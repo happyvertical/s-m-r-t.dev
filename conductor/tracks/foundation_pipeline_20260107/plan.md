@@ -9,7 +9,7 @@
 
 ## Phase 2: Documentation Pipeline
 
-- [ ] Task: Create utility to fetch/parse documentation from `s-m-r-t` dependencies
+- [~] Task: Create utility to fetch/parse documentation from `s-m-r-t` dependencies
 - [ ] Task: Implement dynamic routing for foundational "bits" (objects, collection, agent)
 - [ ] Task: Implement dynamic routing for foundational modules (smrt-auth, smrt-db, smrt-ai)
 - [ ] Task: Conductor - User Manual Verification 'Documentation Pipeline' (Protocol in workflow.md)
