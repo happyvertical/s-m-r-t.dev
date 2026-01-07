@@ -8,6 +8,9 @@
 body {
 	line-height: 1.5;
 	-webkit-font-smoothing: antialiased;
+	font-family: var(--font-sans);
+	color: var(--color-text);
+	background-color: var(--color-bg);
 }
 
 img, picture, video, canvas, svg {

@@ -15,10 +15,12 @@
 	}
 
 	.branding {
+		grid-column: 1 / -1;
 		font-family: var(--font-mono);
 		font-weight: bold;
 		font-size: 1.5rem;
 		color: var(--color-text);
 		text-decoration: none;
+		white-space: nowrap;
 	}
 </style>
