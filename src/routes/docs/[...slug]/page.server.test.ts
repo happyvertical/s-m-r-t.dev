@@ -15,6 +15,11 @@ describe('Docs Page Load', () => {
 		expect(result.doc.slug).toBe('api/core/classes/SmrtObject');
 	});
 
+	it('handles module mappings', async () => {
+		const result = await load({ params: { slug: 'smrt-db' } } as any);
+		expect(result.doc.slug).toBe('core');
+	});
+
 	it('throws 404 for missing doc', async () => {
 		// SvelteKit error() throws a special object, but Vitest 'rejects.toThrow' might need adjustment
 		try {
