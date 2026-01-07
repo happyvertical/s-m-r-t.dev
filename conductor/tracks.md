@@ -5,4 +5,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 ---
 
 ## [~] Track: Build the Project Foundation and Documentation Pipeline
-*Link: [./conductor/tracks/foundation_pipeline_20260107/](./conductor/tracks/foundation_pipeline_20260107/)*
+
+_Link: [./conductor/tracks/foundation_pipeline_20260107/](./conductor/tracks/foundation_pipeline_20260107/)_
