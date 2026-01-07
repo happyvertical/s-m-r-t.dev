@@ -3,7 +3,7 @@
 ## Phase 1: Scaffolding and Branding
 
 - [x] Task: Initialize SvelteKit project with TypeScript e068f1f
-- [ ] Task: Implement base Vanilla CSS Module structure for "Swiss Design" grid
+- [~] Task: Implement base Vanilla CSS Module structure for "Swiss Design" grid
 - [ ] Task: Create global Layout with `s-m-r-t` monospace branding
 - [ ] Task: Conductor - User Manual Verification 'Scaffolding and Branding' (Protocol in workflow.md)
 

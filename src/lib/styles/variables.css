@@ -1,0 +1,17 @@
+/* Swiss Design Variables */
+:root {
+	/* Typography */
+	--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+	--font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+	
+	/* Colors */
+	--color-bg: #ffffff;
+	--color-text: #1a1a1a;
+	--color-accent: #ff3e00; /* Svelte Orange or a Swiss Red */
+	--color-grid: #e5e5e5;
+	
+	/* Grid */
+	--grid-columns: 12;
+	--grid-gap: 24px;
+	--container-width: 1200px;
+}
