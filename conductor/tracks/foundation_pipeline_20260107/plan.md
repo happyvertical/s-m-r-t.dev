@@ -1,7 +1,7 @@
 # Track Plan: Project Foundation and Documentation Pipeline
 
 ## Phase 1: Scaffolding and Branding
-- [ ] Task: Initialize SvelteKit project with TypeScript
+- [~] Task: Initialize SvelteKit project with TypeScript
 - [ ] Task: Implement base Vanilla CSS Module structure for "Swiss Design" grid
 - [ ] Task: Create global Layout with `s-m-r-t` monospace branding
 - [ ] Task: Conductor - User Manual Verification 'Scaffolding and Branding' (Protocol in workflow.md)
