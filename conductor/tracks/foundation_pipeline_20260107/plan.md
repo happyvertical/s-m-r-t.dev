@@ -16,6 +16,6 @@
 
 ## Phase 3: Components and FAQ
 
-- [~] Task: Integrate `smrt-svelte` and create the basic component browser page
+- [x] Task: Integrate `smrt-svelte` and create the basic component browser page df53c86
 - [ ] Task: Implement the FAQ page with the branded response to "What does s-m-r-t stand for?"
 - [ ] Task: Conductor - User Manual Verification 'Components and FAQ' (Protocol in workflow.md)
