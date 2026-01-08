@@ -7,12 +7,12 @@
 - [x] Task: Create global Layout with `s-m-r-t` monospace branding 70374aa
 - [x] Task: Conductor - User Manual Verification 'Scaffolding and Branding' (Protocol in workflow.md) c5171d6
 
-## Phase 2: Documentation Pipeline
+## Phase 2: Documentation Pipeline [checkpoint: 3777218]
 
 - [x] Task: Create utility to fetch/parse documentation from `s-m-r-t` dependencies c711c8d
 - [x] Task: Implement dynamic routing for foundational "bits" (objects, collection, agent) 11fbfe5
 - [x] Task: Implement dynamic routing for foundational modules (smrt-auth, smrt-db, smrt-ai) 79d71cf
-- [ ] Task: Conductor - User Manual Verification 'Documentation Pipeline' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Documentation Pipeline' (Protocol in workflow.md) 3777218
 
 ## Phase 3: Components and FAQ
 
