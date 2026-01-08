@@ -18,9 +18,3 @@ variable "aws_region" {
   type        = string
   default     = "us-west-2"
 }
-
-variable "kubeconfig_path" {
-  description = "Path to kubeconfig file for Kubernetes backend"
-  type        = string
-  default     = "~/.kube/have-rickety.config"
-}

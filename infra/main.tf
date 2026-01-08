@@ -8,9 +8,10 @@ terraform {
     }
   }
 
-  backend "kubernetes" {
-    secret_suffix = "havesmrt"
-    namespace     = "terraform-state"
+  backend "s3" {
+    bucket = "happyvertical-terraform-state"
+    key    = "havesmrt/terraform.tfstate"
+    region = "us-east-1"
   }
 }
 

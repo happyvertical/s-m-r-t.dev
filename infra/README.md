@@ -9,7 +9,7 @@ This directory contains OpenTofu/Terraform configuration for deploying havesmrt.
 - **CDN**: AWS CloudFront distribution with custom domain and SSL
 - **DNS**: Route53 for domain management
 - **Certificate**: ACM certificate (us-east-1) for CloudFront
-- **State**: Kubernetes backend storing state in cluster secrets
+- **State**: S3 backend in `happyvertical-terraform-state` bucket
 
 ## Environments
 
@@ -20,8 +20,8 @@ This directory contains OpenTofu/Terraform configuration for deploying havesmrt.
 
 1. **AWS CLI** configured with appropriate credentials
 2. **OpenTofu** >= 1.6.0
-3. **kubectl** with access to have-rickety cluster (`~/.kube/have-rickety.config`)
-4. **Route53 hosted zone** for `havesmrt.com`
+3. **Route53 hosted zone** for `havesmrt.com`
+4. **S3 bucket** for state: `happyvertical-terraform-state` (already exists)
 
 ## Initial Setup
 
@@ -29,7 +29,6 @@ This directory contains OpenTofu/Terraform configuration for deploying havesmrt.
 
 ```bash
 cd infra
-export KUBECONFIG=~/.kube/have-rickety.config
 tofu init
 ```
 
