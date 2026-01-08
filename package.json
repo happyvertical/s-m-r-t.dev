@@ -38,6 +38,7 @@
 	"dependencies": {
 		"@happyvertical/smrt-docs": "file:../smrt/docs",
 		"@happyvertical/smrt-svelte": "file:../smrt/packages/smrt-svelte",
+		"@happyvertical/svelte": "file:../svelte",
 		"gray-matter": "^4.0.3",
 		"marked": "^17.0.1"
 	}

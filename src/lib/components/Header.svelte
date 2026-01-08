@@ -7,9 +7,10 @@
 		<div class="header-content">
 			<a href="/" class="branding">s-m-r-t</a>
 			<nav>
-				<a href="/docs/bits">Bits</a>
-				<a href="/docs/smrt-db">Modules</a>
+				<a href="/docs">Docs</a>
 				<a href="/components">Components</a>
+				<a href="/modules">Modules</a>
+				<a href="/reference">Reference</a>
 				<a href="/faq">FAQ</a>
 			</nav>
 		</div>
@@ -55,5 +56,17 @@
 
 	nav a:hover {
 		color: var(--color-accent);
+	}
+
+	@media (max-width: 700px) {
+		.header-content {
+			flex-direction: column;
+			gap: 16px;
+		}
+
+		nav {
+			flex-wrap: wrap;
+			gap: 16px;
+		}
 	}
 </style>

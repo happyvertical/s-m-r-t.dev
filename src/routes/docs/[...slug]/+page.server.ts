@@ -9,7 +9,8 @@ const MAPPINGS: Record<string, string> = {
 	'smrt-cli': 'cli',
 	'smrt-auth': 'api/accounts/index',
 	'smrt-db': 'core',
-	'smrt-ai': 'api/core/interfaces/AiConfig'
+	'smrt-ai': 'api/core/interfaces/AiConfig',
+	'foundations': 'core'
 };
 
 export const load: PageServerLoad = async ({ params }) => {
