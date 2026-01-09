@@ -44,7 +44,7 @@ jobs:
         with:
           repository: happyvertical/smrt
           path: smrt
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          token: ${{ secrets.GH_PAT || secrets.REPO_ACCESS_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
