@@ -60,6 +60,8 @@ jobs:
 
       - name: Build smrt packages
         working-directory: smrt
+        env:
+          NPM_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           pnpm install --frozen-lockfile
           pnpm run build --if-present
