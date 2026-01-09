@@ -64,7 +64,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           pnpm install --frozen-lockfile
-          pnpm run build --if-present
+          pnpm run build
 
       - name: Install dependencies
         working-directory: havesmrt.com
