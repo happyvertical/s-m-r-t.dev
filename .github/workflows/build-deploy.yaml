@@ -34,36 +34,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout havesmrt.com
-        uses: actions/checkout@v4
-
       - name: Checkout smrt monorepo
         uses: actions/checkout@v4
         with:
           repository: happyvertical/smrt
-          path: ../smrt
+          path: smrt
           token: ${{ secrets.GH_TOKEN }}
+
+      - name: Checkout havesmrt.com
+        uses: actions/checkout@v4
+        with:
+          path: havesmrt.com
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: 'npm'
+          cache-dependency-path: havesmrt.com/package-lock.json
 
       - name: Install dependencies
+        working-directory: havesmrt.com
         run: npm ci
 
       - name: Run tests
+        working-directory: havesmrt.com
         run: npm test
 
       - name: Build static site
+        working-directory: havesmrt.com
         run: npm run build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: build/
+          path: havesmrt.com/build/
           retention-days: 7
 
   deploy-staging:
