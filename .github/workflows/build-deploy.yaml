@@ -36,14 +36,12 @@ jobs:
     steps:
       - name: Checkout havesmrt.com
         uses: actions/checkout@v4
-        with:
-          path: havesmrt.com
 
       - name: Checkout smrt monorepo
         uses: actions/checkout@v4
         with:
           repository: happyvertical/smrt
-          path: smrt
+          path: ../smrt
           token: ${{ secrets.GH_TOKEN }}
 
       - name: Setup Node.js
@@ -51,28 +49,21 @@ jobs:
         with:
           node-version: '24'
           cache: 'npm'
-          cache-dependency-path: havesmrt.com/package-lock.json
 
       - name: Install dependencies
-        run: |
-          cd havesmrt.com
-          npm ci
+        run: npm ci
 
       - name: Run tests
-        run: |
-          cd havesmrt.com
-          npm test
+        run: npm test
 
       - name: Build static site
-        run: |
-          cd havesmrt.com
-          npm run build
+        run: npm run build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: havesmrt.com/build/
+          path: build/
           retention-days: 7
 
   deploy-staging:
