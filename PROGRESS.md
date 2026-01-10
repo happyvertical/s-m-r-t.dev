@@ -17,6 +17,7 @@
 ### Pages & Routes
 - [x] Homepage with SMRT value propositions and examples
 - [x] Component library landing page (/components)
+- [x] Modules landing page (/modules) with all 28 modules organized in 8 categories
 - [x] Layout structure (Header, Footer, Grid system)
 - [x] Basic navigation
 - [x] Breadcrumb navigation
@@ -26,6 +27,10 @@
 - [x] Component pages created for:
   - Forms: text-input, smrt-select, checkbox, datetime, address, money
   - Users: user-card, user-avatar, user-list, user-form, user-menu, invite-user
+
+### Module Documentation (2 of 28 complete)
+- [x] smrt-core - Comprehensive documentation covering architecture, AI integration, querying, code generation, STI, context memory, Vite plugin
+- [x] smrt-types - Complete documentation of Signal system, types, and adapters
 
 ### Reusable Components
 - [x] CodeBlock component with syntax highlighting
@@ -133,12 +138,12 @@ Per PRD, each module needs:
 
 ## 📊 Progress Summary
 
-**Overall Completion**: ~10-15% (optimistically)
+**Overall Completion**: ~12-18% (optimistically)
 
 **Breakdown by PRD Phase**:
-- Phase 1 (Foundation): 80% complete
+- Phase 1 (Foundation): 90% complete (modules landing page added)
 - Phase 2 (Component Docs): 20% complete (1 of 17 fully done, others need verification)
-- Phase 3 (Module Docs): 0% complete (0 of 28 modules)
+- Phase 3 (Module Docs): 7% complete (2 of 28 modules documented)
 - Phase 4 (Core Docs): 0% complete
 - Phase 5 (Polish): 0% complete
 
