@@ -25,75 +25,44 @@
 				{ name: 'SMRTCheckbox', href: '/components/forms/checkbox', description: 'Checkbox with voice control' },
 				{ name: 'SMRTDateTime', href: '/components/forms/datetime', description: 'Date/time with natural language' },
 				{ name: 'SMRTAddress', href: '/components/forms/address', description: 'Address input with parsing' },
-				{ name: 'SMRTMoney', href: '/components/forms/money', description: 'Currency input in cents' }
+				{ name: 'SMRTMoney', href: '/components/forms/money', description: 'Currency input in cents' },
+				{ name: 'SMRTPhone', description: 'Phone number input with formatting' },
+				{ name: 'SMRTTextarea', description: 'Multiline text with voice support' },
+				{ name: 'SMRTNumber', description: 'Numeric input with constraints' },
+				{ name: 'SMRTDateRange', description: 'Date range picker' },
+				{ name: 'SMRTMeasurement', description: 'Measurement with units' }
 			]
 		},
 		{
-			name: 'UI',
-			description: 'Core interface components',
+			name: 'Users',
+			description: 'User management and authentication components',
+			href: '/components/users',
 			components: [
-				{ name: 'Button', description: 'Versatile button with variants and sizes' },
-				{ name: 'Badge', description: 'Status indicator with multiple variants' },
-				{ name: 'Card', description: 'Flexible container with header/footer slots' },
-				{ name: 'Input', description: 'Text input with validation states' },
-				{ name: 'Select', description: 'Dropdown select component' },
-				{ name: 'Textarea', description: 'Multiline text input' },
-				{ name: 'Toggle', description: 'Toggle/checkbox component' },
-				{ name: 'FormGroup', description: 'Form control wrapper with labels' },
-				{ name: 'Pagination', description: 'Navigation pagination' }
+				{ name: 'UserCard', href: '/components/users/user-card', description: 'User profile card display' },
+				{ name: 'UserAvatar', href: '/components/users/user-avatar', description: 'User avatar with fallback' },
+				{ name: 'UserList', href: '/components/users/user-list', description: 'List of user cards' },
+				{ name: 'UserForm', href: '/components/users/user-form', description: 'User profile edit form' },
+				{ name: 'UserMenu', href: '/components/users/user-menu', description: 'User dropdown menu' },
+				{ name: 'InviteUserModal', href: '/components/users/invite-user', description: 'User invitation modal' }
 			]
 		},
 		{
-			name: 'Layout',
-			description: 'Page structure components',
+			name: 'Tenants & Roles',
+			description: 'Multi-tenancy and role-based access',
 			components: [
-				{ name: 'Header', description: 'Site header with logo and navigation' },
-				{ name: 'Footer', description: 'Site footer component' },
-				{ name: 'Container', description: 'Responsive content container' },
-				{ name: 'Grid', description: 'Responsive grid layout' },
-				{ name: 'Masthead', description: 'Newspaper-style header' }
+				{ name: 'TenantCard', description: 'Tenant organization card' },
+				{ name: 'TenantSwitcher', description: 'Switch between tenants' },
+				{ name: 'RoleBadge', description: 'Role indicator badge' },
+				{ name: 'RoleSelector', description: 'Role selection component' },
+				{ name: 'PermissionCheck', description: 'Permission-based rendering' }
 			]
 		},
 		{
-			name: 'Content',
-			description: 'Content display components',
+			name: 'Memberships',
+			description: 'Membership management components',
 			components: [
-				{ name: 'ArticleCard', description: 'Article preview card' },
-				{ name: 'ArticleList', description: 'Grid of article cards' },
-				{ name: 'Markdown', description: 'Markdown renderer' }
-			]
-		},
-		{
-			name: 'Weather',
-			description: 'Weather display components',
-			components: [
-				{ name: 'WeatherForecast', description: 'Interactive forecast display' },
-				{ name: 'WeatherHeader', description: 'Multi-day forecast header' }
-			]
-		},
-		{
-			name: 'Calendar',
-			description: 'Date and event components',
-			components: [
-				{ name: 'Calendar', description: 'Calendar view component' },
-				{ name: 'DayView', description: 'Day-specific calendar view' }
-			]
-		},
-		{
-			name: 'Feedback',
-			description: 'User feedback and progress components',
-			components: [
-				{ name: 'ProgressBar', href: '/components/feedback/progress-bar', description: 'Visual progress indicator' },
-				{ name: 'ConfirmDialog', href: '/components/feedback/confirm-dialog', description: 'Confirmation modal dialog' }
-			]
-		},
-		{
-			name: 'Specialized',
-			description: 'Domain-specific components',
-			components: [
-				{ name: 'CouncilSidebar', description: 'Council/meeting sidebar' },
-				{ name: 'ArticleReferences', description: 'Reference list display' },
-				{ name: 'MeetingView', description: 'Meeting details display' }
+				{ name: 'MembershipCard', description: 'Membership details card' },
+				{ name: 'MembershipList', description: 'List of memberships' }
 			]
 		}
 	];
@@ -111,24 +80,24 @@
 
 	<section class="install">
 		<h2>Installation</h2>
-		<pre><code>npm install @happyvertical/smrt-svelte @happyvertical/smrt-svelte</code></pre>
-		<pre><code>{`// Core UI components
-import { Button, Card, Badge } from '@happyvertical/smrt-svelte';
+		<pre><code>npm install @happyvertical/smrt-svelte</code></pre>
+		<pre><code>{`// SMRT form components with voice input
+import { SMRTTextInput, SMRTSelect, SMRTCheckbox } from '@happyvertical/smrt-svelte';
 
-// SMRT-specific components
-import { SMRTTextInput, StatusBadge } from '@happyvertical/smrt-svelte';`}</code></pre>
+// User management components
+import { UserCard, UserAvatar, UserList } from '@happyvertical/smrt-svelte';`}</code></pre>
 	</section>
 
 	<section class="preview">
 		<h2>Quick Preview</h2>
 		<pre><code>{`<script>
-  import { Button, Badge, Card } from '@happyvertical/smrt-svelte';
+  import { SMRTTextInput, UserAvatar } from '@happyvertical/smrt-svelte';
+
+  let name = $state('');
 </script>
 
-<Button variant="primary">Primary</Button>
-<Button variant="secondary">Secondary</Button>
-<Badge variant="success">Active</Badge>
-<Badge variant="warning">Pending</Badge>`}</code></pre>
+<SMRTTextInput bind:value={name} label="Name" placeholder="Enter your name" />
+<UserAvatar user={{ name: "John Doe", email: "john@example.com" }} />`}</code></pre>
 	</section>
 
 	{#each categories as category}
