@@ -102,15 +102,6 @@ export const categories: CategoryMeta[] = [
 		]
 	},
 	{
-		name: 'Weather',
-		slug: 'weather',
-		description: 'Weather display components',
-		components: [
-			{ name: 'WeatherForecast', slug: 'weather-forecast', description: 'Multi-day weather forecast' },
-			{ name: 'WeatherHeader', slug: 'weather-header', description: 'Current weather display' }
-		]
-	},
-	{
 		name: 'Calendar',
 		slug: 'calendar',
 		description: 'Date and calendar components',

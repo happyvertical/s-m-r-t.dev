@@ -64,14 +64,6 @@
 			]
 		},
 		{
-			name: 'Weather',
-			description: 'Weather display components',
-			components: [
-				{ name: 'WeatherForecast', description: 'Interactive forecast display' },
-				{ name: 'WeatherHeader', description: 'Multi-day forecast header' }
-			]
-		},
-		{
 			name: 'Calendar',
 			description: 'Date and event components',
 			components: [
@@ -88,11 +80,9 @@
 			]
 		},
 		{
-			name: 'Specialized',
-			description: 'Domain-specific components',
+			name: 'Meetings',
+			description: 'Meeting display components',
 			components: [
-				{ name: 'CouncilSidebar', description: 'Council/meeting sidebar' },
-				{ name: 'ArticleReferences', description: 'Reference list display' },
 				{ name: 'MeetingView', description: 'Meeting details display' }
 			]
 		}
