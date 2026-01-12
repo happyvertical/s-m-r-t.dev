@@ -497,10 +497,10 @@ import type { Product } from '@smrt/types';`} language="typescript" />
 
 			<h3>Supported Databases</h3>
 			<ul>
-				<li><strong>SQLite</strong> - <code>{ type: 'sqlite', url: 'app.db' }</code></li>
-				<li><strong>PostgreSQL</strong> - <code>{ type: 'postgres', url: 'postgres://...' }</code></li>
-				<li><strong>DuckDB</strong> - <code>{ type: 'duckdb', url: 'data.db' }</code></li>
-				<li><strong>JSON</strong> - <code>{ type: 'json', url: 'data.json' }</code> (testing only)</li>
+				<li><strong>SQLite</strong> - <code>{'{ type: \'sqlite\', url: \'app.db\' }'}</code></li>
+				<li><strong>PostgreSQL</strong> - <code>{'{ type: \'postgres\', url: \'postgres://...\' }'}</code></li>
+				<li><strong>DuckDB</strong> - <code>{'{ type: \'duckdb\', url: \'data.db\' }'}</code></li>
+				<li><strong>JSON</strong> - <code>{'{ type: \'json\', url: \'data.json\' }'}</code> (testing only)</li>
 			</ul>
 
 			<h3>Configuration</h3>
