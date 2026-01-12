@@ -40,6 +40,24 @@
 />
 
 <Grid>
+	<section class="example">
+		<h3>Simple</h3>
+		<p class="example-desc">Extend SmrtObject. That's it.</p>
+		<pre><code>{`class Product extends SmrtObject {
+  name: string = '';
+  price: number = 0.0;    // DECIMAL (inferred from decimal)
+  quantity: number = 0;   // INTEGER (inferred from integer)
+  categoryId = foreignKey(Category);
+}
+
+// That's it. You get:
+// - Database schema with migrations
+// - REST API endpoints
+// - MCP tools for AI agents
+// - CLI: smrt product create --name "Widget" --price 9.99
+// - AI-powered methods: is(), do(), describe()`}</code></pre>
+	</section>
+
 	<section class="hero">
 		<div class="tenets">
 			<div class="tenet">
@@ -59,24 +77,6 @@
 				<p>Startup to enterprise seamlessly.</p>
 			</div>
 		</div>
-	</section>
-
-	<section class="example">
-		<h3>Simple</h3>
-		<p class="example-desc">Extend SmrtObject. That's it.</p>
-		<pre><code>{`class Product extends SmrtObject {
-  name: string = '';
-  price: number = 0.0;    // DECIMAL (inferred from decimal)
-  quantity: number = 0;   // INTEGER (inferred from integer)
-  categoryId = foreignKey(Category);
-}
-
-// That's it. You get:
-// - Database schema with migrations
-// - REST API endpoints
-// - MCP tools for AI agents
-// - CLI: smrt product create --name "Widget" --price 9.99
-// - AI-powered methods: is(), do(), describe()`}</code></pre>
 	</section>
 
 	<section class="example">
