@@ -29,7 +29,7 @@
   - Forms: text-input, smrt-select, checkbox, datetime, address, money
   - Users: user-card, user-avatar, user-list, user-form, user-menu, invite-user
 
-### Module Documentation (15 of 29 complete - 52%)
+### Module Documentation (18 of 29 complete - 62%)
 - [x] smrt-core - Comprehensive documentation covering architecture, AI integration, querying, code generation, STI, context memory, Vite plugin
 - [x] smrt-types - Complete documentation of Signal system, types, and adapters
 - [x] smrt-config - Full configuration management documentation with tutorials, API reference, best practices
@@ -45,6 +45,9 @@
 - [x] smrt-tags - Hierarchical tagging system with context scoping, multi-language aliases, flexible metadata
 - [x] smrt-messages - Email persistence with multi-provider support, threading, attachments, intelligent sync
 - [x] smrt-properties - Digital property and zone management with hierarchical organization
+- [x] smrt-commerce - Complete commerce system with invoicing, payments, fulfillment (6 invoice components)
+- [x] smrt-events - Hierarchical event management with calendar integration and MeetingView component
+- [x] smrt-projects - Project management with Living Spec pattern and 7 time tracking components
 
 **Module Updates in v0.19.0:**
 - NEW: smrt-tenancy (29th module) - Production-ready multi-tenancy framework
@@ -165,7 +168,7 @@ Per PRD, each module needs:
 **Breakdown by PRD Phase**:
 - Phase 1 (Foundation): 95% complete (infrastructure deployed, build working)
 - Phase 2 (Component Docs): 5% complete (1 of 100 components fully documented)
-- Phase 3 (Module Docs): 52% complete (15 of 29 modules documented)
+- Phase 3 (Module Docs): 62% complete (18 of 29 modules documented)
 - Phase 4 (Core Docs): 0% complete
 - Phase 5 (Polish): 0% complete
 
@@ -184,7 +187,10 @@ Per PRD, each module needs:
 - ✅ Documented smrt-products (comprehensive, 971 lines - product catalog with Svelte 5 components)
 - ✅ Documented smrt-tags (comprehensive, 762 lines - hierarchical tagging with multi-language support)
 - ✅ Documented smrt-messages (comprehensive, 657 lines - email with multi-provider support)
-- [x] smrt-properties - Digital property and zone management with hierarchical organization
+- ✅ Documented smrt-properties (concise, 322 lines - digital property and zone management)
+- ✅ Documented smrt-commerce (comprehensive, 423 lines - 6 invoice components)
+- ✅ Documented smrt-events (comprehensive, 361 lines - MeetingView component)
+- ✅ Documented smrt-projects (comprehensive, 380 lines - Living Spec + 7 time tracking components)
 
 **Reality Check**:
 - Original estimate: 17 components
