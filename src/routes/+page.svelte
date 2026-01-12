@@ -5,7 +5,7 @@
 </script>
 
 <SEO
-	title="SMRT Framework"
+	title="s-m-r-t Framework"
 	description="Full-stack TypeScript framework with AI agents, auto-generated APIs, MCP tools, and CLI commands. Build faster with no vendor lock, adaptability, brevity, and scalability."
 	url="https://havesmrt.com"
 	type="website"
@@ -14,7 +14,7 @@
 <StructuredData
 	type="Organization"
 	data={{
-		name: 'SMRT Framework',
+		name: 's-m-r-t Framework',
 		url: 'https://havesmrt.com',
 		logo: 'https://havesmrt.com/logo.png',
 		description:
@@ -26,7 +26,7 @@
 <StructuredData
 	type="SoftwareApplication"
 	data={{
-		name: 'SMRT Framework',
+		name: 's-m-r-t Framework',
 		applicationCategory: 'DeveloperApplication',
 		operatingSystem: 'Linux, macOS, Windows',
 		offers: {

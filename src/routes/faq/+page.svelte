@@ -3,14 +3,14 @@
 </script>
 
 <svelte:head>
-  <title>FAQ - SMRT Framework</title>
-  <meta name="description" content="Frequently asked questions about the SMRT framework, troubleshooting, and best practices." />
+  <title>FAQ - s-m-r-t Framework</title>
+  <meta name="description" content="Frequently asked questions about the s-m-r-t framework, troubleshooting, and best practices." />
 </svelte:head>
 
 <div class="max-w-4xl mx-auto px-4 py-8">
   <h1 class="text-4xl font-bold mb-4">Frequently Asked Questions</h1>
   <p class="text-xl text-gray-600 mb-8">
-    Common questions about the SMRT framework, setup, troubleshooting, and best practices.
+    Common questions about the s-m-r-t framework, setup, troubleshooting, and best practices.
   </p>
 
   <div class="space-y-8">
@@ -20,18 +20,18 @@
 
       <div class="space-y-6">
         <div>
-          <h3 class="text-xl font-semibold mb-2">What is SMRT?</h3>
+          <h3 class="text-xl font-semibold mb-2">What is s-m-r-t?</h3>
           <p class="text-gray-700">
-            SMRT is a full-stack TypeScript framework that abstracts away implementation details for databases,
+            s-m-r-t is a full-stack TypeScript framework that abstracts away implementation details for databases,
             REST APIs, MCP tools, and CLI commands. Define your data models once with the @smrt decorator, and
             get auto-generated APIs, CLI commands, and Claude integration.
           </p>
         </div>
 
         <div>
-          <h3 class="text-xl font-semibold mb-2">Which databases does SMRT support?</h3>
+          <h3 class="text-xl font-semibold mb-2">Which databases does s-m-r-t support?</h3>
           <p class="text-gray-700 mb-2">
-            SMRT supports multiple databases through adapters:
+            s-m-r-t supports multiple databases through adapters:
           </p>
           <ul class="list-disc list-inside text-gray-700 space-y-1">
             <li>PostgreSQL (recommended for production)</li>
@@ -44,15 +44,15 @@
         <div>
           <h3 class="text-xl font-semibold mb-2">Do I need to know SQL?</h3>
           <p class="text-gray-700">
-            No! SMRT abstracts database operations into TypeScript methods. However, understanding basic
+            No! s-m-r-t abstracts database operations into TypeScript methods. However, understanding basic
             database concepts (tables, relationships, indexes) is helpful for building efficient applications.
           </p>
         </div>
 
         <div>
-          <h3 class="text-xl font-semibold mb-2">Can I use SMRT with an existing database?</h3>
+          <h3 class="text-xl font-semibold mb-2">Can I use s-m-r-t with an existing database?</h3>
           <p class="text-gray-700">
-            Yes! SMRT can work with existing databases. Use the scanner to generate SmrtObject classes from
+            Yes! s-m-r-t can work with existing databases. Use the scanner to generate SmrtObject classes from
             your existing schema, or manually define models that map to your tables.
           </p>
         </div>
@@ -122,13 +122,13 @@ class Product extends SmrtObject {
         <div>
           <h3 class="text-xl font-semibold mb-2">How do I run migrations?</h3>
           <p class="text-gray-700">
-            SMRT can auto-generate migrations from your models. Use the CLI:
+            s-m-r-t can auto-generate migrations from your models. Use the CLI:
           </p>
           <CodeBlock code={`smrt migrations generate\nsmrt migrations run`} language="bash" />
         </div>
 
         <div>
-          <h3 class="text-xl font-semibold mb-2">How do I test SMRT applications?</h3>
+          <h3 class="text-xl font-semibold mb-2">How do I test s-m-r-t applications?</h3>
           <p class="text-gray-700 mb-2">
             Use <a href="/modules/smrt-vitest" class="text-blue-600 hover:underline">smrt-vitest</a> for testing:
           </p>
@@ -152,9 +152,9 @@ describe('Task Tests', () => {
         </div>
 
         <div>
-          <h3 class="text-xl font-semibold mb-2">Can I use SMRT with SvelteKit?</h3>
+          <h3 class="text-xl font-semibold mb-2">Can I use s-m-r-t with SvelteKit?</h3>
           <p class="text-gray-700">
-            Yes! SMRT works great with SvelteKit. Use the <a href="/modules/template-sveltekit" class="text-blue-600 hover:underline">template-sveltekit</a> template
+            Yes! s-m-r-t works great with SvelteKit. Use the <a href="/modules/template-sveltekit" class="text-blue-600 hover:underline">template-sveltekit</a> template
             to get started with a pre-configured setup.
           </p>
         </div>
@@ -162,7 +162,7 @@ describe('Task Tests', () => {
         <div>
           <h3 class="text-xl font-semibold mb-2">How do I integrate Claude AI?</h3>
           <p class="text-gray-700">
-            SMRT includes built-in MCP (Model Context Protocol) support. Enable it with <code class="bg-gray-100 px-2 py-1 rounded">mcp: true</code>
+            s-m-r-t includes built-in MCP (Model Context Protocol) support. Enable it with <code class="bg-gray-100 px-2 py-1 rounded">mcp: true</code>
             in your @smrt decorator, then start the MCP server with <code class="bg-gray-100 px-2 py-1 rounded">smrt-dev-mcp start</code>.
             Claude Code can then interact with your objects using natural language.
           </p>
@@ -247,7 +247,7 @@ class Order extends SmrtObject {
           <h3 class="text-xl font-semibold mb-2">Should I use caching?</h3>
           <p class="text-gray-700">
             Yes! For frequently accessed data, implement caching at the collection level or use a dedicated
-            caching layer (Redis, Memcached). SMRT collections support custom caching strategies.
+            caching layer (Redis, Memcached). s-m-r-t collections support custom caching strategies.
           </p>
         </div>
 
@@ -272,7 +272,7 @@ class Order extends SmrtObject {
         <div>
           <h3 class="text-xl font-semibold mb-2">Build fails with "Cannot find module"</h3>
           <p class="text-gray-700">
-            Ensure all SMRT packages are installed and have matching versions. Run <code class="bg-gray-100 px-2 py-1 rounded">npm install</code>
+            Ensure all s-m-r-t packages are installed and have matching versions. Run <code class="bg-gray-100 px-2 py-1 rounded">npm install</code>
             and check for peer dependency warnings.
           </p>
         </div>
@@ -327,9 +327,9 @@ class Order extends SmrtObject {
 
       <div class="space-y-6">
         <div>
-          <h3 class="text-xl font-semibold mb-2">How do I deploy SMRT applications?</h3>
+          <h3 class="text-xl font-semibold mb-2">How do I deploy s-m-r-t applications?</h3>
           <p class="text-gray-700">
-            SMRT applications can be deployed anywhere Node.js runs:
+            s-m-r-t applications can be deployed anywhere Node.js runs:
           </p>
           <ul class="list-disc list-inside text-gray-700 space-y-1">
             <li>Docker containers (recommended)</li>

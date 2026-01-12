@@ -23,7 +23,7 @@
 		article
 	}: SEOProps = $props();
 
-	const fullTitle = title === 'SMRT Framework' ? title : `${title} | SMRT Framework`;
+	const fullTitle = title === 's-m-r-t Framework' ? title : `${title} | s-m-r-t Framework`;
 </script>
 
 <svelte:head>
@@ -38,7 +38,7 @@
 	<meta property="og:title" content={fullTitle} />
 	<meta property="og:description" content={description} />
 	<meta property="og:image" content={image} />
-	<meta property="og:site_name" content="SMRT Framework" />
+	<meta property="og:site_name" content="s-m-r-t Framework" />
 
 	{#if article}
 		{#if article.publishedTime}

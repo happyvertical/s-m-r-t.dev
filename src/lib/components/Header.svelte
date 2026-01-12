@@ -5,7 +5,7 @@
 <header role="banner">
 	<Grid>
 		<div class="header-content">
-			<a href="/" class="branding" aria-label="SMRT Framework Home">s-m-r-t</a>
+			<a href="/" class="branding" aria-label="s-m-r-t Framework Home">s-m-r-t</a>
 			<nav role="navigation" aria-label="Main navigation">
 				<a href="/docs">Docs</a>
 				<a href="/components">Components</a>
