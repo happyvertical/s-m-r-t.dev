@@ -22,7 +22,6 @@
         <div>
           <h3 class="text-xl font-semibold mb-2">What does s-m-r-t stand for?</h3>
           <p class="text-gray-700">
-            s-m-r-t stands for <strong>S</strong>imple <strong>M</strong>odel <strong>R</strong>epresentation <strong>T</strong>oolkit.
             It's a TypeScript framework that lets you define your data models once and automatically generates
             everything else you need—databases, APIs, CLI tools, and AI agent integrations.
           </p>
