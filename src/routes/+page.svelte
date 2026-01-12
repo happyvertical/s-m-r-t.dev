@@ -1,6 +1,43 @@
 <script lang="ts">
 	import Grid from '$lib/components/Grid.svelte';
+	import SEO from '$lib/components/SEO.svelte';
+	import StructuredData from '$lib/components/StructuredData.svelte';
 </script>
+
+<SEO
+	title="SMRT Framework"
+	description="Full-stack TypeScript framework with AI agents, auto-generated APIs, MCP tools, and CLI commands. Build faster with no vendor lock, adaptability, brevity, and scalability."
+	url="https://havesmrt.com"
+	type="website"
+/>
+
+<StructuredData
+	type="Organization"
+	data={{
+		name: 'SMRT Framework',
+		url: 'https://havesmrt.com',
+		logo: 'https://havesmrt.com/logo.png',
+		description:
+			'Full-stack TypeScript framework for building AI-powered applications with automatic API generation, CLI tools, and MCP integration.',
+		sameAs: ['https://github.com/happyvertical/smrt']
+	}}
+/>
+
+<StructuredData
+	type="SoftwareApplication"
+	data={{
+		name: 'SMRT Framework',
+		applicationCategory: 'DeveloperApplication',
+		operatingSystem: 'Linux, macOS, Windows',
+		offers: {
+			'@type': 'Offer',
+			price: '0',
+			priceCurrency: 'USD'
+		},
+		description:
+			'Full-stack TypeScript framework with AI agents, auto-generated APIs, MCP tools, and CLI commands.'
+	}}
+/>
 
 <Grid>
 	<section class="hero">

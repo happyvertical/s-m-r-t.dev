@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Grid from '$lib/components/Grid.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 
 	interface Component {
 		name: string;
@@ -89,9 +90,12 @@
 	];
 </script>
 
-<svelte:head>
-	<title>Components | s-m-r-t</title>
-</svelte:head>
+<SEO
+	title="Components"
+	description="Browse 37 production-ready Svelte 5 components for forms, user management, tenants, roles, commerce, projects, and events. All components use runes and Material Design 3."
+	url="https://havesmrt.com/components"
+	type="website"
+/>
 
 <Grid>
 	<div class="header">

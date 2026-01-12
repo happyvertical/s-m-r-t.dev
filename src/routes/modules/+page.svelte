@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Grid from '$lib/components/Grid.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 
 	interface Module {
 		name: string;
@@ -61,9 +62,12 @@
 	];
 </script>
 
-<svelte:head>
-	<title>Modules | s-m-r-t</title>
-</svelte:head>
+<SEO
+	title="Modules"
+	description="Explore 29 SMRT modules for building full-stack applications: core framework, user management, commerce, projects, agents, analytics, and more. Complete TypeScript documentation."
+	url="https://havesmrt.com/modules"
+	type="website"
+/>
 
 <Grid>
 	<div class="header">
