@@ -29,11 +29,14 @@
   - Forms: text-input, smrt-select, checkbox, datetime, address, money
   - Users: user-card, user-avatar, user-list, user-form, user-menu, invite-user
 
-### Module Documentation (4 of 29 complete - 14%)
+### Module Documentation (7 of 29 complete - 24%)
 - [x] smrt-core - Comprehensive documentation covering architecture, AI integration, querying, code generation, STI, context memory, Vite plugin
 - [x] smrt-types - Complete documentation of Signal system, types, and adapters
 - [x] smrt-config - Full configuration management documentation with tutorials, API reference, best practices
 - [x] smrt-scanner - Complete TypeScript scanner documentation with STI handling, inheritance resolution
+- [x] smrt-users - Multi-tenant RBAC architecture with 4-layer permission resolution, OIDC integration
+- [x] smrt-agents - Agent framework with persistent state, DispatchBus communication, interest-based queries
+- [x] smrt-content - Content management with flexible organization, publishing workflow, asset management
 
 **Module Updates in v0.19.0:**
 - NEW: smrt-tenancy (29th module) - Production-ready multi-tenancy framework
@@ -153,7 +156,7 @@ Per PRD, each module needs:
 **Breakdown by PRD Phase**:
 - Phase 1 (Foundation): 95% complete (infrastructure deployed, build working)
 - Phase 2 (Component Docs): 5% complete (1 of 100 components fully documented)
-- Phase 3 (Module Docs): 14% complete (4 of 29 modules documented)
+- Phase 3 (Module Docs): 24% complete (7 of 29 modules documented)
 - Phase 4 (Core Docs): 0% complete
 - Phase 5 (Polish): 0% complete
 
@@ -161,6 +164,10 @@ Per PRD, each module needs:
 - ✅ Updated PROGRESS.md to v0.19.0
 - ✅ Documented smrt-config (comprehensive, 780 lines)
 - ✅ Documented smrt-scanner (comprehensive, 676 lines)
+- ✅ Documented smrt-users (comprehensive, 696 lines)
+- ✅ Documented smrt-agents (comprehensive, 1342 lines)
+- ✅ Documented smrt-profiles (comprehensive, 1298 lines)
+- ✅ Documented smrt-content (comprehensive, 1000 lines)
 
 **Reality Check**:
 - Original estimate: 17 components
