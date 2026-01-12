@@ -22,8 +22,7 @@
         <div>
           <h3 class="text-xl font-semibold mb-2">What does s-m-r-t stand for?</h3>
           <p class="text-gray-700">
-            It's a TypeScript framework that lets you define your data models once and automatically generates
-            everything else you need—databases, APIs, CLI tools, and AI agent integrations.
+            <a href="https://www.youtube.com/watch?v=ls5BFzuxGw4" class="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=ls5BFzuxGw4</a>
           </p>
         </div>
 
