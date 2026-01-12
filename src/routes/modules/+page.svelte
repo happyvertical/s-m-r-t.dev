@@ -1,38 +1,63 @@
 <script lang="ts">
 	import Grid from '$lib/components/Grid.svelte';
 
-	const foundation = [
-		{ name: '@smrt/types', description: 'Shared TypeScript type definitions' },
-		{ name: '@smrt/config', description: 'Configuration management with cosmiconfig' },
-		{ name: '@smrt/core', description: 'Core framework with ORM, code generation, AI integration' },
-		{ name: '@smrt/cli', description: 'CLI generator and runtime' }
+	interface Module {
+		name: string;
+		package: string;
+		description: string;
+		href?: string;
+	}
+
+	const foundation: Module[] = [
+		{ name: 'smrt-core', package: '@happyvertical/smrt-core', description: 'Core AI agent framework with ORM and code generation', href: '/modules/smrt-core' },
+		{ name: 'smrt-types', package: '@happyvertical/smrt-types', description: 'Shared TypeScript type definitions', href: '/modules/smrt-types' },
+		{ name: 'smrt-config', package: '@happyvertical/smrt-config', description: 'Configuration management', href: '/modules/smrt-config' },
+		{ name: 'smrt-scanner', package: '@happyvertical/smrt-scanner', description: 'TypeScript scanner for manifest generation', href: '/modules/smrt-scanner' }
 	];
 
-	const domain = [
-		{ name: '@smrt/profiles', description: 'Profile and organization models with relationships' },
-		{ name: '@smrt/events', description: 'Event management with participants and hierarchies' },
-		{ name: '@smrt/content', description: 'Content processing and management' },
-		{ name: '@smrt/assets', description: 'Asset management with versioning and metadata' },
-		{ name: '@smrt/agents', description: 'Agent framework for autonomous actors' },
-		{ name: '@smrt/places', description: 'Place management with geo integration' },
-		{ name: '@smrt/tags', description: 'Hierarchical tagging system' },
-		{ name: '@smrt/products', description: 'Product catalog and microservice template' },
-		{ name: '@smrt/projects', description: 'Project management' },
-		{ name: '@smrt/messages', description: 'Messaging system' }
+	const userAccess: Module[] = [
+		{ name: 'smrt-users', package: '@happyvertical/smrt-users', description: 'Multi-tenant user management with RBAC', href: '/modules/smrt-users' },
+		{ name: 'smrt-profiles', package: '@happyvertical/smrt-profiles', description: 'Profile management with relationships', href: '/modules/smrt-profiles' }
 	];
 
-	const business = [
-		{ name: '@smrt/commerce', description: 'E-commerce functionality' },
-		{ name: '@smrt/ledgers', description: 'Financial ledger management' },
-		{ name: '@smrt/ads', description: 'Advertising/promotion system' },
-		{ name: '@smrt/properties', description: 'Property/real estate management' }
+	const domain: Module[] = [
+		{ name: 'smrt-assets', package: '@happyvertical/smrt-assets', description: 'Asset management with versioning and AI', href: '/modules/smrt-assets' },
+		{ name: 'smrt-commerce', package: '@happyvertical/smrt-commerce', description: 'Commerce models (contracts, fulfillments, payments)', href: '/modules/smrt-commerce' },
+		{ name: 'smrt-events', package: '@happyvertical/smrt-events', description: 'Hierarchical event management', href: '/modules/smrt-events' },
+		{ name: 'smrt-ledgers', package: '@happyvertical/smrt-ledgers', description: 'Double-entry accounting', href: '/modules/smrt-ledgers' },
+		{ name: 'smrt-places', package: '@happyvertical/smrt-places', description: 'Hierarchical place management with geo', href: '/modules/smrt-places' },
+		{ name: 'smrt-products', package: '@happyvertical/smrt-products', description: 'Product catalog and inventory', href: '/modules/smrt-products' },
+		{ name: 'smrt-projects', package: '@happyvertical/smrt-projects', description: 'Provider-agnostic project management', href: '/modules/smrt-projects' },
+		{ name: 'smrt-properties', package: '@happyvertical/smrt-properties', description: 'Digital property and zone management', href: '/modules/smrt-properties' },
+		{ name: 'smrt-tags', package: '@happyvertical/smrt-tags', description: 'Reusable tagging system', href: '/modules/smrt-tags' }
 	];
 
-	const infrastructure = [
-		{ name: '@smrt/gnode', description: 'Federation library for local knowledge bases' },
-		{ name: '@smrt/dev-mcp', description: 'Development MCP server for code generation' },
-		{ name: '@smrt/vitest', description: 'Vitest configuration and utilities' },
-		{ name: '@smrt/svelte', description: 'Svelte 5 component library' }
+	const content: Module[] = [
+		{ name: 'smrt-content', package: '@happyvertical/smrt-content', description: 'Content processing (documents, web, media)', href: '/modules/smrt-content' },
+		{ name: 'smrt-messages', package: '@happyvertical/smrt-messages', description: 'Email persistence with AI integration', href: '/modules/smrt-messages' },
+		{ name: 'smrt-analytics', package: '@happyvertical/smrt-analytics', description: 'Analytics integration (GA, Plausible)', href: '/modules/smrt-analytics' },
+		{ name: 'smrt-ads', package: '@happyvertical/smrt-ads', description: 'Advertising delivery and tracking', href: '/modules/smrt-ads' }
+	];
+
+	const agents: Module[] = [
+		{ name: 'smrt-agents', package: '@happyvertical/smrt-agents', description: 'Agent framework for autonomous actors', href: '/modules/smrt-agents' },
+		{ name: 'smrt-gnode', package: '@happyvertical/smrt-gnode', description: 'Federation library for local knowledge bases', href: '/modules/smrt-gnode' }
+	];
+
+	const devTools: Module[] = [
+		{ name: 'smrt-cli', package: '@happyvertical/smrt-cli', description: 'Developer CLI for SMRT framework', href: '/modules/smrt-cli' },
+		{ name: 'smrt-dev-mcp', package: '@happyvertical/smrt-dev-mcp', description: 'Development MCP server', href: '/modules/smrt-dev-mcp' },
+		{ name: 'smrt-vitest', package: '@happyvertical/smrt-vitest', description: 'Vitest plugin for cross-package testing', href: '/modules/smrt-vitest' }
+	];
+
+	const ui: Module[] = [
+		{ name: 'smrt-svelte', package: '@happyvertical/smrt-svelte', description: 'Svelte 5 components for SMRT', href: '/components' },
+		{ name: 'browser-ai', package: '@happyvertical/browser-ai', description: 'Framework-agnostic browser AI (STT, TTS, LLM)', href: '/modules/browser-ai' }
+	];
+
+	const templates: Module[] = [
+		{ name: 'template-site-static-json', package: '@happyvertical/template-site-static-json', description: 'Static site template with JSON storage', href: '/modules/template-site-static-json' },
+		{ name: 'template-sveltekit', package: '@happyvertical/template-sveltekit', description: 'SvelteKit project template with SMRT', href: '/modules/template-sveltekit' }
 	];
 </script>
 
@@ -47,53 +72,161 @@
 	</div>
 
 	<section class="section">
-		<h2>Foundation</h2>
-		<p class="section-desc">Core packages required for any SMRT application.</p>
+		<h2>Core Foundation (4 modules)</h2>
+		<p class="section-desc">Essential packages required for any SMRT application.</p>
 		<div class="packages">
-			{#each foundation as pkg}
-				<div class="package">
-					<code>{pkg.name}</code>
-					<span>{pkg.description}</span>
-				</div>
+			{#each foundation as mod}
+				{#if mod.href}
+					<a href={mod.href} class="package package-link">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</a>
+				{:else}
+					<div class="package">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</div>
+				{/if}
 			{/each}
 		</div>
 	</section>
 
 	<section class="section">
-		<h2>Domain Modules</h2>
-		<p class="section-desc">Pre-built domain models for common use cases.</p>
+		<h2>User & Access Management (2 modules)</h2>
+		<p class="section-desc">Multi-tenancy, authentication, and role-based access control.</p>
 		<div class="packages">
-			{#each domain as pkg}
-				<div class="package">
-					<code>{pkg.name}</code>
-					<span>{pkg.description}</span>
-				</div>
+			{#each userAccess as mod}
+				{#if mod.href}
+					<a href={mod.href} class="package package-link">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</a>
+				{:else}
+					<div class="package">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</div>
+				{/if}
 			{/each}
 		</div>
 	</section>
 
 	<section class="section">
-		<h2>Business</h2>
-		<p class="section-desc">Specialized business logic packages.</p>
+		<h2>Domain Models & Data (9 modules)</h2>
+		<p class="section-desc">Pre-built domain models for common business use cases.</p>
 		<div class="packages">
-			{#each business as pkg}
-				<div class="package">
-					<code>{pkg.name}</code>
-					<span>{pkg.description}</span>
-				</div>
+			{#each domain as mod}
+				{#if mod.href}
+					<a href={mod.href} class="package package-link">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</a>
+				{:else}
+					<div class="package">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</div>
+				{/if}
 			{/each}
 		</div>
 	</section>
 
 	<section class="section">
-		<h2>Infrastructure</h2>
-		<p class="section-desc">Development tools and runtime support.</p>
+		<h2>Content & Communication (4 modules)</h2>
+		<p class="section-desc">Content processing, messaging, analytics, and advertising.</p>
 		<div class="packages">
-			{#each infrastructure as pkg}
-				<div class="package">
-					<code>{pkg.name}</code>
-					<span>{pkg.description}</span>
-				</div>
+			{#each content as mod}
+				{#if mod.href}
+					<a href={mod.href} class="package package-link">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</a>
+				{:else}
+					<div class="package">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</div>
+				{/if}
+			{/each}
+		</div>
+	</section>
+
+	<section class="section">
+		<h2>Agents & Automation (2 modules)</h2>
+		<p class="section-desc">Build autonomous agents and federated knowledge systems.</p>
+		<div class="packages">
+			{#each agents as mod}
+				{#if mod.href}
+					<a href={mod.href} class="package package-link">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</a>
+				{:else}
+					<div class="package">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</div>
+				{/if}
+			{/each}
+		</div>
+	</section>
+
+	<section class="section">
+		<h2>Developer Tools & CLI (3 modules)</h2>
+		<p class="section-desc">Development tools, testing utilities, and MCP integration.</p>
+		<div class="packages">
+			{#each devTools as mod}
+				{#if mod.href}
+					<a href={mod.href} class="package package-link">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</a>
+				{:else}
+					<div class="package">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</div>
+				{/if}
+			{/each}
+		</div>
+	</section>
+
+	<section class="section">
+		<h2>UI Components & Frontend (2 modules)</h2>
+		<p class="section-desc">Svelte components and browser-based AI capabilities.</p>
+		<div class="packages">
+			{#each ui as mod}
+				{#if mod.href}
+					<a href={mod.href} class="package package-link">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</a>
+				{:else}
+					<div class="package">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</div>
+				{/if}
+			{/each}
+		</div>
+	</section>
+
+	<section class="section">
+		<h2>Project Templates (2 modules)</h2>
+		<p class="section-desc">Starter templates for building SMRT applications.</p>
+		<div class="packages">
+			{#each templates as mod}
+				{#if mod.href}
+					<a href={mod.href} class="package package-link">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</a>
+				{:else}
+					<div class="package">
+						<code>{mod.package}</code>
+						<span>{mod.description}</span>
+					</div>
+				{/if}
 			{/each}
 		</div>
 	</section>
@@ -191,12 +324,30 @@ npm install @happyvertical/smrt-content`}</code></pre>
 		border-bottom: none;
 	}
 
+	.package-link {
+		text-decoration: none;
+		transition: all 0.2s;
+	}
+
+	.package-link:hover {
+		background: #fafafa;
+		padding-left: 12px;
+		padding-right: 12px;
+		margin-left: -12px;
+		margin-right: -12px;
+	}
+
+	.package-link:hover code {
+		color: var(--color-accent);
+	}
+
 	.package code {
 		font-family: var(--font-mono);
 		font-size: 0.9rem;
 		font-weight: 500;
 		flex-shrink: 0;
-		width: 200px;
+		width: 250px;
+		color: #1a1a1a;
 	}
 
 	.package span {

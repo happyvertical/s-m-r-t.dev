@@ -1,6 +1,6 @@
-import { getDoc } from '$lib/server/docs';
+import { getDoc, listDocs } from '$lib/server/docs';
 import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import type { PageServerLoad, EntryGenerator } from './$types';
 
 const MAPPINGS: Record<string, string> = {
 	'objects': 'api/core/classes/SmrtObject',
@@ -11,6 +11,17 @@ const MAPPINGS: Record<string, string> = {
 	'smrt-db': 'core',
 	'smrt-ai': 'api/core/interfaces/AiConfig',
 	'foundations': 'core'
+};
+
+export const prerender = true;
+
+const STATIC_PAGES = ['agents', 'collections', 'components', 'objects'];
+
+export const entries: EntryGenerator = () => {
+	const docs = listDocs();
+	return docs
+		.filter((slug) => !STATIC_PAGES.includes(slug.split('/')[0]))
+		.map((slug) => ({ slug }));
 };
 
 export const load: PageServerLoad = async ({ params }) => {
