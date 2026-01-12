@@ -101,4 +101,18 @@
   <url><loc>https://havesmrt.com/components/users/user-form</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://havesmrt.com/components/users/user-menu</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://havesmrt.com/components/users/invite-user</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Tenant Components -->
+  <url><loc>https://havesmrt.com/components/tenants/tenant-card</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/tenants/tenant-switcher</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Role Components -->
+  <url><loc>https://havesmrt.com/components/roles/role-badge</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/roles/role-selector</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Permission Components -->
+  <url><loc>https://havesmrt.com/components/permissions/permission-check</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Membership Components -->
+  <url><loc>https://havesmrt.com/components/memberships/membership-card</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>
