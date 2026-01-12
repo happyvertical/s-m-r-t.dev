@@ -25,9 +25,9 @@
 
 ### Component Documentation
 - [x] SMRTTextInput - FULLY DOCUMENTED with 6+ examples, props table, TypeScript interface
-- [x] Component pages created for:
-  - Forms: text-input, smrt-select, checkbox, datetime, address, money
-  - Users: user-card, user-avatar, user-list, user-form, user-menu, invite-user
+- [x] Component pages created and documented (16 components):
+  - Forms (11): text-input, smrt-select, checkbox, datetime, address, money, phone, textarea, number, daterange, measurement
+  - Users (6): user-card, user-avatar, user-list, user-form, user-menu, invite-user (includes InviteUserModal)
 
 ### Module Documentation (29 of 29 complete - 100% COMPLETE ✅)
 - [x] smrt-core - Comprehensive documentation covering architecture, AI integration, querying, code generation, STI, context memory, Vite plugin
@@ -177,12 +177,12 @@ Per PRD, each module needs:
 
 **Breakdown by PRD Phase**:
 - Phase 1 (Foundation): 95% complete (infrastructure deployed, build working)
-- Phase 2 (Component Docs): 5% complete (1 of 100 components fully documented)
+- Phase 2 (Component Docs): ~16% complete (16 of 100 components fully documented)
 - Phase 3 (Module Docs): 100% COMPLETE ✅ (29 of 29 modules documented)
 - Phase 4 (Core Docs): 100% COMPLETE ✅ (getting-started, FAQ, objects, agents, collections)
-- Phase 5 (Polish): 0% complete
+- Phase 5 (Polish): ~30% complete (sitemap, robots.txt done; SEO metadata, analytics pending)
 
-**Recent Progress (Jan 12)**:
+**Recent Progress (Jan 11-12)**:
 - ✅ Updated PROGRESS.md to v0.19.0
 - ✅ Documented smrt-config (comprehensive, 780 lines)
 - ✅ Documented smrt-scanner (comprehensive, 676 lines)
@@ -214,6 +214,16 @@ Per PRD, each module needs:
 
 🎉 **PHASE 3 COMPLETE: All 29 modules documented!**
 🎉 **PHASE 4 COMPLETE: All core docs created!**
+
+**Latest Progress (Jan 12 evening)**:
+- ✅ Created 5 new form component pages with comprehensive docs:
+  - SMRTPhone - phone number formatting and validation
+  - SMRTTextarea - multi-line text with character counting
+  - SMRTNumber - numeric input with constraints
+  - SMRTDateRange - start/end date selection
+  - SMRTMeasurement - value + unit selection (height, weight, temperature, etc.)
+- ✅ Updated sitemap.xml with new component pages
+- ✅ Component documentation: 16/100 (~16% complete)
 
 **Phase 4 Completion Details:**
 - ✅ /docs/getting-started - Comprehensive 10-minute quickstart guide
