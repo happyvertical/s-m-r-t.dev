@@ -29,7 +29,7 @@
   - Forms: text-input, smrt-select, checkbox, datetime, address, money
   - Users: user-card, user-avatar, user-list, user-form, user-menu, invite-user
 
-### Module Documentation (14 of 29 complete - 48%)
+### Module Documentation (15 of 29 complete - 52%)
 - [x] smrt-core - Comprehensive documentation covering architecture, AI integration, querying, code generation, STI, context memory, Vite plugin
 - [x] smrt-types - Complete documentation of Signal system, types, and adapters
 - [x] smrt-config - Full configuration management documentation with tutorials, API reference, best practices
@@ -44,6 +44,7 @@
 - [x] smrt-products - Product catalog with categories, specifications, reactive Svelte 5 components, auto-generated APIs
 - [x] smrt-tags - Hierarchical tagging system with context scoping, multi-language aliases, flexible metadata
 - [x] smrt-messages - Email persistence with multi-provider support, threading, attachments, intelligent sync
+- [x] smrt-properties - Digital property and zone management with hierarchical organization
 
 **Module Updates in v0.19.0:**
 - NEW: smrt-tenancy (29th module) - Production-ready multi-tenancy framework
@@ -96,6 +97,7 @@ Per PRD, each module needs:
 1. Core Foundation (4): smrt-core ✅, smrt-types ✅, smrt-config, smrt-scanner
 2. High-Usage (6): smrt-users, smrt-agents, smrt-profiles, smrt-content, smrt-assets, smrt-tenancy (NEW)
 3. Domain Models (9): smrt-commerce (new UI), smrt-ledgers, smrt-events (new UI), smrt-places, smrt-products, smrt-projects (new UI), smrt-properties, smrt-tags, smrt-messages
+- [x] smrt-properties - Digital property and zone management with hierarchical organization
 4. Content & Communication (3): smrt-analytics, smrt-ads, smrt-gnode
 5. Developer Tools (3): smrt-cli, smrt-dev-mcp, smrt-vitest
 6. UI & Templates (4): smrt-svelte, browser-ai, template-site-static-json, template-sveltekit
@@ -163,7 +165,7 @@ Per PRD, each module needs:
 **Breakdown by PRD Phase**:
 - Phase 1 (Foundation): 95% complete (infrastructure deployed, build working)
 - Phase 2 (Component Docs): 5% complete (1 of 100 components fully documented)
-- Phase 3 (Module Docs): 48% complete (14 of 29 modules documented)
+- Phase 3 (Module Docs): 52% complete (15 of 29 modules documented)
 - Phase 4 (Core Docs): 0% complete
 - Phase 5 (Polish): 0% complete
 
@@ -182,6 +184,7 @@ Per PRD, each module needs:
 - ✅ Documented smrt-products (comprehensive, 971 lines - product catalog with Svelte 5 components)
 - ✅ Documented smrt-tags (comprehensive, 762 lines - hierarchical tagging with multi-language support)
 - ✅ Documented smrt-messages (comprehensive, 657 lines - email with multi-provider support)
+- [x] smrt-properties - Digital property and zone management with hierarchical organization
 
 **Reality Check**:
 - Original estimate: 17 components
