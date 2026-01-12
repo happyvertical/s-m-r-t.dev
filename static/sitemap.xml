@@ -88,6 +88,11 @@
   <url><loc>https://havesmrt.com/components/forms/datetime</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://havesmrt.com/components/forms/address</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://havesmrt.com/components/forms/money</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/forms/phone</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/forms/textarea</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/forms/number</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/forms/daterange</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/forms/measurement</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
   <!-- User Components -->
   <url><loc>https://havesmrt.com/components/users/user-card</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
