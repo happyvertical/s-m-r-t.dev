@@ -29,9 +29,11 @@
   - Forms: text-input, smrt-select, checkbox, datetime, address, money
   - Users: user-card, user-avatar, user-list, user-form, user-menu, invite-user
 
-### Module Documentation (2 of 29 complete)
+### Module Documentation (4 of 29 complete - 14%)
 - [x] smrt-core - Comprehensive documentation covering architecture, AI integration, querying, code generation, STI, context memory, Vite plugin
 - [x] smrt-types - Complete documentation of Signal system, types, and adapters
+- [x] smrt-config - Full configuration management documentation with tutorials, API reference, best practices
+- [x] smrt-scanner - Complete TypeScript scanner documentation with STI handling, inheritance resolution
 
 **Module Updates in v0.19.0:**
 - NEW: smrt-tenancy (29th module) - Production-ready multi-tenancy framework
@@ -151,9 +153,14 @@ Per PRD, each module needs:
 **Breakdown by PRD Phase**:
 - Phase 1 (Foundation): 95% complete (infrastructure deployed, build working)
 - Phase 2 (Component Docs): 5% complete (1 of 100 components fully documented)
-- Phase 3 (Module Docs): 7% complete (2 of 29 modules documented)
+- Phase 3 (Module Docs): 14% complete (4 of 29 modules documented)
 - Phase 4 (Core Docs): 0% complete
 - Phase 5 (Polish): 0% complete
+
+**Recent Progress (Jan 12)**:
+- ✅ Updated PROGRESS.md to v0.19.0
+- ✅ Documented smrt-config (comprehensive, 780 lines)
+- ✅ Documented smrt-scanner (comprehensive, 676 lines)
 
 **Reality Check**:
 - Original estimate: 17 components
