@@ -166,6 +166,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Roles and permissions (RBAC)
 - [ ] Groups and hierarchies
 - [ ] Authentication patterns
+- [ ] Component Browser: User management components (UserCard, UserAvatar, UserList, UserForm, UserMenu, InviteUser, TenantCard, TenantSwitcher, RoleBadge, RoleSelector, PermissionCheck)
 - [ ] Tutorial: Setting up multi-tenant auth
 - [ ] Tutorial: Implementing RBAC
 - [ ] Tutorial: User registration flow
@@ -360,6 +361,7 @@ Create a comprehensive, developer-friendly documentation site that:
 
 **smrt-svelte**:
 - [ ] Component library overview
+- [ ] Component Browser: All SMRT Svelte components organized by category (Forms, UI, Layout, Display, Feedback, etc.)
 - [ ] Auth components
 - [ ] User management UI
 - [ ] Tenant switching
@@ -375,6 +377,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Text-to-speech (TTS)
 - [ ] Browser LLM integration
 - [ ] Adapter pattern
+- [ ] Component Browser (if applicable): UI components for STT/TTS controls, voice input buttons, transcription displays
 - [ ] Tutorial: Voice-enabled forms
 - [ ] Tutorial: Client-side AI
 - [ ] Example: Voice assistant
@@ -404,11 +407,12 @@ Each module must include:
 3. **Quick Start**: 5-minute getting started guide
 4. **Core Concepts**: Key architectural concepts
 5. **API Reference**: All exports, classes, methods
-6. **Tutorials** (2-4 per module): Step-by-step guides
-7. **Examples** (3-5 per module): Real-world scenarios
-8. **Integration**: How it works with other modules
-9. **Best Practices**: Dos and don'ts
-10. **Troubleshooting**: Common issues and solutions
+6. **Component Browser** (if module has components): Interactive browser for module-specific components with live examples, props tables, and code samples
+7. **Tutorials** (2-4 per module): Step-by-step guides
+8. **Examples** (3-5 per module): Real-world scenarios
+9. **Integration**: How it works with other modules
+10. **Best Practices**: Dos and don'ts
+11. **Troubleshooting**: Common issues and solutions
 
 **Subagent Documentation Process**:
 
@@ -993,6 +997,39 @@ havesmrt.com/
 ├── vite.config.ts
 └── tsconfig.json
 ```
+
+### Module Component Browsers
+
+Each module that includes UI components should have its own component browser at `/modules/[module-name]/components/`:
+
+**Structure for modules with components:**
+```
+/modules/[module-name]/
+├── +page.svelte (module overview)
+├── components/
+│   ├── +page.svelte (component browser index)
+│   ├── [component-name]/
+│   │   └── +page.svelte (individual component documentation)
+├── tutorials/
+├── examples/
+└── api/
+```
+
+**Modules with Component Browsers:**
+- **smrt-users**: UserCard, UserAvatar, UserList, UserForm, UserMenu, InviteUser, TenantCard, TenantSwitcher, RoleBadge, RoleSelector, PermissionCheck, MembershipCard, MembershipList
+- **smrt-svelte**: All SMRT Svelte form components, UI components, layout components, display components, feedback components
+- **browser-ai**: STT/TTS control components, voice input buttons, transcription displays (if applicable)
+- **Other modules**: Add component browsers as module-specific UI components are developed
+
+**Component Browser Requirements:**
+Each component page must follow the same standards as Section 2 (Component Documentation):
+1. Clear description and use cases
+2. Installation/import instructions
+3. 3-5 interactive examples
+4. Complete props table
+5. TypeScript interface definition
+6. Accessibility notes
+7. SMRT mode behavior (if applicable)
 
 ### Key Technologies
 
