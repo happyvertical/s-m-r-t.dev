@@ -115,4 +115,10 @@
 
   <!-- Membership Components -->
   <url><loc>https://havesmrt.com/components/memberships/membership-card</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/memberships/membership-list</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Component Category Landing Pages -->
+  <url><loc>https://havesmrt.com/components/commerce</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/projects</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/events</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>

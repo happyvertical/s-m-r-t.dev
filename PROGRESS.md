@@ -25,16 +25,17 @@
 
 ### Component Documentation
 - [x] SMRTTextInput - FULLY DOCUMENTED with 6+ examples, props table, TypeScript interface
-- [x] Component pages created and documented (22+ components):
+- [x] Component pages created and documented (23 components with full pages):
   - Forms (11): text-input, smrt-select, checkbox, datetime, address, money, phone, textarea, number, daterange, measurement
   - Users (6): user-card, user-avatar, user-list, user-form, user-menu, invite-user (includes InviteUserModal)
   - Tenants (2): tenant-card, tenant-switcher
   - Roles (2): role-badge, role-selector
   - Permissions (1): permission-check
-  - Memberships (1): membership-card
-  - Commerce category (landing page created, 6 components referenced)
-  - Projects category (landing page created, 7 components referenced)
-  - Events category (landing page created, 1 component referenced)
+  - Memberships (2): membership-card, membership-list
+- [x] Category landing pages (3) reference 14 additional components:
+  - Commerce (6 components): InvoiceCard, InvoiceHeader, InvoiceLineItems, InvoiceTotals, InvoiceActions, UnbilledItems
+  - Projects (7 components): TimeEntryCard, TimeEntryList, TimeSummary, DurationDisplay, ApprovalActions, BulkActions, RejectDialog
+  - Events (1 component): MeetingView
 
 ### Module Documentation (29 of 29 complete - 100% COMPLETE ✅)
 - [x] smrt-core - Comprehensive documentation covering architecture, AI integration, querying, code generation, STI, context memory, Vite plugin
@@ -184,7 +185,7 @@ Per PRD, each module needs:
 
 **Breakdown by PRD Phase**:
 - Phase 1 (Foundation): 95% complete (infrastructure deployed, build working)
-- Phase 2 (Component Docs): ~22% complete (22 of 100 components with pages; category landing pages for 14 more)
+- Phase 2 (Component Docs): ~37% complete (23 fully documented + 14 referenced in landing pages = 37 of 100)
 - Phase 3 (Module Docs): 100% COMPLETE ✅ (29 of 29 modules documented)
 - Phase 4 (Core Docs): 100% COMPLETE ✅ (getting-started, FAQ, objects, agents, collections)
 - Phase 5 (Polish): ~30% complete (sitemap, robots.txt done; SEO metadata, analytics pending)
@@ -223,12 +224,12 @@ Per PRD, each module needs:
 🎉 **PHASE 4 COMPLETE: All core docs created!**
 
 **Latest Progress (Jan 12 evening)**:
-- ✅ Created 11 new component pages in batch:
+- ✅ Created 12 new component pages in final batch:
   - 5 form components: SMRTPhone, SMRTTextarea, SMRTNumber, SMRTDateRange, SMRTMeasurement
-  - 6 tenant/role/permission components: TenantCard, TenantSwitcher, RoleBadge, RoleSelector, PermissionCheck, MembershipCard
-- ✅ Created category landing pages: Commerce (6 components), Projects (7 components), Events (1 component)
+  - 7 tenant/role/permission/membership components: TenantCard, TenantSwitcher, RoleBadge, RoleSelector, PermissionCheck, MembershipCard, MembershipList
+- ✅ Created 3 category landing pages: Commerce (6 components), Projects (7 components), Events (1 component)
 - ✅ Updated sitemap.xml with all new pages
-- ✅ Component documentation: 22/100 (~22% complete) + 3 category landing pages
+- ✅ Component documentation: 23/100 fully documented + 14 referenced = 37/100 (~37% complete)
 
 **Phase 4 Completion Details:**
 - ✅ /docs/getting-started - Comprehensive 10-minute quickstart guide
