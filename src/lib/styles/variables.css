@@ -81,4 +81,20 @@
 	/* Transitions */
 	--transition-base: 150ms cubic-bezier(0.4, 0, 0.2, 1);
 	--transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+	/* Focus */
+	--focus-ring-color: #1976d2;
+	--focus-ring-width: 3px;
+	--focus-ring-offset: 2px;
+}
+
+/* Global focus-visible styles for accessibility */
+*:focus-visible {
+	outline: var(--focus-ring-width) solid var(--focus-ring-color);
+	outline-offset: var(--focus-ring-offset);
+}
+
+/* Remove default focus outline when using focus-visible */
+*:focus:not(:focus-visible) {
+	outline: none;
 }

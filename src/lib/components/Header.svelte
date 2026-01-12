@@ -2,11 +2,11 @@
 	import Grid from './Grid.svelte';
 </script>
 
-<header>
+<header role="banner">
 	<Grid>
 		<div class="header-content">
-			<a href="/" class="branding">s-m-r-t</a>
-			<nav>
+			<a href="/" class="branding" aria-label="SMRT Framework Home">s-m-r-t</a>
+			<nav role="navigation" aria-label="Main navigation">
 				<a href="/docs">Docs</a>
 				<a href="/components">Components</a>
 				<a href="/modules">Modules</a>
