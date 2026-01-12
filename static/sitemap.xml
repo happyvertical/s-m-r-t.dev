@@ -117,8 +117,26 @@
   <url><loc>https://havesmrt.com/components/memberships/membership-card</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://havesmrt.com/components/memberships/membership-list</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-  <!-- Component Category Landing Pages -->
+  <!-- Commerce Components -->
   <url><loc>https://havesmrt.com/components/commerce</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/commerce/invoice-card</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/commerce/invoice-header</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/commerce/invoice-line-items</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/commerce/invoice-totals</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/commerce/invoice-actions</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/commerce/unbilled-items</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Project Components -->
   <url><loc>https://havesmrt.com/components/projects</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/projects/time-entry-card</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/projects/time-entry-list</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/projects/time-summary</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/projects/duration-display</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/projects/approval-actions</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/projects/bulk-actions</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/projects/reject-dialog</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Event Components -->
   <url><loc>https://havesmrt.com/components/events</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/events/meeting-view</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>
