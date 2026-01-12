@@ -1,3 +1,8 @@
-# allow crawling everything by default
+# robots.txt for havesmrt.com
 User-agent: *
-Disallow:
+Allow: /
+
+# Sitemaps
+Sitemap: https://havesmrt.com/sitemap.xml
+
+# Allow all content by default
