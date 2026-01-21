@@ -113,9 +113,7 @@ jobs:
           aws s3 cp build/_app/ s3://havesmrt-staging/_app/ --recursive --cache-control "public, max-age=31536000, immutable"
 
       - name: Invalidate CloudFront cache
-        run: |
-          DISTRIBUTION_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?contains(Aliases.Items, 'staging.havesmrt.com')].Id | [0]" --output text)
-          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
+        run: aws cloudfront create-invalidation --distribution-id E1OSZKW909MZLI --paths "/*"
 
   deploy-production:
     needs: build
@@ -145,6 +143,4 @@ jobs:
           aws s3 cp build/_app/ s3://havesmrt-production/_app/ --recursive --cache-control "public, max-age=31536000, immutable"
 
       - name: Invalidate CloudFront cache
-        run: |
-          DISTRIBUTION_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?contains(Aliases.Items, 'havesmrt.com')].Id | [0]" --output text)
-          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
+        run: aws cloudfront create-invalidation --distribution-id EV2V4BTTHGGOV --paths "/*"
