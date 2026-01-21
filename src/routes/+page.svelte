@@ -108,6 +108,70 @@ class Invoice extends SmrtObject {
   }
 }`}</code></pre>
 	</section>
+
+	<section class="example">
+		<h3>Agents</h3>
+		<p class="example-desc">Autonomous actors with full SmrtObject capabilities.</p>
+		<pre><code>{`class Praeco extends Agent {
+  beat: string = 'local-news';
+
+  async run() {
+    // Agents inherit all SmrtObject methods
+    const isReady = await this.is('Has valid configuration?');
+
+    // AI-powered content generation
+    const summary = await this.do('Summarize today\\'s council meeting');
+
+    await this.save(); // Persist state to database
+  }
+}`}</code></pre>
+	</section>
+
+	<section class="example">
+		<h3>Inter-Agent Dispatch</h3>
+		<p class="example-desc">Async, persistent messaging between agents.</p>
+		<pre><code>{`// Suasor (marketing) notifies other agents
+await dispatch.emit('campaign.completed', {
+  campaignId: 'camp-123',
+  revenue: 5000
+});
+
+// Fiscus (accounting) subscribes with wildcards
+await dispatch.subscribe({
+  signalType: 'campaign.*',
+  subscriber: 'Fiscus'
+});
+
+// Process incoming messages (survives restarts)
+await dispatch.process('Fiscus', async (payload, meta) => {
+  await this.recordRevenue(payload.campaignId, payload.revenue);
+});`}</code></pre>
+	</section>
+
+	<section class="example">
+		<h3>Agent Memory</h3>
+		<p class="example-desc">Learn patterns, recall them across sessions.</p>
+		<pre><code>{`class Scraper extends Agent {
+  async scrape(url: string) {
+    // Try to recall learned selector
+    const cached = await this.recall({
+      scope: \`parser/\${new URL(url).hostname}\`,
+      key: 'content-selector'
+    });
+
+    if (cached) return this.extract(url, cached.value);
+
+    // Discover and remember for next time
+    const selector = await this.do('Find the article content selector');
+    await this.remember({
+      scope: \`parser/\${new URL(url).hostname}\`,
+      key: 'content-selector',
+      value: selector,
+      confidence: 0.9
+    });
+  }
+}`}</code></pre>
+	</section>
 </Grid>
 
 <style>
