@@ -18,3 +18,9 @@ variable "aws_region" {
   type        = string
   default     = "us-west-2"
 }
+
+variable "github_repository" {
+  description = "GitHub repository in format 'owner/repo'"
+  type        = string
+  default     = "happyvertical/havesmrt.com"
+}

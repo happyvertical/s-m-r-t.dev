@@ -12,3 +12,8 @@ variable "aws_region" {
   description = "AWS region for resources"
   type        = string
 }
+
+variable "github_repository" {
+  description = "GitHub repository in format 'owner/repo'"
+  type        = string
+}

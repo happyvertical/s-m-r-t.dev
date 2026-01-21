@@ -17,3 +17,8 @@ output "site_url" {
   description = "Full site URL"
   value       = "https://${local.site_domain}"
 }
+
+output "github_actions_role_arn" {
+  description = "IAM role ARN for GitHub Actions deployment"
+  value       = aws_iam_role.github_actions.arn
+}

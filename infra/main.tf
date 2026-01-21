@@ -27,9 +27,10 @@ provider "aws" {
 module "havesmrt" {
   source = "./modules/havesmrt"
 
-  environment = var.environment
-  domain      = var.domain
-  aws_region  = var.aws_region
+  environment       = var.environment
+  domain            = var.domain
+  aws_region        = var.aws_region
+  github_repository = var.github_repository
 
   providers = {
     aws.us_east_1 = aws.us_east_1

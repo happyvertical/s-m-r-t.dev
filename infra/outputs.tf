@@ -17,3 +17,8 @@ output "site_url" {
   description = "Full site URL"
   value       = module.havesmrt.site_url
 }
+
+output "github_actions_role_arn" {
+  description = "IAM role ARN for GitHub Actions deployment"
+  value       = module.havesmrt.github_actions_role_arn
+}
