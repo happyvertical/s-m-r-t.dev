@@ -113,6 +113,30 @@ resource "aws_s3_bucket_public_access_block" "site" {
   restrict_public_buckets = true
 }
 
+# CloudFront function to handle URL rewriting (add .html extension)
+resource "aws_cloudfront_function" "url_rewrite" {
+  name    = "havesmrt-${var.environment}-url-rewrite"
+  runtime = "cloudfront-js-2.0"
+  publish = true
+  code    = <<-EOF
+    function handler(event) {
+      var request = event.request;
+      var uri = request.uri;
+
+      // If URI ends with '/' add index.html
+      if (uri.endsWith('/')) {
+        request.uri += 'index.html';
+      }
+      // If URI doesn't have an extension, add .html
+      else if (!uri.includes('.')) {
+        request.uri += '.html';
+      }
+
+      return request;
+    }
+  EOF
+}
+
 # CloudFront Origin Access Control
 resource "aws_cloudfront_origin_access_control" "site" {
   name                              = "havesmrt-${var.environment}-oac"
@@ -154,6 +178,11 @@ resource "aws_cloudfront_distribution" "site" {
     default_ttl            = 3600
     max_ttl                = 86400
     compress               = true
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.url_rewrite.arn
+    }
   }
 
   # Cache static assets aggressively
