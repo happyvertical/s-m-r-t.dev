@@ -112,15 +112,15 @@ class Invoice extends SmrtObject {
 	<section class="example">
 		<h3>Agents</h3>
 		<p class="example-desc">Autonomous actors with full SmrtObject capabilities.</p>
-		<pre><code>{`class Praeco extends Agent {
-  beat: string = 'local-news';
+		<pre><code>{`class Roboto extends Agent {
+  topic: string = 'daily-digest';
 
   async run() {
     // Agents inherit all SmrtObject methods
     const isReady = await this.is('Has valid configuration?');
 
     // AI-powered content generation
-    const summary = await this.do('Summarize today\\'s council meeting');
+    const summary = await this.do('Summarize today\\'s top stories');
 
     await this.save(); // Persist state to database
   }
@@ -130,28 +130,28 @@ class Invoice extends SmrtObject {
 	<section class="example">
 		<h3>Inter-Agent Dispatch</h3>
 		<p class="example-desc">Async, persistent messaging between agents.</p>
-		<pre><code>{`// Suasor (marketing) notifies other agents
-await dispatch.emit('campaign.completed', {
-  campaignId: 'camp-123',
-  revenue: 5000
+		<pre><code>{`// One agent notifies others
+await dispatch.emit('task.completed', {
+  taskId: 'task-123',
+  result: { items: 42 }
 });
 
-// Fiscus (accounting) subscribes with wildcards
+// Another agent subscribes with wildcards
 await dispatch.subscribe({
-  signalType: 'campaign.*',
-  subscriber: 'Fiscus'
+  signalType: 'task.*',
+  subscriber: 'Roboto'
 });
 
 // Process incoming messages (survives restarts)
-await dispatch.process('Fiscus', async (payload, meta) => {
-  await this.recordRevenue(payload.campaignId, payload.revenue);
+await dispatch.process('Roboto', async (payload, meta) => {
+  await this.handleResult(payload.taskId, payload.result);
 });`}</code></pre>
 	</section>
 
 	<section class="example">
 		<h3>Agent Memory</h3>
 		<p class="example-desc">Learn patterns, recall them across sessions.</p>
-		<pre><code>{`class Scraper extends Agent {
+		<pre><code>{`class Roboto extends Agent {
   async scrape(url: string) {
     // Try to recall learned selector
     const cached = await this.recall({
