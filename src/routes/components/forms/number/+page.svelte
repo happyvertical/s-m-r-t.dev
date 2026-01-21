@@ -3,6 +3,7 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
+	import { SmrtProvider } from '@happyvertical/smrt-svelte';
 
 	let basicValue = $state<number | null>(null);
 	let ageValue = $state<number | null>(25);
@@ -97,6 +98,7 @@
 	<meta name="description" content="Numeric input component with validation, constraints, and voice input for numbers." />
 </svelte:head>
 
+<SmrtProvider>
 <article class="prose">
 	<nav class="breadcrumb">
 		<a href="/components">Components</a>
@@ -372,6 +374,7 @@ interface Props {
 		<li>Browser native validation provides immediate feedback</li>
 	</ul>
 </article>
+</SmrtProvider>
 
 <style>
 	.breadcrumb {

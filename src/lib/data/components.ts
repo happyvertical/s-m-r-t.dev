@@ -21,11 +21,6 @@ export const categories: CategoryMeta[] = [
 			{ name: 'Button', slug: 'button', description: 'Interactive button with multiple variants and sizes' },
 			{ name: 'Badge', slug: 'badge', description: 'Small status indicator with color variants' },
 			{ name: 'Card', slug: 'card', description: 'Container for grouping related content' },
-			{ name: 'Input', slug: 'input', description: 'Text input field with validation states' },
-			{ name: 'Select', slug: 'select', description: 'Dropdown selection component' },
-			{ name: 'Textarea', slug: 'textarea', description: 'Multi-line text input' },
-			{ name: 'Toggle', slug: 'toggle', description: 'Binary on/off switch' },
-			{ name: 'FormGroup', slug: 'form-group', description: 'Form field wrapper with label and error' },
 			{ name: 'Pagination', slug: 'pagination', description: 'Page navigation controls' }
 		]
 	},
@@ -85,7 +80,8 @@ export const categories: CategoryMeta[] = [
 		description: 'User feedback and progress components',
 		components: [
 			{ name: 'ProgressBar', slug: 'progress-bar', description: 'Progress indicator with percentage' },
-			{ name: 'ConfirmDialog', slug: 'confirm-dialog', description: 'Confirmation modal dialog' }
+			{ name: 'ConfirmDialog', slug: 'confirm-dialog', description: 'Confirmation modal dialog' },
+			{ name: 'Modal', slug: 'modal', description: 'Accessible dialog component with multiple sizes' }
 		]
 	},
 	{
