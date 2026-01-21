@@ -3,6 +3,7 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
+	import { SmrtProvider } from '@happyvertical/smrt-svelte';
 
 	let dateTimeValue = $state('');
 	let dateOnlyValue = $state('');
@@ -70,6 +71,7 @@
 	<title>SMRTDateTime | SMRT Forms</title>
 </svelte:head>
 
+<SmrtProvider>
 <article class="prose">
 	<nav class="breadcrumb">
 		<a href="/components">Components</a>
@@ -277,6 +279,7 @@ interface Props {
 	</ul>
 	<p>The display value is automatically formatted to the user's locale for readability.</p>
 </article>
+</SmrtProvider>
 
 <style>
 	.breadcrumb {
