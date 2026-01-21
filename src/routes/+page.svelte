@@ -108,6 +108,48 @@ class Invoice extends SmrtObject {
   }
 }`}</code></pre>
 	</section>
+
+	<section class="example">
+		<h3>Semantic Search</h3>
+		<p class="example-desc">Find by meaning, not keywords.</p>
+		<pre><code>{`// Search by text similarity
+const results = await articles.semanticSearch('machine learning basics', {
+  field: 'content',
+  limit: 10,
+  minSimilarity: 0.7
+});
+
+// Find similar to an existing object
+const related = await articles.findSimilar(article, { limit: 5 });`}</code></pre>
+	</section>
+
+	<section class="example">
+		<h3>Batch Operations</h3>
+		<p class="example-desc">Efficient multi-record operations.</p>
+		<pre><code>{`// Batch fetch by IDs (single query)
+const items = await collection.listByIds(['id1', 'id2', 'id3']);
+
+// Find or create with defaults
+const user = await users.getOrUpsert(
+  { email: 'user@example.com' },
+  { name: 'New User', role: 'member' }
+);`}</code></pre>
+	</section>
+
+	<section class="example">
+		<h3>Interceptors</h3>
+		<p class="example-desc">Hook into every operation.</p>
+		<pre><code>{`GlobalInterceptors.register({
+  name: 'tenancy',
+  priority: 100,
+  beforeList(className, options, context) {
+    return {
+      ...options,
+      where: { ...options.where, tenantId: getTenantId() }
+    };
+  }
+});`}</code></pre>
+	</section>
 </Grid>
 
 <style>
