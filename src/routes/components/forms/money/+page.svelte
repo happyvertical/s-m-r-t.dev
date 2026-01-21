@@ -3,8 +3,6 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-	import { SmrtProvider } from '@happyvertical/smrt-svelte';
-
 	let basicValue = $state<number | null>(null);
 	let usdValue = $state<number | null>(15000);
 	let constrainedValue = $state<number | null>(null);
@@ -89,7 +87,6 @@
 	<title>SMRTMoney | SMRT Forms</title>
 </svelte:head>
 
-<SmrtProvider>
 <article class="prose">
 	<nav class="breadcrumb">
 		<a href="/components">Components</a>
@@ -314,7 +311,6 @@ interface Props {
 		A hidden input <code>{`{name}_cents`}</code> is included for form submission with the cents value.
 	</p>
 </article>
-</SmrtProvider>
 
 <style>
 	.breadcrumb {

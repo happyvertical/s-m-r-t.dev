@@ -3,8 +3,6 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-	import { SmrtProvider } from '@happyvertical/smrt-svelte';
-
 	let selectedCountry = $state('');
 	let selectedSize = $state('');
 	let selectedPriority = $state('medium');
@@ -93,7 +91,6 @@
 	<title>SMRTSelect | SMRT Forms</title>
 </svelte:head>
 
-<SmrtProvider>
 <article class="prose">
 	<nav class="breadcrumb">
 		<a href="/components">Components</a>
@@ -295,7 +292,6 @@ interface Props {
 		language="typescript"
 	/>
 </article>
-</SmrtProvider>
 
 <style>
 	.breadcrumb {

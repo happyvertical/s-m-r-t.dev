@@ -3,8 +3,6 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-	import { SmrtProvider } from '@happyvertical/smrt-svelte';
-
 	let basicValue = $state('');
 	let emailValue = $state('');
 	let requiredValue = $state('');
@@ -77,8 +75,7 @@
 	<title>SMRTTextInput | SMRT Forms</title>
 </svelte:head>
 
-<SmrtProvider>
-	<article class="prose">
+<article class="prose">
 		<nav class="breadcrumb">
 			<a href="/components">Components</a>
 			<span>/</span>
@@ -240,8 +237,7 @@ interface Props {
 }`}
 			language="typescript"
 		/>
-	</article>
-</SmrtProvider>
+</article>
 
 <style>
 	.breadcrumb {

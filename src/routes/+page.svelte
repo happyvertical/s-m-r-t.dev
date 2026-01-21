@@ -228,8 +228,6 @@ const user = await users.getOrUpsert(
 
     // AI-powered content generation
     const summary = await this.do('Summarize today\\'s top stories');
-
-    await this.save(); // Persist state to database
   }
 }`}</code></pre>
 	</section>

@@ -3,8 +3,6 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-	import { SmrtProvider } from '@happyvertical/smrt-svelte';
-
 	let basicPhone = $state('');
 	let canadianPhone = $state('+1 (416) 555-0123');
 	let usPhone = $state('');
@@ -79,7 +77,6 @@
 	<meta name="description" content="Phone number input component with formatting and validation for CA and US numbers." />
 </svelte:head>
 
-<SmrtProvider>
 <article class="prose">
 	<nav class="breadcrumb">
 		<a href="/components">Components</a>
@@ -306,7 +303,6 @@ interface Props {
 		<li>Validates 10-digit format (excluding country code)</li>
 	</ul>
 </article>
-</SmrtProvider>
 
 <style>
 	.breadcrumb {
