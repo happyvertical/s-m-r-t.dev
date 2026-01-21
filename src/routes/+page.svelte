@@ -108,6 +108,52 @@ class Invoice extends SmrtObject {
   }
 }`}</code></pre>
 	</section>
+
+	<section class="example">
+		<h3>AI-Powered Methods</h3>
+		<p class="example-desc">Validate, transform, and describe content with AI.</p>
+		<pre><code>{`// Validate content with AI
+const isValid = await article.is("Is this article well-structured?");
+
+// Transform content with AI
+const summary = await article.do("Summarize in 3 bullet points");
+
+// Generate descriptions automatically
+const description = await product.describe();`}</code></pre>
+	</section>
+
+	<section class="example">
+		<h3>Memory & Context</h3>
+		<p class="example-desc">Remember patterns, recall them later.</p>
+		<pre><code>{`// Remember learned patterns
+await agent.remember({
+  scope: 'parser/example.com',
+  key: 'selector',
+  value: '.article-content',
+  confidence: 0.95
+});
+
+// Recall for future use
+const selector = await agent.recall({
+  scope: 'parser/example.com',
+  key: 'selector'
+});`}</code></pre>
+	</section>
+
+	<section class="example">
+		<h3>Vector Embeddings</h3>
+		<p class="example-desc">Semantic search built in.</p>
+		<pre><code>{`// Generate embeddings for semantic search
+await article.generateEmbeddings();
+
+// Check if content changed
+if (await article.hasStaleEmbeddings()) {
+  await article.generateEmbeddings();
+}
+
+// Search by similarity
+const similar = await articles.searchByQuery(queryText, { limit: 5 });`}</code></pre>
+	</section>
 </Grid>
 
 <style>
