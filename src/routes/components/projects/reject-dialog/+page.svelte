@@ -3,7 +3,7 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head><title>RejectDialog | SMRT</title></svelte:head>
+<svelte:head><title>RejectDialog | s-m-r-t</title></svelte:head>
 
 <article class="prose">
 	<h1>RejectDialog</h1>

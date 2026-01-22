@@ -72,7 +72,7 @@
 </script>
 
 <svelte:head>
-	<title>TextInput | SMRT Forms</title>
+	<title>TextInput | s-m-r-t Forms</title>
 </svelte:head>
 
 <article class="prose">
@@ -86,7 +86,7 @@
 
 		<h1>TextInput</h1>
 		<p class="lead">
-			A Material Design 3 inspired text input with optional voice input support in SMRT mode.
+			A Material Design 3 inspired text input with optional voice input support in smrt mode.
 			Supports text and email types with built-in validation.
 		</p>
 
@@ -178,15 +178,15 @@
 			/>
 		</ComponentExample>
 
-		<h2>Voice Input (SMRT Mode)</h2>
+		<h2>Voice Input (smrt Mode)</h2>
 		<p>
-			When the application is in SMRT mode, a microphone button appears. Users can hold to speak
+			When the application is in smrt mode, a microphone button appears. Users can hold to speak
 			and the input will be processed via speech-to-text. The <code>appendMode</code> prop controls
 			whether spoken text replaces or appends to existing content.
 		</p>
 
 		<CodeBlock
-			code={`<!-- In SMRT mode, this input shows a mic button -->
+			code={`<!-- In smrt mode, this input shows a mic button -->
 <TextInput
   name="notes"
   label="Notes"

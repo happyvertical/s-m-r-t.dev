@@ -79,7 +79,7 @@
 </script>
 
 <svelte:head>
-	<title>TextareaInput | SMRT Forms</title>
+	<title>TextareaInput | s-m-r-t Forms</title>
 	<meta name="description" content="Multi-line text input component with character counting and voice input support." />
 </svelte:head>
 
@@ -95,7 +95,7 @@
 	<h1>TextareaInput</h1>
 	<p class="lead">
 		A Material Design 3 styled multi-line text input with character counting, auto-resizing,
-		and voice input support in SMRT mode for longer text content.
+		and voice input support in smrt mode for longer text content.
 	</p>
 
 	<h2>Installation</h2>
@@ -257,9 +257,9 @@
 		/>
 	</ComponentExample>
 
-	<h2>Voice Input (SMRT Mode)</h2>
+	<h2>Voice Input (smrt Mode)</h2>
 	<p>
-		In SMRT mode, users can dictate longer text content. The component supports:
+		In smrt mode, users can dictate longer text content. The component supports:
 	</p>
 	<ul>
 		<li>Continuous dictation for paragraphs</li>

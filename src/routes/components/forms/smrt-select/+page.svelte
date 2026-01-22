@@ -88,7 +88,7 @@
 </script>
 
 <svelte:head>
-	<title>SelectInput | SMRT Forms</title>
+	<title>SelectInput | s-m-r-t Forms</title>
 </svelte:head>
 
 <article class="prose">
@@ -102,7 +102,7 @@
 
 	<h1>SelectInput</h1>
 	<p class="lead">
-		A Material Design 3 styled select dropdown with support for voice selection in SMRT mode.
+		A Material Design 3 styled select dropdown with support for voice selection in smrt mode.
 		Provides consistent styling and integrates with the SMRT form context.
 	</p>
 

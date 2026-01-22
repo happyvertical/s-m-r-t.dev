@@ -73,7 +73,7 @@
 </script>
 
 <svelte:head>
-	<title>PhoneInput | SMRT Forms</title>
+	<title>PhoneInput | s-m-r-t Forms</title>
 	<meta name="description" content="Phone number input component with formatting and validation for CA and US numbers." />
 </svelte:head>
 
@@ -89,7 +89,7 @@
 	<h1>PhoneInput</h1>
 	<p class="lead">
 		A phone number input with automatic formatting for Canadian and US numbers. Supports voice
-		input in SMRT mode with natural language number parsing.
+		input in smrt mode with natural language number parsing.
 	</p>
 
 	<h2>Installation</h2>
@@ -210,7 +210,7 @@
 	</ComponentExample>
 
 	<h2>With Description</h2>
-	<p>Add a <code>description</code> for additional context in SMRT mode.</p>
+	<p>Add a <code>description</code> for additional context in smrt mode.</p>
 
 	<ComponentExample
 		code={`<PhoneInput
@@ -226,9 +226,9 @@
 		/>
 	</ComponentExample>
 
-	<h2>Voice Input (SMRT Mode)</h2>
+	<h2>Voice Input (smrt Mode)</h2>
 	<p>
-		In SMRT mode, users can speak phone numbers naturally. The component parses spoken digits:
+		In smrt mode, users can speak phone numbers naturally. The component parses spoken digits:
 	</p>
 	<ul>
 		<li>"four one six five five five zero one two three" → +1 (416) 555-0123</li>

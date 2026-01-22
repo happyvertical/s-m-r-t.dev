@@ -84,7 +84,7 @@
 </script>
 
 <svelte:head>
-	<title>MoneyInput | SMRT Forms</title>
+	<title>MoneyInput | s-m-r-t Forms</title>
 </svelte:head>
 
 <article class="prose">
@@ -99,7 +99,7 @@
 	<h1>MoneyInput</h1>
 	<p class="lead">
 		A monetary input component that stores values in cents for precision. Supports CAD and USD
-		currencies with voice input for natural language amounts in SMRT mode.
+		currencies with voice input for natural language amounts in smrt mode.
 	</p>
 
 	<h2>Installation</h2>
@@ -224,9 +224,9 @@
 		/>
 	</ComponentExample>
 
-	<h2>Voice Input (SMRT Mode)</h2>
+	<h2>Voice Input (smrt Mode)</h2>
 	<p>
-		In SMRT mode, users can speak monetary amounts naturally. The component parses phrases like:
+		In smrt mode, users can speak monetary amounts naturally. The component parses phrases like:
 	</p>
 	<ul>
 		<li>"one hundred fifty dollars" = 15000 cents</li>

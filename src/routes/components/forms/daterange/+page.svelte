@@ -72,7 +72,7 @@
 </script>
 
 <svelte:head>
-	<title>DateRangeInput | SMRT Forms</title>
+	<title>DateRangeInput | s-m-r-t Forms</title>
 	<meta name="description" content="Date range picker component for selecting start and end dates with validation." />
 </svelte:head>
 
@@ -88,7 +88,7 @@
 	<h1>DateRangeInput</h1>
 	<p class="lead">
 		A date range picker with start and end date inputs. Automatically validates that end date
-		comes after start date, with support for natural language in SMRT mode.
+		comes after start date, with support for natural language in smrt mode.
 	</p>
 
 	<h2>Installation</h2>
@@ -208,9 +208,9 @@
 		/>
 	</ComponentExample>
 
-	<h2>Voice Input (SMRT Mode)</h2>
+	<h2>Voice Input (smrt Mode)</h2>
 	<p>
-		In SMRT mode, users can speak date ranges naturally. Examples:
+		In smrt mode, users can speak date ranges naturally. Examples:
 	</p>
 	<ul>
 		<li>"from March first to March fifteenth"</li>

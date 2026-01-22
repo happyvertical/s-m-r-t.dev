@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>Project Components | SMRT</title>
+	<title>Project Components | s-m-r-t</title>
 	<meta name="description" content="Time tracking and project management components." />
 </svelte:head>
 

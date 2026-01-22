@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>Commerce Components | SMRT</title>
+	<title>Commerce Components | s-m-r-t</title>
 	<meta name="description" content="Invoice and billing components for commerce workflows." />
 </svelte:head>
 

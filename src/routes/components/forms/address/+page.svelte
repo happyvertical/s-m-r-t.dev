@@ -84,7 +84,7 @@
 </script>
 
 <svelte:head>
-	<title>AddressInput | SMRT Forms</title>
+	<title>AddressInput | s-m-r-t Forms</title>
 </svelte:head>
 
 <article class="prose">
@@ -99,7 +99,7 @@
 	<h1>AddressInput</h1>
 	<p class="lead">
 		A comprehensive address input component with street, city, province/state, postal code,
-		and country fields. Supports voice input in SMRT mode with intelligent address parsing.
+		and country fields. Supports voice input in smrt mode with intelligent address parsing.
 	</p>
 
 	<h2>Installation</h2>
@@ -268,9 +268,9 @@
 		/>
 	</ComponentExample>
 
-	<h2>Voice Input (SMRT Mode)</h2>
+	<h2>Voice Input (smrt Mode)</h2>
 	<p>
-		In SMRT mode, users can speak their address naturally. The component parses spoken text
+		In smrt mode, users can speak their address naturally. The component parses spoken text
 		to extract:
 	</p>
 	<ul>

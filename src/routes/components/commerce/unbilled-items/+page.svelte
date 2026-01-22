@@ -3,7 +3,7 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head><title>UnbilledItems | SMRT</title></svelte:head>
+<svelte:head><title>UnbilledItems | s-m-r-t</title></svelte:head>
 
 <article class="prose">
 	<h1>UnbilledItems</h1>

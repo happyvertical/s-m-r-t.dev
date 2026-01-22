@@ -3,7 +3,7 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head><title>InvoiceLineItems | SMRT</title></svelte:head>
+<svelte:head><title>InvoiceLineItems | s-m-r-t</title></svelte:head>
 
 <article class="prose">
 	<h1>InvoiceLineItems</h1>

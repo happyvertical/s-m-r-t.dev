@@ -92,7 +92,7 @@
 </script>
 
 <svelte:head>
-	<title>NumberInput | SMRT Forms</title>
+	<title>NumberInput | s-m-r-t Forms</title>
 	<meta name="description" content="Numeric input component with validation, constraints, and voice input for numbers." />
 </svelte:head>
 
@@ -107,7 +107,7 @@
 
 	<h1>NumberInput</h1>
 	<p class="lead">
-		A numeric input component with constraints, step controls, and voice input support in SMRT mode.
+		A numeric input component with constraints, step controls, and voice input support in smrt mode.
 		Handles both integers and decimals with proper validation.
 	</p>
 
@@ -280,9 +280,9 @@
 		/>
 	</ComponentExample>
 
-	<h2>Voice Input (SMRT Mode)</h2>
+	<h2>Voice Input (smrt Mode)</h2>
 	<p>
-		In SMRT mode, users can speak numbers naturally. The component parses:
+		In smrt mode, users can speak numbers naturally. The component parses:
 	</p>
 	<ul>
 		<li>"twenty five" → 25</li>

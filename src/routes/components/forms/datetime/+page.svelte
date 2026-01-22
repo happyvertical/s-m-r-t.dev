@@ -66,7 +66,7 @@
 </script>
 
 <svelte:head>
-	<title>DateTimeInput | SMRT Forms</title>
+	<title>DateTimeInput | s-m-r-t Forms</title>
 </svelte:head>
 
 <article class="prose">
@@ -80,7 +80,7 @@
 
 	<h1>DateTimeInput</h1>
 	<p class="lead">
-		A smart date and time picker with natural language support in SMRT mode. Users can speak
+		A smart date and time picker with natural language support in smrt mode. Users can speak
 		dates like "next Tuesday at 3pm" and the component parses them automatically using chrono-node.
 	</p>
 
@@ -199,9 +199,9 @@
 		/>
 	</ComponentExample>
 
-	<h2>Natural Language Input (SMRT Mode)</h2>
+	<h2>Natural Language Input (smrt Mode)</h2>
 	<p>
-		In SMRT mode, users can speak natural language dates. The component uses chrono-node to parse
+		In smrt mode, users can speak natural language dates. The component uses chrono-node to parse
 		phrases like:
 	</p>
 	<ul>
@@ -213,7 +213,7 @@
 	</ul>
 
 	<CodeBlock
-		code={`<!-- In SMRT mode, users can hold the mic and say natural language dates -->
+		code={`<!-- In smrt mode, users can hold the mic and say natural language dates -->
 <DateTimeInput
   name="flexible"
   label="Flexible Date"

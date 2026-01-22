@@ -18,7 +18,7 @@
 	const categories: Category[] = [
 		{
 			name: 'Forms',
-			description: 'SMRT form components with voice input support',
+			description: 's-m-r-t form components with voice input support',
 			href: '/components/forms',
 			components: [
 				{ name: 'TextInput', href: '/components/forms/text-input', description: 'Text input with voice support' },
@@ -109,7 +109,7 @@
 		<pre><code>{`// Core UI components
 import { Button, Card, Badge } from '@happyvertical/svelte';
 
-// SMRT-specific components
+// smrt-specific components
 import { TextInput, StatusBadge } from '@happyvertical/smrt-svelte';`}</code></pre>
 	</section>
 

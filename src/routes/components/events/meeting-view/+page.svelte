@@ -3,7 +3,7 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head><title>MeetingView | SMRT</title></svelte:head>
+<svelte:head><title>MeetingView | s-m-r-t</title></svelte:head>
 
 <article class="prose">
 	<h1>MeetingView</h1>

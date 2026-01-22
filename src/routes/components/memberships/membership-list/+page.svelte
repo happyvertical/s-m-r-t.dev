@@ -20,7 +20,7 @@
 </script>
 
 <svelte:head>
-	<title>MembershipList | SMRT Components</title>
+	<title>MembershipList | s-m-r-t Components</title>
 </svelte:head>
 
 <article class="prose">

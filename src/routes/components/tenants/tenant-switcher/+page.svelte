@@ -54,7 +54,7 @@
 </script>
 
 <svelte:head>
-	<title>TenantSwitcher | SMRT Components</title>
+	<title>TenantSwitcher | s-m-r-t Components</title>
 	<meta name="description" content="Dropdown component for switching between multiple tenant organizations." />
 </svelte:head>
 

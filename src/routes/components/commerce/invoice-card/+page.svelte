@@ -20,7 +20,7 @@
 </script>
 
 <svelte:head>
-	<title>InvoiceCard | SMRT Commerce</title>
+	<title>InvoiceCard | s-m-r-t Commerce</title>
 </svelte:head>
 
 <article class="prose">

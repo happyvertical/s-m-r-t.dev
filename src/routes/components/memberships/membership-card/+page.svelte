@@ -22,7 +22,7 @@
 </script>
 
 <svelte:head>
-	<title>MembershipCard | SMRT Components</title>
+	<title>MembershipCard | s-m-r-t Components</title>
 </svelte:head>
 
 <article class="prose">

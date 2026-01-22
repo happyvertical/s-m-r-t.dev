@@ -112,7 +112,7 @@
 </script>
 
 <svelte:head>
-	<title>MeasurementInput | SMRT Forms</title>
+	<title>MeasurementInput | s-m-r-t Forms</title>
 	<meta name="description" content="Measurement input component with unit selection for physical quantities like length, weight, and temperature." />
 </svelte:head>
 
@@ -269,9 +269,9 @@
 		/>
 	</ComponentExample>
 
-	<h2>Voice Input (SMRT Mode)</h2>
+	<h2>Voice Input (smrt Mode)</h2>
 	<p>
-		In SMRT mode, users can speak measurements with units naturally:
+		In smrt mode, users can speak measurements with units naturally:
 	</p>
 	<ul>
 		<li>"one hundred seventy five centimeters" → {'{'} value: 175, unit: 'cm' {'}'}</li>
