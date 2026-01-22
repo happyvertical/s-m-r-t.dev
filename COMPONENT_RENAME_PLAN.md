@@ -72,9 +72,53 @@
 | Current Name | New Name | Reason |
 |--------------|----------|--------|
 | `SmrtProvider` | `SMRT` | Short, distinctive, represents framework. Similar to `<Suspense>`, `<Router>` patterns |
-| `AILoadingOverlay` | *(keep as-is)* | Clear and descriptive |
+| `AILoadingOverlay` | *(refactor - see below)* | Extract generic LoadingOverlay, keep AILoadingOverlay as wrapper |
 | `CapabilityGate` | *(keep as-is)* | Clear and descriptive |
 | `VoiceInput` | *(keep as-is)* | Clear and descriptive |
+
+#### AILoadingOverlay Refactor
+
+**Create new generic component:**
+- `LoadingOverlay` (feedback category) - Generic overlay for any loading state
+
+**Refactor existing:**
+- `AILoadingOverlay` becomes a thin wrapper around `LoadingOverlay` that reads from AI context
+
+**Rationale:**
+- `LoadingOverlay` can be used for uploads, downloads, processing, etc.
+- `AILoadingOverlay` stays as convenience wrapper for AI-specific features
+- Clean separation: generic UI vs AI-specific logic
+
+**Generic LoadingOverlay props:**
+```typescript
+interface LoadingOverlayProps {
+  show: boolean;
+  message?: string;
+  progress?: number;  // 0-100
+  items?: string[];   // completed items (files, adapters, etc)
+  error?: { message: string };
+  dismissible?: boolean;
+  class?: string;
+}
+```
+
+**AILoadingOverlay implementation:**
+```svelte
+<script>
+  import { getAppStateContext } from '../../state/context.js';
+  import LoadingOverlay from '../feedback/LoadingOverlay.svelte';
+  // ... AI-specific logic to map state to props
+</script>
+
+<LoadingOverlay
+  show={aiState.isAILoading}
+  message={getPhaseLabel(aiState.phase)}
+  progress={aiState.overallProgress}
+  items={aiState.loaded}
+  error={aiState.error}
+  dismissible={dismissible}
+/>
+```
 
 ### Other Categories (No Changes)
 - **feedback/**: `ConfirmDialog`, `Modal`, `ProgressBar` - all good
@@ -105,7 +149,9 @@
 ## Implementation Checklist
 
 **In smrt-svelte:**
-- [ ] Rename component files (SmrtProvider.svelte → Provider.svelte, etc.)
+- [ ] Rename component files (SmrtProvider.svelte → SMRT.svelte, etc.)
+- [ ] Create new generic `LoadingOverlay` component in feedback/
+- [ ] Refactor `AILoadingOverlay` to use generic `LoadingOverlay`
 - [ ] Update index.ts exports
 - [ ] Update TypeScript types
 - [ ] Update all documentation
