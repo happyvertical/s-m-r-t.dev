@@ -3,8 +3,6 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-	import { SmrtProvider } from '@happyvertical/smrt-svelte';
-
 	let basicRange = $state({ start: '', end: '' });
 	let vacationRange = $state({ start: '2025-07-01', end: '2025-07-14' });
 	let flexibleRange = $state({ start: '', end: '' });
@@ -78,7 +76,6 @@
 	<meta name="description" content="Date range picker component for selecting start and end dates with validation." />
 </svelte:head>
 
-<SmrtProvider>
 <article class="prose">
 	<nav class="breadcrumb">
 		<a href="/components">Components</a>
@@ -309,7 +306,6 @@ interface Props {
 		Form submission includes two fields: <code>{`{name}_start`}</code> and <code>{`{name}_end`}</code>.
 	</p>
 </article>
-</SmrtProvider>
 
 <style>
 	.breadcrumb {

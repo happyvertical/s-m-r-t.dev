@@ -4,6 +4,7 @@
 	import '$lib/styles/variables.css';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import { SmrtProvider } from '@happyvertical/smrt-svelte';
 
 	let { children } = $props();
 </script>
@@ -15,15 +16,17 @@
 	<html lang="en" />
 </svelte:head>
 
-<a href="#main-content" class="skip-link">Skip to main content</a>
+<SmrtProvider>
+	<a href="#main-content" class="skip-link">Skip to main content</a>
 
-<div class="app">
-	<Header />
-	<main id="main-content" role="main">
-		{@render children()}
-	</main>
-	<Footer />
-</div>
+	<div class="app">
+		<Header />
+		<main id="main-content" role="main">
+			{@render children()}
+		</main>
+		<Footer />
+	</div>
+</SmrtProvider>
 
 <style>
 	.skip-link {

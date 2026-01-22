@@ -3,8 +3,6 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-	import { SmrtProvider } from '@happyvertical/smrt-svelte';
-
 	let heightValue = $state<{ value: number | null, unit: string }>({ value: null, unit: 'cm' });
 	let weightValue = $state<{ value: number | null, unit: string }>({ value: 75, unit: 'kg' });
 	let temperatureValue = $state<{ value: number | null, unit: string }>({ value: null, unit: 'C' });
@@ -118,7 +116,6 @@
 	<meta name="description" content="Measurement input component with unit selection for physical quantities like length, weight, and temperature." />
 </svelte:head>
 
-<SmrtProvider>
 <article class="prose">
 	<nav class="breadcrumb">
 		<a href="/components">Components</a>
@@ -416,7 +413,6 @@ const volumeUnits = [
 		For example, <code>name="height"</code> creates <code>height_value</code> and <code>height_unit</code> fields.
 	</p>
 </article>
-</SmrtProvider>
 
 <style>
 	.breadcrumb {
