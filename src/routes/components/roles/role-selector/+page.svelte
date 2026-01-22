@@ -20,7 +20,7 @@
 </script>
 
 <svelte:head>
-	<title>RoleSelector | SMRT Components</title>
+	<title>RoleSelector | s-m-r-t Components</title>
 </svelte:head>
 
 <article class="prose">

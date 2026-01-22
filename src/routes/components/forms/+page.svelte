@@ -1,32 +1,32 @@
 <script lang="ts">
 	const components = [
 		{
-			name: 'SMRTTextInput',
+			name: 'TextInput',
 			href: '/components/forms/text-input',
-			description: 'Material Design 3 text input with optional voice input support in SMRT mode.'
+			description: 'Material Design 3 text input with optional voice input support in smrt mode.'
 		},
 		{
-			name: 'SMRTSelect',
+			name: 'SelectInput',
 			href: '/components/forms/smrt-select',
-			description: 'Styled select dropdown with support for voice selection in SMRT mode.'
+			description: 'Styled select dropdown with support for voice selection in smrt mode.'
 		},
 		{
-			name: 'SMRTCheckbox',
+			name: 'CheckboxInput',
 			href: '/components/forms/checkbox',
-			description: 'Checkbox with ripple effect and voice control support in SMRT mode.'
+			description: 'Checkbox with ripple effect and voice control support in smrt mode.'
 		},
 		{
-			name: 'SMRTDateTime',
+			name: 'DateTimeInput',
 			href: '/components/forms/datetime',
 			description: 'Date and time picker with natural language parsing via chrono-node.'
 		},
 		{
-			name: 'SMRTAddress',
+			name: 'AddressInput',
 			href: '/components/forms/address',
 			description: 'Comprehensive address input with intelligent address parsing.'
 		},
 		{
-			name: 'SMRTMoney',
+			name: 'MoneyInput',
 			href: '/components/forms/money',
 			description: 'Monetary input storing values in cents for precision calculations.'
 		}
@@ -34,7 +34,7 @@
 </script>
 
 <svelte:head>
-	<title>Forms | SMRT Components</title>
+	<title>Forms | s-m-r-t Components</title>
 </svelte:head>
 
 <article class="prose">
@@ -44,16 +44,16 @@
 		<span>Forms</span>
 	</nav>
 
-	<h1>SMRT Form Components</h1>
+	<h1>s-m-r-t Form Components</h1>
 	<p class="lead">
-		Voice-enabled form components that work in both standard and SMRT modes. In SMRT mode,
+		Voice-enabled form components that work in both standard and smrt modes. In smrt mode,
 		users can interact with forms using natural speech, making data entry faster and more accessible.
 	</p>
 
 	<section class="install">
 		<h2>Installation</h2>
 		<pre><code>npm install @happyvertical/smrt-svelte</code></pre>
-		<pre><code>{`import { SMRTTextInput, SMRTSelect, SMRTCheckbox } from '@happyvertical/smrt-svelte';`}</code></pre>
+		<pre><code>{`import { TextInput, SelectInput, CheckboxInput } from '@happyvertical/smrt-svelte';`}</code></pre>
 	</section>
 
 	<section class="components">
@@ -71,7 +71,7 @@
 	<section class="modes">
 		<h2>Operating Modes</h2>
 		<p>
-			SMRT form components automatically adapt based on the application mode:
+			s-m-r-t form components automatically adapt based on the application mode:
 		</p>
 
 		<div class="mode-grid">
@@ -80,7 +80,7 @@
 				<p>Traditional keyboard and mouse input with native browser controls for date/time pickers.</p>
 			</div>
 			<div class="mode-card">
-				<h3>SMRT Mode</h3>
+				<h3>smrt Mode</h3>
 				<p>Voice input enabled. Hold the microphone button to speak naturally. Speech is processed locally using Whisper for privacy.</p>
 			</div>
 		</div>
@@ -89,11 +89,11 @@
 	<section class="form-context">
 		<h2>Form Context</h2>
 		<p>
-			Wrap your form components in <code>SMRTForm</code> to enable automatic field registration
+			Wrap your form components in <code>Form</code> to enable automatic field registration
 			and voice-to-form processing:
 		</p>
 		<pre><code>{`<script>
-  import { SMRTForm, SMRTTextInput, SMRTSelect } from '@happyvertical/smrt-svelte';
+  import { Form, TextInput, SelectInput } from '@happyvertical/smrt-svelte';
 
   let formData = $state({
     name: '',
@@ -102,11 +102,11 @@
   });
 </script>
 
-<SMRTForm>
-  <SMRTTextInput name="name" label="Full Name" bind:value={formData.name} />
-  <SMRTTextInput name="email" label="Email" type="email" bind:value={formData.email} />
-  <SMRTSelect name="country" label="Country" options={countries} bind:value={formData.country} />
-</SMRTForm>`}</code></pre>
+<Form>
+  <TextInput name="name" label="Full Name" bind:value={formData.name} />
+  <TextInput name="email" label="Email" type="email" bind:value={formData.email} />
+  <SelectInput name="country" label="Country" options={countries} bind:value={formData.country} />
+</Form>`}</code></pre>
 	</section>
 </article>
 

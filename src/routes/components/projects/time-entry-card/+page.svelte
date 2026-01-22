@@ -3,7 +3,7 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head><title>TimeEntryCard | SMRT</title></svelte:head>
+<svelte:head><title>TimeEntryCard | s-m-r-t</title></svelte:head>
 
 <article class="prose">
 	<h1>TimeEntryCard</h1>

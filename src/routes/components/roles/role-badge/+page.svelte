@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-	<title>RoleBadge | SMRT Components</title>
+	<title>RoleBadge | s-m-r-t Components</title>
 </svelte:head>
 
 <article class="prose">

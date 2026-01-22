@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SMRTIcon } from '@happyvertical/smrt-svelte';
+	import { Icon } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -39,7 +39,7 @@
 </script>
 
 <svelte:head>
-	<title>SMRTIcon | s-m-r-t Components</title>
+	<title>Icon | s-m-r-t Components</title>
 </svelte:head>
 
 <article class="prose">
@@ -48,32 +48,32 @@
 		<span>/</span>
 		<a href="/components/display">Display</a>
 		<span>/</span>
-		<span>SMRTIcon</span>
+		<span>Icon</span>
 	</nav>
 
-	<h1>SMRTIcon</h1>
+	<h1>Icon</h1>
 	<p class="lead">
 		Icon component with preset Material Design icons and support for custom SVG paths. Uses
 		currentColor for easy theming.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { SMRTIcon } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { Icon } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Preset Icons</h2>
 	<p>Built-in Material Design icons.</p>
 
 	<ComponentExample
-		code={`<SMRTIcon name="menu" />
-<SMRTIcon name="search" />
-<SMRTIcon name="close" />
-<SMRTIcon name="check" />
-<SMRTIcon name="add" />`}
+		code={`<Icon name="menu" />
+<Icon name="search" />
+<Icon name="close" />
+<Icon name="check" />
+<Icon name="add" />`}
 	>
 		<div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
 			{#each presetIcons as icon}
 				<div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-					<SMRTIcon name={icon} />
+					<Icon name={icon} />
 					<span style="font-size: 0.75rem; color: #666;">{icon}</span>
 				</div>
 			{/each}
@@ -84,16 +84,16 @@
 	<p>Specify size as a number (pixels) or string.</p>
 
 	<ComponentExample
-		code={`<SMRTIcon name="search" size={16} />
-<SMRTIcon name="search" size={24} />
-<SMRTIcon name="search" size={32} />
-<SMRTIcon name="search" size="48px" />`}
+		code={`<Icon name="search" size={16} />
+<Icon name="search" size={24} />
+<Icon name="search" size={32} />
+<Icon name="search" size="48px" />`}
 	>
 		<div style="display: flex; gap: 16px; align-items: center;">
-			<SMRTIcon name="search" size={16} />
-			<SMRTIcon name="search" size={24} />
-			<SMRTIcon name="search" size={32} />
-			<SMRTIcon name="search" size="48" />
+			<Icon name="search" size={16} />
+			<Icon name="search" size={24} />
+			<Icon name="search" size={32} />
+			<Icon name="search" size="48" />
 		</div>
 	</ComponentExample>
 
@@ -101,14 +101,14 @@
 	<p>Icons inherit color by default, or specify explicitly.</p>
 
 	<ComponentExample
-		code={`<SMRTIcon name="check" color="#22c55e" />
-<SMRTIcon name="close" color="#ef4444" />
-<SMRTIcon name="add" color="#3b82f6" />`}
+		code={`<Icon name="check" color="#22c55e" />
+<Icon name="close" color="#ef4444" />
+<Icon name="add" color="#3b82f6" />`}
 	>
 		<div style="display: flex; gap: 16px; align-items: center;">
-			<SMRTIcon name="check" color="#22c55e" />
-			<SMRTIcon name="close" color="#ef4444" />
-			<SMRTIcon name="add" color="#3b82f6" />
+			<Icon name="check" color="#22c55e" />
+			<Icon name="close" color="#ef4444" />
+			<Icon name="add" color="#3b82f6" />
 		</div>
 	</ComponentExample>
 
@@ -116,9 +116,9 @@
 	<p>Use any SVG path data for custom icons.</p>
 
 	<ComponentExample
-		code={`<SMRTIcon path="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />`}
+		code={`<Icon path="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />`}
 	>
-		<SMRTIcon path="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+		<Icon path="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
 	</ComponentExample>
 
 	<h2>In Context</h2>
@@ -126,17 +126,17 @@
 
 	<ComponentExample
 		code={`<button>
-  <SMRTIcon name="add" size={18} />
+  <Icon name="add" size={18} />
   Add Item
 </button>`}
 	>
 		<div style="display: flex; gap: 12px;">
 			<button style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #1a1a1a; color: white; border: none; border-radius: 4px; cursor: pointer;">
-				<SMRTIcon name="add" size={18} />
+				<Icon name="add" size={18} />
 				Add Item
 			</button>
 			<button style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: white; color: #1a1a1a; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
-				<SMRTIcon name="search" size={18} />
+				<Icon name="search" size={18} />
 				Search
 			</button>
 		</div>
@@ -146,7 +146,7 @@
 	<div class="icon-grid">
 		{#each presetIcons as icon}
 			<div class="icon-item">
-				<SMRTIcon name={icon} />
+				<Icon name={icon} />
 				<code>{icon}</code>
 			</div>
 		{/each}
@@ -157,7 +157,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { SMRTIcon } from '@happyvertical/smrt-svelte';
+		code={`import { Icon } from '@happyvertical/smrt-svelte';
 
 interface Props {
   name?: string;

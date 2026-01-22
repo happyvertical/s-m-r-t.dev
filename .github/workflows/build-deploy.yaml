@@ -38,6 +38,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: happyvertical/smrt
+          ref: ${{ github.head_ref || github.ref_name }}
           path: smrt
           token: ${{ secrets.GH_TOKEN }}
 

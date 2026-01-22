@@ -43,7 +43,7 @@
 </script>
 
 <svelte:head>
-	<title>TenantCard | SMRT Components</title>
+	<title>TenantCard | s-m-r-t Components</title>
 	<meta name="description" content="Display tenant information in a card format with status and member count." />
 </svelte:head>
 

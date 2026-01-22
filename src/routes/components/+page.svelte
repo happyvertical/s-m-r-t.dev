@@ -18,15 +18,15 @@
 	const categories: Category[] = [
 		{
 			name: 'Forms',
-			description: 'SMRT form components with voice input support',
+			description: 's-m-r-t form components with voice input support',
 			href: '/components/forms',
 			components: [
-				{ name: 'SMRTTextInput', href: '/components/forms/text-input', description: 'Text input with voice support' },
-				{ name: 'SMRTSelect', href: '/components/forms/smrt-select', description: 'Dropdown with voice selection' },
-				{ name: 'SMRTCheckbox', href: '/components/forms/checkbox', description: 'Checkbox with voice control' },
-				{ name: 'SMRTDateTime', href: '/components/forms/datetime', description: 'Date/time with natural language' },
-				{ name: 'SMRTAddress', href: '/components/forms/address', description: 'Address input with parsing' },
-				{ name: 'SMRTMoney', href: '/components/forms/money', description: 'Currency input in cents' }
+				{ name: 'TextInput', href: '/components/forms/text-input', description: 'Text input with voice support' },
+				{ name: 'SelectInput', href: '/components/forms/smrt-select', description: 'Dropdown with voice selection' },
+				{ name: 'CheckboxInput', href: '/components/forms/checkbox', description: 'Checkbox with voice control' },
+				{ name: 'DateTimeInput', href: '/components/forms/datetime', description: 'Date/time with natural language' },
+				{ name: 'AddressInput', href: '/components/forms/address', description: 'Address input with parsing' },
+				{ name: 'MoneyInput', href: '/components/forms/money', description: 'Currency input in cents' }
 			]
 		},
 		{
@@ -109,8 +109,8 @@
 		<pre><code>{`// Core UI components
 import { Button, Card, Badge } from '@happyvertical/svelte';
 
-// SMRT-specific components
-import { SMRTTextInput, StatusBadge } from '@happyvertical/smrt-svelte';`}</code></pre>
+// smrt-specific components
+import { TextInput, StatusBadge } from '@happyvertical/smrt-svelte';`}</code></pre>
 	</section>
 
 	<section class="preview">

@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>Event Components | SMRT</title>
+	<title>Event Components | s-m-r-t</title>
 	<meta name="description" content="Event and calendar components from smrt-events." />
 </svelte:head>
 

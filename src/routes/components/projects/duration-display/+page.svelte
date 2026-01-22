@@ -3,7 +3,7 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head><title>DurationDisplay | SMRT</title></svelte:head>
+<svelte:head><title>DurationDisplay | s-m-r-t</title></svelte:head>
 
 <article class="prose">
 	<h1>DurationDisplay</h1>

@@ -4,7 +4,7 @@
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 </script>
 
-<svelte:head><title>InvoiceHeader | SMRT</title></svelte:head>
+<svelte:head><title>InvoiceHeader | s-m-r-t</title></svelte:head>
 
 <article class="prose">
 	<h1>InvoiceHeader</h1>

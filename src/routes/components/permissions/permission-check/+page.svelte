@@ -11,7 +11,7 @@
 </script>
 
 <svelte:head>
-	<title>PermissionCheck | SMRT Components</title>
+	<title>PermissionCheck | s-m-r-t Components</title>
 </svelte:head>
 
 <article class="prose">

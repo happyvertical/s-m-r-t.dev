@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SMRTCheckbox } from '@happyvertical/smrt-svelte';
+	import { CheckboxInput } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -54,7 +54,7 @@
 </script>
 
 <svelte:head>
-	<title>SMRTCheckbox | SMRT Forms</title>
+	<title>CheckboxInput | s-m-r-t Forms</title>
 </svelte:head>
 
 <article class="prose">
@@ -63,17 +63,17 @@
 		<span>/</span>
 		<a href="/components/forms">Forms</a>
 		<span>/</span>
-		<span>SMRTCheckbox</span>
+		<span>CheckboxInput</span>
 	</nav>
 
-	<h1>SMRTCheckbox</h1>
+	<h1>CheckboxInput</h1>
 	<p class="lead">
-		A Material Design 3 styled checkbox with ripple effect and voice control support in SMRT mode.
+		A Material Design 3 styled checkbox with ripple effect and voice control support in smrt mode.
 		Perfect for boolean options, terms acceptance, and feature toggles.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { SMRTCheckbox } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { CheckboxInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>A simple checkbox with a label and bindable checked state.</p>
@@ -83,13 +83,13 @@
   let checked = $state(false);
 </script>
 
-<SMRTCheckbox
+<CheckboxInput
   name="terms"
   label="I accept the terms and conditions"
   bind:checked
 />`}
 	>
-		<SMRTCheckbox
+		<CheckboxInput
 			name="terms"
 			label="I accept the terms and conditions"
 			bind:checked={termsAccepted}
@@ -100,13 +100,13 @@
 	<p>Set <code>checked</code> to <code>true</code> for an initially checked state.</p>
 
 	<ComponentExample
-		code={`<SMRTCheckbox
+		code={`<CheckboxInput
   name="newsletter"
   label="Subscribe to newsletter"
   checked={true}
 />`}
 	>
-		<SMRTCheckbox
+		<CheckboxInput
 			name="newsletter"
 			label="Subscribe to newsletter"
 			bind:checked={newsletterOptIn}
@@ -117,13 +117,13 @@
 	<p>Add <code>required</code> to mark the checkbox as required (shows an asterisk).</p>
 
 	<ComponentExample
-		code={`<SMRTCheckbox
+		code={`<CheckboxInput
   name="privacy"
   label="I have read and agree to the Privacy Policy"
   required
 />`}
 	>
-		<SMRTCheckbox
+		<CheckboxInput
 			name="privacy"
 			label="I have read and agree to the Privacy Policy"
 			required
@@ -134,12 +134,12 @@
 	<p>Use <code>disabled</code> to prevent user interaction.</p>
 
 	<ComponentExample
-		code={`<SMRTCheckbox
+		code={`<CheckboxInput
   name="disabled-unchecked"
   label="Disabled unchecked"
   disabled
 />
-<SMRTCheckbox
+<CheckboxInput
   name="disabled-checked"
   label="Disabled checked"
   checked={true}
@@ -147,12 +147,12 @@
 />`}
 	>
 		<div style="display: flex; flex-direction: column; gap: 12px;">
-			<SMRTCheckbox
+			<CheckboxInput
 				name="disabled-unchecked"
 				label="Disabled unchecked"
 				disabled
 			/>
-			<SMRTCheckbox
+			<CheckboxInput
 				name="disabled-checked"
 				label="Disabled checked"
 				checked={true}
@@ -162,16 +162,16 @@
 	</ComponentExample>
 
 	<h2>With Description</h2>
-	<p>Add a <code>description</code> for voice extraction context in SMRT mode.</p>
+	<p>Add a <code>description</code> for voice extraction context in smrt mode.</p>
 
 	<ComponentExample
-		code={`<SMRTCheckbox
+		code={`<CheckboxInput
   name="marketing"
   label="Enable marketing emails"
   description="Yes or no for receiving marketing communications"
 />`}
 	>
-		<SMRTCheckbox
+		<CheckboxInput
 			name="marketing"
 			label="Enable marketing emails"
 			description="Yes or no for receiving marketing communications"
@@ -190,14 +190,14 @@
   });
 </script>
 
-<SMRTCheckbox name="darkMode" label="Dark Mode" bind:checked={features.darkMode} />
-<SMRTCheckbox name="notifications" label="Push Notifications" bind:checked={features.notifications} />
-<SMRTCheckbox name="autoSave" label="Auto-save" bind:checked={features.autoSave} />`}
+<CheckboxInput name="darkMode" label="Dark Mode" bind:checked={features.darkMode} />
+<CheckboxInput name="notifications" label="Push Notifications" bind:checked={features.notifications} />
+<CheckboxInput name="autoSave" label="Auto-save" bind:checked={features.autoSave} />`}
 	>
 		<div style="display: flex; flex-direction: column; gap: 12px;">
-			<SMRTCheckbox name="darkMode" label="Dark Mode" checked={true} />
-			<SMRTCheckbox name="notifications" label="Push Notifications" />
-			<SMRTCheckbox name="autoSave" label="Auto-save" checked={true} />
+			<CheckboxInput name="darkMode" label="Dark Mode" checked={true} />
+			<CheckboxInput name="notifications" label="Push Notifications" />
+			<CheckboxInput name="autoSave" label="Auto-save" checked={true} />
 		</div>
 	</ComponentExample>
 
@@ -209,14 +209,14 @@
   let checked = $state(false);
 </script>
 
-<SMRTCheckbox
+<CheckboxInput
   name="interactive"
   label="Toggle me"
   bind:checked
 />
 <p>Checked: {checked ? 'Yes' : 'No'}</p>`}
 	>
-		<SMRTCheckbox
+		<CheckboxInput
 			name="interactive"
 			label="Toggle me"
 			bind:checked={interactiveChecked}
@@ -224,15 +224,15 @@
 		<p style="margin-top: 1rem; color: #666;">Checked: {interactiveChecked ? 'Yes' : 'No'}</p>
 	</ComponentExample>
 
-	<h2>Voice Control (SMRT Mode)</h2>
+	<h2>Voice Control (smrt Mode)</h2>
 	<p>
-		In SMRT mode, checkboxes can be controlled via voice commands. The component understands
+		In smrt mode, checkboxes can be controlled via voice commands. The component understands
 		natural language like "yes", "no", "true", "false", "check", "uncheck", etc.
 	</p>
 
 	<CodeBlock
 		code={`<!-- Voice commands: "yes", "no", "true", "false", "check", "uncheck" -->
-<SMRTCheckbox
+<CheckboxInput
   name="voiceControl"
   label="Voice controlled checkbox"
   description="Say yes or no to toggle"
@@ -245,7 +245,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { SMRTCheckbox } from '@happyvertical/smrt-svelte';
+		code={`import { CheckboxInput } from '@happyvertical/smrt-svelte';
 
 // Props interface
 interface Props {

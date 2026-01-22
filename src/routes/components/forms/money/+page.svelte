@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SMRTMoney } from '@happyvertical/smrt-svelte';
+	import { MoneyInput } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -84,7 +84,7 @@
 </script>
 
 <svelte:head>
-	<title>SMRTMoney | SMRT Forms</title>
+	<title>MoneyInput | s-m-r-t Forms</title>
 </svelte:head>
 
 <article class="prose">
@@ -93,17 +93,17 @@
 		<span>/</span>
 		<a href="/components/forms">Forms</a>
 		<span>/</span>
-		<span>SMRTMoney</span>
+		<span>MoneyInput</span>
 	</nav>
 
-	<h1>SMRTMoney</h1>
+	<h1>MoneyInput</h1>
 	<p class="lead">
 		A monetary input component that stores values in cents for precision. Supports CAD and USD
-		currencies with voice input for natural language amounts in SMRT mode.
+		currencies with voice input for natural language amounts in smrt mode.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { SMRTMoney } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { MoneyInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>
@@ -115,13 +115,13 @@
   let value = $state<number | null>(null);
 </script>
 
-<SMRTMoney
+<MoneyInput
   name="amount"
   label="Amount"
   bind:value
 />`}
 	>
-		<SMRTMoney
+		<MoneyInput
 			name="amount"
 			label="Amount"
 			bind:value={basicValue}
@@ -132,14 +132,14 @@
 	<p>Use <code>currency</code> to switch between CAD (default) and USD.</p>
 
 	<ComponentExample
-		code={`<SMRTMoney
+		code={`<MoneyInput
   name="usd-amount"
   label="Price (USD)"
   currency="USD"
   value={15000}
 />`}
 	>
-		<SMRTMoney
+		<MoneyInput
 			name="usd-amount"
 			label="Price (USD)"
 			currency="USD"
@@ -151,7 +151,7 @@
 	<p>Use <code>min</code> and <code>max</code> to constrain the value range (in cents).</p>
 
 	<ComponentExample
-		code={`<SMRTMoney
+		code={`<MoneyInput
   name="donation"
   label="Donation Amount"
   min={500}
@@ -159,7 +159,7 @@
   description="Between $5.00 and $1,000.00"
 />`}
 	>
-		<SMRTMoney
+		<MoneyInput
 			name="donation"
 			label="Donation Amount"
 			min={500}
@@ -173,13 +173,13 @@
 	<p>Add <code>required</code> to mark the field as required.</p>
 
 	<ComponentExample
-		code={`<SMRTMoney
+		code={`<MoneyInput
   name="payment"
   label="Payment Amount"
   required
 />`}
 	>
-		<SMRTMoney
+		<MoneyInput
 			name="payment"
 			label="Payment Amount"
 			required
@@ -190,14 +190,14 @@
 	<p>Use <code>disabled</code> to prevent user interaction.</p>
 
 	<ComponentExample
-		code={`<SMRTMoney
+		code={`<MoneyInput
   name="total"
   label="Order Total"
   value={24999}
   disabled
 />`}
 	>
-		<SMRTMoney
+		<MoneyInput
 			name="total"
 			label="Order Total"
 			value={24999}
@@ -209,14 +209,14 @@
 	<p>Display validation errors using the <code>error</code> prop.</p>
 
 	<ComponentExample
-		code={`<SMRTMoney
+		code={`<MoneyInput
   name="budget"
   label="Budget"
   error="Budget exceeds available funds"
   value={500000}
 />`}
 	>
-		<SMRTMoney
+		<MoneyInput
 			name="budget"
 			label="Budget"
 			error="Budget exceeds available funds"
@@ -224,9 +224,9 @@
 		/>
 	</ComponentExample>
 
-	<h2>Voice Input (SMRT Mode)</h2>
+	<h2>Voice Input (smrt Mode)</h2>
 	<p>
-		In SMRT mode, users can speak monetary amounts naturally. The component parses phrases like:
+		In smrt mode, users can speak monetary amounts naturally. The component parses phrases like:
 	</p>
 	<ul>
 		<li>"one hundred fifty dollars" = 15000 cents</li>
@@ -237,7 +237,7 @@
 
 	<CodeBlock
 		code={`<!-- Voice example: "one hundred fifty dollars" -->
-<SMRTMoney
+<MoneyInput
   name="voice"
   label="Enter Amount"
   description="A monetary amount in dollars"
@@ -253,7 +253,7 @@
   let value = $state<number | null>(null);
 </script>
 
-<SMRTMoney
+<MoneyInput
   name="interactive"
   label="Enter Price"
   bind:value
@@ -261,7 +261,7 @@
 <p>Value in cents: {value ?? 'null'}</p>
 <p>Display: {value ? '$' + (value / 100).toFixed(2) : '(empty)'}</p>`}
 	>
-		<SMRTMoney
+		<MoneyInput
 			name="interactive"
 			label="Enter Price"
 			bind:value={basicValue}
@@ -277,7 +277,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { SMRTMoney } from '@happyvertical/smrt-svelte';
+		code={`import { MoneyInput } from '@happyvertical/smrt-svelte';
 
 // Props interface
 interface Props {
