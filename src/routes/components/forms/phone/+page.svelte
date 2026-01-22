@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SMRTPhone } from '@happyvertical/smrt-svelte';
+	import { PhoneInput } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -73,7 +73,7 @@
 </script>
 
 <svelte:head>
-	<title>SMRTPhone | SMRT Forms</title>
+	<title>PhoneInput | SMRT Forms</title>
 	<meta name="description" content="Phone number input component with formatting and validation for CA and US numbers." />
 </svelte:head>
 
@@ -83,17 +83,17 @@
 		<span>/</span>
 		<a href="/components/forms">Forms</a>
 		<span>/</span>
-		<span>SMRTPhone</span>
+		<span>PhoneInput</span>
 	</nav>
 
-	<h1>SMRTPhone</h1>
+	<h1>PhoneInput</h1>
 	<p class="lead">
 		A phone number input with automatic formatting for Canadian and US numbers. Supports voice
 		input in SMRT mode with natural language number parsing.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { SMRTPhone } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { PhoneInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>A simple phone input with automatic formatting as you type.</p>
@@ -103,13 +103,13 @@
   let value = $state('');
 </script>
 
-<SMRTPhone
+<PhoneInput
   name="phone"
   label="Phone Number"
   bind:value
 />`}
 	>
-		<SMRTPhone
+		<PhoneInput
 			name="phone"
 			label="Phone Number"
 			bind:value={basicPhone}
@@ -120,13 +120,13 @@
 	<p>Pre-populate with a formatted phone number.</p>
 
 	<ComponentExample
-		code={`<SMRTPhone
+		code={`<PhoneInput
   name="contact"
   label="Contact Phone"
   value="+1 (416) 555-0123"
 />`}
 	>
-		<SMRTPhone
+		<PhoneInput
 			name="contact"
 			label="Contact Phone"
 			bind:value={canadianPhone}
@@ -137,7 +137,7 @@
 	<p>Set <code>country="US"</code> for US-specific formatting.</p>
 
 	<ComponentExample
-		code={`<SMRTPhone
+		code={`<PhoneInput
   name="us-phone"
   label="US Phone Number"
   country="US"
@@ -145,7 +145,7 @@
   bind:value
 />`}
 	>
-		<SMRTPhone
+		<PhoneInput
 			name="us-phone"
 			label="US Phone Number"
 			country="US"
@@ -158,13 +158,13 @@
 	<p>Add <code>required</code> to mark the field as required.</p>
 
 	<ComponentExample
-		code={`<SMRTPhone
+		code={`<PhoneInput
   name="required-phone"
   label="Mobile Number"
   required
 />`}
 	>
-		<SMRTPhone
+		<PhoneInput
 			name="required-phone"
 			label="Mobile Number"
 			required
@@ -175,14 +175,14 @@
 	<p>Use <code>disabled</code> to prevent user interaction.</p>
 
 	<ComponentExample
-		code={`<SMRTPhone
+		code={`<PhoneInput
   name="verified"
   label="Verified Phone"
   value="+1 (416) 555-0199"
   disabled
 />`}
 	>
-		<SMRTPhone
+		<PhoneInput
 			name="verified"
 			label="Verified Phone"
 			value="+1 (416) 555-0199"
@@ -194,14 +194,14 @@
 	<p>Display validation errors using the <code>error</code> prop.</p>
 
 	<ComponentExample
-		code={`<SMRTPhone
+		code={`<PhoneInput
   name="error-phone"
   label="Phone Number"
   value="123"
   error="Please enter a valid phone number"
 />`}
 	>
-		<SMRTPhone
+		<PhoneInput
 			name="error-phone"
 			label="Phone Number"
 			value="123"
@@ -213,13 +213,13 @@
 	<p>Add a <code>description</code> for additional context in SMRT mode.</p>
 
 	<ComponentExample
-		code={`<SMRTPhone
+		code={`<PhoneInput
   name="business"
   label="Business Phone"
   description="Your company's main phone number"
 />`}
 	>
-		<SMRTPhone
+		<PhoneInput
 			name="business"
 			label="Business Phone"
 			description="Your company's main phone number"
@@ -238,7 +238,7 @@
 
 	<CodeBlock
 		code={`<!-- Voice example: "four one six five five five zero one two three" -->
-<SMRTPhone
+<PhoneInput
   name="voice"
   label="Phone Number"
   description="A ten digit phone number"
@@ -254,14 +254,14 @@
   let value = $state('');
 </script>
 
-<SMRTPhone
+<PhoneInput
   name="interactive"
   label="Enter Phone"
   bind:value
 />
 <p>Raw value: {value || '(empty)'}</p>`}
 	>
-		<SMRTPhone
+		<PhoneInput
 			name="interactive"
 			label="Enter Phone"
 			bind:value={interactivePhone}
@@ -274,7 +274,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { SMRTPhone } from '@happyvertical/smrt-svelte';
+		code={`import { PhoneInput } from '@happyvertical/smrt-svelte';
 
 // Props interface
 interface Props {

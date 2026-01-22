@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SMRTTextarea } from '@happyvertical/smrt-svelte';
+	import { TextareaInput } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -79,7 +79,7 @@
 </script>
 
 <svelte:head>
-	<title>SMRTTextarea | SMRT Forms</title>
+	<title>TextareaInput | SMRT Forms</title>
 	<meta name="description" content="Multi-line text input component with character counting and voice input support." />
 </svelte:head>
 
@@ -89,17 +89,17 @@
 		<span>/</span>
 		<a href="/components/forms">Forms</a>
 		<span>/</span>
-		<span>SMRTTextarea</span>
+		<span>TextareaInput</span>
 	</nav>
 
-	<h1>SMRTTextarea</h1>
+	<h1>TextareaInput</h1>
 	<p class="lead">
 		A Material Design 3 styled multi-line text input with character counting, auto-resizing,
 		and voice input support in SMRT mode for longer text content.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { SMRTTextarea } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { TextareaInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>A simple textarea with 4 rows by default.</p>
@@ -109,14 +109,14 @@
   let value = $state('');
 </script>
 
-<SMRTTextarea
+<TextareaInput
   name="bio"
   label="Biography"
   placeholder="Tell us about yourself..."
   bind:value
 />`}
 	>
-		<SMRTTextarea
+		<TextareaInput
 			name="bio"
 			label="Biography"
 			placeholder="Tell us about yourself..."
@@ -128,13 +128,13 @@
 	<p>Pre-populate the textarea with existing text.</p>
 
 	<ComponentExample
-		code={`<SMRTTextarea
+		code={`<TextareaInput
   name="description"
   label="Description"
   value="Software developer passionate about building elegant solutions."
 />`}
 	>
-		<SMRTTextarea
+		<TextareaInput
 			name="description"
 			label="Description"
 			bind:value={bioValue}
@@ -145,14 +145,14 @@
 	<p>Adjust the number of visible rows with the <code>rows</code> prop.</p>
 
 	<ComponentExample
-		code={`<SMRTTextarea
+		code={`<TextareaInput
   name="comments"
   label="Comments"
   rows={8}
   placeholder="Enter your detailed feedback..."
 />`}
 	>
-		<SMRTTextarea
+		<TextareaInput
 			name="comments"
 			label="Comments"
 			rows={8}
@@ -164,7 +164,7 @@
 	<p>Set <code>maxlength</code> to limit characters and show a counter.</p>
 
 	<ComponentExample
-		code={`<SMRTTextarea
+		code={`<TextareaInput
   name="tweet"
   label="Twitter Post"
   maxlength={280}
@@ -172,7 +172,7 @@
   bind:value
 />`}
 	>
-		<SMRTTextarea
+		<TextareaInput
 			name="tweet"
 			label="Twitter Post"
 			maxlength={280}
@@ -185,14 +185,14 @@
 	<p>Add <code>required</code> to mark the field as required.</p>
 
 	<ComponentExample
-		code={`<SMRTTextarea
+		code={`<TextareaInput
   name="feedback"
   label="Feedback"
   placeholder="Please share your thoughts..."
   required
 />`}
 	>
-		<SMRTTextarea
+		<TextareaInput
 			name="feedback"
 			label="Feedback"
 			placeholder="Please share your thoughts..."
@@ -204,14 +204,14 @@
 	<p>Use <code>disabled</code> to prevent user interaction.</p>
 
 	<ComponentExample
-		code={`<SMRTTextarea
+		code={`<TextareaInput
   name="readonly"
   label="Approved Content"
   value="This content has been approved and cannot be edited."
   disabled
 />`}
 	>
-		<SMRTTextarea
+		<TextareaInput
 			name="readonly"
 			label="Approved Content"
 			value="This content has been approved and cannot be edited."
@@ -223,14 +223,14 @@
 	<p>Display validation errors using the <code>error</code> prop.</p>
 
 	<ComponentExample
-		code={`<SMRTTextarea
+		code={`<TextareaInput
   name="error-example"
   label="Description"
   value="Too short"
   error="Description must be at least 50 characters"
 />`}
 	>
-		<SMRTTextarea
+		<TextareaInput
 			name="error-example"
 			label="Description"
 			value="Too short"
@@ -242,14 +242,14 @@
 	<p>Add a <code>description</code> for additional context.</p>
 
 	<ComponentExample
-		code={`<SMRTTextarea
+		code={`<TextareaInput
   name="notes"
   label="Additional Notes"
   description="Any other information you'd like to share"
   placeholder="Optional notes..."
 />`}
 	>
-		<SMRTTextarea
+		<TextareaInput
 			name="notes"
 			label="Additional Notes"
 			description="Any other information you'd like to share"
@@ -270,7 +270,7 @@
 
 	<CodeBlock
 		code={`<!-- Voice example: continuous dictation with natural punctuation -->
-<SMRTTextarea
+<TextareaInput
   name="voice"
   label="Article Content"
   description="The main body text of your article"
@@ -287,7 +287,7 @@
   let value = $state('');
 </script>
 
-<SMRTTextarea
+<TextareaInput
   name="interactive"
   label="Your Message"
   maxlength={200}
@@ -295,7 +295,7 @@
 />
 <p>Length: {value.length} / 200</p>`}
 	>
-		<SMRTTextarea
+		<TextareaInput
 			name="interactive"
 			label="Your Message"
 			maxlength={200}
@@ -309,7 +309,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { SMRTTextarea } from '@happyvertical/smrt-svelte';
+		code={`import { TextareaInput } from '@happyvertical/smrt-svelte';
 
 // Props interface
 interface Props {
@@ -330,7 +330,7 @@ interface Props {
 
 	<h2>Accessibility</h2>
 	<p>
-		SMRTTextarea follows WCAG 2.1 AA guidelines:
+		TextareaInput follows WCAG 2.1 AA guidelines:
 	</p>
 	<ul>
 		<li>Proper ARIA labels for screen readers</li>

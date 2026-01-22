@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SMRTMeasurement } from '@happyvertical/smrt-svelte';
+	import { MeasurementInput } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -112,7 +112,7 @@
 </script>
 
 <svelte:head>
-	<title>SMRTMeasurement | SMRT Forms</title>
+	<title>MeasurementInput | SMRT Forms</title>
 	<meta name="description" content="Measurement input component with unit selection for physical quantities like length, weight, and temperature." />
 </svelte:head>
 
@@ -122,17 +122,17 @@
 		<span>/</span>
 		<a href="/components/forms">Forms</a>
 		<span>/</span>
-		<span>SMRTMeasurement</span>
+		<span>MeasurementInput</span>
 	</nav>
 
-	<h1>SMRTMeasurement</h1>
+	<h1>MeasurementInput</h1>
 	<p class="lead">
 		A measurement input component combining a numeric value with a unit selector. Perfect for
 		physical quantities like height, weight, distance, temperature, and more.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { SMRTMeasurement } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { MeasurementInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage - Height</h2>
 	<p>Measure height with common units like centimeters, meters, inches, or feet.</p>
@@ -149,14 +149,14 @@
   let value = $state({ value: null, unit: 'cm' });
 </script>
 
-<SMRTMeasurement
+<MeasurementInput
   name="height"
   label="Height"
   units={heightUnits}
   bind:value
 />`}
 	>
-		<SMRTMeasurement
+		<MeasurementInput
 			name="height"
 			label="Height"
 			units={heightUnits}
@@ -168,14 +168,14 @@
 	<p>Weight with default value and common units.</p>
 
 	<ComponentExample
-		code={`<SMRTMeasurement
+		code={`<MeasurementInput
   name="weight"
   label="Weight"
   units={weightUnits}
   value={{ value: 75, unit: 'kg' }}
 />`}
 	>
-		<SMRTMeasurement
+		<MeasurementInput
 			name="weight"
 			label="Weight"
 			units={weightUnits}
@@ -187,7 +187,7 @@
 	<p>Temperature measurement with 1 decimal place precision.</p>
 
 	<ComponentExample
-		code={`<SMRTMeasurement
+		code={`<MeasurementInput
   name="temperature"
   label="Temperature"
   units={temperatureUnits}
@@ -197,7 +197,7 @@
   bind:value
 />`}
 	>
-		<SMRTMeasurement
+		<MeasurementInput
 			name="temperature"
 			label="Temperature"
 			units={temperatureUnits}
@@ -212,14 +212,14 @@
 	<p>Add <code>required</code> to mark the field as required.</p>
 
 	<ComponentExample
-		code={`<SMRTMeasurement
+		code={`<MeasurementInput
   name="distance"
   label="Distance"
   units={distanceUnits}
   required
 />`}
 	>
-		<SMRTMeasurement
+		<MeasurementInput
 			name="distance"
 			label="Distance"
 			units={distanceUnits}
@@ -231,7 +231,7 @@
 	<p>Use <code>disabled</code> to prevent user interaction.</p>
 
 	<ComponentExample
-		code={`<SMRTMeasurement
+		code={`<MeasurementInput
   name="recorded"
   label="Recorded Weight"
   units={weightUnits}
@@ -239,7 +239,7 @@
   disabled
 />`}
 	>
-		<SMRTMeasurement
+		<MeasurementInput
 			name="recorded"
 			label="Recorded Weight"
 			units={weightUnits}
@@ -252,7 +252,7 @@
 	<p>Display validation errors using the <code>error</code> prop.</p>
 
 	<ComponentExample
-		code={`<SMRTMeasurement
+		code={`<MeasurementInput
   name="invalid"
   label="Height"
   units={heightUnits}
@@ -260,7 +260,7 @@
   error="Height seems unusually high. Please verify."
 />`}
 	>
-		<SMRTMeasurement
+		<MeasurementInput
 			name="invalid"
 			label="Height"
 			units={heightUnits}
@@ -283,7 +283,7 @@
 
 	<CodeBlock
 		code={`<!-- Voice example: "one hundred seventy five centimeters" -->
-<SMRTMeasurement
+<MeasurementInput
   name="voice"
   label="Height"
   description="A height measurement with units"
@@ -300,7 +300,7 @@
   let value = $state({ value: null, unit: 'm' });
 </script>
 
-<SMRTMeasurement
+<MeasurementInput
   name="interactive"
   label="Distance"
   units={distanceUnits}
@@ -308,7 +308,7 @@
 />
 <p>Value: {value.value ?? '(empty)'} {value.unit}</p>`}
 	>
-		<SMRTMeasurement
+		<MeasurementInput
 			name="interactive"
 			label="Distance"
 			units={distanceUnits}
@@ -324,7 +324,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { SMRTMeasurement } from '@happyvertical/smrt-svelte';
+		code={`import { MeasurementInput } from '@happyvertical/smrt-svelte';
 
 // Measurement value interface
 interface MeasurementValue {

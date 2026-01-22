@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SMRTDateRange } from '@happyvertical/smrt-svelte';
+	import { DateRangeInput } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -72,7 +72,7 @@
 </script>
 
 <svelte:head>
-	<title>SMRTDateRange | SMRT Forms</title>
+	<title>DateRangeInput | SMRT Forms</title>
 	<meta name="description" content="Date range picker component for selecting start and end dates with validation." />
 </svelte:head>
 
@@ -82,17 +82,17 @@
 		<span>/</span>
 		<a href="/components/forms">Forms</a>
 		<span>/</span>
-		<span>SMRTDateRange</span>
+		<span>DateRangeInput</span>
 	</nav>
 
-	<h1>SMRTDateRange</h1>
+	<h1>DateRangeInput</h1>
 	<p class="lead">
 		A date range picker with start and end date inputs. Automatically validates that end date
 		comes after start date, with support for natural language in SMRT mode.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { SMRTDateRange } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { DateRangeInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>A simple date range picker with start and end date fields.</p>
@@ -102,13 +102,13 @@
   let value = $state({ start: '', end: '' });
 </script>
 
-<SMRTDateRange
+<DateRangeInput
   name="daterange"
   label="Select Date Range"
   bind:value
 />`}
 	>
-		<SMRTDateRange
+		<DateRangeInput
 			name="daterange"
 			label="Select Date Range"
 			bind:value={basicRange}
@@ -119,13 +119,13 @@
 	<p>Pre-populate with start and end dates.</p>
 
 	<ComponentExample
-		code={`<SMRTDateRange
+		code={`<DateRangeInput
   name="vacation"
   label="Vacation Period"
   value={{ start: '2025-07-01', end: '2025-07-14' }}
 />`}
 	>
-		<SMRTDateRange
+		<DateRangeInput
 			name="vacation"
 			label="Vacation Period"
 			bind:value={vacationRange}
@@ -136,7 +136,7 @@
 	<p>Use <code>min</code> and <code>max</code> to limit the selectable date range.</p>
 
 	<ComponentExample
-		code={`<SMRTDateRange
+		code={`<DateRangeInput
   name="booking"
   label="Booking Dates"
   min="2025-01-01"
@@ -144,7 +144,7 @@
   description="Select dates within 2025"
 />`}
 	>
-		<SMRTDateRange
+		<DateRangeInput
 			name="booking"
 			label="Booking Dates"
 			min="2025-01-01"
@@ -157,13 +157,13 @@
 	<p>Add <code>required</code> to mark both dates as required.</p>
 
 	<ComponentExample
-		code={`<SMRTDateRange
+		code={`<DateRangeInput
   name="availability"
   label="Availability Period"
   required
 />`}
 	>
-		<SMRTDateRange
+		<DateRangeInput
 			name="availability"
 			label="Availability Period"
 			required
@@ -174,14 +174,14 @@
 	<p>Use <code>disabled</code> to prevent user interaction.</p>
 
 	<ComponentExample
-		code={`<SMRTDateRange
+		code={`<DateRangeInput
   name="confirmed"
   label="Confirmed Period"
   value={{ start: '2025-03-01', end: '2025-03-15' }}
   disabled
 />`}
 	>
-		<SMRTDateRange
+		<DateRangeInput
 			name="confirmed"
 			label="Confirmed Period"
 			value={{ start: '2025-03-01', end: '2025-03-15' }}
@@ -193,14 +193,14 @@
 	<p>Display validation errors using the <code>error</code> prop.</p>
 
 	<ComponentExample
-		code={`<SMRTDateRange
+		code={`<DateRangeInput
   name="invalid"
   label="Date Range"
   value={{ start: '2025-03-15', end: '2025-03-01' }}
   error="End date must be after start date"
 />`}
 	>
-		<SMRTDateRange
+		<DateRangeInput
 			name="invalid"
 			label="Date Range"
 			value={{ start: '2025-03-15', end: '2025-03-01' }}
@@ -222,7 +222,7 @@
 
 	<CodeBlock
 		code={`<!-- Voice example: "from March first to March fifteenth" -->
-<SMRTDateRange
+<DateRangeInput
   name="voice"
   label="Date Range"
   description="A range with start and end dates"
@@ -242,7 +242,7 @@
     : null;
 </script>
 
-<SMRTDateRange
+<DateRangeInput
   name="interactive"
   label="Select Range"
   bind:value
@@ -250,7 +250,7 @@
 <p>Range: {value.start || '(none)'} to {value.end || '(none)'}</p>
 <p>Duration: {duration ? \`\${duration} days\` : 'N/A'}</p>`}
 	>
-		<SMRTDateRange
+		<DateRangeInput
 			name="interactive"
 			label="Select Range"
 			bind:value={flexibleRange}
@@ -268,7 +268,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { SMRTDateRange } from '@happyvertical/smrt-svelte';
+		code={`import { DateRangeInput } from '@happyvertical/smrt-svelte';
 
 // DateRange interface
 interface DateRange {

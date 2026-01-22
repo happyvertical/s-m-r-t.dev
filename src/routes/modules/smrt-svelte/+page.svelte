@@ -48,7 +48,7 @@
     <h2 class="text-3xl font-bold mb-4">Quick Start</h2>
     <CodeBlock
       code={`<script>
-  import { SMRTTextInput, UserCard, ModuleUIRegistry } from '@happyvertical/smrt-svelte';
+  import { TextInput, UserCard, ModuleUIRegistry } from '@happyvertical/smrt-svelte';
   import { createProfileStore } from '@happyvertical/smrt-svelte/stores';
 
   // Reactive store
@@ -59,7 +59,7 @@
 </script>
 
 <!-- Form component -->
-<SMRTTextInput
+<TextInput
   bind:value={name}
   label="Full Name"
   placeholder="Enter name"
@@ -88,7 +88,7 @@
     <h2 class="text-3xl font-bold mb-4">Component Categories</h2>
 
     <h3 class="text-2xl font-semibold mb-3">Form Components (11)</h3>
-    <p class="mb-2">SMRTTextInput, SMRTSelect, SMRTCheckbox, SMRTDateTime, SMRTAddress, SMRTMoney, SMRTPhone, SMRTTextarea, SMRTNumber, SMRTDateRange, SMRTMeasurement</p>
+    <p class="mb-2">TextInput, SelectInput, CheckboxInput, DateTimeInput, AddressInput, MoneyInput, PhoneInput, TextareaInput, NumberInput, DateRangeInput, MeasurementInput</p>
 
     <h3 class="text-2xl font-semibold mb-3 mt-4">User Components (6)</h3>
     <p class="mb-2">UserCard, UserAvatar, UserList, UserForm, UserMenu, InviteUserModal</p>

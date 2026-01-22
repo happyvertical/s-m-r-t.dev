@@ -21,7 +21,7 @@
 			description: 'Formatted dates with relative time support.'
 		},
 		{
-			name: 'SMRTIcon',
+			name: 'Icon',
 			href: '/components/display/icon',
 			description: 'Icon component with multiple icon sets.'
 		}

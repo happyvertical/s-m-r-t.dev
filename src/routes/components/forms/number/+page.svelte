@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SMRTNumber } from '@happyvertical/smrt-svelte';
+	import { NumberInput } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -92,7 +92,7 @@
 </script>
 
 <svelte:head>
-	<title>SMRTNumber | SMRT Forms</title>
+	<title>NumberInput | SMRT Forms</title>
 	<meta name="description" content="Numeric input component with validation, constraints, and voice input for numbers." />
 </svelte:head>
 
@@ -102,17 +102,17 @@
 		<span>/</span>
 		<a href="/components/forms">Forms</a>
 		<span>/</span>
-		<span>SMRTNumber</span>
+		<span>NumberInput</span>
 	</nav>
 
-	<h1>SMRTNumber</h1>
+	<h1>NumberInput</h1>
 	<p class="lead">
 		A numeric input component with constraints, step controls, and voice input support in SMRT mode.
 		Handles both integers and decimals with proper validation.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { SMRTNumber } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { NumberInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>A simple number input for integer values.</p>
@@ -122,13 +122,13 @@
   let value = $state<number | null>(null);
 </script>
 
-<SMRTNumber
+<NumberInput
   name="quantity"
   label="Quantity"
   bind:value
 />`}
 	>
-		<SMRTNumber
+		<NumberInput
 			name="quantity"
 			label="Quantity"
 			bind:value={basicValue}
@@ -139,13 +139,13 @@
 	<p>Pre-populate with an initial number.</p>
 
 	<ComponentExample
-		code={`<SMRTNumber
+		code={`<NumberInput
   name="age"
   label="Age"
   value={25}
 />`}
 	>
-		<SMRTNumber
+		<NumberInput
 			name="age"
 			label="Age"
 			bind:value={ageValue}
@@ -156,7 +156,7 @@
 	<p>Use <code>min</code> and <code>max</code> to limit the value range.</p>
 
 	<ComponentExample
-		code={`<SMRTNumber
+		code={`<NumberInput
   name="items"
   label="Items"
   min={1}
@@ -165,7 +165,7 @@
   description="Between 1 and 100"
 />`}
 	>
-		<SMRTNumber
+		<NumberInput
 			name="items"
 			label="Items"
 			min={1}
@@ -179,7 +179,7 @@
 	<p>Set the <code>step</code> for increment/decrement controls.</p>
 
 	<ComponentExample
-		code={`<SMRTNumber
+		code={`<NumberInput
   name="discount"
   label="Discount (%)"
   min={0}
@@ -188,7 +188,7 @@
   placeholder="0"
 />`}
 	>
-		<SMRTNumber
+		<NumberInput
 			name="discount"
 			label="Discount (%)"
 			min={0}
@@ -202,7 +202,7 @@
 	<p>Use <code>decimals</code> to allow decimal places (e.g., for prices, weights).</p>
 
 	<ComponentExample
-		code={`<SMRTNumber
+		code={`<NumberInput
   name="weight"
   label="Weight (kg)"
   decimals={2}
@@ -212,7 +212,7 @@
   bind:value
 />`}
 	>
-		<SMRTNumber
+		<NumberInput
 			name="weight"
 			label="Weight (kg)"
 			decimals={2}
@@ -227,14 +227,14 @@
 	<p>Add <code>required</code> to mark the field as required.</p>
 
 	<ComponentExample
-		code={`<SMRTNumber
+		code={`<NumberInput
   name="participants"
   label="Number of Participants"
   min={1}
   required
 />`}
 	>
-		<SMRTNumber
+		<NumberInput
 			name="participants"
 			label="Number of Participants"
 			min={1}
@@ -246,14 +246,14 @@
 	<p>Use <code>disabled</code> to prevent user interaction.</p>
 
 	<ComponentExample
-		code={`<SMRTNumber
+		code={`<NumberInput
   name="total"
   label="Total Score"
   value={87}
   disabled
 />`}
 	>
-		<SMRTNumber
+		<NumberInput
 			name="total"
 			label="Total Score"
 			value={87}
@@ -265,14 +265,14 @@
 	<p>Display validation errors using the <code>error</code> prop.</p>
 
 	<ComponentExample
-		code={`<SMRTNumber
+		code={`<NumberInput
   name="invalid"
   label="Age"
   value={150}
   error="Age must be between 0 and 120"
 />`}
 	>
-		<SMRTNumber
+		<NumberInput
 			name="invalid"
 			label="Age"
 			value={150}
@@ -294,7 +294,7 @@
 
 	<CodeBlock
 		code={`<!-- Voice example: "twenty five" -->
-<SMRTNumber
+<NumberInput
   name="voice"
   label="Enter a Number"
   description="A numeric value"
@@ -310,7 +310,7 @@
   let value = $state<number | null>(null);
 </script>
 
-<SMRTNumber
+<NumberInput
   name="interactive"
   label="Enter Value"
   min={0}
@@ -320,7 +320,7 @@
 <p>Current value: {value ?? 'null'}</p>
 <p>Valid: {value !== null && value >= 0 && value <= 1000 ? 'Yes' : 'No'}</p>`}
 	>
-		<SMRTNumber
+		<NumberInput
 			name="interactive"
 			label="Enter Value"
 			min={0}
@@ -338,7 +338,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { SMRTNumber } from '@happyvertical/smrt-svelte';
+		code={`import { NumberInput } from '@happyvertical/smrt-svelte';
 
 // Props interface
 interface Props {
