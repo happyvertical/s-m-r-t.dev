@@ -4,7 +4,7 @@
 	import '$lib/styles/variables.css';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
-	import { SMRT } from '@happyvertical/smrt-svelte';
+	import { smrt } from '@happyvertical/smrt-svelte';
 
 	let { children } = $props();
 </script>
@@ -16,7 +16,7 @@
 	<html lang="en" />
 </svelte:head>
 
-<SMRT>
+<smrt>
 	<a href="#main-content" class="skip-link">Skip to main content</a>
 
 	<div class="app">
@@ -26,7 +26,7 @@
 		</main>
 		<Footer />
 	</div>
-</SMRT>
+</smrt>
 
 <style>
 	.skip-link {
