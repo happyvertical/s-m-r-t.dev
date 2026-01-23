@@ -105,6 +105,14 @@ export const categories: CategoryMeta[] = [
 			{ name: 'Calendar', slug: 'calendar', description: 'Month view calendar' },
 			{ name: 'DayView', slug: 'day-view', description: 'Single day schedule view' }
 		]
+	},
+	{
+		name: 'Theme',
+		slug: 'theme',
+		description: 'Theme and appearance components',
+		components: [
+			{ name: 'ThemeSwitcher', slug: 'theme-switcher', description: 'Light/dark/system theme selector' }
+		]
 	}
 ];
 

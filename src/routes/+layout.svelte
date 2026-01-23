@@ -1,12 +1,25 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import favicon from '$lib/assets/favicon.svg';
 	import '$lib/styles/reset.css';
 	import '$lib/styles/variables.css';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
-	import { smrt } from '@happyvertical/smrt-svelte';
+	import { Smrt } from '@happyvertical/smrt-svelte';
+	import { theme } from '$lib/stores/theme';
 
 	let { children } = $props();
+
+	onMount(() => {
+		theme.init();
+
+		const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+		const handleChange = () => {
+			if ($theme === 'system') theme.set('system');
+		};
+		mediaQuery.addEventListener('change', handleChange);
+		return () => mediaQuery.removeEventListener('change', handleChange);
+	});
 </script>
 
 <svelte:head>
@@ -16,7 +29,7 @@
 	<html lang="en" />
 </svelte:head>
 
-<smrt>
+<Smrt>
 	<a href="#main-content" class="skip-link">Skip to main content</a>
 
 	<div class="app">
@@ -26,7 +39,7 @@
 		</main>
 		<Footer />
 	</div>
-</smrt>
+</Smrt>
 
 <style>
 	.skip-link {
