@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Grid from './Grid.svelte';
-	import { Smrt, SelectInput } from '@happyvertical/smrt-svelte';
+	import { smrt as Smrt, SelectInput } from '@happyvertical/smrt-svelte';
 	import { theme, type Theme } from '$lib/stores/theme';
 
 	const themeOptions = [

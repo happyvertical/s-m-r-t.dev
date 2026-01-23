@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Smrt, SelectInput } from '@happyvertical/smrt-svelte';
+	import { smrt as Smrt, SelectInput } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';

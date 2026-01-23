@@ -5,7 +5,7 @@
 	import '$lib/styles/variables.css';
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
-	import { Smrt } from '@happyvertical/smrt-svelte';
+	import { smrt as Smrt } from '@happyvertical/smrt-svelte';
 	import { theme } from '$lib/stores/theme';
 
 	let { children } = $props();
