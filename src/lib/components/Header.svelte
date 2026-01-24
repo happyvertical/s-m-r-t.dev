@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Grid from './Grid.svelte';
-	import { smrt as Smrt, SelectInput } from '@happyvertical/smrt-svelte';
+	import { SelectInput } from '@happyvertical/smrt-svelte';
 	import { theme, type Theme } from '$lib/stores/theme';
 
 	const themeOptions = [
@@ -25,14 +25,12 @@
 				<a href="/reference">Reference</a>
 				<a href="/faq">FAQ</a>
 				<div class="theme-switcher">
-					<Smrt>
-						<SelectInput
-							name="theme"
-							options={themeOptions}
-							value={$theme}
-							onchange={handleThemeChange}
-						/>
-					</Smrt>
+					<SelectInput
+						name="theme"
+						options={themeOptions}
+						value={$theme}
+						onchange={handleThemeChange}
+					/>
 				</div>
 			</nav>
 		</div>

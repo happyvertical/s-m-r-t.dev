@@ -13,6 +13,14 @@ interface PlausibleOptions {
 	callback?: () => void;
 }
 
+type PlausibleFunction = (eventName: string, options?: PlausibleOptions) => void;
+
+declare global {
+	interface Window {
+		plausible?: PlausibleFunction;
+	}
+}
+
 /**
  * Track a custom event in Plausible
  * @param eventName - Name of the event (e.g., "Download", "Signup")
@@ -21,7 +29,7 @@ interface PlausibleOptions {
 export function trackEvent(eventName: string, options?: PlausibleOptions): void {
 	if (typeof window === 'undefined') return;
 
-	const plausible = (window as any).plausible;
+	const plausible = window.plausible;
 	if (!plausible) {
 		console.warn('Plausible not loaded. Install script tag in layout.');
 		return;

@@ -6,7 +6,6 @@
 	let basicValue = $state<number | null>(null);
 	let ageValue = $state<number | null>(25);
 	let quantityValue = $state<number | null>(1);
-	let decimalValue = $state<number | null>(null);
 	let interactiveValue = $state<number | null>(null);
 
 	const numberProps = [
@@ -59,12 +58,6 @@
 			description: 'Increment/decrement step value'
 		},
 		{
-			name: 'decimals',
-			type: 'number',
-			default: '0',
-			description: 'Number of decimal places (0 for integers)'
-		},
-		{
 			name: 'disabled',
 			type: 'boolean',
 			default: 'false',
@@ -75,12 +68,6 @@
 			type: 'boolean',
 			default: 'false',
 			description: 'Marks field as required'
-		},
-		{
-			name: 'error',
-			type: 'string',
-			default: 'undefined',
-			description: 'Error message to display'
 		},
 		{
 			name: 'onchange',
@@ -198,31 +185,6 @@
 		/>
 	</ComponentExample>
 
-	<h2>Decimal Numbers</h2>
-	<p>Use <code>decimals</code> to allow decimal places (e.g., for prices, weights).</p>
-
-	<ComponentExample
-		code={`<NumberInput
-  name="weight"
-  label="Weight (kg)"
-  decimals={2}
-  step={0.1}
-  min={0}
-  placeholder="0.00"
-  bind:value
-/>`}
-	>
-		<NumberInput
-			name="weight"
-			label="Weight (kg)"
-			decimals={2}
-			step={0.1}
-			min={0}
-			placeholder="0.00"
-			bind:value={decimalValue}
-		/>
-	</ComponentExample>
-
 	<h2>Required Field</h2>
 	<p>Add <code>required</code> to mark the field as required.</p>
 
@@ -261,25 +223,6 @@
 		/>
 	</ComponentExample>
 
-	<h2>With Error</h2>
-	<p>Display validation errors using the <code>error</code> prop.</p>
-
-	<ComponentExample
-		code={`<NumberInput
-  name="invalid"
-  label="Age"
-  value={150}
-  error="Age must be between 0 and 120"
-/>`}
-	>
-		<NumberInput
-			name="invalid"
-			label="Age"
-			value={150}
-			error="Age must be between 0 and 120"
-		/>
-	</ComponentExample>
-
 	<h2>Voice Input (smrt Mode)</h2>
 	<p>
 		In smrt mode, users can speak numbers naturally. The component parses:
@@ -287,7 +230,7 @@
 	<ul>
 		<li>"twenty five" → 25</li>
 		<li>"one hundred fifty" → 150</li>
-		<li>"three point one four" → 3.14 (with decimals enabled)</li>
+		<li>"three point one four" → 3.14</li>
 		<li>"negative ten" → -10</li>
 		<li>"zero" → 0</li>
 	</ul>
@@ -350,10 +293,8 @@ interface Props {
   min?: number;
   max?: number;
   step?: number;
-  decimals?: number;
   disabled?: boolean;
   required?: boolean;
-  error?: string;
   onchange?: (value: number | null) => void;
 }`}
 		language="typescript"
@@ -366,7 +307,7 @@ interface Props {
 	<ul>
 		<li>Values outside <code>min</code>/<code>max</code> range are rejected</li>
 		<li>Non-numeric input is stripped</li>
-		<li>Decimal places are limited by the <code>decimals</code> prop</li>
+		<li>The <code>step</code> prop controls decimal precision (e.g., <code>step={0.01}</code> for 2 decimal places)</li>
 		<li>Required fields prevent form submission when empty</li>
 		<li>Browser native validation provides immediate feedback</li>
 	</ul>
