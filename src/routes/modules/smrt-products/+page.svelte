@@ -248,7 +248,7 @@ console.log('Categories:', productStore.categories);`}
             <td class="border px-4 py-2 font-mono">specifications</td>
             <td class="border px-4 py-2">Record</td>
             <td class="border px-4 py-2">Extensible attributes</td>
-            <td class="border px-4 py-2">{'{'} weight: "1kg", ports: 7 {'}'}</td>
+            <td class="border px-4 py-2">{'} weight: "1kg", ports: 7 {'}</td>
           </tr>
           <tr>
             <td class="border px-4 py-2 font-mono">tags</td>

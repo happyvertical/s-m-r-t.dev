@@ -649,17 +649,17 @@ export default defineConfig({
 	.header {
 		grid-column: 1 / -1;
 		padding: 48px 0;
-		border-bottom: 1px solid var(--color-grid);
+		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
 	}
 
 	.breadcrumb {
 		font-size: 0.875rem;
 		margin-bottom: 16px;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	.breadcrumb a {
-		color: var(--color-accent);
+		color: var(--smrt-color-primary, #1976d2);
 		text-decoration: none;
 	}
 
@@ -680,7 +680,7 @@ export default defineConfig({
 
 	.lead {
 		font-size: 1.125rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		margin-bottom: 16px;
 		line-height: 1.6;
 	}
@@ -694,7 +694,7 @@ export default defineConfig({
 	.badge {
 		display: inline-block;
 		padding: 4px 12px;
-		background: #f0f0f0;
+		background: var(--smrt-color-surface-container, #f0f0f0);
 		border-radius: 4px;
 		font-size: 0.875rem;
 		font-weight: 500;
@@ -703,7 +703,7 @@ export default defineConfig({
 	section {
 		grid-column: 1 / -1;
 		padding: 48px 0;
-		border-bottom: 1px solid var(--color-grid);
+		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
 	}
 
 	section:last-child {
@@ -734,7 +734,7 @@ export default defineConfig({
 	p {
 		margin-bottom: 16px;
 		line-height: 1.7;
-		color: #333;
+		color: var(--smrt-color-on-background, #333);
 	}
 
 	ul,
@@ -749,7 +749,7 @@ export default defineConfig({
 	}
 
 	code {
-		background: #f5f5f5;
+		background: var(--smrt-color-surface-container, #f5f5f5);
 		padding: 2px 6px;
 		border-radius: 3px;
 		font-family: var(--font-mono);

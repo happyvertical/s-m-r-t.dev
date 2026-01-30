@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { getCategory } from '$lib/data/components';
+	import { getCategoryBySlug } from '$lib/data/components';
 
-	const category = getCategory('users');
+	const category = getCategoryBySlug('users');
 </script>
 
 <svelte:head>

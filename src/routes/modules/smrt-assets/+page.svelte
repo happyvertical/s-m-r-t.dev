@@ -87,14 +87,14 @@
 
 		<h3>Setup</h3>
 		<CodeBlock
-			code={`import {'{ AssetCollection, ImageCollection }'} from '@happyvertical/smrt-assets';
+			code={`import { AssetCollection, ImageCollection @happyvertical '@happyvertical/smrt-assets';
 
 const assets = await AssetCollection.create({
-  db: {'{ type: \'sqlite\', url: \'./assets.db\' }'}
+  db: { type: \'sqlite\', url: \'./assets.db\' }
 });
 
 const images = await ImageCollection.create({
-  db: {'{ type: \'sqlite\', url: \'./assets.db\' }'}
+  db: { type: \'sqlite\', url: \'./assets.db\' }
 });`}
 			language="typescript"
 		/>
@@ -131,8 +131,8 @@ const images = await ImageCollection.create({
   statusSlug: 'published'
 });
 
-console.log(\`Aspect ratio: \${'${image.aspectRatio}'}\`);  // 1.777
-console.log(\`Is landscape: \${'${image.isLandscape}'}\`);  // true`}
+console.log(\`Aspect ratio: \${'${image.aspectRatio}\`);  // 1.777
+console.log(\`Is landscape: \${'${image.isLandscape}\`);  // true`}
 			language="typescript"
 		/>
 
@@ -142,7 +142,7 @@ console.log(\`Is landscape: \${'${image.isLandscape}'}\`);  // true`}
 const newVersion = await assets.createNewVersion(
   asset.id,
   's3://mybucket/products/photo-v2.jpg',
-  {'{ description: \'Updated product photo\' }'}
+  { description: \'Updated product photo\' }
 );
 
 // Get latest version
@@ -293,9 +293,9 @@ const widthField = new AssetMetafield({
 });
 
 // Validation examples
-{'{ type: \'integer\', minimum: 0, maximum: 10000 }'}
-{'{ type: \'string\', enum: [\'portrait\', \'landscape\', \'square\'] }'}
-{'{ type: \'string\', pattern: \'^#[0-9A-Fa-f]{6}$\' }'}`}
+{ type: \'integer\', minimum: 0, maximum: 10000 }
+{ type: \'string\', enum: [\'portrait\', \'landscape\', \'square\'] }
+{ type: \'string\', pattern: \'^#[0-9A-Fa-f]{6}$\' }`}
 			language="typescript"
 		/>
 
@@ -322,7 +322,7 @@ const featured = await assets.getByTag('featured/homepage');`}
 
 		<h3>Auto-Generate Alt Text</h3>
 		<CodeBlock
-			code={`const image = await images.get({'{ id: imageId }'});
+			code={`const image = await images.get({ id: imageId });
 const altText = await image.generateAltText();
 image.alt = altText;
 await image.save();`}
@@ -366,16 +366,16 @@ const details = await asset.describe('what this image shows');`}
 		<h4>Step 2: Create Responsive Derivatives</h4>
 		<CodeBlock
 			code={`const sizes = [
-  {'{ slug: \'thumb\', width: 150, height: 150 }'},
-  {'{ slug: \'preview\', width: 400, height: 300 }'},
-  {'{ slug: \'full\', width: 1000, height: 750 }'}
+  { slug: \'thumb\', width: 150, height: 150 },
+  { slug: \'preview\', width: 400, height: 300 },
+  { slug: \'full\', width: 1000, height: 750 }
 ];
 
 for (const size of sizes) {
   await images.create({
-    name: \`\${'${master.name}'} - \${'${size.slug}'}\`,
-    slug: \`\${'${master.slug}'}-\${'${size.slug}'}\`,
-    sourceUri: \`s3://products/sneakers/xyz-\${'${size.slug}'}.jpg\`,
+    name: \`\${'${master.name} - \${'${size.slug}\`,
+    slug: \`\${'${master.slug}-\${'${size.slug}\`,
+    sourceUri: \`s3://products/sneakers/xyz-\${'${size.slug}.jpg\`,
     mimeType: 'image/jpeg',
     width: size.width,
     height: size.height,
@@ -402,7 +402,7 @@ await assets.addTag(master.id, 'featured/homepage');`}
   // Create asset
   const asset = await assets.create({
     name: file.name,
-    sourceUri: \`s3://uploads/\${'${file.name}'}\`,
+    sourceUri: \`s3://uploads/\${'${file.name}\`,
     mimeType: file.type,
     typeSlug: detectAssetType(file.type),
     statusSlug: 'draft',
@@ -721,7 +721,7 @@ const history = await assets.listVersions(v1.id);`}
 		gap: 0.5rem;
 		margin-bottom: 1rem;
 		font-size: 0.875rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	.breadcrumb a {

@@ -118,7 +118,7 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { smrt as Smrt } from '@happyvertical/smrt-svelte';
+  import { Provider as Smrt } from '@happyvertical/smrt-svelte';
 </script>
 
 <Smrt

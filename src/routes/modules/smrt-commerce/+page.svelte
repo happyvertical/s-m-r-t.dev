@@ -317,13 +317,13 @@ await invoice2.save(); // Status becomes PARTIAL or PAID`}
     <h3 class="text-2xl font-semibold mb-3 mt-6">InvoiceCard</h3>
     <CodeBlock
       code={`<InvoiceCard
-  invoice={{'{'}
+  invoice={{'}
     invoiceNumber: 'INV-2025-0001',
     status: 'SENT',
     totalAmount: 1050,
     dueDate: new Date('2025-02-15'),
     customerName: 'Acme Corp'
-  {'}'}}
+  {'}}
   currency="USD"
   href="/invoices/123"
 />`}

@@ -660,7 +660,7 @@ const tags = await response.json();`}
         <p class="text-sm mb-2"><strong>Cause:</strong> Same slug exists in different contexts</p>
         <p class="text-sm mb-2">
           <strong>Solution:</strong> Always include context in queries:
-          <code>tags.get({'{'} slug, context {'}'})</code>
+          <code>tags.get({'} slug, context {'})</code>
         </p>
       </div>
 

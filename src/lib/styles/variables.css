@@ -1,145 +1,21 @@
-/* Swiss Design Variables */
+/* 
+ * Minimal custom variables - rely on SMRT theme system
+ * These are fallbacks only, SMRT themes provide the real values
+ */
+
 :root {
-	/* Typography */
-	--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-	--font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-
-	/* Colors */
-	--color-bg: #ffffff;
-	--color-text: #1a1a1a;
-	--color-accent: #ff3e00; /* Svelte Orange or a Swiss Red */
-	--color-grid: #e5e5e5;
-
-	/* Grid */
+	/* Grid system */
 	--grid-columns: 12;
 	--grid-gap: 24px;
 	--container-width: 1200px;
-
-	/* ================================================
-	   Component Library Tokens (@happyvertical/svelte)
-	   ================================================ */
-
-	/* Colors - Primary */
-	--color-primary-main: #1976d2;
-	--color-primary-light: #e3f2fd;
-	--color-primary-dark: #1565c0;
-
-	/* Colors - Neutral */
-	--color-neutral-white: #ffffff;
-	--color-neutral-gray100: #f5f5f5;
-	--color-neutral-gray200: #eeeeee;
-	--color-neutral-gray300: #e0e0e0;
-	--color-neutral-black: #000000;
-
-	/* Colors - Text */
-	--color-text-primary: #212121;
-	--color-text-secondary: #757575;
-	--color-text-inverse: #ffffff;
-
-	/* Colors - Semantic */
-	--color-semantic-error: #f44336;
-	--color-semantic-success: #4caf50;
-	--color-semantic-warning: #ff9800;
-	--color-semantic-info: #2196f3;
-
-	/* Spacing */
-	--spacing-xs: 0.25rem;
-	--spacing-sm: 0.5rem;
-	--spacing-md: 1rem;
-	--spacing-lg: 1.5rem;
-	--spacing-xl: 2rem;
-	--spacing-2xl: 3rem;
-
-	/* Font Sizes */
-	--font-size-xs: 0.75rem;
-	--font-size-sm: 0.875rem;
-	--font-size-base: 1rem;
-	--font-size-lg: 1.125rem;
-	--font-size-xl: 1.25rem;
-	--font-size-2xl: 1.5rem;
-	--font-size-3xl: 2rem;
-
-	/* Font Weights */
-	--font-weight-normal: 400;
-	--font-weight-medium: 500;
-	--font-weight-semibold: 600;
-	--font-weight-bold: 700;
-
-	/* Border Radius */
-	--radius-sm: 0.25rem;
-	--radius-md: 0.5rem;
-	--radius-lg: 0.75rem;
-	--radius-xl: 1rem;
-	--radius-full: 9999px;
-
-	/* Shadows */
-	--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-	--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-	--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-	--shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-
-	/* Transitions */
-	--transition-base: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-	--transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-
-	/* Focus */
-	--focus-ring-color: #1976d2;
-	--focus-ring-width: 3px;
-	--focus-ring-offset: 2px;
 }
 
-/* Global focus-visible styles for accessibility */
+/* Focus styles using SMRT primary color */
 *:focus-visible {
-	outline: var(--focus-ring-width) solid var(--focus-ring-color);
-	outline-offset: var(--focus-ring-offset);
+	outline: 2px solid var(--smrt-color-primary, #1976d2);
+	outline-offset: 2px;
 }
 
-/* Remove default focus outline when using focus-visible */
 *:focus:not(:focus-visible) {
 	outline: none;
-}
-
-/* Dark Theme */
-:root[data-theme='dark'] {
-	/* Typography - same fonts */
-	--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-	--font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-
-	/* Colors */
-	--color-bg: #121212;
-	--color-text: #e0e0e0;
-	--color-accent: #ff6b3d;
-	--color-grid: #2a2a2a;
-
-	/* Colors - Primary */
-	--color-primary-main: #64b5f6;
-	--color-primary-light: #1e3a5f;
-	--color-primary-dark: #90caf9;
-
-	/* Colors - Neutral */
-	--color-neutral-white: #1a1a1a;
-	--color-neutral-gray100: #252525;
-	--color-neutral-gray200: #2e2e2e;
-	--color-neutral-gray300: #3d3d3d;
-	--color-neutral-black: #ffffff;
-
-	/* Colors - Text */
-	--color-text-primary: #e0e0e0;
-	--color-text-secondary: #a0a0a0;
-	--color-text-inverse: #121212;
-
-	/* Colors - Semantic */
-	--color-semantic-error: #ef5350;
-	--color-semantic-success: #66bb6a;
-	--color-semantic-warning: #ffa726;
-	--color-semantic-info: #42a5f5;
-
-	/* Shadows */
-	--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-	--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
-	--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4);
-	--shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4);
-
-	/* Focus */
-	--focus-ring-color: #64b5f6;
 }

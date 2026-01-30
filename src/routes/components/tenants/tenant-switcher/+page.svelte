@@ -203,7 +203,7 @@ import { TenantContext } from '@happyvertical/smrt-tenancy';
     await TenantContext.setTenant(tenantId);
 
     // Reload page or update app state
-    window.location.href = \`/\${tenantId}/dashboard\`;
+    window.location.href = '/' + tenantId + '/dashboard';
   }
 
   function handleCreateTenant() {

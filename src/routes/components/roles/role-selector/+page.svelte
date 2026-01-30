@@ -37,7 +37,16 @@
 	<CodeBlock code={`import { RoleSelector } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
-	<ComponentExample code={`<script lang="ts">\n  let selectedRole = $state('');\n  const roles = [\n    { id: 'admin', name: 'Administrator', description: 'Full system access' },\n    { id: 'editor', name: 'Editor', description: 'Can edit content' },\n    { id: 'viewer', name: 'Viewer', description: 'Read-only access' }\n  ];\n</script>\n\n<RoleSelector {roles} bind:value={selectedRole} />`}>
+	<ComponentExample code={`<script lang="ts">
+  let selectedRole = $state('');
+  const roles = [
+    { id: 'admin', name: 'Administrator', description: 'Full system access' },
+    { id: 'editor', name: 'Editor', description: 'Can edit content' },
+    { id: 'viewer', name: 'Viewer', description: 'Read-only access' }
+  ];
+</script>
+
+<RoleSelector {roles} bind:value={selectedRole} />`}>
 		<RoleSelector {roles} bind:value={selectedRole} />
 		<p style="margin-top: 1rem; color: #666;">Selected: {selectedRole || '(none)'}</p>
 	</ComponentExample>
@@ -46,7 +55,18 @@
 	<PropsTable props={selectorProps} />
 
 	<h2>TypeScript</h2>
-	<CodeBlock code={`interface Role {\n  id: string;\n  name: string;\n  description?: string;\n}\n\ninterface Props {\n  roles: Role[];\n  value: string;\n  onchange?: (roleId: string) => void;\n  disabled?: boolean;\n}`} language="typescript" />
+	<CodeBlock code={`interface Role {
+  id: string;
+  name: string;
+  description?: string;
+}
+
+interface Props {
+  roles: Role[];
+  value: string;
+  onchange?: (roleId: string) => void;
+  disabled?: boolean;
+}`} language="typescript" />
 </article>
 
 <style>

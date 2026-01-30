@@ -1,16 +1,21 @@
-/* Minimal reset for Swiss Design */
+/* Minimal reset */
 *, *::before, *::after {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 }
 
+html, body {
+	height: 100%;
+}
+
 body {
 	line-height: 1.5;
 	-webkit-font-smoothing: antialiased;
-	font-family: var(--font-sans);
-	color: var(--color-text);
-	background-color: var(--color-bg);
+	/* Use SMRT theme variables */
+	font-family: var(--smrt-font-family, system-ui, sans-serif);
+	color: var(--smrt-color-on-background, #1a1a1a);
+	background-color: var(--smrt-color-background, #fafafa);
 }
 
 img, picture, video, canvas, svg {

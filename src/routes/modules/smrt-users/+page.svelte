@@ -569,17 +569,18 @@ console.log('Denied:', result.deniedPermissionIds);`}
 	.header {
 		grid-column: 1 / -1;
 		padding: 48px 0;
-		border-bottom: 1px solid var(--color-grid);
+		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
 	}
 
 	.breadcrumb {
 		font-size: 0.875rem;
+		margin-top: 8px;
 		margin-bottom: 16px;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	.breadcrumb a {
-		color: var(--color-accent);
+		color: var(--smrt-color-primary, #1976d2);
 		text-decoration: none;
 	}
 
@@ -600,7 +601,7 @@ console.log('Denied:', result.deniedPermissionIds);`}
 
 	.lead {
 		font-size: 1.125rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		margin-bottom: 16px;
 		line-height: 1.6;
 	}
@@ -614,16 +615,17 @@ console.log('Denied:', result.deniedPermissionIds);`}
 	.badge {
 		display: inline-block;
 		padding: 4px 12px;
-		background: #f0f0f0;
-		border-radius: 4px;
+		background: var(--smrt-color-surface-container, #f0f0f0);
+		border-radius: var(--smrt-radius-md, 8px);
 		font-size: 0.875rem;
 		font-weight: 500;
+		color: var(--smrt-color-on-surface, #333);
 	}
 
 	section {
 		grid-column: 1 / -1;
 		padding: 48px 0;
-		border-bottom: 1px solid var(--color-grid);
+		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
 	}
 
 	section:last-child {
@@ -654,7 +656,7 @@ console.log('Denied:', result.deniedPermissionIds);`}
 	p {
 		margin-bottom: 16px;
 		line-height: 1.7;
-		color: #333;
+		color: var(--smrt-color-on-background, #333);
 	}
 
 	ul,
@@ -669,11 +671,12 @@ console.log('Denied:', result.deniedPermissionIds);`}
 	}
 
 	code {
-		background: #f5f5f5;
+		background: var(--smrt-color-surface-container, #f5f5f5);
 		padding: 2px 6px;
-		border-radius: 3px;
-		font-family: var(--font-mono);
+		border-radius: var(--smrt-radius-sm, 4px);
+		font-family: var(--smrt-font-family-mono, ui-monospace, monospace);
 		font-size: 0.9em;
+		color: var(--smrt-color-on-surface, #333);
 	}
 
 	table {
