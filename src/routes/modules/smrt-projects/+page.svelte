@@ -1,4 +1,5 @@
 <script lang="ts">
+  import ModulePage from '$lib/components/ModulePage.svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
@@ -7,30 +8,21 @@
   <meta name="description" content="Project management with issue tracking, Living Spec pattern, and time tracking components." />
 </svelte:head>
 
-<div class="max-w-4xl mx-auto px-4 py-8">
-  <div class="mb-8">
-    <h1 class="text-4xl font-bold mb-4">smrt-projects</h1>
-    <p class="text-xl text-gray-600 mb-4">
-      Project and repository management with AI-powered issue tracking, Living Spec pattern, and comprehensive time tracking UI.
-    </p>
-    <div class="flex gap-2 flex-wrap">
-      <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">v0.19.0</span>
-      <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Projects</span>
-      <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">Living Spec</span>
-      <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">7 Components</span>
-    </div>
-  </div>
-
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Overview</h2>
-    <p class="mb-4">
+<ModulePage 
+  name="smrt-projects" 
+  description="Provider-agnostic project management with time tracking, task management, and team collaboration."
+  badges={['v0.19.0', 'Project Management', 'Time Tracking']}
+>
+  <section>
+    <h2>Overview</h2>
+    <p>
       <strong>smrt-projects</strong> provides project board management, repository integration, issue/PR tracking,
       and AI-powered Living Spec pattern where comments are synthesized into issue bodies. Now includes 7 new time
       tracking components for approval workflows.
     </p>
-    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
-      <p class="font-semibold mb-2">Key Features:</p>
-      <ul class="list-disc list-inside space-y-1">
+    <aside>
+      <p>Key Features:</p>
+      <ul>
         <li>Project board management (GitHub Projects, Jira, Linear)</li>
         <li>Living Spec: AI-synthesized issue bodies from comments</li>
         <li>Issue/PR tracking with sync throttling</li>
@@ -38,16 +30,16 @@
         <li>7 time tracking components (NEW v0.19.0)</li>
         <li>Token management with security</li>
       </ul>
-    </div>
+    </aside>
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Installation</h2>
+  <section>
+    <h2>Installation</h2>
     <CodeBlock code={`npm install @happyvertical/smrt-projects`} language="bash" />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Quick Start</h2>
+  <section>
+    <h2>Quick Start</h2>
     <CodeBlock
       code={`import {
   RepositoryCollection, IssueCollection, ProjectCollection
@@ -93,10 +85,10 @@ console.log(result.synthesized); // Updated body with comments`}
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Core Models</h2>
+  <section>
+    <h2>Core Models</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">Repository</h3>
+    <h3>Repository</h3>
     <CodeBlock
       code={`class Repository extends SmrtObject {
   owner: string
@@ -121,7 +113,7 @@ console.log(result.synthesized); // Updated body with comments`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Issue (Living Spec)</h3>
+    <h3>Issue (Living Spec)</h3>
     <CodeBlock
       code={`class Issue extends SmrtObject {
   repositoryId: string
@@ -160,7 +152,7 @@ console.log(result.synthesized); // Updated body with comments`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Project</h3>
+    <h3>Project</h3>
     <CodeBlock
       code={`class Project extends SmrtObject {
   projectId: string        // Provider-specific ID
@@ -190,9 +182,9 @@ console.log(result.synthesized); // Updated body with comments`}
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Living Spec Pattern</h2>
-    <p class="mb-4">
+  <section>
+    <h2>Living Spec Pattern</h2>
+    <p>
       The Living Spec pattern automatically incorporates comment feedback into issue bodies using AI synthesis.
     </p>
     <CodeBlock
@@ -232,10 +224,10 @@ await issue.rollback();
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Time Tracking Components (NEW v0.19.0)</h2>
+  <section>
+    <h2>Time Tracking Components (NEW v0.19.0)</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">TimeEntryCard</h3>
+    <h3>TimeEntryCard</h3>
     <CodeBlock
       code={`<script>
   import { TimeEntryCard } from '@happyvertical/smrt-projects/svelte';
@@ -256,7 +248,7 @@ await issue.rollback();
       language="svelte"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">TimeSummary</h3>
+    <h3>TimeSummary</h3>
     <CodeBlock
       code={`<TimeSummary
   totalHours={160}
@@ -269,7 +261,7 @@ await issue.rollback();
       language="svelte"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">ApprovalActions</h3>
+    <h3>ApprovalActions</h3>
     <CodeBlock
       code={`<ApprovalActions
   status="submitted"
@@ -281,7 +273,7 @@ await issue.rollback();
       language="svelte"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">BulkActions</h3>
+    <h3>BulkActions</h3>
     <CodeBlock
       code={`<BulkActions
   selectedCount={5}
@@ -294,8 +286,8 @@ await issue.rollback();
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">AI-Powered Features</h2>
+  <section>
+    <h2>AI-Powered Features</h2>
     <CodeBlock
       code={`// Classify issues
 const isBug = await issue.isBugReport();
@@ -327,54 +319,52 @@ const health = await project.analyzeHealth();
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Best Practices</h2>
-    <div class="space-y-6">
-      <div class="bg-green-50 border-l-4 border-green-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✓ DOs</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
+  <section>
+    <h2>Best Practices</h2>
+    <div>
+      <aside>
+        <h3>✓ DOs</h3>
+        <ul>
           <li>Use tokenConfigKey (env var name) not actual tokens</li>
           <li>Call incorporateFeedback periodically for Living Spec</li>
           <li>Check synthesis count before re-synthesizing</li>
           <li>Use sync throttling (5 minutes default)</li>
           <li>Store originalBody for audit trail</li>
         </ul>
-      </div>
-      <div class="bg-red-50 border-l-4 border-red-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✗ DON'Ts</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
+      </aside>
+      <aside>
+        <h3>✗ DON'Ts</h3>
+        <ul>
           <li>Don't store tokens in database (security risk)</li>
           <li>Don't sync without throttling (API rate limits)</li>
           <li>Don't synthesize issues without user approval</li>
           <li>Don't lose originalBody (breaks rollback)</li>
           <li>Don't ignore synthesisCount (avoid over-synthesis)</li>
         </ul>
-      </div>
+      </aside>
     </div>
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Related Modules</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <a href="/modules/smrt-core" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-core</h3>
-        <p class="text-sm text-gray-600">Base classes and framework</p>
+  <section>
+    <h2>Related Modules</h2>
+    <nav>
+      <a href="/modules/smrt-core">
+        <h3>smrt-core</h3>
+        <p>Base classes and framework</p>
       </a>
-      <a href="/modules/smrt-profiles" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-profiles</h3>
-        <p class="text-sm text-gray-600">User profiles for authors/assignees</p>
+      <a href="/modules/smrt-profiles">
+        <h3>smrt-profiles</h3>
+        <p>User profiles for authors/assignees</p>
       </a>
-      <a href="/modules/smrt-commerce" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-commerce</h3>
-        <p class="text-sm text-gray-600">Invoicing for time tracking</p>
+      <a href="/modules/smrt-commerce">
+        <h3>smrt-commerce</h3>
+        <p>Invoicing for time tracking</p>
       </a>
-    </div>
+    </nav>
   </section>
 
-  <div class="border-t pt-6 mt-12">
-    <div class="flex justify-between">
-      <a href="/modules" class="text-blue-600 hover:underline">← Back to Modules</a>
-      <a href="/modules/smrt-analytics" class="text-blue-600 hover:underline">Next: smrt-analytics →</a>
-    </div>
-  </div>
-</div>
+  <nav>
+    <a href="/modules">← Back to Modules</a>
+    <a href="/modules/smrt-analytics">Next: smrt-analytics →</a>
+  </nav>
+</ModulePage>

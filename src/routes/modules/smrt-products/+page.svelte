@@ -1,44 +1,28 @@
 <script lang="ts">
+  import ModulePage from '$lib/components/ModulePage.svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head>
-  <title>smrt-products - Product Catalog Management | SMRT Framework</title>
-  <meta name="description" content="Complete product management system with hierarchical categories, specifications, reactive Svelte 5 components, and auto-generated REST APIs." />
-</svelte:head>
-
-<div class="max-w-4xl mx-auto px-4 py-8">
-  <!-- Header Section -->
-  <div class="mb-8">
-    <h1 class="text-4xl font-bold mb-4">smrt-products</h1>
-    <p class="text-xl text-gray-600 mb-4">
-      Complete product management system with hierarchical categories, specifications, inventory tracking,
-      and reactive Svelte 5 components. Triple-purpose: standalone app, federated modules, and NPM library.
-    </p>
-    <div class="flex gap-2 flex-wrap">
-      <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">v0.19.0</span>
-      <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Product Management</span>
-      <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">Triple-Purpose</span>
-      <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">ESM</span>
-    </div>
-  </div>
-
-  <!-- Overview -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Overview</h2>
-    <p class="mb-4">
+<ModulePage 
+  name="smrt-products" 
+  description="Product catalog and inventory management with variants, pricing, and stock tracking."
+  badges={['v0.19.0', 'Catalog', 'Inventory']}
+>
+  <section>
+    <h2>Overview</h2>
+    <p>
       <strong>smrt-products</strong> is a comprehensive product catalog management system built on the SMRT framework.
       It provides a complete solution for managing products, categories, inventory, and specifications with
       auto-generated REST APIs, MCP tools for AI integration, and reactive Svelte 5 components.
     </p>
-    <p class="mb-4">
+    <p>
       The module serves three purposes: (1) standalone application with its own dev server, (2) federated modules
       that can be consumed by other micro-frontends, and (3) NPM package for direct imports. All three consumption
       modes use the same source code, ensuring consistency and maintainability.
     </p>
-    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
-      <p class="font-semibold mb-2">Key Features:</p>
-      <ul class="list-disc list-inside space-y-1">
+    <aside>
+      <p><strong>Key Features:</strong></p>
+      <ul>
         <li>Hierarchical category system with parent-child relationships</li>
         <li>Comprehensive product model (name, description, price, stock status, specifications, tags)</li>
         <li>Extensible specifications system for product attributes</li>
@@ -48,11 +32,11 @@
         <li>CLI commands for admin operations</li>
         <li>STI (Single Table Inheritance) pattern for extensibility</li>
       </ul>
-    </div>
+    </aside>
 
-    <div class="bg-gray-50 p-4 rounded mb-4">
-      <h3 class="font-semibold mb-2">Architecture:</h3>
-      <pre class="text-xs font-mono">┌─────────────────────────────────────────┐
+    <h3>Architecture:</h3>
+    <figure class="diagram">
+      <pre>┌─────────────────────────────────────────┐
 │     smrt-products Module                 │
 ├─────────────────────────────────────────┤
 │  Models (Decorated with @smrt)           │
@@ -75,12 +59,11 @@
 │  • Federation: npm run dev:federation    │
 │  • Library: npm package imports          │
 └─────────────────────────────────────────┘</pre>
-    </div>
+    </figure>
   </section>
 
-  <!-- Installation -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Installation</h2>
+  <section>
+    <h2>Installation</h2>
     <CodeBlock
       code={`# Using pnpm (recommended)
 pnpm add @happyvertical/smrt-products
@@ -89,18 +72,17 @@ pnpm add @happyvertical/smrt-products
 npm install @happyvertical/smrt-products`}
       language="bash"
     />
-    <p class="mt-4 mb-4">
+    <p>
       The module depends on <code>@happyvertical/smrt-core</code> for base classes,
       <code>@happyvertical/ai</code> for AI operations, and <code>@happyvertical/sql</code>
       for database operations.
     </p>
   </section>
 
-  <!-- Quick Start -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Quick Start (5 Minutes)</h2>
+  <section>
+    <h2>Quick Start (5 Minutes)</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">1. Initialize Product Store</h3>
+    <h3>1. Initialize Product Store</h3>
     <CodeBlock
       code={`import { ProductStoreClass } from '@happyvertical/smrt-products';
 
@@ -116,7 +98,7 @@ console.log('Total value:', productStore.totalValue);`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">2. Display Product Catalog</h3>
+    <h3>2. Display Product Catalog</h3>
     <CodeBlock
       code={`<script lang="ts">
   import { ProductCatalog } from '@happyvertical/smrt-products';
@@ -133,7 +115,7 @@ console.log('Total value:', productStore.totalValue);`}
       language="svelte"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">3. Create Product with Form</h3>
+    <h3>3. Create Product with Form</h3>
     <CodeBlock
       code={`<script lang="ts">
   import { ProductForm } from '@happyvertical/smrt-products';
@@ -162,7 +144,7 @@ console.log('Total value:', productStore.totalValue);`}
       language="svelte"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">4. Search and Filter Products</h3>
+    <h3>4. Search and Filter Products</h3>
     <CodeBlock
       code={`// Search by text (name, description, tags)
 const results = productStore.searchProducts('laptop');
@@ -182,86 +164,83 @@ console.log('Categories:', productStore.categories);`}
     />
   </section>
 
-  <!-- Core Concepts -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Core Concepts</h2>
+  <section>
+    <h2>Core Concepts</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">Product Model Structure</h3>
-    <p class="mb-4">
+    <h3>Product Model Structure</h3>
+    <p>
       The <code>Product</code> class extends <code>SmrtObject</code> with comprehensive fields for
       e-commerce and inventory management:
     </p>
-    <div class="overflow-x-auto mb-4">
-      <table class="min-w-full border text-sm">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="border px-4 py-2 text-left">Field</th>
-            <th class="border px-4 py-2 text-left">Type</th>
-            <th class="border px-4 py-2 text-left">Purpose</th>
-            <th class="border px-4 py-2 text-left">Example</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="border px-4 py-2 font-mono">name</td>
-            <td class="border px-4 py-2">string</td>
-            <td class="border px-4 py-2">Product identifier</td>
-            <td class="border px-4 py-2">"USB-C Hub"</td>
-          </tr>
-          <tr>
-            <td class="border px-4 py-2 font-mono">description</td>
-            <td class="border px-4 py-2">string</td>
-            <td class="border px-4 py-2">Detailed info</td>
-            <td class="border px-4 py-2">"7-port hub with PD..."</td>
-          </tr>
-          <tr>
-            <td class="border px-4 py-2 font-mono">category</td>
-            <td class="border px-4 py-2">string</td>
-            <td class="border px-4 py-2">Category name</td>
-            <td class="border px-4 py-2">"Electronics"</td>
-          </tr>
-          <tr>
-            <td class="border px-4 py-2 font-mono">manufacturer</td>
-            <td class="border px-4 py-2">string</td>
-            <td class="border px-4 py-2">Maker/brand</td>
-            <td class="border px-4 py-2">"TechCorp"</td>
-          </tr>
-          <tr>
-            <td class="border px-4 py-2 font-mono">model</td>
-            <td class="border px-4 py-2">string</td>
-            <td class="border px-4 py-2">Model number</td>
-            <td class="border px-4 py-2">"TC-HUB-7P"</td>
-          </tr>
-          <tr>
-            <td class="border px-4 py-2 font-mono">price</td>
-            <td class="border px-4 py-2">number</td>
-            <td class="border px-4 py-2">Decimal price</td>
-            <td class="border px-4 py-2">39.99</td>
-          </tr>
-          <tr>
-            <td class="border px-4 py-2 font-mono">inStock</td>
-            <td class="border px-4 py-2">boolean</td>
-            <td class="border px-4 py-2">Availability</td>
-            <td class="border px-4 py-2">true</td>
-          </tr>
-          <tr>
-            <td class="border px-4 py-2 font-mono">specifications</td>
-            <td class="border px-4 py-2">Record</td>
-            <td class="border px-4 py-2">Extensible attributes</td>
-            <td class="border px-4 py-2">{'} weight: "1kg", ports: 7 {'}</td>
-          </tr>
-          <tr>
-            <td class="border px-4 py-2 font-mono">tags</td>
-            <td class="border px-4 py-2">string[]</td>
-            <td class="border px-4 py-2">Searchable keywords</td>
-            <td class="border px-4 py-2">["usb", "hub", "adapter"]</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Type</th>
+          <th>Purpose</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>string</td>
+          <td>Product identifier</td>
+          <td>"USB-C Hub"</td>
+        </tr>
+        <tr>
+          <td><code>description</code></td>
+          <td>string</td>
+          <td>Detailed info</td>
+          <td>"7-port hub with PD..."</td>
+        </tr>
+        <tr>
+          <td><code>category</code></td>
+          <td>string</td>
+          <td>Category name</td>
+          <td>"Electronics"</td>
+        </tr>
+        <tr>
+          <td><code>manufacturer</code></td>
+          <td>string</td>
+          <td>Maker/brand</td>
+          <td>"TechCorp"</td>
+        </tr>
+        <tr>
+          <td><code>model</code></td>
+          <td>string</td>
+          <td>Model number</td>
+          <td>"TC-HUB-7P"</td>
+        </tr>
+        <tr>
+          <td><code>price</code></td>
+          <td>number</td>
+          <td>Decimal price</td>
+          <td>39.99</td>
+        </tr>
+        <tr>
+          <td><code>inStock</code></td>
+          <td>boolean</td>
+          <td>Availability</td>
+          <td>true</td>
+        </tr>
+        <tr>
+          <td><code>specifications</code></td>
+          <td>Record</td>
+          <td>Extensible attributes</td>
+          <td>{'{'} weight: "1kg", ports: 7 {'}'}</td>
+        </tr>
+        <tr>
+          <td><code>tags</code></td>
+          <td>string[]</td>
+          <td>Searchable keywords</td>
+          <td>["usb", "hub", "adapter"]</td>
+        </tr>
+      </tbody>
+    </table>
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Category System</h3>
-    <p class="mb-4">
+    <h3>Category System</h3>
+    <p>
       Categories form a hierarchical structure for organizing products:
     </p>
     <CodeBlock
@@ -282,8 +261,8 @@ console.log('Categories:', productStore.categories);`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Specifications System</h3>
-    <p class="mb-4">
+    <h3>Specifications System</h3>
+    <p>
       Products have an extensible <code>specifications</code> field for storing arbitrary attributes:
     </p>
     <CodeBlock
@@ -303,8 +282,8 @@ const warranty = await product.getSpecification('warranty');
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Reactive Store (Svelte 5 Runes)</h3>
-    <p class="mb-4">
+    <h3>Reactive Store (Svelte 5 Runes)</h3>
+    <p>
       The <code>ProductStoreClass</code> uses Svelte 5's runes for reactive state management:
     </p>
     <CodeBlock
@@ -343,54 +322,51 @@ const warranty = await product.getSpecification('warranty');
     />
   </section>
 
-  <!-- API Reference -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">API Reference</h2>
+  <section>
+    <h2>API Reference</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">Auto-Generated REST APIs</h3>
-    <p class="mb-4">
+    <h3>Auto-Generated REST APIs</h3>
+    <p>
       The <code>@smrt</code> decorator automatically generates REST endpoints:
     </p>
-    <div class="overflow-x-auto mb-4">
-      <table class="min-w-full border text-sm">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="border px-4 py-2 text-left">Method</th>
-            <th class="border px-4 py-2 text-left">Endpoint</th>
-            <th class="border px-4 py-2 text-left">Purpose</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="border px-4 py-2 font-mono">GET</td>
-            <td class="border px-4 py-2">/api/v1/products</td>
-            <td class="border px-4 py-2">List all products</td>
-          </tr>
-          <tr>
-            <td class="border px-4 py-2 font-mono">POST</td>
-            <td class="border px-4 py-2">/api/v1/products</td>
-            <td class="border px-4 py-2">Create new product</td>
-          </tr>
-          <tr>
-            <td class="border px-4 py-2 font-mono">GET</td>
-            <td class="border px-4 py-2">/api/v1/products/:id</td>
-            <td class="border px-4 py-2">Get single product</td>
-          </tr>
-          <tr>
-            <td class="border px-4 py-2 font-mono">PUT</td>
-            <td class="border px-4 py-2">/api/v1/products/:id</td>
-            <td class="border px-4 py-2">Update product</td>
-          </tr>
-          <tr>
-            <td class="border px-4 py-2 font-mono">GET</td>
-            <td class="border px-4 py-2">/api/v1/categories</td>
-            <td class="border px-4 py-2">List all categories</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>GET</code></td>
+          <td>/api/v1/products</td>
+          <td>List all products</td>
+        </tr>
+        <tr>
+          <td><code>POST</code></td>
+          <td>/api/v1/products</td>
+          <td>Create new product</td>
+        </tr>
+        <tr>
+          <td><code>GET</code></td>
+          <td>/api/v1/products/:id</td>
+          <td>Get single product</td>
+        </tr>
+        <tr>
+          <td><code>PUT</code></td>
+          <td>/api/v1/products/:id</td>
+          <td>Update product</td>
+        </tr>
+        <tr>
+          <td><code>GET</code></td>
+          <td>/api/v1/categories</td>
+          <td>List all categories</td>
+        </tr>
+      </tbody>
+    </table>
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">TypeScript Client</h3>
+    <h3>TypeScript Client</h3>
     <CodeBlock
       code={`import { createClient } from '@happyvertical/smrt-products/client';
 
@@ -417,9 +393,9 @@ const updated = await client.products.update(productId, {
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Components API</h3>
+    <h3>Components API</h3>
 
-    <h4 class="text-xl font-semibold mb-2 mt-4">ProductCard</h4>
+    <h4>ProductCard</h4>
     <CodeBlock
       code={`<ProductCard
   product={productData}
@@ -438,7 +414,7 @@ const updated = await client.products.update(productId, {
       language="svelte"
     />
 
-    <h4 class="text-xl font-semibold mb-2 mt-4">ProductForm</h4>
+    <h4>ProductForm</h4>
     <CodeBlock
       code={`<ProductForm
   product={existingProduct}
@@ -460,7 +436,7 @@ const updated = await client.products.update(productId, {
       language="svelte"
     />
 
-    <h4 class="text-xl font-semibold mb-2 mt-4">ProductCatalog</h4>
+    <h4>ProductCatalog</h4>
     <CodeBlock
       code={`<ProductCatalog
   readonly={false}
@@ -483,70 +459,66 @@ const updated = await client.products.update(productId, {
     />
   </section>
 
-  <!-- Tutorials -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Tutorials</h2>
+  <section>
+    <h2>Tutorials</h2>
 
-    <div class="space-y-8">
-      <div class="border-l-4 border-blue-500 pl-4">
-        <h3 class="text-xl font-semibold mb-2">Tutorial 1: Creating and Managing Your Product Catalog (45-60 min)</h3>
-        <p class="mb-2">Build a complete product catalog from scratch:</p>
-        <ul class="list-disc list-inside space-y-1 text-sm">
-          <li>Initialize ProductStore singleton in your app</li>
-          <li>Create first product using ProductForm component</li>
-          <li>Display catalog with ProductCatalog component</li>
-          <li>Implement add/edit/delete operations</li>
-          <li>Handle error states gracefully</li>
-          <li>Deploy to production with persistence</li>
-        </ul>
-      </div>
+    <article>
+      <h3>Tutorial 1: Creating and Managing Your Product Catalog (45-60 min)</h3>
+      <p>Build a complete product catalog from scratch:</p>
+      <ul>
+        <li>Initialize ProductStore singleton in your app</li>
+        <li>Create first product using ProductForm component</li>
+        <li>Display catalog with ProductCatalog component</li>
+        <li>Implement add/edit/delete operations</li>
+        <li>Handle error states gracefully</li>
+        <li>Deploy to production with persistence</li>
+      </ul>
+    </article>
 
-      <div class="border-l-4 border-green-500 pl-4">
-        <h3 class="text-xl font-semibold mb-2">Tutorial 2: Advanced Product Organization with Categories (45-60 min)</h3>
-        <p class="mb-2">Organize products with hierarchical categories:</p>
-        <ul class="list-disc list-inside space-y-1 text-sm">
-          <li>Set up hierarchical category structure (Electronics {'>'} Accessories {'>'} Cables)</li>
-          <li>Assign products to categories</li>
-          <li>Display category-filtered product views</li>
-          <li>Implement category-specific landing pages</li>
-          <li>Calculate and display product counts per category</li>
-          <li>Build category navigation menu</li>
-        </ul>
-      </div>
+    <article>
+      <h3>Tutorial 2: Advanced Product Organization with Categories (45-60 min)</h3>
+      <p>Organize products with hierarchical categories:</p>
+      <ul>
+        <li>Set up hierarchical category structure (Electronics {'>'} Accessories {'>'} Cables)</li>
+        <li>Assign products to categories</li>
+        <li>Display category-filtered product views</li>
+        <li>Implement category-specific landing pages</li>
+        <li>Calculate and display product counts per category</li>
+        <li>Build category navigation menu</li>
+      </ul>
+    </article>
 
-      <div class="border-l-4 border-purple-500 pl-4">
-        <h3 class="text-xl font-semibold mb-2">Tutorial 3: Product Search and Filtering (30-45 min)</h3>
-        <p class="mb-2">Implement advanced search and filtering:</p>
-        <ul class="list-disc list-inside space-y-1 text-sm">
-          <li>Full-text search across name, description, and tags</li>
-          <li>Category filters (single and multi-select)</li>
-          <li>Availability filter (in-stock only checkbox)</li>
-          <li>Combine multiple filters for precise results</li>
-          <li>Display result counts and stats</li>
-          <li>Clear all filters button</li>
-        </ul>
-      </div>
+    <article>
+      <h3>Tutorial 3: Product Search and Filtering (30-45 min)</h3>
+      <p>Implement advanced search and filtering:</p>
+      <ul>
+        <li>Full-text search across name, description, and tags</li>
+        <li>Category filters (single and multi-select)</li>
+        <li>Availability filter (in-stock only checkbox)</li>
+        <li>Combine multiple filters for precise results</li>
+        <li>Display result counts and stats</li>
+        <li>Clear all filters button</li>
+      </ul>
+    </article>
 
-      <div class="border-l-4 border-orange-500 pl-4">
-        <h3 class="text-xl font-semibold mb-2">Tutorial 4: Specifications and Product Variants (45-60 min)</h3>
-        <p class="mb-2">Handle product variants using specifications:</p>
-        <ul class="list-disc list-inside space-y-1 text-sm">
-          <li>Model product variants using specifications field</li>
-          <li>Store variant combinations (size, color, material)</li>
-          <li>Display variant selector UI in ProductCard</li>
-          <li>Update inventory per variant</li>
-          <li>Support dynamic specification schema per category</li>
-          <li>Validate specification values before saving</li>
-        </ul>
-      </div>
-    </div>
+    <article>
+      <h3>Tutorial 4: Specifications and Product Variants (45-60 min)</h3>
+      <p>Handle product variants using specifications:</p>
+      <ul>
+        <li>Model product variants using specifications field</li>
+        <li>Store variant combinations (size, color, material)</li>
+        <li>Display variant selector UI in ProductCard</li>
+        <li>Update inventory per variant</li>
+        <li>Support dynamic specification schema per category</li>
+        <li>Validate specification values before saving</li>
+      </ul>
+    </article>
   </section>
 
-  <!-- Examples -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Real-World Examples</h2>
+  <section>
+    <h2>Real-World Examples</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">Example 1: E-Commerce Product Catalog</h3>
+    <h3>Example 1: E-Commerce Product Catalog</h3>
     <CodeBlock
       code={`// Initialize store
 const store = new ProductStoreClass();
@@ -588,7 +560,7 @@ console.log('Catalog value:', store.totalValue);`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-8">Example 2: Product Inventory Dashboard</h3>
+    <h3>Example 2: Product Inventory Dashboard</h3>
     <CodeBlock
       code={`<script lang="ts">
   import { ProductCatalog } from '@happyvertical/smrt-products';
@@ -627,7 +599,7 @@ console.log('Catalog value:', store.totalValue);`}
       language="svelte"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-8">Example 3: Admin Product Editor</h3>
+    <h3>Example 3: Admin Product Editor</h3>
     <CodeBlock
       code={`<script lang="ts">
   import { ProductForm } from '@happyvertical/smrt-products';
@@ -673,7 +645,7 @@ console.log('Catalog value:', store.totalValue);`}
       language="svelte"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-8">Example 4: Manufacturer-Based Search</h3>
+    <h3>Example 4: Manufacturer-Based Search</h3>
     <CodeBlock
       code={`import { Product } from '@happyvertical/smrt-products';
 
@@ -701,7 +673,7 @@ console.log('Average TechCorp product price:', avgPrice.toFixed(2));`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-8">Example 5: Product Specifications System</h3>
+    <h3>Example 5: Product Specifications System</h3>
     <CodeBlock
       code={`// Create product with specifications
 const laptop = await Product.create({
@@ -750,222 +722,197 @@ console.log('Laptops with 32GB+ RAM:', highRamLaptops.length);`}
     />
   </section>
 
-  <!-- Integration Patterns -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Integration Patterns</h2>
+  <section>
+    <h2>Integration Patterns</h2>
 
-    <div class="space-y-6">
-      <div>
-        <h3 class="text-xl font-semibold mb-2">With smrt-core</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Product and Category extend <code>SmrtObject</code> for ORM/persistence</li>
-          <li><code>@smrt</code> decorator auto-generates REST APIs, CLI commands, MCP tools</li>
-          <li>Inherits AI methods: <code>is()</code>, <code>do()</code>, <code>describe()</code></li>
-          <li>Database schema auto-generated from TypeScript types</li>
-          <li>Built-in validation and lifecycle hooks</li>
-        </ul>
-      </div>
+    <article>
+      <h3>With smrt-core</h3>
+      <ul>
+        <li>Product and Category extend <code>SmrtObject</code> for ORM/persistence</li>
+        <li><code>@smrt</code> decorator auto-generates REST APIs, CLI commands, MCP tools</li>
+        <li>Inherits AI methods: <code>is()</code>, <code>do()</code>, <code>describe()</code></li>
+        <li>Database schema auto-generated from TypeScript types</li>
+        <li>Built-in validation and lifecycle hooks</li>
+      </ul>
+    </article>
 
-      <div>
-        <h3 class="text-xl font-semibold mb-2">With smrt-commerce</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Products feed into shopping cart and checkout</li>
-          <li>Orders reference products via foreign keys</li>
-          <li>Inventory sync with order transactions</li>
-          <li>Price updates trigger commerce events</li>
-          <li>Product availability affects checkout flow</li>
-        </ul>
-      </div>
+    <article>
+      <h3>With smrt-commerce</h3>
+      <ul>
+        <li>Products feed into shopping cart and checkout</li>
+        <li>Orders reference products via foreign keys</li>
+        <li>Inventory sync with order transactions</li>
+        <li>Price updates trigger commerce events</li>
+        <li>Product availability affects checkout flow</li>
+      </ul>
+    </article>
 
-      <div>
-        <h3 class="text-xl font-semibold mb-2">With smrt-assets</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Product images/videos managed as assets</li>
-          <li>ALT text auto-generated via AI for accessibility</li>
-          <li>Asset versions for product photo updates</li>
-          <li>Asset tagging aligns with product tags</li>
-          <li>Derivatives (thumbnails, webp) generated automatically</li>
-        </ul>
-      </div>
+    <article>
+      <h3>With smrt-assets</h3>
+      <ul>
+        <li>Product images/videos managed as assets</li>
+        <li>ALT text auto-generated via AI for accessibility</li>
+        <li>Asset versions for product photo updates</li>
+        <li>Asset tagging aligns with product tags</li>
+        <li>Derivatives (thumbnails, webp) generated automatically</li>
+      </ul>
+    </article>
 
-      <div>
-        <h3 class="text-xl font-semibold mb-2">With smrt-ledgers</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Product prices feed into accounting entries</li>
-          <li>Revenue recognized per product/category</li>
-          <li>Cost of goods sold tracking</li>
-          <li>Inventory valuation for balance sheet</li>
-          <li>Tax calculations based on product category</li>
-        </ul>
-      </div>
+    <article>
+      <h3>With smrt-ledgers</h3>
+      <ul>
+        <li>Product prices feed into accounting entries</li>
+        <li>Revenue recognized per product/category</li>
+        <li>Cost of goods sold tracking</li>
+        <li>Inventory valuation for balance sheet</li>
+        <li>Tax calculations based on product category</li>
+      </ul>
+    </article>
 
-      <div>
-        <h3 class="text-xl font-semibold mb-2">With smrt-tenancy</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Products isolated per tenant automatically</li>
-          <li>Category hierarchies per tenant</li>
-          <li>Separate product inventories</li>
-          <li>Tenant-specific pricing and visibility</li>
-          <li>Shared schema, separate data</li>
-        </ul>
-      </div>
+    <article>
+      <h3>With smrt-tenancy</h3>
+      <ul>
+        <li>Products isolated per tenant automatically</li>
+        <li>Category hierarchies per tenant</li>
+        <li>Separate product inventories</li>
+        <li>Tenant-specific pricing and visibility</li>
+        <li>Shared schema, separate data</li>
+      </ul>
+    </article>
 
-      <div>
-        <h3 class="text-xl font-semibold mb-2">Module Federation</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>ProductCard exported for consumption in other micro-frontends</li>
-          <li>ProductCatalog embeddable in dashboards</li>
-          <li>Product model definitions shared across services</li>
-          <li>ProductStore accessible in federated apps</li>
-          <li>Type safety maintained across boundaries</li>
-        </ul>
-      </div>
-    </div>
+    <article>
+      <h3>Module Federation</h3>
+      <ul>
+        <li>ProductCard exported for consumption in other micro-frontends</li>
+        <li>ProductCatalog embeddable in dashboards</li>
+        <li>Product model definitions shared across services</li>
+        <li>ProductStore accessible in federated apps</li>
+        <li>Type safety maintained across boundaries</li>
+      </ul>
+    </article>
   </section>
 
-  <!-- Best Practices -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Best Practices</h2>
+  <section>
+    <h2>Best Practices</h2>
 
-    <div class="space-y-6">
-      <div class="bg-green-50 border-l-4 border-green-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✓ DOs</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Use categories for organization (don't rely on tags alone)</li>
-          <li>Cache derived data (inStockCount, totalValue) via store</li>
-          <li>Validate product data before submission (form handles this)</li>
-          <li>Use tags for searchable keywords and filtering</li>
-          <li>Keep specifications schema consistent per product type</li>
-          <li>Lazy-load products for large catalogs (implement pagination)</li>
-          <li>Use the store for reactive state (not direct API calls)</li>
-          <li>Implement pagination for large product lists (1000+ items)</li>
-          <li>Use STI pattern for product variants/types</li>
-        </ul>
-      </div>
+    <article>
+      <h3>DOs</h3>
+      <ul>
+        <li>Use categories for organization (don't rely on tags alone)</li>
+        <li>Cache derived data (inStockCount, totalValue) via store</li>
+        <li>Validate product data before submission (form handles this)</li>
+        <li>Use tags for searchable keywords and filtering</li>
+        <li>Keep specifications schema consistent per product type</li>
+        <li>Lazy-load products for large catalogs (implement pagination)</li>
+        <li>Use the store for reactive state (not direct API calls)</li>
+        <li>Implement pagination for large product lists (1000+ items)</li>
+        <li>Use STI pattern for product variants/types</li>
+      </ul>
+    </article>
 
-      <div class="bg-red-50 border-l-4 border-red-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✗ DON'Ts</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Don't store large files in specifications (use smrt-assets)</li>
-          <li>Don't create deep category hierarchies ({'>'} 5 levels)</li>
-          <li>Don't hard-code prices (use dynamic fields)</li>
-          <li>Don't skip validation on forms</li>
-          <li>Don't duplicate product data across services (use federation)</li>
-          <li>Don't mutate store state directly (use provided actions)</li>
-          <li>Don't fetch all products on page load without pagination</li>
-          <li>Don't leave error states unhandled in UI</li>
-        </ul>
-      </div>
-    </div>
+    <article>
+      <h3>DON'Ts</h3>
+      <ul>
+        <li>Don't store large files in specifications (use smrt-assets)</li>
+        <li>Don't create deep category hierarchies ({'>'} 5 levels)</li>
+        <li>Don't hard-code prices (use dynamic fields)</li>
+        <li>Don't skip validation on forms</li>
+        <li>Don't duplicate product data across services (use federation)</li>
+        <li>Don't mutate store state directly (use provided actions)</li>
+        <li>Don't fetch all products on page load without pagination</li>
+        <li>Don't leave error states unhandled in UI</li>
+      </ul>
+    </article>
   </section>
 
-  <!-- Troubleshooting -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Common Issues and Troubleshooting</h2>
+  <section>
+    <h2>Common Issues and Troubleshooting</h2>
 
-    <div class="space-y-4">
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-red-600">Issue: Products not appearing in catalog</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Store not initialized or loadProducts() not called</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Call loadProducts() in onMount or component initialization.
-        </p>
-        <CodeBlock
-          code={`onMount(() => {
+    <article>
+      <h3>Issue: Products not appearing in catalog</h3>
+      <p><strong>Cause:</strong> Store not initialized or loadProducts() not called</p>
+      <p><strong>Solution:</strong> Call loadProducts() in onMount or component initialization.</p>
+      <CodeBlock
+        code={`onMount(() => {
   productStore.loadProducts();
 });`}
-          language="typescript"
-        />
-      </div>
+        language="typescript"
+      />
+    </article>
 
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-red-600">Issue: Form validation errors</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Required fields empty (name, price) or invalid values</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> ProductForm component handles validation. Check console for errors.
-          Ensure name is non-empty and price is a positive number.
-        </p>
-      </div>
+    <article>
+      <h3>Issue: Form validation errors</h3>
+      <p><strong>Cause:</strong> Required fields empty (name, price) or invalid values</p>
+      <p><strong>Solution:</strong> ProductForm component handles validation. Check console for errors.
+        Ensure name is non-empty and price is a positive number.</p>
+    </article>
 
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-orange-600">Issue: Specifications not saving</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Using wrong method or not awaiting promise</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Always await updateSpecification(), pass correct key/value types.
-        </p>
-        <CodeBlock
-          code={`// Correct
+    <article>
+      <h3>Issue: Specifications not saving</h3>
+      <p><strong>Cause:</strong> Using wrong method or not awaiting promise</p>
+      <p><strong>Solution:</strong> Always await updateSpecification(), pass correct key/value types.</p>
+      <CodeBlock
+        code={`// Correct
 await product.updateSpecification('weight', '1.2kg');
 
 // Wrong: not awaiting
 product.updateSpecification('weight', '1.2kg'); // Promise not resolved`}
-          language="typescript"
-        />
-      </div>
+        language="typescript"
+      />
+    </article>
 
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-orange-600">Issue: Search not finding results</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Search only looks at name, description, and tags</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Add relevant keywords to tags array for better searchability.
-        </p>
-      </div>
+    <article>
+      <h3>Issue: Search not finding results</h3>
+      <p><strong>Cause:</strong> Search only looks at name, description, and tags</p>
+      <p><strong>Solution:</strong> Add relevant keywords to tags array for better searchability.</p>
+    </article>
 
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-orange-600">Issue: Category hierarchy confusion</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Not setting parentId correctly or level incorrect</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Use getRootCategories() for level=0. Set parentId for subcategories.
-        </p>
-      </div>
+    <article>
+      <h3>Issue: Category hierarchy confusion</h3>
+      <p><strong>Cause:</strong> Not setting parentId correctly or level incorrect</p>
+      <p><strong>Solution:</strong> Use getRootCategories() for level=0. Set parentId for subcategories.</p>
+    </article>
 
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-orange-600">Issue: Performance with large catalogs</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Loading all products at once without pagination</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Implement API pagination. Filter/search client-side for small datasets
-          ({'<'}1000 items), server-side for larger.
-        </p>
-      </div>
+    <article>
+      <h3>Issue: Performance with large catalogs</h3>
+      <p><strong>Cause:</strong> Loading all products at once without pagination</p>
+      <p><strong>Solution:</strong> Implement API pagination. Filter/search client-side for small datasets
+        ({'<'}1000 items), server-side for larger.</p>
+    </article>
 
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-orange-600">Issue: Module federation components not loading</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Expose config not exporting components</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Verify federation/expose.config.ts includes ProductCard, ProductCatalog exports.
-        </p>
-      </div>
-    </div>
+    <article>
+      <h3>Issue: Module federation components not loading</h3>
+      <p><strong>Cause:</strong> Expose config not exporting components</p>
+      <p><strong>Solution:</strong> Verify federation/expose.config.ts includes ProductCard, ProductCatalog exports.</p>
+    </article>
   </section>
 
-  <!-- Related Modules -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Related Modules</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <a href="/modules/smrt-core" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-core</h3>
-        <p class="text-sm text-gray-600">Base classes, decorators, and AI integration</p>
+  <section>
+    <h2>Related Modules</h2>
+    <div class="link-grid">
+      <a href="/modules/smrt-core" class="link-card">
+        <h3>smrt-core</h3>
+        <p>Base classes, decorators, and AI integration</p>
       </a>
-      <a href="/modules/smrt-commerce" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-commerce</h3>
-        <p class="text-sm text-gray-600">Shopping cart and checkout integration</p>
+      <a href="/modules/smrt-commerce" class="link-card">
+        <h3>smrt-commerce</h3>
+        <p>Shopping cart and checkout integration</p>
       </a>
-      <a href="/modules/smrt-assets" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-assets</h3>
-        <p class="text-sm text-gray-600">Product image and video management</p>
+      <a href="/modules/smrt-assets" class="link-card">
+        <h3>smrt-assets</h3>
+        <p>Product image and video management</p>
       </a>
-      <a href="/modules/smrt-ledgers" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-ledgers</h3>
-        <p class="text-sm text-gray-600">Accounting integration for revenue tracking</p>
+      <a href="/modules/smrt-ledgers" class="link-card">
+        <h3>smrt-ledgers</h3>
+        <p>Accounting integration for revenue tracking</p>
       </a>
     </div>
   </section>
 
-  <!-- Footer Navigation -->
-  <div class="border-t pt-6 mt-12">
-    <div class="flex justify-between">
-      <a href="/modules" class="text-blue-600 hover:underline">← Back to Modules</a>
-      <a href="/modules/smrt-tags" class="text-blue-600 hover:underline">Next: smrt-tags →</a>
-    </div>
-  </div>
-</div>
+  <section>
+    <nav aria-label="Footer navigation">
+      <a href="/modules">← Back to Modules</a>
+      <a href="/modules/smrt-tags">Next: smrt-tags →</a>
+    </nav>
+  </section>
+</ModulePage>

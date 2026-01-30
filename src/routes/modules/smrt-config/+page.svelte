@@ -1,31 +1,13 @@
 <script lang="ts">
-	import Grid from '$lib/components/Grid.svelte';
+	import ModulePage from '$lib/components/ModulePage.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head>
-	<title>smrt-config | s-m-r-t</title>
-</svelte:head>
-
-<Grid>
-	<div class="header">
-		<div class="breadcrumb">
-			<a href="/modules">Modules</a>
-			<span class="separator">/</span>
-			<span>smrt-config</span>
-		</div>
-		<h1>@happyvertical/smrt-config</h1>
-		<p class="lead">
-			Centralized configuration management for SMRT modules and applications with support for
-			multiple file formats, environment variables, and powerful orchestration via top-level await.
-		</p>
-		<div class="badges">
-			<span class="badge">v0.19.0</span>
-			<span class="badge">Core Foundation</span>
-			<span class="badge">ESM</span>
-		</div>
-	</div>
-
+<ModulePage 
+  name="smrt-config" 
+  description="Centralized configuration management for SMRT modules and applications with support for multiple file formats, environment variables, and powerful orchestration via top-level await."
+  badges={['v0.19.0', 'Core Foundation', 'ESM']}
+>
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
@@ -643,63 +625,9 @@ export default defineConfig({
 			</tbody>
 		</table>
 	</section>
-</Grid>
+</ModulePage>
 
 <style>
-	.header {
-		grid-column: 1 / -1;
-		padding: 48px 0;
-		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
-	}
-
-	.breadcrumb {
-		font-size: 0.875rem;
-		margin-bottom: 16px;
-		color: var(--smrt-color-on-surface-variant, #666);
-	}
-
-	.breadcrumb a {
-		color: var(--smrt-color-primary, #1976d2);
-		text-decoration: none;
-	}
-
-	.breadcrumb a:hover {
-		text-decoration: underline;
-	}
-
-	.separator {
-		margin: 0 8px;
-	}
-
-	h1 {
-		font-size: 2.5rem;
-		font-weight: 600;
-		margin-bottom: 16px;
-		font-family: var(--font-mono);
-	}
-
-	.lead {
-		font-size: 1.125rem;
-		color: var(--smrt-color-on-surface-variant, #666);
-		margin-bottom: 16px;
-		line-height: 1.6;
-	}
-
-	.badges {
-		display: flex;
-		gap: 8px;
-		flex-wrap: wrap;
-	}
-
-	.badge {
-		display: inline-block;
-		padding: 4px 12px;
-		background: var(--smrt-color-surface-container, #f0f0f0);
-		border-radius: 4px;
-		font-size: 0.875rem;
-		font-weight: 500;
-	}
-
 	section {
 		grid-column: 1 / -1;
 		padding: 48px 0;

@@ -1,46 +1,31 @@
 <script lang="ts">
+  import ModulePage from '$lib/components/ModulePage.svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head>
-  <title>smrt-places - Geographic Location Management | SMRT Framework</title>
-  <meta name="description" content="Hierarchical geographic location management with geocoding integration, proximity search, and support for both physical and abstract places." />
-</svelte:head>
-
-<div class="max-w-4xl mx-auto px-4 py-8">
-  <!-- Header Section -->
-  <div class="mb-8">
-    <h1 class="text-4xl font-bold mb-4">smrt-places</h1>
-    <p class="text-xl text-gray-600 mb-4">
-      Hierarchical geographic location management with automatic geocoding, proximity search,
-      and support for both physical locations and abstract places like game zones.
-    </p>
-    <div class="flex gap-2 flex-wrap">
-      <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">v0.19.0</span>
-      <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Geocoding</span>
-      <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">Hierarchy</span>
-      <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">ESM</span>
-    </div>
-  </div>
-
+<ModulePage 
+  name="smrt-places" 
+  description="Hierarchical place management with geo-coordinates, address validation, and territory mapping."
+  badges={['v0.19.0', 'Geography', 'Hierarchy']}
+>
   <!-- What is smrt-places? -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Overview</h2>
-    <p class="mb-4">
+  <section>
+    <h2>Overview</h2>
+    <p>
       <strong>smrt-places</strong> is a comprehensive location management system for the SMRT framework.
       It provides hierarchical organization of geographic locations with automatic geocoding integration,
       proximity-based searches, and support for both real-world places (with coordinates) and abstract
       places (virtual worlds, game zones, organizational units).
     </p>
-    <p class="mb-4">
+    <p>
       The module enables organic database growth through <code>lookupOrCreate()</code>, which automatically
       queries geocoding services (OpenStreetMap or Google Maps) for missing locations. Places can be
       organized in unlimited nesting depth (Country → Region → City → Building → Room), and each place
       can store custom metadata for domain-specific attributes.
     </p>
-    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
-      <p class="font-semibold mb-2">Key Features:</p>
-      <ul class="list-disc list-inside space-y-1">
+    <aside>
+      <p><strong>Key Features:</strong></p>
+      <ul>
         <li>Self-referencing hierarchy with unlimited nesting depth</li>
         <li>Automatic geocoding integration (OpenStreetMap + Google Maps)</li>
         <li>Forward geocoding (address → coordinates) and reverse geocoding (coordinates → address)</li>
@@ -50,19 +35,19 @@
         <li>JSON metadata storage for custom attributes</li>
         <li>Distance calculations (Haversine formula)</li>
       </ul>
-    </div>
+    </aside>
   </section>
 
   <!-- Installation -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Installation</h2>
+  <section>
+    <h2>Installation</h2>
     <CodeBlock
       code={`npm install @happyvertical/smrt-places
 # or
 pnpm add @happyvertical/smrt-places`}
       language="bash"
     />
-    <p class="mt-4 mb-4">
+    <p>
       The module depends on <code>@happyvertical/smrt-core</code> for base classes and
       <code>@happyvertical/geo</code> for geocoding integration. It works seamlessly with
       <code>smrt-tenancy</code> for multi-tenant isolation.
@@ -70,13 +55,13 @@ pnpm add @happyvertical/smrt-places`}
   </section>
 
   <!-- Quick Start -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Quick Start (5 Minutes)</h2>
-    <p class="mb-4">
+  <section>
+    <h2>Quick Start (5 Minutes)</h2>
+    <p>
       Here's a minimal example showing how to create a place hierarchy, use geocoding, and search by proximity:
     </p>
 
-    <h3 class="text-2xl font-semibold mb-3">1. Initialize Collections</h3>
+    <h3>1. Initialize Collections</h3>
     <CodeBlock
       code={`import { PlaceCollection, PlaceTypeCollection } from '@happyvertical/smrt-places';
 
@@ -88,7 +73,7 @@ await placeTypes.initializeDefaults();`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">2. Create Place Hierarchy Manually</h3>
+    <h3>2. Create Place Hierarchy Manually</h3>
     <CodeBlock
       code={`// Create country
 const usa = await places.create({
@@ -117,7 +102,7 @@ const sanFrancisco = await places.create({
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">3. Use Organic Database Growth (lookupOrCreate)</h3>
+    <h3>3. Use Organic Database Growth (lookupOrCreate)</h3>
     <CodeBlock
       code={`// Forward geocoding: address → place with coordinates
 const office = await places.lookupOrCreate(
@@ -146,7 +131,7 @@ console.log('Place from coords:', placeFromCoords.name);`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">4. Search by Proximity</h3>
+    <h3>4. Search by Proximity</h3>
     <CodeBlock
       code={`// Find all places within 5km of coordinates
 const nearbyPlaces = await places.searchByProximity(
@@ -164,11 +149,11 @@ nearbyPlaces.forEach(place => {
   </section>
 
   <!-- Core Concepts -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Core Concepts</h2>
+  <section>
+    <h2>Core Concepts</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">Place Model Structure</h3>
-    <p class="mb-4">
+    <h3>Place Model Structure</h3>
+    <p>
       The <code>Place</code> model supports both physical locations (with coordinates) and abstract
       places (virtual worlds, game zones). All geographic fields are optional:
     </p>
@@ -208,19 +193,19 @@ nearbyPlaces.forEach(place => {
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Hierarchical Organization</h3>
-    <p class="mb-4">
+    <h3>Hierarchical Organization</h3>
+    <p>
       Places form a self-referencing hierarchy through the <code>parentId</code> field. This enables
       unlimited nesting depth for organizing locations:
     </p>
-    <div class="bg-gray-50 p-4 rounded mb-4">
-      <p class="font-mono text-sm mb-2">Example Hierarchies:</p>
-      <ul class="list-none space-y-2 text-sm">
+    <figure>
+      <figcaption>Example Hierarchies:</figcaption>
+      <ul>
         <li>🌍 United States → California → San Francisco → Market Street → Building 1234 → Floor 5 → Room 501</li>
         <li>🎮 Game World → Eastern Kingdom → Forest of Doom → Ancient Temple → Treasure Chamber</li>
         <li>🏢 Acme Corp → West Coast Office → Floor 3 → Engineering → Desk 42</li>
       </ul>
-    </div>
+    </figure>
     <CodeBlock
       code={`// Get immediate parent
 const parent = await place.getParent();
@@ -240,21 +225,21 @@ const hierarchy = await place.getHierarchy();
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">PlaceType System</h3>
-    <p class="mb-4">
+    <h3>PlaceType System</h3>
+    <p>
       Places are categorized using the <code>PlaceType</code> model with slug-based identification.
       Default types include:
     </p>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
-      <div class="border rounded p-2 text-center text-sm">country</div>
-      <div class="border rounded p-2 text-center text-sm">region</div>
-      <div class="border rounded p-2 text-center text-sm">city</div>
-      <div class="border rounded p-2 text-center text-sm">address</div>
-      <div class="border rounded p-2 text-center text-sm">building</div>
-      <div class="border rounded p-2 text-center text-sm">room</div>
-      <div class="border rounded p-2 text-center text-sm">zone</div>
-      <div class="border rounded p-2 text-center text-sm">point_of_interest</div>
-    </div>
+    <ul class="type-grid">
+      <li>country</li>
+      <li>region</li>
+      <li>city</li>
+      <li>address</li>
+      <li>building</li>
+      <li>room</li>
+      <li>zone</li>
+      <li>point_of_interest</li>
+    </ul>
     <CodeBlock
       code={`// Get or create type (idempotent)
 const buildingType = await placeTypes.getOrCreate('building', 'Building');
@@ -267,8 +252,8 @@ const restaurantType = await placeTypes.getOrCreate('restaurant', 'Restaurant');
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Geocoding Integration</h3>
-    <p class="mb-4">
+    <h3>Geocoding Integration</h3>
+    <p>
       The module integrates with <code>@happyvertical/geo</code> for automatic geocoding using
       OpenStreetMap (free, no API key) or Google Maps (requires API key):
     </p>
@@ -297,8 +282,8 @@ const place2 = await places.lookupOrCreate(
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Abstract Places (No Coordinates)</h3>
-    <p class="mb-4">
+    <h3>Abstract Places (No Coordinates)</h3>
+    <p>
       Places don't require coordinates - perfect for virtual worlds, game zones, or organizational structures:
     </p>
     <CodeBlock
@@ -334,10 +319,10 @@ const poi = await places.create({
   </section>
 
   <!-- API Reference -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">API Reference</h2>
+  <section>
+    <h2>API Reference</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">Place Model Methods</h3>
+    <h3>Place Model Methods</h3>
     <CodeBlock
       code={`// Geographic data
 place.getGeoData(): GeoData              // Get all geographic fields
@@ -358,7 +343,7 @@ await place.getHierarchy(): PlaceHierarchy`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">PlaceCollection Methods</h3>
+    <h3>PlaceCollection Methods</h3>
     <CodeBlock
       code={`// Organic database growth
 await places.lookupOrCreate(query, options?): Promise<Place | null>
@@ -379,7 +364,7 @@ await places.searchByProximity(lat, lng, radiusKm): Promise<Place[]>
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">PlaceTypeCollection Methods</h3>
+    <h3>PlaceTypeCollection Methods</h3>
     <CodeBlock
       code={`// Idempotent type access
 await placeTypes.getOrCreate(slug, name?): Promise<PlaceType>
@@ -393,7 +378,7 @@ await placeTypes.initializeDefaults(): Promise<PlaceType[]>
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Utility Functions</h3>
+    <h3>Utility Functions</h3>
     <CodeBlock
       code={`import {
   validateCoordinates,
@@ -445,66 +430,64 @@ const display = generateDisplayName({
   </section>
 
   <!-- Tutorials -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Tutorials</h2>
+  <section>
+    <h2>Tutorials</h2>
 
-    <div class="space-y-8">
-      <div class="border-l-4 border-blue-500 pl-4">
-        <h3 class="text-xl font-semibold mb-2">Tutorial 1: Basic Place Creation and Hierarchy (10-15 min)</h3>
-        <p class="mb-2">Build a location hierarchy from scratch:</p>
-        <ul class="list-disc list-inside space-y-1 text-sm">
-          <li>Initialize PlaceTypeCollection and seed default types</li>
-          <li>Create country, region, city hierarchy manually</li>
-          <li>Retrieve complete hierarchy using getHierarchy()</li>
-          <li>List all places at each level</li>
-          <li>Navigate parent-child relationships</li>
-        </ul>
-      </div>
+    <article>
+      <h3>Tutorial 1: Basic Place Creation and Hierarchy (10-15 min)</h3>
+      <p>Build a location hierarchy from scratch:</p>
+      <ul>
+        <li>Initialize PlaceTypeCollection and seed default types</li>
+        <li>Create country, region, city hierarchy manually</li>
+        <li>Retrieve complete hierarchy using getHierarchy()</li>
+        <li>List all places at each level</li>
+        <li>Navigate parent-child relationships</li>
+      </ul>
+    </article>
 
-      <div class="border-l-4 border-green-500 pl-4">
-        <h3 class="text-xl font-semibold mb-2">Tutorial 2: Organic Database Growth with lookupOrCreate (15-20 min)</h3>
-        <p class="mb-2">Automatically populate places using geocoding:</p>
-        <ul class="list-disc list-inside space-y-1 text-sm">
-          <li>Forward geocoding (address string → place with coordinates)</li>
-          <li>Reverse geocoding (coordinates → place with address)</li>
-          <li>Compare OpenStreetMap vs Google Maps providers</li>
-          <li>Control creation with createIfNotFound flag</li>
-          <li>Store and retrieve metadata from geocoding results</li>
-        </ul>
-      </div>
+    <article>
+      <h3>Tutorial 2: Organic Database Growth with lookupOrCreate (15-20 min)</h3>
+      <p>Automatically populate places using geocoding:</p>
+      <ul>
+        <li>Forward geocoding (address string → place with coordinates)</li>
+        <li>Reverse geocoding (coordinates → place with address)</li>
+        <li>Compare OpenStreetMap vs Google Maps providers</li>
+        <li>Control creation with createIfNotFound flag</li>
+        <li>Store and retrieve metadata from geocoding results</li>
+      </ul>
+    </article>
 
-      <div class="border-l-4 border-purple-500 pl-4">
-        <h3 class="text-xl font-semibold mb-2">Tutorial 3: Proximity Search and Location Queries (15-20 min)</h3>
-        <p class="mb-2">Find nearby places and calculate distances:</p>
-        <ul class="list-disc list-inside space-y-1 text-sm">
-          <li>Populate database with places at real coordinates</li>
-          <li>Search places within 10km radius</li>
-          <li>Calculate distances between specific places</li>
-          <li>Filter results by place type</li>
-          <li>Sort by relevance/distance</li>
-        </ul>
-      </div>
+    <article>
+      <h3>Tutorial 3: Proximity Search and Location Queries (15-20 min)</h3>
+      <p>Find nearby places and calculate distances:</p>
+      <ul>
+        <li>Populate database with places at real coordinates</li>
+        <li>Search places within 10km radius</li>
+        <li>Calculate distances between specific places</li>
+        <li>Filter results by place type</li>
+        <li>Sort by relevance/distance</li>
+      </ul>
+    </article>
 
-      <div class="border-l-4 border-orange-500 pl-4">
-        <h3 class="text-xl font-semibold mb-2">Tutorial 4: Abstract Places and Virtual Worlds (15-20 min)</h3>
-        <p class="mb-2">Build location systems without real-world coordinates:</p>
-        <ul class="list-disc list-inside space-y-1 text-sm">
-          <li>Create custom place types for game zones (zone, area, sector)</li>
-          <li>Build hierarchy without geocoding</li>
-          <li>Store game-specific metadata</li>
-          <li>Query abstract place hierarchies</li>
-          <li>Mix physical and abstract places in same system</li>
-        </ul>
-      </div>
-    </div>
+    <article>
+      <h3>Tutorial 4: Abstract Places and Virtual Worlds (15-20 min)</h3>
+      <p>Build location systems without real-world coordinates:</p>
+      <ul>
+        <li>Create custom place types for game zones (zone, area, sector)</li>
+        <li>Build hierarchy without geocoding</li>
+        <li>Store game-specific metadata</li>
+        <li>Query abstract place hierarchies</li>
+        <li>Mix physical and abstract places in same system</li>
+      </ul>
+    </article>
   </section>
 
   <!-- Examples -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Real-World Examples</h2>
+  <section>
+    <h2>Real-World Examples</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">Example 1: Restaurant Locator Application</h3>
-    <p class="mb-4">
+    <h3>Example 1: Restaurant Locator Application</h3>
+    <p>
       Build a restaurant finder with automatic geocoding:
     </p>
     <CodeBlock
@@ -551,8 +534,8 @@ console.log('Found', italianRestaurants.length, 'Italian restaurants within 5km'
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-8">Example 2: Event Management System</h3>
-    <p class="mb-4">
+    <h3>Example 2: Event Management System</h3>
+    <p>
       Manage venues with hierarchical room organization:
     </p>
     <CodeBlock
@@ -620,8 +603,8 @@ console.log('Found', nearbyVenues.length, 'venues within 10km');`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-8">Example 3: Game World Builder</h3>
-    <p class="mb-4">
+    <h3>Example 3: Game World Builder</h3>
+    <p>
       Create abstract place hierarchies for virtual worlds:
     </p>
     <CodeBlock
@@ -684,8 +667,8 @@ console.log('- Total locations:', worldHierarchy.descendants.length);`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-8">Example 4: Real Estate Platform</h3>
-    <p class="mb-4">
+    <h3>Example 4: Real Estate Platform</h3>
+    <p>
       Organize properties with geocoding and search:
     </p>
     <CodeBlock
@@ -750,8 +733,8 @@ console.log('Found', availableUnits.length, 'available units under $3000 within 
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-8">Example 5: Supply Chain Management</h3>
-    <p class="mb-4">
+    <h3>Example 5: Supply Chain Management</h3>
+    <p>
       Track warehouse locations and zones:
     </p>
     <CodeBlock
@@ -841,163 +824,158 @@ console.log('Distance between warehouses:', distance, 'km');`}
   </section>
 
   <!-- Integration Patterns -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Integration Patterns</h2>
+  <section>
+    <h2>Integration Patterns</h2>
 
-    <div class="space-y-6">
-      <div>
-        <h3 class="text-xl font-semibold mb-2">With smrt-core</h3>
-        <p class="mb-2">
-          Place and PlaceType extend <code>SmrtObject</code> with full SMRT framework integration:
-        </p>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li><code>@smrt</code> decorator auto-generates REST APIs, CLI commands, and MCP tools</li>
-          <li>Automatic database schema generation from TypeScript types</li>
-          <li>Built-in validation, lifecycle hooks (beforeSave, afterSave)</li>
-          <li>AI-powered methods: <code>do()</code> and <code>is()</code></li>
-        </ul>
-      </div>
+    <article>
+      <h3>With smrt-core</h3>
+      <p>
+        Place and PlaceType extend <code>SmrtObject</code> with full SMRT framework integration:
+      </p>
+      <ul>
+        <li><code>@smrt</code> decorator auto-generates REST APIs, CLI commands, and MCP tools</li>
+        <li>Automatic database schema generation from TypeScript types</li>
+        <li>Built-in validation, lifecycle hooks (beforeSave, afterSave)</li>
+        <li>AI-powered methods: <code>do()</code> and <code>is()</code></li>
+      </ul>
+    </article>
 
-      <div>
-        <h3 class="text-xl font-semibold mb-2">With @happyvertical/geo</h3>
-        <p class="mb-2">
-          Seamless geocoding integration for organic database growth:
-        </p>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>PlaceCollection internally uses geo adapter for lookupOrCreate()</li>
-          <li>OpenStreetMap provider (free, no API key)</li>
-          <li>Google Maps provider (requires GOOGLE_MAPS_API_KEY env var)</li>
-          <li>Automatic address component extraction and population</li>
-        </ul>
-      </div>
+    <article>
+      <h3>With @happyvertical/geo</h3>
+      <p>
+        Seamless geocoding integration for organic database growth:
+      </p>
+      <ul>
+        <li>PlaceCollection internally uses geo adapter for lookupOrCreate()</li>
+        <li>OpenStreetMap provider (free, no API key)</li>
+        <li>Google Maps provider (requires GOOGLE_MAPS_API_KEY env var)</li>
+        <li>Automatic address component extraction and population</li>
+      </ul>
+    </article>
 
-      <div>
-        <h3 class="text-xl font-semibold mb-2">With smrt-tenancy</h3>
-        <p class="mb-2">
-          Multi-tenant place isolation:
-        </p>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Each tenant has separate place hierarchies</li>
-          <li>Query scoping via tenant context in collection options</li>
-          <li>Shared schema, separate data per tenant</li>
-          <li>Permission checks control which users access which places</li>
-        </ul>
-      </div>
+    <article>
+      <h3>With smrt-tenancy</h3>
+      <p>
+        Multi-tenant place isolation:
+      </p>
+      <ul>
+        <li>Each tenant has separate place hierarchies</li>
+        <li>Query scoping via tenant context in collection options</li>
+        <li>Shared schema, separate data per tenant</li>
+        <li>Permission checks control which users access which places</li>
+      </ul>
+    </article>
 
-      <div>
-        <h3 class="text-xl font-semibold mb-2">With smrt-users</h3>
-        <p class="mb-2">
-          User location tracking and proximity features:
-        </p>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>User profiles store <code>placeId</code> foreign key</li>
-          <li>Track user location history (visits to places)</li>
-          <li>Proximity-based user discovery (find users nearby)</li>
-          <li>Location-based permissions/roles</li>
-        </ul>
-      </div>
+    <article>
+      <h3>With smrt-users</h3>
+      <p>
+        User location tracking and proximity features:
+      </p>
+      <ul>
+        <li>User profiles store <code>placeId</code> foreign key</li>
+        <li>Track user location history (visits to places)</li>
+        <li>Proximity-based user discovery (find users nearby)</li>
+        <li>Location-based permissions/roles</li>
+      </ul>
+    </article>
 
-      <div>
-        <h3 class="text-xl font-semibold mb-2">With smrt-content</h3>
-        <p class="mb-2">
-          Location-specific content:
-        </p>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Content references places via <code>placeId</code> foreign key</li>
-          <li>Blog posts/articles about specific locations</li>
-          <li>Location guides and documentation</li>
-          <li>Metadata synchronization between content and places</li>
-        </ul>
-      </div>
-    </div>
+    <article>
+      <h3>With smrt-content</h3>
+      <p>
+        Location-specific content:
+      </p>
+      <ul>
+        <li>Content references places via <code>placeId</code> foreign key</li>
+        <li>Blog posts/articles about specific locations</li>
+        <li>Location guides and documentation</li>
+        <li>Metadata synchronization between content and places</li>
+      </ul>
+    </article>
   </section>
 
   <!-- Best Practices -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Best Practices</h2>
+  <section>
+    <h2>Best Practices</h2>
 
-    <div class="space-y-6">
-      <div class="bg-green-50 border-l-4 border-green-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✓ Creating Hierarchies</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Start with root places (countries) and build downward</li>
-          <li>Use consistent naming conventions across hierarchy levels</li>
-          <li>Assign type slugs early for better querying and filtering</li>
-          <li>Store external IDs for syncing with other systems</li>
-        </ul>
-      </div>
+    <article class="tip">
+      <h3>Creating Hierarchies</h3>
+      <ul>
+        <li>Start with root places (countries) and build downward</li>
+        <li>Use consistent naming conventions across hierarchy levels</li>
+        <li>Assign type slugs early for better querying and filtering</li>
+        <li>Store external IDs for syncing with other systems</li>
+      </ul>
+    </article>
 
-      <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✓ Geocoding</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Use OpenStreetMap by default (free, no API key needed)</li>
-          <li>Switch to Google Maps for better accuracy on edge cases</li>
-          <li>Set <code>createIfNotFound: false</code> for lookup-only queries</li>
-          <li>Validate coordinates with <code>validateCoordinates()</code> before storing</li>
-          <li>Check <code>source</code> field to track which provider created the place</li>
-        </ul>
-      </div>
+    <article class="tip">
+      <h3>Geocoding</h3>
+      <ul>
+        <li>Use OpenStreetMap by default (free, no API key needed)</li>
+        <li>Switch to Google Maps for better accuracy on edge cases</li>
+        <li>Set <code>createIfNotFound: false</code> for lookup-only queries</li>
+        <li>Validate coordinates with <code>validateCoordinates()</code> before storing</li>
+        <li>Check <code>source</code> field to track which provider created the place</li>
+      </ul>
+    </article>
 
-      <div class="bg-purple-50 border-l-4 border-purple-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✓ Metadata Usage</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Store domain-specific attributes in JSON metadata field</li>
-          <li>Use consistent schema across place types for easier querying</li>
-          <li>Don't store sensitive data in metadata (no encryption)</li>
-          <li>Validate metadata structure before <code>updateMetadata()</code></li>
-          <li>Consider extracting frequently-queried metadata to dedicated columns</li>
-        </ul>
-      </div>
+    <article class="tip">
+      <h3>Metadata Usage</h3>
+      <ul>
+        <li>Store domain-specific attributes in JSON metadata field</li>
+        <li>Use consistent schema across place types for easier querying</li>
+        <li>Don't store sensitive data in metadata (no encryption)</li>
+        <li>Validate metadata structure before <code>updateMetadata()</code></li>
+        <li>Consider extracting frequently-queried metadata to dedicated columns</li>
+      </ul>
+    </article>
 
-      <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✓ Performance</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Index frequently-queried fields (parentId, typeId, city, region)</li>
-          <li>Use proximity search carefully on large datasets (pre-filter by type)</li>
-          <li>Cache hierarchy results when possible (e.g., getHierarchy())</li>
-          <li>Batch load relationships to avoid N+1 queries</li>
-          <li>Consider pagination for large result sets</li>
-        </ul>
-      </div>
+    <article class="tip">
+      <h3>Performance</h3>
+      <ul>
+        <li>Index frequently-queried fields (parentId, typeId, city, region)</li>
+        <li>Use proximity search carefully on large datasets (pre-filter by type)</li>
+        <li>Cache hierarchy results when possible (e.g., getHierarchy())</li>
+        <li>Batch load relationships to avoid N+1 queries</li>
+        <li>Consider pagination for large result sets</li>
+      </ul>
+    </article>
 
-      <div class="bg-orange-50 border-l-4 border-orange-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✓ Abstract Places</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Skip all geographic fields for virtual/abstract places</li>
-          <li>Use descriptive type slugs ('zone', 'area', 'sector')</li>
-          <li>Store domain-specific data in metadata field</li>
-          <li>Hierarchies can be arbitrarily deep (no practical limit)</li>
-          <li>Mix physical and abstract places in same system</li>
-        </ul>
-      </div>
+    <article class="tip">
+      <h3>Abstract Places</h3>
+      <ul>
+        <li>Skip all geographic fields for virtual/abstract places</li>
+        <li>Use descriptive type slugs ('zone', 'area', 'sector')</li>
+        <li>Store domain-specific data in metadata field</li>
+        <li>Hierarchies can be arbitrarily deep (no practical limit)</li>
+        <li>Mix physical and abstract places in same system</li>
+      </ul>
+    </article>
 
-      <div class="bg-red-50 border-l-4 border-red-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✗ Common Mistakes to Avoid</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Don't create circular references (Child → Parent → Grandparent → Child)</li>
-          <li>Don't store massive objects in metadata (keep under 10KB)</li>
-          <li>Don't use geocoding for every query (cache lookups)</li>
-          <li>Don't forget to set <code>typeId</code> (required field)</li>
-          <li>Don't mix coordinate systems (always use decimal degrees)</li>
-        </ul>
-      </div>
-    </div>
+    <article class="warning">
+      <h3>Common Mistakes to Avoid</h3>
+      <ul>
+        <li>Don't create circular references (Child → Parent → Grandparent → Child)</li>
+        <li>Don't store massive objects in metadata (keep under 10KB)</li>
+        <li>Don't use geocoding for every query (cache lookups)</li>
+        <li>Don't forget to set <code>typeId</code> (required field)</li>
+        <li>Don't mix coordinate systems (always use decimal degrees)</li>
+      </ul>
+    </article>
   </section>
 
   <!-- Troubleshooting -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Common Issues and Troubleshooting</h2>
+  <section>
+    <h2>Common Issues and Troubleshooting</h2>
 
-    <div class="space-y-4">
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-red-600">Error: "Place not found" on lookupOrCreate()</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Geocoding service can't find the address</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Check internet access, verify address format, try different provider,
-          or use reverse geocoding with coordinates instead.
-        </p>
-        <CodeBlock
-          code={`// Try different format
+    <article class="issue">
+      <h3>Error: "Place not found" on lookupOrCreate()</h3>
+      <p><strong>Cause:</strong> Geocoding service can't find the address</p>
+      <p>
+        <strong>Solution:</strong> Check internet access, verify address format, try different provider,
+        or use reverse geocoding with coordinates instead.
+      </p>
+      <CodeBlock
+        code={`// Try different format
 const place1 = await places.lookupOrCreate('San Francisco, CA, USA', {...});
 
 // Or use coordinates
@@ -1005,36 +983,36 @@ const place2 = await places.lookupOrCreate(
   { lat: 37.7749, lng: -122.4194 },
   {...}
 );`}
-          language="typescript"
-        />
-      </div>
+        language="typescript"
+      />
+    </article>
 
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-red-600">Error: "Invalid coordinates"</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Latitude or longitude out of valid range</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Validate with <code>validateCoordinates()</code>. Latitude: -90 to 90,
-          Longitude: -180 to 180. Watch for swapped values.
-        </p>
-        <CodeBlock
-          code={`const result = validateCoordinates(lat, lng);
+    <article class="issue">
+      <h3>Error: "Invalid coordinates"</h3>
+      <p><strong>Cause:</strong> Latitude or longitude out of valid range</p>
+      <p>
+        <strong>Solution:</strong> Validate with <code>validateCoordinates()</code>. Latitude: -90 to 90,
+        Longitude: -180 to 180. Watch for swapped values.
+      </p>
+      <CodeBlock
+        code={`const result = validateCoordinates(lat, lng);
 if (!result.valid) {
   console.error('Invalid coordinates:', result.error);
   return;
 }`}
-          language="typescript"
-        />
-      </div>
+        language="typescript"
+      />
+    </article>
 
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-orange-600">Issue: Slow hierarchy traversal</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Multiple database queries for ancestors/descendants</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Use <code>getHierarchy()</code> once instead of separate calls.
-          Create database indexes on parentId. Cache results for frequently-accessed hierarchies.
-        </p>
-        <CodeBlock
-          code={`// Efficient: single call
+    <article class="issue">
+      <h3>Issue: Slow hierarchy traversal</h3>
+      <p><strong>Cause:</strong> Multiple database queries for ancestors/descendants</p>
+      <p>
+        <strong>Solution:</strong> Use <code>getHierarchy()</code> once instead of separate calls.
+        Create database indexes on parentId. Cache results for frequently-accessed hierarchies.
+      </p>
+      <CodeBlock
+        code={`// Efficient: single call
 const hierarchy = await place.getHierarchy();
 const ancestors = hierarchy.ancestors;
 const descendants = hierarchy.descendants;
@@ -1042,19 +1020,19 @@ const descendants = hierarchy.descendants;
 // Less efficient: multiple calls
 const ancestors = await place.getAncestors();
 const descendants = await place.getDescendants();`}
-          language="typescript"
-        />
-      </div>
+        language="typescript"
+      />
+    </article>
 
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-orange-600">Issue: Geocoding provider inconsistencies</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Different providers return different address formats</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Store <code>source</code> field to track provider. Use
-          <code>normalizeAddressComponents()</code> to standardize formats. Consider fallback provider.
-        </p>
-        <CodeBlock
-          code={`const place = await places.lookupOrCreate(address, {
+    <article class="issue">
+      <h3>Issue: Geocoding provider inconsistencies</h3>
+      <p><strong>Cause:</strong> Different providers return different address formats</p>
+      <p>
+        <strong>Solution:</strong> Store <code>source</code> field to track provider. Use
+        <code>normalizeAddressComponents()</code> to standardize formats. Consider fallback provider.
+      </p>
+      <CodeBlock
+        code={`const place = await places.lookupOrCreate(address, {
   geoProvider: 'google',
   createIfNotFound: true
 });
@@ -1068,36 +1046,36 @@ if (!place) {
     createIfNotFound: true
   });
 }`}
-          language="typescript"
-        />
-      </div>
+        language="typescript"
+      />
+    </article>
 
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-orange-600">Issue: Abstract place queries returning empty</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Incorrect parentId or typeId</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Verify parentId is set correctly (null or empty = root level).
-          Check typeId matches expected type. Use <code>getHierarchy()</code> to inspect structure.
-        </p>
-        <CodeBlock
-          code={`// Check place structure
+    <article class="issue">
+      <h3>Issue: Abstract place queries returning empty</h3>
+      <p><strong>Cause:</strong> Incorrect parentId or typeId</p>
+      <p>
+        <strong>Solution:</strong> Verify parentId is set correctly (null or empty = root level).
+        Check typeId matches expected type. Use <code>getHierarchy()</code> to inspect structure.
+      </p>
+      <CodeBlock
+        code={`// Check place structure
 const hierarchy = await place.getHierarchy();
 console.log('Parent:', hierarchy.current.parentId);
 console.log('Type:', await hierarchy.current.getType());
 console.log('Children:', hierarchy.descendants.length);`}
-          language="typescript"
-        />
-      </div>
+        language="typescript"
+      />
+    </article>
 
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-orange-600">Issue: Circular reference errors</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Attempting to create Parent → Child → Parent loop</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Database foreign key constraints prevent this. Always verify parent
-          exists before setting parentId. Use transactions when restructuring hierarchies.
-        </p>
-        <CodeBlock
-          code={`// Safe: check parent exists
+    <article class="issue">
+      <h3>Issue: Circular reference errors</h3>
+      <p><strong>Cause:</strong> Attempting to create Parent → Child → Parent loop</p>
+      <p>
+        <strong>Solution:</strong> Database foreign key constraints prevent this. Always verify parent
+        exists before setting parentId. Use transactions when restructuring hierarchies.
+      </p>
+      <CodeBlock
+        code={`// Safe: check parent exists
 const parent = await places.findById(parentId);
 if (!parent) {
   throw new Error('Parent not found');
@@ -1108,40 +1086,31 @@ const child = await places.create({
   parentId: parent.id,
   typeId: typeId
 });`}
-          language="typescript"
-        />
-      </div>
-    </div>
+        language="typescript"
+      />
+    </article>
   </section>
 
   <!-- Related Modules -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Related Modules</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <a href="/modules/smrt-core" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-core</h3>
-        <p class="text-sm text-gray-600">Base classes, decorators, and AI integration</p>
+  <section>
+    <h2>Related Modules</h2>
+    <nav>
+      <a href="/modules/smrt-core">
+        <h3>smrt-core</h3>
+        <p>Base classes, decorators, and AI integration</p>
       </a>
-      <a href="/modules/smrt-tenancy" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-tenancy</h3>
-        <p class="text-sm text-gray-600">Multi-tenant place isolation</p>
+      <a href="/modules/smrt-tenancy">
+        <h3>smrt-tenancy</h3>
+        <p>Multi-tenant place isolation</p>
       </a>
-      <a href="/modules/smrt-users" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-users</h3>
-        <p class="text-sm text-gray-600">User location tracking and proximity</p>
+      <a href="/modules/smrt-users">
+        <h3>smrt-users</h3>
+        <p>User location tracking and proximity</p>
       </a>
-      <a href="/modules/smrt-content" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-content</h3>
-        <p class="text-sm text-gray-600">Location-specific content management</p>
+      <a href="/modules/smrt-content">
+        <h3>smrt-content</h3>
+        <p>Location-specific content management</p>
       </a>
-    </div>
+    </nav>
   </section>
-
-  <!-- Footer Navigation -->
-  <div class="border-t pt-6 mt-12">
-    <div class="flex justify-between">
-      <a href="/modules" class="text-blue-600 hover:underline">← Back to Modules</a>
-      <a href="/modules/smrt-products" class="text-blue-600 hover:underline">Next: smrt-products →</a>
-    </div>
-  </div>
-</div>
+</ModulePage>

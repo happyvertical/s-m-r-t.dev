@@ -1,30 +1,13 @@
 <script lang="ts">
-	import Grid from '$lib/components/Grid.svelte';
+	import ModulePage from '$lib/components/ModulePage.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head>
-	<title>smrt-agents - Autonomous Agent Framework | SMRT Documentation</title>
-	<meta
-		name="description"
-		content="Build autonomous actors with persistent state, inter-agent communication via DispatchBus, and lifecycle management in the SMRT framework."
-	/>
-</svelte:head>
-
-<Grid>
-	<nav class="breadcrumb" slot="header">
-		<a href="/">Home</a>
-		<span>/</span>
-		<a href="/modules">Modules</a>
-		<span>/</span>
-		<span>smrt-agents</span>
-	</nav>
-
-	<h1>smrt-agents</h1>
-	<p class="lead">
-		Build autonomous actors with persistent state, inter-agent communication via DispatchBus, and
-		comprehensive lifecycle management.
-	</p>
+<ModulePage 
+	name="smrt-agents" 
+	description="Build autonomous actors with persistent state, inter-agent communication via DispatchBus, and comprehensive lifecycle management."
+	badges={['v0.19.0', 'Agents', 'Automation']}
+>
 
 	<section id="overview">
 		<h2>Overview</h2>
@@ -635,44 +618,9 @@ async run(): Promise<void> {
 			language="typescript"
 		/>
 	</section>
-</Grid>
+</ModulePage>
 
 <style>
-	.breadcrumb {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		font-size: 0.85rem;
-		color: var(--smrt-color-on-surface-variant, #666);
-		margin-bottom: 24px;
-	}
-
-	.breadcrumb a {
-		color: var(--smrt-color-on-surface-variant, #666);
-		text-decoration: none;
-	}
-
-	.breadcrumb a:hover {
-		color: var(--smrt-color-primary, #1976d2);
-	}
-
-	.breadcrumb span:not(:last-child) {
-		color: #ccc;
-	}
-
-	h1 {
-		font-size: 2.5rem;
-		font-weight: 600;
-		margin-bottom: 16px;
-	}
-
-	.lead {
-		font-size: 1.1rem;
-		color: var(--smrt-color-on-surface-variant, #666);
-		margin-bottom: 48px;
-		line-height: 1.6;
-	}
-
 	section {
 		margin-bottom: 64px;
 	}

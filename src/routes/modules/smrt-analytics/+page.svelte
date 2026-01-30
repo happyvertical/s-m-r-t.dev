@@ -1,51 +1,38 @@
 <script lang="ts">
+  import ModulePage from '$lib/components/ModulePage.svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head>
-  <title>smrt-analytics - Analytics Tracking | SMRT Framework</title>
-  <meta name="description" content="Server-side analytics tracking with GA4 and Plausible integration, event logging, and AI-powered insights." />
-</svelte:head>
-
-<div class="max-w-4xl mx-auto px-4 py-8">
-  <div class="mb-8">
-    <h1 class="text-4xl font-bold mb-4">smrt-analytics</h1>
-    <p class="text-xl text-gray-600 mb-4">
-      Server-side analytics tracking with GA4 and Plausible integration, event logging, scheduled reports, and AI-powered performance analysis.
-    </p>
-    <div class="flex gap-2 flex-wrap">
-      <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">v0.19.0</span>
-      <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">GA4</span>
-      <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">Plausible</span>
-      <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">AI Insights</span>
-    </div>
-  </div>
-
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Overview</h2>
-    <p class="mb-4">
+<ModulePage 
+  name="smrt-analytics" 
+  description="Server-side analytics tracking with GA4 and Plausible integration, event logging, scheduled reports, and AI-powered performance analysis."
+  badges={['v0.19.0', 'GA4', 'Plausible', 'AI Insights']}
+>
+  <section>
+    <h2>Overview</h2>
+    <p>
       <strong>smrt-analytics</strong> provides server-side analytics event tracking, property/data stream management,
       scheduled reporting, and AI-powered performance analysis for GA4 and Plausible.
     </p>
-    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
-      <p class="font-semibold mb-2">Key Features:</p>
-      <ul class="list-disc list-inside space-y-1">
+    <aside>
+      <p>Key Features:</p>
+      <ul>
         <li>Server-side event tracking (GA4 Measurement Protocol, Plausible Events API)</li>
         <li>Property and data stream management</li>
         <li>Scheduled report generation with caching</li>
         <li>Event retry logic with status tracking</li>
         <li>AI-powered performance analysis and trend detection</li>
       </ul>
-    </div>
+    </aside>
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Installation</h2>
+  <section>
+    <h2>Installation</h2>
     <CodeBlock code={`npm install @happyvertical/smrt-analytics`} language="bash" />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Quick Start</h2>
+  <section>
+    <h2>Quick Start</h2>
     <CodeBlock
       code={`import {
   AnalyticsPropertyCollection,
@@ -96,10 +83,10 @@ await event.markSent();`}
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Core Models</h2>
+  <section>
+    <h2>Core Models</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">AnalyticsProperty</h3>
+    <h3>AnalyticsProperty</h3>
     <CodeBlock
       code={`class AnalyticsProperty extends SmrtObject {
   name: string
@@ -115,7 +102,7 @@ await event.markSent();`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">AnalyticsEvent</h3>
+    <h3>AnalyticsEvent</h3>
     <CodeBlock
       code={`class AnalyticsEvent extends SmrtObject {
   propertyId: string
@@ -139,7 +126,7 @@ await event.markSent();`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">AnalyticsReport</h3>
+    <h3>AnalyticsReport</h3>
     <CodeBlock
       code={`class AnalyticsReport extends SmrtObject {
   propertyId: string
@@ -163,8 +150,8 @@ await event.markSent();`}
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Event Tracking</h2>
+  <section>
+    <h2>Event Tracking</h2>
     <CodeBlock
       code={`// Track page view
 const pageView = await events.create({
@@ -209,8 +196,8 @@ console.log(\`Total: \${stats.total}, Sent: \${stats.sent}\`);`}
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Scheduled Reports</h2>
+  <section>
+    <h2>Scheduled Reports</h2>
     <CodeBlock
       code={`// Create weekly report
 const report = await reports.create({
@@ -246,8 +233,8 @@ if (report.isDue()) {
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">AI-Powered Analysis</h2>
+  <section>
+    <h2>AI-Powered Analysis</h2>
     <CodeBlock
       code={`// Analyze property performance
 const analysis = await property.analyzePerformance();
@@ -268,50 +255,48 @@ const hasGrowth = await report.hasPositiveTrends();
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Best Practices</h2>
-    <div class="space-y-6">
-      <div class="bg-green-50 border-l-4 border-green-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✓ DOs</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
+  <section>
+    <h2>Best Practices</h2>
+    <div>
+      <aside>
+        <h3>DOs</h3>
+        <ul>
           <li>Use server-side tracking for sensitive events (purchases)</li>
           <li>Implement retry logic with shouldRetry() check</li>
           <li>Cache report results to reduce API calls</li>
           <li>Track both clientId and userId when available</li>
           <li>Use ISO 4217 currency codes</li>
         </ul>
-      </div>
-      <div class="bg-red-50 border-l-4 border-red-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✗ DON'Ts</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
+      </aside>
+      <aside>
+        <h3>DON'Ts</h3>
+        <ul>
           <li>Don't store unencrypted API secrets</li>
           <li>Don't retry failed events indefinitely</li>
           <li>Don't send PII in event parameters</li>
           <li>Don't run expensive reports without caching</li>
           <li>Don't track events without propertyId</li>
         </ul>
-      </div>
+      </aside>
     </div>
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Related Modules</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <a href="/modules/smrt-core" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-core</h3>
-        <p class="text-sm text-gray-600">Base classes and framework</p>
+  <section>
+    <h2>Related Modules</h2>
+    <div>
+      <a href="/modules/smrt-core">
+        <h3>smrt-core</h3>
+        <p>Base classes and framework</p>
       </a>
-      <a href="/modules/smrt-properties" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-properties</h3>
-        <p class="text-sm text-gray-600">Website property management</p>
+      <a href="/modules/smrt-properties">
+        <h3>smrt-properties</h3>
+        <p>Website property management</p>
       </a>
     </div>
   </section>
 
-  <div class="border-t pt-6 mt-12">
-    <div class="flex justify-between">
-      <a href="/modules" class="text-blue-600 hover:underline">← Back to Modules</a>
-      <a href="/modules/smrt-ads" class="text-blue-600 hover:underline">Next: smrt-ads →</a>
-    </div>
-  </div>
-</div>
+  <nav>
+    <a href="/modules">Back to Modules</a>
+    <a href="/modules/smrt-ads">Next: smrt-ads</a>
+  </nav>
+</ModulePage>
