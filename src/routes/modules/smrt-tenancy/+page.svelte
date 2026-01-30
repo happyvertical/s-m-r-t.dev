@@ -12,15 +12,16 @@
 </svelte:head>
 
 <Grid>
-	<nav class="breadcrumb" slot="header">
-		<a href="/">Home</a>
-		<span>/</span>
-		<a href="/modules">Modules</a>
-		<span>/</span>
-		<span>smrt-tenancy</span>
-	</nav>
+	<div class="page-header">
+		<nav class="breadcrumb">
+			<a href="/">Home</a>
+			<span>/</span>
+			<a href="/modules">Modules</a>
+			<span>/</span>
+			<span>smrt-tenancy</span>
+		</nav>
 
-	<h1>smrt-tenancy</h1>
+		<h1>smrt-tenancy</h1>
 	<p class="lead">
 		Production-ready multi-tenancy framework with automatic tenant isolation, AsyncLocalStorage
 		context propagation, and framework adapters.
@@ -72,12 +73,12 @@ Request Flow
 
 		<h4>1. Enable Tenancy Globally</h4>
 		<CodeBlock
-			code={`import {'{ enableTenancy }'} from '@happyvertical/smrt-tenancy';
+			code={`import { enableTenancy } from '@happyvertical/smrt-tenancy';
 
 enableTenancy({
   rawQueryPolicy: 'throw',  // Prevent raw SQL
   onMissingContext: (className, operation) => {
-    console.error(\`Missing context: \${'${className}'} \${'${operation}'}\`);
+    console.error('Missing context: ' + className + ' ' + operation);
   }
 });`}
 			language="typescript"
@@ -85,8 +86,8 @@ enableTenancy({
 
 		<h4>2. Mark Classes as Tenant-Scoped</h4>
 		<CodeBlock
-			code={`import {'{ smrt, SmrtObject }'} from '@happyvertical/smrt-core';
-import {'{ TenantScoped, tenantId }'} from '@happyvertical/smrt-tenancy';
+			code={`import { smrt, SmrtObject } from '@happyvertical/smrt-core';
+import { TenantScoped, tenantId } from '@happyvertical/smrt-tenancy';
 
 @smrt()
 @TenantScoped()
@@ -101,7 +102,7 @@ class Document extends SmrtObject {
 		<h4>3. Setup Framework Middleware</h4>
 		<CodeBlock
 			code={`// SvelteKit (hooks.server.ts)
-import {'{ createSvelteKitHandle }'} from '@happyvertical/smrt-tenancy/adapters';
+import { createSvelteKitHandle } from '@happyvertical/smrt-tenancy/adapters';
 
 export const handle = createSvelteKitHandle({
   resolveTenantId: async (event) => {
@@ -111,7 +112,7 @@ export const handle = createSvelteKitHandle({
 });
 
 // Express
-import {'{ createExpressMiddleware }'} from '@happyvertical/smrt-tenancy/adapters';
+import { createExpressMiddleware } from '@happyvertical/smrt-tenancy/adapters';
 
 app.use(createExpressMiddleware({
   resolveTenantId: (req) => req.headers['x-tenant-id'] as string
@@ -141,7 +142,7 @@ class Project extends SmrtObject {
 app.get('/api/projects', async (req, res) => {
   // Query automatically filtered by tenant
   const projects = await projectCollection.list({
-    where: {'{ status: \'active\' }'}
+    where: { status: 'active' }
   });
   // Actual SQL: WHERE tenantId = 'current' AND status = 'active'
 
@@ -172,7 +173,7 @@ app.delete('/api/projects/:id', async (req, res) => {
   // Throws TenantIsolationError if wrong tenant
   await project.delete();
 
-  res.json({'{ deleted: true }'});
+  res.json({ deleted: true });
 });`}
 			language="typescript"
 		/>
@@ -185,7 +186,7 @@ app.delete('/api/projects/:id', async (req, res) => {
 		<p>AsyncLocalStorage-based context flows through async operations:</p>
 
 		<CodeBlock
-			code={`import {'{ getTenantId, requireTenantId, withTenant }'} from '@happyvertical/smrt-tenancy';
+			code={`import { getTenantId, requireTenantId, withTenant } from '@happyvertical/smrt-tenancy';
 
 // Non-throwing getter
 const tenantId = getTenantId();  // string | undefined
@@ -194,7 +195,7 @@ const tenantId = getTenantId();  // string | undefined
 const tenantId = requireTenantId();  // throws if undefined
 
 // Manual context setting
-await withTenant({'{ tenantId: \'tenant-123\' }'}, async () => {
+await withTenant({ tenantId: 'tenant-123' }, async () => {
   const projects = await projectCollection.list({});
 });`}
 			language="typescript"
@@ -204,7 +205,7 @@ await withTenant({'{ tenantId: \'tenant-123\' }'}, async () => {
 
 		<h4>Required Mode (default)</h4>
 		<CodeBlock
-			code={`@TenantScoped({'{ mode: \'required\' }'})
+			code={`@TenantScoped({ mode: 'required' })
 class SecretData extends SmrtObject {
   tenantId = tenantId();
 }
@@ -216,14 +217,14 @@ await secretDataCollection.list({});  // No context!`}
 
 		<h4>Optional Mode</h4>
 		<CodeBlock
-			code={`@TenantScoped({'{ mode: \'optional\' }'})
+			code={`@TenantScoped({ mode: 'optional' })
 class PublicConfig extends SmrtObject {
-  tenantId = tenantId({'{ nullable: true }'});
+  tenantId = tenantId({ nullable: true });
 }
 
 // Both work
 await configCollection.list({});  // All records
-await withTenant({'{ tenantId: \'t1\' }'}, () =>
+await withTenant({ tenantId: 't1' }, () =>
   configCollection.list({})
 );  // Filtered`}
 			language="typescript"
@@ -233,7 +234,7 @@ await withTenant({'{ tenantId: \'t1\' }'}, () =>
 		<p>Controlled cross-tenant access for privileged operations:</p>
 
 		<CodeBlock
-			code={`@TenantScoped({'{ allowSuperAdminBypass: true }'})
+			code={`@TenantScoped({ allowSuperAdminBypass: true })
 class AuditLog extends SmrtObject {
   tenantId = tenantId();
 }
@@ -282,21 +283,21 @@ await projectCollection.query({
 
 describe('Project isolation', () => {
   beforeAll(() => {
-    setupTestTenancy({'{ enableInterceptors: true }'});
+    setupTestTenancy({ enableInterceptors: true });
   });
 
   it('should isolate projects by tenant', async () => {
     // Create in tenant A
     const projectA = await createTestTenantContext(
-      {'{ tenantId: \'tenant-a\' }'},
+      { tenantId: 'tenant-a' },
       async () => {
-        return projectCollection.create({'{ name: \'Project A\' }'});
+        return projectCollection.create({ name: 'Project A' });
       }
     );
 
     // Verify not visible in tenant B
     await createTestTenantContext(
-      {'{ tenantId: \'tenant-b\' }'},
+      { tenantId: 'tenant-b' },
       async () => {
         const found = await projectCollection.get(projectA.id);
         expect(found).toBeNull(); // Isolated!
@@ -337,7 +338,7 @@ describe('Project isolation', () => {
 });
 
 // Use in business logic
-import {'{ getCurrentTenant }'} from '@happyvertical/smrt-tenancy';
+import { getCurrentTenant } from '@happyvertical/smrt-tenancy';
 
 function requirePermission(permission: string): boolean {
   const context = getCurrentTenant();
@@ -355,14 +356,14 @@ export async function scheduleJob(data: unknown) {
   await queue.enqueue({
     type: 'process_data',
     data,
-    metadata: {'{ tenantId }'}  // Capture!
+    metadata: { tenantId }  // Capture!
   });
 }
 
 // Restore context in worker
 async function processJob(job: Job) {
   await withTenant(
-    {'{ tenantId: job.metadata.tenantId }'},
+    { tenantId: job.metadata.tenantId },
     async () => {
       await handleJob(job);
     }
@@ -384,7 +385,7 @@ class Document extends SmrtObject {
 }
 
 // Risky
-@TenantScoped({'{ autoFilter: false }'})
+@TenantScoped({ autoFilter: false })
 class Document extends SmrtObject {
   tenantId = tenantId();  // Manual filtering error-prone
 }`}
@@ -460,7 +461,7 @@ console.log(getTenantId());  // Should not be undefined`}
 		<h3>TenantIsolationError: Cross-tenant access</h3>
 		<p><strong>Solution:</strong> Enable bypass if needed for admins</p>
 		<CodeBlock
-			code={`@TenantScoped({'{ allowSuperAdminBypass: true }'})
+			code={`@TenantScoped({ allowSuperAdminBypass: true })
 class AuditLog extends SmrtObject {
   tenantId = tenantId();
 }
@@ -476,10 +477,10 @@ isSuperAdmin: async (event) => {
 		<p><strong>Solution:</strong> Use list()/get() or explicit bypass</p>
 		<CodeBlock
 			code={`// Instead of raw SQL
-await collection.query({'{ sql: \'SELECT...\' }'});
+await collection.query({ sql: 'SELECT...' });
 
 // Use collection methods
-await collection.list({'{ where: {...} }'});
+await collection.list({ where: {...} });
 
 // Or explicit bypass
 await collection.query({
@@ -502,7 +503,7 @@ const job = {
 
 // When processing
 await withTenant(
-  {'{ tenantId: job.metadata.tenantId }'},
+  { tenantId: job.metadata.tenantId },
   async () => {
     // Context restored
   }
@@ -624,24 +625,33 @@ await withTenant(
 			<li><a href="/modules/smrt-users">smrt-users</a> - RBAC integration</li>
 		</ul>
 	</section>
-</Grid>
+</div></Grid>
 
 <style>
+	/* All direct children span full grid width */
+	.page-header,
+	section {
+		grid-column: 1 / -1;
+		min-width: 0;
+	}
+
 	.lead {
 		font-size: 1.25rem;
 		margin-bottom: 2rem;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	.breadcrumb {
 		display: flex;
 		gap: 0.5rem;
+		margin-top: 0.5rem;
 		margin-bottom: 1rem;
 		font-size: 0.875rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	.breadcrumb a {
-		color: #0066cc;
+		color: var(--smrt-color-primary, #1976d2);
 		text-decoration: none;
 	}
 
@@ -651,6 +661,20 @@ await withTenant(
 
 	section {
 		margin-bottom: 3rem;
+		color: var(--smrt-color-on-background, #1a1a1a);
+		max-width: 100%;
+		overflow-x: hidden;
+	}
+
+	/* Prevent horizontal page scroll - contain overflow in sections */
+	section {
+		min-width: 0;
+	}
+
+	/* Ensure code blocks can scroll horizontally */
+	:global(pre) {
+		overflow-x: auto;
+		max-width: 100%;
 	}
 
 	table {
@@ -663,47 +687,59 @@ await withTenant(
 	td {
 		text-align: left;
 		padding: 0.75rem;
-		border-bottom: 1px solid #e5e5e5;
+		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
+		color: var(--smrt-color-on-surface, #1a1a1a);
 	}
 
 	th {
 		font-weight: 600;
-		background-color: #f5f5f5;
+		background-color: var(--smrt-color-surface-container, #f5f5f5);
 	}
 
 	code {
-		background-color: #f5f5f5;
+		background-color: var(--smrt-color-surface-container, #f5f5f5);
 		padding: 0.2rem 0.4rem;
-		border-radius: 3px;
+		border-radius: var(--smrt-radius-sm, 4px);
 		font-size: 0.9em;
+		color: var(--smrt-color-on-surface, #1a1a1a);
 	}
 
 	.diagram {
-		background-color: #f5f5f5;
+		background-color: var(--smrt-color-surface-container, #f5f5f5);
 		padding: 1rem;
-		border-radius: 4px;
+		border-radius: var(--smrt-radius-md, 8px);
 		overflow-x: auto;
 		margin: 1rem 0;
+		max-width: 100%;
+	}
+
+	.diagram pre {
+		white-space: pre-wrap;
+		word-wrap: break-word;
 	}
 
 	.diagram pre {
 		margin: 0;
 		font-size: 0.85rem;
 		line-height: 1.4;
+		color: var(--smrt-color-on-surface, #1a1a1a);
 	}
 
 	h2 {
 		margin-top: 2rem;
 		padding-top: 1rem;
-		border-top: 1px solid #e5e5e5;
+		border-top: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
+		color: var(--smrt-color-on-background, #1a1a1a);
 	}
 
 	h3 {
 		margin-top: 1.5rem;
+		color: var(--smrt-color-on-background, #1a1a1a);
 	}
 
 	h4 {
 		margin-top: 1rem;
 		font-size: 1rem;
+		color: var(--smrt-color-on-background, #1a1a1a);
 	}
 </style>

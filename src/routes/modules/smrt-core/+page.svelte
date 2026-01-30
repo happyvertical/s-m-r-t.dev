@@ -497,10 +497,10 @@ import type { Product } from '@smrt/types';`} language="typescript" />
 
 			<h3>Supported Databases</h3>
 			<ul>
-				<li><strong>SQLite</strong> - <code>{'{ type: \'sqlite\', url: \'app.db\' }'}</code></li>
-				<li><strong>PostgreSQL</strong> - <code>{'{ type: \'postgres\', url: \'postgres://...\' }'}</code></li>
-				<li><strong>DuckDB</strong> - <code>{'{ type: \'duckdb\', url: \'data.db\' }'}</code></li>
-				<li><strong>JSON</strong> - <code>{'{ type: \'json\', url: \'data.json\' }'}</code> (testing only)</li>
+				<li><strong>SQLite</strong> - <code>{'\{ type: \'sqlite\', url: \'app.db\' }'}</code></li>
+				<li><strong>PostgreSQL</strong> - <code>{'\{ type: \'postgres\', url: \'postgres://...\' }'}</code></li>
+				<li><strong>DuckDB</strong> - <code>{'\{ type: \'duckdb\', url: \'data.db\' }'}</code></li>
+				<li><strong>JSON</strong> - <code>{'\{ type: \'json\', url: \'data.json\' }'}</code> (testing only)</li>
 			</ul>
 
 			<h3>Configuration</h3>
@@ -569,17 +569,17 @@ const collection = await ProductCollection.create({ db });`} language="typescrip
 		align-items: center;
 		gap: 8px;
 		font-size: 0.85rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		margin-bottom: 24px;
 	}
 
 	.breadcrumb a {
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		text-decoration: none;
 	}
 
 	.breadcrumb a:hover {
-		color: var(--color-accent);
+		color: var(--smrt-color-primary, #1976d2);
 	}
 
 	.breadcrumb span:not(:last-child) {
@@ -601,7 +601,7 @@ const collection = await ProductCollection.create({ db });`} language="typescrip
 
 	.lead {
 		font-size: 1.2rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		margin-bottom: 24px;
 		line-height: 1.6;
 	}
@@ -611,17 +611,17 @@ const collection = await ProductCollection.create({ db });`} language="typescrip
 		gap: 8px;
 		margin-bottom: 48px;
 		padding-bottom: 48px;
-		border-bottom: 1px solid var(--color-grid);
+		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
 	}
 
 	.badge {
 		display: inline-block;
 		padding: 4px 12px;
-		background: #f5f5f5;
+		background: var(--smrt-color-surface-container, #f5f5f5);
 		border-radius: 12px;
 		font-size: 0.85rem;
 		font-weight: 500;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	.prose h2 {
@@ -630,7 +630,7 @@ const collection = await ProductCollection.create({ db });`} language="typescrip
 		margin-top: 64px;
 		margin-bottom: 24px;
 		padding-top: 16px;
-		border-top: 1px solid var(--color-grid);
+		border-top: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
 	}
 
 	.prose h2:first-of-type {
@@ -646,13 +646,13 @@ const collection = await ProductCollection.create({ db });`} language="typescrip
 	}
 
 	.prose p {
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		margin-bottom: 16px;
 		line-height: 1.7;
 	}
 
 	.prose ul, .prose ol {
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		margin-bottom: 16px;
 		padding-left: 24px;
 		line-height: 1.7;
@@ -666,7 +666,7 @@ const collection = await ProductCollection.create({ db });`} language="typescrip
 		font-family: var(--font-mono);
 		font-size: 0.9em;
 		padding: 2px 6px;
-		background: #f5f5f5;
+		background: var(--smrt-color-surface-container, #f5f5f5);
 		border-radius: 3px;
 		color: #d63384;
 	}
@@ -691,10 +691,10 @@ const collection = await ProductCollection.create({ db });`} language="typescrip
 	}
 
 	.link-card:hover {
-		background: #f0f0f0;
+		background: var(--smrt-color-surface-container, #f0f0f0);
 		transform: translateY(-2px);
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-		border-color: var(--color-accent);
+		border-color: var(--smrt-color-primary, #1976d2);
 	}
 
 	.link-card h3 {
@@ -705,12 +705,12 @@ const collection = await ProductCollection.create({ db });`} language="typescrip
 	}
 
 	.link-card:hover h3 {
-		color: var(--color-accent);
+		color: var(--smrt-color-primary, #1976d2);
 	}
 
 	.link-card p {
 		font-size: 0.85rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		margin: 0;
 	}
 </style>

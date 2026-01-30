@@ -1,131 +1,181 @@
 <script lang="ts">
-	const components = [
-		{
-			name: 'Form',
-			href: '/components/forms/form',
-			description: 'Smart form wrapper enabling voice-powered form filling with STT.'
-		},
-		{
-			name: 'FormGroup',
-			href: '/components/forms/form-group',
-			description: 'Layout wrapper for form fields with label, hint, and error styling.'
-		},
-		{
-			name: 'FormMicButton',
-			href: '/components/forms/form-mic-button',
-			description: 'Microphone button that triggers form-level voice filling in SMRT mode.'
-		},
-		{
-			name: 'TextInput',
-			href: '/components/forms/text-input',
-			description: 'Material Design 3 text input with optional voice input support in smrt mode.'
-		},
-		{
-			name: 'SelectInput',
-			href: '/components/forms/smrt-select',
-			description: 'Styled select dropdown with support for voice selection in smrt mode.'
-		},
-		{
-			name: 'CheckboxInput',
-			href: '/components/forms/checkbox',
-			description: 'Checkbox with ripple effect and voice control support in smrt mode.'
-		},
-		{
-			name: 'DateTimeInput',
-			href: '/components/forms/datetime',
-			description: 'Date and time picker with natural language parsing via chrono-node.'
-		},
-		{
-			name: 'AddressInput',
-			href: '/components/forms/address',
-			description: 'Comprehensive address input with intelligent address parsing.'
-		},
-		{
-			name: 'MoneyInput',
-			href: '/components/forms/money',
-			description: 'Monetary input storing values in cents for precision calculations.'
-		}
+	import { TextInput, SelectInput, CheckboxInput, DateTimeInput } from '@happyvertical/smrt-svelte';
+	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import ComponentExample from '$lib/components/ComponentExample.svelte';
+
+	let textValue = $state('');
+	let selectValue = $state('');
+	let checked = $state(false);
+	let dateValue = $state('');
+
+	const selectOptions = [
+		{ value: 'option1', label: 'Option 1' },
+		{ value: 'option2', label: 'Option 2' },
+		{ value: 'option3', label: 'Option 3' }
 	];
 </script>
 
 <svelte:head>
-	<title>Forms | s-m-r-t Components</title>
+	<title>Form Components | s-m-r-t Framework</title>
 </svelte:head>
 
-<article class="prose">
+<div class="page">
 	<nav class="breadcrumb">
 		<a href="/components">Components</a>
 		<span>/</span>
 		<span>Forms</span>
 	</nav>
 
-	<h1>s-m-r-t Form Components</h1>
-	<p class="lead">
-		Voice-enabled form components that work in both standard and smrt modes. In smrt mode,
-		users can interact with forms using natural speech, making data entry faster and more accessible.
-	</p>
+	<header class="page-header">
+		<h1>Form Components</h1>
+		<p class="subtitle">Input components with smrt mode voice support</p>
+	</header>
 
-	<section class="install">
-		<h2>Installation</h2>
-		<pre><code>npm install @happyvertical/smrt-svelte</code></pre>
-		<pre><code>{`import { TextInput, SelectInput, CheckboxInput } from '@happyvertical/smrt-svelte';`}</code></pre>
+	<section class="intro">
+		<p>
+			Form components extend standard HTML inputs with Material Design 3 styling and
+			voice input capabilities in smrt mode. All components support natural language
+			input when voice mode is active.
+		</p>
 	</section>
 
-	<section class="components">
-		<h2>Components</h2>
+	<section class="component-section">
+		<h2>TextInput</h2>
+		<p>Text input with voice support in smrt mode.</p>
+
+		<ComponentExample
+			code={`<TextInput
+  name="example"
+  label="Full Name"
+  description="Your first and last name"
+  bind:value
+/>`}
+		>
+			<TextInput
+				name="example"
+				label="Full Name"
+				description="Your first and last name"
+				bind:value={textValue}
+			/>
+		</ComponentExample>
+
+		<p class="docs-link">
+			<a href="/components/forms/text-input">View TextInput documentation →</a>
+		</p>
+	</section>
+
+	<section class="component-section">
+		<h2>SelectInput</h2>
+		<p>Dropdown select with voice selection support.</p>
+
+		<ComponentExample
+			code={`<SelectInput
+  name="country"
+  label="Country"
+  options={selectOptions}
+  bind:value
+/>`}
+		>
+			<SelectInput
+				name="country"
+				label="Country"
+				options={selectOptions}
+				bind:value={selectValue}
+			/>
+		</ComponentExample>
+
+		<p class="docs-link">
+			<a href="/components/forms/smrt-select">View SelectInput documentation →</a>
+		</p>
+	</section>
+
+	<section class="component-section">
+		<h2>CheckboxInput</h2>
+		<p>Checkbox with voice control support.</p>
+
+		<ComponentExample
+			code={`<CheckboxInput
+  name="agree"
+  label="I agree to the terms"
+  description="Say yes or no"
+  bind:checked
+/>`}
+		>
+			<CheckboxInput
+				name="agree"
+				label="I agree to the terms"
+				description="Say yes or no"
+				bind:checked={checked}
+			/>
+		</ComponentExample>
+
+		<p class="docs-link">
+			<a href="/components/forms/checkbox">View CheckboxInput documentation →</a>
+		</p>
+	</section>
+
+	<section class="component-section">
+		<h2>DateTimeInput</h2>
+		<p>Date and time picker with natural language support.</p>
+
+		<ComponentExample
+			code={`<DateTimeInput
+  name="appointment"
+  label="Appointment Time"
+  description="Say something like 'next Tuesday at 3pm'"
+  bind:value
+/>`}
+		>
+			<DateTimeInput
+				name="appointment"
+				label="Appointment Time"
+				description="Say something like 'next Tuesday at 3pm'"
+				bind:value={dateValue}
+			/>
+		</ComponentExample>
+
+		<p class="docs-link">
+			<a href="/components/forms/datetime">View DateTimeInput documentation →</a>
+		</p>
+	</section>
+
+	<section class="all-components">
+		<h2>All Form Components</h2>
 		<div class="component-grid">
-			{#each components as component}
-				<a href={component.href} class="component-card">
-					<h3>{component.name}</h3>
-					<p>{component.description}</p>
-				</a>
-			{/each}
+			<a href="/components/forms/text-input" class="component-link">TextInput</a>
+			<a href="/components/forms/smrt-select" class="component-link">SelectInput</a>
+			<a href="/components/forms/checkbox" class="component-link">CheckboxInput</a>
+			<a href="/components/forms/datetime" class="component-link">DateTimeInput</a>
+			<a href="/components/forms/address" class="component-link">AddressInput</a>
+			<a href="/components/forms/money" class="component-link">MoneyInput</a>
 		</div>
 	</section>
 
-	<section class="modes">
-		<h2>Operating Modes</h2>
+	<section class="voice-section">
+		<h2>Voice Input</h2>
 		<p>
-			s-m-r-t form components automatically adapt based on the application mode:
+			In smrt mode, form inputs display a microphone button. Users can hold the button
+			and speak naturally to fill in values. Each component type has specific voice
+			command patterns - see individual component docs for details.
 		</p>
-
-		<div class="mode-grid">
-			<div class="mode-card">
-				<h3>Standard Mode</h3>
-				<p>Traditional keyboard and mouse input with native browser controls for date/time pickers.</p>
-			</div>
-			<div class="mode-card">
-				<h3>smrt Mode</h3>
-				<p>Voice input enabled. Hold the microphone button to speak naturally. Speech is processed locally using Whisper for privacy.</p>
-			</div>
-		</div>
+		<CodeBlock
+			code={`<!-- Example voice commands for TextInput -->
+"John Smith"           → fills text input
+"yes" / "no"           → toggles checkbox
+"next Tuesday at 3pm"  → sets date/time
+"Canada"               → selects from dropdown`}
+			language="text"
+		/>
 	</section>
-
-	<section class="form-context">
-		<h2>Form Context</h2>
-		<p>
-			Wrap your form components in <code>Form</code> to enable automatic field registration
-			and voice-to-form processing:
-		</p>
-		<pre><code>{`<script>
-  import { Form, TextInput, SelectInput } from '@happyvertical/smrt-svelte';
-
-  let formData = $state({
-    name: '',
-    email: '',
-    country: ''
-  });
-</script>
-
-<Form>
-  <TextInput name="name" label="Full Name" bind:value={formData.name} />
-  <TextInput name="email" label="Email" type="email" bind:value={formData.email} />
-  <SelectInput name="country" label="Country" options={countries} bind:value={formData.country} />
-</Form>`}</code></pre>
-	</section>
-</article>
+</div>
 
 <style>
+	.page {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 48px 24px;
+	}
+
 	.breadcrumb {
 		display: flex;
 		align-items: center;
@@ -144,131 +194,93 @@
 		color: var(--color-accent);
 	}
 
-	.breadcrumb span:not(:last-child) {
-		color: #ccc;
+	.page-header {
+		margin-bottom: 32px;
 	}
 
-	.prose h1 {
-		font-size: 2rem;
+	.page-header h1 {
+		font-size: 2.5rem;
 		font-weight: 600;
-		margin-bottom: 16px;
+		margin-bottom: 8px;
 	}
 
-	.prose .lead {
+	.subtitle {
+		color: #666;
+		font-size: 1.1rem;
+	}
+
+	section {
+		margin-bottom: 64px;
+	}
+
+	.intro p {
 		font-size: 1.1rem;
 		color: #666;
-		margin-bottom: 48px;
-		padding-bottom: 48px;
-		border-bottom: 1px solid var(--color-grid);
-	}
-
-	.install,
-	.components,
-	.modes,
-	.form-context {
-		padding: 48px 0;
-		border-bottom: 1px solid var(--color-grid);
-	}
-
-	.form-context {
-		border-bottom: none;
-	}
-
-	h2 {
-		font-size: 1.1rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		margin-bottom: 16px;
-	}
-
-	.prose p {
-		color: #666;
-		margin-bottom: 16px;
 		line-height: 1.6;
+		max-width: 700px;
 	}
 
-	pre {
-		background: #1a1a1a;
-		color: #f0f0f0;
-		padding: 16px 20px;
-		overflow-x: auto;
-		font-family: var(--font-mono);
-		font-size: 0.85rem;
+	.component-section h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin-bottom: 8px;
+	}
+
+	.component-section > p {
+		color: #666;
+		margin-bottom: 24px;
+	}
+
+	.docs-link {
+		margin-top: 16px;
+	}
+
+	.docs-link a {
+		color: var(--color-accent);
+		text-decoration: none;
+		font-weight: 500;
+	}
+
+	.docs-link a:hover {
+		text-decoration: underline;
+	}
+
+	.all-components h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
 		margin-bottom: 16px;
-	}
-
-	.prose code {
-		font-family: var(--font-mono);
-		font-size: 0.9em;
-		padding: 2px 6px;
-		background: #f5f5f5;
-		border-radius: 3px;
 	}
 
 	.component-grid {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 16px;
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		gap: 12px;
 	}
 
-	.component-card {
-		padding: 20px;
-		background: #fafafa;
+	.component-link {
+		display: block;
+		padding: 16px 20px;
+		background: #f5f5f5;
+		border-radius: 8px;
+		color: var(--color-text);
 		text-decoration: none;
-		transition: all 0.2s;
+		font-weight: 500;
+		transition: background 0.2s;
 	}
 
-	.component-card:hover {
-		background: #f0f0f0;
-		transform: translateY(-2px);
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	.component-link:hover {
+		background: #e8e8e8;
 	}
 
-	.component-card h3 {
-		font-size: 1rem;
+	.voice-section h2 {
+		font-size: 1.5rem;
 		font-weight: 600;
-		margin-bottom: 8px;
-		color: #1a1a1a;
+		margin-bottom: 16px;
 	}
 
-	.component-card:hover h3 {
-		color: var(--color-accent);
-	}
-
-	.component-card p {
-		font-size: 0.85rem;
+	.voice-section > p {
 		color: #666;
-		line-height: 1.5;
-	}
-
-	.mode-grid {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 16px;
-	}
-
-	.mode-card {
-		padding: 20px;
-		background: #fafafa;
-	}
-
-	.mode-card h3 {
-		font-size: 1rem;
-		font-weight: 600;
-		margin-bottom: 8px;
-	}
-
-	.mode-card p {
-		font-size: 0.85rem;
-		color: #666;
-		line-height: 1.5;
-	}
-
-	@media (max-width: 800px) {
-		.component-grid,
-		.mode-grid {
-			grid-template-columns: 1fr;
-		}
+		line-height: 1.6;
+		margin-bottom: 24px;
 	}
 </style>

@@ -35,7 +35,7 @@
 		}
 	];
 
-	const presetIcons = ['menu', 'search', 'close', 'chevron-right', 'chevron-left', 'chevron-down', 'check', 'add', 'mic'];
+	const presetIcons = ['menu', 'search', 'close', 'chevron-right', 'chevron-left', 'chevron-down', 'check', 'add'];
 </script>
 
 <svelte:head>

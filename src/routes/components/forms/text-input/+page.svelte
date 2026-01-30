@@ -76,28 +76,28 @@
 </svelte:head>
 
 <article class="prose">
-		<nav class="breadcrumb">
-			<a href="/components">Components</a>
-			<span>/</span>
-			<a href="/components/forms">Forms</a>
-			<span>/</span>
-			<span>TextInput</span>
-		</nav>
+	<nav class="breadcrumb">
+		<a href="/components">Components</a>
+		<span>/</span>
+		<a href="/components/forms">Forms</a>
+		<span>/</span>
+		<span>TextInput</span>
+	</nav>
 
-		<h1>TextInput</h1>
-		<p class="lead">
-			A Material Design 3 inspired text input with optional voice input support in smrt mode.
-			Supports text and email types with built-in validation.
-		</p>
+	<h1>TextInput</h1>
+	<p class="lead">
+		A Material Design 3 inspired text input with optional voice input support in smrt mode.
+		Supports text and email types with built-in validation.
+	</p>
 
-		<h2>Installation</h2>
-		<CodeBlock code={`import { TextInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<h2>Installation</h2>
+	<CodeBlock code={`import { TextInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
-		<h2>Basic Usage</h2>
-		<p>The simplest text input with a label and bindable value.</p>
+	<h2>Basic Usage</h2>
+	<p>The simplest text input with a label and bindable value.</p>
 
-		<ComponentExample
-			code={`<script lang="ts">
+	<ComponentExample
+		code={`<script lang="ts">
   let value = $state('');
 </script>
 
@@ -106,101 +106,101 @@
   label="Username"
   bind:value
 />`}
-		>
-			<TextInput name="username" label="Username" bind:value={basicValue} />
-		</ComponentExample>
+	>
+		<TextInput name="username" label="Username" bind:value={basicValue} />
+	</ComponentExample>
 
-		<h2>Email Type</h2>
-		<p>Use <code>type="email"</code> for built-in email validation.</p>
+	<h2>Email Type</h2>
+	<p>Use <code>type="email"</code> for built-in email validation.</p>
 
-		<ComponentExample
-			code={`<TextInput
+	<ComponentExample
+		code={`<TextInput
   name="email"
   label="Email Address"
   type="email"
   placeholder="you@example.com"
   bind:value
 />`}
-		>
-			<TextInput
-				name="email"
-				label="Email Address"
-				type="email"
-				placeholder="you@example.com"
-				bind:value={emailValue}
-			/>
-		</ComponentExample>
+	>
+		<TextInput
+			name="email"
+			label="Email Address"
+			type="email"
+			placeholder="you@example.com"
+			bind:value={emailValue}
+		/>
+	</ComponentExample>
 
-		<h2>Required Field</h2>
-		<p>Add <code>required</code> to mark the field as required (shows an asterisk).</p>
+	<h2>Required Field</h2>
+	<p>Add <code>required</code> to mark the field as required (shows an asterisk).</p>
 
-		<ComponentExample
-			code={`<TextInput
+	<ComponentExample
+		code={`<TextInput
   name="fullName"
   label="Full Name"
   required
   bind:value
 />`}
-		>
-			<TextInput name="fullName" label="Full Name" required bind:value={requiredValue} />
-		</ComponentExample>
+	>
+		<TextInput name="fullName" label="Full Name" required bind:value={requiredValue} />
+	</ComponentExample>
 
-		<h2>Disabled State</h2>
-		<p>Use <code>disabled</code> to prevent user interaction.</p>
+	<h2>Disabled State</h2>
+	<p>Use <code>disabled</code> to prevent user interaction.</p>
 
-		<ComponentExample
-			code={`<TextInput
+	<ComponentExample
+		code={`<TextInput
   name="disabled"
   label="Disabled Field"
   value="Cannot edit this"
   disabled
 />`}
-		>
-			<TextInput name="disabled" label="Disabled Field" value="Cannot edit this" disabled />
-		</ComponentExample>
+	>
+		<TextInput name="disabled" label="Disabled Field" value="Cannot edit this" disabled />
+	</ComponentExample>
 
-		<h2>With Description</h2>
-		<p>Add a <code>description</code> for context, shown when the field is focused. Also used by AI for voice extraction.</p>
+	<h2>With Description</h2>
+	<p>Add a <code>description</code> for context, shown when the field is focused. Also used by AI for voice extraction.</p>
 
-		<ComponentExample
-			code={`<TextInput
+	<ComponentExample
+		code={`<TextInput
   name="bio"
   label="Short Bio"
   description="A brief description about yourself"
   placeholder="Tell us about yourself..."
 />`}
-		>
-			<TextInput
-				name="bio"
-				label="Short Bio"
-				description="A brief description about yourself"
-				placeholder="Tell us about yourself..."
-			/>
-		</ComponentExample>
+	>
+		<TextInput
+			name="bio"
+			label="Short Bio"
+			description="A brief description about yourself"
+			placeholder="Tell us about yourself..."
+		/>
+	</ComponentExample>
 
-		<h2>Voice Input (smrt Mode)</h2>
-		<p>
-			When the application is in smrt mode, a microphone button appears. Users can hold to speak
-			and the input will be processed via speech-to-text. The <code>appendMode</code> prop controls
-			whether spoken text replaces or appends to existing content.
-		</p>
+	<h2>Voice Input (smrt Mode)</h2>
+	<p>
+		When the application is in smrt mode, a microphone button appears. Users can hold to speak
+		and the input will be processed via speech-to-text. The <code>appendMode</code> prop controls
+		whether spoken text replaces or appends to existing content.
+	</p>
 
-		<CodeBlock
-			code={`<!-- In smrt mode, this input shows a mic button -->
+	<CodeBlock
+		code={`<!-- In smrt mode, this input shows a mic button -->
 <TextInput
   name="notes"
   label="Notes"
   appendMode
   description="Any additional notes"
 />`}
-			language="svelte"
-		/>
+		language="svelte"
+	/>
 
-		<h2>Interactive Example</h2>
-		<p>Type in the field to see the bound value update:</p>
+	<h2>Interactive Example</h2>
+	<p>Type in the field to see the bound value update:</p>
 
-		<ComponentExample
-			code={`<script lang="ts">
+	<ComponentExample
+		code={`<script lang="ts">
   let value = $state('');
 </script>
 
@@ -210,17 +210,17 @@
   bind:value
 />
 <p>Current value: {value || '(empty)'}</p>`}
-		>
-			<TextInput name="interactive" label="Type something" bind:value={basicValue} />
-			<p style="margin-top: 1rem; color: #666;">Current value: {basicValue || '(empty)'}</p>
-		</ComponentExample>
+	>
+		<TextInput name="interactive" label="Type something" bind:value={basicValue} />
+		<p style="margin-top: 1rem; color: #666;">Current value: {basicValue || '(empty)'}</p>
+	</ComponentExample>
 
-		<h2>Props</h2>
-		<PropsTable props={textInputProps} />
+	<h2>Props</h2>
+	<PropsTable props={textInputProps} />
 
-		<h2>TypeScript</h2>
-		<CodeBlock
-			code={`import { TextInput } from '@happyvertical/smrt-svelte';
+	<h2>TypeScript</h2>
+	<CodeBlock
+		code={`import { TextInput } from '@happyvertical/smrt-svelte';
 
 // Props interface
 interface Props {
@@ -235,8 +235,8 @@ interface Props {
   appendMode?: boolean;
   onchange?: (value: string) => void;
 }`}
-			language="typescript"
-		/>
+		language="typescript"
+	/>
 </article>
 
 <style>

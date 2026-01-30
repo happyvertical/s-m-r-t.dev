@@ -34,11 +34,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Determine smrt branch
+        id: smrt-branch
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+        run: |
+          # Check if the branch exists in the smrt repo, fall back to main
+          if gh api "repos/happyvertical/smrt/branches/$BRANCH_NAME" --silent 2>/dev/null; then
+            echo "ref=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          else
+            echo "ref=main" >> $GITHUB_OUTPUT
+          fi
+
       - name: Checkout smrt monorepo
         uses: actions/checkout@v4
         with:
           repository: happyvertical/smrt
-          ref: ${{ github.head_ref || github.ref_name }}
+          ref: ${{ steps.smrt-branch.outputs.ref }}
           path: smrt
           token: ${{ secrets.GH_TOKEN }}
 

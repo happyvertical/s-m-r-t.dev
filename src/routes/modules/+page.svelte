@@ -18,7 +18,8 @@
 
 	const userAccess: Module[] = [
 		{ name: 'smrt-users', package: '@happyvertical/smrt-users', description: 'Multi-tenant user management with RBAC', href: '/modules/smrt-users' },
-		{ name: 'smrt-profiles', package: '@happyvertical/smrt-profiles', description: 'Profile management with relationships', href: '/modules/smrt-profiles' }
+		{ name: 'smrt-profiles', package: '@happyvertical/smrt-profiles', description: 'Profile management with relationships', href: '/modules/smrt-profiles' },
+		{ name: 'smrt-tenancy', package: '@happyvertical/smrt-tenancy', description: 'Multi-tenancy framework with automatic tenant isolation', href: '/modules/smrt-tenancy' }
 	];
 
 	const domain: Module[] = [
@@ -81,7 +82,7 @@
 		<div class="packages">
 			{#each foundation as mod}
 				{#if mod.href}
-					<a href={mod.href} class="package package-link">
+					<a href={mod.href} class="package package-link" data-sveltekit-preload-data="hover">
 						<code>{mod.package}</code>
 						<span>{mod.description}</span>
 					</a>
@@ -96,12 +97,12 @@
 	</section>
 
 	<section class="section">
-		<h2>User & Access Management (2 modules)</h2>
-		<p class="section-desc">Multi-tenancy, authentication, and role-based access control.</p>
+		<h2>User & Access Management (3 modules)</h2>
+		<p class="section-desc">Multi-tenancy, authentication, role-based access control, and tenant isolation.</p>
 		<div class="packages">
 			{#each userAccess as mod}
 				{#if mod.href}
-					<a href={mod.href} class="package package-link">
+					<a href={mod.href} class="package package-link" data-sveltekit-preload-data="hover">
 						<code>{mod.package}</code>
 						<span>{mod.description}</span>
 					</a>
@@ -121,7 +122,7 @@
 		<div class="packages">
 			{#each domain as mod}
 				{#if mod.href}
-					<a href={mod.href} class="package package-link">
+					<a href={mod.href} class="package package-link" data-sveltekit-preload-data="hover">
 						<code>{mod.package}</code>
 						<span>{mod.description}</span>
 					</a>
@@ -141,7 +142,7 @@
 		<div class="packages">
 			{#each content as mod}
 				{#if mod.href}
-					<a href={mod.href} class="package package-link">
+					<a href={mod.href} class="package package-link" data-sveltekit-preload-data="hover">
 						<code>{mod.package}</code>
 						<span>{mod.description}</span>
 					</a>
@@ -161,7 +162,7 @@
 		<div class="packages">
 			{#each agents as mod}
 				{#if mod.href}
-					<a href={mod.href} class="package package-link">
+					<a href={mod.href} class="package package-link" data-sveltekit-preload-data="hover">
 						<code>{mod.package}</code>
 						<span>{mod.description}</span>
 					</a>
@@ -181,7 +182,7 @@
 		<div class="packages">
 			{#each devTools as mod}
 				{#if mod.href}
-					<a href={mod.href} class="package package-link">
+					<a href={mod.href} class="package package-link" data-sveltekit-preload-data="hover">
 						<code>{mod.package}</code>
 						<span>{mod.description}</span>
 					</a>
@@ -201,7 +202,7 @@
 		<div class="packages">
 			{#each ui as mod}
 				{#if mod.href}
-					<a href={mod.href} class="package package-link">
+					<a href={mod.href} class="package package-link" data-sveltekit-preload-data="hover">
 						<code>{mod.package}</code>
 						<span>{mod.description}</span>
 					</a>
@@ -221,7 +222,7 @@
 		<div class="packages">
 			{#each templates as mod}
 				{#if mod.href}
-					<a href={mod.href} class="package package-link">
+					<a href={mod.href} class="package package-link" data-sveltekit-preload-data="hover">
 						<code>{mod.package}</code>
 						<span>{mod.description}</span>
 					</a>
@@ -274,24 +275,25 @@ npm install @happyvertical/smrt-content`}</code></pre>
 	.header {
 		grid-column: 1 / -1;
 		padding: 48px 0;
-		border-bottom: 1px solid var(--color-grid);
+		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
 	}
 
 	.header h1 {
 		font-size: 2.5rem;
 		font-weight: 600;
 		margin-bottom: 8px;
+		color: var(--smrt-color-on-background, #1a1a1a);
 	}
 
 	.header p {
 		font-size: 1.1rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	.section {
 		grid-column: 1 / -1;
 		padding: 48px 0;
-		border-bottom: 1px solid var(--color-grid);
+		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
 	}
 
 	.section.last {
@@ -304,10 +306,11 @@ npm install @happyvertical/smrt-content`}</code></pre>
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		margin-bottom: 8px;
+		color: var(--smrt-color-on-background, #1a1a1a);
 	}
 
 	.section-desc {
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		margin-bottom: 24px;
 	}
 
@@ -320,7 +323,7 @@ npm install @happyvertical/smrt-content`}</code></pre>
 		display: flex;
 		gap: 24px;
 		padding: 16px 0;
-		border-bottom: 1px solid var(--color-grid);
+		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
 		align-items: baseline;
 	}
 
@@ -334,39 +337,41 @@ npm install @happyvertical/smrt-content`}</code></pre>
 	}
 
 	.package-link:hover {
-		background: #fafafa;
+		background: var(--smrt-color-surface-container-low, #fafafa);
 		padding-left: 12px;
 		padding-right: 12px;
 		margin-left: -12px;
 		margin-right: -12px;
+		border-radius: var(--smrt-radius-md, 8px);
 	}
 
 	.package-link:hover code {
-		color: var(--color-accent);
+		color: var(--smrt-color-primary, #1976d2);
 	}
 
 	.package code {
-		font-family: var(--font-mono);
+		font-family: var(--smrt-font-family-mono, ui-monospace, monospace);
 		font-size: 0.9rem;
 		font-weight: 500;
 		flex-shrink: 0;
 		width: 250px;
-		color: #1a1a1a;
+		color: var(--smrt-color-on-surface, #1a1a1a);
 	}
 
 	.package span {
 		font-size: 0.9rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	pre {
-		background: #1a1a1a;
-		color: #f0f0f0;
+		background: var(--smrt-color-surface-container-highest, #1a1a1a);
+		color: var(--smrt-color-on-surface, #f0f0f0);
 		padding: 20px;
 		overflow-x: auto;
-		font-family: var(--font-mono);
+		font-family: var(--smrt-font-family-mono, ui-monospace, monospace);
 		font-size: 0.85rem;
 		line-height: 1.6;
+		border-radius: var(--smrt-radius-md, 8px);
 	}
 
 	@media (max-width: 700px) {

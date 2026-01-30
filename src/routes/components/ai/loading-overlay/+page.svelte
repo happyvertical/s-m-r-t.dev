@@ -63,7 +63,7 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { smrt as Smrt, AILoadingOverlay } from '@happyvertical/smrt-svelte';
+  import { Provider as Smrt, AILoadingOverlay } from '@happyvertical/smrt-svelte';
 </script>
 
 <Smrt>

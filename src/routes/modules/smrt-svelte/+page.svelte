@@ -32,7 +32,7 @@
       <ul class="list-disc list-inside space-y-1">
         <li>100+ Svelte 5 components with runes</li>
         <li>Reactive stores for SMRT objects</li>
-        <li>Form components (TextInput, Select, DateTime, etc.)</li>
+        <li>Form components (TextInput, SelectInput, DateTime, etc.)</li>
         <li>User/tenant/role management UI</li>
         <li>Module UI registry for dynamic component loading</li>
       </ul>
@@ -49,11 +49,6 @@
     <CodeBlock
       code={`<script>
   import { TextInput, UserCard, ModuleUIRegistry } from '@happyvertical/smrt-svelte';
-  import { createProfileStore } from '@happyvertical/smrt-svelte/stores';
-
-  // Reactive store
-  const profileStore = createProfileStore();
-  await profileStore.loadProfile('profile-123');
 
   let name = $state('');
 </script>
@@ -68,18 +63,12 @@
 
 <!-- User component -->
 <UserCard
-  user={'{'}
+  user={{
     id: 'user-1',
-    displayName: profileStore.profile?.displayName,
-    email: profileStore.profile?.email,
-    avatarUrl: profileStore.profile?.avatarUrl
-  {'}'}
-/>
-
-<!-- Dynamic component loading -->
-{#each ModuleUIRegistry.getComponents('@happyvertical/smrt-commerce') as component}
-  <component.component {...props} />
-{/each}`}
+    displayName: 'John Doe',
+    email: 'john@example.com'
+  }}
+/>`}
       language="svelte"
     />
   </section>
@@ -107,49 +96,6 @@
   </section>
 
   <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Reactive Stores</h2>
-    <CodeBlock
-      code={`import { createProfileStore, createEventStore } from '@happyvertical/smrt-svelte/stores';
-
-// Profile store
-const profileStore = createProfileStore();
-await profileStore.loadProfile('profile-123');
-console.log(profileStore.profile); // Reactive
-
-// Event store
-const eventStore = createEventStore();
-await eventStore.loadEvents({ status: 'scheduled' });
-console.log(eventStore.events); // Reactive array`}
-      language="typescript"
-    />
-  </section>
-
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Module UI Registry</h2>
-    <CodeBlock
-      code={`import { ModuleUIRegistry } from '@happyvertical/smrt-svelte/registry';
-
-// Register module components
-ModuleUIRegistry.registerModule({
-  name: '@happyvertical/smrt-commerce',
-  displayName: 'Commerce',
-  uiSlots: {
-    'invoice-card': {
-      id: 'invoice-card',
-      label: 'Invoice Card',
-      component: InvoiceCard
-    }
-  }
-});
-
-// Get components
-const components = ModuleUIRegistry.getComponents('@happyvertical/smrt-commerce');
-const invoiceCard = ModuleUIRegistry.getComponent('@happyvertical/smrt-commerce', 'invoice-card');`}
-      language="typescript"
-    />
-  </section>
-
-  <section class="mb-12">
     <h2 class="text-3xl font-bold mb-4">Related Modules</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <a href="/modules/smrt-core" class="block p-4 border rounded hover:border-blue-500 transition">
@@ -165,8 +111,8 @@ const invoiceCard = ModuleUIRegistry.getComponent('@happyvertical/smrt-commerce'
 
   <div class="border-t pt-6 mt-12">
     <div class="flex justify-between">
-      <a href="/modules" class="text-blue-600 hover:underline">← Back to Modules</a>
-      <a href="/modules/browser-ai" class="text-blue-600 hover:underline">Next: browser-ai →</a>
+      <a href="/modules" class="text-blue-600 hover:underline">Back to Modules</a>
+      <a href="/modules/browser-ai" class="text-blue-600 hover:underline">Next: browser-ai</a>
     </div>
   </div>
 </div>

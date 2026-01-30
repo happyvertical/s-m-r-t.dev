@@ -23,8 +23,8 @@
 	footer {
 		margin-top: auto;
 		padding: 48px 0;
-		border-top: 1px solid var(--color-grid);
-		background: #fafafa;
+		border-top: 1px solid var(--smrt-color-outline, #e5e5e5);
+		background: var(--smrt-color-surface, #ffffff);
 	}
 
 	.footer-content {
@@ -41,14 +41,15 @@
 	}
 
 	.name {
-		font-family: var(--font-mono);
+		font-family: var(--smrt-font-family-mono, monospace);
 		font-weight: bold;
 		font-size: 1.1rem;
+		color: var(--smrt-color-on-surface, #1a1a1a);
 	}
 
 	.tagline {
 		font-size: 0.85rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	nav {
@@ -58,12 +59,12 @@
 
 	nav a {
 		font-size: 0.9rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		text-decoration: none;
 	}
 
 	nav a:hover {
-		color: var(--color-text);
+		color: var(--smrt-color-on-surface, #1a1a1a);
 	}
 
 	@media (max-width: 600px) {

@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { getCategory, getComponent } from '$lib/data/components';
+	import { getCategoryBySlug, getComponentBySlug } from '$lib/data/components';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 
-	const category = $derived(getCategory($page.params.category));
-	const component = $derived(getComponent($page.params.category, $page.params.name));
+	const category = $derived(getCategoryBySlug($page.params.category));
+	const component = $derived(getComponentBySlug($page.params.category, $page.params.name));
 </script>
 
 <svelte:head>

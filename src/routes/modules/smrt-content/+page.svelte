@@ -105,12 +105,12 @@
 
 		<h3>Basic Setup</h3>
 		<CodeBlock
-			code={`import {'{ Contents, Content }'} from '@happyvertical/smrt-content';
+			code={`import { Contents, Content @happyvertical '@happyvertical/smrt-content';
 
 // Create collection with database
 const contents = await Contents.create({
-  db: {'{ url: \'sqlite:./content.db\' }'},
-  ai: {'{ type: \'openai\', apiKey: process.env.OPENAI_API_KEY }'}
+  db: { url: \'sqlite:./content.db\' },
+  ai: { type: \'openai\', apiKey: process.env.OPENAI_API_KEY }
 });`}
 			language="typescript"
 		/>
@@ -128,7 +128,7 @@ const contents = await Contents.create({
   author: 'Dev Team',
   status: 'published',
   tags: ['smrt', 'tutorial'],
-  metadata: {'{ difficulty: \'beginner\' }'}
+  metadata: { difficulty: \'beginner\' }
 });
 
 await article.initialize();
@@ -139,7 +139,7 @@ await article.save();`}
 		<h3>2. Query Content</h3>
 		<CodeBlock
 			code={`// Get single content
-const article = await contents.get({'{ slug: \'my-article\' }'});
+const article = await contents.get({ slug: \'my-article\' });
 
 // List with filters
 const published = await contents.list({
@@ -152,7 +152,7 @@ const published = await contents.list({
 });
 
 // Count results
-const total = await contents.count({'{ where: { type: \'article\' } }'});`}
+const total = await contents.count({ where: { type: \'article\' } });`}
 			language="typescript"
 		/>
 
@@ -217,9 +217,9 @@ await contents.syncContentDir({
 
 		<CodeBlock
 			code={`// All stored in single 'contents' table with _meta_type
-const article = new Article({'{ title: \'...\', type: \'article\' }'});
-const document = new ContentDocument({'{ title: \'...\', type: \'document\' }'});
-const mirror = new Mirror({'{ title: \'...\', type: \'mirror\' }'});`}
+const article = new Article({ title: \'...\', type: \'article\' });
+const document = new ContentDocument({ title: \'...\', type: \'document\' });
+const mirror = new Mirror({ title: \'...\', type: \'mirror\' });`}
 			language="typescript"
 		/>
 
@@ -370,7 +370,7 @@ const mapThumbnail = await content.generateThumbnail({
 			code={`const aiThumbnail = await content.generateThumbnail({
   strategy: 'ai-generate',
   style: 'photorealistic', // or 'illustration', 'abstract', 'minimal'
-  ai: {'{ type: \'openai\', apiKey: process.env.OPENAI_API_KEY }'}
+  ai: { type: \'openai\', apiKey: process.env.OPENAI_API_KEY }
 });`}
 			language="typescript"
 		/>
@@ -379,13 +379,13 @@ const mapThumbnail = await content.generateThumbnail({
 		<CodeBlock
 			code={`const result = await contents.generateMissingThumbnails({
   strategy: 'headline-card',
-  where: {'{ type: \'article\', status: \'published\' }'},
+  where: { type: \'article\', status: \'published\' },
   brandColor: '#1a56db',
   limit: 100
 });
 
-console.log(\`Generated \${'${result.images.length}'} thumbnails\`);
-console.log(\`Failed: \${'${result.failed.length}'}\`);`}
+console.log(\`Generated \${'${result.images.length} thumbnails\`);
+console.log(\`Failed: \${'${result.failed.length}\`);`}
 			language="typescript"
 		/>
 	</section>
@@ -406,7 +406,7 @@ console.log(\`Failed: \${'${result.failed.length}'}\`);`}
   status: 'draft',
   body: '# Introduction\\n\\nContent here...',
   tags: ['feature', 'announcement'],
-  metadata: {'{ readingTime: 5 }'}
+  metadata: { readingTime: 5 }
 });`}
 			language="typescript"
 		/>
@@ -508,7 +508,7 @@ await event.save();`}
 		<h4>Step 3: Query by Category</h4>
 		<CodeBlock
 			code={`const conferences = await contents.list({
-  where: {'{ category: \'events/conferences\' }'}
+  where: { category: \'events/conferences\' }
 });
 
 // Filter by ancestor category
@@ -548,7 +548,7 @@ await story.save();
 
 // Query civic news
 const civicNews = await contents.list({
-  where: {'{ category: \'local/civic\' }'}
+  where: { category: \'local/civic\' }
 }).then(items =>
   items.filter(c => c.isInCategory('local/civic', true))
 );`}
@@ -580,7 +580,7 @@ const allDocs = await contents.list()
 
 // Query specific variant
 const guides = await contents.list({
-  where: {'{ variant: \'docs:guide:getting-started\' }'}
+  where: { variant: \'docs:guide:getting-started\' }
 });`}
 			language="typescript"
 		/>
@@ -716,7 +716,7 @@ if (isAcademic) {
 		<h3>Duplicate Content on Mirror</h3>
 		<p><strong>Solution:</strong> Check for existing content before mirroring</p>
 		<CodeBlock
-			code={`const existing = await contents.get({'{ url: mirrorUrl }'});
+			code={`const existing = await contents.get({ url: mirrorUrl });
 if (existing) {
   return existing;
 }
@@ -762,7 +762,7 @@ content.context = '';            // → slug/index.md`}
 		<p><strong>Solution:</strong> Ensure AI config is passed</p>
 		<CodeBlock
 			code={`const contents = await Contents.create({
-  db: {'{ url: \'sqlite:./content.db\' }'},
+  db: { url: \'sqlite:./content.db\' },
   ai: {
     type: 'openai',
     apiKey: process.env.OPENAI_API_KEY // Required
@@ -928,7 +928,7 @@ content.context = '';            // → slug/index.md`}
 		gap: 0.5rem;
 		margin-bottom: 1rem;
 		font-size: 0.875rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	.breadcrumb a {

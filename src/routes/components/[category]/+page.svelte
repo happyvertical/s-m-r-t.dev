@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { getCategory } from '$lib/data/components';
+	import { getCategoryBySlug } from '$lib/data/components';
 	import { error } from '@sveltejs/kit';
 
-	const category = $derived(getCategory($page.params.category));
+	const category = $derived(getCategoryBySlug($page.params.category));
 
 	$effect(() => {
 		if (!category) {

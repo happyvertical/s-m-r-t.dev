@@ -368,17 +368,17 @@ export type { SignalType } from './signals.js';`} language="typescript" />
 		align-items: center;
 		gap: 8px;
 		font-size: 0.85rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		margin-bottom: 24px;
 	}
 
 	.breadcrumb a {
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		text-decoration: none;
 	}
 
 	.breadcrumb a:hover {
-		color: var(--color-accent);
+		color: var(--smrt-color-primary, #1976d2);
 	}
 
 	.breadcrumb span:not(:last-child) {
@@ -400,7 +400,7 @@ export type { SignalType } from './signals.js';`} language="typescript" />
 
 	.lead {
 		font-size: 1.2rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		margin-bottom: 24px;
 		line-height: 1.6;
 	}
@@ -411,17 +411,17 @@ export type { SignalType } from './signals.js';`} language="typescript" />
 		flex-wrap: wrap;
 		margin-bottom: 48px;
 		padding-bottom: 48px;
-		border-bottom: 1px solid var(--color-grid);
+		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
 	}
 
 	.badge {
 		display: inline-block;
 		padding: 4px 12px;
-		background: #f5f5f5;
+		background: var(--smrt-color-surface-container, #f5f5f5);
 		border-radius: 12px;
 		font-size: 0.85rem;
 		font-weight: 500;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	.note {
@@ -438,7 +438,7 @@ export type { SignalType } from './signals.js';`} language="typescript" />
 		margin-top: 64px;
 		margin-bottom: 24px;
 		padding-top: 16px;
-		border-top: 1px solid var(--color-grid);
+		border-top: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
 	}
 
 	.prose h2:first-of-type {
@@ -454,13 +454,13 @@ export type { SignalType } from './signals.js';`} language="typescript" />
 	}
 
 	.prose p {
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		margin-bottom: 16px;
 		line-height: 1.7;
 	}
 
 	.prose ul, .prose ol {
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		margin-bottom: 16px;
 		padding-left: 24px;
 		line-height: 1.7;
@@ -474,7 +474,7 @@ export type { SignalType } from './signals.js';`} language="typescript" />
 		font-family: var(--font-mono);
 		font-size: 0.9em;
 		padding: 2px 6px;
-		background: #f5f5f5;
+		background: var(--smrt-color-surface-container, #f5f5f5);
 		border-radius: 3px;
 		color: #d63384;
 	}
@@ -489,14 +489,14 @@ export type { SignalType } from './signals.js';`} language="typescript" />
 	.api-table th {
 		text-align: left;
 		padding: 12px;
-		background: #f5f5f5;
+		background: var(--smrt-color-surface-container, #f5f5f5);
 		font-weight: 600;
-		border-bottom: 2px solid var(--color-grid);
+		border-bottom: 2px solid var(--smrt-color-outline-variant, #e5e5e5);
 	}
 
 	.api-table td {
 		padding: 12px;
-		border-bottom: 1px solid var(--color-grid);
+		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
 		vertical-align: top;
 	}
 
@@ -508,11 +508,11 @@ export type { SignalType } from './signals.js';`} language="typescript" />
 	.api-table td:nth-child(2) {
 		font-family: var(--font-mono);
 		font-size: 0.85rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	.api-table td:nth-child(3) {
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	.link-grid {
@@ -531,10 +531,10 @@ export type { SignalType } from './signals.js';`} language="typescript" />
 	}
 
 	.link-card:hover {
-		background: #f0f0f0;
+		background: var(--smrt-color-surface-container, #f0f0f0);
 		transform: translateY(-2px);
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-		border-color: var(--color-accent);
+		border-color: var(--smrt-color-primary, #1976d2);
 	}
 
 	.link-card h3 {
@@ -545,12 +545,12 @@ export type { SignalType } from './signals.js';`} language="typescript" />
 	}
 
 	.link-card:hover h3 {
-		color: var(--color-accent);
+		color: var(--smrt-color-primary, #1976d2);
 	}
 
 	.link-card p {
 		font-size: 0.85rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		margin: 0;
 	}
 </style>

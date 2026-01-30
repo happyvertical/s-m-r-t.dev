@@ -58,27 +58,6 @@
 // - AI-powered methods: is(), do(), describe()`}</code></pre>
 	</section>
 
-	<section class="hero">
-		<div class="tenets">
-			<div class="tenet">
-				<h2>No vendor lock</h2>
-				<p>Abstract away implementation details. Switch SQLite to PostgreSQL without refactoring.</p>
-			</div>
-			<div class="tenet">
-				<h2>Adaptability</h2>
-				<p>Evolve as quickly as possible through abstraction.</p>
-			</div>
-			<div class="tenet">
-				<h2>Brevity</h2>
-				<p>Agent context focuses on application logic, not implementation boilerplate.</p>
-			</div>
-			<div class="tenet">
-				<h2>Scalability</h2>
-				<p>Startup to enterprise seamlessly.</p>
-			</div>
-		</div>
-	</section>
-
 	<section class="example">
 		<h3>Advanced</h3>
 		<p class="example-desc">Decorators for complex use cases.</p>
@@ -109,7 +88,27 @@ class Invoice extends SmrtObject {
 }`}</code></pre>
 	</section>
 
-	<!-- OBJECTS SECTION -->
+	<section class="hero">
+		<div class="tenets">
+			<div class="tenet">
+				<h2>No vendor lock</h2>
+				<p>Abstract away implementation details. Switch SQLite to PostgreSQL without refactoring.</p>
+			</div>
+			<div class="tenet">
+				<h2>Adaptability</h2>
+				<p>Evolve as quickly as possible through abstraction.</p>
+			</div>
+			<div class="tenet">
+				<h2>Brevity</h2>
+				<p>Agent context focuses on application logic, not implementation boilerplate.</p>
+			</div>
+			<div class="tenet">
+				<h2>Scalability</h2>
+				<p>Startup to enterprise seamlessly.</p>
+			</div>
+		</div>
+	</section>
+
 	<section class="section-header">
 		<h2>Objects</h2>
 		<p>AI-powered data models with built-in persistence, validation, and intelligence.</p>
@@ -162,7 +161,6 @@ const selector = await scraper.recall({
 });`}</code></pre>
 	</section>
 
-	<!-- COLLECTIONS SECTION -->
 	<section class="section-header">
 		<h2>Collections</h2>
 		<p>Query, search, and manage objects with powerful collection operations.</p>
@@ -195,41 +193,9 @@ const user = await users.getOrUpsert(
 );`}</code></pre>
 	</section>
 
-	<section class="example">
-		<h3>Interceptors</h3>
-		<p class="example-desc">Hook into every operation.</p>
-		<pre><code>{`GlobalInterceptors.register({
-  name: 'tenancy',
-  priority: 100,
-  beforeList(className, options, context) {
-    return {
-      ...options,
-      where: { ...options.where, tenantId: getTenantId() }
-    };
-  }
-});`}</code></pre>
-	</section>
-
-	<!-- AGENTS SECTION -->
 	<section class="section-header">
 		<h2>Agents</h2>
 		<p>Autonomous actors with full object capabilities and inter-agent communication.</p>
-	</section>
-
-	<section class="example">
-		<h3>Agent Basics</h3>
-		<p class="example-desc">Agents inherit all SmrtObject capabilities.</p>
-		<pre><code>{`class Roboto extends Agent {
-  topic: string = 'daily-digest';
-
-  async run() {
-    // Agents inherit all SmrtObject methods
-    const isReady = await this.is('Has valid configuration?');
-
-    // AI-powered content generation
-    const summary = await this.do('Summarize today\\'s top stories');
-  }
-}`}</code></pre>
 	</section>
 
 	<section class="example">
@@ -252,38 +218,14 @@ await dispatch.process('Roboto', async (payload, meta) => {
   await this.handleResult(payload.taskId, payload.result);
 });`}</code></pre>
 	</section>
-
-	<section class="example">
-		<h3>Agent Memory</h3>
-		<p class="example-desc">Agents learn and remember across sessions.</p>
-		<pre><code>{`class Roboto extends Agent {
-  async scrape(url: string) {
-    // Try to recall learned selector
-    const cached = await this.recall({
-      scope: \`parser/\${new URL(url).hostname}\`,
-      key: 'content-selector'
-    });
-
-    if (cached) return this.extract(url, cached.value);
-
-    // Discover and remember for next time
-    const selector = await this.do('Find the article content selector');
-    await this.remember({
-      scope: \`parser/\${new URL(url).hostname}\`,
-      key: 'content-selector',
-      value: selector,
-      confidence: 0.9
-    });
-  }
-}`}</code></pre>
-	</section>
 </Grid>
 
 <style>
+	/* Use SMRT theme variables throughout */
+	
 	.hero {
 		grid-column: 1 / -1;
-		padding: 48px 0;
-		border-bottom: 1px solid var(--color-grid);
+		padding: 32px 0;
 	}
 
 	.tenets {
@@ -294,46 +236,49 @@ await dispatch.process('Roboto', async (payload, meta) => {
 
 	.tenet {
 		padding: 24px;
-		border: 1px solid var(--color-grid);
+		background: var(--smrt-color-surface, #ffffff);
+		border: 1px solid var(--smrt-color-outline, #e5e5e5);
+		border-radius: var(--smrt-shape-medium, 8px);
 	}
 
 	.tenet h2 {
 		font-size: 1rem;
 		font-weight: 600;
 		margin-bottom: 8px;
+		color: var(--smrt-color-on-surface, #1a1a1a);
 	}
 
 	.tenet p {
 		font-size: 0.9rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		line-height: 1.5;
 	}
 
 	.section-header {
 		grid-column: 1 / -1;
-		padding: 48px 0 24px;
-		border-bottom: 1px solid var(--color-grid);
+		padding: 48px 0 16px;
 	}
 
 	.section-header h2 {
 		font-size: 1.5rem;
 		font-weight: 700;
 		margin-bottom: 8px;
+		color: var(--smrt-color-on-background, #1a1a1a);
 	}
 
 	.section-header p {
 		font-size: 1rem;
-		color: #666;
+		color: var(--smrt-color-on-background-variant, #666);
 	}
 
 	.example {
 		grid-column: 1 / -1;
-		padding: 48px 0;
-		border-bottom: 1px solid var(--color-grid);
+		padding: 24px 0;
 	}
 
-	.example:last-of-type {
-		border-bottom: none;
+	/* Add padding to last section for footer spacing */
+	section:last-of-type {
+		padding-bottom: 64px;
 	}
 
 	.example h3 {
@@ -341,24 +286,25 @@ await dispatch.process('Roboto', async (payload, meta) => {
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
-		color: var(--color-accent);
+		color: var(--smrt-color-primary, #1976d2);
 		margin-bottom: 8px;
 	}
 
 	.example-desc {
-		color: #666;
+		color: var(--smrt-color-on-background-variant, #666);
 		margin-bottom: 16px;
 		font-size: 0.95rem;
 	}
 
 	pre {
-		background: #1a1a1a;
-		color: #f0f0f0;
+		background: var(--smrt-color-surface-variant, #1a1a1a);
+		color: var(--smrt-color-on-surface-variant, #f0f0f0);
 		padding: 24px;
 		overflow-x: auto;
-		font-family: var(--font-mono);
+		font-family: var(--smrt-font-family-mono, monospace);
 		font-size: 0.85rem;
 		line-height: 1.6;
+		border-radius: var(--smrt-shape-medium, 8px);
 	}
 
 	@media (max-width: 900px) {

@@ -119,10 +119,10 @@
 		<h3>Database Setup</h3>
 		<p>Requires database configuration (SQLite, PostgreSQL, etc.):</p>
 		<CodeBlock
-			code={`import {'{ smrt }'} from '@happyvertical/smrt-core';
+			code={`import { smrt @happyvertical '@happyvertical/smrt-core';
 
 await smrt.initialize({
-  db: {'{ type: \'sqlite\', url: \'profiles.db\' }'}
+  db: { type: \'sqlite\', url: \'profiles.db\' }
 });`}
 			language="typescript"
 		/>
@@ -139,8 +139,8 @@ await smrt.initialize({
 } from '@happyvertical/smrt-profiles';
 
 // Create profile type
-const typeCollection = await ProfileTypeCollection.create({'{ db: {...} }'});
-const humanType = await typeCollection.create({'{ name: \'Human\' }'});
+const typeCollection = await ProfileTypeCollection.create({ db: {...} });
+const humanType = await typeCollection.create({ name: \'Human\' });
 await humanType.save();
 console.log(humanType.slug); // 'human'`}
 			language="typescript"
@@ -149,7 +149,7 @@ console.log(humanType.slug); // 'human'`}
 		<h3>2. Create Profile</h3>
 		<CodeBlock
 			code={`// Create profile
-const profileCollection = await ProfileCollection.create({'{ db: {...} }'});
+const profileCollection = await ProfileCollection.create({ db: {...} });
 const person = await profileCollection.create({
   typeId: humanType.id,
   name: 'Alice Johnson',
@@ -162,20 +162,20 @@ await person.save();`}
 
 		<h3>3. Add Metadata</h3>
 		<CodeBlock
-			code={`import {'{ ProfileMetafieldCollection }'} from '@happyvertical/smrt-profiles';
+			code={`import { ProfileMetafieldCollection @happyvertical '@happyvertical/smrt-profiles';
 
 // Define metafield with validation
-const fieldCollection = await ProfileMetafieldCollection.create({'{ db: {...} }'});
+const fieldCollection = await ProfileMetafieldCollection.create({ db: {...} });
 const location = await fieldCollection.create({
   name: 'Location',
-  validation: {'{ type: \'string\', maxLength: 100 }'}
+  validation: { type: \'string\', maxLength: 100 }
 });
 await location.save();
 
 // Add metadata to profile
 await person.addMetadata('location', 'San Francisco, CA');
 const metadata = await person.getMetadata();
-// {'{ location: \'San Francisco, CA\' }'}`}
+// { location: \'San Francisco, CA\' }`}
 			language="typescript"
 		/>
 
@@ -186,7 +186,7 @@ const metadata = await person.getMetadata();
 } from '@happyvertical/smrt-profiles';
 
 // Create relationship type (reciprocal)
-const relTypeCollection = await ProfileRelationshipTypeCollection.create({'{ db: {...} }'});
+const relTypeCollection = await ProfileRelationshipTypeCollection.create({ db: {...} });
 const friendType = await relTypeCollection.create({
   name: 'Friend',
   reciprocal: true // Auto-creates inverse
@@ -194,7 +194,7 @@ const friendType = await relTypeCollection.create({
 await friendType.save();
 
 // Create relationship (automatically creates reciprocal)
-const bob = await profileCollection.get({'{ email: \'bob@example.com\' }'});
+const bob = await profileCollection.get({ email: \'bob@example.com\' });
 await person.addRelationship(bob, 'friend');
 
 // Query relationships
@@ -215,9 +215,9 @@ console.log(friends.length); // 1 (Bob)`}
 
 		<CodeBlock
 			code={`// Create multiple types
-const personType = await typeCollection.create({'{ name: \'Person\' }'});
-const orgType = await typeCollection.create({'{ name: \'Organization\' }'});
-const teamType = await typeCollection.create({'{ name: \'Team\' }'});
+const personType = await typeCollection.create({ name: \'Person\' });
+const orgType = await typeCollection.create({ name: \'Organization\' });
+const teamType = await typeCollection.create({ name: \'Team\' });
 
 // Use type when creating profiles
 const employee = await profileCollection.create({
@@ -260,7 +260,7 @@ await person.addMetadata('phone-number', '+14155551234');
 
 // Get all metadata
 const metadata = await person.getMetadata();
-// {'{ 'phone-number': \'+14155551234\', location: \'SF\' }'}
+// { 'phone-number': \'+14155551234\', location: \'SF\' }
 
 // Update multiple
 await person.updateMetadata({
@@ -392,8 +392,8 @@ await employeeRel.addTerm(new Date('2024-07-01'), null);
 // Query history
 const terms = await employeeRel.getTerms();
 // [
-//   {'{ startDate: 2023-01-15, endDate: 2024-06-30 }'},
-//   {'{ startDate: 2024-07-01, endDate: null }'}
+//   { startDate: 2023-01-15, endDate: 2024-06-30 },
+//   { startDate: 2024-07-01, endDate: null }
 // ]
 
 // Get current active term
@@ -427,10 +427,10 @@ const oidcClaims = {
 };
 
 // Create or link profile
-const {'{ profile, oidcIdentity, created }'} = await createProfileFromOidc(
+const { profile, oidcIdentity, created } = await createProfileFromOidc(
   oidcClaims,
   'google',
-  {'{ db: {...} }'}
+  { db: {...} }
 );
 
 if (created) {
@@ -451,7 +451,7 @@ if (created) {
 		<h3>Authentication Resolution</h3>
 		<CodeBlock
 			code={`// In authentication middleware
-const {'{ profile, source }'} = await resolveIdentity({
+const { profile, source } = await resolveIdentity({
   oidcSession: event.locals.session,
   apiKey: event.request.headers.get('X-API-Key'),
   db: event.locals.db
@@ -535,7 +535,7 @@ const token = await createMagicLinkToken(profile, keypair);
 await sendEmail({
   to: profile.email,
   subject: 'Sign in to your account',
-  body: \`Click here: https://app.example.com/auth/magic?\${'${token}'}\`
+  body: \`Click here: https://app.example.com/auth/magic?\${'${token}\`
 });
 
 // Verify magic link
@@ -558,9 +558,9 @@ if (verified) {
 
 		<h4>Step 1: Create Profile Types</h4>
 		<CodeBlock
-			code={`const personType = await typeCollection.create({'{ name: \'Person\' }'});
-const orgType = await typeCollection.create({'{ name: \'Organization\' }'});
-const deptType = await typeCollection.create({'{ name: \'Department\' }'});
+			code={`const personType = await typeCollection.create({ name: \'Person\' });
+const orgType = await typeCollection.create({ name: \'Organization\' });
+const deptType = await typeCollection.create({ name: \'Department\' });
 await Promise.all([personType.save(), orgType.save(), deptType.save()]);`}
 			language="typescript"
 		/>
@@ -589,11 +589,11 @@ await engineering.addRelationship(company, 'part-of');`}
 			code={`// Define metadata fields
 const jobTitleField = await fieldCollection.create({
   name: 'Job Title',
-  validation: {'{ type: \'string\', maxLength: 100 }'}
+  validation: { type: \'string\', maxLength: 100 }
 });
 const startDateField = await fieldCollection.create({
   name: 'Start Date',
-  validation: {'{ type: \'date\' }'}
+  validation: { type: \'date\' }
 });
 await Promise.all([jobTitleField.save(), startDateField.save()]);
 
@@ -636,14 +636,14 @@ await employee.addRelationship(bob, 'colleague', company);`}
 		<CodeBlock
 			code={`// Get all employees
 const employees = await profileCollection.list({
-  where: {'{ typeId: personType.id }'}
+  where: { typeId: personType.id }
 });
 
 // Get employee's colleagues
 const colleagues = await employee.getRelatedProfiles('colleague');
 
 // Get employment history
-const workRel = await employee.getRelationships({'{ slug: \'works-at\' }'});
+const workRel = await employee.getRelationships({ slug: \'works-at\' });
 const terms = await workRel[0].getTerms();`}
 			language="typescript"
 		/>
@@ -671,10 +671,10 @@ const providers = [
 		<CodeBlock
 			code={`// In your OIDC callback handler
 export async function handleOidcCallback(oidcClaims, provider) {
-  const {'{ profile, oidcIdentity, created }'} = await createProfileFromOidc(
+  const { profile, oidcIdentity, created } = await createProfileFromOidc(
     oidcClaims,
     provider,
-    {'{ db: getTenantDb() }'}
+    { db: getTenantDb() }
   );
 
   // Store tenant ID in metadata
@@ -696,8 +696,8 @@ export async function handleOidcCallback(oidcClaims, provider) {
 		<h4>Step 3: Authentication Middleware</h4>
 		<CodeBlock
 			code={`// In hooks.server.ts or middleware
-export async function handle({'{ event, resolve }'}) {
-  const {'{ profile, source }'} = await resolveIdentity({
+export async function handle({ event, resolve }) {
+  const { profile, source } = await resolveIdentity({
     oidcSession: await getSession(event.cookies),
     apiKey: event.request.headers.get('X-API-Key'),
     db: event.locals.db
@@ -761,9 +761,9 @@ const mutualFriends = await findMutualFriends(alice, bob);`}
 		<h3>Example 1: Healthcare Provider Network</h3>
 		<CodeBlock
 			code={`// Profile types
-const physicianType = await typeCollection.create({'{ name: \'Physician\' }'});
-const patientType = await typeCollection.create({'{ name: \'Patient\' }'});
-const clinicType = await typeCollection.create({'{ name: \'Clinic\' }'});
+const physicianType = await typeCollection.create({ name: \'Physician\' });
+const patientType = await typeCollection.create({ name: \'Patient\' });
+const clinicType = await typeCollection.create({ name: \'Clinic\' });
 
 // Create profiles
 const drSmith = await profileCollection.create({
@@ -798,7 +798,7 @@ await drSmith.recordAction({
   resourceType: 'Patient',
   resourceId: 'patient-123',
   source: 'web',
-  metadata: {'{ reason: \'Follow-up appointment\' }'}
+  metadata: { reason: \'Follow-up appointment\' }
 });`}
 			language="typescript"
 		/>
@@ -806,9 +806,9 @@ await drSmith.recordAction({
 		<h3>Example 2: Educational Institution</h3>
 		<CodeBlock
 			code={`// Profile types
-const studentType = await typeCollection.create({'{ name: \'Student\' }'});
-const teacherType = await typeCollection.create({'{ name: \'Teacher\' }'});
-const courseType = await typeCollection.create({'{ name: \'Course\' }'});
+const studentType = await typeCollection.create({ name: \'Student\' });
+const teacherType = await typeCollection.create({ name: \'Teacher\' });
+const courseType = await typeCollection.create({ name: \'Course\' });
 
 // Create profiles
 const student = await profileCollection.create({
@@ -837,7 +837,7 @@ await student.addMetadata('gpa', 3.8);
 const courses = await student.getRelatedProfiles('enrolled-in');
 
 // Get enrollment history
-const enrollments = await student.getRelationships({'{ slug: \'enrolled-in\' }'});
+const enrollments = await student.getRelationships({ slug: \'enrolled-in\' });
 const history = await Promise.all(
   enrollments.map(async (rel) => ({
     course: await rel.getToProfile(),
@@ -863,7 +863,7 @@ const history = await Promise.all(
 		<CodeBlock
 			code={`// User logs in via OIDC (handled by smrt-users)
 // Profile is created or retrieved via smrt-profiles
-const {'{ profile }'} = await resolveIdentity(authContext);
+const { profile } = await resolveIdentity(authContext);
 
 // Store profile reference in user session
 event.locals.profile = profile;
@@ -885,12 +885,12 @@ const membership = await getUserTenantMembership(profile.id, tenantId);`}
 		<CodeBlock
 			code={`// Tenant A database
 const profilesA = await ProfileCollection.create({
-  db: {'{ type: \'postgres\', url: DATABASE_URL_TENANT_A }'}
+  db: { type: \'postgres\', url: DATABASE_URL_TENANT_A }
 });
 
 // Tenant B database
 const profilesB = await ProfileCollection.create({
-  db: {'{ type: \'postgres\', url: DATABASE_URL_TENANT_B }'}
+  db: { type: \'postgres\', url: DATABASE_URL_TENANT_B }
 });
 
 // Complete isolation at database level`}
@@ -981,7 +981,7 @@ const profile = await profileCollection.create({
 });
 
 // Correct order
-const personType = await typeCollection.create({'{ name: \'Person\' }'});
+const personType = await typeCollection.create({ name: \'Person\' });
 await personType.save();
 
 const profile = await profileCollection.create({
@@ -1049,14 +1049,14 @@ await profile.addMetadata('phone', '+14155551234');`}
 		<p><strong>Solution:</strong> Pass correct database URL for each tenant</p>
 		<CodeBlock
 			code={`// Wrong - shared database
-const collection = await ProfileCollection.create({'{ db: sharedDb }'});
+const collection = await ProfileCollection.create({ db: sharedDb });
 
 // Correct - tenant-specific
 const tenantACollection = await ProfileCollection.create({
-  db: {'{ type: \'postgres\', url: TENANT_A_URL }'}
+  db: { type: \'postgres\', url: TENANT_A_URL }
 });
 const tenantBCollection = await ProfileCollection.create({
-  db: {'{ type: \'postgres\', url: TENANT_B_URL }'}
+  db: { type: \'postgres\', url: TENANT_B_URL }
 });`}
 			language="typescript"
 		/>
@@ -1188,12 +1188,12 @@ const tenantBCollection = await ProfileCollection.create({
 			<tbody>
 				<tr>
 					<td><code>createProfileFromOidc(claims, provider, options)</code></td>
-					<td><code>Promise&lt;{'{ profile, oidcIdentity, created }'}&gt;</code></td>
+					<td><code>Promise&lt;{ profile, oidcIdentity, created }&gt;</code></td>
 					<td>Create or link profile from OIDC</td>
 				</tr>
 				<tr>
 					<td><code>resolveIdentity(context)</code></td>
-					<td><code>Promise&lt;{'{ profile, source }'} | null&gt;</code></td>
+					<td><code>Promise&lt;{ profile, source } | null&gt;</code></td>
 					<td>Resolve authentication</td>
 				</tr>
 				<tr>
@@ -1226,7 +1226,7 @@ const tenantBCollection = await ProfileCollection.create({
 		gap: 0.5rem;
 		margin-bottom: 1rem;
 		font-size: 0.875rem;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	.breadcrumb a {
