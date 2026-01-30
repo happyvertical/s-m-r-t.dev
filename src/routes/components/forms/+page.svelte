@@ -1,6 +1,21 @@
 <script lang="ts">
 	const components = [
 		{
+			name: 'Form',
+			href: '/components/forms/form',
+			description: 'Smart form wrapper enabling voice-powered form filling with STT.'
+		},
+		{
+			name: 'FormGroup',
+			href: '/components/forms/form-group',
+			description: 'Layout wrapper for form fields with label, hint, and error styling.'
+		},
+		{
+			name: 'FormMicButton',
+			href: '/components/forms/form-mic-button',
+			description: 'Microphone button that triggers form-level voice filling in SMRT mode.'
+		},
+		{
 			name: 'TextInput',
 			href: '/components/forms/text-input',
 			description: 'Material Design 3 text input with optional voice input support in smrt mode.'

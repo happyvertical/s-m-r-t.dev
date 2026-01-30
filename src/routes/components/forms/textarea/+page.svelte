@@ -30,7 +30,7 @@
 		{
 			name: 'placeholder',
 			type: 'string',
-			default: 'undefined',
+			default: "''",
 			description: 'Placeholder text shown when empty'
 		},
 		{
@@ -46,12 +46,6 @@
 			description: 'Number of visible text rows'
 		},
 		{
-			name: 'maxlength',
-			type: 'number',
-			default: 'undefined',
-			description: 'Maximum character count'
-		},
-		{
 			name: 'disabled',
 			type: 'boolean',
 			default: 'false',
@@ -64,10 +58,10 @@
 			description: 'Marks field as required'
 		},
 		{
-			name: 'error',
-			type: 'string',
-			default: 'undefined',
-			description: 'Error message to display'
+			name: 'appendMode',
+			type: 'boolean',
+			default: 'false',
+			description: 'When true, voice input appends to existing text instead of replacing'
 		},
 		{
 			name: 'onchange',
@@ -160,27 +154,6 @@
 		/>
 	</ComponentExample>
 
-	<h2>With Character Limit</h2>
-	<p>Set <code>maxlength</code> to limit characters and show a counter.</p>
-
-	<ComponentExample
-		code={`<TextareaInput
-  name="tweet"
-  label="Twitter Post"
-  maxlength={280}
-  placeholder="What's happening?"
-  bind:value
-/>`}
-	>
-		<TextareaInput
-			name="tweet"
-			label="Twitter Post"
-			maxlength={280}
-			placeholder="What's happening?"
-			bind:value={limitedValue}
-		/>
-	</ComponentExample>
-
 	<h2>Required Field</h2>
 	<p>Add <code>required</code> to mark the field as required.</p>
 
@@ -216,25 +189,6 @@
 			label="Approved Content"
 			value="This content has been approved and cannot be edited."
 			disabled
-		/>
-	</ComponentExample>
-
-	<h2>With Error</h2>
-	<p>Display validation errors using the <code>error</code> prop.</p>
-
-	<ComponentExample
-		code={`<TextareaInput
-  name="error-example"
-  label="Description"
-  value="Too short"
-  error="Description must be at least 50 characters"
-/>`}
-	>
-		<TextareaInput
-			name="error-example"
-			label="Description"
-			value="Too short"
-			error="Description must be at least 50 characters"
 		/>
 	</ComponentExample>
 
@@ -280,7 +234,7 @@
 	/>
 
 	<h2>Interactive Example</h2>
-	<p>Type to see character count and value updates:</p>
+	<p>Type to see value updates in real-time:</p>
 
 	<ComponentExample
 		code={`<script lang="ts">
@@ -290,18 +244,18 @@
 <TextareaInput
   name="interactive"
   label="Your Message"
-  maxlength={200}
+  placeholder="Start typing..."
   bind:value
 />
-<p>Length: {value.length} / 200</p>`}
+<p>Length: {value.length} characters</p>`}
 	>
 		<TextareaInput
 			name="interactive"
 			label="Your Message"
-			maxlength={200}
+			placeholder="Start typing..."
 			bind:value={interactiveValue}
 		/>
-		<p style="margin-top: 1rem; color: #666;">Length: {interactiveValue.length} / 200</p>
+		<p style="margin-top: 1rem; color: #666;">Length: {interactiveValue.length} characters</p>
 	</ComponentExample>
 
 	<h2>Props</h2>
@@ -319,10 +273,9 @@ interface Props {
   placeholder?: string;
   value?: string;
   rows?: number;
-  maxlength?: number;
   disabled?: boolean;
   required?: boolean;
-  error?: string;
+  appendMode?: boolean;
   onchange?: (value: string) => void;
 }`}
 		language="typescript"

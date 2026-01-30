@@ -98,3 +98,48 @@
 *:focus:not(:focus-visible) {
 	outline: none;
 }
+
+/* Dark Theme */
+:root[data-theme='dark'] {
+	/* Typography - same fonts */
+	--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+	--font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+	/* Colors */
+	--color-bg: #121212;
+	--color-text: #e0e0e0;
+	--color-accent: #ff6b3d;
+	--color-grid: #2a2a2a;
+
+	/* Colors - Primary */
+	--color-primary-main: #64b5f6;
+	--color-primary-light: #1e3a5f;
+	--color-primary-dark: #90caf9;
+
+	/* Colors - Neutral */
+	--color-neutral-white: #1a1a1a;
+	--color-neutral-gray100: #252525;
+	--color-neutral-gray200: #2e2e2e;
+	--color-neutral-gray300: #3d3d3d;
+	--color-neutral-black: #ffffff;
+
+	/* Colors - Text */
+	--color-text-primary: #e0e0e0;
+	--color-text-secondary: #a0a0a0;
+	--color-text-inverse: #121212;
+
+	/* Colors - Semantic */
+	--color-semantic-error: #ef5350;
+	--color-semantic-success: #66bb6a;
+	--color-semantic-warning: #ffa726;
+	--color-semantic-info: #42a5f5;
+
+	/* Shadows */
+	--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+	--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+	--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4);
+	--shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4);
+
+	/* Focus */
+	--focus-ring-color: #64b5f6;
+}

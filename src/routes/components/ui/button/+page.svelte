@@ -153,20 +153,46 @@
 	<h2>Props</h2>
 	<PropsTable props={buttonProps} />
 
+	<h2>HTML Attributes</h2>
+	<p>
+		Button extends <code>HTMLButtonAttributes</code>, so you can pass any standard HTML button
+		attribute like <code>id</code>, <code>name</code>, <code>form</code>, <code>formaction</code>,
+		<code>aria-*</code>, and more.
+	</p>
+
+	<ComponentExample
+		code={`<Button
+  id="submit-btn"
+  name="action"
+  form="my-form"
+  aria-label="Submit the form"
+>
+  Submit
+</Button>`}
+	>
+		<Button
+			id="submit-btn"
+			name="action"
+			aria-label="Submit the form"
+		>
+			Submit
+		</Button>
+	</ComponentExample>
+
 	<h2>TypeScript</h2>
 	<CodeBlock
 		code={`import { Button } from '@happyvertical/smrt-svelte';
+import type { HTMLButtonAttributes } from 'svelte/elements';
+import type { Snippet } from 'svelte';
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
-interface Props {
+// Button extends HTMLButtonAttributes, supporting all standard button attributes
+interface Props extends Omit<HTMLButtonAttributes, 'class'> {
   variant?: ButtonVariant;
   size?: ButtonSize;
-  href?: string;
-  disabled?: boolean;
-  type?: 'button' | 'submit' | 'reset';
-  onclick?: () => void;
+  href?: string;  // If provided, renders as <a> instead of <button>
   children?: Snippet;
 }`}
 		language="typescript"
