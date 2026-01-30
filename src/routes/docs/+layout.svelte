@@ -43,6 +43,14 @@
 			]
 		},
 		{
+			title: 'Theming',
+			items: [
+				{ label: 'Themes Overview', href: '/themes' },
+				{ label: 'Built-in Themes', href: '/themes#themes-list' },
+				{ label: 'Custom Themes', href: '/themes#custom' }
+			]
+		},
+		{
 			title: 'Modules',
 			items: [
 				{ label: 'Overview', href: '/modules' }
@@ -104,7 +112,7 @@
 
 	.sidebar {
 		padding: 48px 0;
-		border-right: 1px solid var(--color-grid);
+		border-right: 1px solid var(--smrt-color-outline, #e5e5e5);
 	}
 
 	.nav-section {
@@ -116,7 +124,7 @@
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
-		color: #999;
+		color: var(--smrt-color-on-surface-variant, #999);
 		margin-bottom: 12px;
 	}
 
@@ -133,17 +141,18 @@
 	a {
 		display: block;
 		padding: 6px 0;
-		color: var(--color-text);
+		color: var(--smrt-color-on-surface, #1a1a1a);
 		text-decoration: none;
 		font-size: 0.9rem;
+		transition: color 0.2s;
 	}
 
 	a:hover {
-		color: var(--color-accent);
+		color: var(--smrt-color-primary, #e63946);
 	}
 
 	a.active {
-		color: var(--color-accent);
+		color: var(--smrt-color-primary, #e63946);
 		font-weight: 600;
 	}
 
@@ -154,6 +163,7 @@
 
 	.subnav a {
 		font-size: 0.85rem;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	.content {
@@ -168,7 +178,7 @@
 
 		.sidebar {
 			border-right: none;
-			border-bottom: 1px solid var(--color-grid);
+			border-bottom: 1px solid var(--smrt-color-outline, #e5e5e5);
 			padding: 24px 0;
 		}
 

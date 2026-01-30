@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SMRTDateTime } from '@happyvertical/smrt-svelte';
+	import { DateTimeInput } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -67,7 +67,7 @@
 </script>
 
 <svelte:head>
-	<title>SMRTDateTime | SMRT Forms</title>
+	<title>DateTimeInput | SMRT Forms</title>
 </svelte:head>
 
 <article class="prose">
@@ -76,17 +76,17 @@
 		<span>/</span>
 		<a href="/components/forms">Forms</a>
 		<span>/</span>
-		<span>SMRTDateTime</span>
+		<span>DateTimeInput</span>
 	</nav>
 
-	<h1>SMRTDateTime</h1>
+	<h1>DateTimeInput</h1>
 	<p class="lead">
 		A smart date and time picker with natural language support in SMRT mode. Users can speak
 		dates like "next Tuesday at 3pm" and the component parses them automatically using chrono-node.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { SMRTDateTime } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { DateTimeInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>A date and time picker with native browser controls in standard mode.</p>
@@ -96,13 +96,13 @@
   let value = $state('');
 </script>
 
-<SMRTDateTime
+<DateTimeInput
   name="appointment"
   label="Appointment Date & Time"
   bind:value
 />`}
 	>
-		<SMRTDateTime
+		<DateTimeInput
 			name="appointment"
 			label="Appointment Date & Time"
 			bind:value={dateTimeValue}
@@ -113,7 +113,7 @@
 	<p>Set <code>includeTime={false}</code> for a date-only picker.</p>
 
 	<ComponentExample
-		code={`<SMRTDateTime
+		code={`<DateTimeInput
   name="birthdate"
   label="Date of Birth"
   includeTime={false}
@@ -121,7 +121,7 @@
   bind:value
 />`}
 	>
-		<SMRTDateTime
+		<DateTimeInput
 			name="birthdate"
 			label="Date of Birth"
 			includeTime={false}
@@ -134,13 +134,13 @@
 	<p>Set an initial value in ISO format (YYYY-MM-DDTHH:mm for datetime, YYYY-MM-DD for date).</p>
 
 	<ComponentExample
-		code={`<SMRTDateTime
+		code={`<DateTimeInput
   name="meeting"
   label="Meeting Time"
   value="2025-03-15T14:30"
 />`}
 	>
-		<SMRTDateTime
+		<DateTimeInput
 			name="meeting"
 			label="Meeting Time"
 			bind:value={presetValue}
@@ -151,13 +151,13 @@
 	<p>Add <code>required</code> to mark the field as required.</p>
 
 	<ComponentExample
-		code={`<SMRTDateTime
+		code={`<DateTimeInput
   name="deadline"
   label="Deadline"
   required
 />`}
 	>
-		<SMRTDateTime
+		<DateTimeInput
 			name="deadline"
 			label="Deadline"
 			required
@@ -168,14 +168,14 @@
 	<p>Use <code>disabled</code> to prevent user interaction.</p>
 
 	<ComponentExample
-		code={`<SMRTDateTime
+		code={`<DateTimeInput
   name="locked"
   label="Locked Date"
   value="2025-01-01T00:00"
   disabled
 />`}
 	>
-		<SMRTDateTime
+		<DateTimeInput
 			name="locked"
 			label="Locked Date"
 			value="2025-01-01T00:00"
@@ -187,13 +187,13 @@
 	<p>Add a <code>description</code> for additional context.</p>
 
 	<ComponentExample
-		code={`<SMRTDateTime
+		code={`<DateTimeInput
   name="event"
   label="Event Start"
   description="When should the event begin?"
 />`}
 	>
-		<SMRTDateTime
+		<DateTimeInput
 			name="event"
 			label="Event Start"
 			description="When should the event begin?"
@@ -215,7 +215,7 @@
 
 	<CodeBlock
 		code={`<!-- In SMRT mode, users can hold the mic and say natural language dates -->
-<SMRTDateTime
+<DateTimeInput
   name="flexible"
   label="Flexible Date"
   placeholder="Say a date like 'next Tuesday at 3pm'"
@@ -232,14 +232,14 @@
   let value = $state('');
 </script>
 
-<SMRTDateTime
+<DateTimeInput
   name="interactive"
   label="Pick a date and time"
   bind:value
 />
 <p>ISO Value: {value || '(none)'}</p>`}
 	>
-		<SMRTDateTime
+		<DateTimeInput
 			name="interactive"
 			label="Pick a date and time"
 			bind:value={dateTimeValue}
@@ -252,7 +252,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { SMRTDateTime } from '@happyvertical/smrt-svelte';
+		code={`import { DateTimeInput } from '@happyvertical/smrt-svelte';
 
 // Props interface
 interface Props {

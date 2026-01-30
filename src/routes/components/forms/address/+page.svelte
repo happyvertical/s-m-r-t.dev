@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SMRTAddress } from '@happyvertical/smrt-svelte';
+	import { AddressInput } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -85,7 +85,7 @@
 </script>
 
 <svelte:head>
-	<title>SMRTAddress | SMRT Forms</title>
+	<title>AddressInput | SMRT Forms</title>
 </svelte:head>
 
 <article class="prose">
@@ -94,17 +94,17 @@
 		<span>/</span>
 		<a href="/components/forms">Forms</a>
 		<span>/</span>
-		<span>SMRTAddress</span>
+		<span>AddressInput</span>
 	</nav>
 
-	<h1>SMRTAddress</h1>
+	<h1>AddressInput</h1>
 	<p class="lead">
 		A comprehensive address input component with street, city, province/state, postal code,
 		and country fields. Supports voice input in SMRT mode with intelligent address parsing.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { SMRTAddress } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { AddressInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>A complete address form with all fields.</p>
@@ -114,13 +114,13 @@
   let value = $state({});
 </script>
 
-<SMRTAddress
+<AddressInput
   name="shipping"
   label="Shipping Address"
   bind:value
 />`}
 	>
-		<SMRTAddress
+		<AddressInput
 			name="shipping"
 			label="Shipping Address"
 			bind:value={fullAddress}
@@ -131,7 +131,7 @@
 	<p>Pre-populate the address with existing data.</p>
 
 	<ComponentExample
-		code={`<SMRTAddress
+		code={`<AddressInput
   name="billing"
   label="Billing Address"
   value={{
@@ -143,7 +143,7 @@
   }}
 />`}
 	>
-		<SMRTAddress
+		<AddressInput
 			name="billing"
 			label="Billing Address"
 			bind:value={canadianAddress}
@@ -154,14 +154,14 @@
 	<p>Show only specific fields using the <code>fields</code> prop.</p>
 
 	<ComponentExample
-		code={`<SMRTAddress
+		code={`<AddressInput
   name="simple"
   label="Location"
   fields={['city', 'province', 'country']}
   bind:value
 />`}
 	>
-		<SMRTAddress
+		<AddressInput
 			name="simple"
 			label="Location"
 			fields={['city', 'province', 'country']}
@@ -173,13 +173,13 @@
 	<p>Add <code>required</code> to mark all visible fields as required.</p>
 
 	<ComponentExample
-		code={`<SMRTAddress
+		code={`<AddressInput
   name="required"
   label="Delivery Address"
   required
 />`}
 	>
-		<SMRTAddress
+		<AddressInput
 			name="required"
 			label="Delivery Address"
 			required
@@ -190,7 +190,7 @@
 	<p>Use <code>disabled</code> to prevent user interaction.</p>
 
 	<ComponentExample
-		code={`<SMRTAddress
+		code={`<AddressInput
   name="disabled"
   label="Confirmed Address"
   value={{
@@ -203,7 +203,7 @@
   disabled
 />`}
 	>
-		<SMRTAddress
+		<AddressInput
 			name="disabled"
 			label="Confirmed Address"
 			value={{
@@ -221,13 +221,13 @@
 	<p>Display validation errors using the <code>error</code> prop.</p>
 
 	<ComponentExample
-		code={`<SMRTAddress
+		code={`<AddressInput
   name="error"
   label="Address"
   error="Please enter a valid postal code"
 />`}
 	>
-		<SMRTAddress
+		<AddressInput
 			name="error"
 			label="Address"
 			error="Please enter a valid postal code"
@@ -238,7 +238,7 @@
 	<p>Provide custom options for countries and provinces.</p>
 
 	<ComponentExample
-		code={`<SMRTAddress
+		code={`<AddressInput
   name="custom"
   label="UK Address"
   countries={[
@@ -253,7 +253,7 @@
   ]}
 />`}
 	>
-		<SMRTAddress
+		<AddressInput
 			name="custom"
 			label="UK Address"
 			countries={[
@@ -284,7 +284,7 @@
 
 	<CodeBlock
 		code={`<!-- Voice example: "123 Main Street, Toronto, Ontario, M5V 1A1, Canada" -->
-<SMRTAddress
+<AddressInput
   name="voice"
   label="Address"
   description="A mailing address including street, city, and postal code"
@@ -300,14 +300,14 @@
   let value = $state({});
 </script>
 
-<SMRTAddress
+<AddressInput
   name="interactive"
   label="Your Address"
   bind:value
 />
 <pre>{JSON.stringify(value, null, 2)}</pre>`}
 	>
-		<SMRTAddress
+		<AddressInput
 			name="interactive"
 			label="Your Address"
 			bind:value={fullAddress}
@@ -320,7 +320,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { SMRTAddress } from '@happyvertical/smrt-svelte';
+		code={`import { AddressInput } from '@happyvertical/smrt-svelte';
 
 // AddressValue interface
 interface AddressValue {

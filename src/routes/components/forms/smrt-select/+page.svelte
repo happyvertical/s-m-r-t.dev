@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SMRTSelect } from '@happyvertical/smrt-svelte';
+	import { Select } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -89,7 +89,7 @@
 </script>
 
 <svelte:head>
-	<title>SMRTSelect | SMRT Forms</title>
+	<title>Select | SMRT Forms</title>
 </svelte:head>
 
 <article class="prose">
@@ -98,17 +98,17 @@
 		<span>/</span>
 		<a href="/components/forms">Forms</a>
 		<span>/</span>
-		<span>SMRTSelect</span>
+		<span>Select</span>
 	</nav>
 
-	<h1>SMRTSelect</h1>
+	<h1>Select</h1>
 	<p class="lead">
 		A Material Design 3 styled select dropdown with support for voice selection in SMRT mode.
 		Provides consistent styling and integrates with the SMRT form context.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { SMRTSelect } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { Select } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>Pass an array of options with <code>value</code> and <code>label</code> properties.</p>
@@ -125,14 +125,14 @@
   ];
 </script>
 
-<SMRTSelect
+<Select
   name="country"
   label="Country"
   {options}
   bind:value
 />`}
 	>
-		<SMRTSelect
+		<Select
 			name="country"
 			label="Country"
 			options={countryOptions}
@@ -144,14 +144,14 @@
 	<p>Set an initial value to pre-select an option.</p>
 
 	<ComponentExample
-		code={`<SMRTSelect
+		code={`<Select
   name="priority"
   label="Priority Level"
   options={priorityOptions}
   value="medium"
 />`}
 	>
-		<SMRTSelect
+		<Select
 			name="priority"
 			label="Priority Level"
 			options={priorityOptions}
@@ -163,7 +163,7 @@
 	<p>Add <code>required</code> to mark the field as required.</p>
 
 	<ComponentExample
-		code={`<SMRTSelect
+		code={`<Select
   name="size"
   label="Size"
   options={sizeOptions}
@@ -171,7 +171,7 @@
   bind:value
 />`}
 	>
-		<SMRTSelect
+		<Select
 			name="size"
 			label="Size"
 			options={sizeOptions}
@@ -184,7 +184,7 @@
 	<p>Use <code>disabled</code> to prevent user interaction.</p>
 
 	<ComponentExample
-		code={`<SMRTSelect
+		code={`<Select
   name="disabled"
   label="Disabled Select"
   options={sizeOptions}
@@ -192,7 +192,7 @@
   disabled
 />`}
 	>
-		<SMRTSelect
+		<Select
 			name="disabled"
 			label="Disabled Select"
 			options={sizeOptions}
@@ -205,14 +205,14 @@
 	<p>Customize the placeholder text shown when no option is selected.</p>
 
 	<ComponentExample
-		code={`<SMRTSelect
+		code={`<Select
   name="country"
   label="Select Your Country"
   options={countryOptions}
   placeholder="Choose a country..."
 />`}
 	>
-		<SMRTSelect
+		<Select
 			name="country2"
 			label="Select Your Country"
 			options={countryOptions}
@@ -224,14 +224,14 @@
 	<p>Add a <code>description</code> for additional context, shown when focused.</p>
 
 	<ComponentExample
-		code={`<SMRTSelect
+		code={`<Select
   name="country"
   label="Country of Residence"
   description="Select where you currently live"
   options={countryOptions}
 />`}
 	>
-		<SMRTSelect
+		<Select
 			name="country3"
 			label="Country of Residence"
 			description="Select where you currently live"
@@ -247,7 +247,7 @@
   let value = $state('');
 </script>
 
-<SMRTSelect
+<Select
   name="interactive"
   label="Pick a size"
   options={sizeOptions}
@@ -255,7 +255,7 @@
 />
 <p>Selected: {value || '(none)'}</p>`}
 	>
-		<SMRTSelect
+		<Select
 			name="interactive"
 			label="Pick a size"
 			options={sizeOptions}
@@ -269,7 +269,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { SMRTSelect } from '@happyvertical/smrt-svelte';
+		code={`import { Select } from '@happyvertical/smrt-svelte';
 import type { SelectOption } from '@happyvertical/smrt-svelte';
 
 // SelectOption interface

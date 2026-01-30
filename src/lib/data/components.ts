@@ -59,12 +59,12 @@ export const categories: CategoryMeta[] = [
 		slug: 'forms',
 		description: 'Smart form components with validation',
 		components: [
-			{ name: 'SMRTTextInput', slug: 'text-input', description: 'Enhanced text input with SMRT integration' },
-			{ name: 'SMRTSelect', slug: 'smrt-select', description: 'Enhanced select with search' },
-			{ name: 'SMRTCheckbox', slug: 'checkbox', description: 'Checkbox with label' },
-			{ name: 'SMRTDateTime', slug: 'datetime', description: 'Date and time picker' },
-			{ name: 'SMRTAddress', slug: 'address', description: 'Address input with autocomplete' },
-			{ name: 'SMRTMoney', slug: 'money', description: 'Currency input with formatting' }
+			{ name: 'TextInput', slug: 'text-input', description: 'Enhanced text input with SMRT integration' },
+			{ name: 'Select', slug: 'smrt-select', description: 'Enhanced select with search' },
+			{ name: 'CheckboxInput', slug: 'checkbox', description: 'Checkbox with label' },
+			{ name: 'DateTimeInput', slug: 'datetime', description: 'Date and time picker' },
+			{ name: 'AddressInput', slug: 'address', description: 'Address input with autocomplete' },
+			{ name: 'MoneyInput', slug: 'money', description: 'Currency input with formatting' }
 		]
 	},
 	{
@@ -76,7 +76,7 @@ export const categories: CategoryMeta[] = [
 			{ name: 'ConfidenceBadge', slug: 'confidence-badge', description: 'Show confidence scores' },
 			{ name: 'CurrencyDisplay', slug: 'currency-display', description: 'Formatted currency values' },
 			{ name: 'DateDisplay', slug: 'date-display', description: 'Formatted dates with relative time' },
-			{ name: 'SMRTIcon', slug: 'icon', description: 'Icon component with multiple sets' }
+			{ name: 'Icon', slug: 'icon', description: 'Icon component with multiple sets' }
 		]
 	},
 	{

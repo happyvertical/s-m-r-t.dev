@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SMRTTextInput } from '@happyvertical/smrt-svelte';
+	import { TextInput } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -73,7 +73,7 @@
 </script>
 
 <svelte:head>
-	<title>SMRTTextInput | SMRT Forms</title>
+	<title>TextInput | SMRT Forms</title>
 </svelte:head>
 
 <article class="prose">
@@ -82,17 +82,17 @@
 		<span>/</span>
 		<a href="/components/forms">Forms</a>
 		<span>/</span>
-		<span>SMRTTextInput</span>
+		<span>TextInput</span>
 	</nav>
 
-	<h1>SMRTTextInput</h1>
+	<h1>TextInput</h1>
 	<p class="lead">
 		A Material Design 3 inspired text input with optional voice input support in SMRT mode.
 		Supports text and email types with built-in validation.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { SMRTTextInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { TextInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>The simplest text input with a label and bindable value.</p>
@@ -102,20 +102,20 @@
   let value = $state('');
 </script>
 
-<SMRTTextInput
+<TextInput
   name="username"
   label="Username"
   bind:value
 />`}
 	>
-		<SMRTTextInput name="username" label="Username" bind:value={basicValue} />
+		<TextInput name="username" label="Username" bind:value={basicValue} />
 	</ComponentExample>
 
 	<h2>Email Type</h2>
 	<p>Use <code>type="email"</code> for built-in email validation.</p>
 
 	<ComponentExample
-		code={`<SMRTTextInput
+		code={`<TextInput
   name="email"
   label="Email Address"
   type="email"
@@ -123,7 +123,7 @@
   bind:value
 />`}
 	>
-		<SMRTTextInput
+		<TextInput
 			name="email"
 			label="Email Address"
 			type="email"
@@ -136,42 +136,42 @@
 	<p>Add <code>required</code> to mark the field as required (shows an asterisk).</p>
 
 	<ComponentExample
-		code={`<SMRTTextInput
+		code={`<TextInput
   name="fullName"
   label="Full Name"
   required
   bind:value
 />`}
 	>
-		<SMRTTextInput name="fullName" label="Full Name" required bind:value={requiredValue} />
+		<TextInput name="fullName" label="Full Name" required bind:value={requiredValue} />
 	</ComponentExample>
 
 	<h2>Disabled State</h2>
 	<p>Use <code>disabled</code> to prevent user interaction.</p>
 
 	<ComponentExample
-		code={`<SMRTTextInput
+		code={`<TextInput
   name="disabled"
   label="Disabled Field"
   value="Cannot edit this"
   disabled
 />`}
 	>
-		<SMRTTextInput name="disabled" label="Disabled Field" value="Cannot edit this" disabled />
+		<TextInput name="disabled" label="Disabled Field" value="Cannot edit this" disabled />
 	</ComponentExample>
 
 	<h2>With Description</h2>
 	<p>Add a <code>description</code> for context, shown when the field is focused. Also used by AI for voice extraction.</p>
 
 	<ComponentExample
-		code={`<SMRTTextInput
+		code={`<TextInput
   name="bio"
   label="Short Bio"
   description="A brief description about yourself"
   placeholder="Tell us about yourself..."
 />`}
 	>
-		<SMRTTextInput
+		<TextInput
 			name="bio"
 			label="Short Bio"
 			description="A brief description about yourself"
@@ -188,7 +188,7 @@
 
 	<CodeBlock
 		code={`<!-- In SMRT mode, this input shows a mic button -->
-<SMRTTextInput
+<TextInput
   name="notes"
   label="Notes"
   appendMode
@@ -205,14 +205,14 @@
   let value = $state('');
 </script>
 
-<SMRTTextInput
+<TextInput
   name="interactive"
   label="Type something"
   bind:value
 />
 <p>Current value: {value || '(empty)'}</p>`}
 	>
-		<SMRTTextInput name="interactive" label="Type something" bind:value={basicValue} />
+		<TextInput name="interactive" label="Type something" bind:value={basicValue} />
 		<p style="margin-top: 1rem; color: #666;">Current value: {basicValue || '(empty)'}</p>
 	</ComponentExample>
 
@@ -221,7 +221,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { SMRTTextInput } from '@happyvertical/smrt-svelte';
+		code={`import { TextInput } from '@happyvertical/smrt-svelte';
 
 // Props interface
 interface Props {

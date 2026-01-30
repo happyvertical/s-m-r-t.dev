@@ -37,7 +37,7 @@
 		{
 			name: 'icon',
 			type: 'string',
-			description: 'Icon name (SMRTIcon) or SVG string'
+			description: 'Icon name (Icon) or SVG string'
 		},
 		{
 			name: 'variant',
@@ -86,7 +86,7 @@
 	</ComponentExample>
 
 	<h2>With Icons</h2>
-	<p>Add visual context with an icon. Use an SMRTIcon name or pass an SVG string.</p>
+	<p>Add visual context with an icon. Use an Icon name or pass an SVG string.</p>
 
 	<ComponentExample
 		code={`<SummaryCard label="Documents" value="156" icon="file" />
