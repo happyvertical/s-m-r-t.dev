@@ -3,17 +3,35 @@
 	import '$lib/styles/reset.css';
 	import '$lib/styles/variables.css';
 
-	// Import and register custom themes
-	import '$lib/themes';
-
 	// Import theme system
-	import { ThemeProvider, type ThemePreset } from '@happyvertical/smrt-svelte/themes';
+	import { ThemeProvider, type ThemePreset, registerTheme } from '@happyvertical/smrt-svelte/themes';
 	import '@happyvertical/smrt-svelte/themes/styles/all.css';
+
+	// Import custom theme
+	import { swissTheme } from '$lib/themes';
+	import { browser } from '$app/environment';
 
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 
 	let { children } = $props();
+
+	// Register custom theme
+	let themeRegistered = $state(false);
+	
+	$effect(() => {
+		if (browser) {
+			// Register the custom theme (fire and forget, it will be available shortly)
+			registerTheme(swissTheme);
+			// Small delay to ensure registration completes
+			setTimeout(() => {
+				themeRegistered = true;
+			}, 100);
+		} else {
+			// SSR - don't wait
+			themeRegistered = true;
+		}
+	});
 </script>
 
 <svelte:head>
@@ -21,15 +39,22 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<ThemeProvider preset={("swiss" as ThemePreset)} colorScheme="system" persist={true}>
-	<div class="app">
-		<Header />
-		<main>
-			{@render children()}
-		</main>
-		<Footer />
+{#if themeRegistered}
+	<ThemeProvider preset={("swiss" as ThemePreset)} colorScheme="system" persist={true}>
+		<div class="app">
+			<Header />
+			<main>
+				{@render children()}
+			</main>
+			<Footer />
+		</div>
+	</ThemeProvider>
+{:else}
+	<div class="loading">
+		<div class="spinner"></div>
+		<p>Loading theme...</p>
 	</div>
-</ThemeProvider>
+{/if}
 
 <style>
 	.app {
@@ -42,5 +67,30 @@
 
 	main {
 		flex: 1;
+	}
+
+	.loading {
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 16px;
+		background: #fafafa;
+		color: #1a1a1a;
+		font-family: system-ui, sans-serif;
+	}
+
+	.spinner {
+		width: 32px;
+		height: 32px;
+		border: 3px solid #e5e5e5;
+		border-top-color: #e63946;
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+	}
+
+	@keyframes spin {
+		to { transform: rotate(360deg); }
 	}
 </style>

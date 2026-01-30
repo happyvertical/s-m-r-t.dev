@@ -5,7 +5,7 @@
  * Clean, grid-based, with strong typography and minimal embellishment.
  */
 
-import { createTheme, registerTheme } from '@happyvertical/smrt-svelte/themes';
+import { createTheme } from '@happyvertical/smrt-svelte/themes';
 import type { Theme } from '@happyvertical/smrt-svelte/themes';
 
 export const swissTheme: Theme = createTheme({
@@ -246,7 +246,6 @@ export const swissTheme: Theme = createTheme({
 	fontFamily: '"Inter", "Helvetica Neue", "Arial", system-ui, sans-serif',
 });
 
-// Auto-register when imported
-registerTheme(swissTheme);
+// Note: Theme is registered by the consumer (see +layout.svelte)
 
 export { swissTheme as default };
