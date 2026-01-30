@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Homepage -->
+  <url>
+    <loc>https://havesmrt.com/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Core Documentation -->
+  <url>
+    <loc>https://havesmrt.com/docs/getting-started</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://havesmrt.com/docs/objects</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://havesmrt.com/docs/agents</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://havesmrt.com/docs/collections</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- FAQ -->
+  <url>
+    <loc>https://havesmrt.com/faq</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Modules Landing -->
+  <url>
+    <loc>https://havesmrt.com/modules</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Module Documentation (29 modules) -->
+  <url><loc>https://havesmrt.com/modules/smrt-core</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-types</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-config</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-scanner</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-users</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-agents</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-profiles</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-content</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-assets</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-tenancy</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-ledgers</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-places</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-products</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-tags</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-messages</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-properties</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-commerce</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-events</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-projects</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-analytics</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-ads</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-gnode</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-cli</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-dev-mcp</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-vitest</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/smrt-svelte</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/browser-ai</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://havesmrt.com/modules/template-site-static-json</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/modules/template-sveltekit</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Components Landing -->
+  <url>
+    <loc>https://havesmrt.com/components</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Form Components -->
+  <url><loc>https://havesmrt.com/components/forms/text-input</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/forms/smrt-select</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/forms/checkbox</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/forms/datetime</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/forms/address</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/forms/money</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/forms/phone</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/forms/textarea</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/forms/number</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/forms/daterange</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/forms/measurement</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- User Components -->
+  <url><loc>https://havesmrt.com/components/users/user-card</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/users/user-avatar</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/users/user-list</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/users/user-form</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/users/user-menu</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/users/invite-user</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Tenant Components -->
+  <url><loc>https://havesmrt.com/components/tenants/tenant-card</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/tenants/tenant-switcher</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Role Components -->
+  <url><loc>https://havesmrt.com/components/roles/role-badge</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/roles/role-selector</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Permission Components -->
+  <url><loc>https://havesmrt.com/components/permissions/permission-check</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Membership Components -->
+  <url><loc>https://havesmrt.com/components/memberships/membership-card</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/memberships/membership-list</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Commerce Components -->
+  <url><loc>https://havesmrt.com/components/commerce</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/commerce/invoice-card</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/commerce/invoice-header</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/commerce/invoice-line-items</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/commerce/invoice-totals</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/commerce/invoice-actions</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/commerce/unbilled-items</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Project Components -->
+  <url><loc>https://havesmrt.com/components/projects</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/projects/time-entry-card</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/projects/time-entry-list</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/projects/time-summary</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/projects/duration-display</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/projects/approval-actions</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/projects/bulk-actions</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/projects/reject-dialog</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Event Components -->
+  <url><loc>https://havesmrt.com/components/events</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://havesmrt.com/components/events/meeting-view</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+</urlset>

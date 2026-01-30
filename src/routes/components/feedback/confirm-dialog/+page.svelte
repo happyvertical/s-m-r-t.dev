@@ -1,78 +1,77 @@
 <script lang="ts">
-	import { ConfirmDialog } from '@happyvertical/smrt-svelte';
-	import { Button } from '@happyvertical/svelte';
+	import { ConfirmDialog, Button } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
-	let basicOpen = $state(false);
-	let destructiveOpen = $state(false);
-	let loadingOpen = $state(false);
-	let customOpen = $state(false);
+	let showBasic = $state(false);
+	let showDestructive = $state(false);
+	let showCustom = $state(false);
+	let showLoading = $state(false);
 	let isLoading = $state(false);
+
+	function handleConfirmLoading() {
+		isLoading = true;
+		setTimeout(() => {
+			isLoading = false;
+			showLoading = false;
+		}, 2000);
+	}
 
 	const confirmDialogProps = [
 		{
 			name: 'open',
 			type: 'boolean',
-			description: 'Whether the dialog is visible',
+			description: 'Whether the dialog is open',
 			required: true
 		},
 		{
 			name: 'title',
 			type: 'string',
-			description: 'Dialog title displayed at the top',
+			description: 'Dialog title',
 			required: true
 		},
 		{
 			name: 'message',
 			type: 'string',
-			description: 'Descriptive message explaining the action',
+			description: 'Dialog message',
 			required: true
 		},
 		{
 			name: 'confirmLabel',
 			type: 'string',
 			default: "'Confirm'",
-			description: 'Text for the confirm button'
+			description: 'Confirm button label'
 		},
 		{
 			name: 'cancelLabel',
 			type: 'string',
 			default: "'Cancel'",
-			description: 'Text for the cancel button'
+			description: 'Cancel button label'
 		},
 		{
 			name: 'destructive',
 			type: 'boolean',
 			default: 'false',
-			description: 'Use red/error styling for confirm button'
+			description: 'Use destructive (red) styling for confirm'
 		},
 		{
 			name: 'loading',
 			type: 'boolean',
 			default: 'false',
-			description: 'Show loading spinner on confirm button'
+			description: 'Show loading state on confirm'
 		},
 		{
 			name: 'onconfirm',
 			type: '() => void',
-			description: 'Callback when confirm button is clicked'
+			description: 'Called when confirm is clicked'
 		},
 		{
 			name: 'oncancel',
 			type: '() => void',
-			description: 'Callback when cancel is clicked or dialog dismissed'
+			description: 'Called when cancel is clicked or dialog closed'
 		}
 	];
-
-	function handleLoadingConfirm() {
-		isLoading = true;
-		setTimeout(() => {
-			isLoading = false;
-			loadingOpen = false;
-		}, 2000);
-	}
 </script>
 
 <svelte:head>
@@ -90,151 +89,79 @@
 
 	<h1>ConfirmDialog</h1>
 	<p class="lead">
-		A modal confirmation dialog for destructive actions or important decisions. Provides consistent
-		UX for confirmations with support for loading states and destructive styling.
+		Modal confirmation dialog for important decisions and destructive actions. Features backdrop
+		click to close, escape key support, and loading states.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock
-		code={`import { ConfirmDialog } from '@happyvertical/smrt-svelte';`}
-		language="typescript"
-	/>
+	<CodeBlock code={`import { ConfirmDialog } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
-	<p>
-		The dialog requires <code>open</code>, <code>title</code>, and <code>message</code> props. Use
-		<code>onconfirm</code> and <code>oncancel</code> callbacks to handle user actions.
-	</p>
+	<p>Simple confirmation dialog with title and message.</p>
 
 	<ComponentExample
-		code={`<script>
-  let open = $state(false);
-</script>
-
-<Button onclick={() => open = true}>Open Dialog</Button>
+		code={`<Button onclick={() => showDialog = true}>Open Dialog</Button>
 
 <ConfirmDialog
-  {open}
+  open={showDialog}
   title="Confirm Action"
-  message="Are you sure you want to proceed with this action?"
-  onconfirm={() => { open = false; /* do action */ }}
-  oncancel={() => open = false}
+  message="Are you sure you want to proceed?"
+  onconfirm={() => { showDialog = false; }}
+  oncancel={() => showDialog = false}
 />`}
 	>
-		<Button onclick={() => (basicOpen = true)}>Open Dialog</Button>
+		<Button onclick={() => (showBasic = true)}>Open Basic Dialog</Button>
 	</ComponentExample>
 
-	<ConfirmDialog
-		open={basicOpen}
-		title="Confirm Action"
-		message="Are you sure you want to proceed with this action?"
-		onconfirm={() => (basicOpen = false)}
-		oncancel={() => (basicOpen = false)}
-	/>
-
-	<h2>Destructive Actions</h2>
-	<p>Use the <code>destructive</code> prop for delete or irreversible actions to show red styling.</p>
+	<h2>Destructive Action</h2>
+	<p>Red styling for dangerous or irreversible actions.</p>
 
 	<ComponentExample
 		code={`<ConfirmDialog
-  {open}
+  open={showDialog}
   title="Delete Item"
-  message="This action cannot be undone. Are you sure you want to delete this item permanently?"
+  message="This action cannot be undone. Are you sure?"
   confirmLabel="Delete"
   destructive
-  onconfirm={() => { /* delete */ }}
-  oncancel={() => open = false}
+  onconfirm={handleDelete}
+  oncancel={() => showDialog = false}
 />`}
 	>
-		<Button variant="secondary" onclick={() => (destructiveOpen = true)}>Delete Item</Button>
+		<Button variant="secondary" onclick={() => (showDestructive = true)}>Delete Item</Button>
 	</ComponentExample>
-
-	<ConfirmDialog
-		open={destructiveOpen}
-		title="Delete Item"
-		message="This action cannot be undone. Are you sure you want to delete this item permanently?"
-		confirmLabel="Delete"
-		destructive
-		onconfirm={() => (destructiveOpen = false)}
-		oncancel={() => (destructiveOpen = false)}
-	/>
-
-	<h2>Loading State</h2>
-	<p>Show a loading spinner on the confirm button while the action is processing.</p>
-
-	<ComponentExample
-		code={`<script>
-  let isLoading = $state(false);
-
-  function handleConfirm() {
-    isLoading = true;
-    // Simulate async operation
-    setTimeout(() => {
-      isLoading = false;
-      open = false;
-    }, 2000);
-  }
-</script>
-
-<ConfirmDialog
-  {open}
-  title="Submit Form"
-  message="Your data will be submitted to the server."
-  confirmLabel="Submit"
-  loading={isLoading}
-  onconfirm={handleConfirm}
-  oncancel={() => open = false}
-/>`}
-	>
-		<Button onclick={() => (loadingOpen = true)}>Submit with Loading</Button>
-	</ComponentExample>
-
-	<ConfirmDialog
-		open={loadingOpen}
-		title="Submit Form"
-		message="Your data will be submitted to the server."
-		confirmLabel="Submit"
-		loading={isLoading}
-		onconfirm={handleLoadingConfirm}
-		oncancel={() => (loadingOpen = false)}
-	/>
 
 	<h2>Custom Labels</h2>
-	<p>Customize the button labels to match the specific action.</p>
+	<p>Customize button labels for context.</p>
 
 	<ComponentExample
 		code={`<ConfirmDialog
-  {open}
+  open={showDialog}
   title="Publish Article"
   message="This will make your article visible to all users."
   confirmLabel="Publish Now"
   cancelLabel="Keep as Draft"
-  onconfirm={() => { /* publish */ }}
-  oncancel={() => open = false}
+  onconfirm={handlePublish}
+  oncancel={() => showDialog = false}
 />`}
 	>
-		<Button variant="primary" onclick={() => (customOpen = true)}>Publish Article</Button>
+		<Button onclick={() => (showCustom = true)}>Publish Article</Button>
 	</ComponentExample>
 
-	<ConfirmDialog
-		open={customOpen}
-		title="Publish Article"
-		message="This will make your article visible to all users."
-		confirmLabel="Publish Now"
-		cancelLabel="Keep as Draft"
-		onconfirm={() => (customOpen = false)}
-		oncancel={() => (customOpen = false)}
-	/>
+	<h2>Loading State</h2>
+	<p>Show loading indicator while processing.</p>
 
-	<h2>Accessibility</h2>
-	<p>The dialog follows accessibility best practices:</p>
-	<ul class="feature-list">
-		<li>Uses <code>role="dialog"</code> and <code>aria-modal="true"</code></li>
-		<li>Title is linked via <code>aria-labelledby</code></li>
-		<li>Pressing <code>Escape</code> closes the dialog</li>
-		<li>Clicking the backdrop closes the dialog</li>
-		<li>Focus is trapped within the dialog when open</li>
-	</ul>
+	<ComponentExample
+		code={`<ConfirmDialog
+  open={showDialog}
+  title="Sending..."
+  message="Please wait while we process your request."
+  loading={isLoading}
+  onconfirm={handleConfirm}
+  oncancel={() => showDialog = false}
+/>`}
+	>
+		<Button onclick={() => (showLoading = true)}>Submit (with loading)</Button>
+	</ComponentExample>
 
 	<h2>Props</h2>
 	<PropsTable props={confirmDialogProps} />
@@ -243,8 +170,7 @@
 	<CodeBlock
 		code={`import { ConfirmDialog } from '@happyvertical/smrt-svelte';
 
-// Props interface
-interface ConfirmDialogProps {
+interface Props {
   open: boolean;
   title: string;
   message: string;
@@ -257,7 +183,53 @@ interface ConfirmDialogProps {
 }`}
 		language="typescript"
 	/>
+
+	<h2>Accessibility</h2>
+	<ul class="a11y-list">
+		<li>Uses <code>role="dialog"</code> and <code>aria-modal="true"</code></li>
+		<li>Title connected via <code>aria-labelledby</code></li>
+		<li>Escape key closes the dialog</li>
+		<li>Clicking backdrop closes the dialog</li>
+		<li>Buttons disabled during loading state</li>
+	</ul>
 </article>
+
+<ConfirmDialog
+	open={showBasic}
+	title="Confirm Action"
+	message="Are you sure you want to proceed with this action?"
+	onconfirm={() => (showBasic = false)}
+	oncancel={() => (showBasic = false)}
+/>
+
+<ConfirmDialog
+	open={showDestructive}
+	title="Delete Item"
+	message="This action cannot be undone. The item will be permanently removed."
+	confirmLabel="Delete"
+	destructive
+	onconfirm={() => (showDestructive = false)}
+	oncancel={() => (showDestructive = false)}
+/>
+
+<ConfirmDialog
+	open={showCustom}
+	title="Publish Article"
+	message="This will make your article visible to all users."
+	confirmLabel="Publish Now"
+	cancelLabel="Keep as Draft"
+	onconfirm={() => (showCustom = false)}
+	oncancel={() => (showCustom = false)}
+/>
+
+<ConfirmDialog
+	open={showLoading}
+	title="Processing Request"
+	message="Please wait while we process your request."
+	loading={isLoading}
+	onconfirm={handleConfirmLoading}
+	oncancel={() => (showLoading = false)}
+/>
 
 <style>
 	.breadcrumb {
@@ -317,14 +289,14 @@ interface ConfirmDialogProps {
 		border-radius: 3px;
 	}
 
-	.feature-list {
-		color: #666;
-		line-height: 1.8;
-		margin-bottom: 16px;
+	.a11y-list {
+		margin-top: 16px;
 		padding-left: 24px;
 	}
 
-	.feature-list li {
+	.a11y-list li {
+		color: #666;
 		margin-bottom: 8px;
+		line-height: 1.6;
 	}
 </style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Grid, Card } from '@happyvertical/svelte';
+	import { Grid, Card } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -9,19 +9,13 @@
 			name: 'columns',
 			type: "number | 'auto'",
 			default: "'auto'",
-			description: 'Number of columns or auto-fill with min 300px'
+			description: 'Number of columns or auto-fill with minmax'
 		},
 		{
 			name: 'gap',
 			type: "'sm' | 'md' | 'lg' | 'xl'",
 			default: "'md'",
 			description: 'Gap between grid items'
-		},
-		{
-			name: 'children',
-			type: 'Snippet',
-			description: 'Grid items',
-			required: true
 		}
 	];
 </script>
@@ -41,18 +35,15 @@
 
 	<h1>Grid</h1>
 	<p class="lead">
-		A responsive CSS grid layout component with configurable columns and gap sizes. Automatically
-		adapts to available space.
+		Responsive grid layout with configurable columns and gaps. Uses CSS Grid with smart
+		auto-fill behavior by default.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Grid } from '@happyvertical/svelte';`} language="typescript" />
+	<CodeBlock code={`import { Grid } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
-	<h2>Basic Usage</h2>
-	<p>
-		By default, the Grid uses <code>auto</code> columns which creates a responsive layout with items
-		that are at least 300px wide.
-	</p>
+	<h2>Auto Columns (Default)</h2>
+	<p>By default, columns auto-fill with a minimum width of 300px.</p>
 
 	<ComponentExample
 		code={`<Grid>
@@ -63,134 +54,114 @@
 </Grid>`}
 	>
 		<Grid>
-			<Card>Item 1</Card>
-			<Card>Item 2</Card>
-			<Card>Item 3</Card>
-			<Card>Item 4</Card>
+			<Card><p style="margin: 0;">Item 1</p></Card>
+			<Card><p style="margin: 0;">Item 2</p></Card>
+			<Card><p style="margin: 0;">Item 3</p></Card>
+			<Card><p style="margin: 0;">Item 4</p></Card>
 		</Grid>
 	</ComponentExample>
 
 	<h2>Fixed Columns</h2>
-	<p>Specify a fixed number of columns using the <code>columns</code> prop.</p>
+	<p>Specify exact number of columns.</p>
 
 	<ComponentExample
 		code={`<Grid columns={2}>
-  <Card>Column 1</Card>
-  <Card>Column 2</Card>
+  <Card>Item 1</Card>
+  <Card>Item 2</Card>
+  <Card>Item 3</Card>
+  <Card>Item 4</Card>
 </Grid>
 
 <Grid columns={3}>
-  <Card>Column 1</Card>
-  <Card>Column 2</Card>
-  <Card>Column 3</Card>
-</Grid>
-
-<Grid columns={4}>
-  <Card>1</Card>
-  <Card>2</Card>
-  <Card>3</Card>
-  <Card>4</Card>
+  <Card>Item 1</Card>
+  <Card>Item 2</Card>
+  <Card>Item 3</Card>
 </Grid>`}
 	>
-		<div class="grid-demos">
-			<div>
-				<p class="demo-label">2 columns:</p>
-				<Grid columns={2}>
-					<Card>Column 1</Card>
-					<Card>Column 2</Card>
-				</Grid>
-			</div>
-			<div>
-				<p class="demo-label">3 columns:</p>
-				<Grid columns={3}>
-					<Card>Column 1</Card>
-					<Card>Column 2</Card>
-					<Card>Column 3</Card>
-				</Grid>
-			</div>
-			<div>
-				<p class="demo-label">4 columns:</p>
-				<Grid columns={4}>
-					<Card>1</Card>
-					<Card>2</Card>
-					<Card>3</Card>
-					<Card>4</Card>
-				</Grid>
-			</div>
+		<div style="margin-bottom: 24px;">
+			<Grid columns={2}>
+				<Card><p style="margin: 0;">Item 1</p></Card>
+				<Card><p style="margin: 0;">Item 2</p></Card>
+				<Card><p style="margin: 0;">Item 3</p></Card>
+				<Card><p style="margin: 0;">Item 4</p></Card>
+			</Grid>
 		</div>
+		<Grid columns={3}>
+			<Card><p style="margin: 0;">Item 1</p></Card>
+			<Card><p style="margin: 0;">Item 2</p></Card>
+			<Card><p style="margin: 0;">Item 3</p></Card>
+		</Grid>
 	</ComponentExample>
 
 	<h2>Gap Sizes</h2>
-	<p>
-		Control spacing between items with the <code>gap</code> prop. Options are: <code>sm</code>,
-		<code>md</code> (default), <code>lg</code>, and <code>xl</code>.
-	</p>
+	<p>Control spacing between grid items.</p>
 
 	<ComponentExample
 		code={`<Grid columns={3} gap="sm">Small gap</Grid>
-<Grid columns={3} gap="md">Medium gap</Grid>
+<Grid columns={3} gap="md">Medium gap (default)</Grid>
 <Grid columns={3} gap="lg">Large gap</Grid>
 <Grid columns={3} gap="xl">Extra large gap</Grid>`}
 	>
-		<div class="grid-demos">
+		<div style="display: flex; flex-direction: column; gap: 24px;">
 			<div>
-				<p class="demo-label">gap="sm":</p>
+				<p style="font-size: 0.875rem; color: #666; margin-bottom: 8px;">Small gap:</p>
 				<Grid columns={3} gap="sm">
-					<Card>1</Card>
-					<Card>2</Card>
-					<Card>3</Card>
+					<Card padding="sm"><p style="margin: 0; font-size: 0.875rem;">A</p></Card>
+					<Card padding="sm"><p style="margin: 0; font-size: 0.875rem;">B</p></Card>
+					<Card padding="sm"><p style="margin: 0; font-size: 0.875rem;">C</p></Card>
 				</Grid>
 			</div>
 			<div>
-				<p class="demo-label">gap="md":</p>
-				<Grid columns={3} gap="md">
-					<Card>1</Card>
-					<Card>2</Card>
-					<Card>3</Card>
-				</Grid>
-			</div>
-			<div>
-				<p class="demo-label">gap="lg":</p>
+				<p style="font-size: 0.875rem; color: #666; margin-bottom: 8px;">Large gap:</p>
 				<Grid columns={3} gap="lg">
-					<Card>1</Card>
-					<Card>2</Card>
-					<Card>3</Card>
-				</Grid>
-			</div>
-			<div>
-				<p class="demo-label">gap="xl":</p>
-				<Grid columns={3} gap="xl">
-					<Card>1</Card>
-					<Card>2</Card>
-					<Card>3</Card>
+					<Card padding="sm"><p style="margin: 0; font-size: 0.875rem;">A</p></Card>
+					<Card padding="sm"><p style="margin: 0; font-size: 0.875rem;">B</p></Card>
+					<Card padding="sm"><p style="margin: 0; font-size: 0.875rem;">C</p></Card>
 				</Grid>
 			</div>
 		</div>
 	</ComponentExample>
 
-	<h2>Auto-Fill Responsive</h2>
-	<p>
-		The default <code>auto</code> setting uses CSS <code>auto-fill</code> with a minimum of 300px per
-		item, creating a naturally responsive grid.
-	</p>
+	<h2>Dashboard Example</h2>
+	<p>Common pattern for metric cards.</p>
 
 	<ComponentExample
-		code={`<Grid columns="auto">
-  <Card>Responsive Item 1</Card>
-  <Card>Responsive Item 2</Card>
-  <Card>Responsive Item 3</Card>
-  <Card>Responsive Item 4</Card>
-  <Card>Responsive Item 5</Card>
-  <Card>Responsive Item 6</Card>
+		code={`<Grid columns={4}>
+  <Card>
+    <h3>Users</h3>
+    <p class="metric">1,234</p>
+  </Card>
+  <Card>
+    <h3>Revenue</h3>
+    <p class="metric">$45,678</p>
+  </Card>
+  <Card>
+    <h3>Orders</h3>
+    <p class="metric">567</p>
+  </Card>
+  <Card>
+    <h3>Conversion</h3>
+    <p class="metric">3.2%</p>
+  </Card>
 </Grid>`}
 	>
-		<Grid columns="auto">
-			<Card>Responsive Item 1</Card>
-			<Card>Responsive Item 2</Card>
-			<Card>Responsive Item 3</Card>
-			<Card>Responsive Item 4</Card>
-			<Card>Responsive Item 5</Card>
-			<Card>Responsive Item 6</Card>
+		<Grid columns={4}>
+			<Card>
+				<p style="margin: 0 0 8px; font-size: 0.875rem; color: #666;">Users</p>
+				<p style="margin: 0; font-size: 1.5rem; font-weight: 600;">1,234</p>
+			</Card>
+			<Card>
+				<p style="margin: 0 0 8px; font-size: 0.875rem; color: #666;">Revenue</p>
+				<p style="margin: 0; font-size: 1.5rem; font-weight: 600;">$45,678</p>
+			</Card>
+			<Card>
+				<p style="margin: 0 0 8px; font-size: 0.875rem; color: #666;">Orders</p>
+				<p style="margin: 0; font-size: 1.5rem; font-weight: 600;">567</p>
+			</Card>
+			<Card>
+				<p style="margin: 0 0 8px; font-size: 0.875rem; color: #666;">Conversion</p>
+				<p style="margin: 0; font-size: 1.5rem; font-weight: 600;">3.2%</p>
+			</Card>
 		</Grid>
 	</ComponentExample>
 
@@ -199,9 +170,15 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import type { GapSize } from '@happyvertical/svelte';
+		code={`import { Grid } from '@happyvertical/smrt-svelte';
 
-// GapSize = 'sm' | 'md' | 'lg' | 'xl'`}
+type GapSize = 'sm' | 'md' | 'lg' | 'xl';
+
+interface Props {
+  columns?: number | 'auto';
+  gap?: GapSize;
+  children?: Snippet;
+}`}
 		language="typescript"
 	/>
 </article>
@@ -262,22 +239,5 @@
 		padding: 2px 6px;
 		background: #f5f5f5;
 		border-radius: 3px;
-	}
-
-	.grid-demos {
-		display: flex;
-		flex-direction: column;
-		gap: 24px;
-	}
-
-	.demo-label {
-		font-size: 0.85rem;
-		font-weight: 500;
-		color: #666;
-		margin-bottom: 8px !important;
-	}
-
-	:global(.grid .card) {
-		text-align: center;
 	}
 </style>

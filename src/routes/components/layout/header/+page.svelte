@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Header } from '@happyvertical/svelte';
+	import { Header } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -8,12 +8,12 @@
 		{
 			name: 'logo',
 			type: 'Snippet',
-			description: 'Logo/branding content slot'
+			description: 'Content for the logo area (left side)'
 		},
 		{
 			name: 'nav',
 			type: 'Snippet',
-			description: 'Navigation links slot'
+			description: 'Content for the navigation area (right side)'
 		}
 	];
 </script>
@@ -33,110 +33,103 @@
 
 	<h1>Header</h1>
 	<p class="lead">
-		A site header component with slots for logo and navigation. Features a primary background color
-		with inverse text, and responsive layout that stacks on mobile.
+		Site header component with slots for logo and navigation. Uses primary color background with
+		responsive layout.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Header } from '@happyvertical/svelte';`} language="typescript" />
+	<CodeBlock code={`import { Header } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
-	<p>Use the <code>logo</code> and <code>nav</code> snippet props to add content.</p>
+	<p>Header with logo and navigation links.</p>
 
 	<ComponentExample
 		code={`<Header>
   {#snippet logo()}
-    <h1><a href="/">My Site</a></h1>
+    <a href="/"><h1>My App</h1></a>
   {/snippet}
-
   {#snippet nav()}
+    <a href="/docs">Docs</a>
     <a href="/about">About</a>
-    <a href="/contact">Contact</a>
   {/snippet}
 </Header>`}
 	>
-		<div class="header-demo">
-			<Header>
-				{#snippet logo()}
-					<h1><a href="/">My Site</a></h1>
-				{/snippet}
-
-				{#snippet nav()}
-					<a href="/components">Docs</a>
-					<a href="/about">About</a>
-					<a href="/contact">Contact</a>
-				{/snippet}
-			</Header>
-		</div>
+		<Header>
+			{#snippet logo()}
+				<a href="/"><h1 style="margin: 0; font-size: 1.25rem;">My App</h1></a>
+			{/snippet}
+			{#snippet nav()}
+				<a href="/docs">Docs</a>
+				<a href="/about">About</a>
+			{/snippet}
+		</Header>
 	</ComponentExample>
 
 	<h2>Logo Only</h2>
-	<p>The header works with just a logo slot.</p>
+	<p>Header with just a logo.</p>
 
 	<ComponentExample
 		code={`<Header>
   {#snippet logo()}
-    <h1><a href="/">Brand Name</a></h1>
+    <a href="/"><h1>Brand Name</h1></a>
   {/snippet}
 </Header>`}
 	>
-		<div class="header-demo">
-			<Header>
-				{#snippet logo()}
-					<h1><a href="/">Brand Name</a></h1>
-				{/snippet}
-			</Header>
-		</div>
+		<Header>
+			{#snippet logo()}
+				<a href="/"><h1 style="margin: 0; font-size: 1.25rem;">Brand Name</h1></a>
+			{/snippet}
+		</Header>
 	</ComponentExample>
 
-	<h2>Nav Only</h2>
-	<p>Or with just navigation links.</p>
+	<h2>With More Navigation</h2>
+	<p>Header with multiple navigation links.</p>
 
 	<ComponentExample
 		code={`<Header>
+  {#snippet logo()}
+    <a href="/"><h1>SMRT</h1></a>
+  {/snippet}
   {#snippet nav()}
-    <a href="/features">Features</a>
-    <a href="/pricing">Pricing</a>
+    <a href="/components">Components</a>
+    <a href="/modules">Modules</a>
     <a href="/docs">Docs</a>
+    <a href="/faq">FAQ</a>
   {/snippet}
 </Header>`}
 	>
-		<div class="header-demo">
-			<Header>
-				{#snippet nav()}
-					<a href="/features">Features</a>
-					<a href="/pricing">Pricing</a>
-					<a href="/docs">Docs</a>
-				{/snippet}
-			</Header>
-		</div>
+		<Header>
+			{#snippet logo()}
+				<a href="/"><h1 style="margin: 0; font-size: 1.25rem;">SMRT</h1></a>
+			{/snippet}
+			{#snippet nav()}
+				<a href="/components">Components</a>
+				<a href="/modules">Modules</a>
+				<a href="/docs">Docs</a>
+				<a href="/faq">FAQ</a>
+			{/snippet}
+		</Header>
 	</ComponentExample>
-
-	<h2>Responsive Behavior</h2>
-	<p>
-		The Header component uses flexbox and switches from a stacked column layout on mobile to a row
-		layout with space-between alignment on screens 768px and wider.
-	</p>
-
-	<h2>Styling</h2>
-	<p>The Header component applies several styles:</p>
-	<ul>
-		<li>
-			Background uses <code>--color-primary-main</code>
-		</li>
-		<li>
-			Text color uses <code>--color-text-inverse</code>
-		</li>
-		<li>
-			Navigation links have hover underline effect
-		</li>
-		<li>
-			Box shadow provides elevation with <code>--shadow-md</code>
-		</li>
-	</ul>
 
 	<h2>Props</h2>
 	<PropsTable props={headerProps} />
+
+	<h2>TypeScript</h2>
+	<CodeBlock
+		code={`import { Header } from '@happyvertical/smrt-svelte';
+
+interface Props {
+  logo?: Snippet;
+  nav?: Snippet;
+}`}
+		language="typescript"
+	/>
+
+	<h2>Responsive Behavior</h2>
+	<p>
+		On mobile, the header stacks vertically. On desktop, logo and nav are side-by-side.
+		Consider using a mobile menu for complex navigation.
+	</p>
 </article>
 
 <style>
@@ -195,21 +188,5 @@
 		padding: 2px 6px;
 		background: #f5f5f5;
 		border-radius: 3px;
-	}
-
-	.prose ul {
-		color: #666;
-		margin-bottom: 16px;
-		line-height: 1.6;
-		padding-left: 24px;
-	}
-
-	.prose li {
-		margin-bottom: 8px;
-	}
-
-	.header-demo {
-		border-radius: 8px;
-		overflow: hidden;
 	}
 </style>

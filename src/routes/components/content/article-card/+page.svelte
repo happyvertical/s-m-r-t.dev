@@ -1,71 +1,59 @@
 <script lang="ts">
-	import { ArticleCard } from '@happyvertical/svelte';
+	import { ArticleCard } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
-	const sampleArticle = {
+	const mockArticle = {
 		id: '1',
-		slug: 'getting-started-with-smrt',
-		title: 'Getting Started with SMRT Framework',
-		description:
-			'Learn how to build powerful AI agents using the SMRT framework. This comprehensive guide covers installation, configuration, and your first agent.',
-		publish_date: '2024-01-15',
-		author: 'Jane Developer',
-		tags: 'tutorial,smrt,ai'
+		slug: 'getting-started',
+		title: 'Getting Started with SMRT',
+		description: 'Learn how to build your first SMRT application in under 5 minutes.',
+		publish_date: '2025-01-15',
+		author: 'Jane Smith',
+		tags: 'tutorial,beginner'
 	};
 
-	const articleWithTags = {
+	const mockArticle2 = {
 		id: '2',
 		slug: 'advanced-patterns',
 		title: 'Advanced SMRT Patterns',
-		description:
-			'Deep dive into advanced patterns for building scalable and maintainable AI agents with SMRT.',
-		publish_date: '2024-02-20',
-		author: 'John Smith',
-		tags: '["patterns", "advanced", "best-practices"]'
-	};
-
-	const minimalArticle = {
-		id: '3',
-		slug: 'quick-tip',
-		title: 'Quick Tip: Using Decorators',
-		description: null,
-		publish_date: null,
-		author: null,
-		tags: ''
+		description: 'Explore advanced patterns for building scalable applications with SMRT.',
+		publish_date: '2025-01-10',
+		author: 'John Doe',
+		tags: '["advanced", "patterns", "architecture"]'
 	};
 
 	const articleCardProps = [
 		{
 			name: 'article',
 			type: 'Article',
-			description: 'Article object containing id, slug, title, description, publish_date, author, and tags',
+			description: 'Article object with id, slug, title, description, publish_date, author, tags',
 			required: true
 		},
 		{
 			name: 'showExcerpt',
 			type: 'boolean',
 			default: 'true',
-			description: 'Whether to show the article description'
+			description: 'Show article description/excerpt'
 		},
 		{
 			name: 'showDate',
 			type: 'boolean',
 			default: 'true',
-			description: 'Whether to show the publication date'
+			description: 'Show publication date'
 		},
 		{
 			name: 'showAuthor',
 			type: 'boolean',
 			default: 'true',
-			description: 'Whether to show the author name'
+			description: 'Show author name'
 		},
 		{
 			name: 'showTags',
 			type: 'boolean',
 			default: 'false',
-			description: 'Whether to show article tags as badges'
+			description: 'Show article tags as badges'
 		}
 	];
 </script>
@@ -85,48 +73,29 @@
 
 	<h1>ArticleCard</h1>
 	<p class="lead">
-		A card component for displaying article previews with title, excerpt, author, date, and optional tags.
-		Links to the full article page.
+		Card component for article previews. Shows title, excerpt, date, author, and optional tags.
+		Links to the article detail page.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { ArticleCard } from '@happyvertical/svelte';`} language="typescript" />
+	<CodeBlock code={`import { ArticleCard } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
-	<p>Display an article with all default options enabled:</p>
+	<p>Article card with all default options.</p>
 
-	<ComponentExample
-		code={`<script lang="ts">
-  const article = {
-    id: '1',
-    slug: 'getting-started-with-smrt',
-    title: 'Getting Started with SMRT Framework',
-    description: 'Learn how to build powerful AI agents...',
-    publish_date: '2024-01-15',
-    author: 'Jane Developer',
-    tags: 'tutorial,smrt,ai'
-  };
-</script>
-
-<ArticleCard {article} />`}
-	>
-		<ArticleCard article={sampleArticle} />
+	<ComponentExample code={`<ArticleCard article={article} />`}>
+		<ArticleCard article={mockArticle} />
 	</ComponentExample>
 
 	<h2>With Tags</h2>
-	<p>Enable tag display with the <code>showTags</code> prop. Tags can be comma-separated strings or JSON arrays:</p>
+	<p>Show article tags as badges.</p>
 
-	<ComponentExample
-		code={`<ArticleCard
-  article={article}
-  showTags={true}
-/>`}
-	>
-		<ArticleCard article={articleWithTags} showTags={true} />
+	<ComponentExample code={`<ArticleCard article={article} showTags />`}>
+		<ArticleCard article={mockArticle2} showTags />
 	</ComponentExample>
 
-	<h2>Minimal Display</h2>
-	<p>Hide metadata for a cleaner look:</p>
+	<h2>Minimal Card</h2>
+	<p>Title only without metadata.</p>
 
 	<ComponentExample
 		code={`<ArticleCard
@@ -136,28 +105,7 @@
   showAuthor={false}
 />`}
 	>
-		<ArticleCard article={sampleArticle} showExcerpt={false} showDate={false} showAuthor={false} />
-	</ComponentExample>
-
-	<h2>Handling Missing Data</h2>
-	<p>The component gracefully handles articles with missing optional fields:</p>
-
-	<ComponentExample
-		code={`<script lang="ts">
-  const article = {
-    id: '3',
-    slug: 'quick-tip',
-    title: 'Quick Tip: Using Decorators',
-    description: null,
-    publish_date: null,
-    author: null,
-    tags: ''
-  };
-</script>
-
-<ArticleCard {article} />`}
-	>
-		<ArticleCard article={minimalArticle} />
+		<ArticleCard article={mockArticle} showExcerpt={false} showDate={false} showAuthor={false} />
 	</ComponentExample>
 
 	<h2>Props</h2>
@@ -165,14 +113,24 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`interface Article {
+		code={`import { ArticleCard } from '@happyvertical/smrt-svelte';
+
+interface Article {
   id: string;
   slug: string;
   title: string;
   description: string | null;
   publish_date: string | null;
   author: string | null;
-  tags: string; // comma-separated or JSON array
+  tags: string; // JSON array or comma-separated
+}
+
+interface Props {
+  article: Article;
+  showExcerpt?: boolean;
+  showDate?: boolean;
+  showAuthor?: boolean;
+  showTags?: boolean;
 }`}
 		language="typescript"
 	/>

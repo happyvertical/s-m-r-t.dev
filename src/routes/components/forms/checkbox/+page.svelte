@@ -3,7 +3,6 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-
 	let termsAccepted = $state(false);
 	let newsletterOptIn = $state(true);
 	let interactiveChecked = $state(false);
@@ -55,7 +54,7 @@
 </script>
 
 <svelte:head>
-	<title>CheckboxInput | SMRT Forms</title>
+	<title>CheckboxInput | s-m-r-t Forms</title>
 </svelte:head>
 
 <article class="prose">
@@ -69,7 +68,7 @@
 
 	<h1>CheckboxInput</h1>
 	<p class="lead">
-		A Material Design 3 styled checkbox with ripple effect and voice control support in SMRT mode.
+		A Material Design 3 styled checkbox with ripple effect and voice control support in smrt mode.
 		Perfect for boolean options, terms acceptance, and feature toggles.
 	</p>
 
@@ -163,7 +162,7 @@
 	</ComponentExample>
 
 	<h2>With Description</h2>
-	<p>Add a <code>description</code> for voice extraction context in SMRT mode.</p>
+	<p>Add a <code>description</code> for voice extraction context in smrt mode.</p>
 
 	<ComponentExample
 		code={`<CheckboxInput
@@ -225,9 +224,9 @@
 		<p style="margin-top: 1rem; color: #666;">Checked: {interactiveChecked ? 'Yes' : 'No'}</p>
 	</ComponentExample>
 
-	<h2>Voice Control (SMRT Mode)</h2>
+	<h2>Voice Control (smrt Mode)</h2>
 	<p>
-		In SMRT mode, checkboxes can be controlled via voice commands. The component understands
+		In smrt mode, checkboxes can be controlled via voice commands. The component understands
 		natural language like "yes", "no", "true", "false", "check", "uncheck", etc.
 	</p>
 

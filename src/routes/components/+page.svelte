@@ -1,271 +1,207 @@
 <script lang="ts">
-	import Grid from '$lib/components/Grid.svelte';
-
-	interface Component {
-		name: string;
-		description: string;
-		href?: string;
-	}
-
-	interface Category {
-		name: string;
-		description: string;
-		href?: string;
-		components: Component[];
-	}
-
-	const categories: Category[] = [
+	const categories = [
 		{
-			name: 'Forms',
-			description: 'SMRT form components with voice input support',
+			title: 'Layout',
+			description: 'Structure and layout components for building page layouts',
+			href: '/components/layout',
+			components: [
+				{ name: 'Grid', href: '/components/layout/grid', description: 'Responsive grid system' },
+				{ name: 'SummaryCard', href: '/components/layout/summary-card', description: 'Metric display card' }
+			]
+		},
+		{
+			title: 'Display',
+			description: 'Visual components for displaying information',
+			href: '/components/display',
+			components: [
+				{ name: 'Icon', href: '/components/display/icon', description: 'SVG icon component' },
+				{ name: 'Badge', href: '/components/display/badge', description: 'Status and label badges' }
+			]
+		},
+		{
+			title: 'Forms',
+			description: 'Form components with voice input support',
 			href: '/components/forms',
 			components: [
 				{ name: 'TextInput', href: '/components/forms/text-input', description: 'Text input with voice support' },
-				{ name: 'Select', href: '/components/forms/smrt-select', description: 'Dropdown with voice selection' },
+				{ name: 'SelectInput', href: '/components/forms/smrt-select', description: 'Dropdown with voice selection' },
 				{ name: 'CheckboxInput', href: '/components/forms/checkbox', description: 'Checkbox with voice control' },
 				{ name: 'DateTimeInput', href: '/components/forms/datetime', description: 'Date/time with natural language' },
 				{ name: 'AddressInput', href: '/components/forms/address', description: 'Address input with parsing' },
-				{ name: 'MoneyInput', href: '/components/forms/money', description: 'Currency input in cents' }
-			]
-		},
-		{
-			name: 'UI',
-			description: 'Core interface components',
-			components: [
-				{ name: 'Button', description: 'Versatile button with variants and sizes' },
-				{ name: 'Badge', description: 'Status indicator with multiple variants' },
-				{ name: 'Card', description: 'Flexible container with header/footer slots' },
-				{ name: 'Input', description: 'Text input with validation states' },
-				{ name: 'Select', description: 'Dropdown select component' },
-				{ name: 'Textarea', description: 'Multiline text input' },
-				{ name: 'Toggle', description: 'Toggle/checkbox component' },
-				{ name: 'FormGroup', description: 'Form control wrapper with labels' },
-				{ name: 'Pagination', description: 'Navigation pagination' }
-			]
-		},
-		{
-			name: 'Layout',
-			description: 'Page structure components',
-			components: [
-				{ name: 'Header', description: 'Site header with logo and navigation' },
-				{ name: 'Footer', description: 'Site footer component' },
-				{ name: 'Container', description: 'Responsive content container' },
-				{ name: 'Grid', description: 'Responsive grid layout' },
-				{ name: 'Masthead', description: 'Newspaper-style header' }
-			]
-		},
-		{
-			name: 'Content',
-			description: 'Content display components',
-			components: [
-				{ name: 'ArticleCard', description: 'Article preview card' },
-				{ name: 'ArticleList', description: 'Grid of article cards' },
-				{ name: 'Markdown', description: 'Markdown renderer' }
-			]
-		},
-		{
-			name: 'Calendar',
-			description: 'Date and event components',
-			components: [
-				{ name: 'Calendar', description: 'Calendar view component' },
-				{ name: 'DayView', description: 'Day-specific calendar view' }
-			]
-		},
-		{
-			name: 'Feedback',
-			description: 'User feedback and progress components',
-			components: [
-				{ name: 'ProgressBar', href: '/components/feedback/progress-bar', description: 'Visual progress indicator' },
-				{ name: 'ConfirmDialog', href: '/components/feedback/confirm-dialog', description: 'Confirmation modal dialog' }
-			]
-		},
-		{
-			name: 'Meetings',
-			description: 'Meeting display components',
-			components: [
-				{ name: 'MeetingView', description: 'Meeting details display' }
+				{ name: 'MoneyInput', href: '/components/forms/money', description: 'Monetary input with cents' }
 			]
 		}
 	];
 </script>
 
 <svelte:head>
-	<title>Components | s-m-r-t</title>
+	<title>Components | s-m-r-t Framework</title>
 </svelte:head>
 
-<Grid>
-	<div class="header">
+<div class="page">
+	<header class="page-header">
 		<h1>Components</h1>
-		<p>Svelte 5 component library with design tokens. Built for the SMRT ecosystem.</p>
-	</div>
+		<p class="subtitle">UI components for building smrt applications</p>
+	</header>
 
-	<section class="install">
-		<h2>Installation</h2>
-		<pre><code>npm install @happyvertical/svelte @happyvertical/smrt-svelte</code></pre>
-		<pre><code>{`// Core UI components
-import { Button, Card, Badge } from '@happyvertical/svelte';
-
-// SMRT-specific components
-import { TextInput, StatusBadge } from '@happyvertical/smrt-svelte';`}</code></pre>
-	</section>
-
-	<section class="preview">
-		<h2>Quick Preview</h2>
-		<pre><code>{`<script>
-  import { Button, Badge, Card } from '@happyvertical/svelte';
-</script>
-
-<Button variant="primary">Primary</Button>
-<Button variant="secondary">Secondary</Button>
-<Badge variant="success">Active</Badge>
-<Badge variant="warning">Pending</Badge>`}</code></pre>
-	</section>
-
-	{#each categories as category}
-		<section class="category">
-			<h2>{category.name}</h2>
-			<p class="category-desc">{category.description}</p>
-			<div class="component-grid">
-				{#each category.components as component}
-					{#if component.href}
-						<a href={component.href} class="component-card component-link">
+	<div class="categories">
+		{#each categories as category}
+			<section class="category">
+				<div class="category-header">
+					<h2>
+						<a href={category.href}>{category.title}</a>
+					</h2>
+					<p>{category.description}</p>
+				</div>
+				<div class="component-list">
+					{#each category.components as component}
+						<a href={component.href} class="component-card">
 							<h3>{component.name}</h3>
 							<p>{component.description}</p>
 						</a>
-					{:else}
-						<div class="component-card">
-							<h3>{component.name}</h3>
-							<p>{component.description}</p>
-						</div>
-					{/if}
-				{/each}
-			</div>
-		</section>
-	{/each}
+					{/each}
+				</div>
+			</section>
+		{/each}
+	</div>
 
-	<section class="tokens">
-		<h2>Design Tokens</h2>
-		<p>Customize components with CSS custom properties:</p>
-		<pre><code>{`:root {
-  /* Colors */
-  --color-primary: #ff3e00;
-  --color-primary-light: #ff6b3d;
-  --color-primary-dark: #cc3200;
-
-  /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-
-  /* Typography */
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-
-  /* Border Radius */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.5rem;
-}`}</code></pre>
+	<section class="installation">
+		<h2>Installation</h2>
+		<p>All components are available from the smrt-svelte package:</p>
+		<pre><code>npm install @happyvertical/smrt-svelte</code></pre>
 	</section>
-</Grid>
+
+	<section class="usage">
+		<h2>Basic Usage</h2>
+		<pre><code>{`// Core UI components
+import { Button, Card, Badge } from '@happyvertical/svelte';
+
+// smrt-specific components
+import { TextInput, StatusBadge } from '@happyvertical/smrt-svelte';`}</code></pre>
+	</section>
+
+	<section class="voice">
+		<h2>Voice Input</h2>
+		<p>
+			Form components support voice input in <strong>smrt mode</strong>. Users can speak naturally
+			to fill out forms. See individual component pages for voice command examples.
+		</p>
+	</section>
+</div>
 
 <style>
-	.header {
-		grid-column: 1 / -1;
-		padding: 48px 0;
-		border-bottom: 1px solid var(--color-grid);
+	.page {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 48px 24px;
 	}
 
-	.header h1 {
+	.page-header {
+		margin-bottom: 48px;
+	}
+
+	.page-header h1 {
 		font-size: 2.5rem;
 		font-weight: 600;
 		margin-bottom: 8px;
 	}
 
-	.header p {
-		font-size: 1.1rem;
+	.subtitle {
 		color: #666;
-	}
-
-	.install,
-	.preview,
-	.category,
-	.tokens {
-		grid-column: 1 / -1;
-		padding: 48px 0;
-		border-bottom: 1px solid var(--color-grid);
-	}
-
-	.tokens {
-		border-bottom: none;
-	}
-
-	h2 {
 		font-size: 1.1rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		margin-bottom: 16px;
 	}
 
-	.category-desc {
-		color: #666;
+	.categories {
+		display: flex;
+		flex-direction: column;
+		gap: 48px;
+		margin-bottom: 64px;
+	}
+
+	.category-header {
 		margin-bottom: 24px;
 	}
 
-	pre {
-		background: #1a1a1a;
-		color: #f0f0f0;
-		padding: 16px 20px;
-		overflow-x: auto;
-		font-family: var(--font-mono);
-		font-size: 0.85rem;
-		margin-bottom: 16px;
+	.category-header h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin-bottom: 4px;
 	}
 
-	.component-grid {
+	.category-header h2 a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.category-header h2 a:hover {
+		color: var(--color-accent);
+	}
+
+	.category-header p {
+		color: #666;
+	}
+
+	.component-list {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 		gap: 16px;
 	}
 
 	.component-card {
+		display: block;
 		padding: 20px;
-		background: #fafafa;
-	}
-
-	.component-link {
+		border: 1px solid var(--color-grid, #e5e5e5);
+		border-radius: 8px;
 		text-decoration: none;
-		transition: all 0.2s;
+		transition: border-color 0.2s, box-shadow 0.2s;
 	}
 
-	.component-link:hover {
-		background: #f0f0f0;
-		transform: translateY(-2px);
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	.component-card:hover {
+		border-color: var(--color-accent);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 	}
 
 	.component-card h3 {
 		font-size: 1rem;
 		font-weight: 600;
 		margin-bottom: 4px;
-		color: #1a1a1a;
-	}
-
-	.component-link:hover h3 {
-		color: var(--color-accent);
+		color: var(--color-text);
 	}
 
 	.component-card p {
-		font-size: 0.85rem;
+		font-size: 0.9rem;
 		color: #666;
 	}
 
-	@media (max-width: 800px) {
-		.component-grid {
-			grid-template-columns: 1fr;
-		}
+	section {
+		margin-bottom: 48px;
+	}
+
+	section h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin-bottom: 16px;
+	}
+
+	section p {
+		color: #666;
+		margin-bottom: 16px;
+		line-height: 1.6;
+	}
+
+	pre {
+		background: #f5f5f5;
+		padding: 16px;
+		border-radius: 8px;
+		overflow-x: auto;
+	}
+
+	code {
+		font-family: var(--font-mono, ui-monospace, monospace);
+		font-size: 0.9em;
+	}
+
+	.voice strong {
+		color: var(--color-text);
 	}
 </style>

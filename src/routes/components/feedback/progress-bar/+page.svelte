@@ -8,43 +8,43 @@
 		{
 			name: 'value',
 			type: 'number',
-			description: 'Current progress value',
+			description: 'Current value (0-100 or custom range)',
 			required: true
 		},
 		{
 			name: 'max',
 			type: 'number',
 			default: '100',
-			description: 'Maximum value for the progress bar'
+			description: 'Maximum value'
 		},
 		{
 			name: 'status',
 			type: "'default' | 'healthy' | 'warning' | 'critical' | 'over'",
 			default: "'default'",
-			description: 'Status determines the color (auto-calculated if default)'
+			description: 'Status determines color (auto-detected if default)'
 		},
 		{
 			name: 'showLabel',
 			type: 'boolean',
 			default: 'false',
-			description: 'Show percentage label above the bar'
+			description: 'Show percentage label'
 		},
 		{
 			name: 'label',
 			type: 'string',
-			description: 'Custom label text (overrides percentage)'
+			description: 'Custom label text'
 		},
 		{
 			name: 'size',
 			type: "'sm' | 'md' | 'lg'",
 			default: "'md'",
-			description: 'Size variant for the progress bar'
+			description: 'Size variant'
 		},
 		{
 			name: 'showValue',
 			type: 'boolean',
 			default: 'false',
-			description: 'Show value/max format (e.g., "75/100")'
+			description: 'Show value over max (e.g., "75/100")'
 		}
 	];
 </script>
@@ -64,105 +64,115 @@
 
 	<h1>ProgressBar</h1>
 	<p class="lead">
-		A visual progress indicator with status-based coloring. Useful for budget tracking, task
-		completion, file uploads, and more.
+		Visual progress indicator with automatic status-based coloring. Useful for budget tracking, task
+		completion, and loading states.
 	</p>
 
 	<h2>Installation</h2>
 	<CodeBlock code={`import { ProgressBar } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
-	<p>
-		The progress bar automatically calculates color based on the percentage. Under 75% shows primary
-		(healthy), 75-90% shows warning, and 90%+ shows critical.
-	</p>
+	<p>Simple progress bar with automatic color based on percentage.</p>
+
+	<ComponentExample code={`<ProgressBar value={45} />`}>
+		<ProgressBar value={45} />
+	</ComponentExample>
+
+	<h2>With Label</h2>
+	<p>Show the percentage above the bar.</p>
+
+	<ComponentExample code={`<ProgressBar value={65} showLabel />`}>
+		<ProgressBar value={65} showLabel />
+	</ComponentExample>
+
+	<h2>Auto Status Colors</h2>
+	<p>Colors change automatically based on percentage thresholds.</p>
 
 	<ComponentExample
-		code={`<ProgressBar value={25} />
-<ProgressBar value={50} />
-<ProgressBar value={75} />
-<ProgressBar value={95} />`}
+		code={`<ProgressBar value={50} showLabel />  <!-- Healthy (under 75%) -->
+<ProgressBar value={80} showLabel />  <!-- Warning (75-89%) -->
+<ProgressBar value={95} showLabel />  <!-- Critical (90%+) -->`}
 	>
-		<div class="progress-stack">
-			<ProgressBar value={25} />
-			<ProgressBar value={50} />
-			<ProgressBar value={75} />
-			<ProgressBar value={95} />
+		<div style="display: flex; flex-direction: column; gap: 16px;">
+			<div>
+				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;">Healthy (under 75%)</span>
+				<ProgressBar value={50} showLabel />
+			</div>
+			<div>
+				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;">Warning (75-89%)</span>
+				<ProgressBar value={80} showLabel />
+			</div>
+			<div>
+				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;">Critical (90%+)</span>
+				<ProgressBar value={95} showLabel />
+			</div>
 		</div>
 	</ComponentExample>
 
-	<h2>With Labels</h2>
-	<p>Display the percentage or a custom label above the progress bar.</p>
+	<h2>Over Budget</h2>
+	<p>When value exceeds max, shows "over" indicator.</p>
 
 	<ComponentExample
-		code={`<ProgressBar value={65} showLabel />
-<ProgressBar value={42} showLabel label="Budget Used" />`}
+		code={`<ProgressBar value={120} max={100} showLabel />`}
 	>
-		<div class="progress-stack">
-			<ProgressBar value={65} showLabel />
-			<ProgressBar value={42} showLabel label="Budget Used" />
-		</div>
+		<ProgressBar value={120} max={100} showLabel />
 	</ComponentExample>
 
-	<h2>Value Display</h2>
-	<p>Show the actual value versus maximum instead of a percentage.</p>
+	<h2>Custom Range</h2>
+	<p>Use any max value, not just 100.</p>
 
 	<ComponentExample
-		code={`<ProgressBar value={750} max={1000} showValue />
-<ProgressBar value={8} max={10} showValue label="Tasks Completed" />`}
+		code={`<ProgressBar value={750} max={1000} showValue />`}
 	>
-		<div class="progress-stack">
-			<ProgressBar value={750} max={1000} showValue />
-			<ProgressBar value={8} max={10} showValue label="Tasks Completed" />
-		</div>
+		<ProgressBar value={750} max={1000} showValue />
 	</ComponentExample>
 
 	<h2>Sizes</h2>
-	<p>Three size variants are available: small, medium (default), and large.</p>
+	<p>Available in small, medium, and large sizes.</p>
 
 	<ComponentExample
 		code={`<ProgressBar value={60} size="sm" showLabel />
 <ProgressBar value={60} size="md" showLabel />
 <ProgressBar value={60} size="lg" showLabel />`}
 	>
-		<div class="progress-stack">
+		<div style="display: flex; flex-direction: column; gap: 24px;">
 			<div>
-				<span class="size-label">Small</span>
+				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;">Small</span>
 				<ProgressBar value={60} size="sm" showLabel />
 			</div>
 			<div>
-				<span class="size-label">Medium</span>
+				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;">Medium</span>
 				<ProgressBar value={60} size="md" showLabel />
 			</div>
 			<div>
-				<span class="size-label">Large</span>
+				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;">Large</span>
 				<ProgressBar value={60} size="lg" showLabel />
 			</div>
 		</div>
 	</ComponentExample>
 
-	<h2>Manual Status</h2>
-	<p>Override the automatic status calculation with an explicit status.</p>
+	<h2>Custom Label</h2>
+	<p>Override the label text.</p>
+
+	<ComponentExample
+		code={`<ProgressBar value={75} showLabel label="$7,500 of $10,000" />`}
+	>
+		<ProgressBar value={75} showLabel label="$7,500 of $10,000" />
+	</ComponentExample>
+
+	<h2>Forced Status</h2>
+	<p>Override auto status with a specific color.</p>
 
 	<ComponentExample
 		code={`<ProgressBar value={30} status="healthy" showLabel />
 <ProgressBar value={30} status="warning" showLabel />
 <ProgressBar value={30} status="critical" showLabel />`}
 	>
-		<div class="progress-stack">
+		<div style="display: flex; flex-direction: column; gap: 16px;">
 			<ProgressBar value={30} status="healthy" showLabel />
 			<ProgressBar value={30} status="warning" showLabel />
 			<ProgressBar value={30} status="critical" showLabel />
 		</div>
-	</ComponentExample>
-
-	<h2>Over Budget</h2>
-	<p>When value exceeds max, an "over" indicator is shown.</p>
-
-	<ComponentExample
-		code={`<ProgressBar value={1250} max={1000} showValue />`}
-	>
-		<ProgressBar value={1250} max={1000} showValue />
 	</ComponentExample>
 
 	<h2>Props</h2>
@@ -172,11 +182,15 @@
 	<CodeBlock
 		code={`import { ProgressBar } from '@happyvertical/smrt-svelte';
 
-// Status type
-type ProgressStatus = 'default' | 'healthy' | 'warning' | 'critical' | 'over';
-
-// Size type
-type ProgressSize = 'sm' | 'md' | 'lg';`}
+interface Props {
+  value: number;
+  max?: number;
+  status?: 'default' | 'healthy' | 'warning' | 'critical' | 'over';
+  showLabel?: boolean;
+  label?: string;
+  size?: 'sm' | 'md' | 'lg';
+  showValue?: boolean;
+}`}
 		language="typescript"
 	/>
 </article>
@@ -237,18 +251,5 @@ type ProgressSize = 'sm' | 'md' | 'lg';`}
 		padding: 2px 6px;
 		background: #f5f5f5;
 		border-radius: 3px;
-	}
-
-	.progress-stack {
-		display: flex;
-		flex-direction: column;
-		gap: 24px;
-	}
-
-	.size-label {
-		display: block;
-		font-size: 0.85rem;
-		color: #666;
-		margin-bottom: 8px;
 	}
 </style>

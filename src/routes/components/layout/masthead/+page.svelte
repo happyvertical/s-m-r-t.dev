@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Masthead } from '@happyvertical/svelte';
+	import { Masthead } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -8,35 +8,35 @@
 		{
 			name: 'date',
 			type: 'string',
-			default: 'Current date formatted',
-			description: 'Date string to display'
+			default: 'Current date',
+			description: 'Date to display in center'
 		},
 		{
 			name: 'dateHref',
 			type: 'string',
-			description: 'Optional link for the date'
+			description: 'URL for the date link'
 		},
 		{
 			name: 'location',
 			type: 'string',
 			default: "''",
-			description: 'Location label (displayed uppercase)'
+			description: 'Location label on the left'
 		},
 		{
 			name: 'locationHref',
 			type: 'string',
 			default: "'/'",
-			description: 'Link for the location'
+			description: 'URL for location link'
 		},
 		{
 			name: 'nav',
 			type: 'Snippet',
-			description: 'Desktop navigation slot'
+			description: 'Navigation content for desktop'
 		},
 		{
 			name: 'mobileNav',
 			type: 'Snippet',
-			description: 'Mobile navigation slot (icons recommended)'
+			description: 'Navigation content for mobile (optional)'
 		}
 	];
 </script>
@@ -56,18 +56,37 @@
 
 	<h1>Masthead</h1>
 	<p class="lead">
-		A newspaper-style subheader with location, date, and navigation. Features separate desktop and
-		mobile layouts with automatic responsive switching at 640px.
+		Subheader component for news-style layouts. Shows location, date, and navigation with
+		responsive desktop/mobile layouts.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Masthead } from '@happyvertical/svelte';`} language="typescript" />
+	<CodeBlock code={`import { Masthead } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
-	<p>Display a date-centered masthead with location and navigation.</p>
+	<p>Simple masthead with date (defaults to current date).</p>
+
+	<ComponentExample code={`<Masthead />`}>
+		<Masthead />
+	</ComponentExample>
+
+	<h2>With Location</h2>
+	<p>Add a location label on the left side.</p>
 
 	<ComponentExample
-		code={`<Masthead location="New York" locationHref="/">
+		code={`<Masthead
+  location="San Francisco"
+  locationHref="/sf"
+/>`}
+	>
+		<Masthead location="San Francisco" locationHref="/sf" />
+	</ComponentExample>
+
+	<h2>With Navigation</h2>
+	<p>Add navigation links on the right side.</p>
+
+	<ComponentExample
+		code={`<Masthead location="Toronto">
   {#snippet nav()}
     <a href="/news">News</a>
     <a href="/events">Events</a>
@@ -75,132 +94,51 @@
   {/snippet}
 </Masthead>`}
 	>
-		<div class="masthead-demo">
-			<Masthead location="New York" locationHref="/">
-				{#snippet nav()}
-					<a href="/news">News</a>
-					<a href="/events">Events</a>
-					<a href="/about">About</a>
-				{/snippet}
-			</Masthead>
-		</div>
+		<Masthead location="Toronto">
+			{#snippet nav()}
+				<a href="/news">News</a>
+				<a href="/events">Events</a>
+				<a href="/about">About</a>
+			{/snippet}
+		</Masthead>
 	</ComponentExample>
 
-	<h2>With Custom Date</h2>
-	<p>Override the default date display.</p>
+	<h2>Custom Date</h2>
+	<p>Override the date display.</p>
 
 	<ComponentExample
 		code={`<Masthead
-  location="Boston"
-  date="Wednesday, January 1, 2025"
-  dateHref="/archive"
->
-  {#snippet nav()}
-    <a href="/local">Local</a>
-    <a href="/sports">Sports</a>
-  {/snippet}
-</Masthead>`}
+  date="January 15, 2025"
+  dateHref="/archive/2025/01/15"
+  location="New York"
+/>`}
 	>
-		<div class="masthead-demo">
-			<Masthead location="Boston" date="Wednesday, January 1, 2025" dateHref="/archive">
-				{#snippet nav()}
-					<a href="/local">Local</a>
-					<a href="/sports">Sports</a>
-				{/snippet}
-			</Masthead>
-		</div>
+		<Masthead date="January 15, 2025" dateHref="/archive/2025/01/15" location="New York" />
 	</ComponentExample>
-
-	<h2>With Mobile Navigation</h2>
-	<p>
-		Provide separate navigation for mobile with the <code>mobileNav</code> slot. Icon-based navigation
-		is recommended for mobile.
-	</p>
-
-	<ComponentExample
-		code={`<Masthead location="Chicago">
-  {#snippet nav()}
-    <a href="/news">News</a>
-    <a href="/events">Events</a>
-  {/snippet}
-
-  {#snippet mobileNav()}
-    <a href="/news" aria-label="News">
-      <svg>...</svg>
-    </a>
-    <a href="/events" aria-label="Events">
-      <svg>...</svg>
-    </a>
-  {/snippet}
-</Masthead>`}
-	>
-		<div class="masthead-demo">
-			<Masthead location="Chicago">
-				{#snippet nav()}
-					<a href="/news">News</a>
-					<a href="/events">Events</a>
-				{/snippet}
-
-				{#snippet mobileNav()}
-					<a href="/news" aria-label="News">
-						<svg
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							width="20"
-							height="20"
-						>
-							<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" />
-							<path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
-						</svg>
-					</a>
-					<a href="/events" aria-label="Events">
-						<svg
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							width="20"
-							height="20"
-						>
-							<rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-							<line x1="16" y1="2" x2="16" y2="6" />
-							<line x1="8" y1="2" x2="8" y2="6" />
-							<line x1="3" y1="10" x2="21" y2="10" />
-						</svg>
-					</a>
-				{/snippet}
-			</Masthead>
-		</div>
-	</ComponentExample>
-
-	<h2>Date Only</h2>
-	<p>A minimal masthead with just the date.</p>
-
-	<ComponentExample
-		code={`<Masthead />`}
-	>
-		<div class="masthead-demo">
-			<Masthead />
-		</div>
-	</ComponentExample>
-
-	<h2>Responsive Behavior</h2>
-	<p>The Masthead has two distinct layouts:</p>
-	<ul>
-		<li>
-			<strong>Desktop (640px+):</strong> Three-column grid with location (left), date (center), and navigation
-			(right)
-		</li>
-		<li>
-			<strong>Mobile (&lt;640px):</strong> Two-column flex with home icon (left) and mobile nav (right).
-			Date is hidden.
-		</li>
-	</ul>
 
 	<h2>Props</h2>
 	<PropsTable props={mastheadProps} />
+
+	<h2>TypeScript</h2>
+	<CodeBlock
+		code={`import { Masthead } from '@happyvertical/smrt-svelte';
+
+interface Props {
+  date?: string;
+  dateHref?: string;
+  location?: string;
+  locationHref?: string;
+  nav?: Snippet;
+  mobileNav?: Snippet;
+}`}
+		language="typescript"
+	/>
+
+	<h2>Responsive Behavior</h2>
+	<p>
+		On mobile, the masthead shows a home icon on the left and icon-based navigation on the right.
+		Use <code>mobileNav</code> to provide mobile-specific navigation with icons.
+	</p>
 </article>
 
 <style>
@@ -259,22 +197,5 @@
 		padding: 2px 6px;
 		background: #f5f5f5;
 		border-radius: 3px;
-	}
-
-	.prose ul {
-		color: #666;
-		margin-bottom: 16px;
-		line-height: 1.6;
-		padding-left: 24px;
-	}
-
-	.prose li {
-		margin-bottom: 8px;
-	}
-
-	.masthead-demo {
-		border-radius: 8px;
-		overflow: hidden;
-		border: 1px solid #e5e5e5;
 	}
 </style>

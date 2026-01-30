@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card, Button } from '@happyvertical/svelte';
+	import { Card, Button, Badge } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -15,29 +15,23 @@
 			name: 'padding',
 			type: "'none' | 'sm' | 'md' | 'lg'",
 			default: "'md'",
-			description: 'Content padding'
+			description: 'Content padding size'
 		},
 		{
 			name: 'hoverable',
 			type: 'boolean',
 			default: 'false',
-			description: 'Add hover effect with shadow and lift'
-		},
-		{
-			name: 'children',
-			type: 'Snippet',
-			description: 'Main card content',
-			required: true
+			description: 'Adds hover effect with elevation'
 		},
 		{
 			name: 'header',
 			type: 'Snippet',
-			description: 'Optional header slot'
+			description: 'Content for the card header section'
 		},
 		{
 			name: 'footer',
 			type: 'Snippet',
-			description: 'Optional footer slot'
+			description: 'Content for the card footer section'
 		}
 	];
 </script>
@@ -57,54 +51,74 @@
 
 	<h1>Card</h1>
 	<p class="lead">
-		A flexible container component with optional header and footer slots, supporting multiple
-		variants and hover effects.
+		Container for grouping related content with optional header and footer sections. Supports
+		multiple visual variants and hover effects.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Card } from '@happyvertical/svelte';`} language="typescript" />
+	<CodeBlock code={`import { Card } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
+	<p>A simple card with default styling.</p>
 
 	<ComponentExample
 		code={`<Card>
-  <p>This is a basic card with default styling.</p>
+  <p>This is some card content.</p>
 </Card>`}
 	>
 		<Card>
-			<p>This is a basic card with default styling.</p>
+			<p style="margin: 0;">This is some card content.</p>
 		</Card>
 	</ComponentExample>
 
 	<h2>Variants</h2>
-	<p>
-		Cards support three variants: <code>default</code>, <code>outlined</code>, and
-		<code>elevated</code>.
-	</p>
+	<p>Choose from default, outlined, or elevated styles.</p>
 
 	<ComponentExample
-		code={`<Card variant="default">Default Card</Card>
-<Card variant="outlined">Outlined Card</Card>
-<Card variant="elevated">Elevated Card</Card>`}
+		code={`<Card variant="default">Default card</Card>
+<Card variant="outlined">Outlined card</Card>
+<Card variant="elevated">Elevated card</Card>`}
 	>
-		<div class="card-row">
+		<div class="card-grid">
 			<Card variant="default">
-				<strong>Default</strong>
-				<p>Standard border</p>
+				<p style="margin: 0;">Default card</p>
 			</Card>
 			<Card variant="outlined">
-				<strong>Outlined</strong>
-				<p>Thicker border</p>
+				<p style="margin: 0;">Outlined card</p>
 			</Card>
 			<Card variant="elevated">
-				<strong>Elevated</strong>
-				<p>With shadow</p>
+				<p style="margin: 0;">Elevated card</p>
+			</Card>
+		</div>
+	</ComponentExample>
+
+	<h2>Padding Sizes</h2>
+	<p>Control content padding with the padding prop.</p>
+
+	<ComponentExample
+		code={`<Card padding="none">No padding</Card>
+<Card padding="sm">Small padding</Card>
+<Card padding="md">Medium padding (default)</Card>
+<Card padding="lg">Large padding</Card>`}
+	>
+		<div class="card-grid">
+			<Card padding="none">
+				<p style="margin: 0; background: #f5f5f5; padding: 8px;">No padding</p>
+			</Card>
+			<Card padding="sm">
+				<p style="margin: 0;">Small padding</p>
+			</Card>
+			<Card padding="md">
+				<p style="margin: 0;">Medium padding</p>
+			</Card>
+			<Card padding="lg">
+				<p style="margin: 0;">Large padding</p>
 			</Card>
 		</div>
 	</ComponentExample>
 
 	<h2>With Header and Footer</h2>
-	<p>Use snippet props to add header and footer sections.</p>
+	<p>Add header and footer sections using snippets.</p>
 
 	<ComponentExample
 		code={`<Card>
@@ -112,57 +126,81 @@
     <h3>Card Title</h3>
   {/snippet}
 
-  <p>Card content goes here.</p>
+  <p>Main card content goes here.</p>
 
   {#snippet footer()}
-    <Button variant="primary">Action</Button>
+    <Button>Action</Button>
   {/snippet}
 </Card>`}
 	>
 		<Card>
 			{#snippet header()}
-				<h3>Card Title</h3>
+				<h3 style="margin: 0; font-size: 1.1rem; font-weight: 600;">Card Title</h3>
 			{/snippet}
 
-			<p>Card content goes here. This demonstrates the header and footer slots.</p>
+			<p style="margin: 0;">Main card content goes here with supporting text and details.</p>
 
 			{#snippet footer()}
-				<Button variant="primary" size="sm">Action</Button>
+				<Button size="sm">Action</Button>
 			{/snippet}
 		</Card>
 	</ComponentExample>
 
-	<h2>Padding</h2>
-	<p>Adjust content padding with the <code>padding</code> prop.</p>
-
-	<ComponentExample
-		code={`<Card padding="sm">Small padding</Card>
-<Card padding="md">Medium padding</Card>
-<Card padding="lg">Large padding</Card>`}
-	>
-		<div class="card-row">
-			<Card padding="sm">
-				<strong>Small</strong>
-			</Card>
-			<Card padding="md">
-				<strong>Medium</strong>
-			</Card>
-			<Card padding="lg">
-				<strong>Large</strong>
-			</Card>
-		</div>
-	</ComponentExample>
-
 	<h2>Hoverable</h2>
-	<p>Add a hover effect that lifts the card and adds shadow.</p>
+	<p>Add hover effects for interactive cards.</p>
 
 	<ComponentExample
 		code={`<Card hoverable>
-  <p>Hover over me!</p>
+  <p>Hover over this card to see the effect.</p>
 </Card>`}
 	>
 		<Card hoverable>
-			<p>Hover over this card to see the lift effect.</p>
+			<p style="margin: 0;">Hover over this card to see the effect.</p>
+		</Card>
+	</ComponentExample>
+
+	<h2>Real-World Example</h2>
+	<p>A product card with header, content, and footer.</p>
+
+	<ComponentExample
+		code={`<Card variant="elevated">
+  {#snippet header()}
+    <div class="product-header">
+      <h3>Premium Plan</h3>
+      <Badge variant="primary">Popular</Badge>
+    </div>
+  {/snippet}
+
+  <p>$29/month</p>
+  <ul>
+    <li>Unlimited users</li>
+    <li>Priority support</li>
+    <li>Advanced analytics</li>
+  </ul>
+
+  {#snippet footer()}
+    <Button>Subscribe</Button>
+  {/snippet}
+</Card>`}
+	>
+		<Card variant="elevated">
+			{#snippet header()}
+				<div style="display: flex; justify-content: space-between; align-items: center;">
+					<h3 style="margin: 0; font-size: 1.1rem; font-weight: 600;">Premium Plan</h3>
+					<Badge variant="primary">Popular</Badge>
+				</div>
+			{/snippet}
+
+			<p style="font-size: 1.5rem; font-weight: 600; margin: 0 0 16px;">$29/month</p>
+			<ul style="margin: 0; padding-left: 20px; color: #666;">
+				<li>Unlimited users</li>
+				<li>Priority support</li>
+				<li>Advanced analytics</li>
+			</ul>
+
+			{#snippet footer()}
+				<Button>Subscribe</Button>
+			{/snippet}
 		</Card>
 	</ComponentExample>
 
@@ -171,10 +209,19 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import type { CardVariant, CardPadding } from '@happyvertical/svelte';
+		code={`import { Card } from '@happyvertical/smrt-svelte';
 
-// CardVariant = 'default' | 'outlined' | 'elevated'
-// CardPadding = 'none' | 'sm' | 'md' | 'lg'`}
+type CardVariant = 'default' | 'outlined' | 'elevated';
+type CardPadding = 'none' | 'sm' | 'md' | 'lg';
+
+interface Props {
+  variant?: CardVariant;
+  padding?: CardPadding;
+  hoverable?: boolean;
+  children?: Snippet;
+  header?: Snippet;
+  footer?: Snippet;
+}`}
 		language="typescript"
 	/>
 </article>
@@ -237,30 +284,9 @@
 		border-radius: 3px;
 	}
 
-	.card-row {
-		display: flex;
+	.card-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 		gap: 16px;
-		flex-wrap: wrap;
-	}
-
-	.card-row :global(.card) {
-		flex: 1;
-		min-width: 150px;
-	}
-
-	:global(.card) h3 {
-		margin: 0;
-		font-size: 1rem;
-		font-weight: 600;
-	}
-
-	:global(.card) p {
-		margin: 8px 0 0;
-		font-size: 0.9rem;
-		color: #666;
-	}
-
-	:global(.card) strong {
-		font-weight: 600;
 	}
 </style>

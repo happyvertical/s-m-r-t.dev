@@ -20,34 +20,30 @@
 			name: 'icon',
 			type: "'document' | 'folder' | 'users' | 'search' | 'inbox' | Snippet",
 			default: "'inbox'",
-			description: 'Icon name or custom snippet'
+			description: 'Icon to display'
 		},
 		{
 			name: 'actionLabel',
 			type: 'string',
-			description: 'Label for optional action button'
+			description: 'Label for the action button'
 		},
 		{
 			name: 'actionHref',
 			type: 'string',
-			description: 'URL for action button (renders as link)'
+			description: 'URL for the action button (renders as link)'
 		},
 		{
 			name: 'onaction',
 			type: '() => void',
-			description: 'Click handler for action button'
+			description: 'Click handler for the action button'
 		},
 		{
 			name: 'size',
 			type: "'sm' | 'md' | 'lg'",
 			default: "'md'",
-			description: 'Size variant affecting padding and icon size'
+			description: 'Size variant'
 		}
 	];
-
-	function handleAction() {
-		alert('Action clicked!');
-	}
 </script>
 
 <svelte:head>
@@ -65,15 +61,15 @@
 
 	<h1>EmptyState</h1>
 	<p class="lead">
-		A placeholder component for empty lists or content areas. Provides a consistent display with
-		icon, description, and optional call-to-action button. Built with Material 3 design.
+		Placeholder for empty lists or content areas. Provides consistent empty state display with
+		icon, description, and optional call-to-action button.
 	</p>
 
 	<h2>Installation</h2>
 	<CodeBlock code={`import { EmptyState } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
-	<p>Display a simple empty state with title and description.</p>
+	<p>Simple empty state with title and description.</p>
 
 	<ComponentExample
 		code={`<EmptyState
@@ -81,116 +77,89 @@
   description="Get started by creating your first item."
 />`}
 	>
-		<EmptyState title="No items yet" description="Get started by creating your first item." />
+		<EmptyState
+			title="No items yet"
+			description="Get started by creating your first item."
+		/>
 	</ComponentExample>
 
 	<h2>With Action Button</h2>
-	<p>Add a call-to-action with <code>actionLabel</code> and either <code>actionHref</code> or <code>onaction</code>.</p>
+	<p>Add a call-to-action button using <code>actionLabel</code> and <code>actionHref</code>.</p>
 
 	<ComponentExample
 		code={`<EmptyState
-  title="No documents found"
-  description="Start by uploading your first document."
+  title="No documents"
+  description="Upload your first document to get started."
   icon="document"
   actionLabel="Upload Document"
   actionHref="/upload"
-/>
-
-<EmptyState
-  title="No results"
-  description="Try adjusting your search criteria."
-  icon="search"
-  actionLabel="Clear Filters"
-  onaction={() => alert('Action clicked!')}
 />`}
 	>
-		<div class="empty-demos">
-			<EmptyState
-				title="No documents found"
-				description="Start by uploading your first document."
-				icon="document"
-				actionLabel="Upload Document"
-				actionHref="/upload"
-			/>
-			<EmptyState
-				title="No results"
-				description="Try adjusting your search criteria."
-				icon="search"
-				actionLabel="Clear Filters"
-				onaction={handleAction}
-			/>
-		</div>
+		<EmptyState
+			title="No documents"
+			description="Upload your first document to get started."
+			icon="document"
+			actionLabel="Upload Document"
+			actionHref="/upload"
+		/>
 	</ComponentExample>
 
-	<h2>Icons</h2>
-	<p>
-		Choose from built-in icons: <code>document</code>, <code>folder</code>, <code>users</code>,
-		<code>search</code>, or <code>inbox</code> (default).
-	</p>
+	<h2>Icon Variants</h2>
+	<p>Built-in icons for common empty states.</p>
 
 	<ComponentExample
 		code={`<EmptyState title="No documents" icon="document" />
-<EmptyState title="Empty folder" icon="folder" />
+<EmptyState title="No folders" icon="folder" />
 <EmptyState title="No users" icon="users" />
 <EmptyState title="No results" icon="search" />
-<EmptyState title="Inbox empty" icon="inbox" />`}
+<EmptyState title="Empty inbox" icon="inbox" />`}
 	>
-		<div class="icon-demos">
+		<div class="icon-grid">
 			<EmptyState title="No documents" icon="document" size="sm" />
-			<EmptyState title="Empty folder" icon="folder" size="sm" />
+			<EmptyState title="No folders" icon="folder" size="sm" />
 			<EmptyState title="No users" icon="users" size="sm" />
 			<EmptyState title="No results" icon="search" size="sm" />
-			<EmptyState title="Inbox empty" icon="inbox" size="sm" />
+			<EmptyState title="Empty inbox" icon="inbox" size="sm" />
 		</div>
 	</ComponentExample>
 
-	<h2>Sizes</h2>
-	<p>
-		Three sizes are available: <code>sm</code>, <code>md</code> (default), and <code>lg</code>.
-	</p>
+	<h2>Size Variants</h2>
+	<p>Three sizes for different contexts.</p>
 
 	<ComponentExample
-		code={`<EmptyState title="Small" description="Compact layout" size="sm" />
-<EmptyState title="Medium" description="Default layout" size="md" />
-<EmptyState title="Large" description="Expanded layout" size="lg" />`}
+		code={`<EmptyState title="Small" size="sm" />
+<EmptyState title="Medium" size="md" />
+<EmptyState title="Large" size="lg" />`}
 	>
-		<div class="size-demos">
-			<div class="size-demo">
-				<p class="demo-label">size="sm"</p>
-				<EmptyState title="Small" description="Compact layout" size="sm" />
+		<div style="display: flex; flex-direction: column; gap: 24px;">
+			<div style="background: #fafafa;">
+				<EmptyState title="Small empty state" description="Compact size for cards" size="sm" />
 			</div>
-			<div class="size-demo">
-				<p class="demo-label">size="md"</p>
-				<EmptyState title="Medium" description="Default layout" size="md" />
-			</div>
-			<div class="size-demo">
-				<p class="demo-label">size="lg"</p>
-				<EmptyState title="Large" description="Expanded layout" size="lg" />
+			<div style="background: #fafafa;">
+				<EmptyState title="Medium empty state" description="Default size" size="md" />
 			</div>
 		</div>
 	</ComponentExample>
 
-	<h2>Custom Icon</h2>
-	<p>Pass a Snippet for a completely custom icon.</p>
+	<h2>With Click Handler</h2>
+	<p>Use <code>onaction</code> for button click handling instead of navigation.</p>
 
 	<ComponentExample
-		code={`<EmptyState title="Custom Icon">
-  {#snippet icon()}
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-    </svg>
-  {/snippet}
-</EmptyState>`}
+		code={`<EmptyState
+  title="No projects"
+  description="Create a new project to get started."
+  icon="folder"
+  actionLabel="Create Project"
+  onaction={() => openModal()}
+/>`}
 	>
-		<EmptyState title="Custom Icon" description="Using a custom SVG snippet" size="sm">
-			{#snippet icon()}
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-					<path d="M12 2L2 7l10 5 10-5-10-5z" />
-					<path d="M2 17l10 5 10-5" />
-					<path d="M2 12l10 5 10-5" />
-				</svg>
-			{/snippet}
-		</EmptyState>
+		<EmptyState
+			title="No projects"
+			description="Create a new project to get started."
+			icon="folder"
+			actionLabel="Create Project"
+			onaction={() => alert('Create project clicked!')}
+		/>
 	</ComponentExample>
 
 	<h2>Props</h2>
@@ -198,11 +167,19 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`// Built-in icon names
-type EmptyStateIcon = 'document' | 'folder' | 'users' | 'search' | 'inbox';
+		code={`import { EmptyState } from '@happyvertical/smrt-svelte';
 
-// Size variants
-type EmptyStateSize = 'sm' | 'md' | 'lg';`}
+type IconType = 'document' | 'folder' | 'users' | 'search' | 'inbox';
+
+interface Props {
+  title: string;
+  description?: string;
+  icon?: IconType | Snippet;
+  actionLabel?: string;
+  actionHref?: string;
+  onaction?: () => void;
+  size?: 'sm' | 'md' | 'lg';
+}`}
 		language="typescript"
 	/>
 </article>
@@ -265,37 +242,11 @@ type EmptyStateSize = 'sm' | 'md' | 'lg';`}
 		border-radius: 3px;
 	}
 
-	.empty-demos {
+	.icon-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 24px;
-	}
-
-	.icon-demos {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 		gap: 16px;
-	}
-
-	.size-demos {
-		display: flex;
-		flex-direction: column;
-		gap: 24px;
-	}
-
-	.size-demo {
-		border: 1px solid #e5e5e5;
-		border-radius: 8px;
-		overflow: hidden;
-	}
-
-	.demo-label {
-		font-size: 0.85rem;
-		font-weight: 500;
-		color: #666;
-		padding: 8px 16px;
-		background: #f5f5f5;
-		margin: 0 !important;
-		border-bottom: 1px solid #e5e5e5;
+		background: #fafafa;
+		padding: 16px;
 	}
 </style>

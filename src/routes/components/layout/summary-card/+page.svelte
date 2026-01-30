@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { SummaryCard } from '@happyvertical/smrt-svelte';
-	import { Grid } from '@happyvertical/svelte';
+	import { SummaryCard, Grid } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -9,7 +8,7 @@
 		{
 			name: 'label',
 			type: 'string',
-			description: 'Card label/title',
+			description: 'Card label text',
 			required: true
 		},
 		{
@@ -27,7 +26,7 @@
 			name: 'highlight',
 			type: 'boolean',
 			default: 'false',
-			description: 'Apply highlighted/featured styling'
+			description: 'Use highlighted style'
 		},
 		{
 			name: 'href',
@@ -37,7 +36,7 @@
 		{
 			name: 'icon',
 			type: 'string',
-			description: 'Icon name (Icon) or SVG string'
+			description: 'Icon name or SVG string'
 		},
 		{
 			name: 'variant',
@@ -63,181 +62,95 @@
 
 	<h1>SummaryCard</h1>
 	<p class="lead">
-		A statistic or summary display card showing a label with a prominent value. Supports icons,
-		count badges, click functionality, and value color variants. Built with Material 3 design.
+		Compact info card for dashboards and metrics. Shows a label with a prominent value,
+		optionally with count badge, icon, and link functionality.
 	</p>
 
 	<h2>Installation</h2>
 	<CodeBlock code={`import { SummaryCard } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
-	<p>Display a simple statistic with label and value.</p>
+	<p>Simple metric display with label and value.</p>
 
-	<ComponentExample
-		code={`<SummaryCard label="Total Users" value="1,234" />
-<SummaryCard label="Revenue" value="$45,678" />
-<SummaryCard label="Conversion Rate" value="3.2%" />`}
-	>
-		<Grid columns={3} gap="md">
-			<SummaryCard label="Total Users" value="1,234" />
-			<SummaryCard label="Revenue" value="$45,678" />
-			<SummaryCard label="Conversion Rate" value="3.2%" />
-		</Grid>
+	<ComponentExample code={`<SummaryCard label="Total Users" value="1,234" />`}>
+		<SummaryCard label="Total Users" value="1,234" />
 	</ComponentExample>
 
-	<h2>With Icons</h2>
-	<p>Add visual context with an icon. Use an Icon name or pass an SVG string.</p>
+	<h2>With Icon</h2>
+	<p>Add an icon for visual context.</p>
 
 	<ComponentExample
-		code={`<SummaryCard label="Documents" value="156" icon="file" />
-<SummaryCard label="Team Members" value="24" icon="users" />
-<SummaryCard label="Messages" value="89" icon="mail" />`}
+		code={`<SummaryCard label="Revenue" value="$45,678" icon="dollar-sign" />
+<SummaryCard label="Orders" value="567" icon="shopping-cart" />`}
 	>
-		<Grid columns={3} gap="md">
-			<SummaryCard label="Documents" value="156" icon="file" />
-			<SummaryCard label="Team Members" value="24" icon="users" />
-			<SummaryCard label="Messages" value="89" icon="mail" />
-		</Grid>
+		<div style="display: flex; flex-direction: column; gap: 12px;">
+			<SummaryCard label="Revenue" value="$45,678" icon="dollar-sign" />
+			<SummaryCard label="Orders" value="567" icon="shopping-cart" />
+		</div>
 	</ComponentExample>
 
 	<h2>With Count Badge</h2>
-	<p>Display a count badge next to the label using the <code>count</code> prop.</p>
+	<p>Show a count badge next to the label.</p>
 
 	<ComponentExample
-		code={`<SummaryCard label="Active Tasks" value="12" count={5} />
-<SummaryCard label="Notifications" value="New" count={23} icon="bell" />`}
+		code={`<SummaryCard label="Pending Tasks" value="12" count={3} />`}
 	>
-		<Grid columns={2} gap="md">
-			<SummaryCard label="Active Tasks" value="12" count={5} />
-			<SummaryCard label="Notifications" value="New" count={23} icon="bell" />
-		</Grid>
+		<SummaryCard label="Pending Tasks" value="12" count={3} />
 	</ComponentExample>
 
-	<h2>Clickable Cards</h2>
-	<p>Make cards clickable by adding an <code>href</code> prop. Clickable cards show a chevron indicator.</p>
+	<h2>Clickable Card</h2>
+	<p>Add href to make the card a clickable link.</p>
 
 	<ComponentExample
 		code={`<SummaryCard
-  label="View All Orders"
-  value="1,456"
-  href="/orders"
-  icon="shopping-cart"
-/>
-<SummaryCard
-  label="Analytics Dashboard"
-  value="View"
-  href="/analytics"
-  icon="bar-chart"
+  label="Active Projects"
+  value="8"
+  href="/projects"
 />`}
 	>
-		<Grid columns={2} gap="md">
-			<SummaryCard label="View All Orders" value="1,456" href="/orders" icon="shopping-cart" />
-			<SummaryCard label="Analytics Dashboard" value="View" href="/analytics" icon="bar-chart" />
-		</Grid>
+		<SummaryCard label="Active Projects" value="8" href="/projects" />
 	</ComponentExample>
 
 	<h2>Highlighted</h2>
-	<p>Emphasize important cards with the <code>highlight</code> prop.</p>
+	<p>Use highlight for important metrics.</p>
 
 	<ComponentExample
-		code={`<SummaryCard label="Total Revenue" value="$125,000" highlight />
-<SummaryCard
-  label="This Month"
-  value="$32,450"
-  highlight
-  href="/revenue/monthly"
-  icon="trending-up"
-/>`}
+		code={`<SummaryCard label="Today's Sales" value="$12,345" highlight />`}
 	>
-		<Grid columns={2} gap="md">
-			<SummaryCard label="Total Revenue" value="$125,000" highlight />
-			<SummaryCard
-				label="This Month"
-				value="$32,450"
-				highlight
-				href="/revenue/monthly"
-				icon="trending-up"
-			/>
-		</Grid>
+		<SummaryCard label="Today's Sales" value="$12,345" highlight />
 	</ComponentExample>
 
-	<h2>Value Variants</h2>
-	<p>
-		Use color variants to add semantic meaning to values: <code>success</code>,
-		<code>warning</code>, and <code>danger</code>.
-	</p>
+	<h2>Color Variants</h2>
+	<p>Use variants for semantic meaning.</p>
 
 	<ComponentExample
-		code={`<SummaryCard label="Status" value="Active" variant="success" />
-<SummaryCard label="Items" value="Low Stock" variant="warning" />
-<SummaryCard label="Errors" value="3 Critical" variant="danger" />
-<SummaryCard label="Default" value="Normal" variant="default" />`}
+		code={`<SummaryCard label="Success Rate" value="98.5%" variant="success" />
+<SummaryCard label="Warnings" value="12" variant="warning" />
+<SummaryCard label="Errors" value="3" variant="danger" />`}
 	>
-		<Grid columns={4} gap="md">
-			<SummaryCard label="Status" value="Active" variant="success" />
-			<SummaryCard label="Items" value="Low Stock" variant="warning" />
-			<SummaryCard label="Errors" value="3 Critical" variant="danger" />
-			<SummaryCard label="Default" value="Normal" variant="default" />
-		</Grid>
+		<div style="display: flex; flex-direction: column; gap: 12px;">
+			<SummaryCard label="Success Rate" value="98.5%" variant="success" />
+			<SummaryCard label="Warnings" value="12" variant="warning" />
+			<SummaryCard label="Errors" value="3" variant="danger" />
+		</div>
 	</ComponentExample>
 
 	<h2>Dashboard Example</h2>
-	<p>Combining multiple SummaryCards for a dashboard overview.</p>
+	<p>Multiple cards in a grid layout.</p>
 
 	<ComponentExample
-		code={`<Grid columns={4} gap="md">
-  <SummaryCard
-    label="Total Sales"
-    value="$84,254"
-    icon="dollar-sign"
-    variant="success"
-    highlight
-  />
-  <SummaryCard
-    label="Orders"
-    value="1,429"
-    count={12}
-    icon="shopping-bag"
-    href="/orders"
-  />
-  <SummaryCard
-    label="Customers"
-    value="3,842"
-    icon="users"
-    href="/customers"
-  />
-  <SummaryCard
-    label="Pending"
-    value="23"
-    variant="warning"
-    icon="clock"
-    href="/orders?status=pending"
-  />
+		code={`<Grid columns={2}>
+  <SummaryCard label="Users" value="1,234" icon="users" href="/users" />
+  <SummaryCard label="Revenue" value="$45,678" icon="dollar-sign" href="/revenue" />
+  <SummaryCard label="Orders" value="567" icon="shopping-cart" href="/orders" />
+  <SummaryCard label="Conversion" value="3.2%" icon="trending-up" variant="success" />
 </Grid>`}
 	>
-		<Grid columns={2} gap="md">
-			<SummaryCard
-				label="Total Sales"
-				value="$84,254"
-				icon="dollar-sign"
-				variant="success"
-				highlight
-			/>
-			<SummaryCard
-				label="Orders"
-				value="1,429"
-				count={12}
-				icon="shopping-bag"
-				href="/orders"
-			/>
-			<SummaryCard label="Customers" value="3,842" icon="users" href="/customers" />
-			<SummaryCard
-				label="Pending"
-				value="23"
-				variant="warning"
-				icon="clock"
-				href="/orders?status=pending"
-			/>
+		<Grid columns={2}>
+			<SummaryCard label="Users" value="1,234" icon="users" href="/users" />
+			<SummaryCard label="Revenue" value="$45,678" icon="dollar-sign" href="/revenue" />
+			<SummaryCard label="Orders" value="567" icon="shopping-cart" href="/orders" />
+			<SummaryCard label="Conversion" value="3.2%" icon="trending-up" variant="success" />
 		</Grid>
 	</ComponentExample>
 
@@ -246,8 +159,17 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`// Value color variants
-type SummaryCardVariant = 'default' | 'success' | 'warning' | 'danger';`}
+		code={`import { SummaryCard } from '@happyvertical/smrt-svelte';
+
+interface Props {
+  label: string;
+  value: string | number;
+  count?: number;
+  highlight?: boolean;
+  href?: string;
+  icon?: string;
+  variant?: 'default' | 'success' | 'warning' | 'danger';
+}`}
 		language="typescript"
 	/>
 </article>

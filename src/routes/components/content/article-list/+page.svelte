@@ -1,43 +1,38 @@
 <script lang="ts">
-	import { ArticleList } from '@happyvertical/svelte';
+	import { ArticleList, Grid } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
-	const sampleArticles = [
+	const mockArticles = [
 		{
 			id: '1',
-			slug: 'getting-started-with-smrt',
-			title: 'Getting Started with SMRT Framework',
-			description:
-				'Learn how to build powerful AI agents using the SMRT framework. This comprehensive guide covers installation, configuration, and your first agent.',
-			publish_date: '2024-01-15',
-			author: 'Jane Developer',
-			tags: 'tutorial,smrt,ai'
+			slug: 'getting-started',
+			title: 'Getting Started with SMRT',
+			description: 'Learn how to build your first SMRT application in under 5 minutes.',
+			publish_date: '2025-01-15',
+			author: 'Jane Smith',
+			tags: 'tutorial,beginner'
 		},
 		{
 			id: '2',
 			slug: 'advanced-patterns',
 			title: 'Advanced SMRT Patterns',
-			description:
-				'Deep dive into advanced patterns for building scalable and maintainable AI agents with SMRT.',
-			publish_date: '2024-02-20',
-			author: 'John Smith',
-			tags: 'patterns,advanced'
+			description: 'Explore advanced patterns for building scalable applications.',
+			publish_date: '2025-01-10',
+			author: 'John Doe',
+			tags: '["advanced", "patterns"]'
 		},
 		{
 			id: '3',
-			slug: 'building-gnodes',
-			title: 'Building Local Knowledge Bases with Gnodes',
-			description:
-				'Create federated knowledge bases for your community using the gnode architecture.',
-			publish_date: '2024-03-10',
-			author: 'Sarah Johnson',
-			tags: 'gnodes,federation'
+			slug: 'api-design',
+			title: 'Designing APIs with SMRT',
+			description: 'Best practices for API design using the SMRT framework.',
+			publish_date: '2025-01-05',
+			author: 'Alice Chen',
+			tags: 'api,design'
 		}
 	];
-
-	const emptyArticles: typeof sampleArticles = [];
 
 	const articleListProps = [
 		{
@@ -50,37 +45,37 @@
 			name: 'columns',
 			type: "number | 'auto'",
 			default: "'auto'",
-			description: 'Number of grid columns, or auto for responsive layout'
+			description: 'Number of grid columns or auto for responsive'
 		},
 		{
 			name: 'showExcerpt',
 			type: 'boolean',
 			default: 'true',
-			description: 'Whether to show article descriptions'
+			description: 'Show article descriptions'
 		},
 		{
 			name: 'showDate',
 			type: 'boolean',
 			default: 'true',
-			description: 'Whether to show publication dates'
+			description: 'Show publication dates'
 		},
 		{
 			name: 'showAuthor',
 			type: 'boolean',
 			default: 'true',
-			description: 'Whether to show author names'
+			description: 'Show author names'
 		},
 		{
 			name: 'showTags',
 			type: 'boolean',
 			default: 'false',
-			description: 'Whether to show article tags'
+			description: 'Show article tags as badges'
 		},
 		{
 			name: 'emptyMessage',
 			type: 'string',
-			default: "'No articles published yet. Check back soon for updates!'",
-			description: 'Message shown when articles array is empty'
+			default: "'No articles published yet...'",
+			description: 'Message shown when no articles'
 		}
 	];
 </script>
@@ -100,87 +95,57 @@
 
 	<h1>ArticleList</h1>
 	<p class="lead">
-		A responsive grid layout for displaying multiple article cards. Automatically handles empty states
-		and supports configurable column layouts.
+		Grid layout for displaying multiple article cards. Automatically handles responsive columns and
+		empty states.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { ArticleList } from '@happyvertical/svelte';`} language="typescript" />
+	<CodeBlock code={`import { ArticleList } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
-	<p>Display a list of articles in a responsive grid:</p>
+	<p>Display articles in a responsive grid layout.</p>
 
-	<ComponentExample
-		code={`<script lang="ts">
-  const articles = [
-    {
-      id: '1',
-      slug: 'getting-started',
-      title: 'Getting Started with SMRT',
-      description: 'Learn how to build AI agents...',
-      publish_date: '2024-01-15',
-      author: 'Jane Developer',
-      tags: 'tutorial,smrt'
-    },
-    // ... more articles
-  ];
-</script>
-
-<ArticleList {articles} />`}
-	>
-		<ArticleList articles={sampleArticles} />
+	<ComponentExample code={`<ArticleList articles={articles} />`}>
+		<ArticleList articles={mockArticles} />
 	</ComponentExample>
 
-	<h2>Fixed Column Layout</h2>
-	<p>Set a specific number of columns:</p>
+	<h2>Fixed Columns</h2>
+	<p>Specify exact number of columns.</p>
 
-	<ComponentExample
-		code={`<ArticleList articles={articles} columns={2} />`}
-	>
-		<ArticleList articles={sampleArticles} columns={2} />
+	<ComponentExample code={`<ArticleList articles={articles} columns={2} />`}>
+		<ArticleList articles={mockArticles} columns={2} />
 	</ComponentExample>
 
 	<h2>With Tags</h2>
-	<p>Enable tags on all article cards:</p>
+	<p>Show article tags as badges.</p>
 
-	<ComponentExample
-		code={`<ArticleList articles={articles} showTags={true} />`}
-	>
-		<ArticleList articles={sampleArticles} showTags={true} />
+	<ComponentExample code={`<ArticleList articles={articles} showTags />`}>
+		<ArticleList articles={mockArticles} showTags />
 	</ComponentExample>
 
 	<h2>Minimal Display</h2>
-	<p>Show only titles by hiding metadata:</p>
+	<p>Show only titles and excerpts.</p>
 
 	<ComponentExample
 		code={`<ArticleList
   articles={articles}
-  showExcerpt={false}
   showDate={false}
   showAuthor={false}
 />`}
 	>
-		<ArticleList
-			articles={sampleArticles}
-			showExcerpt={false}
-			showDate={false}
-			showAuthor={false}
-		/>
+		<ArticleList articles={mockArticles} showDate={false} showAuthor={false} />
 	</ComponentExample>
 
 	<h2>Empty State</h2>
-	<p>When there are no articles, a customizable empty message is displayed:</p>
+	<p>Custom message when no articles available.</p>
 
 	<ComponentExample
-		code={`<ArticleList articles={[]} />
-
-<!-- Or with custom message -->
-<ArticleList
+		code={`<ArticleList
   articles={[]}
-  emptyMessage="No news articles available at this time."
+  emptyMessage="No blog posts yet. Check back soon!"
 />`}
 	>
-		<ArticleList articles={emptyArticles} emptyMessage="No news articles available at this time." />
+		<ArticleList articles={[]} emptyMessage="No blog posts yet. Check back soon!" />
 	</ComponentExample>
 
 	<h2>Props</h2>
@@ -188,14 +153,16 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`interface Article {
+		code={`import { ArticleList } from '@happyvertical/smrt-svelte';
+
+interface Article {
   id: string;
   slug: string;
   title: string;
   description: string | null;
   publish_date: string | null;
   author: string | null;
-  tags: string;
+  tags: string; // JSON array or comma-separated
 }
 
 interface Props {

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Footer } from '@happyvertical/svelte';
+	import { Footer } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -8,7 +8,7 @@
 		{
 			name: 'children',
 			type: 'Snippet',
-			description: 'Optional footer links or additional content'
+			description: 'Content for footer links'
 		}
 	];
 </script>
@@ -28,85 +28,89 @@
 
 	<h1>Footer</h1>
 	<p class="lead">
-		A site footer component that displays copyright information with the current year and optional
-		footer links. Automatically updates the year.
+		Site footer component with automatic copyright year and optional links. Uses a subtle
+		background color and centered layout.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Footer } from '@happyvertical/svelte';`} language="typescript" />
+	<CodeBlock code={`import { Footer } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
-	<p>
-		The Footer automatically displays a copyright notice with the current year. No props are
-		required.
-	</p>
+	<p>Footer with automatic copyright year.</p>
 
-	<ComponentExample
-		code={`<Footer />`}
-	>
-		<div class="footer-demo">
-			<Footer />
-		</div>
+	<ComponentExample code={`<Footer />`}>
+		<Footer />
 	</ComponentExample>
 
 	<h2>With Links</h2>
-	<p>Add footer links using the default slot (children).</p>
+	<p>Add footer links using the children snippet.</p>
 
 	<ComponentExample
 		code={`<Footer>
   <a href="/privacy">Privacy Policy</a>
   <a href="/terms">Terms of Service</a>
-  <a href="/contact">Contact Us</a>
+  <a href="/contact">Contact</a>
 </Footer>`}
 	>
-		<div class="footer-demo">
-			<Footer>
-				<a href="/privacy">Privacy Policy</a>
-				<a href="/terms">Terms of Service</a>
-				<a href="/contact">Contact Us</a>
-			</Footer>
-		</div>
+		<Footer>
+			<a href="/privacy">Privacy Policy</a>
+			<a href="/terms">Terms of Service</a>
+			<a href="/contact">Contact</a>
+		</Footer>
 	</ComponentExample>
 
-	<h2>With External Links</h2>
-	<p>Include social or external links.</p>
+	<h2>Common Pattern</h2>
+	<p>Footer typically placed at the bottom of your layout.</p>
 
-	<ComponentExample
-		code={`<Footer>
-  <a href="https://github.com/happyvertical">GitHub</a>
-  <a href="https://twitter.com/happyvertical">Twitter</a>
-  <a href="/docs">Documentation</a>
-</Footer>`}
-	>
-		<div class="footer-demo">
-			<Footer>
-				<a href="https://github.com/happyvertical">GitHub</a>
-				<a href="https://twitter.com/happyvertical">Twitter</a>
-				<a href="/docs">Documentation</a>
-			</Footer>
-		</div>
-	</ComponentExample>
+	<CodeBlock
+		code={`<script>
+  import { Header, Container, Footer } from '@happyvertical/smrt-svelte';
+</script>
 
-	<h2>Styling</h2>
-	<p>The Footer component applies several styles:</p>
-	<ul>
-		<li>
-			Background uses <code>--color-neutral-gray100</code>
-		</li>
-		<li>
-			Border top uses <code>--color-neutral-gray200</code>
-		</li>
-		<li>Centered text alignment</li>
-		<li>
-			Links use <code>--color-primary-main</code> with underline on hover
-		</li>
-		<li>
-			Automatic margin top of <code>--spacing-3xl</code>
-		</li>
-	</ul>
+<div class="app">
+  <Header>
+    {#snippet logo()}
+      <a href="/"><h1>My App</h1></a>
+    {/snippet}
+  </Header>
+
+  <main>
+    <Container>
+      <slot />
+    </Container>
+  </main>
+
+  <Footer>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+  </Footer>
+</div>
+
+<style>
+  .app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  main {
+    flex: 1;
+  }
+</style>`}
+		language="svelte"
+	/>
 
 	<h2>Props</h2>
 	<PropsTable props={footerProps} />
+
+	<h2>TypeScript</h2>
+	<CodeBlock
+		code={`import { Footer } from '@happyvertical/smrt-svelte';
+
+interface Props {
+  children?: Snippet;
+}`}
+		language="typescript"
+	/>
 </article>
 
 <style>
@@ -165,25 +169,5 @@
 		padding: 2px 6px;
 		background: #f5f5f5;
 		border-radius: 3px;
-	}
-
-	.prose ul {
-		color: #666;
-		margin-bottom: 16px;
-		line-height: 1.6;
-		padding-left: 24px;
-	}
-
-	.prose li {
-		margin-bottom: 8px;
-	}
-
-	.footer-demo {
-		border-radius: 8px;
-		overflow: hidden;
-	}
-
-	.footer-demo :global(.site-footer) {
-		margin-top: 0;
 	}
 </style>

@@ -8,7 +8,7 @@
 		{
 			name: 'amount',
 			type: 'number',
-			description: 'Amount in cents (e.g., 12500 = $125.00)',
+			description: 'Amount in cents',
 			required: true
 		},
 		{
@@ -59,173 +59,162 @@
 
 	<h1>CurrencyDisplay</h1>
 	<p class="lead">
-		Formats and displays monetary values with proper currency symbols and locale formatting. Takes
-		amounts in cents for precision and supports CAD/USD currencies.
+		Formatted currency values with locale support. Takes amounts in cents and displays formatted
+		currency with proper symbols.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock
-		code={`import { CurrencyDisplay } from '@happyvertical/smrt-svelte';`}
-		language="typescript"
-	/>
+	<CodeBlock code={`import { CurrencyDisplay } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
-	<p>
-		Pass the amount in cents. The component handles conversion to dollars and proper formatting.
-	</p>
+	<p>Display currency values (amounts are in cents).</p>
 
 	<ComponentExample
-		code={`<CurrencyDisplay amount={12500} />
-<CurrencyDisplay amount={9999} />
-<CurrencyDisplay amount={50} />
-<CurrencyDisplay amount={0} />`}
+		code={`<CurrencyDisplay amount={12345} />
+<CurrencyDisplay amount={9900} />
+<CurrencyDisplay amount={50} />`}
 	>
-		<CurrencyDisplay amount={12500} />
-		<CurrencyDisplay amount={9999} />
-		<CurrencyDisplay amount={50} />
-		<CurrencyDisplay amount={0} />
+		<div style="display: flex; gap: 16px; flex-wrap: wrap;">
+			<CurrencyDisplay amount={12345} />
+			<CurrencyDisplay amount={9900} />
+			<CurrencyDisplay amount={50} />
+		</div>
 	</ComponentExample>
 
 	<h2>Currency Types</h2>
-	<p>Supports both CAD (default) and USD currencies.</p>
+	<p>Support for CAD and USD currencies.</p>
 
 	<ComponentExample
-		code={`<CurrencyDisplay amount={12500} currency="CAD" />
-<CurrencyDisplay amount={12500} currency="USD" />`}
+		code={`<CurrencyDisplay amount={9999} currency="CAD" />
+<CurrencyDisplay amount={9999} currency="USD" />`}
 	>
-		<CurrencyDisplay amount={12500} currency="CAD" />
-		<CurrencyDisplay amount={12500} currency="USD" />
-	</ComponentExample>
-
-	<h2>Sizes</h2>
-	<p>Three sizes are available: <code>sm</code>, <code>md</code> (default), and <code>lg</code>.</p>
-
-	<ComponentExample
-		code={`<CurrencyDisplay amount={12500} size="sm" />
-<CurrencyDisplay amount={12500} size="md" />
-<CurrencyDisplay amount={12500} size="lg" />`}
-	>
-		<CurrencyDisplay amount={12500} size="sm" />
-		<CurrencyDisplay amount={12500} size="md" />
-		<CurrencyDisplay amount={12500} size="lg" />
+		<div style="display: flex; gap: 16px;">
+			<div>
+				<div style="font-size: 0.75rem; color: #666; margin-bottom: 4px;">CAD</div>
+				<CurrencyDisplay amount={9999} currency="CAD" />
+			</div>
+			<div>
+				<div style="font-size: 0.75rem; color: #666; margin-bottom: 4px;">USD</div>
+				<CurrencyDisplay amount={9999} currency="USD" />
+			</div>
+		</div>
 	</ComponentExample>
 
 	<h2>Negative Values</h2>
-	<p>Negative amounts are displayed with a minus sign by default.</p>
+	<p>Display negative amounts with optional highlighting.</p>
 
 	<ComponentExample
-		code={`<CurrencyDisplay amount={-12500} />
-<CurrencyDisplay amount={-5000} />
-<CurrencyDisplay amount={-99} />`}
+		code={`<CurrencyDisplay amount={-5000} />
+<CurrencyDisplay amount={-5000} highlightNegative />`}
 	>
-		<CurrencyDisplay amount={-12500} />
-		<CurrencyDisplay amount={-5000} />
-		<CurrencyDisplay amount={-99} />
-	</ComponentExample>
-
-	<h2>Show Sign</h2>
-	<p>
-		Use <code>showSign</code> to explicitly show + or - signs for non-zero values.
-	</p>
-
-	<ComponentExample
-		code={`<CurrencyDisplay amount={12500} showSign />
-<CurrencyDisplay amount={-12500} showSign />
-<CurrencyDisplay amount={0} showSign />`}
-	>
-		<CurrencyDisplay amount={12500} showSign />
-		<CurrencyDisplay amount={-12500} showSign />
-		<CurrencyDisplay amount={0} showSign />
-	</ComponentExample>
-
-	<h2>Highlight Negative Values</h2>
-	<p>
-		Use <code>highlightNegative</code> to display negative amounts in red.
-	</p>
-
-	<ComponentExample
-		code={`<CurrencyDisplay amount={12500} highlightNegative />
-<CurrencyDisplay amount={-12500} highlightNegative />
-<CurrencyDisplay amount={-5000} highlightNegative size="lg" />`}
-	>
-		<CurrencyDisplay amount={12500} highlightNegative />
-		<CurrencyDisplay amount={-12500} highlightNegative />
-		<CurrencyDisplay amount={-5000} highlightNegative size="lg" />
-	</ComponentExample>
-
-	<h2>Highlight Positive Values</h2>
-	<p>
-		Use <code>highlightPositive</code> to display positive amounts in green.
-	</p>
-
-	<ComponentExample
-		code={`<CurrencyDisplay amount={12500} highlightPositive />
-<CurrencyDisplay amount={-12500} highlightPositive />
-<CurrencyDisplay amount={5000} highlightPositive size="lg" />`}
-	>
-		<CurrencyDisplay amount={12500} highlightPositive />
-		<CurrencyDisplay amount={-12500} highlightPositive />
-		<CurrencyDisplay amount={5000} highlightPositive size="lg" />
-	</ComponentExample>
-
-	<h2>Combined Highlighting</h2>
-	<p>Use both highlight props for profit/loss displays.</p>
-
-	<ComponentExample
-		code={`<CurrencyDisplay amount={25000} highlightPositive highlightNegative showSign />
-<CurrencyDisplay amount={-15000} highlightPositive highlightNegative showSign />
-<CurrencyDisplay amount={0} highlightPositive highlightNegative showSign />`}
-	>
-		<CurrencyDisplay amount={25000} highlightPositive highlightNegative showSign />
-		<CurrencyDisplay amount={-15000} highlightPositive highlightNegative showSign />
-		<CurrencyDisplay amount={0} highlightPositive highlightNegative showSign />
-	</ComponentExample>
-
-	<h2>Use Cases</h2>
-
-	<h3>Invoice Totals</h3>
-	<ComponentExample
-		code={`<CurrencyDisplay amount={125000} size="lg" />
-<CurrencyDisplay amount={999900} size="lg" />`}
-	>
-		<div class="use-case-grid">
-			<div class="use-case-item">
-				<span class="use-case-label">Subtotal</span>
-				<CurrencyDisplay amount={125000} size="lg" />
+		<div style="display: flex; gap: 16px;">
+			<div>
+				<div style="font-size: 0.75rem; color: #666; margin-bottom: 4px;">Default</div>
+				<CurrencyDisplay amount={-5000} />
 			</div>
-			<div class="use-case-item">
-				<span class="use-case-label">Grand Total</span>
-				<CurrencyDisplay amount={999900} size="lg" />
+			<div>
+				<div style="font-size: 0.75rem; color: #666; margin-bottom: 4px;">Highlighted</div>
+				<CurrencyDisplay amount={-5000} highlightNegative />
 			</div>
 		</div>
 	</ComponentExample>
 
-	<h3>Account Balance</h3>
+	<h2>With Sign</h2>
+	<p>Show explicit +/- signs for all non-zero values.</p>
+
 	<ComponentExample
-		code={`<CurrencyDisplay amount={50000} highlightPositive highlightNegative size="lg" />
-<CurrencyDisplay amount={-12500} highlightPositive highlightNegative size="lg" />`}
+		code={`<CurrencyDisplay amount={2500} showSign />
+<CurrencyDisplay amount={-1500} showSign />`}
 	>
-		<div class="use-case-grid">
-			<div class="use-case-item">
-				<span class="use-case-label">Available</span>
-				<CurrencyDisplay amount={50000} highlightPositive highlightNegative size="lg" />
+		<div style="display: flex; gap: 16px;">
+			<CurrencyDisplay amount={2500} showSign />
+			<CurrencyDisplay amount={-1500} showSign />
+		</div>
+	</ComponentExample>
+
+	<h2>Highlighted Values</h2>
+	<p>Color-code positive and negative values.</p>
+
+	<ComponentExample
+		code={`<CurrencyDisplay amount={15000} highlightPositive />
+<CurrencyDisplay amount={-8000} highlightNegative />`}
+	>
+		<div style="display: flex; gap: 16px;">
+			<div>
+				<div style="font-size: 0.75rem; color: #666; margin-bottom: 4px;">Profit</div>
+				<CurrencyDisplay amount={15000} highlightPositive />
 			</div>
-			<div class="use-case-item">
-				<span class="use-case-label">Overdue</span>
-				<CurrencyDisplay amount={-12500} highlightPositive highlightNegative size="lg" />
+			<div>
+				<div style="font-size: 0.75rem; color: #666; margin-bottom: 4px;">Loss</div>
+				<CurrencyDisplay amount={-8000} highlightNegative />
 			</div>
 		</div>
+	</ComponentExample>
+
+	<h2>Sizes</h2>
+	<p>Available in small, medium, and large sizes.</p>
+
+	<ComponentExample
+		code={`<CurrencyDisplay amount={9999} size="sm" />
+<CurrencyDisplay amount={9999} size="md" />
+<CurrencyDisplay amount={9999} size="lg" />`}
+	>
+		<div style="display: flex; gap: 16px; align-items: center;">
+			<CurrencyDisplay amount={9999} size="sm" />
+			<CurrencyDisplay amount={9999} size="md" />
+			<CurrencyDisplay amount={9999} size="lg" />
+		</div>
+	</ComponentExample>
+
+	<h2>Table Example</h2>
+	<p>Using CurrencyDisplay in a data table.</p>
+
+	<ComponentExample
+		code={`<table>
+  <tr><td>Revenue</td><td><CurrencyDisplay amount={125000} highlightPositive /></td></tr>
+  <tr><td>Expenses</td><td><CurrencyDisplay amount={-45000} highlightNegative /></td></tr>
+  <tr><td>Profit</td><td><CurrencyDisplay amount={80000} highlightPositive size="lg" /></td></tr>
+</table>`}
+	>
+		<table style="width: 100%; border-collapse: collapse;">
+			<tbody>
+				<tr style="border-bottom: 1px solid #eee;">
+					<td style="padding: 12px 0;">Revenue</td>
+					<td style="padding: 12px 0; text-align: right;">
+						<CurrencyDisplay amount={125000} highlightPositive />
+					</td>
+				</tr>
+				<tr style="border-bottom: 1px solid #eee;">
+					<td style="padding: 12px 0;">Expenses</td>
+					<td style="padding: 12px 0; text-align: right;">
+						<CurrencyDisplay amount={-45000} highlightNegative />
+					</td>
+				</tr>
+				<tr>
+					<td style="padding: 12px 0; font-weight: 600;">Profit</td>
+					<td style="padding: 12px 0; text-align: right;">
+						<CurrencyDisplay amount={80000} highlightPositive size="lg" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</ComponentExample>
 
 	<h2>Props</h2>
 	<PropsTable props={currencyDisplayProps} />
 
-	<h2>Notes</h2>
+	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`// Amounts are in cents for precision
-// 12500 cents = $125.00
-// Uses Intl.NumberFormat with en-CA locale
-// Tabular nums font feature for aligned digits`}
+		code={`import { CurrencyDisplay } from '@happyvertical/smrt-svelte';
+
+interface Props {
+  amount: number;  // In cents
+  currency?: 'CAD' | 'USD';
+  showSign?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  highlightNegative?: boolean;
+  highlightPositive?: boolean;
+}`}
 		language="typescript"
 	/>
 </article>
@@ -274,13 +263,6 @@
 		margin-bottom: 16px;
 	}
 
-	.prose h3 {
-		font-size: 1.1rem;
-		font-weight: 600;
-		margin-top: 32px;
-		margin-bottom: 12px;
-	}
-
 	.prose p {
 		color: #666;
 		margin-bottom: 16px;
@@ -293,24 +275,5 @@
 		padding: 2px 6px;
 		background: #f5f5f5;
 		border-radius: 3px;
-	}
-
-	.use-case-grid {
-		display: flex;
-		flex-direction: column;
-		gap: 12px;
-	}
-
-	.use-case-item {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 24px;
-		padding: 8px 0;
-	}
-
-	.use-case-label {
-		font-size: 0.875rem;
-		color: #666;
 	}
 </style>

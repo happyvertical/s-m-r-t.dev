@@ -1,66 +1,78 @@
 <script lang="ts">
 	import Grid from './Grid.svelte';
-	import { ThemeSwitcher, ColorSchemeToggle } from '@happyvertical/smrt-svelte/themes';
+	import { SelectInput } from '@happyvertical/smrt-svelte';
+	import { theme, type Theme } from '$lib/stores/theme';
+
+	const themeOptions = [
+		{ value: 'light', label: 'Light' },
+		{ value: 'dark', label: 'Dark' },
+		{ value: 'system', label: 'System' }
+	];
+
+	function handleThemeChange(value: string) {
+		theme.set(value as Theme);
+	}
 </script>
 
-<header>
+<header role="banner">
 	<Grid>
 		<div class="header-content">
-			<a href="/" class="branding">s-m-r-t</a>
-			<nav>
+			<a href="/" class="branding" aria-label="s-m-r-t Framework Home">s-m-r-t</a>
+			<nav role="navigation" aria-label="Main navigation">
 				<a href="/docs">Docs</a>
 				<a href="/components">Components</a>
 				<a href="/modules">Modules</a>
 				<a href="/reference">Reference</a>
 				<a href="/faq">FAQ</a>
-				<a href="/themes">Themes</a>
+				<div class="theme-switcher">
+					<SelectInput
+						name="theme"
+						options={themeOptions}
+						value={$theme}
+						onchange={handleThemeChange}
+					/>
+				</div>
 			</nav>
-			<div class="theme-controls">
-				<ColorSchemeToggle variant="buttons" showLabels={false} />
-			</div>
 		</div>
 	</Grid>
 </header>
 
 <style>
 	header {
-		padding: 24px 0;
-		border-bottom: 1px solid var(--smrt-color-outline, #e5e5e5);
-		background: var(--smrt-color-surface, #ffffff);
+		background: var(--smrt-color-surface, white);
+		border-bottom: 1px solid var(--color-grid, #e5e5e5);
+		padding: 16px 0;
 	}
 
 	.header-content {
-		grid-column: 1 / -1;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		gap: 24px;
 	}
 
 	.branding {
-		font-family: var(--font-mono, monospace);
-		font-weight: bold;
 		font-size: 1.5rem;
-		color: var(--smrt-color-on-surface, #1a1a1a);
+		font-weight: 700;
+		color: var(--smrt-color-primary, #e63946);
 		text-decoration: none;
-		white-space: nowrap;
+		letter-spacing: -0.5px;
+	}
+
+	.branding:hover {
+		opacity: 0.8;
 	}
 
 	nav {
 		display: flex;
+		align-items: center;
 		gap: 24px;
-		flex: 1;
-		justify-content: center;
 	}
 
 	nav a {
+		color: var(--color-text, #1a1a1a);
 		text-decoration: none;
-		color: var(--smrt-color-on-surface, #1a1a1a);
-		font-family: var(--smrt-font-family, sans-serif);
+		font-size: 0.95rem;
 		font-weight: 500;
-		font-size: 0.9rem;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
 		transition: color 0.2s;
 	}
 
@@ -68,45 +80,33 @@
 		color: var(--smrt-color-primary, #e63946);
 	}
 
-	.theme-controls {
-		display: flex;
-		align-items: center;
-		gap: 12px;
+	.theme-switcher {
+		width: 120px;
 	}
 
-	@media (max-width: 900px) {
-		.header-content {
-			flex-wrap: wrap;
+	@media (max-width: 768px) {
+		header {
+			padding: 12px 0;
 		}
 
-		nav {
-			order: 3;
-			width: 100%;
-			justify-content: flex-start;
-			border-top: 1px solid var(--smrt-color-outline, #e5e5e5);
-			padding-top: 16px;
-			margin-top: 16px;
-		}
-	}
-
-	@media (max-width: 700px) {
 		.header-content {
 			flex-direction: column;
-			align-items: stretch;
 			gap: 16px;
+			align-items: flex-start;
+		}
+
+		.branding {
+			font-size: 1.25rem;
 		}
 
 		nav {
-			order: 0;
-			border-top: none;
-			padding-top: 0;
-			margin-top: 0;
 			flex-wrap: wrap;
 			gap: 16px;
 		}
 
-		.theme-controls {
-			justify-content: flex-end;
+		.theme-switcher {
+			width: 100%;
+			margin-top: 8px;
 		}
 	}
 </style>

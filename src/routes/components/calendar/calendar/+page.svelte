@@ -1,68 +1,28 @@
 <script lang="ts">
-	import { Calendar } from '@happyvertical/svelte';
+	import { Calendar } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-	import type { DayEventsData } from '@happyvertical/svelte';
 
-	let selectedDate = $state<string | null>(null);
-	let lastNavigation = $state<string | null>(null);
-
-	// Mock events data for demonstration
-	const mockEvents: DayEventsData[] = [
+	const mockEvents = [
 		{
-			date: '2026-01-15',
+			date: new Date().toISOString().split('T')[0],
 			events: [
-				{
-					id: '1',
-					slug: 'town-council-meeting',
-					name: 'Town Council Meeting',
-					type: 'meeting',
-					startDate: '2026-01-15T19:00:00',
-					startTime: '7:00 PM',
-					venue: 'Town Hall',
-					councilSlug: 'town-council'
-				}
+				{ type: 'meeting' as const, name: 'Town Council Meeting', startTime: '7:00 PM' },
+				{ type: 'event' as const, name: 'Community Event', startTime: '2:00 PM' }
 			]
 		},
 		{
-			date: '2026-01-18',
-			events: [
-				{
-					id: '2',
-					slug: 'tigers-vs-bears',
-					name: 'Tigers vs Bears',
-					type: 'game',
-					startDate: '2026-01-18T14:00:00',
-					startTime: '2:00 PM',
-					venue: 'Community Arena',
-					homeTeam: 'Tigers',
-					awayTeam: 'Bears'
-				},
-				{
-					id: '3',
-					slug: 'winter-festival',
-					name: 'Winter Festival',
-					type: 'event',
-					startDate: '2026-01-18T10:00:00',
-					startTime: '10:00 AM',
-					venue: 'Main Street'
-				}
-			]
+			date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+			events: [{ type: 'game' as const, name: 'Hockey Game', startTime: '6:00 PM' }]
 		},
 		{
-			date: '2026-01-22',
+			date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
 			events: [
-				{
-					id: '4',
-					slug: 'planning-committee',
-					name: 'Planning Committee',
-					type: 'meeting',
-					startDate: '2026-01-22T18:30:00',
-					startTime: '6:30 PM',
-					venue: 'Town Hall',
-					councilSlug: 'planning-committee'
-				}
+				{ type: 'meeting' as const, name: 'School Board Meeting', startTime: '6:30 PM' },
+				{ type: 'event' as const, name: 'Farmers Market', startTime: '8:00 AM' },
+				{ type: 'game' as const, name: 'Minor Hockey', startTime: '4:00 PM' },
+				{ type: 'event' as const, name: 'Book Club', startTime: '7:00 PM' }
 			]
 		}
 	];
@@ -71,55 +31,42 @@
 		{
 			name: 'events',
 			type: 'DayEventsData[] | null',
-			default: 'null',
-			description: 'Array of events grouped by date for display indicators'
+			description: 'Array of day event data objects'
 		},
 		{
 			name: 'year',
 			type: 'number',
-			default: 'new Date().getFullYear()',
+			default: 'current year',
 			description: 'Initial year to display'
 		},
 		{
 			name: 'month',
 			type: 'number',
-			default: 'new Date().getMonth()',
-			description: 'Initial month to display (0-indexed, 0 = January)'
+			default: 'current month',
+			description: 'Initial month to display (0-indexed)'
 		},
 		{
 			name: 'baseUrl',
 			type: 'string',
 			default: "'/events'",
-			description: 'Base URL for day links (e.g., /events/2026/1/15)'
+			description: 'Base URL for day links'
 		},
 		{
 			name: 'onMonthNavigate',
-			type: '(direction: "prev" | "next", year: number, month: number) => void',
-			default: 'undefined',
-			description: 'Callback when navigating to prev/next month'
+			type: "(direction: 'prev' | 'next', year: number, month: number) => void",
+			description: 'Callback when navigating months'
 		},
 		{
 			name: 'onDateSelect',
 			type: '(date: string, hasEvents: boolean) => void',
-			default: 'undefined',
-			description: 'Callback when a date cell is clicked'
+			description: 'Callback when a date is clicked'
 		},
 		{
 			name: 'onTodayClick',
 			type: '() => void',
-			default: 'undefined',
 			description: 'Callback when Today button is clicked'
 		}
 	];
-
-	function handleDateSelect(date: string, hasEvents: boolean) {
-		selectedDate = date;
-	}
-
-	function handleMonthNavigate(direction: 'prev' | 'next', year: number, month: number) {
-		const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-		lastNavigation = `Navigated ${direction} to ${months[month]} ${year}`;
-	}
 </script>
 
 <svelte:head>
@@ -137,138 +84,93 @@
 
 	<h1>Calendar</h1>
 	<p class="lead">
-		A month view calendar component with event indicators and day navigation. Displays events with
-		type-specific icons and supports month/year selection.
+		Month view calendar with event indicators, navigation controls, and day linking. Perfect for
+		local news sites, event calendars, and scheduling applications.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Calendar } from '@happyvertical/svelte';`} language="typescript" />
+	<CodeBlock code={`import { Calendar } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
-	<p>The Calendar component displays a month view with navigation controls.</p>
+	<p>Simple calendar without events.</p>
 
-	<ComponentExample
-		code={`<Calendar />`}
-	>
+	<ComponentExample code={`<Calendar />`}>
 		<Calendar />
 	</ComponentExample>
 
 	<h2>With Events</h2>
-	<p>
-		Pass event data to display indicators on days with events. Events are displayed with
-		type-specific icons: meetings, games, and general events.
-	</p>
+	<p>Display event indicators on days with events.</p>
 
 	<ComponentExample
-		code={`<script lang="ts">
-  import type { DayEventsData } from '@happyvertical/svelte';
-
-  const events: DayEventsData[] = [
-    {
-      date: '2026-01-15',
-      events: [
-        {
-          id: '1',
-          slug: 'town-council-meeting',
-          name: 'Town Council Meeting',
-          type: 'meeting',
-          startDate: '2026-01-15T19:00:00',
-          startTime: '7:00 PM',
-          venue: 'Town Hall',
-          councilSlug: 'town-council'
-        }
-      ]
-    },
-    {
-      date: '2026-01-18',
-      events: [
-        {
-          id: '2',
-          slug: 'tigers-vs-bears',
-          name: 'Tigers vs Bears',
-          type: 'game',
-          startDate: '2026-01-18T14:00:00',
-          startTime: '2:00 PM',
-          homeTeam: 'Tigers',
-          awayTeam: 'Bears'
-        }
-      ]
-    }
-  ];
-</script>
-
-<Calendar events={events} year={2026} month={0} />`}
+		code={`<Calendar events={[
+  {
+    date: '2025-01-20',
+    events: [
+      { type: 'meeting', name: 'Council Meeting', startTime: '7:00 PM' },
+      { type: 'event', name: 'Community Event', startTime: '2:00 PM' }
+    ]
+  }
+]} />`}
 	>
-		<Calendar events={mockEvents} year={2026} month={0} />
+		<Calendar events={mockEvents} />
 	</ComponentExample>
 
-	<h2>Interactive Example</h2>
-	<p>
-		Use callbacks to respond to user interactions. Click a date or navigate months to see the
-		callbacks in action.
-	</p>
+	<h2>Event Types</h2>
+	<p>Different icons for different event types.</p>
+
+	<div class="event-types">
+		<div class="event-type">
+			<span class="event-icon">🏒</span>
+			<span class="event-label">game - Sports events</span>
+		</div>
+		<div class="event-type">
+			<span class="event-icon">🏛</span>
+			<span class="event-label">meeting - Council/board meetings</span>
+		</div>
+		<div class="event-type">
+			<span class="event-icon">📅</span>
+			<span class="event-label">event - General events</span>
+		</div>
+	</div>
+
+	<h2>Initial Date</h2>
+	<p>Start the calendar on a specific month/year.</p>
 
 	<ComponentExample
-		code={`<script lang="ts">
-  let selectedDate = $state<string | null>(null);
-  let lastNavigation = $state<string | null>(null);
-
-  function handleDateSelect(date: string, hasEvents: boolean) {
-    selectedDate = date;
-  }
-
-  function handleMonthNavigate(direction: 'prev' | 'next', year: number, month: number) {
-    lastNavigation = \`Navigated \${direction} to \${month + 1}/\${year}\`;
-  }
-</script>
-
-<Calendar
-  events={events}
-  year={2026}
-  month={0}
-  onDateSelect={handleDateSelect}
-  onMonthNavigate={handleMonthNavigate}
-/>
-
-{#if selectedDate}
-  <p>Selected: {selectedDate}</p>
-{/if}
-{#if lastNavigation}
-  <p>{lastNavigation}</p>
-{/if}`}
+		code={`<Calendar year={2025} month={6} />  <!-- July 2025 -->`}
 	>
-		<div class="interactive-demo">
-			<Calendar
-				events={mockEvents}
-				year={2026}
-				month={0}
-				onDateSelect={handleDateSelect}
-				onMonthNavigate={handleMonthNavigate}
-			/>
-			<div class="demo-output">
-				{#if selectedDate}
-					<p><strong>Selected:</strong> {selectedDate}</p>
-				{/if}
-				{#if lastNavigation}
-					<p><strong>Navigation:</strong> {lastNavigation}</p>
-				{/if}
-				{#if !selectedDate && !lastNavigation}
-					<p class="hint">Click a date or navigate months to see callbacks</p>
-				{/if}
-			</div>
-		</div>
+		<Calendar year={2025} month={6} />
 	</ComponentExample>
 
 	<h2>Custom Base URL</h2>
-	<p>
-		The <code>baseUrl</code> prop controls the link destination for each day cell. Links are generated
-		as <code>{'{baseUrl}/{year}/{month}/{day}'}</code>.
-	</p>
+	<p>Change the URL pattern for day links.</p>
 
 	<ComponentExample
 		code={`<Calendar baseUrl="/schedule" />`}
 	>
-		<Calendar baseUrl="/schedule" />
+		<div style="font-size: 0.875rem; color: #666; padding: 16px; background: #f5f5f5; border-radius: 4px;">
+			Day links will use pattern: <code>/schedule/2025/1/20</code>
+		</div>
+	</ComponentExample>
+
+	<h2>Callbacks</h2>
+	<p>Handle navigation and selection events.</p>
+
+	<ComponentExample
+		code={`<Calendar
+  onMonthNavigate={(dir, year, month) => console.log(\`Navigated \${dir}\`)}
+  onDateSelect={(date, hasEvents) => console.log(\`Selected \${date}\`)}
+  onTodayClick={() => console.log('Today clicked')}
+/>`}
+	>
+		<div style="font-size: 0.875rem; color: #666; padding: 16px; background: #f5f5f5; border-radius: 4px;">
+			<p style="margin: 0;">Callbacks available:</p>
+			<ul style="margin: 8px 0 0 0; padding-left: 20px;">
+				<li><code>onMonthNavigate</code> - When prev/next month clicked</li>
+				<li><code>onDateSelect</code> - When a date cell is clicked</li>
+				<li><code>onTodayClick</code> - When Today button is clicked</li>
+			</ul>
+		</div>
 	</ComponentExample>
 
 	<h2>Props</h2>
@@ -276,27 +178,30 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import type { DayEventsData, DayEventDetail } from '@happyvertical/svelte';
+		code={`import { Calendar } from '@happyvertical/smrt-svelte';
+
+interface DayEventDetail {
+  type: 'game' | 'meeting' | 'event';
+  name: string;
+  startTime: string;
+  venue?: string;
+  slug?: string;
+  councilSlug?: string;
+}
 
 interface DayEventsData {
-  date: string; // YYYY-MM-DD
+  date: string;  // YYYY-MM-DD
   events: DayEventDetail[];
 }
 
-interface DayEventDetail {
-  id: string;
-  slug: string;
-  name: string;
-  type: 'game' | 'meeting' | 'event';
-  startDate: string; // ISO datetime
-  startTime: string; // "7:30 PM"
-  venue?: string;
-  venueSlug?: string;
-  // Game-specific
-  homeTeam?: string;
-  awayTeam?: string;
-  // Meeting-specific
-  councilSlug?: string;
+interface Props {
+  events?: DayEventsData[] | null;
+  year?: number;
+  month?: number;  // 0-indexed
+  baseUrl?: string;
+  onMonthNavigate?: (direction: 'prev' | 'next', year: number, month: number) => void;
+  onDateSelect?: (date: string, hasEvents: boolean) => void;
+  onTodayClick?: () => void;
 }`}
 		language="typescript"
 	/>
@@ -360,26 +265,28 @@ interface DayEventDetail {
 		border-radius: 3px;
 	}
 
-	.interactive-demo {
+	.event-types {
 		display: flex;
 		flex-direction: column;
-		gap: 16px;
+		gap: 12px;
+		margin: 16px 0 32px;
+		padding: 20px;
+		background: #fafafa;
+		border-radius: 8px;
 	}
 
-	.demo-output {
-		padding: 12px 16px;
-		background: #f9f9f9;
-		border-radius: 6px;
+	.event-type {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+
+	.event-icon {
+		font-size: 1.5rem;
+	}
+
+	.event-label {
+		color: #666;
 		font-size: 0.9rem;
-	}
-
-	.demo-output p {
-		margin: 4px 0;
-		color: #333;
-	}
-
-	.demo-output .hint {
-		color: #999;
-		font-style: italic;
 	}
 </style>

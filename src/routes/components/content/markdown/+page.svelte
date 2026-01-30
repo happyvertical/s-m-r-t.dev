@@ -1,34 +1,30 @@
 <script lang="ts">
-	import { Markdown } from '@happyvertical/svelte';
+	import { Markdown } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
 	const basicMarkdown = `# Welcome to SMRT
 
-This is a paragraph with **bold text** and *italic text*.
+This is a **paragraph** with *emphasis* and **strong text**.
 
 ## Features
 
-- Define business logic once
-- Auto-generate APIs and CLI
-- AI-powered methods
-
-### Getting Started
-
-Check out the documentation to learn more.`;
+- Simple API
+- Type safety
+- Great documentation`;
 
 	const headingsMarkdown = `# Heading 1
 ## Heading 2
 ### Heading 3`;
 
-	const formattingMarkdown = `This text contains **bold words** and *italicized words*.
+	const formattingMarkdown = `This text has **bold words** and *italic words*.
 
-You can combine **bold and *nested italic*** for emphasis.`;
+You can also combine **bold and *nested italic* text**.`;
 
-	const listMarkdown = `- First item in the list
-- Second item with more details
-- Third item completes the set`;
+	const listMarkdown = `- First item
+- Second item
+- Third item with more detail`;
 
 	const markdownProps = [
 		{
@@ -55,97 +51,112 @@ You can combine **bold and *nested italic*** for emphasis.`;
 
 	<h1>Markdown</h1>
 	<p class="lead">
-		A simple markdown renderer that converts common markdown syntax to styled HTML.
-		Supports headings, bold, italic, and lists.
+		Render markdown content with XSS protection. Supports headings, bold, italic, and lists.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Markdown } from '@happyvertical/svelte';`} language="typescript" />
+	<CodeBlock code={`import { Markdown } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
-	<p>Render markdown content with automatic styling:</p>
+	<p>Render markdown content with automatic styling.</p>
 
-	<ComponentExample
-		code={`<script lang="ts">
-  const content = \`# Welcome to SMRT
-
-This is a paragraph with **bold text** and *italic text*.
-
-## Features
-
-- Define business logic once
-- Auto-generate APIs and CLI
-- AI-powered methods
-
-### Getting Started
-
-Check out the documentation to learn more.\`;
-</script>
-
-<Markdown {content} />`}
-	>
+	<ComponentExample code={`<Markdown content={markdownText} />`}>
 		<Markdown content={basicMarkdown} />
 	</ComponentExample>
 
 	<h2>Headings</h2>
-	<p>Three levels of headings are supported:</p>
+	<p>Support for H1, H2, and H3 headings.</p>
 
 	<ComponentExample
-		code={`<Markdown content="# Heading 1
+		code={`<Markdown content={\`# Heading 1
 ## Heading 2
-### Heading 3" />`}
+### Heading 3\`} />`}
 	>
 		<Markdown content={headingsMarkdown} />
 	</ComponentExample>
 
 	<h2>Text Formatting</h2>
-	<p>Bold and italic text formatting:</p>
+	<p>Bold and italic text formatting.</p>
 
 	<ComponentExample
-		code={`<Markdown content="This text contains **bold words** and *italicized words*.
-
-You can combine **bold and *nested italic*** for emphasis." />`}
+		code={`<Markdown content="**bold** and *italic*" />`}
 	>
 		<Markdown content={formattingMarkdown} />
 	</ComponentExample>
 
 	<h2>Lists</h2>
-	<p>Unordered lists with the dash syntax:</p>
+	<p>Unordered list support.</p>
 
 	<ComponentExample
-		code={`<Markdown content="- First item in the list
-- Second item with more details
-- Third item completes the set" />`}
+		code={`<Markdown content={\`- First item
+- Second item
+- Third item\`} />`}
 	>
 		<Markdown content={listMarkdown} />
+	</ComponentExample>
+
+	<h2>Security</h2>
+	<p>
+		The Markdown component automatically escapes HTML to prevent XSS attacks. User-provided content
+		is safe to render.
+	</p>
+
+	<ComponentExample
+		code={`<Markdown content="<script>alert('xss')</script>" />`}
+	>
+		<Markdown content="<script>alert('xss')</script> - This is escaped and safe!" />
 	</ComponentExample>
 
 	<h2>Props</h2>
 	<PropsTable props={markdownProps} />
 
-	<h2>Supported Syntax</h2>
-	<CodeBlock
-		code={`# Heading 1
-## Heading 2
-### Heading 3
-
-**bold text**
-*italic text*
-
-- list item
-- another item
-
-Paragraphs separated by blank lines.`}
-		language="markdown"
-	/>
-
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`interface Props {
+		code={`import { Markdown } from '@happyvertical/smrt-svelte';
+
+interface Props {
   content: string;
 }`}
 		language="typescript"
 	/>
+
+	<h2>Supported Syntax</h2>
+	<div class="syntax-table">
+		<table>
+			<thead>
+				<tr>
+					<th>Syntax</th>
+					<th>Output</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code># Heading 1</code></td>
+					<td>H1 heading</td>
+				</tr>
+				<tr>
+					<td><code>## Heading 2</code></td>
+					<td>H2 heading</td>
+				</tr>
+				<tr>
+					<td><code>### Heading 3</code></td>
+					<td>H3 heading</td>
+				</tr>
+				<tr>
+					<td><code>**bold**</code></td>
+					<td>Bold text</td>
+				</tr>
+				<tr>
+					<td><code>*italic*</code></td>
+					<td>Italic text</td>
+				</tr>
+				<tr>
+					<td><code>- item</code></td>
+					<td>List item</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </article>
 
 <style>
@@ -201,6 +212,35 @@ Paragraphs separated by blank lines.`}
 	.prose code {
 		font-family: var(--font-mono);
 		font-size: 0.9em;
+		padding: 2px 6px;
+		background: #f5f5f5;
+		border-radius: 3px;
+	}
+
+	.syntax-table {
+		margin-top: 16px;
+	}
+
+	.syntax-table table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+	.syntax-table th,
+	.syntax-table td {
+		padding: 12px 16px;
+		text-align: left;
+		border-bottom: 1px solid var(--color-grid);
+	}
+
+	.syntax-table th {
+		font-weight: 600;
+		background: #fafafa;
+	}
+
+	.syntax-table td code {
+		font-family: var(--font-mono);
+		font-size: 0.85em;
 		padding: 2px 6px;
 		background: #f5f5f5;
 		border-radius: 3px;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Container, Card } from '@happyvertical/svelte';
+	import { Container } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -10,12 +10,6 @@
 			type: "'sm' | 'md' | 'lg' | 'xl' | 'full'",
 			default: "'lg'",
 			description: 'Maximum width of the container'
-		},
-		{
-			name: 'children',
-			type: 'Snippet',
-			description: 'Container content',
-			required: true
 		}
 	];
 </script>
@@ -35,90 +29,99 @@
 
 	<h1>Container</h1>
 	<p class="lead">
-		A responsive wrapper component that centers content and applies consistent horizontal padding
-		with configurable maximum width.
+		Centered max-width container with responsive padding. Use to constrain content width and
+		provide consistent horizontal spacing.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Container } from '@happyvertical/svelte';`} language="typescript" />
+	<CodeBlock code={`import { Container } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
-	<p>The Container component centers content and adds responsive horizontal padding.</p>
+	<p>The default container with lg max-width (1024px).</p>
 
 	<ComponentExample
 		code={`<Container>
-  <p>Content is centered with consistent padding.</p>
+  <p>Content inside a centered container</p>
 </Container>`}
 	>
-		<div class="demo-bg">
+		<div class="demo-area">
 			<Container>
-				<Card>
-					<p>Content is centered with consistent padding.</p>
-				</Card>
+				<div class="demo-content">Content inside a centered container</div>
 			</Container>
 		</div>
 	</ComponentExample>
 
-	<h2>Max Width</h2>
-	<p>
-		Control the maximum width with the <code>maxWidth</code> prop. Options are: <code>sm</code> (640px),
-		<code>md</code> (768px), <code>lg</code> (1024px, default), <code>xl</code> (1280px), and
-		<code>full</code> (100%).
-	</p>
+	<h2>Max Width Sizes</h2>
+	<p>Choose from sm (640px), md (768px), lg (1024px), xl (1280px), or full width.</p>
 
 	<ComponentExample
-		code={`<Container maxWidth="sm">Small (640px)</Container>
-<Container maxWidth="md">Medium (768px)</Container>
-<Container maxWidth="lg">Large (1024px)</Container>
-<Container maxWidth="xl">Extra Large (1280px)</Container>
+		code={`<Container maxWidth="sm">Small - 640px</Container>
+<Container maxWidth="md">Medium - 768px</Container>
+<Container maxWidth="lg">Large - 1024px (default)</Container>
+<Container maxWidth="xl">Extra Large - 1280px</Container>
 <Container maxWidth="full">Full Width</Container>`}
 	>
-		<div class="width-demos">
-			<div class="demo-bg">
+		<div class="size-demos">
+			<div class="demo-area">
 				<Container maxWidth="sm">
-					<Card><strong>sm</strong> - 640px max</Card>
+					<div class="demo-content">Small - 640px</div>
 				</Container>
 			</div>
-			<div class="demo-bg">
+			<div class="demo-area">
 				<Container maxWidth="md">
-					<Card><strong>md</strong> - 768px max</Card>
+					<div class="demo-content">Medium - 768px</div>
 				</Container>
 			</div>
-			<div class="demo-bg">
+			<div class="demo-area">
 				<Container maxWidth="lg">
-					<Card><strong>lg</strong> - 1024px max</Card>
-				</Container>
-			</div>
-			<div class="demo-bg">
-				<Container maxWidth="xl">
-					<Card><strong>xl</strong> - 1280px max</Card>
-				</Container>
-			</div>
-			<div class="demo-bg">
-				<Container maxWidth="full">
-					<Card><strong>full</strong> - 100% width</Card>
+					<div class="demo-content">Large - 1024px</div>
 				</Container>
 			</div>
 		</div>
 	</ComponentExample>
 
-	<h2>Responsive Padding</h2>
-	<p>
-		The Container automatically adjusts horizontal padding based on viewport width. On smaller
-		screens, it uses <code>--spacing-md</code>, and on screens 640px and wider, it uses
-		<code>--spacing-lg</code>.
-	</p>
+	<h2>Common Patterns</h2>
+	<p>Use Container to wrap page content for consistent layout.</p>
+
+	<CodeBlock
+		code={`<script>
+  import { Container, Header, Footer } from '@happyvertical/smrt-svelte';
+</script>
+
+<Header />
+
+<main>
+  <Container>
+    <h1>Page Title</h1>
+    <p>Page content...</p>
+  </Container>
+</main>
+
+<Footer />`}
+		language="svelte"
+	/>
 
 	<h2>Props</h2>
 	<PropsTable props={containerProps} />
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import type { MaxWidth } from '@happyvertical/svelte';
+		code={`import { Container } from '@happyvertical/smrt-svelte';
 
-// MaxWidth = 'sm' | 'md' | 'lg' | 'xl' | 'full'`}
+type MaxWidth = 'sm' | 'md' | 'lg' | 'xl' | 'full';
+
+interface Props {
+  maxWidth?: MaxWidth;
+  children?: Snippet;
+}`}
 		language="typescript"
 	/>
+
+	<h2>Responsive Behavior</h2>
+	<p>
+		Container automatically adjusts padding on smaller screens. On mobile, padding is reduced
+		while maintaining centered content.
+	</p>
 </article>
 
 <style>
@@ -179,23 +182,22 @@
 		border-radius: 3px;
 	}
 
-	.demo-bg {
+	.demo-area {
 		background: #f0f0f0;
 		padding: 16px 0;
-		border-radius: 4px;
+		margin-bottom: 16px;
 	}
 
-	.width-demos {
+	.demo-content {
+		background: #fff;
+		padding: 16px;
+		text-align: center;
+		border: 1px dashed #ccc;
+	}
+
+	.size-demos {
 		display: flex;
 		flex-direction: column;
 		gap: 16px;
-	}
-
-	:global(.width-demos .card) {
-		text-align: center;
-	}
-
-	:global(.width-demos .card p) {
-		margin: 0;
 	}
 </style>

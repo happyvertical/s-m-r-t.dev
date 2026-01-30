@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Badge } from '@happyvertical/svelte';
+	import { Badge } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -9,19 +9,13 @@
 			name: 'variant',
 			type: "'default' | 'primary' | 'success' | 'warning' | 'error' | 'info'",
 			default: "'default'",
-			description: 'Color variant for semantic meaning'
+			description: 'Visual style variant'
 		},
 		{
 			name: 'size',
 			type: "'sm' | 'md'",
 			default: "'md'",
 			description: 'Badge size'
-		},
-		{
-			name: 'children',
-			type: 'Snippet',
-			description: 'Badge content',
-			required: true
 		}
 	];
 </script>
@@ -41,17 +35,22 @@
 
 	<h1>Badge</h1>
 	<p class="lead">
-		A small status indicator component with semantic color variants for highlighting information.
+		Small status indicator with color variants. Perfect for labeling, categorizing, or showing
+		status information.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Badge } from '@happyvertical/svelte';`} language="typescript" />
+	<CodeBlock code={`import { Badge } from '@happyvertical/smrt-svelte';`} language="typescript" />
+
+	<h2>Basic Usage</h2>
+	<p>The default badge style with neutral colors.</p>
+
+	<ComponentExample code={`<Badge>Default</Badge>`}>
+		<Badge>Default</Badge>
+	</ComponentExample>
 
 	<h2>Variants</h2>
-	<p>
-		Badges support six variants: <code>default</code>, <code>primary</code>, <code>success</code>,
-		<code>warning</code>, <code>error</code>, and <code>info</code>.
-	</p>
+	<p>Choose from semantic color variants for different contexts.</p>
 
 	<ComponentExample
 		code={`<Badge variant="default">Default</Badge>
@@ -61,58 +60,48 @@
 <Badge variant="error">Error</Badge>
 <Badge variant="info">Info</Badge>`}
 	>
-		<Badge variant="default">Default</Badge>
-		<Badge variant="primary">Primary</Badge>
-		<Badge variant="success">Success</Badge>
-		<Badge variant="warning">Warning</Badge>
-		<Badge variant="error">Error</Badge>
-		<Badge variant="info">Info</Badge>
+		<div class="badge-row">
+			<Badge variant="default">Default</Badge>
+			<Badge variant="primary">Primary</Badge>
+			<Badge variant="success">Success</Badge>
+			<Badge variant="warning">Warning</Badge>
+			<Badge variant="error">Error</Badge>
+			<Badge variant="info">Info</Badge>
+		</div>
 	</ComponentExample>
 
 	<h2>Sizes</h2>
-	<p>Two sizes are available: <code>sm</code> and <code>md</code> (default).</p>
+	<p>Two size options: small and medium (default).</p>
 
 	<ComponentExample
 		code={`<Badge size="sm">Small</Badge>
 <Badge size="md">Medium</Badge>`}
 	>
-		<Badge size="sm">Small</Badge>
-		<Badge size="md">Medium</Badge>
+		<div class="badge-row">
+			<Badge size="sm">Small</Badge>
+			<Badge size="md">Medium</Badge>
+		</div>
 	</ComponentExample>
 
-	<h2>Status Examples</h2>
-	<p>Common use cases for status indicators.</p>
+	<h2>Use Cases</h2>
+	<p>Common patterns for using badges in your application.</p>
 
 	<ComponentExample
-		code={`<Badge variant="success">Active</Badge>
+		code={`<!-- Status indicators -->
+<Badge variant="success">Active</Badge>
 <Badge variant="warning">Pending</Badge>
-<Badge variant="error">Failed</Badge>
-<Badge variant="default">Draft</Badge>`}
-	>
-		<Badge variant="success">Active</Badge>
-		<Badge variant="warning">Pending</Badge>
-		<Badge variant="error">Failed</Badge>
-		<Badge variant="default">Draft</Badge>
-	</ComponentExample>
+<Badge variant="error">Expired</Badge>
 
-	<h2>With Text</h2>
-	<p>Badges work well inline with text content.</p>
-
-	<ComponentExample
-		code={`<p>
-  Order Status: <Badge variant="success">Completed</Badge>
-</p>
-<p>
-  Review Status: <Badge variant="warning">In Progress</Badge>
-</p>`}
+<!-- Labels and tags -->
+<Badge variant="primary">New</Badge>
+<Badge variant="info">Featured</Badge>`}
 	>
-		<div class="text-examples">
-			<p>
-				Order Status: <Badge variant="success">Completed</Badge>
-			</p>
-			<p>
-				Review Status: <Badge variant="warning">In Progress</Badge>
-			</p>
+		<div class="badge-row">
+			<Badge variant="success">Active</Badge>
+			<Badge variant="warning">Pending</Badge>
+			<Badge variant="error">Expired</Badge>
+			<Badge variant="primary">New</Badge>
+			<Badge variant="info">Featured</Badge>
 		</div>
 	</ComponentExample>
 
@@ -121,10 +110,16 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import type { BadgeVariant, BadgeSize } from '@happyvertical/svelte';
+		code={`import { Badge } from '@happyvertical/smrt-svelte';
 
-// BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info'
-// BadgeSize = 'sm' | 'md'`}
+type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info';
+type BadgeSize = 'sm' | 'md';
+
+interface Props {
+  variant?: BadgeVariant;
+  size?: BadgeSize;
+  children?: Snippet;
+}`}
 		language="typescript"
 	/>
 </article>
@@ -187,8 +182,10 @@
 		border-radius: 3px;
 	}
 
-	.text-examples p {
-		margin: 8px 0;
-		font-size: 0.95rem;
+	.badge-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		align-items: center;
 	}
 </style>

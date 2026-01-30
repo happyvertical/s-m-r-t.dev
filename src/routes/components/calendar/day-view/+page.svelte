@@ -1,140 +1,52 @@
 <script lang="ts">
-	import { DayView } from '@happyvertical/svelte';
+	import { DayView } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-	import type { DayEventDetail, DayForecast } from '@happyvertical/svelte';
 
-	let lastClickedEvent = $state<string | null>(null);
+	const today = new Date();
 
-	// Mock events data for demonstration
-	const mockEvents: DayEventDetail[] = [
-		{
-			id: '1',
-			slug: 'town-council-meeting',
-			name: 'Town Council Meeting',
-			type: 'meeting',
-			startDate: '2026-01-15T19:00:00',
-			startTime: '7:00 PM',
-			venue: 'Town Hall',
-			councilSlug: 'town-council'
-		},
-		{
-			id: '2',
-			slug: 'planning-committee',
-			name: 'Planning Committee',
-			type: 'meeting',
-			startDate: '2026-01-15T18:00:00',
-			startTime: '6:00 PM',
-			venue: 'Council Chambers',
-			councilSlug: 'planning-committee'
-		}
+	const mockEvents = [
+		{ type: 'meeting' as const, name: 'Town Council Meeting', startTime: '7:00 PM', venue: 'Town Hall' },
+		{ type: 'game' as const, name: 'Minor Hockey - Atoms vs Stars', startTime: '6:00 PM', venue: 'Community Arena', slug: 'atoms-vs-stars' },
+		{ type: 'event' as const, name: 'Farmers Market', startTime: '8:00 AM', venue: 'Main Street' }
 	];
 
-	const gameEvents: DayEventDetail[] = [
-		{
-			id: '3',
-			slug: 'tigers-vs-bears',
-			name: 'Tigers vs Bears',
-			type: 'game',
-			startDate: '2026-01-18T14:00:00',
-			startTime: '2:00 PM',
-			venue: 'Community Arena',
-			homeTeam: 'Tigers',
-			awayTeam: 'Bears'
-		},
-		{
-			id: '4',
-			slug: 'eagles-vs-hawks',
-			name: 'Eagles vs Hawks',
-			type: 'game',
-			startDate: '2026-01-18T16:30:00',
-			startTime: '4:30 PM',
-			venue: 'Community Arena',
-			homeTeam: 'Eagles',
-			awayTeam: 'Hawks'
-		}
-	];
-
-	const mixedEvents: DayEventDetail[] = [
-		{
-			id: '5',
-			slug: 'winter-festival',
-			name: 'Winter Festival Opening',
-			type: 'event',
-			startDate: '2026-01-20T10:00:00',
-			startTime: '10:00 AM',
-			venue: 'Main Street'
-		},
-		{
-			id: '6',
-			slug: 'tigers-vs-wolves',
-			name: 'Tigers vs Wolves',
-			type: 'game',
-			startDate: '2026-01-20T14:00:00',
-			startTime: '2:00 PM',
-			venue: 'Community Arena',
-			homeTeam: 'Tigers',
-			awayTeam: 'Wolves'
-		},
-		{
-			id: '7',
-			slug: 'city-council-special',
-			name: 'City Council Special Session',
-			type: 'meeting',
-			startDate: '2026-01-20T19:00:00',
-			startTime: '7:00 PM',
-			venue: 'City Hall',
-			councilSlug: 'city-council'
-		}
-	];
-
-	const mockForecast: DayForecast = {
-		id: 'forecast-1',
-		dayName: 'Wednesday',
-		date: '2026-01-15',
-		icon: '\u{2600}',
-		high: 42,
-		low: 28,
-		hourlyData: []
+	const mockForecast = {
+		icon: '☀️',
+		high: 5,
+		low: -3
 	};
 
 	const dayViewProps = [
 		{
 			name: 'date',
 			type: 'Date',
-			description: 'The date to display',
+			description: 'Date to display',
 			required: true
 		},
 		{
 			name: 'events',
 			type: 'DayEventDetail[] | null',
-			default: 'null',
 			description: 'Array of events for the day'
 		},
 		{
 			name: 'forecast',
 			type: 'DayForecast | null',
-			default: 'null',
 			description: 'Weather forecast for the day'
 		},
 		{
 			name: 'calendarUrl',
 			type: 'string',
 			default: "'/events'",
-			description: 'URL for the "Back to Calendar" link'
+			description: 'URL for back to calendar link'
 		},
 		{
 			name: 'onEventClick',
 			type: '(eventType: string, eventName: string) => void',
-			default: 'undefined',
 			description: 'Callback when an event card is clicked'
 		}
 	];
-
-	function handleEventClick(eventType: string, eventName: string) {
-		lastClickedEvent = `${eventType}: ${eventName}`;
-	}
 </script>
 
 <svelte:head>
@@ -152,144 +64,71 @@
 
 	<h1>DayView</h1>
 	<p class="lead">
-		A detailed day view component showing all events for a specific date. Events are grouped by
-		type (meetings, games, events) with optional weather forecast display.
+		Full event list for a specific day with optional weather forecast. Events are grouped by type
+		and linkable events have detail pages.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { DayView } from '@happyvertical/svelte';`} language="typescript" />
+	<CodeBlock code={`import { DayView } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
-	<p>Pass a date and events array to display the day view.</p>
+	<p>Display events for a specific date.</p>
 
-	<ComponentExample
-		code={`<script lang="ts">
-  import type { DayEventDetail } from '@happyvertical/svelte';
-
-  const events: DayEventDetail[] = [
-    {
-      id: '1',
-      slug: 'town-council-meeting',
-      name: 'Town Council Meeting',
-      type: 'meeting',
-      startDate: '2026-01-15T19:00:00',
-      startTime: '7:00 PM',
-      venue: 'Town Hall',
-      councilSlug: 'town-council'
-    }
-  ];
-</script>
-
-<DayView date={new Date('2026-01-15')} events={events} />`}
-	>
-		<DayView date={new Date('2026-01-15')} events={mockEvents} />
+	<ComponentExample code={`<DayView date={new Date()} events={events} />`}>
+		<DayView date={today} events={mockEvents} />
 	</ComponentExample>
 
-	<h2>Multiple Event Types</h2>
-	<p>
-		Events are automatically grouped by type: meetings, games, and general events. Each group has
-		its own section with a count indicator.
-	</p>
+	<h2>With Weather</h2>
+	<p>Include weather forecast in the header.</p>
 
 	<ComponentExample
 		code={`<DayView
-  date={new Date('2026-01-20')}
-  events={[
-    { type: 'event', name: 'Winter Festival', ... },
-    { type: 'game', name: 'Tigers vs Wolves', ... },
-    { type: 'meeting', name: 'City Council', ... }
-  ]}
-/>`}
-	>
-		<DayView date={new Date('2026-01-20')} events={mixedEvents} />
-	</ComponentExample>
-
-	<h2>Games Only</h2>
-	<p>When showing game events, links to game detail pages are generated automatically.</p>
-
-	<ComponentExample
-		code={`<DayView
-  date={new Date('2026-01-18')}
-  events={[
-    { type: 'game', name: 'Tigers vs Bears', ... },
-    { type: 'game', name: 'Eagles vs Hawks', ... }
-  ]}
-/>`}
-	>
-		<DayView date={new Date('2026-01-18')} events={gameEvents} />
-	</ComponentExample>
-
-	<h2>With Weather Forecast</h2>
-	<p>Include weather information by passing a forecast object.</p>
-
-	<ComponentExample
-		code={`<script lang="ts">
-  import type { DayForecast } from '@happyvertical/svelte';
-
-  const forecast: DayForecast = {
-    id: 'forecast-1',
-    dayName: 'Wednesday',
-    date: '2026-01-15',
-    icon: '\u{2600}',
-    high: 42,
-    low: 28,
-    hourlyData: []
-  };
-</script>
-
-<DayView
-  date={new Date('2026-01-15')}
+  date={new Date()}
   events={events}
-  forecast={forecast}
+  forecast={{ icon: '☀️', high: 5, low: -3 }}
 />`}
 	>
-		<DayView date={new Date('2026-01-15')} events={mockEvents} forecast={mockForecast} />
+		<DayView date={today} events={mockEvents} forecast={mockForecast} />
 	</ComponentExample>
 
 	<h2>Empty State</h2>
-	<p>When no events are scheduled, an empty state message is displayed.</p>
+	<p>When no events are scheduled.</p>
 
-	<ComponentExample
-		code={`<DayView date={new Date('2026-01-25')} events={[]} />`}
-	>
-		<DayView date={new Date('2026-01-25')} events={[]} />
+	<ComponentExample code={`<DayView date={new Date()} events={[]} />`}>
+		<DayView date={today} events={[]} />
 	</ComponentExample>
 
-	<h2>Interactive Example</h2>
-	<p>Use the <code>onEventClick</code> callback to respond to event card clicks.</p>
+	<h2>Event Grouping</h2>
+	<p>Events are automatically grouped by type (games, meetings, events).</p>
 
 	<ComponentExample
-		code={`<script lang="ts">
-  let lastClickedEvent = $state<string | null>(null);
-
-  function handleEventClick(eventType: string, eventName: string) {
-    lastClickedEvent = \`\${eventType}: \${eventName}\`;
-  }
-</script>
-
-<DayView
-  date={new Date('2026-01-20')}
-  events={mixedEvents}
-  onEventClick={handleEventClick}
-/>
-
-{#if lastClickedEvent}
-  <p>Clicked: {lastClickedEvent}</p>
-{/if}`}
+		code={`<DayView
+  date={date}
+  events={[
+    { type: 'game', name: 'Hockey Game', startTime: '6:00 PM' },
+    { type: 'game', name: 'Basketball Game', startTime: '8:00 PM' },
+    { type: 'meeting', name: 'Council Meeting', startTime: '7:00 PM' }
+  ]}
+/>`}
 	>
-		<div class="interactive-demo">
-			<DayView
-				date={new Date('2026-01-20')}
-				events={mixedEvents}
-				onEventClick={handleEventClick}
-			/>
-			<div class="demo-output">
-				{#if lastClickedEvent}
-					<p><strong>Clicked:</strong> {lastClickedEvent}</p>
-				{:else}
-					<p class="hint">Click an event card to see the callback</p>
-				{/if}
-			</div>
+		<DayView
+			date={today}
+			events={[
+				{ type: 'game' as const, name: 'Atoms vs Stars', startTime: '6:00 PM', venue: 'Arena', slug: 'atoms-vs-stars' },
+				{ type: 'game' as const, name: 'Novice Tournament', startTime: '8:00 PM', venue: 'Arena', slug: 'novice-tournament' },
+				{ type: 'meeting' as const, name: 'Town Council', startTime: '7:00 PM', venue: 'Town Hall' }
+			]}
+		/>
+	</ComponentExample>
+
+	<h2>Custom Calendar URL</h2>
+	<p>Change the back link destination.</p>
+
+	<ComponentExample
+		code={`<DayView date={date} events={events} calendarUrl="/schedule" />`}
+	>
+		<div style="font-size: 0.875rem; color: #666; padding: 16px; background: #f5f5f5; border-radius: 4px;">
+			Back link will navigate to: <code>/schedule</code>
 		</div>
 	</ComponentExample>
 
@@ -298,35 +137,40 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import type { DayEventDetail, DayForecast } from '@happyvertical/svelte';
+		code={`import { DayView } from '@happyvertical/smrt-svelte';
 
 interface DayEventDetail {
-  id: string;
-  slug: string;
-  name: string;
   type: 'game' | 'meeting' | 'event';
-  startDate: string; // ISO datetime
-  startTime: string; // "7:30 PM"
+  name: string;
+  startTime: string;
   venue?: string;
-  venueSlug?: string;
-  // Game-specific
-  homeTeam?: string;
-  awayTeam?: string;
-  // Meeting-specific
+  slug?: string;
   councilSlug?: string;
 }
 
 interface DayForecast {
-  id: string;
-  dayName: string;
-  date: string;
-  icon: string; // Weather emoji
-  high: number;
-  low: number;
-  hourlyData: HourlyForecast[];
+  icon: string;  // Weather emoji
+  high: number;  // Temperature high
+  low: number;   // Temperature low
+}
+
+interface Props {
+  date: Date;
+  events?: DayEventDetail[] | null;
+  forecast?: DayForecast | null;
+  calendarUrl?: string;
+  onEventClick?: (eventType: string, eventName: string) => void;
 }`}
 		language="typescript"
 	/>
+
+	<h2>Event Links</h2>
+	<p>Events with slugs automatically link to detail pages:</p>
+	<ul class="link-list">
+		<li><strong>Games:</strong> <code>/sports/hockey/games/{'{slug}'}/</code></li>
+		<li><strong>Meetings:</strong> <code>/meetings/{'{councilSlug}'}/{'{slug}'}/</code></li>
+		<li><strong>Events:</strong> No detail pages (display only)</li>
+	</ul>
 </article>
 
 <style>
@@ -387,26 +231,14 @@ interface DayForecast {
 		border-radius: 3px;
 	}
 
-	.interactive-demo {
-		display: flex;
-		flex-direction: column;
-		gap: 16px;
+	.link-list {
+		margin-top: 16px;
+		padding-left: 24px;
 	}
 
-	.demo-output {
-		padding: 12px 16px;
-		background: #f9f9f9;
-		border-radius: 6px;
-		font-size: 0.9rem;
-	}
-
-	.demo-output p {
-		margin: 4px 0;
-		color: #333;
-	}
-
-	.demo-output .hint {
-		color: #999;
-		font-style: italic;
+	.link-list li {
+		color: #666;
+		margin-bottom: 8px;
+		line-height: 1.6;
 	}
 </style>

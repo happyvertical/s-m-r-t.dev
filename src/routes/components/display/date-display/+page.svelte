@@ -4,19 +4,16 @@
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
-	// Sample dates for examples
 	const now = new Date();
 	const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 	const lastWeek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-	const lastMonth = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-	const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 	const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
 	const dateDisplayProps = [
 		{
 			name: 'date',
 			type: 'Date | string | number | null | undefined',
-			description: 'Date to display (Date object, ISO string, or timestamp)',
+			description: 'Date to display (Date, ISO string, or timestamp)',
 			required: true
 		},
 		{
@@ -29,7 +26,7 @@
 			name: 'fallback',
 			type: 'string',
 			default: "'N/A'",
-			description: 'Fallback text when date is null/undefined'
+			description: 'Text shown when date is null/undefined'
 		},
 		{
 			name: 'showTime',
@@ -61,233 +58,124 @@
 
 	<h1>DateDisplay</h1>
 	<p class="lead">
-		Formats and displays dates with various format options including relative time. Supports Date
-		objects, ISO strings, and timestamps with proper locale handling.
+		Formatted dates with multiple format options and relative time support. Accepts Date objects,
+		ISO strings, or timestamps.
 	</p>
 
 	<h2>Installation</h2>
 	<CodeBlock code={`import { DateDisplay } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
+	<h2>Basic Usage</h2>
+	<p>Display dates in medium format (default).</p>
+
+	<ComponentExample code={`<DateDisplay date={new Date()} />`}>
+		<DateDisplay date={now} />
+	</ComponentExample>
+
 	<h2>Format Options</h2>
-	<p>
-		Four format options are available: <code>short</code>, <code>medium</code> (default),
-		<code>long</code>, and <code>relative</code>.
-	</p>
+	<p>Available format styles.</p>
 
 	<ComponentExample
-		code={`<DateDisplay date={new Date()} format="short" />
-<DateDisplay date={new Date()} format="medium" />
-<DateDisplay date={new Date()} format="long" />
-<DateDisplay date={new Date()} format="relative" />`}
+		code={`<DateDisplay date={date} format="short" />
+<DateDisplay date={date} format="medium" />
+<DateDisplay date={date} format="long" />
+<DateDisplay date={date} format="relative" />`}
 	>
-		<div class="format-grid">
-			<div class="format-item">
-				<span class="format-label">short</span>
+		<div style="display: flex; flex-direction: column; gap: 12px;">
+			<div style="display: flex; align-items: center; gap: 12px;">
+				<span style="min-width: 80px; color: #666; font-size: 0.875rem;">Short:</span>
 				<DateDisplay date={now} format="short" />
 			</div>
-			<div class="format-item">
-				<span class="format-label">medium</span>
+			<div style="display: flex; align-items: center; gap: 12px;">
+				<span style="min-width: 80px; color: #666; font-size: 0.875rem;">Medium:</span>
 				<DateDisplay date={now} format="medium" />
 			</div>
-			<div class="format-item">
-				<span class="format-label">long</span>
+			<div style="display: flex; align-items: center; gap: 12px;">
+				<span style="min-width: 80px; color: #666; font-size: 0.875rem;">Long:</span>
 				<DateDisplay date={now} format="long" />
 			</div>
-			<div class="format-item">
-				<span class="format-label">relative</span>
+			<div style="display: flex; align-items: center; gap: 12px;">
+				<span style="min-width: 80px; color: #666; font-size: 0.875rem;">Relative:</span>
 				<DateDisplay date={now} format="relative" />
 			</div>
 		</div>
 	</ComponentExample>
 
-	<h2>Relative Time (Past)</h2>
-	<p>The relative format shows human-friendly time differences for past dates.</p>
+	<h2>Relative Time</h2>
+	<p>Human-readable relative time display.</p>
 
 	<ComponentExample
-		code={`<DateDisplay date={new Date()} format="relative" />
-<DateDisplay date={yesterday} format="relative" />
+		code={`<DateDisplay date={yesterday} format="relative" />
 <DateDisplay date={lastWeek} format="relative" />
-<DateDisplay date={lastMonth} format="relative" />`}
-	>
-		<div class="format-grid">
-			<div class="format-item">
-				<span class="format-label">Now</span>
-				<DateDisplay date={now} format="relative" />
-			</div>
-			<div class="format-item">
-				<span class="format-label">Yesterday</span>
-				<DateDisplay date={yesterday} format="relative" />
-			</div>
-			<div class="format-item">
-				<span class="format-label">Last week</span>
-				<DateDisplay date={lastWeek} format="relative" />
-			</div>
-			<div class="format-item">
-				<span class="format-label">Last month</span>
-				<DateDisplay date={lastMonth} format="relative" />
-			</div>
-		</div>
-	</ComponentExample>
-
-	<h2>Relative Time (Future)</h2>
-	<p>Future dates show upcoming time differences.</p>
-
-	<ComponentExample
-		code={`<DateDisplay date={tomorrow} format="relative" />
 <DateDisplay date={nextWeek} format="relative" />`}
 	>
-		<div class="format-grid">
-			<div class="format-item">
-				<span class="format-label">Tomorrow</span>
-				<DateDisplay date={tomorrow} format="relative" />
-			</div>
-			<div class="format-item">
-				<span class="format-label">Next week</span>
-				<DateDisplay date={nextWeek} format="relative" />
-			</div>
+		<div style="display: flex; flex-direction: column; gap: 8px;">
+			<div>Yesterday: <DateDisplay date={yesterday} format="relative" /></div>
+			<div>Last week: <DateDisplay date={lastWeek} format="relative" /></div>
+			<div>Next week: <DateDisplay date={nextWeek} format="relative" /></div>
 		</div>
 	</ComponentExample>
 
 	<h2>With Time</h2>
-	<p>
-		Use <code>showTime</code> to include the time alongside the date.
-	</p>
+	<p>Include time in the display.</p>
 
-	<ComponentExample
-		code={`<DateDisplay date={new Date()} format="short" showTime />
-<DateDisplay date={new Date()} format="medium" showTime />
-<DateDisplay date={new Date()} format="long" showTime />`}
-	>
-		<div class="format-grid">
-			<div class="format-item">
-				<span class="format-label">short + time</span>
+	<ComponentExample code={`<DateDisplay date={date} showTime />`}>
+		<div style="display: flex; flex-direction: column; gap: 8px;">
+			<div>
+				<span style="color: #666; font-size: 0.875rem;">Short with time: </span>
 				<DateDisplay date={now} format="short" showTime />
 			</div>
-			<div class="format-item">
-				<span class="format-label">medium + time</span>
+			<div>
+				<span style="color: #666; font-size: 0.875rem;">Medium with time: </span>
 				<DateDisplay date={now} format="medium" showTime />
 			</div>
-			<div class="format-item">
-				<span class="format-label">long + time</span>
-				<DateDisplay date={now} format="long" showTime />
-			</div>
 		</div>
 	</ComponentExample>
 
-	<h2>Input Types</h2>
-	<p>Accepts Date objects, ISO strings, or timestamps.</p>
+	<h2>Input Formats</h2>
+	<p>Accepts various date input formats.</p>
 
 	<ComponentExample
-		code={`<DateDisplay date={new Date()} />
-<DateDisplay date="2024-06-15T14:30:00Z" />
-<DateDisplay date={1718451000000} />`}
+		code={`<!-- Date object -->
+<DateDisplay date={new Date()} />
+
+<!-- ISO string -->
+<DateDisplay date="2025-01-15" />
+
+<!-- Timestamp -->
+<DateDisplay date={1705276800000} />`}
 	>
-		<div class="format-grid">
-			<div class="format-item">
-				<span class="format-label">Date object</span>
+		<div style="display: flex; flex-direction: column; gap: 8px;">
+			<div>
+				<span style="color: #666; font-size: 0.875rem;">Date object: </span>
 				<DateDisplay date={now} />
 			</div>
-			<div class="format-item">
-				<span class="format-label">ISO string</span>
-				<DateDisplay date="2024-06-15T14:30:00Z" />
+			<div>
+				<span style="color: #666; font-size: 0.875rem;">ISO string: </span>
+				<DateDisplay date="2025-01-15" />
 			</div>
-			<div class="format-item">
-				<span class="format-label">Timestamp</span>
-				<DateDisplay date={1718451000000} />
+			<div>
+				<span style="color: #666; font-size: 0.875rem;">Timestamp: </span>
+				<DateDisplay date={1705276800000} />
 			</div>
 		</div>
 	</ComponentExample>
 
-	<h2>Null/Undefined Handling</h2>
-	<p>When the date is null or undefined, a fallback is displayed.</p>
+	<h2>Null Handling</h2>
+	<p>Display fallback text when date is null or undefined.</p>
 
 	<ComponentExample
 		code={`<DateDisplay date={null} />
-<DateDisplay date={undefined} />
-<DateDisplay date={null} fallback="Not set" />
-<DateDisplay date={null} fallback="--" />`}
+<DateDisplay date={null} fallback="Not set" />`}
 	>
-		<div class="format-grid">
-			<div class="format-item">
-				<span class="format-label">null (default)</span>
+		<div style="display: flex; gap: 16px;">
+			<div>
+				<span style="color: #666; font-size: 0.875rem;">Default: </span>
 				<DateDisplay date={null} />
 			</div>
-			<div class="format-item">
-				<span class="format-label">undefined</span>
-				<DateDisplay date={undefined} />
-			</div>
-			<div class="format-item">
-				<span class="format-label">Custom fallback</span>
+			<div>
+				<span style="color: #666; font-size: 0.875rem;">Custom: </span>
 				<DateDisplay date={null} fallback="Not set" />
-			</div>
-			<div class="format-item">
-				<span class="format-label">Dash fallback</span>
-				<DateDisplay date={null} fallback="--" />
-			</div>
-		</div>
-	</ComponentExample>
-
-	<h2>Locale</h2>
-	<p>Change the locale for different date formatting conventions.</p>
-
-	<ComponentExample
-		code={`<DateDisplay date={new Date()} locale="en-CA" />
-<DateDisplay date={new Date()} locale="en-US" />
-<DateDisplay date={new Date()} locale="fr-CA" />
-<DateDisplay date={new Date()} locale="de-DE" />`}
-	>
-		<div class="format-grid">
-			<div class="format-item">
-				<span class="format-label">en-CA</span>
-				<DateDisplay date={now} locale="en-CA" />
-			</div>
-			<div class="format-item">
-				<span class="format-label">en-US</span>
-				<DateDisplay date={now} locale="en-US" />
-			</div>
-			<div class="format-item">
-				<span class="format-label">fr-CA</span>
-				<DateDisplay date={now} locale="fr-CA" />
-			</div>
-			<div class="format-item">
-				<span class="format-label">de-DE</span>
-				<DateDisplay date={now} locale="de-DE" />
-			</div>
-		</div>
-	</ComponentExample>
-
-	<h2>Use Cases</h2>
-
-	<h3>Invoice Due Dates</h3>
-	<ComponentExample
-		code={`<DateDisplay date={tomorrow} format="medium" />
-<DateDisplay date={lastWeek} format="relative" />`}
-	>
-		<div class="use-case-grid">
-			<div class="use-case-item">
-				<span class="use-case-label">Due date</span>
-				<DateDisplay date={tomorrow} format="medium" />
-			</div>
-			<div class="use-case-item">
-				<span class="use-case-label">Last activity</span>
-				<DateDisplay date={lastWeek} format="relative" />
-			</div>
-		</div>
-	</ComponentExample>
-
-	<h3>Activity Timestamps</h3>
-	<ComponentExample
-		code={`<DateDisplay date={now} format="relative" />
-<DateDisplay date={now} format="short" showTime />`}
-	>
-		<div class="use-case-grid">
-			<div class="use-case-item">
-				<span class="use-case-label">Updated</span>
-				<DateDisplay date={now} format="relative" />
-			</div>
-			<div class="use-case-item">
-				<span class="use-case-label">Created</span>
-				<DateDisplay date={now} format="short" showTime />
 			</div>
 		</div>
 	</ComponentExample>
@@ -295,16 +183,18 @@
 	<h2>Props</h2>
 	<PropsTable props={dateDisplayProps} />
 
-	<h2>Semantic HTML</h2>
+	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`<!-- Renders as <time datetime="..."> for accessibility -->
-<time class="date-display" datetime="2024-06-15T14:30:00.000Z">
-  Jun 15, 2024
-</time>
+		code={`import { DateDisplay } from '@happyvertical/smrt-svelte';
 
-<!-- Fallback renders as <span> -->
-<span class="date-display date-fallback">N/A</span>`}
-		language="html"
+interface Props {
+  date: Date | string | number | null | undefined;
+  format?: 'short' | 'medium' | 'long' | 'relative';
+  fallback?: string;
+  showTime?: boolean;
+  locale?: string;
+}`}
+		language="typescript"
 	/>
 </article>
 
@@ -352,13 +242,6 @@
 		margin-bottom: 16px;
 	}
 
-	.prose h3 {
-		font-size: 1.1rem;
-		font-weight: 600;
-		margin-top: 32px;
-		margin-bottom: 12px;
-	}
-
 	.prose p {
 		color: #666;
 		margin-bottom: 16px;
@@ -371,43 +254,5 @@
 		padding: 2px 6px;
 		background: #f5f5f5;
 		border-radius: 3px;
-	}
-
-	.format-grid {
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-	}
-
-	.format-item {
-		display: flex;
-		align-items: center;
-		gap: 16px;
-	}
-
-	.format-label {
-		font-size: 0.75rem;
-		font-family: var(--font-mono);
-		color: #999;
-		min-width: 100px;
-	}
-
-	.use-case-grid {
-		display: flex;
-		flex-direction: column;
-		gap: 12px;
-	}
-
-	.use-case-item {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 24px;
-		padding: 8px 0;
-	}
-
-	.use-case-label {
-		font-size: 0.875rem;
-		color: #666;
 	}
 </style>

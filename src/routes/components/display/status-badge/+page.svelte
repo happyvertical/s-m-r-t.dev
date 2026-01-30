@@ -15,25 +15,24 @@
 			name: 'type',
 			type: "'default' | 'invoice' | 'project' | 'expense' | 'time' | 'compliance' | 'estimate'",
 			default: "'default'",
-			description: 'Pre-defined color scheme type for the status domain'
+			description: 'Pre-defined color scheme type'
 		},
 		{
 			name: 'size',
 			type: "'sm' | 'md' | 'lg'",
 			default: "'md'",
-			description: 'Badge size'
+			description: 'Badge size variant'
 		},
 		{
 			name: 'variant',
 			type: "'filled' | 'outline'",
 			default: "'filled'",
-			description: 'Visual variant style'
+			description: 'Visual variant'
 		},
 		{
 			name: 'label',
 			type: 'string',
-			default: 'undefined',
-			description: 'Optional custom label (defaults to status value)'
+			description: 'Custom display label (defaults to status value)'
 		}
 	];
 </script>
@@ -53,174 +52,120 @@
 
 	<h1>StatusBadge</h1>
 	<p class="lead">
-		A generic status indicator badge with pre-defined color schemes for common status domains like
-		invoices, projects, expenses, and more.
+		Status indicator with pre-defined color schemes for common business domains like invoices,
+		projects, and expenses.
 	</p>
 
 	<h2>Installation</h2>
 	<CodeBlock code={`import { StatusBadge } from '@happyvertical/smrt-svelte';`} language="typescript" />
 
-	<h2>Default Status Types</h2>
-	<p>
-		The default type includes common status values: <code>active</code>, <code>inactive</code>,
-		<code>pending</code>, <code>error</code>, <code>success</code>, and <code>warning</code>.
-	</p>
+	<h2>Basic Usage</h2>
+	<p>Default status badges with automatic coloring.</p>
 
 	<ComponentExample
 		code={`<StatusBadge status="active" />
-<StatusBadge status="inactive" />
 <StatusBadge status="pending" />
-<StatusBadge status="error" />
-<StatusBadge status="success" />
-<StatusBadge status="warning" />`}
+<StatusBadge status="error" />`}
 	>
-		<StatusBadge status="active" />
-		<StatusBadge status="inactive" />
-		<StatusBadge status="pending" />
-		<StatusBadge status="error" />
-		<StatusBadge status="success" />
-		<StatusBadge status="warning" />
+		<div style="display: flex; gap: 8px; flex-wrap: wrap;">
+			<StatusBadge status="active" />
+			<StatusBadge status="pending" />
+			<StatusBadge status="error" />
+		</div>
 	</ComponentExample>
 
 	<h2>Invoice Status</h2>
-	<p>Use <code>type="invoice"</code> for invoice-specific status colors.</p>
+	<p>Pre-defined colors for invoice workflows.</p>
 
 	<ComponentExample
 		code={`<StatusBadge status="draft" type="invoice" />
 <StatusBadge status="sent" type="invoice" />
 <StatusBadge status="viewed" type="invoice" />
 <StatusBadge status="paid" type="invoice" />
-<StatusBadge status="overdue" type="invoice" />
-<StatusBadge status="cancelled" type="invoice" />`}
+<StatusBadge status="overdue" type="invoice" />`}
 	>
-		<StatusBadge status="draft" type="invoice" />
-		<StatusBadge status="sent" type="invoice" />
-		<StatusBadge status="viewed" type="invoice" />
-		<StatusBadge status="paid" type="invoice" />
-		<StatusBadge status="overdue" type="invoice" />
-		<StatusBadge status="cancelled" type="invoice" />
+		<div style="display: flex; gap: 8px; flex-wrap: wrap;">
+			<StatusBadge status="draft" type="invoice" />
+			<StatusBadge status="sent" type="invoice" />
+			<StatusBadge status="viewed" type="invoice" />
+			<StatusBadge status="paid" type="invoice" />
+			<StatusBadge status="overdue" type="invoice" />
+		</div>
 	</ComponentExample>
 
 	<h2>Project Status</h2>
-	<p>Use <code>type="project"</code> for project workflow status colors.</p>
+	<p>Colors for project management workflows.</p>
 
 	<ComponentExample
 		code={`<StatusBadge status="lead" type="project" />
 <StatusBadge status="quoted" type="project" />
 <StatusBadge status="active" type="project" />
 <StatusBadge status="on_hold" type="project" />
-<StatusBadge status="completed" type="project" />
-<StatusBadge status="archived" type="project" />`}
+<StatusBadge status="completed" type="project" />`}
 	>
-		<StatusBadge status="lead" type="project" />
-		<StatusBadge status="quoted" type="project" />
-		<StatusBadge status="active" type="project" />
-		<StatusBadge status="on_hold" type="project" />
-		<StatusBadge status="completed" type="project" />
-		<StatusBadge status="archived" type="project" />
+		<div style="display: flex; gap: 8px; flex-wrap: wrap;">
+			<StatusBadge status="lead" type="project" />
+			<StatusBadge status="quoted" type="project" />
+			<StatusBadge status="active" type="project" />
+			<StatusBadge status="on_hold" type="project" />
+			<StatusBadge status="completed" type="project" />
+		</div>
 	</ComponentExample>
 
-	<h2>Sizes</h2>
-	<p>Three sizes are available: <code>sm</code>, <code>md</code> (default), and <code>lg</code>.</p>
+	<h2>Expense Status</h2>
+	<p>Colors for expense tracking.</p>
 
-	<ComponentExample
-		code={`<StatusBadge status="active" size="sm" />
-<StatusBadge status="active" size="md" />
-<StatusBadge status="active" size="lg" />`}
-	>
-		<StatusBadge status="active" size="sm" />
-		<StatusBadge status="active" size="md" />
-		<StatusBadge status="active" size="lg" />
-	</ComponentExample>
-
-	<h2>Variants</h2>
-	<p>
-		Use the <code>variant</code> prop to switch between <code>filled</code> (default) and
-		<code>outline</code> styles.
-	</p>
-
-	<ComponentExample
-		code={`<StatusBadge status="active" variant="filled" />
-<StatusBadge status="active" variant="outline" />
-<StatusBadge status="error" variant="filled" />
-<StatusBadge status="error" variant="outline" />`}
-	>
-		<StatusBadge status="active" variant="filled" />
-		<StatusBadge status="active" variant="outline" />
-		<StatusBadge status="error" variant="filled" />
-		<StatusBadge status="error" variant="outline" />
-	</ComponentExample>
-
-	<h2>Custom Labels</h2>
-	<p>Use the <code>label</code> prop to override the displayed text.</p>
-
-	<ComponentExample
-		code={`<StatusBadge status="active" label="Live" />
-<StatusBadge status="pending" label="Awaiting Review" />
-<StatusBadge status="error" label="Action Required" />`}
-	>
-		<StatusBadge status="active" label="Live" />
-		<StatusBadge status="pending" label="Awaiting Review" />
-		<StatusBadge status="error" label="Action Required" />
-	</ComponentExample>
-
-	<h2>Other Domain Types</h2>
-	<p>Additional domain-specific color schemes are available.</p>
-
-	<h3>Expense Status</h3>
 	<ComponentExample
 		code={`<StatusBadge status="unbilled" type="expense" />
 <StatusBadge status="billed" type="expense" />
 <StatusBadge status="reimbursed" type="expense" />
 <StatusBadge status="rejected" type="expense" />`}
 	>
-		<StatusBadge status="unbilled" type="expense" />
-		<StatusBadge status="billed" type="expense" />
-		<StatusBadge status="reimbursed" type="expense" />
-		<StatusBadge status="rejected" type="expense" />
+		<div style="display: flex; gap: 8px; flex-wrap: wrap;">
+			<StatusBadge status="unbilled" type="expense" />
+			<StatusBadge status="billed" type="expense" />
+			<StatusBadge status="reimbursed" type="expense" />
+			<StatusBadge status="rejected" type="expense" />
+		</div>
 	</ComponentExample>
 
-	<h3>Time Entry Status</h3>
+	<h2>Sizes</h2>
+	<p>Available in small, medium, and large sizes.</p>
+
 	<ComponentExample
-		code={`<StatusBadge status="draft" type="time" />
-<StatusBadge status="submitted" type="time" />
-<StatusBadge status="approved" type="time" />
-<StatusBadge status="rejected" type="time" />
-<StatusBadge status="billed" type="time" />`}
+		code={`<StatusBadge status="active" size="sm" />
+<StatusBadge status="active" size="md" />
+<StatusBadge status="active" size="lg" />`}
 	>
-		<StatusBadge status="draft" type="time" />
-		<StatusBadge status="submitted" type="time" />
-		<StatusBadge status="approved" type="time" />
-		<StatusBadge status="rejected" type="time" />
-		<StatusBadge status="billed" type="time" />
+		<div style="display: flex; gap: 8px; align-items: center;">
+			<StatusBadge status="active" size="sm" />
+			<StatusBadge status="active" size="md" />
+			<StatusBadge status="active" size="lg" />
+		</div>
 	</ComponentExample>
 
-	<h3>Compliance Status</h3>
+	<h2>Outline Variant</h2>
+	<p>Use outline for a lighter appearance.</p>
+
 	<ComponentExample
-		code={`<StatusBadge status="valid" type="compliance" />
-<StatusBadge status="expiring" type="compliance" />
-<StatusBadge status="expired" type="compliance" />
-<StatusBadge status="pending" type="compliance" />`}
+		code={`<StatusBadge status="active" variant="outline" />
+<StatusBadge status="pending" variant="outline" />
+<StatusBadge status="error" variant="outline" />`}
 	>
-		<StatusBadge status="valid" type="compliance" />
-		<StatusBadge status="expiring" type="compliance" />
-		<StatusBadge status="expired" type="compliance" />
-		<StatusBadge status="pending" type="compliance" />
+		<div style="display: flex; gap: 8px; flex-wrap: wrap;">
+			<StatusBadge status="active" variant="outline" />
+			<StatusBadge status="pending" variant="outline" />
+			<StatusBadge status="error" variant="outline" />
+		</div>
 	</ComponentExample>
 
-	<h3>Estimate Status</h3>
+	<h2>Custom Label</h2>
+	<p>Override the displayed text while keeping the color scheme.</p>
+
 	<ComponentExample
-		code={`<StatusBadge status="draft" type="estimate" />
-<StatusBadge status="presented" type="estimate" />
-<StatusBadge status="accepted" type="estimate" />
-<StatusBadge status="declined" type="estimate" />
-<StatusBadge status="expired" type="estimate" />`}
+		code={`<StatusBadge status="paid" type="invoice" label="Complete" />`}
 	>
-		<StatusBadge status="draft" type="estimate" />
-		<StatusBadge status="presented" type="estimate" />
-		<StatusBadge status="accepted" type="estimate" />
-		<StatusBadge status="declined" type="estimate" />
-		<StatusBadge status="expired" type="estimate" />
+		<StatusBadge status="paid" type="invoice" label="Complete" />
 	</ComponentExample>
 
 	<h2>Props</h2>
@@ -228,9 +173,17 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import type { StatusType } from '@happyvertical/smrt-svelte';
+		code={`import { StatusBadge } from '@happyvertical/smrt-svelte';
 
-// StatusType = 'default' | 'invoice' | 'project' | 'expense' | 'time' | 'compliance' | 'estimate'`}
+type StatusType = 'default' | 'invoice' | 'project' | 'expense' | 'time' | 'compliance' | 'estimate';
+
+interface Props {
+  status: string;
+  type?: StatusType;
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'filled' | 'outline';
+  label?: string;
+}`}
 		language="typescript"
 	/>
 </article>
@@ -277,13 +230,6 @@
 		font-weight: 600;
 		margin-top: 48px;
 		margin-bottom: 16px;
-	}
-
-	.prose h3 {
-		font-size: 1.1rem;
-		font-weight: 600;
-		margin-top: 32px;
-		margin-bottom: 12px;
 	}
 
 	.prose p {

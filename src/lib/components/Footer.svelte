@@ -2,18 +2,18 @@
 	import Grid from './Grid.svelte';
 </script>
 
-<footer>
+<footer role="contentinfo">
 	<Grid>
 		<div class="footer-content">
 			<div class="brand">
-				<span class="name">s-m-r-t</span>
+				<span class="name" aria-label="s-m-r-t Framework">s-m-r-t</span>
 				<span class="tagline">Your agent's favorite typescript framework</span>
 			</div>
-			<nav>
+			<nav role="navigation" aria-label="Footer navigation">
 				<a href="/docs">Docs</a>
 				<a href="/components">Components</a>
 				<a href="/modules">Modules</a>
-				<a href="https://github.com/happyvertical/smrt" target="_blank" rel="noopener">GitHub</a>
+				<a href="https://github.com/happyvertical/smrt" target="_blank" rel="noopener noreferrer" aria-label="s-m-r-t Framework on GitHub (opens in new tab)">GitHub</a>
 			</nav>
 		</div>
 	</Grid>
