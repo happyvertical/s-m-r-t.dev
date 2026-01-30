@@ -1,4 +1,5 @@
 <script lang="ts">
+  import ModulePage from '$lib/components/ModulePage.svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
@@ -7,29 +8,20 @@
   <meta name="description" content="Hierarchical event management with calendar integration, recurrence patterns, and participant tracking." />
 </svelte:head>
 
-<div class="max-w-4xl mx-auto px-4 py-8">
-  <div class="mb-8">
-    <h1 class="text-4xl font-bold mb-4">smrt-events</h1>
-    <p class="text-xl text-gray-600 mb-4">
-      Hierarchical event management with calendar integration, recurring events, participant tracking, and meeting views.
-    </p>
-    <div class="flex gap-2 flex-wrap">
-      <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">v0.19.0</span>
-      <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Events</span>
-      <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">Calendar</span>
-      <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">MeetingView</span>
-    </div>
-  </div>
-
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Overview</h2>
-    <p class="mb-4">
+<ModulePage 
+  name="smrt-events" 
+  description="Hierarchical event management with scheduling, ticketing, and calendar integration."
+  badges={['v0.19.0', 'Events', 'Calendar']}
+>
+  <section>
+    <h2>Overview</h2>
+    <p>
       <strong>smrt-events</strong> provides comprehensive event management with infinite hierarchical nesting, recurring patterns,
       participant tracking, and conflict detection. Perfect for sports, entertainment, conferences, and municipal meetings.
     </p>
-    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
-      <p class="font-semibold mb-2">Key Features:</p>
-      <ul class="list-disc list-inside space-y-1">
+    <aside>
+      <p><strong>Key Features:</strong></p>
+      <ul>
         <li>Hierarchical events with unlimited nesting (games → quarters → goals)</li>
         <li>Event series with flexible recurrence patterns (iCal RRULE compatible)</li>
         <li>Participant tracking with roles, placement, and performance data</li>
@@ -37,16 +29,16 @@
         <li>MeetingView component (NEW v0.19.0)</li>
         <li>Integration with smrt-places for venue tracking</li>
       </ul>
-    </div>
+    </aside>
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Installation</h2>
+  <section>
+    <h2>Installation</h2>
     <CodeBlock code={`npm install @happyvertical/smrt-events`} language="bash" />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Quick Start</h2>
+  <section>
+    <h2>Quick Start</h2>
     <CodeBlock
       code={`import { EventCollection, EventSeriesCollection, EventParticipantCollection } from '@happyvertical/smrt-events';
 
@@ -98,10 +90,10 @@ await warriors.save();`}
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Core Models</h2>
+  <section>
+    <h2>Core Models</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">Event (Hierarchical)</h3>
+    <h3>Event (Hierarchical)</h3>
     <CodeBlock
       code={`class Event extends SmrtObject {
   name: string
@@ -139,7 +131,7 @@ await warriors.save();`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">EventSeries (Recurring)</h3>
+    <h3>EventSeries (Recurring)</h3>
     <CodeBlock
       code={`class EventSeries extends SmrtObject {
   name: string
@@ -167,7 +159,7 @@ interface RecurrencePattern {
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">EventParticipant</h3>
+    <h3>EventParticipant</h3>
     <CodeBlock
       code={`class EventParticipant extends SmrtObject {
   eventId: string           // FK to Event
@@ -187,8 +179,8 @@ interface RecurrencePattern {
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Hierarchical Events</h2>
+  <section>
+    <h2>Hierarchical Events</h2>
     <CodeBlock
       code={`// Create hierarchical game structure
 const game = await events.create({
@@ -224,10 +216,10 @@ const root = await goal.getRootEvent(); // game`}
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Calendar Integration</h2>
+  <section>
+    <h2>Calendar Integration</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">Date Range Queries</h3>
+    <h3>Date Range Queries</h3>
     <CodeBlock
       code={`// Get events for week
 const weekEvents = await events.getByDateRange(
@@ -251,7 +243,7 @@ const hasConflict = checkSchedulingConflict(
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Recurrence Patterns</h3>
+    <h3>Recurrence Patterns</h3>
     <CodeBlock
       code={`// Weekly meeting series
 const weeklySeries = await series.create({
@@ -280,8 +272,8 @@ const nextDate = calculateNextOccurrence(pattern, new Date());`}
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">MeetingView Component (NEW v0.19.0)</h2>
+  <section>
+    <h2>MeetingView Component (NEW v0.19.0)</h2>
     <CodeBlock
       code={`<script>
   import { MeetingView } from '@happyvertical/smrt-events/svelte';
@@ -308,54 +300,50 @@ const nextDate = calculateNextOccurrence(pattern, new Date());`}
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Best Practices</h2>
-    <div class="space-y-6">
-      <div class="bg-green-50 border-l-4 border-green-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✓ DOs</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Use event series for recurring events</li>
-          <li>Check for conflicts before scheduling</li>
-          <li>Store performance data in participant metadata</li>
-          <li>Initialize default event types with initializeDefaults()</li>
-          <li>Use placement field for home/away or speaker order</li>
-        </ul>
-      </div>
-      <div class="bg-red-50 border-l-4 border-red-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✗ DON'Ts</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Don't create circular hierarchies (parent references child)</li>
-          <li>Don't transition completed events to other states</li>
-          <li>Don't skip validation when changing event status</li>
-          <li>Don't delete parent events without handling children</li>
-          <li>Don't store large binary data in metadata (use smrt-assets)</li>
-        </ul>
-      </div>
-    </div>
+  <section>
+    <h2>Best Practices</h2>
+    <article>
+      <h3>DOs</h3>
+      <ul>
+        <li>Use event series for recurring events</li>
+        <li>Check for conflicts before scheduling</li>
+        <li>Store performance data in participant metadata</li>
+        <li>Initialize default event types with initializeDefaults()</li>
+        <li>Use placement field for home/away or speaker order</li>
+      </ul>
+    </article>
+    <article>
+      <h3>DON'Ts</h3>
+      <ul>
+        <li>Don't create circular hierarchies (parent references child)</li>
+        <li>Don't transition completed events to other states</li>
+        <li>Don't skip validation when changing event status</li>
+        <li>Don't delete parent events without handling children</li>
+        <li>Don't store large binary data in metadata (use smrt-assets)</li>
+      </ul>
+    </article>
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Related Modules</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <a href="/modules/smrt-places" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-places</h3>
-        <p class="text-sm text-gray-600">Venue and location tracking</p>
+  <section>
+    <h2>Related Modules</h2>
+    <nav>
+      <a href="/modules/smrt-places">
+        <h3>smrt-places</h3>
+        <p>Venue and location tracking</p>
       </a>
-      <a href="/modules/smrt-profiles" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-profiles</h3>
-        <p class="text-sm text-gray-600">Participant and organizer profiles</p>
+      <a href="/modules/smrt-profiles">
+        <h3>smrt-profiles</h3>
+        <p>Participant and organizer profiles</p>
       </a>
-      <a href="/modules/smrt-core" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-core</h3>
-        <p class="text-sm text-gray-600">Base classes and framework</p>
+      <a href="/modules/smrt-core">
+        <h3>smrt-core</h3>
+        <p>Base classes and framework</p>
       </a>
-    </div>
+    </nav>
   </section>
 
-  <div class="border-t pt-6 mt-12">
-    <div class="flex justify-between">
-      <a href="/modules" class="text-blue-600 hover:underline">← Back to Modules</a>
-      <a href="/modules/smrt-projects" class="text-blue-600 hover:underline">Next: smrt-projects →</a>
-    </div>
-  </div>
-</div>
+  <nav>
+    <a href="/modules">← Back to Modules</a>
+    <a href="/modules/smrt-projects">Next: smrt-projects →</a>
+  </nav>
+</ModulePage>

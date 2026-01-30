@@ -1,31 +1,13 @@
 <script lang="ts">
-	import Grid from '$lib/components/Grid.svelte';
+	import ModulePage from '$lib/components/ModulePage.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head>
-	<title>smrt-assets - Asset Management System | SMRT Documentation</title>
-	<meta
-		name="description"
-		content="Asset management with versioning, metadata, hierarchical tagging, and AI-powered operations for images, videos, and documents."
-	/>
-</svelte:head>
-
-<Grid>
-	<nav class="breadcrumb" slot="header">
-		<a href="/">Home</a>
-		<span>/</span>
-		<a href="/modules">Modules</a>
-		<span>/</span>
-		<span>smrt-assets</span>
-	</nav>
-
-	<h1>smrt-assets</h1>
-	<p class="lead">
-		Production-grade asset management with versioning, derivatives, hierarchical tagging, and
-		AI-powered operations.
-	</p>
-
+<ModulePage 
+	name="smrt-assets" 
+	description="Production-grade asset management with versioning, derivatives, hierarchical tagging, and AI-powered operations."
+	badges={['v0.19.0', 'Asset Management', 'AI-Powered']}
+>
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
@@ -90,11 +72,11 @@
 			code={`import { AssetCollection, ImageCollection @happyvertical '@happyvertical/smrt-assets';
 
 const assets = await AssetCollection.create({
-  db: { type: \'sqlite\', url: \'./assets.db\' }
+  db: { type: \\'sqlite\\', url: \\'./assets.db\\' }
 });
 
 const images = await ImageCollection.create({
-  db: { type: \'sqlite\', url: \'./assets.db\' }
+  db: { type: \\'sqlite\\', url: \\'./assets.db\\' }
 });`}
 			language="typescript"
 		/>
@@ -142,7 +124,7 @@ console.log(\`Is landscape: \${'${image.isLandscape}\`);  // true`}
 const newVersion = await assets.createNewVersion(
   asset.id,
   's3://mybucket/products/photo-v2.jpg',
-  { description: \'Updated product photo\' }
+  { description: \\'Updated product photo\\' }
 );
 
 // Get latest version
@@ -293,9 +275,9 @@ const widthField = new AssetMetafield({
 });
 
 // Validation examples
-{ type: \'integer\', minimum: 0, maximum: 10000 }
-{ type: \'string\', enum: [\'portrait\', \'landscape\', \'square\'] }
-{ type: \'string\', pattern: \'^#[0-9A-Fa-f]{6}$\' }`}
+{ type: \\'integer\\', minimum: 0, maximum: 10000 }
+{ type: \\'string\\', enum: [\\'portrait\\', \\'landscape\\', \\'square\\'] }
+{ type: \\'string\\', pattern: \\'^#[0-9A-Fa-f]{6}$\\' }`}
 			language="typescript"
 		/>
 
@@ -366,9 +348,9 @@ const details = await asset.describe('what this image shows');`}
 		<h4>Step 2: Create Responsive Derivatives</h4>
 		<CodeBlock
 			code={`const sizes = [
-  { slug: \'thumb\', width: 150, height: 150 },
-  { slug: \'preview\', width: 400, height: 300 },
-  { slug: \'full\', width: 1000, height: 750 }
+  { slug: \\'thumb\\', width: 150, height: 150 },
+  { slug: \\'preview\\', width: 400, height: 300 },
+  { slug: \\'full\\', width: 1000, height: 750 }
 ];
 
 for (const size of sizes) {
@@ -708,31 +690,9 @@ const history = await assets.listVersions(v1.id);`}
 			<li><a href="/modules/smrt-content">smrt-content</a> - Content management</li>
 		</ul>
 	</section>
-</Grid>
+</ModulePage>
 
 <style>
-	.lead {
-		font-size: 1.25rem;
-		margin-bottom: 2rem;
-	}
-
-	.breadcrumb {
-		display: flex;
-		gap: 0.5rem;
-		margin-bottom: 1rem;
-		font-size: 0.875rem;
-		color: var(--smrt-color-on-surface-variant, #666);
-	}
-
-	.breadcrumb a {
-		color: #0066cc;
-		text-decoration: none;
-	}
-
-	.breadcrumb a:hover {
-		text-decoration: underline;
-	}
-
 	section {
 		margin-bottom: 3rem;
 	}

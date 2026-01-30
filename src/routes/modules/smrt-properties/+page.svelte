@@ -1,37 +1,23 @@
 <script lang="ts">
+  import ModulePage from '$lib/components/ModulePage.svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head>
-  <title>smrt-properties - Digital Property Management | SMRT Framework</title>
-  <meta name="description" content="Manage digital properties and hierarchical zones with flexible metadata and tree-structured organization." />
-</svelte:head>
-
-<div class="max-w-4xl mx-auto px-4 py-8">
-  <div class="mb-8">
-    <h1 class="text-4xl font-bold mb-4">smrt-properties</h1>
-    <p class="text-xl text-gray-600 mb-4">
-      Digital property and zone management with hierarchical organization, dimension tracking,
-      and format validation for websites, applications, and ad placement.
-    </p>
-    <div class="flex gap-2 flex-wrap">
-      <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">v0.19.0</span>
-      <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Properties</span>
-      <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">Zones</span>
-      <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">ESM</span>
-    </div>
-  </div>
-
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Overview</h2>
-    <p class="mb-4">
+<ModulePage 
+  name="smrt-properties" 
+  description="Digital property and zone management for websites, apps, and advertising inventory."
+  badges={['v0.19.0', 'Properties', 'Zones']}
+>
+  <section>
+    <h2>Overview</h2>
+    <p>
       <strong>smrt-properties</strong> manages digital properties (websites, applications) and their hierarchical
       zones (pages, sections, ad slots). It provides tree-structured organization with flexible metadata, dimension
       tracking, and format validation.
     </p>
-    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
-      <p class="font-semibold mb-2">Key Features:</p>
-      <ul class="list-disc list-inside space-y-1">
+    <aside>
+      <p><strong>Key Features:</strong></p>
+      <ul>
         <li>Property management with domain, URL, and status tracking</li>
         <li>Hierarchical zones with unlimited nesting depth</li>
         <li>Dimension tracking (width/height) for ad slots</li>
@@ -39,16 +25,16 @@
         <li>Tree operations with cycle prevention</li>
         <li>Path traversal (ancestors/descendants)</li>
       </ul>
-    </div>
+    </aside>
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Installation</h2>
+  <section>
+    <h2>Installation</h2>
     <CodeBlock code={`npm install @happyvertical/smrt-properties`} language="bash" />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Quick Start</h2>
+  <section>
+    <h2>Quick Start</h2>
     <CodeBlock
       code={`import { PropertyCollection, ZoneCollection } from '@happyvertical/smrt-properties';
 
@@ -93,10 +79,10 @@ console.log(\`Property has \${tree.roots.length} top-level zones\`);`}
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Core Concepts</h2>
+  <section>
+    <h2>Core Concepts</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">Property Model</h3>
+    <h3>Property Model</h3>
     <CodeBlock
       code={`class Property extends SmrtObject {
   name: string
@@ -115,7 +101,7 @@ console.log(\`Property has \${tree.roots.length} top-level zones\`);`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Zone Model</h3>
+    <h3>Zone Model</h3>
     <CodeBlock
       code={`class Zone extends SmrtObject {
   propertyId: string
@@ -144,10 +130,10 @@ console.log(\`Property has \${tree.roots.length} top-level zones\`);`}
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">API Reference</h2>
+  <section>
+    <h2>API Reference</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">PropertyCollection</h3>
+    <h3>PropertyCollection</h3>
     <CodeBlock
       code={`await properties.findByDomain(domain: string)
 await properties.findByOwner(ownerId: string)
@@ -157,7 +143,7 @@ await properties.countByStatus()`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">ZoneCollection</h3>
+    <h3>ZoneCollection</h3>
     <CodeBlock
       code={`await zones.findByProperty(propertyId: string)
 await zones.findTopLevel(propertyId: string)
@@ -170,10 +156,10 @@ await zones.deleteZone(zoneId: string, cascade: boolean)`}
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Examples</h2>
+  <section>
+    <h2>Examples</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">Example 1: Multi-Zone Website</h3>
+    <h3>Example 1: Multi-Zone Website</h3>
     <CodeBlock
       code={`// Create property
 const site = await properties.create({
@@ -213,7 +199,7 @@ await headerAd.save();`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Example 2: Zone Traversal</h3>
+    <h3>Example 2: Zone Traversal</h3>
     <CodeBlock
       code={`// Get tree structure
 const tree = await zones.getTree(site.id);
@@ -229,7 +215,7 @@ const slots = await home.getDescendants();`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Example 3: Format Validation</h3>
+    <h3>Example 3: Format Validation</h3>
     <CodeBlock
       code={`// Configure allowed formats
 const videoSlot = await zones.create({
@@ -256,12 +242,12 @@ const leaderboards = await zones.list({
     />
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Best Practices</h2>
-    <div class="space-y-6">
-      <div class="bg-green-50 border-l-4 border-green-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✓ DOs</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
+  <section>
+    <h2>Best Practices</h2>
+    <div>
+      <div>
+        <h3>✓ DOs</h3>
+        <ul>
           <li>Save properties before creating zones</li>
           <li>Cache zone trees in-memory for performance</li>
           <li>Use moveZone() for reparenting (prevents cycles)</li>
@@ -269,9 +255,9 @@ const leaderboards = await zones.list({
           <li>Use findByDimensions() to pre-filter ad slots</li>
         </ul>
       </div>
-      <div class="bg-red-50 border-l-4 border-red-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✗ DON'Ts</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
+      <div>
+        <h3>✗ DON'Ts</h3>
+        <ul>
           <li>Don't manually set parentId to a descendant (causes cycles)</li>
           <li>Don't delete properties without handling zones first</li>
           <li>Don't assume unlimited nesting without depth checks</li>
@@ -282,32 +268,30 @@ const leaderboards = await zones.list({
     </div>
   </section>
 
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Related Modules</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <a href="/modules/smrt-core" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-core</h3>
-        <p class="text-sm text-gray-600">Base classes and database operations</p>
+  <section>
+    <h2>Related Modules</h2>
+    <div>
+      <a href="/modules/smrt-core">
+        <h3>smrt-core</h3>
+        <p>Base classes and database operations</p>
       </a>
-      <a href="/modules/smrt-profiles" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-profiles</h3>
-        <p class="text-sm text-gray-600">Property owner profile links</p>
+      <a href="/modules/smrt-profiles">
+        <h3>smrt-profiles</h3>
+        <p>Property owner profile links</p>
       </a>
-      <a href="/modules/smrt-projects" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-projects</h3>
-        <p class="text-sm text-gray-600">Repository links for properties</p>
+      <a href="/modules/smrt-projects">
+        <h3>smrt-projects</h3>
+        <p>Repository links for properties</p>
       </a>
-      <a href="/modules/smrt-ads" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-ads</h3>
-        <p class="text-sm text-gray-600">Ad placement in zones</p>
+      <a href="/modules/smrt-ads">
+        <h3>smrt-ads</h3>
+        <p>Ad placement in zones</p>
       </a>
     </div>
   </section>
 
-  <div class="border-t pt-6 mt-12">
-    <div class="flex justify-between">
-      <a href="/modules" class="text-blue-600 hover:underline">← Back to Modules</a>
-      <a href="/modules/smrt-commerce" class="text-blue-600 hover:underline">Next: smrt-commerce →</a>
-    </div>
-  </div>
-</div>
+  <nav>
+    <a href="/modules">← Back to Modules</a>
+    <a href="/modules/smrt-commerce">Next: smrt-commerce →</a>
+  </nav>
+</ModulePage>

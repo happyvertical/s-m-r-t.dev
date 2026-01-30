@@ -1,44 +1,28 @@
 <script lang="ts">
+  import ModulePage from '$lib/components/ModulePage.svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head>
-  <title>smrt-tags - Hierarchical Tagging System | SMRT Framework</title>
-  <meta name="description" content="Reusable hierarchical tagging system with context scoping, multi-language support, and flexible metadata for taxonomy management." />
-</svelte:head>
-
-<div class="max-w-4xl mx-auto px-4 py-8">
-  <!-- Header Section -->
-  <div class="mb-8">
-    <h1 class="text-4xl font-bold mb-4">smrt-tags</h1>
-    <p class="text-xl text-gray-600 mb-4">
-      Hierarchical tagging system with context scoping, multi-language aliases, and flexible
-      metadata for building taxonomies across SMRT applications.
-    </p>
-    <div class="flex gap-2 flex-wrap">
-      <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">v0.19.0</span>
-      <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Taxonomy</span>
-      <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">Multi-Language</span>
-      <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">ESM</span>
-    </div>
-  </div>
-
-  <!-- Overview -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Overview</h2>
-    <p class="mb-4">
+<ModulePage 
+  name="smrt-tags" 
+  description="Hierarchical tagging system with context scoping, multi-language aliases, and flexible metadata for building taxonomies across SMRT applications."
+  badges={['v0.19.0', 'Taxonomy', 'Multi-Language', 'ESM']}
+>
+  <section>
+    <h2>Overview</h2>
+    <p>
       <strong>smrt-tags</strong> provides a reusable hierarchical tagging system for organizing and categorizing
       content across SMRT applications. It supports unlimited nesting depth, context-based namespace isolation,
       multi-language aliases, and flexible JSON metadata for UI styling and custom properties.
     </p>
-    <p class="mb-4">
+    <p>
       The module is designed for multi-tenant SaaS applications where different contexts (blogs, products, assets)
       need separate but consistent tagging vocabularies. Tags use slugs as identifiers with automatic level
       tracking and circular reference prevention.
     </p>
-    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
-      <p class="font-semibold mb-2">Key Features:</p>
-      <ul class="list-disc list-inside space-y-1">
+    <aside>
+      <p><strong>Key Features:</strong></p>
+      <ul>
         <li>Hierarchical parent-child relationships with unlimited nesting</li>
         <li>Context-based namespace isolation (e.g., "blog", "products", "global")</li>
         <li>Multi-language alias support (ISO 639-1 language codes)</li>
@@ -47,28 +31,26 @@
         <li>Circular reference prevention with validation utilities</li>
         <li>Type-safe TypeScript support</li>
       </ul>
-    </div>
+    </aside>
   </section>
 
-  <!-- Installation -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Installation</h2>
+  <section>
+    <h2>Installation</h2>
     <CodeBlock
       code={`npm install @happyvertical/smrt-tags
 # or
 pnpm add @happyvertical/smrt-tags`}
       language="bash"
     />
-    <p class="mt-4 mb-4">
+    <p>
       The module depends on <code>@happyvertical/smrt-core</code> for base classes and database operations.
     </p>
   </section>
 
-  <!-- Quick Start -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Quick Start (5 Minutes)</h2>
+  <section>
+    <h2>Quick Start (5 Minutes)</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">1. Create Tags with Hierarchy</h3>
+    <h3>1. Create Tags with Hierarchy</h3>
     <CodeBlock
       code={`import { TagCollection } from '@happyvertical/smrt-tags';
 
@@ -102,7 +84,7 @@ const gaming = await tags.create({
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">2. Add Multi-Language Aliases</h3>
+    <h3>2. Add Multi-Language Aliases</h3>
     <CodeBlock
       code={`import { TagAliasCollection } from '@happyvertical/smrt-tags';
 
@@ -122,7 +104,7 @@ console.log('Found tag:', results[0].name); // "Laptops"`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">3. Use Metadata for UI Customization</h3>
+    <h3>3. Use Metadata for UI Customization</h3>
     <CodeBlock
       code={`// Create tag with metadata
 const featured = await tags.create({
@@ -149,7 +131,7 @@ await tags.update(tag);`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">4. Query Tags by Context and Hierarchy</h3>
+    <h3>4. Query Tags by Context and Hierarchy</h3>
     <CodeBlock
       code={`// Get all root tags in context
 const rootTags = await tags.getRootTags('products');
@@ -171,12 +153,11 @@ const descendants = await tag.getDescendants();
     />
   </section>
 
-  <!-- Core Concepts -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Core Concepts</h2>
+  <section>
+    <h2>Core Concepts</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">Tag Model Structure</h3>
-    <p class="mb-4">
+    <h3>Tag Model Structure</h3>
+    <p>
       Tags are identified by <code>slug</code> (URL-friendly unique identifier) within a <code>context</code>
       (namespace):
     </p>
@@ -204,8 +185,8 @@ const descendants = await tag.getDescendants();
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Context Isolation</h3>
-    <p class="mb-4">
+    <h3>Context Isolation</h3>
+    <p>
       The <code>context</code> field provides namespace isolation. The same slug can exist in different
       contexts without conflicts:
     </p>
@@ -226,8 +207,8 @@ const marketplaceTags = await tags.listByContext('marketplace');`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Multi-Language Support</h3>
-    <p class="mb-4">
+    <h3>Multi-Language Support</h3>
+    <p>
       The <code>TagAlias</code> model provides alternative names and translations using ISO 639-1 language codes:
     </p>
     <CodeBlock
@@ -249,8 +230,8 @@ const aliasesByLang = await aliases.getAliasesByLanguage('technology');
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Metadata and Custom Properties</h3>
-    <p class="mb-4">
+    <h3>Metadata and Custom Properties</h3>
+    <p>
       Tags support flexible JSON metadata for UI rendering, usage statistics, and application-specific data:
     </p>
     <CodeBlock
@@ -283,11 +264,10 @@ const aliasesByLang = await aliases.getAliasesByLanguage('technology');
     />
   </section>
 
-  <!-- API Reference -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">API Reference</h2>
+  <section>
+    <h2>API Reference</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">TagCollection Methods</h3>
+    <h3>TagCollection Methods</h3>
     <CodeBlock
       code={`// Create tag
 await tags.create(options: TagOptions): Promise<Tag>
@@ -315,7 +295,7 @@ await tags.getRootTags(context: string): Promise<Tag[]>`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">TagAliasCollection Methods</h3>
+    <h3>TagAliasCollection Methods</h3>
     <CodeBlock
       code={`// Add single alias
 await aliases.addAlias(
@@ -356,7 +336,7 @@ await aliases.findMatchingAliases(
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">Utility Functions</h3>
+    <h3>Utility Functions</h3>
     <CodeBlock
       code={`import {
   sanitizeSlug,
@@ -390,11 +370,10 @@ if (hasCircle) {
     />
   </section>
 
-  <!-- Examples -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Real-World Examples</h2>
+  <section>
+    <h2>Real-World Examples</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">Example 1: E-Commerce Product Categorization</h3>
+    <h3>Example 1: E-Commerce Product Categorization</h3>
     <CodeBlock
       code={`// Create product taxonomy
 const productTags = new TagCollection({ db: {...} });
@@ -443,7 +422,7 @@ const smartphones = await db.query(\`
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-8">Example 2: Multi-Language Blog Tags</h3>
+    <h3>Example 2: Multi-Language Blog Tags</h3>
     <CodeBlock
       code={`const blogTags = new TagCollection({ db: {...} });
 const aliases = new TagAliasCollection({ db: {...} });
@@ -477,7 +456,7 @@ console.log('Display as:', aliasesEs[0].alias); // "inteligencia artificial"`}
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-8">Example 3: AI-Generated Tags with Review Workflow</h3>
+    <h3>Example 3: AI-Generated Tags with Review Workflow</h3>
     <CodeBlock
       code={`// AI generates tags from document content
 const aiTags = [
@@ -521,7 +500,7 @@ for (const tag of pendingTags) {
       language="typescript"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-8">Example 4: Multi-Tenant SaaS with Context Isolation</h3>
+    <h3>Example 4: Multi-Tenant SaaS with Context Isolation</h3>
     <CodeBlock
       code={`// Tenant A: blog application
 await tags.create({ slug: 'featured', name: 'Featured', context: 'tenant-a-blog' });
@@ -547,12 +526,11 @@ console.log('Global has', globalTags.length, 'tags');`}
     />
   </section>
 
-  <!-- Integration Patterns -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Integration Patterns</h2>
+  <section>
+    <h2>Integration Patterns</h2>
 
-    <h3 class="text-2xl font-semibold mb-3">Join Table Pattern</h3>
-    <p class="mb-4">
+    <h3>Join Table Pattern</h3>
+    <p>
       Consuming packages implement many-to-many relationships via join tables:
     </p>
     <CodeBlock
@@ -581,8 +559,8 @@ WHERE at.asset_id = 'asset-123';`}
       language="sql"
     />
 
-    <h3 class="text-2xl font-semibold mb-3 mt-6">REST API Auto-Generation</h3>
-    <p class="mb-4">
+    <h3>REST API Auto-Generation</h3>
+    <p>
       The <code>@smrt</code> decorator generates CRUD endpoints automatically:
     </p>
     <CodeBlock
@@ -605,158 +583,143 @@ const tags = await response.json();`}
     />
   </section>
 
-  <!-- Best Practices -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Best Practices</h2>
+  <section>
+    <h2>Best Practices</h2>
 
-    <div class="space-y-6">
-      <div class="bg-green-50 border-l-4 border-green-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✓ DOs</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Use consistent slug format (lowercase, hyphens only)</li>
-          <li>Sanitize user input with <code>sanitizeSlug()</code> before creating tags</li>
-          <li>Use context scoping for multi-tenant or multi-domain applications</li>
-          <li>Validate hierarchy with <code>hasCircularReference()</code> before updates</li>
-          <li>Leverage metadata for UI rendering (colors, icons, sort order)</li>
-          <li>Use <code>getOrCreate()</code> to prevent duplicate tags</li>
-          <li>Batch alias operations with <code>bulkAddAliases()</code></li>
-          <li>Store slugs in entities, not tag names (slugs are immutable)</li>
-        </ul>
-      </div>
+    <article>
+      <h3>✓ DOs</h3>
+      <ul>
+        <li>Use consistent slug format (lowercase, hyphens only)</li>
+        <li>Sanitize user input with <code>sanitizeSlug()</code> before creating tags</li>
+        <li>Use context scoping for multi-tenant or multi-domain applications</li>
+        <li>Validate hierarchy with <code>hasCircularReference()</code> before updates</li>
+        <li>Leverage metadata for UI rendering (colors, icons, sort order)</li>
+        <li>Use <code>getOrCreate()</code> to prevent duplicate tags</li>
+        <li>Batch alias operations with <code>bulkAddAliases()</code></li>
+        <li>Store slugs in entities, not tag names (slugs are immutable)</li>
+      </ul>
+    </article>
 
-      <div class="bg-red-50 border-l-4 border-red-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">✗ DON'Ts</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Don't create deep hierarchies without purpose (limit to 3-4 levels)</li>
-          <li>Don't use special characters or spaces in slugs</li>
-          <li>Don't manually set <code>level</code> — let system auto-calculate</li>
-          <li>Don't delete parent tags without handling orphaned children</li>
-          <li>Don't store large data in metadata (keep {'<'} 1MB per tag)</li>
-          <li>Don't assume slug uniqueness across contexts (always include context)</li>
-          <li>Don't create circular references without validation</li>
-        </ul>
-      </div>
+    <article>
+      <h3>✗ DON'Ts</h3>
+      <ul>
+        <li>Don't create deep hierarchies without purpose (limit to 3-4 levels)</li>
+        <li>Don't use special characters or spaces in slugs</li>
+        <li>Don't manually set <code>level</code> — let system auto-calculate</li>
+        <li>Don't delete parent tags without handling orphaned children</li>
+        <li>Don't store large data in metadata (keep {'<'} 1MB per tag)</li>
+        <li>Don't assume slug uniqueness across contexts (always include context)</li>
+        <li>Don't create circular references without validation</li>
+      </ul>
+    </article>
 
-      <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
-        <h3 class="text-lg font-semibold mb-2">⚡ Performance Tips</h3>
-        <ul class="list-disc list-inside text-sm space-y-1">
-          <li>Index queries by <code>context</code> for fast filtering</li>
-          <li>Use <code>listByContext()</code> for context + parent filtering</li>
-          <li>Paginate large result sets with <code>limit</code> and <code>offset</code></li>
-          <li>Cache root tags for frequently-accessed taxonomies</li>
-          <li>Consider denormalizing high-cardinality metadata in join tables</li>
-        </ul>
-      </div>
-    </div>
+    <aside>
+      <h3>⚡ Performance Tips</h3>
+      <ul>
+        <li>Index queries by <code>context</code> for fast filtering</li>
+        <li>Use <code>listByContext()</code> for context + parent filtering</li>
+        <li>Paginate large result sets with <code>limit</code> and <code>offset</code></li>
+        <li>Cache root tags for frequently-accessed taxonomies</li>
+        <li>Consider denormalizing high-cardinality metadata in join tables</li>
+      </ul>
+    </aside>
   </section>
 
-  <!-- Troubleshooting -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Common Issues and Troubleshooting</h2>
+  <section>
+    <h2>Common Issues and Troubleshooting</h2>
 
-    <div class="space-y-4">
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-red-600">Issue: Slug conflicts across contexts</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Same slug exists in different contexts</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Always include context in queries:
-          <code>tags.get({'} slug, context {'})</code>
-        </p>
-      </div>
+    <article>
+      <h3>Issue: Slug conflicts across contexts</h3>
+      <p><strong>Cause:</strong> Same slug exists in different contexts</p>
+      <p>
+        <strong>Solution:</strong> Always include context in queries:
+        <code>tags.get({ slug, context })</code>
+      </p>
+    </article>
 
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-red-600">Issue: Circular reference when reassigning parent</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Setting a tag's own descendant as parent</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Call <code>hasCircularReference()</code> before updating parentSlug
-        </p>
-        <CodeBlock
-          code={`const hasCircle = await hasCircularReference(tag.slug, newParentSlug, tags);
+    <article>
+      <h3>Issue: Circular reference when reassigning parent</h3>
+      <p><strong>Cause:</strong> Setting a tag's own descendant as parent</p>
+      <p>
+        <strong>Solution:</strong> Call <code>hasCircularReference()</code> before updating parentSlug
+      </p>
+      <CodeBlock
+        code={`const hasCircle = await hasCircularReference(tag.slug, newParentSlug, tags);
 if (hasCircle) {
   throw new Error('Cannot create circular reference');
 }
 tag.parentSlug = newParentSlug;
 await tags.update(tag);`}
-          language="typescript"
-        />
-      </div>
+        language="typescript"
+      />
+    </article>
 
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-orange-600">Issue: Orphaned children when deleting parent</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Deleting parent doesn't update child <code>parentSlug</code></p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Query children first, reassign or delete explicitly
-        </p>
-        <CodeBlock
-          code={`const children = await parentTag.getChildren();
+    <article>
+      <h3>Issue: Orphaned children when deleting parent</h3>
+      <p><strong>Cause:</strong> Deleting parent doesn't update child <code>parentSlug</code></p>
+      <p>
+        <strong>Solution:</strong> Query children first, reassign or delete explicitly
+      </p>
+      <CodeBlock
+        code={`const children = await parentTag.getChildren();
 for (const child of children) {
   child.parentSlug = null;  // Make orphans root-level
   await tags.update(child);
 }
 await tags.delete({ slug: parentTag.slug, context: parentTag.context });`}
-          language="typescript"
-        />
-      </div>
+        language="typescript"
+      />
+    </article>
 
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-orange-600">Issue: Metadata not persisting</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Metadata object passed but not saved</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Call <code>setMetadata()</code> then save with <code>update()</code>
-        </p>
-        <CodeBlock
-          code={`tag.updateMetadata({ color: '#FF6B6B', featured: true });
+    <article>
+      <h3>Issue: Metadata not persisting</h3>
+      <p><strong>Cause:</strong> Metadata object passed but not saved</p>
+      <p>
+        <strong>Solution:</strong> Call <code>setMetadata()</code> then save with <code>update()</code>
+      </p>
+      <CodeBlock
+        code={`tag.updateMetadata({ color: '#FF6B6B', featured: true });
 await tags.update(tag);  // Must call update to persist`}
-          language="typescript"
-        />
-      </div>
+        language="typescript"
+      />
+    </article>
 
-      <div class="border rounded p-4">
-        <h3 class="font-semibold mb-2 text-orange-600">Issue: Alias search not finding results</h3>
-        <p class="text-sm mb-2"><strong>Cause:</strong> Case sensitivity or language mismatch</p>
-        <p class="text-sm mb-2">
-          <strong>Solution:</strong> Use <code>findMatchingAliases()</code> for case-insensitive search
-        </p>
-        <CodeBlock
-          code={`// Case-sensitive
+    <article>
+      <h3>Issue: Alias search not finding results</h3>
+      <p><strong>Cause:</strong> Case sensitivity or language mismatch</p>
+      <p>
+        <strong>Solution:</strong> Use <code>findMatchingAliases()</code> for case-insensitive search
+      </p>
+      <CodeBlock
+        code={`// Case-sensitive
 const results1 = await aliases.searchByAlias('Technology', 'en'); // May not find
 
 // Case-insensitive
 const results2 = await aliases.findMatchingAliases('technology', 'en'); // Will find`}
-          language="typescript"
-        />
-      </div>
-    </div>
+        language="typescript"
+      />
+    </article>
   </section>
 
-  <!-- Related Modules -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Related Modules</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <a href="/modules/smrt-core" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-core</h3>
-        <p class="text-sm text-gray-600">Base classes, decorators, and database operations</p>
+  <section>
+    <h2>Related Modules</h2>
+    <div class="link-grid">
+      <a href="/modules/smrt-core" class="link-card">
+        <h3>smrt-core</h3>
+        <p>Base classes, decorators, and database operations</p>
       </a>
-      <a href="/modules/smrt-products" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-products</h3>
-        <p class="text-sm text-gray-600">Product categorization with tags</p>
+      <a href="/modules/smrt-products" class="link-card">
+        <h3>smrt-products</h3>
+        <p>Product categorization with tags</p>
       </a>
-      <a href="/modules/smrt-content" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-content</h3>
-        <p class="text-sm text-gray-600">Content tagging and organization</p>
+      <a href="/modules/smrt-content" class="link-card">
+        <h3>smrt-content</h3>
+        <p>Content tagging and organization</p>
       </a>
-      <a href="/modules/smrt-assets" class="block p-4 border rounded hover:border-blue-500 transition">
-        <h3 class="font-semibold mb-2">smrt-assets</h3>
-        <p class="text-sm text-gray-600">Asset tagging and classification</p>
+      <a href="/modules/smrt-assets" class="link-card">
+        <h3>smrt-assets</h3>
+        <p>Asset tagging and classification</p>
       </a>
     </div>
   </section>
-
-  <!-- Footer Navigation -->
-  <div class="border-t pt-6 mt-12">
-    <div class="flex justify-between">
-      <a href="/modules" class="text-blue-600 hover:underline">← Back to Modules</a>
-      <a href="/modules/smrt-messages" class="text-blue-600 hover:underline">Next: smrt-messages →</a>
-    </div>
-  </div>
-</div>
+</ModulePage>

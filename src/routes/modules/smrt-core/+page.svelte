@@ -1,63 +1,44 @@
 <script lang="ts">
-	import CodeBlock from '$lib/components/CodeBlock.svelte';
-	import Grid from '$lib/components/Grid.svelte';
+  import ModulePage from '$lib/components/ModulePage.svelte';
+  import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head>
-	<title>smrt-core | SMRT Modules</title>
-	<meta name="description" content="Core AI agent framework with ORM, code generation, and AI integration" />
-</svelte:head>
+<ModulePage 
+  name="smrt-core" 
+  description="The foundational AI agent framework providing ORM, code generation, AI operations, and standardized collections for building intelligent TypeScript applications."
+  badges={['v0.17.100', 'Core Foundation', 'ESM']}
+>
+  <section id="overview">
+    <h2>Overview</h2>
+    <p>
+      <code>@happyvertical/smrt-core</code> is the heart of the SMRT framework. It provides:
+    </p>
+    <ul>
+      <li><strong>AI-First Object Framework</strong> - TypeScript classes with built-in AI operations (is, do, describe)</li>
+      <li><strong>Object-Relational Mapping</strong> - Automatic database schema generation from TypeScript definitions</li>
+      <li><strong>Standardized Collections</strong> - Advanced CRUD with SQL-like querying</li>
+      <li><strong>Code Generators</strong> - Auto-generate REST APIs, MCP servers, CLI commands, and Swagger docs</li>
+      <li><strong>Vite Plugin</strong> - Virtual modules for seamless development integration</li>
+      <li><strong>Context Memory</strong> - Persistent storage for learned patterns</li>
+      <li><strong>Semantic Search</strong> - Built-in embedding support for similarity</li>
+    </ul>
+  </section>
 
-<Grid>
-	<article class="prose">
-		<nav class="breadcrumb">
-			<a href="/modules">Modules</a>
-			<span>/</span>
-			<span>smrt-core</span>
-		</nav>
+  <section id="installation">
+    <h2>Installation</h2>
+    <CodeBlock code={`npm install @happyvertical/smrt-core`} language="bash" />
 
-		<h1>@happyvertical/smrt-core</h1>
-		<p class="lead">
-			The foundational AI agent framework providing ORM, code generation, AI operations, and standardized collections for building intelligent TypeScript applications.
-		</p>
+    <h3>Dependencies</h3>
+    <p>smrt-core builds on the HappyVertical SDK:</p>
+    <CodeBlock code={`npm install @happyvertical/ai @happyvertical/sql @happyvertical/files`} language="bash" />
+  </section>
 
-		<div class="meta">
-			<span class="badge">v0.17.100</span>
-			<span class="badge">Core Foundation</span>
-			<span class="badge">ESM</span>
-		</div>
+  <section id="quick-start">
+    <h2>Quick Start</h2>
+    <p>Create your first SMRT object in under 5 minutes:</p>
 
-		<section id="overview">
-			<h2>Overview</h2>
-			<p>
-				<code>@happyvertical/smrt-core</code> is the heart of the SMRT framework. It provides:
-			</p>
-			<ul>
-				<li><strong>AI-First Object Framework</strong> - TypeScript classes with built-in AI operations (is, do, describe)</li>
-				<li><strong>Object-Relational Mapping</strong> - Automatic database schema generation from TypeScript definitions</li>
-				<li><strong>Standardized Collections</strong> - Advanced CRUD with SQL-like querying</li>
-				<li><strong>Code Generators</strong> - Auto-generate REST APIs, MCP servers, CLI commands, and Swagger docs</li>
-				<li><strong>Vite Plugin</strong> - Virtual modules for seamless development integration</li>
-				<li><strong>Context Memory</strong> - Persistent storage for learned patterns</li>
-				<li><strong>Semantic Search</strong> - Built-in embedding support for similarity</li>
-			</ul>
-		</section>
-
-		<section id="installation">
-			<h2>Installation</h2>
-			<CodeBlock code={`npm install @happyvertical/smrt-core`} language="bash" />
-
-			<h3>Dependencies</h3>
-			<p>smrt-core builds on the HappyVertical SDK:</p>
-			<CodeBlock code={`npm install @happyvertical/ai @happyvertical/sql @happyvertical/files`} language="bash" />
-		</section>
-
-		<section id="quick-start">
-			<h2>Quick Start</h2>
-			<p>Create your first SMRT object in under 5 minutes:</p>
-
-			<h3>1. Define Your Object</h3>
-			<CodeBlock code={`import { SmrtObject, SmrtCollection, smrt } from '@happyvertical/smrt-core';
+    <h3>1. Define Your Object</h3>
+    <CodeBlock code={`import { SmrtObject, SmrtCollection, smrt } from '@happyvertical/smrt-core';
 
 @smrt({ cli: true, api: true })
 export class Product extends SmrtObject {
@@ -72,8 +53,8 @@ export class ProductCollection extends SmrtCollection<Product> {
   static readonly _itemClass = Product;
 }`} language="typescript" />
 
-			<h3>2. Initialize Collection</h3>
-			<CodeBlock code={`// Create and initialize collection
+    <h3>2. Initialize Collection</h3>
+    <CodeBlock code={`// Create and initialize collection
 const products = await ProductCollection.create({
   db: 'products.db',  // SQLite database
   ai: {
@@ -84,8 +65,8 @@ const products = await ProductCollection.create({
 
 await products.initialize();`} language="typescript" />
 
-			<h3>3. CRUD Operations</h3>
-			<CodeBlock code={`// Create
+    <h3>3. CRUD Operations</h3>
+    <CodeBlock code={`// Create
 const product = await products.create({
   name: 'Widget',
   description: 'A useful widget',
@@ -106,8 +87,8 @@ await product.save();
 // Delete
 await product.delete();`} language="typescript" />
 
-			<h3>4. AI Operations</h3>
-			<CodeBlock code={`// Ask yes/no questions
+    <h3>4. AI Operations</h3>
+    <CodeBlock code={`// Ask yes/no questions
 const isExpensive = await product.is(\`
   - Price is above $50
   - Premium quality product
@@ -123,14 +104,14 @@ const summary = await product.do(\`
 const description = await product.describe();
 console.log(description);
 // "Widget is a useful product priced at $29.99..."`} language="typescript" />
-		</section>
+  </section>
 
-		<section id="core-concepts">
-			<h2>Core Concepts</h2>
+  <section id="core-concepts">
+    <h2>Core Concepts</h2>
 
-			<h3>Architecture</h3>
-			<p>smrt-core uses a registry-driven design:</p>
-			<CodeBlock code={`┌─────────────────────────────────────────┐
+    <h3>Architecture</h3>
+    <p>smrt-core uses a registry-driven design:</p>
+    <CodeBlock code={`┌─────────────────────────────────────────┐
 │  @smrt Decorated Classes                │
 │  (auto-register on instantiation)       │
 └────────────┬────────────────────────────┘
@@ -148,16 +129,16 @@ console.log(description);
     ↓        ↓        ↓
  REST API  MCP Tools  CLI`} language="text" />
 
-			<h3>Three Core Classes</h3>
-			<ul>
-				<li><strong>SmrtClass</strong> - Foundation providing database, filesystem, and AI client access</li>
-				<li><strong>SmrtObject</strong> - Persistent entities with unique IDs, timestamps, and AI operations</li>
-				<li><strong>SmrtCollection&lt;T&gt;</strong> - Manages sets of SmrtObject instances with CRUD operations</li>
-			</ul>
+    <h3>Three Core Classes</h3>
+    <ul>
+      <li><strong>SmrtClass</strong> - Foundation providing database, filesystem, and AI client access</li>
+      <li><strong>SmrtObject</strong> - Persistent entities with unique IDs, timestamps, and AI operations</li>
+      <li><strong>SmrtCollection&lt;T&gt;</strong> - Manages sets of SmrtObject instances with CRUD operations</li>
+    </ul>
 
-			<h3>Field System</h3>
-			<p>Use TypeScript types for automatic schema inference:</p>
-			<CodeBlock code={`class Product extends SmrtObject {
+    <h3>Field System</h3>
+    <p>Use TypeScript types for automatic schema inference:</p>
+    <CodeBlock code={`class Product extends SmrtObject {
   name: string = '';              // → TEXT
   quantity: number = 0;           // → INTEGER (no decimal)
   price: number = 0.0;            // → DECIMAL (has decimal)
@@ -166,22 +147,22 @@ console.log(description);
   createdAt: Date = new Date();   // → DATETIME
 }`} language="typescript" />
 
-			<p>Or use field helpers when constraints are needed:</p>
-			<CodeBlock code={`import { text, decimal, foreignKey } from '@happyvertical/smrt-core/decorators';
+    <p>Or use field helpers when constraints are needed:</p>
+    <CodeBlock code={`import { text, decimal, foreignKey } from '@happyvertical/smrt-core/decorators';
 
 class Product extends SmrtObject {
   name = text({ required: true, maxLength: 100 });
   price = decimal({ min: 0, max: 999999.99, required: true });
   categoryId = foreignKey(Category, { onDelete: 'restrict' });
 }`} language="typescript" />
-		</section>
+  </section>
 
-		<section id="ai-integration">
-			<h2>AI Integration</h2>
+  <section id="ai-integration">
+    <h2>AI Integration</h2>
 
-			<h3>The is() Method</h3>
-			<p>Ask yes/no questions about your objects:</p>
-			<CodeBlock code={`const isHighQuality = await document.is(\`
+    <h3>The is() Method</h3>
+    <p>Ask yes/no questions about your objects:</p>
+    <CodeBlock code={`const isHighQuality = await document.is(\`
   - Contains more than 500 words
   - Has clear structure and headings
   - Uses professional language
@@ -191,9 +172,9 @@ if (isHighQuality) {
   await document.publish();
 }`} language="typescript" />
 
-			<h3>The do() Method</h3>
-			<p>Perform AI-powered actions:</p>
-			<CodeBlock code={`const summary = await document.do(\`
+    <h3>The do() Method</h3>
+    <p>Perform AI-powered actions:</p>
+    <CodeBlock code={`const summary = await document.do(\`
   Create a 2-sentence summary of this document.
   Focus on the key points and main conclusions.
 \`);
@@ -202,14 +183,14 @@ const translation = await document.do(\`
   Translate the title to Spanish.
 \`);`} language="typescript" />
 
-			<h3>The describe() Method</h3>
-			<p>Generate human-readable descriptions:</p>
-			<CodeBlock code={`const description = await product.describe();
+    <h3>The describe() Method</h3>
+    <p>Generate human-readable descriptions:</p>
+    <CodeBlock code={`const description = await product.describe();
 // Returns professional description suitable for display`} language="typescript" />
 
-			<h3>AI Tools & Function Calling</h3>
-			<p>Objects expose methods as AI tools automatically:</p>
-			<CodeBlock code={`class Document extends SmrtObject {
+    <h3>AI Tools & Function Calling</h3>
+    <p>Objects expose methods as AI tools automatically:</p>
+    <CodeBlock code={`class Document extends SmrtObject {
   async summarize() { /* ... */ }
   async analyze() { /* ... */ }
   async translate(language: string) { /* ... */ }
@@ -220,13 +201,13 @@ const result = await document.do(\`
   Analyze this document and translate the summary to Spanish.
 \`);
 // AI will call analyze() and translate() as needed`} language="typescript" />
-		</section>
+  </section>
 
-		<section id="querying">
-			<h2>Advanced Querying</h2>
+  <section id="querying">
+    <h2>Advanced Querying</h2>
 
-			<h3>Query Operators</h3>
-			<CodeBlock code={`const products = await collection.list({
+    <h3>Query Operators</h3>
+    <CodeBlock code={`const products = await collection.list({
   where: {
     'price >': 10,          // Greater than
     'price <=': 100,        // Less than or equal
@@ -240,8 +221,8 @@ const result = await document.do(\`
   offset: 0
 });`} language="typescript" />
 
-			<h3>Eager Loading (Prevent N+1 Queries)</h3>
-			<CodeBlock code={`// Load relationships efficiently with SQL JOINs
+    <h3>Eager Loading (Prevent N+1 Queries)</h3>
+    <CodeBlock code={`// Load relationships efficiently with SQL JOINs
 const orders = await orderCollection.list({
   limit: 100,
   include: ['customerId', 'productId']  // Pre-load relationships
@@ -253,8 +234,8 @@ for (const order of orders) {
   const product = order.getRelated('productId');
 }`} language="typescript" />
 
-			<h3>Direct SQL Access</h3>
-			<CodeBlock code={`// Template literal safety (SQL injection prevention)
+    <h3>Direct SQL Access</h3>
+    <CodeBlock code={`// Template literal safety (SQL injection prevention)
 const expensive = await collection.db.many\`
   SELECT * FROM products
   WHERE price > \${100}
@@ -264,14 +245,14 @@ const expensive = await collection.db.many\`
 const count = await collection.db.pluck\`
   SELECT COUNT(*) FROM products WHERE category = \${'electronics'}
 \`;`} language="typescript" />
-		</section>
+  </section>
 
-		<section id="code-generation">
-			<h2>Code Generation</h2>
+  <section id="code-generation">
+    <h2>Code Generation</h2>
 
-			<h3>The @smrt Decorator</h3>
-			<p>Control what gets generated for each object:</p>
-			<CodeBlock code={`@smrt({
+    <h3>The @smrt Decorator</h3>
+    <p>Control what gets generated for each object:</p>
+    <CodeBlock code={`@smrt({
   api: { include: ['list', 'get', 'create', 'update', 'delete'] },
   mcp: { include: ['list', 'get'] },  // Read-only for AI
   cli: true,
@@ -279,8 +260,8 @@ const count = await collection.db.pluck\`
 })
 export class Product extends SmrtObject { }`} language="typescript" />
 
-			<h3>REST API Generator</h3>
-			<CodeBlock code={`import { APIGenerator } from '@happyvertical/smrt-core/generators';
+    <h3>REST API Generator</h3>
+    <CodeBlock code={`import { APIGenerator } from '@happyvertical/smrt-core/generators';
 
 const generator = new APIGenerator({
   basePath: '/api/v1',
@@ -298,8 +279,8 @@ const { server, url } = generator.createServer();
 // PUT    /api/v1/products/:id   - Update
 // DELETE /api/v1/products/:id   - Delete`} language="typescript" />
 
-			<h3>MCP Server Generator</h3>
-			<CodeBlock code={`import { MCPGenerator } from '@happyvertical/smrt-core/generators';
+    <h3>MCP Server Generator</h3>
+    <CodeBlock code={`import { MCPGenerator } from '@happyvertical/smrt-core/generators';
 
 const generator = new MCPGenerator({
   name: 'smrt-mcp-server',
@@ -313,20 +294,20 @@ const tools = generator.generateTools();
 // list_products, get_product_by_id, create_product,
 // update_product, delete_product`} language="typescript" />
 
-			<h3>CLI Commands</h3>
-			<CodeBlock code={`# Auto-generated from @smrt({ cli: true })
+    <h3>CLI Commands</h3>
+    <CodeBlock code={`# Auto-generated from @smrt({ cli: true })
 npx smrt products list
 npx smrt products get <id>
 npx smrt products create --name "Widget" --price 29.99
 npx smrt products update <id> --price 24.99
 npx smrt products delete <id>`} language="bash" />
-		</section>
+  </section>
 
-		<section id="context-memory">
-			<h2>Context Memory System</h2>
-			<p>Store and retrieve learned patterns:</p>
+  <section id="context-memory">
+    <h2>Context Memory System</h2>
+    <p>Store and retrieve learned patterns:</p>
 
-			<CodeBlock code={`// Store learned patterns
+    <CodeBlock code={`// Store learned patterns
 await object.remember({
   scope: 'parser/html/domain.com',
   key: 'article-selector',
@@ -352,8 +333,8 @@ const allContexts = await object.recallAll({
 await object.forget({ scope, key });
 await object.forgetScope({ scope, includeDescendants: true });`} language="typescript" />
 
-			<h3>Use Case: Web Scraper Learning</h3>
-			<CodeBlock code={`class WebScraper extends SmrtObject {
+    <h3>Use Case: Web Scraper Learning</h3>
+    <CodeBlock code={`class WebScraper extends SmrtObject {
   async discoverSelector(url: string) {
     const hostname = new URL(url).hostname;
 
@@ -378,13 +359,13 @@ await object.forgetScope({ scope, includeDescendants: true });`} language="types
     return selector;
   }
 }`} language="typescript" />
-		</section>
+  </section>
 
-		<section id="relationships">
-			<h2>Relationships</h2>
+  <section id="relationships">
+    <h2>Relationships</h2>
 
-			<h3>Foreign Keys</h3>
-			<CodeBlock code={`import { foreignKey } from '@happyvertical/smrt-core/decorators';
+    <h3>Foreign Keys</h3>
+    <CodeBlock code={`import { foreignKey } from '@happyvertical/smrt-core/decorators';
 
 class Order extends SmrtObject {
   customerId = foreignKey(Customer, { onDelete: 'cascade' });
@@ -396,8 +377,8 @@ class Order extends SmrtObject {
 await order.loadRelated('customerId');
 const customer = order.getRelated('customerId');`} language="typescript" />
 
-			<h3>One-to-Many</h3>
-			<CodeBlock code={`import { oneToMany } from '@happyvertical/smrt-core/decorators';
+    <h3>One-to-Many</h3>
+    <CodeBlock code={`import { oneToMany } from '@happyvertical/smrt-core/decorators';
 
 class Customer extends SmrtObject {
   orders = oneToMany(Order, { foreignKey: 'customerId' });
@@ -406,8 +387,8 @@ class Customer extends SmrtObject {
 // Access related records
 const orders = await customer.loadRelated('orders');`} language="typescript" />
 
-			<h3>Many-to-Many</h3>
-			<CodeBlock code={`import { manyToMany } from '@happyvertical/smrt-core/decorators';
+    <h3>Many-to-Many</h3>
+    <CodeBlock code={`import { manyToMany } from '@happyvertical/smrt-core/decorators';
 
 class Product extends SmrtObject {
   relatedProducts = manyToMany(Product, {
@@ -417,13 +398,13 @@ class Product extends SmrtObject {
 
 // Access related products
 const related = await product.loadRelated('relatedProducts');`} language="typescript" />
-		</section>
+  </section>
 
-		<section id="sti">
-			<h2>Single Table Inheritance</h2>
-			<p>Polymorphic object hierarchies in a single database table:</p>
+  <section id="sti">
+    <h2>Single Table Inheritance</h2>
+    <p>Polymorphic object hierarchies in a single database table:</p>
 
-			<CodeBlock code={`import { Meta } from '@happyvertical/smrt-core';
+    <CodeBlock code={`import { Meta } from '@happyvertical/smrt-core';
 
 @smrt({ tableStrategy: 'sti' })
 class Event extends SmrtObject {
@@ -458,13 +439,13 @@ events.forEach(event => {
     console.log(\`Concert by \${event.artist}\`);
   }
 });`} language="typescript" />
-		</section>
+  </section>
 
-		<section id="vite-plugin">
-			<h2>Vite Plugin</h2>
-			<p>Auto-generate virtual modules during development:</p>
+  <section id="vite-plugin">
+    <h2>Vite Plugin</h2>
+    <p>Auto-generate virtual modules during development:</p>
 
-			<CodeBlock code={`// vite.config.ts
+    <CodeBlock code={`// vite.config.ts
 import { smrtPlugin } from '@happyvertical/smrt-core/vite-plugin';
 
 export default {
@@ -483,28 +464,28 @@ export default {
   ]
 };`} language="typescript" />
 
-			<h3>Virtual Modules</h3>
-			<CodeBlock code={`// Auto-generated type-safe imports
+    <h3>Virtual Modules</h3>
+    <CodeBlock code={`// Auto-generated type-safe imports
 import { setupRoutes } from '@smrt/routes';
 import { createClient } from '@smrt/client';
 import { tools } from '@smrt/mcp';
 import { manifest } from '@smrt/manifest';
 import type { Product } from '@smrt/types';`} language="typescript" />
-		</section>
+  </section>
 
-		<section id="databases">
-			<h2>Database Support</h2>
+  <section id="databases">
+    <h2>Database Support</h2>
 
-			<h3>Supported Databases</h3>
-			<ul>
-				<li><strong>SQLite</strong> - <code>{'\{ type: \'sqlite\', url: \'app.db\' }'}</code></li>
-				<li><strong>PostgreSQL</strong> - <code>{'\{ type: \'postgres\', url: \'postgres://...\' }'}</code></li>
-				<li><strong>DuckDB</strong> - <code>{'\{ type: \'duckdb\', url: \'data.db\' }'}</code></li>
-				<li><strong>JSON</strong> - <code>{'\{ type: \'json\', url: \'data.json\' }'}</code> (testing only)</li>
-			</ul>
+    <h3>Supported Databases</h3>
+    <ul>
+      <li><strong>SQLite</strong> - <code>{"{ type: 'sqlite', url: 'app.db' }"}</code></li>
+      <li><strong>PostgreSQL</strong> - <code>{"{ type: 'postgres', url: 'postgres://...' }"}</code></li>
+      <li><strong>DuckDB</strong> - <code>{"{ type: 'duckdb', url: 'data.db' }"}</code></li>
+      <li><strong>JSON</strong> - <code>{"{ type: 'json', url: 'data.json' }"}</code> (testing only)</li>
+    </ul>
 
-			<h3>Configuration</h3>
-			<CodeBlock code={`// String shortcut (auto-detects type)
+    <h3>Configuration</h3>
+    <CodeBlock code={`// String shortcut (auto-detects type)
 const collection = await ProductCollection.create({
   db: 'products.db'
 });
@@ -521,196 +502,84 @@ const collection = await ProductCollection.create({
 import { getDatabase } from '@happyvertical/sql';
 const db = await getDatabase({ type: 'postgres', url: '...' });
 const collection = await ProductCollection.create({ db });`} language="typescript" />
-		</section>
+  </section>
 
-		<section id="best-practices">
-			<h2>Best Practices</h2>
-			<ol>
-				<li><strong>Use TypeScript types</strong> for simple properties - let the framework infer the schema</li>
-				<li><strong>Use field helpers</strong> only when you need constraints or validation</li>
-				<li><strong>Always define static _itemClass</strong> on collection classes</li>
-				<li><strong>Use factory pattern</strong> for collection creation (<code>create()</code> method)</li>
-				<li><strong>Leverage eager loading</strong> to prevent N+1 query problems</li>
-				<li><strong>Set confidence scores</strong> in context memory for pattern reliability</li>
-				<li><strong>Use hierarchical scopes</strong> for context organization</li>
-				<li><strong>Cache AI responses</strong> in object properties to avoid redundant calls</li>
-				<li><strong>Use direct SQL</strong> for complex queries when the ORM is insufficient</li>
-				<li><strong>Organize by concerns</strong> - one object class per business entity</li>
-			</ol>
-		</section>
+  <section id="best-practices">
+    <h2>Best Practices</h2>
+    <ol>
+      <li><strong>Use TypeScript types</strong> for simple properties - let the framework infer the schema</li>
+      <li><strong>Use field helpers</strong> only when you need constraints or validation</li>
+      <li><strong>Always define static _itemClass</strong> on collection classes</li>
+      <li><strong>Use factory pattern</strong> for collection creation (<code>create()</code> method)</li>
+      <li><strong>Leverage eager loading</strong> to prevent N+1 query problems</li>
+      <li><strong>Set confidence scores</strong> in context memory for pattern reliability</li>
+      <li><strong>Use hierarchical scopes</strong> for context organization</li>
+      <li><strong>Cache AI responses</strong> in object properties to avoid redundant calls</li>
+      <li><strong>Use direct SQL</strong> for complex queries when the ORM is insufficient</li>
+      <li><strong>Organize by concerns</strong> - one object class per business entity</li>
+    </ol>
+  </section>
 
-		<section id="next-steps">
-			<h2>Next Steps</h2>
-			<div class="link-grid">
-				<a href="/modules/smrt-types" class="link-card">
-					<h3>smrt-types →</h3>
-					<p>Shared TypeScript type definitions</p>
-				</a>
-				<a href="/modules/smrt-config" class="link-card">
-					<h3>smrt-config →</h3>
-					<p>Configuration management</p>
-				</a>
-				<a href="/modules/smrt-users" class="link-card">
-					<h3>smrt-users →</h3>
-					<p>Multi-tenant user management</p>
-				</a>
-				<a href="/modules/smrt-agents" class="link-card">
-					<h3>smrt-agents →</h3>
-					<p>Build autonomous agents</p>
-				</a>
-			</div>
-		</section>
-	</article>
-</Grid>
+  <section id="next-steps">
+    <h2>Next Steps</h2>
+    <div class="link-grid">
+      <a href="/modules/smrt-types" class="link-card">
+        <h3>smrt-types →</h3>
+        <p>Shared TypeScript type definitions</p>
+      </a>
+      <a href="/modules/smrt-config" class="link-card">
+        <h3>smrt-config →</h3>
+        <p>Configuration management</p>
+      </a>
+      <a href="/modules/smrt-users" class="link-card">
+        <h3>smrt-users →</h3>
+        <p>Multi-tenant user management</p>
+      </a>
+      <a href="/modules/smrt-agents" class="link-card">
+        <h3>smrt-agents →</h3>
+        <p>Build autonomous agents</p>
+      </a>
+    </div>
+  </section>
+</ModulePage>
 
 <style>
-	.breadcrumb {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		font-size: 0.85rem;
-		color: var(--smrt-color-on-surface-variant, #666);
-		margin-bottom: 24px;
-	}
+  .link-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
 
-	.breadcrumb a {
-		color: var(--smrt-color-on-surface-variant, #666);
-		text-decoration: none;
-	}
+  .link-card {
+    padding: 20px;
+    background: #fafafa;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+  }
 
-	.breadcrumb a:hover {
-		color: var(--smrt-color-primary, #1976d2);
-	}
+  .link-card:hover {
+    background: var(--smrt-color-surface-container, #f0f0f0);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-color: var(--smrt-color-primary, #1976d2);
+  }
 
-	.breadcrumb span:not(:last-child) {
-		color: #ccc;
-	}
+  .link-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #1a1a1a;
+  }
 
-	.prose {
-		grid-column: 1 / -1;
-		max-width: 900px;
-		margin: 0 auto;
-		padding: 48px 24px;
-	}
+  .link-card:hover h3 {
+    color: var(--smrt-color-primary, #1976d2);
+  }
 
-	.prose h1 {
-		font-size: 2.5rem;
-		font-weight: 600;
-		margin-bottom: 16px;
-	}
-
-	.lead {
-		font-size: 1.2rem;
-		color: var(--smrt-color-on-surface-variant, #666);
-		margin-bottom: 24px;
-		line-height: 1.6;
-	}
-
-	.meta {
-		display: flex;
-		gap: 8px;
-		margin-bottom: 48px;
-		padding-bottom: 48px;
-		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
-	}
-
-	.badge {
-		display: inline-block;
-		padding: 4px 12px;
-		background: var(--smrt-color-surface-container, #f5f5f5);
-		border-radius: 12px;
-		font-size: 0.85rem;
-		font-weight: 500;
-		color: var(--smrt-color-on-surface-variant, #666);
-	}
-
-	.prose h2 {
-		font-size: 1.75rem;
-		font-weight: 600;
-		margin-top: 64px;
-		margin-bottom: 24px;
-		padding-top: 16px;
-		border-top: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
-	}
-
-	.prose h2:first-of-type {
-		border-top: none;
-		margin-top: 0;
-	}
-
-	.prose h3 {
-		font-size: 1.25rem;
-		font-weight: 600;
-		margin-top: 32px;
-		margin-bottom: 16px;
-	}
-
-	.prose p {
-		color: var(--smrt-color-on-surface-variant, #666);
-		margin-bottom: 16px;
-		line-height: 1.7;
-	}
-
-	.prose ul, .prose ol {
-		color: var(--smrt-color-on-surface-variant, #666);
-		margin-bottom: 16px;
-		padding-left: 24px;
-		line-height: 1.7;
-	}
-
-	.prose li {
-		margin-bottom: 8px;
-	}
-
-	.prose code:not(pre code) {
-		font-family: var(--font-mono);
-		font-size: 0.9em;
-		padding: 2px 6px;
-		background: var(--smrt-color-surface-container, #f5f5f5);
-		border-radius: 3px;
-		color: #d63384;
-	}
-
-	.prose section {
-		scroll-margin-top: 24px;
-	}
-
-	.link-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-		gap: 16px;
-		margin-top: 24px;
-	}
-
-	.link-card {
-		padding: 20px;
-		background: #fafafa;
-		text-decoration: none;
-		transition: all 0.2s;
-		border: 1px solid transparent;
-	}
-
-	.link-card:hover {
-		background: var(--smrt-color-surface-container, #f0f0f0);
-		transform: translateY(-2px);
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-		border-color: var(--smrt-color-primary, #1976d2);
-	}
-
-	.link-card h3 {
-		font-size: 1rem;
-		font-weight: 600;
-		margin: 0 0 8px 0;
-		color: #1a1a1a;
-	}
-
-	.link-card:hover h3 {
-		color: var(--smrt-color-primary, #1976d2);
-	}
-
-	.link-card p {
-		font-size: 0.85rem;
-		color: var(--smrt-color-on-surface-variant, #666);
-		margin: 0;
-	}
+  .link-card p {
+    font-size: 0.85rem;
+    color: var(--smrt-color-on-surface-variant, #666);
+    margin: 0;
+  }
 </style>
