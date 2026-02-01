@@ -1,43 +1,28 @@
 <script lang="ts">
-	import Grid from '$lib/components/Grid.svelte';
+	import ModulePage from '$lib/components/ModulePage.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head>
-	<title>smrt-tenancy - Multi-Tenancy Framework | SMRT Documentation</title>
-	<meta
-		name="description"
-		content="Production-ready multi-tenancy with automatic tenant isolation, context propagation, and RBAC integration."
-	/>
-</svelte:head>
-
-<Grid>
-	<div class="page-header">
-		<nav class="breadcrumb">
-			<a href="/">Home</a>
-			<span>/</span>
-			<a href="/modules">Modules</a>
-			<span>/</span>
-			<span>smrt-tenancy</span>
-		</nav>
-
-		<h1>smrt-tenancy</h1>
-	<p class="lead">
-		Production-ready multi-tenancy framework with automatic tenant isolation, AsyncLocalStorage
-		context propagation, and framework adapters.
-	</p>
-
+<ModulePage
+	name="smrt-tenancy"
+	description="Production-ready multi-tenancy framework with automatic tenant isolation, AsyncLocalStorage context propagation, and framework adapters."
+	badges={['v0.19.0', 'Multi-Tenancy', 'ESM']}
+>
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			The <code>@happyvertical/smrt-tenancy</code> package (NEW in v0.19.0) provides automatic
-			tenant isolation for SaaS applications built on SMRT-core.
+			The <code>@happyvertical/smrt-tenancy</code> package (NEW in v0.19.0) provides automatic tenant
+			isolation for SaaS applications built on SMRT-core.
 		</p>
 
 		<h3>Key Features</h3>
 		<ul>
-			<li><strong>Automatic Query Filtering</strong>: WHERE tenantId = current added automatically</li>
-			<li><strong>AsyncLocalStorage Context</strong>: Propagates tenant through async operations</li>
+			<li>
+				<strong>Automatic Query Filtering</strong>: WHERE tenantId = current added automatically
+			</li>
+			<li>
+				<strong>AsyncLocalStorage Context</strong>: Propagates tenant through async operations
+			</li>
 			<li><strong>Decorator-Based</strong>: @TenantScoped marks classes for isolation</li>
 			<li><strong>Framework Adapters</strong>: SvelteKit, Express, CLI support</li>
 			<li><strong>Super-Admin Bypass</strong>: Controlled cross-tenant access</li>
@@ -625,38 +610,13 @@ await withTenant(
 			<li><a href="/modules/smrt-users">smrt-users</a> - RBAC integration</li>
 		</ul>
 	</section>
-</div></Grid>
+</ModulePage>
 
 <style>
 	/* All direct children span full grid width */
-	.page-header,
 	section {
 		grid-column: 1 / -1;
 		min-width: 0;
-	}
-
-	.lead {
-		font-size: 1.25rem;
-		margin-bottom: 2rem;
-		color: var(--smrt-color-on-surface-variant, #666);
-	}
-
-	.breadcrumb {
-		display: flex;
-		gap: 0.5rem;
-		margin-top: 0.5rem;
-		margin-bottom: 1rem;
-		font-size: 0.875rem;
-		color: var(--smrt-color-on-surface-variant, #666);
-	}
-
-	.breadcrumb a {
-		color: var(--smrt-color-primary, #1976d2);
-		text-decoration: none;
-	}
-
-	.breadcrumb a:hover {
-		text-decoration: underline;
 	}
 
 	section {

@@ -3,18 +3,21 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<ModulePage 
-	name="smrt-types" 
+<ModulePage
+	name="smrt-types"
 	description="Shared TypeScript type definitions and interfaces used across multiple SMRT packages to prevent circular dependencies and ensure type safety."
 	badges={['v0.17.100', 'Core Foundation', 'ESM', 'Zero Dependencies']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			<code>@happyvertical/smrt-types</code> provides shared TypeScript definitions that are used across the entire SMRT ecosystem. By centralizing these types, we avoid circular dependencies between packages and ensure consistent interfaces throughout the SDK.
+			<code>@happyvertical/smrt-types</code> provides shared TypeScript definitions that are used across
+			the entire SMRT ecosystem. By centralizing these types, we avoid circular dependencies between packages
+			and ensure consistent interfaces throughout the SDK.
 		</p>
 		<p>
-			Currently, this package exports the <strong>Signal System</strong> types, which power automatic method tracking and event distribution across SMRT objects.
+			Currently, this package exports the <strong>Signal System</strong> types, which power automatic
+			method tracking and event distribution across SMRT objects.
 		</p>
 	</section>
 
@@ -22,18 +25,21 @@
 		<h2>Installation</h2>
 		<CodeBlock code={`npm install @happyvertical/smrt-types`} language="bash" />
 		<p class="note">
-			<strong>Note:</strong> This package is typically installed as a dependency of other SMRT packages. You rarely need to install it directly.
+			<strong>Note:</strong> This package is typically installed as a dependency of other SMRT packages.
+			You rarely need to install it directly.
 		</p>
 	</section>
 
 	<section id="signal-system">
 		<h2>Signal System</h2>
 		<p>
-			The Signal System provides automatic observability into SMRT method execution, enabling logging, metrics, pub/sub updates, and distributed tracing without manual instrumentation.
+			The Signal System provides automatic observability into SMRT method execution, enabling
+			logging, metrics, pub/sub updates, and distributed tracing without manual instrumentation.
 		</p>
 
 		<h3>Signal Interface</h3>
-		<CodeBlock code={`import type { Signal } from '@happyvertical/smrt-types';
+		<CodeBlock
+			code={`import type { Signal } from '@happyvertical/smrt-types';
 
 // Signal structure
 interface Signal {
@@ -58,7 +64,9 @@ interface Signal {
   // Metadata
   timestamp: Date;
   metadata?: Record<string, any>;
-}`} language="typescript" />
+}`}
+			language="typescript"
+		/>
 
 		<h3>SignalType</h3>
 		<p>Four lifecycle stages for method execution:</p>
@@ -69,11 +77,15 @@ interface Signal {
 			<li><code>error</code> - Method failed with error</li>
 		</ul>
 
-		<CodeBlock code={`type SignalType = 'start' | 'step' | 'end' | 'error';`} language="typescript" />
+		<CodeBlock
+			code={`type SignalType = 'start' | 'step' | 'end' | 'error';`}
+			language="typescript"
+		/>
 
 		<h3>SignalAdapter Interface</h3>
 		<p>Adapters consume signals for specific purposes (logging, metrics, tracing, etc.):</p>
-		<CodeBlock code={`import type { SignalAdapter, Signal } from '@happyvertical/smrt-types';
+		<CodeBlock
+			code={`import type { SignalAdapter, Signal } from '@happyvertical/smrt-types';
 
 class MyAdapter implements SignalAdapter {
   async handle(signal: Signal): Promise<void> {
@@ -86,16 +98,20 @@ class MyAdapter implements SignalAdapter {
 // - Logging: Write to console, file, or logging service
 // - Metrics: Track execution counts, durations, errors
 // - Pub/Sub: Broadcast real-time updates to clients
-// - Tracing: Send spans to distributed tracing systems`} language="typescript" />
+// - Tracing: Send spans to distributed tracing systems`}
+			language="typescript"
+		/>
 	</section>
 
 	<section id="usage">
 		<h2>Usage in SMRT Objects</h2>
 		<p>
-			SMRT objects automatically emit signals during method execution. You can listen to these signals using the internal signal bus:
+			SMRT objects automatically emit signals during method execution. You can listen to these
+			signals using the internal signal bus:
 		</p>
 
-		<CodeBlock code={`import { SmrtObject } from '@happyvertical/smrt-core';
+		<CodeBlock
+			code={`import { SmrtObject } from '@happyvertical/smrt-core';
 import type { Signal } from '@happyvertical/smrt-types';
 
 class Product extends SmrtObject {
@@ -123,11 +139,14 @@ signalBus?.on('method:error', (signal: Signal) => {
   console.error(\`Failed: \${signal.method}\`, signal.error);
 });
 
-await product.analyze();`} language="typescript" />
+await product.analyze();`}
+			language="typescript"
+		/>
 
 		<h3>Custom Step Signals</h3>
 		<p>Emit manual progress steps within methods:</p>
-		<CodeBlock code={`class Document extends SmrtObject {
+		<CodeBlock
+			code={`class Document extends SmrtObject {
   async process() {
     this._signalBus?.emit({
       id: 'exec-123',
@@ -149,14 +168,17 @@ await product.analyze();`} language="typescript" />
 
     await this.parse();
   }
-}`} language="typescript" />
+}`}
+			language="typescript"
+		/>
 	</section>
 
 	<section id="adapters">
 		<h2>Signal Adapters</h2>
 
 		<h3>Example: Logging Adapter</h3>
-		<CodeBlock code={`import type { SignalAdapter, Signal } from '@happyvertical/smrt-types';
+		<CodeBlock
+			code={`import type { SignalAdapter, Signal } from '@happyvertical/smrt-types';
 
 class LoggingAdapter implements SignalAdapter {
   async handle(signal: Signal): Promise<void> {
@@ -177,10 +199,13 @@ class LoggingAdapter implements SignalAdapter {
       console.log('→', log);
     }
   }
-}`} language="typescript" />
+}`}
+			language="typescript"
+		/>
 
 		<h3>Example: Metrics Adapter</h3>
-		<CodeBlock code={`class MetricsAdapter implements SignalAdapter {
+		<CodeBlock
+			code={`class MetricsAdapter implements SignalAdapter {
   private metrics = new Map<string, number[]>();
 
   async handle(signal: Signal): Promise<void> {
@@ -197,10 +222,13 @@ class LoggingAdapter implements SignalAdapter {
     const durations = this.metrics.get(key) || [];
     return durations.reduce((a, b) => a + b, 0) / durations.length;
   }
-}`} language="typescript" />
+}`}
+			language="typescript"
+		/>
 
 		<h3>Example: Pub/Sub Adapter</h3>
-		<CodeBlock code={`class WebSocketAdapter implements SignalAdapter {
+		<CodeBlock
+			code={`class WebSocketAdapter implements SignalAdapter {
   constructor(private ws: WebSocket) {}
 
   async handle(signal: Signal): Promise<void> {
@@ -218,13 +246,18 @@ class LoggingAdapter implements SignalAdapter {
       }));
     }
   }
-}`} language="typescript" />
+}`}
+			language="typescript"
+		/>
 	</section>
 
 	<section id="benefits">
 		<h2>Why Centralize Types?</h2>
 		<ol>
-			<li><strong>Prevent Circular Dependencies</strong> - Shared types can be imported without creating dependency cycles</li>
+			<li>
+				<strong>Prevent Circular Dependencies</strong> - Shared types can be imported without creating
+				dependency cycles
+			</li>
 			<li><strong>Single Source of Truth</strong> - Type definitions maintained in one place</li>
 			<li><strong>Version Synchronization</strong> - All packages use the same type version</li>
 			<li><strong>Type Safety</strong> - TypeScript ensures consistency across the SDK</li>
@@ -236,10 +269,13 @@ class LoggingAdapter implements SignalAdapter {
 		<h2>API Reference</h2>
 
 		<h3>Exports</h3>
-		<CodeBlock code={`// Type exports (no runtime code)
+		<CodeBlock
+			code={`// Type exports (no runtime code)
 export type { Signal } from './signals.js';
 export type { SignalAdapter } from './signals.js';
-export type { SignalType } from './signals.js';`} language="typescript" />
+export type { SignalType } from './signals.js';`}
+			language="typescript"
+		/>
 
 		<h3>Signal Properties</h3>
 		<table class="api-table">
@@ -318,11 +354,22 @@ export type { SignalType } from './signals.js';`} language="typescript" />
 	<section id="best-practices">
 		<h2>Best Practices</h2>
 		<ol>
-			<li><strong>Don't install directly</strong> - Let other SMRT packages bring it in as a dependency</li>
-			<li><strong>Use type-only imports</strong> - <code>import type { Signal } from '@happyvertical/smrt-types'</code></li>
-			<li><strong>Handle adapter errors</strong> - SignalAdapter.handle() should catch its own errors</li>
-			<li><strong>Sanitize sensitive data</strong> - Don't include passwords or keys in signal.args</li>
-			<li><strong>Keep adapters lightweight</strong> - Signals are emitted frequently; avoid heavy operations</li>
+			<li>
+				<strong>Don't install directly</strong> - Let other SMRT packages bring it in as a dependency
+			</li>
+			<li>
+				<strong>Use type-only imports</strong> -
+				<code>import type {'{'} Signal {'}'} from '@happyvertical/smrt-types'</code>
+			</li>
+			<li>
+				<strong>Handle adapter errors</strong> - SignalAdapter.handle() should catch its own errors
+			</li>
+			<li>
+				<strong>Sanitize sensitive data</strong> - Don't include passwords or keys in signal.args
+			</li>
+			<li>
+				<strong>Keep adapters lightweight</strong> - Signals are emitted frequently; avoid heavy operations
+			</li>
 		</ol>
 	</section>
 
@@ -377,7 +424,8 @@ export type { SignalType } from './signals.js';`} language="typescript" />
 		line-height: 1.7;
 	}
 
-	:global(.prose) ul, :global(.prose) ol {
+	:global(.prose) ul,
+	:global(.prose) ol {
 		color: var(--smrt-color-on-surface-variant, #666);
 		margin-bottom: 16px;
 		padding-left: 24px;

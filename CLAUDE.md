@@ -29,12 +29,23 @@ npm run dev
 
 ## Resolved Issues
 
+### Module page navigation failing due to unescaped curly braces in smrt-types
+
+- **Location**: `/src/routes/modules/smrt-types/+page.svelte`
+- **Problem**: Clicking smrt-types module link caused 500 error. Server error: "Signal is not defined" at line 322:69.
+- **Root Cause**: The text `{ Signal }` inside a `<code>` block was being interpreted as a Svelte expression (Svelte uses `{expression}` for templating). Since `Signal` was not defined as a variable, it caused a runtime error.
+- **Fix**: Escaped the curly braces using `{'{'} Signal {'}'}` syntax to prevent Svelte from interpreting them as expressions.
+- **Lesson**: Always escape curly braces in Svelte templates when displaying code examples that contain braces.
+- **Prevention**: Added `npm run check:templates` script that scans for unescaped braces in `<code>` blocks. Runs as part of `npm run lint` and `npm run build`.
+
 ### `smrt` component name capitalized to `Smrt`
+
 - **Location**: `@happyvertical/smrt-svelte` exports `Smrt` component (was lowercase `smrt`)
 - **Fix**: Renamed export from `smrt` to `Smrt` in smrt-svelte/src/components/ai/index.ts
 - **Status**: Fixed - use `<Smrt>` wrapper component for app state context
 
 ### Transformers.js model loading now defaults to remote
+
 - **Location**: `@happyvertical/browser-ai` and `@happyvertical/smrt-svelte`
 - **Problem**: 404s for `/models/Xenova/whisper-tiny.en/*` - transformers.js tried local first
 - **Fix**: Added `allowLocalModels` option to `BaseBrowserAIOptions` (browser-ai) and `STTConfig` (smrt-svelte). Defaults to `false` so models load from HuggingFace Hub CDN.

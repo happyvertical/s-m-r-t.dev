@@ -1,37 +1,19 @@
 <script lang="ts">
-	import Grid from '$lib/components/Grid.svelte';
+	import ModulePage from '$lib/components/ModulePage.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head>
-	<title>smrt-profiles - Profile Management System | SMRT Documentation</title>
-	<meta
-		name="description"
-		content="Comprehensive profile management with flexible metadata, relationships, and multi-provider authentication (OIDC, Nostr, API keys)."
-	/>
-</svelte:head>
-
-<Grid>
-	<nav class="breadcrumb" slot="header">
-		<a href="/">Home</a>
-		<span>/</span>
-		<a href="/modules">Modules</a>
-		<span>/</span>
-		<span>smrt-profiles</span>
-	</nav>
-
-	<h1>smrt-profiles</h1>
-	<p class="lead">
-		Comprehensive profile management system with flexible metadata, complex relationships, and
-		multi-provider authentication support (OIDC, Nostr, API keys).
-	</p>
-
+<ModulePage
+	name="smrt-profiles"
+	description="Comprehensive profile management system with flexible metadata, complex relationships, and multi-provider authentication support (OIDC, Nostr, API keys)."
+	badges={['v0.19.0', 'Identity', 'Auth', 'ESM']}
+>
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			The <code>@happyvertical/smrt-profiles</code> package enables managing profiles of any type
-			(people, organizations, robots) with flexible metadata, complex relationships, and integrated
-			authentication support.
+			The <code>@happyvertical/smrt-profiles</code> package enables managing profiles of any type (people,
+			organizations, robots) with flexible metadata, complex relationships, and integrated authentication
+			support.
 		</p>
 
 		<h3>Key Features</h3>
@@ -119,10 +101,10 @@
 		<h3>Database Setup</h3>
 		<p>Requires database configuration (SQLite, PostgreSQL, etc.):</p>
 		<CodeBlock
-			code={`import { smrt @happyvertical '@happyvertical/smrt-core';
+			code={`import { smrt } from '@happyvertical/smrt-core';
 
 await smrt.initialize({
-  db: { type: \'sqlite\', url: \'profiles.db\' }
+  db: { type: 'sqlite', url: 'profiles.db' }
 });`}
 			language="typescript"
 		/>
@@ -140,7 +122,7 @@ await smrt.initialize({
 
 // Create profile type
 const typeCollection = await ProfileTypeCollection.create({ db: {...} });
-const humanType = await typeCollection.create({ name: \'Human\' });
+const humanType = await typeCollection.create({ name: 'Human' });
 await humanType.save();
 console.log(humanType.slug); // 'human'`}
 			language="typescript"
@@ -162,20 +144,20 @@ await person.save();`}
 
 		<h3>3. Add Metadata</h3>
 		<CodeBlock
-			code={`import { ProfileMetafieldCollection @happyvertical '@happyvertical/smrt-profiles';
+			code={`import { ProfileMetafieldCollection } from '@happyvertical/smrt-profiles';
 
 // Define metafield with validation
 const fieldCollection = await ProfileMetafieldCollection.create({ db: {...} });
 const location = await fieldCollection.create({
   name: 'Location',
-  validation: { type: \'string\', maxLength: 100 }
+  validation: { type: 'string', maxLength: 100 }
 });
 await location.save();
 
 // Add metadata to profile
 await person.addMetadata('location', 'San Francisco, CA');
 const metadata = await person.getMetadata();
-// { location: \'San Francisco, CA\' }`}
+// { location: 'San Francisco, CA' }`}
 			language="typescript"
 		/>
 
@@ -194,7 +176,7 @@ const friendType = await relTypeCollection.create({
 await friendType.save();
 
 // Create relationship (automatically creates reciprocal)
-const bob = await profileCollection.get({ email: \'bob@example.com\' });
+const bob = await profileCollection.get({ email: 'bob@example.com' });
 await person.addRelationship(bob, 'friend');
 
 // Query relationships
@@ -209,15 +191,15 @@ console.log(friends.length); // 1 (Bob)`}
 
 		<h3>1. Profile Type System</h3>
 		<p>
-			<strong>ProfileType</strong> is a lookup table that classifies profiles (Person,
-			Organization, Robot, Team, etc.).
+			<strong>ProfileType</strong> is a lookup table that classifies profiles (Person, Organization, Robot,
+			Team, etc.).
 		</p>
 
 		<CodeBlock
 			code={`// Create multiple types
-const personType = await typeCollection.create({ name: \'Person\' });
-const orgType = await typeCollection.create({ name: \'Organization\' });
-const teamType = await typeCollection.create({ name: \'Team\' });
+const personType = await typeCollection.create({ name: 'Person' });
+const orgType = await typeCollection.create({ name: 'Organization' });
+const teamType = await typeCollection.create({ name: 'Team' });
 
 // Use type when creating profiles
 const employee = await profileCollection.create({
@@ -260,7 +242,7 @@ await person.addMetadata('phone-number', '+14155551234');
 
 // Get all metadata
 const metadata = await person.getMetadata();
-// { 'phone-number': \'+14155551234\', location: \'SF\' }
+// { 'phone-number': '+14155551234', location: 'SF' }
 
 // Update multiple
 await person.updateMetadata({
@@ -313,8 +295,8 @@ await person.removeMetadata('location');`}
 
 		<h3>3. Relationship System</h3>
 		<p>
-			<strong>ProfileRelationship</strong> connects two profiles with a relationship type.
-			Relationships can be directional or reciprocal.
+			<strong>ProfileRelationship</strong> connects two profiles with a relationship type. Relationships
+			can be directional or reciprocal.
 		</p>
 
 		<h4>Reciprocal Relationships</h4>
@@ -374,8 +356,8 @@ const colleagues = await alice.getRelatedProfiles('colleague');
 
 		<h3>4. Temporal Relationships (Terms)</h3>
 		<p>
-			<strong>ProfileRelationshipTerm</strong> tracks time-based periods for relationships
-			(employment history, memberships, etc.).
+			<strong>ProfileRelationshipTerm</strong> tracks time-based periods for relationships (employment
+			history, memberships, etc.).
 		</p>
 
 		<CodeBlock
@@ -535,7 +517,7 @@ const token = await createMagicLinkToken(profile, keypair);
 await sendEmail({
   to: profile.email,
   subject: 'Sign in to your account',
-  body: \`Click here: https://app.example.com/auth/magic?\${'${token}\`
+  body: \`Click here: https://app.example.com/auth/magic?\${token}\`
 });
 
 // Verify magic link
@@ -558,9 +540,9 @@ if (verified) {
 
 		<h4>Step 1: Create Profile Types</h4>
 		<CodeBlock
-			code={`const personType = await typeCollection.create({ name: \'Person\' });
-const orgType = await typeCollection.create({ name: \'Organization\' });
-const deptType = await typeCollection.create({ name: \'Department\' });
+			code={`const personType = await typeCollection.create({ name: 'Person' });
+const orgType = await typeCollection.create({ name: 'Organization' });
+const deptType = await typeCollection.create({ name: 'Department' });
 await Promise.all([personType.save(), orgType.save(), deptType.save()]);`}
 			language="typescript"
 		/>
@@ -589,11 +571,11 @@ await engineering.addRelationship(company, 'part-of');`}
 			code={`// Define metadata fields
 const jobTitleField = await fieldCollection.create({
   name: 'Job Title',
-  validation: { type: \'string\', maxLength: 100 }
+  validation: { type: 'string', maxLength: 100 }
 });
 const startDateField = await fieldCollection.create({
   name: 'Start Date',
-  validation: { type: \'date\' }
+  validation: { type: 'date' }
 });
 await Promise.all([jobTitleField.save(), startDateField.save()]);
 
@@ -643,7 +625,7 @@ const employees = await profileCollection.list({
 const colleagues = await employee.getRelatedProfiles('colleague');
 
 // Get employment history
-const workRel = await employee.getRelationships({ slug: \'works-at\' });
+const workRel = await employee.getRelationships({ slug: 'works-at' });
 const terms = await workRel[0].getTerms();`}
 			language="typescript"
 		/>
@@ -761,9 +743,9 @@ const mutualFriends = await findMutualFriends(alice, bob);`}
 		<h3>Example 1: Healthcare Provider Network</h3>
 		<CodeBlock
 			code={`// Profile types
-const physicianType = await typeCollection.create({ name: \'Physician\' });
-const patientType = await typeCollection.create({ name: \'Patient\' });
-const clinicType = await typeCollection.create({ name: \'Clinic\' });
+const physicianType = await typeCollection.create({ name: 'Physician' });
+const patientType = await typeCollection.create({ name: 'Patient' });
+const clinicType = await typeCollection.create({ name: 'Clinic' });
 
 // Create profiles
 const drSmith = await profileCollection.create({
@@ -798,7 +780,7 @@ await drSmith.recordAction({
   resourceType: 'Patient',
   resourceId: 'patient-123',
   source: 'web',
-  metadata: { reason: \'Follow-up appointment\' }
+  metadata: { reason: 'Follow-up appointment' }
 });`}
 			language="typescript"
 		/>
@@ -806,9 +788,9 @@ await drSmith.recordAction({
 		<h3>Example 2: Educational Institution</h3>
 		<CodeBlock
 			code={`// Profile types
-const studentType = await typeCollection.create({ name: \'Student\' });
-const teacherType = await typeCollection.create({ name: \'Teacher\' });
-const courseType = await typeCollection.create({ name: \'Course\' });
+const studentType = await typeCollection.create({ name: 'Student' });
+const teacherType = await typeCollection.create({ name: 'Teacher' });
+const courseType = await typeCollection.create({ name: 'Course' });
 
 // Create profiles
 const student = await profileCollection.create({
@@ -837,7 +819,7 @@ await student.addMetadata('gpa', 3.8);
 const courses = await student.getRelatedProfiles('enrolled-in');
 
 // Get enrollment history
-const enrollments = await student.getRelationships({ slug: \'enrolled-in\' });
+const enrollments = await student.getRelationships({ slug: 'enrolled-in' });
 const history = await Promise.all(
   enrollments.map(async (rel) => ({
     course: await rel.getToProfile(),
@@ -885,12 +867,12 @@ const membership = await getUserTenantMembership(profile.id, tenantId);`}
 		<CodeBlock
 			code={`// Tenant A database
 const profilesA = await ProfileCollection.create({
-  db: { type: \'postgres\', url: DATABASE_URL_TENANT_A }
+  db: { type: 'postgres', url: DATABASE_URL_TENANT_A }
 });
 
 // Tenant B database
 const profilesB = await ProfileCollection.create({
-  db: { type: \'postgres\', url: DATABASE_URL_TENANT_B }
+  db: { type: 'postgres', url: DATABASE_URL_TENANT_B }
 });
 
 // Complete isolation at database level`}
@@ -981,7 +963,7 @@ const profile = await profileCollection.create({
 });
 
 // Correct order
-const personType = await typeCollection.create({ name: \'Person\' });
+const personType = await typeCollection.create({ name: 'Person' });
 await personType.save();
 
 const profile = await profileCollection.create({
@@ -1053,10 +1035,10 @@ const collection = await ProfileCollection.create({ db: sharedDb });
 
 // Correct - tenant-specific
 const tenantACollection = await ProfileCollection.create({
-  db: { type: \'postgres\', url: TENANT_A_URL }
+  db: { type: 'postgres', url: TENANT_A_URL }
 });
 const tenantBCollection = await ProfileCollection.create({
-  db: { type: \'postgres\', url: TENANT_B_URL }
+  db: { type: 'postgres', url: TENANT_B_URL }
 });`}
 			language="typescript"
 		/>
@@ -1160,7 +1142,7 @@ const tenantBCollection = await ProfileCollection.create({
 				</tr>
 				<tr>
 					<td><code>getActiveTerm()</code></td>
-					<td><code>Promise&lt;ProfileRelationshipTerm | null&gt;</code></td>
+					<td><code>{`Promise&lt;{ profile, source } | null&gt;`}</code></td>
 					<td>Get current active term</td>
 				</tr>
 				<tr>
@@ -1188,12 +1170,12 @@ const tenantBCollection = await ProfileCollection.create({
 			<tbody>
 				<tr>
 					<td><code>createProfileFromOidc(claims, provider, options)</code></td>
-					<td><code>Promise&lt;{ profile, oidcIdentity, created }&gt;</code></td>
+					<td><code>{`Promise&lt;{ profile, oidcIdentity, created }&gt;`}</code></td>
 					<td>Create or link profile from OIDC</td>
 				</tr>
 				<tr>
 					<td><code>resolveIdentity(context)</code></td>
-					<td><code>Promise&lt;{ profile, source } | null&gt;</code></td>
+					<td><code>{`Promise&lt;{ profile, source } | null&gt;`}</code></td>
 					<td>Resolve authentication</td>
 				</tr>
 				<tr>
@@ -1213,86 +1195,22 @@ const tenantBCollection = await ProfileCollection.create({
 			<li><a href="/modules/smrt-config">smrt-config</a> - Configuration management</li>
 		</ul>
 	</section>
-</Grid>
+</ModulePage>
 
 <style>
-	.lead {
-		font-size: 1.25rem;
-		margin-bottom: 2rem;
-	}
-
-	.breadcrumb {
-		display: flex;
-		gap: 0.5rem;
-		margin-bottom: 1rem;
-		font-size: 0.875rem;
-		color: var(--smrt-color-on-surface-variant, #666);
-	}
-
-	.breadcrumb a {
-		color: #0066cc;
-		text-decoration: none;
-	}
-
-	.breadcrumb a:hover {
-		text-decoration: underline;
-	}
-
-	section {
-		margin-bottom: 3rem;
-	}
-
-	table {
-		width: 100%;
-		border-collapse: collapse;
-		margin: 1rem 0;
-	}
-
-	th,
-	td {
-		text-align: left;
-		padding: 0.75rem;
-		border-bottom: 1px solid #e5e5e5;
-	}
-
-	th {
-		font-weight: 600;
-		background-color: #f5f5f5;
-	}
-
-	code {
-		background-color: #f5f5f5;
-		padding: 0.2rem 0.4rem;
-		border-radius: 3px;
-		font-size: 0.9em;
-	}
-
 	.diagram {
-		background-color: #f5f5f5;
-		padding: 1rem;
-		border-radius: 4px;
+		background: #f8f8f8;
+		border: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
+		border-radius: 8px;
+		padding: 16px;
+		margin: 16px 0;
 		overflow-x: auto;
-		margin: 1rem 0;
 	}
 
 	.diagram pre {
 		margin: 0;
+		font-family: var(--font-mono);
 		font-size: 0.85rem;
 		line-height: 1.4;
-	}
-
-	h2 {
-		margin-top: 2rem;
-		padding-top: 1rem;
-		border-top: 1px solid #e5e5e5;
-	}
-
-	h3 {
-		margin-top: 1.5rem;
-	}
-
-	h4 {
-		margin-top: 1rem;
-		font-size: 1rem;
 	}
 </style>

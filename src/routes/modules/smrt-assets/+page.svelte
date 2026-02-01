@@ -3,16 +3,16 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<ModulePage 
-	name="smrt-assets" 
+<ModulePage
+	name="smrt-assets"
 	description="Production-grade asset management with versioning, derivatives, hierarchical tagging, and AI-powered operations."
 	badges={['v0.19.0', 'Asset Management', 'AI-Powered']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			The <code>@happyvertical/smrt-assets</code> package provides sophisticated asset
-			organization, versioning, and lifecycle management built on the SMRT framework.
+			The <code>@happyvertical/smrt-assets</code> package provides sophisticated asset organization, versioning,
+			and lifecycle management built on the SMRT framework.
 		</p>
 
 		<h3>Key Features</h3>
@@ -113,8 +113,8 @@ const images = await ImageCollection.create({
   statusSlug: 'published'
 });
 
-console.log(\`Aspect ratio: \${'${image.aspectRatio}\`);  // 1.777
-console.log(\`Is landscape: \${'${image.isLandscape}\`);  // true`}
+console.log('Aspect ratio: ' + image.aspectRatio);  // 1.777
+console.log('Is landscape: ' + image.isLandscape);  // true`}
 			language="typescript"
 		/>
 
@@ -355,9 +355,9 @@ const details = await asset.describe('what this image shows');`}
 
 for (const size of sizes) {
   await images.create({
-    name: \`\${'${master.name} - \${'${size.slug}\`,
-    slug: \`\${'${master.slug}-\${'${size.slug}\`,
-    sourceUri: \`s3://products/sneakers/xyz-\${'${size.slug}.jpg\`,
+    name: master.name + ' - ' + size.slug,
+    slug: master.slug + '-' + size.slug,
+    sourceUri: 's3://products/sneakers/xyz-' + size.slug + '.jpg',
     mimeType: 'image/jpeg',
     width: size.width,
     height: size.height,
@@ -384,7 +384,7 @@ await assets.addTag(master.id, 'featured/homepage');`}
   // Create asset
   const asset = await assets.create({
     name: file.name,
-    sourceUri: \`s3://uploads/\${'${file.name}\`,
+    sourceUri: 's3://uploads/' + file.name,
     mimeType: file.type,
     typeSlug: detectAssetType(file.type),
     statusSlug: 'draft',

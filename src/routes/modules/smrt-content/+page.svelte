@@ -1,36 +1,18 @@
 <script lang="ts">
-	import Grid from '$lib/components/Grid.svelte';
+	import ModulePage from '$lib/components/ModulePage.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<svelte:head>
-	<title>smrt-content - Content Management System | SMRT Documentation</title>
-	<meta
-		name="description"
-		content="Content management with flexible organization, publishing workflow, asset management, and AI-powered features."
-	/>
-</svelte:head>
-
-<Grid>
-	<nav class="breadcrumb" slot="header">
-		<a href="/">Home</a>
-		<span>/</span>
-		<a href="/modules">Modules</a>
-		<span>/</span>
-		<span>smrt-content</span>
-	</nav>
-
-	<h1>smrt-content</h1>
-	<p class="lead">
-		Content management system with flexible organization, publishing workflows, asset management,
-		and AI-powered analysis.
-	</p>
-
+<ModulePage
+	name="smrt-content"
+	description="Content management system with flexible organization, publishing workflows, asset management, and AI-powered analysis."
+	badges={['v0.19.0', 'Content Management', 'AI-Powered']}
+>
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			The <code>@happyvertical/smrt-content</code> package provides a specialized content
-			management and processing module within the SMRT framework.
+			The <code>@happyvertical/smrt-content</code> package provides a specialized content management and
+			processing module within the SMRT framework.
 		</p>
 
 		<h3>Key Features</h3>
@@ -105,12 +87,12 @@
 
 		<h3>Basic Setup</h3>
 		<CodeBlock
-			code={`import { Contents, Content @happyvertical '@happyvertical/smrt-content';
+			code={`import { Contents, Content } from '@happyvertical/smrt-content';
 
 // Create collection with database
 const contents = await Contents.create({
-  db: { url: \'sqlite:./content.db\' },
-  ai: { type: \'openai\', apiKey: process.env.OPENAI_API_KEY }
+  db: { url: 'sqlite:./content.db' },
+  ai: { type: 'openai', apiKey: process.env.OPENAI_API_KEY }
 });`}
 			language="typescript"
 		/>
@@ -128,7 +110,7 @@ const contents = await Contents.create({
   author: 'Dev Team',
   status: 'published',
   tags: ['smrt', 'tutorial'],
-  metadata: { difficulty: \'beginner\' }
+  metadata: { difficulty: 'beginner' }
 });
 
 await article.initialize();
@@ -139,7 +121,7 @@ await article.save();`}
 		<h3>2. Query Content</h3>
 		<CodeBlock
 			code={`// Get single content
-const article = await contents.get({ slug: \'my-article\' });
+const article = await contents.get({ slug: 'my-article' });
 
 // List with filters
 const published = await contents.list({
@@ -152,7 +134,7 @@ const published = await contents.list({
 });
 
 // Count results
-const total = await contents.count({ where: { type: \'article\' } });`}
+const total = await contents.count({ where: { type: 'article' } });`}
 			language="typescript"
 		/>
 
@@ -217,9 +199,9 @@ await contents.syncContentDir({
 
 		<CodeBlock
 			code={`// All stored in single 'contents' table with _meta_type
-const article = new Article({ title: \'...\', type: \'article\' });
-const document = new ContentDocument({ title: \'...\', type: \'document\' });
-const mirror = new Mirror({ title: \'...\', type: \'mirror\' });`}
+const article = new Article({ title: '...', type: 'article' });
+const document = new ContentDocument({ title: '...', type: 'document' });
+const mirror = new Mirror({ title: '...', type: 'mirror' });`}
 			language="typescript"
 		/>
 
@@ -370,7 +352,7 @@ const mapThumbnail = await content.generateThumbnail({
 			code={`const aiThumbnail = await content.generateThumbnail({
   strategy: 'ai-generate',
   style: 'photorealistic', // or 'illustration', 'abstract', 'minimal'
-  ai: { type: \'openai\', apiKey: process.env.OPENAI_API_KEY }
+  ai: { type: 'openai', apiKey: process.env.OPENAI_API_KEY }
 });`}
 			language="typescript"
 		/>
@@ -379,13 +361,13 @@ const mapThumbnail = await content.generateThumbnail({
 		<CodeBlock
 			code={`const result = await contents.generateMissingThumbnails({
   strategy: 'headline-card',
-  where: { type: \'article\', status: \'published\' },
+  where: { type: 'article', status: 'published' },
   brandColor: '#1a56db',
   limit: 100
 });
 
-console.log(\`Generated \${'${result.images.length} thumbnails\`);
-console.log(\`Failed: \${'${result.failed.length}\`);`}
+console.log('Generated ' + result.images.length + ' thumbnails');
+console.log('Failed: ' + result.failed.length);`}
 			language="typescript"
 		/>
 	</section>
@@ -508,7 +490,7 @@ await event.save();`}
 		<h4>Step 3: Query by Category</h4>
 		<CodeBlock
 			code={`const conferences = await contents.list({
-  where: { category: \'events/conferences\' }
+  where: { category: 'events/conferences' }
 });
 
 // Filter by ancestor category
@@ -548,7 +530,7 @@ await story.save();
 
 // Query civic news
 const civicNews = await contents.list({
-  where: { category: \'local/civic\' }
+  where: { category: 'local/civic' }
 }).then(items =>
   items.filter(c => c.isInCategory('local/civic', true))
 );`}
@@ -580,7 +562,7 @@ const allDocs = await contents.list()
 
 // Query specific variant
 const guides = await contents.list({
-  where: { variant: \'docs:guide:getting-started\' }
+  where: { variant: 'docs:guide:getting-started' }
 });`}
 			language="typescript"
 		/>
@@ -619,7 +601,7 @@ await paper.save();`}
 		<h3>smrt-core</h3>
 		<ul>
 			<li>Content extends <strong>SmrtObject</strong> for automatic persistence</li>
-			<li>STI support via <code>@smrt({'{ tableStrategy: \'sti\' }'})</code></li>
+			<li>STI support via <code>@smrt({"{ tableStrategy: 'sti' }"})</code></li>
 			<li>Auto-generated REST API, CLI commands, and MCP tools</li>
 		</ul>
 
@@ -762,7 +744,7 @@ content.context = '';            // → slug/index.md`}
 		<p><strong>Solution:</strong> Ensure AI config is passed</p>
 		<CodeBlock
 			code={`const contents = await Contents.create({
-  db: { url: \'sqlite:./content.db\' },
+  db: { url: 'sqlite:./content.db' },
   ai: {
     type: 'openai',
     apiKey: process.env.OPENAI_API_KEY // Required
@@ -915,86 +897,4 @@ content.context = '';            // → slug/index.md`}
 			<li><a href="/modules/smrt-users">smrt-users</a> - Author profiles</li>
 		</ul>
 	</section>
-</Grid>
-
-<style>
-	.lead {
-		font-size: 1.25rem;
-		margin-bottom: 2rem;
-	}
-
-	.breadcrumb {
-		display: flex;
-		gap: 0.5rem;
-		margin-bottom: 1rem;
-		font-size: 0.875rem;
-		color: var(--smrt-color-on-surface-variant, #666);
-	}
-
-	.breadcrumb a {
-		color: #0066cc;
-		text-decoration: none;
-	}
-
-	.breadcrumb a:hover {
-		text-decoration: underline;
-	}
-
-	section {
-		margin-bottom: 3rem;
-	}
-
-	table {
-		width: 100%;
-		border-collapse: collapse;
-		margin: 1rem 0;
-	}
-
-	th,
-	td {
-		text-align: left;
-		padding: 0.75rem;
-		border-bottom: 1px solid #e5e5e5;
-	}
-
-	th {
-		font-weight: 600;
-		background-color: #f5f5f5;
-	}
-
-	code {
-		background-color: #f5f5f5;
-		padding: 0.2rem 0.4rem;
-		border-radius: 3px;
-		font-size: 0.9em;
-	}
-
-	.diagram {
-		background-color: #f5f5f5;
-		padding: 1rem;
-		border-radius: 4px;
-		overflow-x: auto;
-		margin: 1rem 0;
-	}
-
-	.diagram pre {
-		margin: 0;
-		font-size: 0.85rem;
-		line-height: 1.4;
-	}
-
-	h2 {
-		margin-top: 2rem;
-		padding-top: 1rem;
-		border-top: 1px solid #e5e5e5;
-	}
-
-	h3 {
-		margin-top: 1.5rem;
-	}
-
-	h4 {
-		margin-top: 1rem;
-		font-size: 1rem;
-	}
-</style>
+</ModulePage>
