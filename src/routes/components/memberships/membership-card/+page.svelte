@@ -14,8 +14,18 @@
 	} as any;
 
 	const cardProps = [
-		{ name: 'membership', type: 'Membership', description: 'Membership object with user, role, status', required: true },
-		{ name: 'showActions', type: 'boolean', default: 'false', description: 'Show edit/remove actions' },
+		{
+			name: 'membership',
+			type: 'Membership',
+			description: 'Membership object with user, role, status',
+			required: true
+		},
+		{
+			name: 'showActions',
+			type: 'boolean',
+			default: 'false',
+			description: 'Show edit/remove actions'
+		},
 		{ name: 'onedit', type: '() => void', description: 'Callback for edit action' },
 		{ name: 'onremove', type: '() => void', description: 'Callback for remove action' }
 	];
@@ -36,7 +46,10 @@
 	<p class="lead">Display tenant membership information with user details, role, and status.</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { MembershipCard } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { MembershipCard } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<ComponentExample code={`<MembershipCard membership={membership} />`}>
@@ -44,7 +57,9 @@
 	</ComponentExample>
 
 	<h2>With Actions</h2>
-	<ComponentExample code={`<MembershipCard\n  membership={membership}\n  showActions={true}\n  onedit={() => {}}\n  onremove={() => {}}\n/>`}>
+	<ComponentExample
+		code={`<MembershipCard\n  membership={membership}\n  showActions={true}\n  onedit={() => {}}\n  onremove={() => {}}\n/>`}
+	>
 		<MembershipCard
 			membership={mockMembership}
 			showActions={true}
@@ -57,7 +72,10 @@
 	<PropsTable props={cardProps} />
 
 	<h2>TypeScript</h2>
-	<CodeBlock code={`interface Membership {\n  id: string;\n  user: User;\n  profile: Profile;\n  role: string;\n  status: string;\n  joinedAt: Date;\n}\n\ninterface Props {\n  membership: Membership;\n  showActions?: boolean;\n  onedit?: () => void;\n  onremove?: () => void;\n}`} language="typescript" />
+	<CodeBlock
+		code={`interface Membership {\n  id: string;\n  user: User;\n  profile: Profile;\n  role: string;\n  status: string;\n  joinedAt: Date;\n}\n\ninterface Props {\n  membership: Membership;\n  showActions?: boolean;\n  onedit?: () => void;\n  onremove?: () => void;\n}`}
+		language="typescript"
+	/>
 </article>
 
 <style>

@@ -69,7 +69,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { ProgressBar } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { ProgressBar } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Simple progress bar with automatic color based on percentage.</p>
@@ -95,15 +98,21 @@
 	>
 		<div style="display: flex; flex-direction: column; gap: 16px;">
 			<div>
-				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;">Healthy (under 75%)</span>
+				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;"
+					>Healthy (under 75%)</span
+				>
 				<ProgressBar value={50} showLabel />
 			</div>
 			<div>
-				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;">Warning (75-89%)</span>
+				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;"
+					>Warning (75-89%)</span
+				>
 				<ProgressBar value={80} showLabel />
 			</div>
 			<div>
-				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;">Critical (90%+)</span>
+				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;"
+					>Critical (90%+)</span
+				>
 				<ProgressBar value={95} showLabel />
 			</div>
 		</div>
@@ -112,18 +121,14 @@
 	<h2>Over Budget</h2>
 	<p>When value exceeds max, shows "over" indicator.</p>
 
-	<ComponentExample
-		code={`<ProgressBar value={120} max={100} showLabel />`}
-	>
+	<ComponentExample code={`<ProgressBar value={120} max={100} showLabel />`}>
 		<ProgressBar value={120} max={100} showLabel />
 	</ComponentExample>
 
 	<h2>Custom Range</h2>
 	<p>Use any max value, not just 100.</p>
 
-	<ComponentExample
-		code={`<ProgressBar value={750} max={1000} showValue />`}
-	>
+	<ComponentExample code={`<ProgressBar value={750} max={1000} showValue />`}>
 		<ProgressBar value={750} max={1000} showValue />
 	</ComponentExample>
 
@@ -137,15 +142,21 @@
 	>
 		<div style="display: flex; flex-direction: column; gap: 24px;">
 			<div>
-				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;">Small</span>
+				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;"
+					>Small</span
+				>
 				<ProgressBar value={60} size="sm" showLabel />
 			</div>
 			<div>
-				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;">Medium</span>
+				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;"
+					>Medium</span
+				>
 				<ProgressBar value={60} size="md" showLabel />
 			</div>
 			<div>
-				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;">Large</span>
+				<span style="display: block; font-size: 0.75rem; color: #666; margin-bottom: 4px;"
+					>Large</span
+				>
 				<ProgressBar value={60} size="lg" showLabel />
 			</div>
 		</div>
@@ -154,9 +165,7 @@
 	<h2>Custom Label</h2>
 	<p>Override the label text.</p>
 
-	<ComponentExample
-		code={`<ProgressBar value={75} showLabel label="$7,500 of $10,000" />`}
-	>
+	<ComponentExample code={`<ProgressBar value={75} showLabel label="$7,500 of $10,000" />`}>
 		<ProgressBar value={75} showLabel label="$7,500 of $10,000" />
 	</ComponentExample>
 

@@ -1,42 +1,42 @@
 <script lang="ts">
-  import ModulePage from '$lib/components/ModulePage.svelte';
-  import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import ModulePage from '$lib/components/ModulePage.svelte';
+	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<ModulePage 
-  name="smrt-properties" 
-  description="Digital property and zone management for websites, apps, and advertising inventory."
-  badges={['v0.19.0', 'Properties', 'Zones']}
+<ModulePage
+	name="smrt-properties"
+	description="Digital property and zone management for websites, apps, and advertising inventory."
+	badges={['v0.19.0', 'Properties', 'Zones']}
 >
-  <section>
-    <h2>Overview</h2>
-    <p>
-      <strong>smrt-properties</strong> manages digital properties (websites, applications) and their hierarchical
-      zones (pages, sections, ad slots). It provides tree-structured organization with flexible metadata, dimension
-      tracking, and format validation.
-    </p>
-    <aside>
-      <p><strong>Key Features:</strong></p>
-      <ul>
-        <li>Property management with domain, URL, and status tracking</li>
-        <li>Hierarchical zones with unlimited nesting depth</li>
-        <li>Dimension tracking (width/height) for ad slots</li>
-        <li>Format validation and allowed formats per zone</li>
-        <li>Tree operations with cycle prevention</li>
-        <li>Path traversal (ancestors/descendants)</li>
-      </ul>
-    </aside>
-  </section>
+	<section>
+		<h2>Overview</h2>
+		<p>
+			<strong>smrt-properties</strong> manages digital properties (websites, applications) and their hierarchical
+			zones (pages, sections, ad slots). It provides tree-structured organization with flexible metadata,
+			dimension tracking, and format validation.
+		</p>
+		<aside>
+			<p><strong>Key Features:</strong></p>
+			<ul>
+				<li>Property management with domain, URL, and status tracking</li>
+				<li>Hierarchical zones with unlimited nesting depth</li>
+				<li>Dimension tracking (width/height) for ad slots</li>
+				<li>Format validation and allowed formats per zone</li>
+				<li>Tree operations with cycle prevention</li>
+				<li>Path traversal (ancestors/descendants)</li>
+			</ul>
+		</aside>
+	</section>
 
-  <section>
-    <h2>Installation</h2>
-    <CodeBlock code={`npm install @happyvertical/smrt-properties`} language="bash" />
-  </section>
+	<section>
+		<h2>Installation</h2>
+		<CodeBlock code={`npm install @happyvertical/smrt-properties`} language="bash" />
+	</section>
 
-  <section>
-    <h2>Quick Start</h2>
-    <CodeBlock
-      code={`import { PropertyCollection, ZoneCollection } from '@happyvertical/smrt-properties';
+	<section>
+		<h2>Quick Start</h2>
+		<CodeBlock
+			code={`import { PropertyCollection, ZoneCollection } from '@happyvertical/smrt-properties';
 
 // Initialize collections
 const properties = await PropertyCollection.create({ db: {...} });
@@ -75,16 +75,16 @@ await headerSlot.save();
 // Get zone tree
 const tree = await zones.getTree(site.id);
 console.log(\`Property has \${tree.roots.length} top-level zones\`);`}
-      language="typescript"
-    />
-  </section>
+			language="typescript"
+		/>
+	</section>
 
-  <section>
-    <h2>Core Concepts</h2>
+	<section>
+		<h2>Core Concepts</h2>
 
-    <h3>Property Model</h3>
-    <CodeBlock
-      code={`class Property extends SmrtObject {
+		<h3>Property Model</h3>
+		<CodeBlock
+			code={`class Property extends SmrtObject {
   name: string
   domain: string
   url: string
@@ -98,12 +98,12 @@ console.log(\`Property has \${tree.roots.length} top-level zones\`);`}
   async createZone(options): Promise<Zone>
   async summarize(): Promise<string>  // AI-powered
 }`}
-      language="typescript"
-    />
+			language="typescript"
+		/>
 
-    <h3>Zone Model</h3>
-    <CodeBlock
-      code={`class Zone extends SmrtObject {
+		<h3>Zone Model</h3>
+		<CodeBlock
+			code={`class Zone extends SmrtObject {
   propertyId: string
   parentId?: string         // Self-referencing hierarchy
   name: string
@@ -126,42 +126,42 @@ console.log(\`Property has \${tree.roots.length} top-level zones\`);`}
   hasDimensions(): boolean
   getDimensionString(): string
 }`}
-      language="typescript"
-    />
-  </section>
+			language="typescript"
+		/>
+	</section>
 
-  <section>
-    <h2>API Reference</h2>
+	<section>
+		<h2>API Reference</h2>
 
-    <h3>PropertyCollection</h3>
-    <CodeBlock
-      code={`await properties.findByDomain(domain: string)
+		<h3>PropertyCollection</h3>
+		<CodeBlock
+			code={`await properties.findByDomain(domain: string)
 await properties.findByOwner(ownerId: string)
 await properties.findActive()
 await properties.getOrCreateByDomain(domain, defaults)
 await properties.countByStatus()`}
-      language="typescript"
-    />
+			language="typescript"
+		/>
 
-    <h3>ZoneCollection</h3>
-    <CodeBlock
-      code={`await zones.findByProperty(propertyId: string)
+		<h3>ZoneCollection</h3>
+		<CodeBlock
+			code={`await zones.findByProperty(propertyId: string)
 await zones.findTopLevel(propertyId: string)
 await zones.getTree(propertyId: string): Promise<ZoneTree>
 await zones.getAncestors(zoneId: string)
 await zones.getDescendants(zoneId: string)
 await zones.moveZone(zoneId: string, newParentId?: string)
 await zones.deleteZone(zoneId: string, cascade: boolean)`}
-      language="typescript"
-    />
-  </section>
+			language="typescript"
+		/>
+	</section>
 
-  <section>
-    <h2>Examples</h2>
+	<section>
+		<h2>Examples</h2>
 
-    <h3>Example 1: Multi-Zone Website</h3>
-    <CodeBlock
-      code={`// Create property
+		<h3>Example 1: Multi-Zone Website</h3>
+		<CodeBlock
+			code={`// Create property
 const site = await properties.create({
   name: 'News Site',
   domain: 'news.com',
@@ -196,12 +196,12 @@ const headerAd = await zones.create({
   height: 90
 });
 await headerAd.save();`}
-      language="typescript"
-    />
+			language="typescript"
+		/>
 
-    <h3>Example 2: Zone Traversal</h3>
-    <CodeBlock
-      code={`// Get tree structure
+		<h3>Example 2: Zone Traversal</h3>
+		<CodeBlock
+			code={`// Get tree structure
 const tree = await zones.getTree(site.id);
 
 // Get full path
@@ -212,12 +212,12 @@ const ancestors = await headerAd.getAncestors(); // [home]
 
 // Get all descendants of page
 const slots = await home.getDescendants();`}
-      language="typescript"
-    />
+			language="typescript"
+		/>
 
-    <h3>Example 3: Format Validation</h3>
-    <CodeBlock
-      code={`// Configure allowed formats
+		<h3>Example 3: Format Validation</h3>
+		<CodeBlock
+			code={`// Configure allowed formats
 const videoSlot = await zones.create({
   propertyId: site.id,
   name: 'Video Player',
@@ -238,60 +238,60 @@ const leaderboards = await zones.list({
     height: 90
   }
 });`}
-      language="typescript"
-    />
-  </section>
+			language="typescript"
+		/>
+	</section>
 
-  <section>
-    <h2>Best Practices</h2>
-    <div>
-      <div>
-        <h3>✓ DOs</h3>
-        <ul>
-          <li>Save properties before creating zones</li>
-          <li>Cache zone trees in-memory for performance</li>
-          <li>Use moveZone() for reparenting (prevents cycles)</li>
-          <li>Validate formats with isFormatAllowed() before assignment</li>
-          <li>Use findByDimensions() to pre-filter ad slots</li>
-        </ul>
-      </div>
-      <div>
-        <h3>✗ DON'Ts</h3>
-        <ul>
-          <li>Don't manually set parentId to a descendant (causes cycles)</li>
-          <li>Don't delete properties without handling zones first</li>
-          <li>Don't assume unlimited nesting without depth checks</li>
-          <li>Don't query zones repeatedly in loops (use batch operations)</li>
-          <li>Don't skip save() after creation (id requires persistence)</li>
-        </ul>
-      </div>
-    </div>
-  </section>
+	<section>
+		<h2>Best Practices</h2>
+		<div>
+			<div>
+				<h3>✓ DOs</h3>
+				<ul>
+					<li>Save properties before creating zones</li>
+					<li>Cache zone trees in-memory for performance</li>
+					<li>Use moveZone() for reparenting (prevents cycles)</li>
+					<li>Validate formats with isFormatAllowed() before assignment</li>
+					<li>Use findByDimensions() to pre-filter ad slots</li>
+				</ul>
+			</div>
+			<div>
+				<h3>✗ DON'Ts</h3>
+				<ul>
+					<li>Don't manually set parentId to a descendant (causes cycles)</li>
+					<li>Don't delete properties without handling zones first</li>
+					<li>Don't assume unlimited nesting without depth checks</li>
+					<li>Don't query zones repeatedly in loops (use batch operations)</li>
+					<li>Don't skip save() after creation (id requires persistence)</li>
+				</ul>
+			</div>
+		</div>
+	</section>
 
-  <section>
-    <h2>Related Modules</h2>
-    <div>
-      <a href="/modules/smrt-core">
-        <h3>smrt-core</h3>
-        <p>Base classes and database operations</p>
-      </a>
-      <a href="/modules/smrt-profiles">
-        <h3>smrt-profiles</h3>
-        <p>Property owner profile links</p>
-      </a>
-      <a href="/modules/smrt-projects">
-        <h3>smrt-projects</h3>
-        <p>Repository links for properties</p>
-      </a>
-      <a href="/modules/smrt-ads">
-        <h3>smrt-ads</h3>
-        <p>Ad placement in zones</p>
-      </a>
-    </div>
-  </section>
+	<section>
+		<h2>Related Modules</h2>
+		<div>
+			<a href="/modules/smrt-core">
+				<h3>smrt-core</h3>
+				<p>Base classes and database operations</p>
+			</a>
+			<a href="/modules/smrt-profiles">
+				<h3>smrt-profiles</h3>
+				<p>Property owner profile links</p>
+			</a>
+			<a href="/modules/smrt-projects">
+				<h3>smrt-projects</h3>
+				<p>Repository links for properties</p>
+			</a>
+			<a href="/modules/smrt-ads">
+				<h3>smrt-ads</h3>
+				<p>Ad placement in zones</p>
+			</a>
+		</div>
+	</section>
 
-  <nav>
-    <a href="/modules">← Back to Modules</a>
-    <a href="/modules/smrt-commerce">Next: smrt-commerce →</a>
-  </nav>
+	<nav>
+		<a href="/modules">← Back to Modules</a>
+		<a href="/modules/smrt-commerce">Next: smrt-commerce →</a>
+	</nav>
 </ModulePage>

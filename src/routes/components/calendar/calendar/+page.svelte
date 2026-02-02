@@ -89,7 +89,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Calendar } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { Calendar } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Simple calendar without events.</p>
@@ -136,19 +139,17 @@
 	<h2>Initial Date</h2>
 	<p>Start the calendar on a specific month/year.</p>
 
-	<ComponentExample
-		code={`<Calendar year={2025} month={6} />  <!-- July 2025 -->`}
-	>
+	<ComponentExample code={`<Calendar year={2025} month={6} />  <!-- July 2025 -->`}>
 		<Calendar year={2025} month={6} />
 	</ComponentExample>
 
 	<h2>Custom Base URL</h2>
 	<p>Change the URL pattern for day links.</p>
 
-	<ComponentExample
-		code={`<Calendar baseUrl="/schedule" />`}
-	>
-		<div style="font-size: 0.875rem; color: #666; padding: 16px; background: #f5f5f5; border-radius: 4px;">
+	<ComponentExample code={`<Calendar baseUrl="/schedule" />`}>
+		<div
+			style="font-size: 0.875rem; color: #666; padding: 16px; background: #f5f5f5; border-radius: 4px;"
+		>
 			Day links will use pattern: <code>/schedule/2025/1/20</code>
 		</div>
 	</ComponentExample>
@@ -163,7 +164,9 @@
   onTodayClick={() => console.log('Today clicked')}
 />`}
 	>
-		<div style="font-size: 0.875rem; color: #666; padding: 16px; background: #f5f5f5; border-radius: 4px;">
+		<div
+			style="font-size: 0.875rem; color: #666; padding: 16px; background: #f5f5f5; border-radius: 4px;"
+		>
 			<p style="margin: 0;">Callbacks available:</p>
 			<ul style="margin: 8px 0 0 0; padding-left: 20px;">
 				<li><code>onMonthNavigate</code> - When prev/next month clicked</li>

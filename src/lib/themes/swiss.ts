@@ -78,7 +78,7 @@ export const swissTheme: Theme = createTheme({
 
 		// Shadows
 		shadow: '#000000',
-		scrim: 'rgba(0, 0, 0, 0.5)',
+		scrim: 'rgba(0, 0, 0, 0.5)'
 	},
 
 	dark: {
@@ -135,7 +135,7 @@ export const swissTheme: Theme = createTheme({
 		inversePrimary: '#e63946',
 
 		shadow: '#000000',
-		scrim: 'rgba(0, 0, 0, 0.7)',
+		scrim: 'rgba(0, 0, 0, 0.7)'
 	},
 
 	// Swiss typography - clean, geometric, highly legible
@@ -144,92 +144,92 @@ export const swissTheme: Theme = createTheme({
 			size: '4rem',
 			lineHeight: '1.0',
 			weight: '700',
-			tracking: '-0.03em',
+			tracking: '-0.03em'
 		},
 		displayMedium: {
 			size: '3rem',
 			lineHeight: '1.1',
 			weight: '700',
-			tracking: '-0.02em',
+			tracking: '-0.02em'
 		},
 		displaySmall: {
 			size: '2.5rem',
 			lineHeight: '1.1',
 			weight: '600',
-			tracking: '-0.02em',
+			tracking: '-0.02em'
 		},
 		headlineLarge: {
 			size: '2rem',
 			lineHeight: '1.2',
 			weight: '600',
-			tracking: '-0.01em',
+			tracking: '-0.01em'
 		},
 		headlineMedium: {
 			size: '1.75rem',
 			lineHeight: '1.2',
 			weight: '600',
-			tracking: '-0.01em',
+			tracking: '-0.01em'
 		},
 		headlineSmall: {
 			size: '1.5rem',
 			lineHeight: '1.2',
 			weight: '600',
-			tracking: '0',
+			tracking: '0'
 		},
 		titleLarge: {
 			size: '1.25rem',
 			lineHeight: '1.3',
 			weight: '600',
-			tracking: '0',
+			tracking: '0'
 		},
 		titleMedium: {
 			size: '1rem',
 			lineHeight: '1.4',
 			weight: '600',
-			tracking: '0.01em',
+			tracking: '0.01em'
 		},
 		titleSmall: {
 			size: '0.875rem',
 			lineHeight: '1.4',
 			weight: '600',
-			tracking: '0.02em',
+			tracking: '0.02em'
 		},
 		bodyLarge: {
 			size: '1.125rem',
 			lineHeight: '1.6',
 			weight: '400',
-			tracking: '0',
+			tracking: '0'
 		},
 		bodyMedium: {
 			size: '1rem',
 			lineHeight: '1.6',
 			weight: '400',
-			tracking: '0',
+			tracking: '0'
 		},
 		bodySmall: {
 			size: '0.875rem',
 			lineHeight: '1.5',
 			weight: '400',
-			tracking: '0',
+			tracking: '0'
 		},
 		labelLarge: {
 			size: '0.875rem',
 			lineHeight: '1.4',
 			weight: '600',
-			tracking: '0.05em',
+			tracking: '0.05em'
 		},
 		labelMedium: {
 			size: '0.75rem',
 			lineHeight: '1.4',
 			weight: '600',
-			tracking: '0.1em',
+			tracking: '0.1em'
 		},
 		labelSmall: {
 			size: '0.6875rem',
 			lineHeight: '1.4',
 			weight: '600',
-			tracking: '0.1em',
-		},
+			tracking: '0.1em'
+		}
 	},
 
 	// Swiss elevation - very minimal, clean shadows
@@ -239,11 +239,11 @@ export const swissTheme: Theme = createTheme({
 		2: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
 		3: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
 		4: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-		5: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+		5: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
 	},
 
 	// Swiss uses clean geometric fonts
-	fontFamily: '"Inter", "Helvetica Neue", "Arial", system-ui, sans-serif',
+	fontFamily: '"Inter", "Helvetica Neue", "Arial", system-ui, sans-serif'
 });
 
 // Note: Theme is registered by the consumer (see +layout.svelte)

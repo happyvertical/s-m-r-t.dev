@@ -45,12 +45,15 @@
 
 	<h1>JobStats</h1>
 	<p class="lead">
-		A statistics display component showing job counts by status,
-		success rate, average duration, and optional queue breakdown.
+		A statistics display component showing job counts by status, success rate, average duration, and
+		optional queue breakdown.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { JobStats } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { JobStats } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display overall job statistics.</p>

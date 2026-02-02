@@ -83,8 +83,8 @@
 
 	<h1>Modal</h1>
 	<p class="lead">
-		Accessible dialog component using native <code>&lt;dialog&gt;</code> element. Supports multiple
-		sizes, custom headers/footers, focus trap, and keyboard navigation.
+		Accessible dialog component using native <code>&lt;dialog&gt;</code> element. Supports multiple sizes,
+		custom headers/footers, focus trap, and keyboard navigation.
 	</p>
 
 	<h2>Installation</h2>
@@ -208,8 +208,16 @@ interface Props {
 		Update your profile information below. Changes will be saved when you click "Save Changes".
 	</p>
 	<div style="display: flex; flex-direction: column; gap: 12px;">
-		<input type="text" placeholder="Name" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px;" />
-		<input type="email" placeholder="Email" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px;" />
+		<input
+			type="text"
+			placeholder="Name"
+			style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px;"
+		/>
+		<input
+			type="email"
+			placeholder="Email"
+			style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px;"
+		/>
 	</div>
 
 	{#snippet footer()}
@@ -220,8 +228,8 @@ interface Props {
 
 <Modal bind:open={showSizes} title="Modal - {currentSize.toUpperCase()}" size={currentSize}>
 	<p style="color: #666; line-height: 1.6;">
-		This modal is using the <strong>{currentSize}</strong> size variant. The modal will adjust its
-		width based on the size prop.
+		This modal is using the <strong>{currentSize}</strong> size variant. The modal will adjust its width
+		based on the size prop.
 	</p>
 	<div style="margin-top: 16px; padding: 16px; background: #f5f5f5; border-radius: 4px;">
 		<code>size="{currentSize}"</code>

@@ -61,12 +61,15 @@
 
 	<h1>EmptyState</h1>
 	<p class="lead">
-		Placeholder for empty lists or content areas. Provides consistent empty state display with
-		icon, description, and optional call-to-action button.
+		Placeholder for empty lists or content areas. Provides consistent empty state display with icon,
+		description, and optional call-to-action button.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { EmptyState } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { EmptyState } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Simple empty state with title and description.</p>
@@ -77,10 +80,7 @@
   description="Get started by creating your first item."
 />`}
 	>
-		<EmptyState
-			title="No items yet"
-			description="Get started by creating your first item."
-		/>
+		<EmptyState title="No items yet" description="Get started by creating your first item." />
 	</ComponentExample>
 
 	<h2>With Action Button</h2>

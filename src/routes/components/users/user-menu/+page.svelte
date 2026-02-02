@@ -51,19 +51,20 @@
 
 	<h1>UserMenu</h1>
 	<p class="lead">
-		A dropdown menu component for authenticated users. Shows user avatar, name, and provides
-		quick access to profile, settings, and sign out actions. Styled with Material 3 design.
+		A dropdown menu component for authenticated users. Shows user avatar, name, and provides quick
+		access to profile, settings, and sign out actions. Styled with Material 3 design.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { UserMenu } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { UserMenu } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Click the menu trigger to reveal the dropdown with navigation options.</p>
 
-	<ComponentExample
-		code={`<UserMenu profile={currentUser} />`}
-	>
+	<ComponentExample code={`<UserMenu profile={currentUser} />`}>
 		<UserMenu profile={mockProfile} />
 	</ComponentExample>
 

@@ -73,7 +73,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { CheckboxInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { CheckboxInput } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>A simple checkbox with a label and bindable checked state.</p>
@@ -123,11 +126,7 @@
   required
 />`}
 	>
-		<CheckboxInput
-			name="privacy"
-			label="I have read and agree to the Privacy Policy"
-			required
-		/>
+		<CheckboxInput name="privacy" label="I have read and agree to the Privacy Policy" required />
 	</ComponentExample>
 
 	<h2>Disabled State</h2>
@@ -147,17 +146,8 @@
 />`}
 	>
 		<div style="display: flex; flex-direction: column; gap: 12px;">
-			<CheckboxInput
-				name="disabled-unchecked"
-				label="Disabled unchecked"
-				disabled
-			/>
-			<CheckboxInput
-				name="disabled-checked"
-				label="Disabled checked"
-				checked={true}
-				disabled
-			/>
+			<CheckboxInput name="disabled-unchecked" label="Disabled unchecked" disabled />
+			<CheckboxInput name="disabled-checked" label="Disabled checked" checked={true} disabled />
 		</div>
 	</ComponentExample>
 
@@ -216,18 +206,14 @@
 />
 <p>Checked: {checked ? 'Yes' : 'No'}</p>`}
 	>
-		<CheckboxInput
-			name="interactive"
-			label="Toggle me"
-			bind:checked={interactiveChecked}
-		/>
+		<CheckboxInput name="interactive" label="Toggle me" bind:checked={interactiveChecked} />
 		<p style="margin-top: 1rem; color: #666;">Checked: {interactiveChecked ? 'Yes' : 'No'}</p>
 	</ComponentExample>
 
 	<h2>Voice Control (smrt Mode)</h2>
 	<p>
-		In smrt mode, checkboxes can be controlled via voice commands. The component understands
-		natural language like "yes", "no", "true", "false", "check", "uncheck", etc.
+		In smrt mode, checkboxes can be controlled via voice commands. The component understands natural
+		language like "yes", "no", "true", "false", "check", "uncheck", etc.
 	</p>
 
 	<CodeBlock

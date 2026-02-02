@@ -62,39 +62,47 @@ smrt-svelte/
 ## Core
 
 ### Provider
+
 - `SMRT` - App context provider (mode, user, permissions)
 
 ## Forms
 
 ### Text Inputs
+
 - `TextInput` - Single-line text input
 - `TextareaInput` - Multi-line text input
 - `SearchInput` - Search input with icon
 
 ### Number Inputs
+
 - `NumberInput` - Basic number input
 - `MoneyInput` - Currency input with formatting
 - `MeasurementInput` - Measurement with unit selector
 
 ### Selection
+
 - `SelectInput` - Dropdown select
 - `CheckboxInput` - Checkbox with label
 - `Toggle` - Toggle switch
 
 ### Date/Time
+
 - `DateTimeInput` - Date and time picker
 - `DateRangeInput` - Start/end date range picker
 
 ### Contact
+
 - `PhoneInput` - Phone number with formatting
 - `AddressInput` - Full address with autocomplete
 
 ### Form Components
+
 - `Form` - Form wrapper with validation
 - `FormGroup` - Form field wrapper with label/error
 - `FormMicButton` - Voice input trigger for forms
 
 ### Legacy (to remove?)
+
 - `Input` - Basic input (duplicate of TextInput?)
 - `Select` - Basic select (duplicate of SelectInput?)
 - `Textarea` - Basic textarea (duplicate of TextareaInput?)
@@ -102,34 +110,40 @@ smrt-svelte/
 ## Display
 
 ### Badges
+
 - `StatusBadge` - Status indicator badge
 - `ConfidenceBadge` - Confidence score badge
 - `RoleBadge` - User role badge
 - `ScheduleStatusBadge` - Agent schedule status
 
 ### Data Display
+
 - `DateDisplay` - Formatted date display
 - `CurrencyDisplay` - Formatted currency display
 - `DurationDisplay` - Time duration display
 
 ### Icons & Visuals
+
 - `Icon` - Icon component
 - `UserAvatar` - User avatar with fallback
 
 ## Feedback
 
 ### Overlays & Modals
+
 - `LoadingOverlay` - **NEW** Generic loading overlay (progress, items, error)
 - `Modal` - Generic modal dialog
 - `ConfirmDialog` - Confirmation dialog
 
 ### Progress
+
 - `ProgressBar` - Progress bar component
 - `DownloadProgress` - Download progress with bytes/percent
 
 ## Layout
 
 ### Structure
+
 - `Container` - Content container
 - `Grid` - Grid layout
 - `Header` - Page header
@@ -138,6 +152,7 @@ smrt-svelte/
 - `PageHeader` - Page title header
 
 ### Cards
+
 - `Card` - Generic card
 - `SummaryCard` - Summary stat card
 - `EmptyState` - Empty state placeholder
@@ -156,10 +171,12 @@ smrt-svelte/
 ## AI
 
 ### Provider & Gates
+
 - `AILoadingOverlay` - AI-specific loading (wraps LoadingOverlay)
 - `CapabilityGate` - Conditional render based on AI capabilities
 
 ### Voice
+
 - `VoiceInput` - Voice input component
 - `STTTest` - Speech-to-text test component
 
@@ -188,6 +205,7 @@ smrt-svelte/
 ## Commerce
 
 ### Invoices
+
 - `InvoiceActions` - Invoice action buttons
 - `InvoiceCard` - Invoice summary card
 - `InvoiceHeader` - Invoice header info
@@ -267,6 +285,7 @@ smrt-svelte/
 **Total Components:** ~95
 
 ### By Category
+
 - **Core:** 1 (SMRT)
 - **Forms:** 16 (15 after removing duplicates)
 - **Display:** 8
@@ -278,12 +297,14 @@ smrt-svelte/
 - **Domain-specific:** ~48 (admin, agents, auth, calendar, commerce, content, data, jobs, meetings, memberships, module, permissions, roles, tenants, theme, time, users)
 
 ### Changes in v2.0
+
 - **Renamed:** 16 components (13 forms + Icon + SMRT + Toggle → Toggle)
 - **New:** 1 (LoadingOverlay)
 - **Refactored:** 1 (AILoadingOverlay)
 - **To Remove:** 3 (duplicate Input, Select, Textarea)
 
 ### Open Questions
+
 1. Remove duplicate base components (Input, Select, Textarea)?
 2. Any other components that should be consolidated?
 3. Are all domain-specific components being used?

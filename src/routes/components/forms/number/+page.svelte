@@ -80,7 +80,10 @@
 
 <svelte:head>
 	<title>NumberInput | s-m-r-t Forms</title>
-	<meta name="description" content="Numeric input component with validation, constraints, and voice input for numbers." />
+	<meta
+		name="description"
+		content="Numeric input component with validation, constraints, and voice input for numbers."
+	/>
 </svelte:head>
 
 <article class="prose">
@@ -99,7 +102,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { NumberInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { NumberInput } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>A simple number input for integer values.</p>
@@ -115,11 +121,7 @@
   bind:value
 />`}
 	>
-		<NumberInput
-			name="quantity"
-			label="Quantity"
-			bind:value={basicValue}
-		/>
+		<NumberInput name="quantity" label="Quantity" bind:value={basicValue} />
 	</ComponentExample>
 
 	<h2>With Default Value</h2>
@@ -132,11 +134,7 @@
   value={25}
 />`}
 	>
-		<NumberInput
-			name="age"
-			label="Age"
-			bind:value={ageValue}
-		/>
+		<NumberInput name="age" label="Age" bind:value={ageValue} />
 	</ComponentExample>
 
 	<h2>With Constraints</h2>
@@ -175,14 +173,7 @@
   placeholder="0"
 />`}
 	>
-		<NumberInput
-			name="discount"
-			label="Discount (%)"
-			min={0}
-			max={100}
-			step={5}
-			placeholder="0"
-		/>
+		<NumberInput name="discount" label="Discount (%)" min={0} max={100} step={5} placeholder="0" />
 	</ComponentExample>
 
 	<h2>Required Field</h2>
@@ -196,12 +187,7 @@
   required
 />`}
 	>
-		<NumberInput
-			name="participants"
-			label="Number of Participants"
-			min={1}
-			required
-		/>
+		<NumberInput name="participants" label="Number of Participants" min={1} required />
 	</ComponentExample>
 
 	<h2>Disabled State</h2>
@@ -215,18 +201,11 @@
   disabled
 />`}
 	>
-		<NumberInput
-			name="total"
-			label="Total Score"
-			value={87}
-			disabled
-		/>
+		<NumberInput name="total" label="Total Score" value={87} disabled />
 	</ComponentExample>
 
 	<h2>Voice Input (smrt Mode)</h2>
-	<p>
-		In smrt mode, users can speak numbers naturally. The component parses:
-	</p>
+	<p>In smrt mode, users can speak numbers naturally. The component parses:</p>
 	<ul>
 		<li>"twenty five" → 25</li>
 		<li>"one hundred fifty" → 150</li>
@@ -272,7 +251,11 @@
 		/>
 		<div style="margin-top: 1rem; color: #666;">
 			<p>Current value: {interactiveValue ?? 'null'}</p>
-			<p>Valid: {interactiveValue !== null && interactiveValue >= 0 && interactiveValue <= 1000 ? 'Yes' : 'No'}</p>
+			<p>
+				Valid: {interactiveValue !== null && interactiveValue >= 0 && interactiveValue <= 1000
+					? 'Yes'
+					: 'No'}
+			</p>
 		</div>
 	</ComponentExample>
 
@@ -301,13 +284,14 @@ interface Props {
 	/>
 
 	<h2>Validation</h2>
-	<p>
-		The component enforces constraints automatically:
-	</p>
+	<p>The component enforces constraints automatically:</p>
 	<ul>
 		<li>Values outside <code>min</code>/<code>max</code> range are rejected</li>
 		<li>Non-numeric input is stripped</li>
-		<li>The <code>step</code> prop controls decimal precision (e.g., <code>step={0.01}</code> for 2 decimal places)</li>
+		<li>
+			The <code>step</code> prop controls decimal precision (e.g., <code>step={0.01}</code> for 2 decimal
+			places)
+		</li>
 		<li>Required fields prevent form submission when empty</li>
 		<li>Browser native validation provides immediate feedback</li>
 	</ul>

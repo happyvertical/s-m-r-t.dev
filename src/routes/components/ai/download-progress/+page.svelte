@@ -45,12 +45,15 @@
 
 	<h1>DownloadProgress</h1>
 	<p class="lead">
-		A progress bar component for AI model downloads. Shows download state,
-		percentage, bytes, and current file being downloaded.
+		A progress bar component for AI model downloads. Shows download state, percentage, bytes, and
+		current file being downloaded.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { DownloadProgress } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { DownloadProgress } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Show download progress from an AI hook.</p>
@@ -109,7 +112,7 @@
 	</ul>
 
 	<h2>Props</h2>
-	<PropsTable props={props} />
+	<PropsTable {props} />
 
 	<h2>TypeScript</h2>
 	<CodeBlock

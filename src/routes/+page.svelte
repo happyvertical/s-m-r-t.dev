@@ -43,7 +43,8 @@
 	<section class="example">
 		<h3>Simple</h3>
 		<p class="example-desc">Extend SmrtObject. That's it.</p>
-		<pre><code>{`class Product extends SmrtObject {
+		<pre><code
+				>{`class Product extends SmrtObject {
   name: string = '';
   price: number = 0.0;    // DECIMAL (inferred from decimal)
   quantity: number = 0;   // INTEGER (inferred from integer)
@@ -55,13 +56,15 @@
 // - REST API endpoints
 // - MCP tools for AI agents
 // - CLI: smrt product create --name "Widget" --price 9.99
-// - AI-powered methods: is(), do(), describe()`}</code></pre>
+// - AI-powered methods: is(), do(), describe()`}</code
+			></pre>
 	</section>
 
 	<section class="example">
 		<h3>Advanced</h3>
 		<p class="example-desc">Decorators for complex use cases.</p>
-		<pre><code>{`@smrt({ api: { rateLimit: 100 }, mcp: { tools: ['search', 'create'] } })
+		<pre><code
+				>{`@smrt({ api: { rateLimit: 100 }, mcp: { tools: ['search', 'create'] } })
 class Invoice extends SmrtObject {
   @field({ index: true, unique: true })
   invoiceNumber: string = '';
@@ -85,14 +88,17 @@ class Invoice extends SmrtObject {
     this.status = 'paid';
     await this.save();
   }
-}`}</code></pre>
+}`}</code
+			></pre>
 	</section>
 
 	<section class="hero">
 		<div class="tenets">
 			<div class="tenet">
 				<h2>No vendor lock</h2>
-				<p>Abstract away implementation details. Switch SQLite to PostgreSQL without refactoring.</p>
+				<p>
+					Abstract away implementation details. Switch SQLite to PostgreSQL without refactoring.
+				</p>
 			</div>
 			<div class="tenet">
 				<h2>Adaptability</h2>
@@ -117,20 +123,23 @@ class Invoice extends SmrtObject {
 	<section class="example">
 		<h3>AI-Powered Methods</h3>
 		<p class="example-desc">Validate, transform, and describe content with AI.</p>
-		<pre><code>{`// Validate content with AI
+		<pre><code
+				>{`// Validate content with AI
 const isValid = await article.is("Is this article well-structured?");
 
 // Transform content with AI
 const summary = await article.do("Summarize in 3 bullet points");
 
 // Generate descriptions automatically
-const description = await product.describe();`}</code></pre>
+const description = await product.describe();`}</code
+			></pre>
 	</section>
 
 	<section class="example">
 		<h3>Vector Embeddings</h3>
 		<p class="example-desc">Semantic representations for similarity search.</p>
-		<pre><code>{`// Generate embeddings for configured fields
+		<pre><code
+				>{`// Generate embeddings for configured fields
 await article.generateEmbeddings();
 
 // Check if content changed since last embedding
@@ -139,13 +148,15 @@ if (await article.hasStaleEmbeddings()) {
 }
 
 // Get embedding vector for a field
-const vector = await article.getEmbedding('content');`}</code></pre>
+const vector = await article.getEmbedding('content');`}</code
+			></pre>
 	</section>
 
 	<section class="example">
 		<h3>Object Memory</h3>
 		<p class="example-desc">Learn patterns, recall them across sessions.</p>
-		<pre><code>{`// Remember learned patterns with confidence scores
+		<pre><code
+				>{`// Remember learned patterns with confidence scores
 await scraper.remember({
   scope: 'parser/example.com',
   key: 'content-selector',
@@ -158,7 +169,8 @@ const selector = await scraper.recall({
   scope: 'parser/example.com',
   key: 'content-selector',
   includeAncestors: true
-});`}</code></pre>
+});`}</code
+			></pre>
 	</section>
 
 	<section class="section-header">
@@ -169,7 +181,8 @@ const selector = await scraper.recall({
 	<section class="example">
 		<h3>Semantic Search</h3>
 		<p class="example-desc">Find by meaning, not keywords.</p>
-		<pre><code>{`// Search by text similarity
+		<pre><code
+				>{`// Search by text similarity
 const results = await articles.semanticSearch('machine learning basics', {
   field: 'content',
   limit: 10,
@@ -177,20 +190,23 @@ const results = await articles.semanticSearch('machine learning basics', {
 });
 
 // Find similar to an existing object
-const related = await articles.findSimilar(article, { limit: 5 });`}</code></pre>
+const related = await articles.findSimilar(article, { limit: 5 });`}</code
+			></pre>
 	</section>
 
 	<section class="example">
 		<h3>Batch Operations</h3>
 		<p class="example-desc">Efficient multi-record operations.</p>
-		<pre><code>{`// Batch fetch by IDs (single query)
+		<pre><code
+				>{`// Batch fetch by IDs (single query)
 const items = await collection.listByIds(['id1', 'id2', 'id3']);
 
 // Find or create with defaults
 const user = await users.getOrUpsert(
   { email: 'user@example.com' },
   { name: 'New User', role: 'member' }
-);`}</code></pre>
+);`}</code
+			></pre>
 	</section>
 
 	<section class="section-header">
@@ -201,7 +217,8 @@ const user = await users.getOrUpsert(
 	<section class="example">
 		<h3>Inter-Agent Dispatch</h3>
 		<p class="example-desc">Async, persistent messaging between agents.</p>
-		<pre><code>{`// One agent notifies others
+		<pre><code
+				>{`// One agent notifies others
 await dispatch.emit('task.completed', {
   taskId: 'task-123',
   result: { items: 42 }
@@ -216,13 +233,14 @@ await dispatch.subscribe({
 // Process incoming messages (survives restarts)
 await dispatch.process('Roboto', async (payload, meta) => {
   await this.handleResult(payload.taskId, payload.result);
-});`}</code></pre>
+});`}</code
+			></pre>
 	</section>
 </Grid>
 
 <style>
 	/* Use SMRT theme variables throughout */
-	
+
 	.hero {
 		grid-column: 1 / -1;
 		padding: 32px 0;

@@ -5,7 +5,12 @@
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
 	const checkProps = [
-		{ name: 'permission', type: 'string', description: 'Permission identifier to check', required: true },
+		{
+			name: 'permission',
+			type: 'string',
+			description: 'Permission identifier to check',
+			required: true
+		},
 		{ name: 'fallback', type: 'string', description: 'Message shown when permission denied' }
 	];
 </script>
@@ -22,16 +27,26 @@
 	</nav>
 
 	<h1>PermissionCheck</h1>
-	<p class="lead">Conditionally render content based on user permissions with fallback messaging.</p>
+	<p class="lead">
+		Conditionally render content based on user permissions with fallback messaging.
+	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { PermissionCheck } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { PermissionCheck } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
-	<ComponentExample code={`<PermissionCheck permission="users.edit">\n  <button>Edit User</button>\n</PermissionCheck>\n\n<PermissionCheck permission="admin.access" fallback="Admin access required">\n  <a href="/admin">Admin Panel</a>\n</PermissionCheck>`}>
+	<ComponentExample
+		code={`<PermissionCheck permission="users.edit">\n  <button>Edit User</button>\n</PermissionCheck>\n\n<PermissionCheck permission="admin.access" fallback="Admin access required">\n  <a href="/admin">Admin Panel</a>\n</PermissionCheck>`}
+	>
 		<div style="display: flex; flex-direction: column; gap: 12px;">
 			<PermissionCheck permission="users.edit">
-				<button style="padding: 8px 16px; border-radius: 4px; background: #0066cc; color: white; border: none;">Edit User</button>
+				<button
+					style="padding: 8px 16px; border-radius: 4px; background: #0066cc; color: white; border: none;"
+					>Edit User</button
+				>
 			</PermissionCheck>
 			<PermissionCheck permission="admin.access" fallback="Admin access required">
 				<a href="/admin" style="color: #0066cc;">Admin Panel</a>
@@ -40,13 +55,19 @@
 	</ComponentExample>
 
 	<h2>Integration with smrt-users</h2>
-	<CodeBlock code={`import { PermissionCheck } from '@happyvertical/smrt-svelte';\nimport { PermissionsService } from '@happyvertical/smrt-users';\n\n// Check permissions programmatically\nconst canEdit = await PermissionsService.check({\n  userId: currentUser.id,\n  tenantId: currentTenant.id,\n  permission: 'users.edit'\n});\n\nif (canEdit) {\n  // Perform action\n}\n\n// Or use component for UI\n<PermissionCheck permission="users.delete">\n  <button onclick={deleteUser}>Delete</button>\n</PermissionCheck>`} language="typescript" />
+	<CodeBlock
+		code={`import { PermissionCheck } from '@happyvertical/smrt-svelte';\nimport { PermissionsService } from '@happyvertical/smrt-users';\n\n// Check permissions programmatically\nconst canEdit = await PermissionsService.check({\n  userId: currentUser.id,\n  tenantId: currentTenant.id,\n  permission: 'users.edit'\n});\n\nif (canEdit) {\n  // Perform action\n}\n\n// Or use component for UI\n<PermissionCheck permission="users.delete">\n  <button onclick={deleteUser}>Delete</button>\n</PermissionCheck>`}
+		language="typescript"
+	/>
 
 	<h2>Props</h2>
 	<PropsTable props={checkProps} />
 
 	<h2>TypeScript</h2>
-	<CodeBlock code={`interface Props {\n  permission: string;\n  fallback?: string;\n  children?: Snippet;\n}`} language="typescript" />
+	<CodeBlock
+		code={`interface Props {\n  permission: string;\n  fallback?: string;\n  children?: Snippet;\n}`}
+		language="typescript"
+	/>
 </article>
 
 <style>

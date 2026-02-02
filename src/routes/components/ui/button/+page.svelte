@@ -59,8 +59,8 @@
 
 	<h1>Button</h1>
 	<p class="lead">
-		Interactive button component with multiple variants and sizes. Supports rendering as a link
-		when href is provided.
+		Interactive button component with multiple variants and sizes. Supports rendering as a link when
+		href is provided.
 	</p>
 
 	<h2>Installation</h2>
@@ -69,9 +69,7 @@
 	<h2>Basic Usage</h2>
 	<p>The default button with primary styling.</p>
 
-	<ComponentExample
-		code={`<Button>Click me</Button>`}
-	>
+	<ComponentExample code={`<Button>Click me</Button>`}>
 		<Button>Click me</Button>
 	</ComponentExample>
 
@@ -170,13 +168,7 @@
   Submit
 </Button>`}
 	>
-		<Button
-			id="submit-btn"
-			name="action"
-			aria-label="Submit the form"
-		>
-			Submit
-		</Button>
+		<Button id="submit-btn" name="action" aria-label="Submit the form">Submit</Button>
 	</ComponentExample>
 
 	<h2>TypeScript</h2>

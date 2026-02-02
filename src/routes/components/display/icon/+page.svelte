@@ -35,7 +35,16 @@
 		}
 	];
 
-	const presetIcons = ['menu', 'search', 'close', 'chevron-right', 'chevron-left', 'chevron-down', 'check', 'add'];
+	const presetIcons = [
+		'menu',
+		'search',
+		'close',
+		'chevron-right',
+		'chevron-left',
+		'chevron-down',
+		'check',
+		'add'
+	];
 </script>
 
 <svelte:head>
@@ -131,11 +140,15 @@
 </button>`}
 	>
 		<div style="display: flex; gap: 12px;">
-			<button style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #1a1a1a; color: white; border: none; border-radius: 4px; cursor: pointer;">
+			<button
+				style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #1a1a1a; color: white; border: none; border-radius: 4px; cursor: pointer;"
+			>
 				<Icon name="add" size={18} />
 				Add Item
 			</button>
-			<button style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: white; color: #1a1a1a; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
+			<button
+				style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: white; color: #1a1a1a; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;"
+			>
 				<Icon name="search" size={18} />
 				Search
 			</button>

@@ -14,7 +14,11 @@
 	const selectorProps = [
 		{ name: 'roles', type: 'Role[]', description: 'Available roles', required: true },
 		{ name: 'value', type: 'string', description: 'Selected role ID (bindable)', required: true },
-		{ name: 'onchange', type: '(roleId: string) => void', description: 'Callback when role changes' },
+		{
+			name: 'onchange',
+			type: '(roleId: string) => void',
+			description: 'Callback when role changes'
+		},
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable selection' }
 	];
 </script>
@@ -34,10 +38,14 @@
 	<p class="lead">Select user roles with descriptions for assignment and permission management.</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { RoleSelector } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { RoleSelector } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
-	<ComponentExample code={`<script lang="ts">
+	<ComponentExample
+		code={`<script lang="ts">
   let selectedRole = $state('');
   const roles = [
     { id: 'admin', name: 'Administrator', description: 'Full system access' },
@@ -46,7 +54,8 @@
   ];
 </script>
 
-<RoleSelector {roles} bind:value={selectedRole} />`}>
+<RoleSelector {roles} bind:value={selectedRole} />`}
+	>
 		<RoleSelector {roles} bind:value={selectedRole} />
 		<p style="margin-top: 1rem; color: #666;">Selected: {selectedRole || '(none)'}</p>
 	</ComponentExample>
@@ -55,7 +64,8 @@
 	<PropsTable props={selectorProps} />
 
 	<h2>TypeScript</h2>
-	<CodeBlock code={`interface Role {
+	<CodeBlock
+		code={`interface Role {
   id: string;
   name: string;
   description?: string;
@@ -66,7 +76,9 @@ interface Props {
   value: string;
   onchange?: (roleId: string) => void;
   disabled?: boolean;
-}`} language="typescript" />
+}`}
+		language="typescript"
+	/>
 </article>
 
 <style>

@@ -3,19 +3,18 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<ModulePage 
-	name="smrt-agents" 
+<ModulePage
+	name="smrt-agents"
 	description="Build autonomous actors with persistent state, inter-agent communication via DispatchBus, and comprehensive lifecycle management."
 	badges={['v0.19.0', 'Agents', 'Automation']}
 >
-
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			The <code>@happyvertical/smrt-agents</code> package provides a base Agent class for building
-			autonomous actors in the SMRT ecosystem. Agents are persistent, state-managing objects that extend
-			SmrtObject with automatic database persistence, lifecycle management, inter-agent communication,
-			and admin panel UI integration.
+			The <code>@happyvertical/smrt-agents</code> package provides a base Agent class for building autonomous
+			actors in the SMRT ecosystem. Agents are persistent, state-managing objects that extend SmrtObject
+			with automatic database persistence, lifecycle management, inter-agent communication, and admin
+			panel UI integration.
 		</p>
 
 		<h3>Key Features</h3>
@@ -23,11 +22,16 @@
 			<li><strong>Persistent State</strong>: Automatic database persistence via SmrtObject</li>
 			<li><strong>Lifecycle Management</strong>: Initialize, validate, run, and shutdown hooks</li>
 			<li>
-				<strong>Inter-Agent Communication</strong>: DispatchBus for async messaging with wildcard patterns
+				<strong>Inter-Agent Communication</strong>: DispatchBus for async messaging with wildcard
+				patterns
 			</li>
 			<li><strong>Interest-Based Queries</strong>: Declarative object discovery and filtering</li>
-			<li><strong>Configuration Management</strong>: Three-layer config (file + database + defaults)</li>
-			<li><strong>Status Tracking</strong>: Five states (idle, initializing, running, error, shutdown)</li>
+			<li>
+				<strong>Configuration Management</strong>: Three-layer config (file + database + defaults)
+			</li>
+			<li>
+				<strong>Status Tracking</strong>: Five states (idle, initializing, running, error, shutdown)
+			</li>
 			<li><strong>UI Slots</strong>: Admin panel component declarations for configuration</li>
 			<li><strong>Graceful Shutdown</strong>: Signal handlers for SIGTERM/SIGINT</li>
 		</ul>
@@ -74,22 +78,13 @@
 		<h2>Installation</h2>
 
 		<h3>Using pnpm (recommended)</h3>
-		<CodeBlock
-			code={`pnpm add @happyvertical/smrt-agents`}
-			language="bash"
-		/>
+		<CodeBlock code={`pnpm add @happyvertical/smrt-agents`} language="bash" />
 
 		<h3>Using npm</h3>
-		<CodeBlock
-			code={`npm install @happyvertical/smrt-agents`}
-			language="bash"
-		/>
+		<CodeBlock code={`npm install @happyvertical/smrt-agents`} language="bash" />
 
 		<h3>Using bun</h3>
-		<CodeBlock
-			code={`bun add @happyvertical/smrt-agents`}
-			language="bash"
-		/>
+		<CodeBlock code={`bun add @happyvertical/smrt-agents`} language="bash" />
 
 		<h3>Peer Dependencies</h3>
 		<ul>
@@ -379,8 +374,8 @@ smrt dispatch:cleanup --completed-older-than 30`}
 	<section id="interests">
 		<h2>Interest-Based Queries</h2>
 		<p>
-			The <code>interests</code> system provides a declarative way to query objects the agent is
-			interested in, with filters, sorting, limiting, and custom handlers.
+			The <code>interests</code> system provides a declarative way to query objects the agent is interested
+			in, with filters, sorting, limiting, and custom handlers.
 		</p>
 
 		<h3>Basic Interest Configuration</h3>

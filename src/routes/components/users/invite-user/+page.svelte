@@ -86,15 +86,21 @@
 
 	<h1>InviteUserModal</h1>
 	<p class="lead">
-		A modal dialog for inviting new users to a tenant/organization. Includes email input,
-		role selection, and an option to send an invitation email.
+		A modal dialog for inviting new users to a tenant/organization. Includes email input, role
+		selection, and an option to send an invitation email.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { InviteUserModal } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { InviteUserModal } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
-	<p>Click the button to open the invite modal. The modal includes form validation and keyboard support (Escape to close).</p>
+	<p>
+		Click the button to open the invite modal. The modal includes form validation and keyboard
+		support (Escape to close).
+	</p>
 
 	<ComponentExample
 		code={`<script lang="ts">
@@ -116,7 +122,7 @@
   onclose={() => isOpen = false}
 />`}
 	>
-		<button class="open-btn" onclick={() => isOpen = true}>Invite User</button>
+		<button class="open-btn" onclick={() => (isOpen = true)}>Invite User</button>
 
 		<InviteUserModal
 			open={isOpen}
@@ -158,11 +164,16 @@
   loading={isSubmitting}
 />`}
 	>
-		<p class="note">The example above demonstrates the loading state when you submit an invitation.</p>
+		<p class="note">
+			The example above demonstrates the loading state when you submit an invitation.
+		</p>
 	</ComponentExample>
 
 	<h2>Manual Invitation</h2>
-	<p>When the "Send invitation email" checkbox is unchecked, a hint is shown explaining that the user will be added with pending status.</p>
+	<p>
+		When the "Send invitation email" checkbox is unchecked, a hint is shown explaining that the user
+		will be added with pending status.
+	</p>
 
 	<ComponentExample
 		code={`// When sendEmail is false, the user is added with 'pending' status

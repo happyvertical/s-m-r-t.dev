@@ -1,6 +1,12 @@
 <script lang="ts">
 	interface StructuredDataProps {
-		type: 'Organization' | 'SoftwareApplication' | 'Article' | 'WebPage' | 'BreadcrumbList' | 'FAQPage';
+		type:
+			| 'Organization'
+			| 'SoftwareApplication'
+			| 'Article'
+			| 'WebPage'
+			| 'BreadcrumbList'
+			| 'FAQPage';
 		data: Record<string, any>;
 	}
 

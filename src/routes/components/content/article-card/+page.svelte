@@ -78,7 +78,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { ArticleCard } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { ArticleCard } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Article card with all default options.</p>

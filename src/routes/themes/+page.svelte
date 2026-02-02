@@ -1,7 +1,12 @@
 <script lang="ts">
 	import Grid from '$lib/components/Grid.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
-	import { getThemeContext, ThemeSwitcher, ColorSchemeToggle, type ThemePreset } from '@happyvertical/smrt-svelte/themes';
+	import {
+		getThemeContext,
+		ThemeSwitcher,
+		ColorSchemeToggle,
+		type ThemePreset
+	} from '@happyvertical/smrt-svelte/themes';
 	import { swissTheme } from '$lib/themes';
 
 	const theme = getThemeContext();
@@ -49,17 +54,29 @@ registerTheme(myTheme);`;
 
 	const colorTokens = [
 		{ name: 'Primary', bg: 'var(--smrt-color-primary)', text: 'var(--smrt-color-on-primary)' },
-		{ name: 'Secondary', bg: 'var(--smrt-color-secondary)', text: 'var(--smrt-color-on-secondary)' },
+		{
+			name: 'Secondary',
+			bg: 'var(--smrt-color-secondary)',
+			text: 'var(--smrt-color-on-secondary)'
+		},
 		{ name: 'Tertiary', bg: 'var(--smrt-color-tertiary)', text: 'var(--smrt-color-on-tertiary)' },
 		{ name: 'Error', bg: 'var(--smrt-color-error)', text: 'var(--smrt-color-on-error)' },
 		{ name: 'Success', bg: 'var(--smrt-color-success)', text: 'var(--smrt-color-on-success)' },
-		{ name: 'Warning', bg: 'var(--smrt-color-warning)', text: 'var(--smrt-color-on-warning)' },
+		{ name: 'Warning', bg: 'var(--smrt-color-warning)', text: 'var(--smrt-color-on-warning)' }
 	];
 
 	const surfaceTokens = [
 		{ name: 'Surface', bg: 'var(--smrt-color-surface)', text: 'var(--smrt-color-on-surface)' },
-		{ name: 'Surface Variant', bg: 'var(--smrt-color-surface-variant)', text: 'var(--smrt-color-on-surface-variant)' },
-		{ name: 'Background', bg: 'var(--smrt-color-background)', text: 'var(--smrt-color-on-background)' },
+		{
+			name: 'Surface Variant',
+			bg: 'var(--smrt-color-surface-variant)',
+			text: 'var(--smrt-color-on-surface-variant)'
+		},
+		{
+			name: 'Background',
+			bg: 'var(--smrt-color-background)',
+			text: 'var(--smrt-color-on-background)'
+		}
 	];
 </script>
 
@@ -67,15 +84,15 @@ registerTheme(myTheme);`;
 	<section class="hero">
 		<h1>Themes</h1>
 		<p class="lead">
-			A comprehensive theme system with Material, Glass, and Studio presets. 
-			All themes include light and dark modes, CSS custom properties, and runtime switching.
+			A comprehensive theme system with Material, Glass, and Studio presets. All themes include
+			light and dark modes, CSS custom properties, and runtime switching.
 		</p>
 	</section>
 
 	<section class="demo">
 		<h2>Live Demo</h2>
 		<p>Try switching themes and color schemes:</p>
-		
+
 		<div class="controls">
 			<div class="control-group">
 				<h3>Theme Preset</h3>
@@ -89,8 +106,8 @@ registerTheme(myTheme);`;
 
 		<div class="current-theme">
 			<p>
-				<strong>Current:</strong> 
-				{theme.state.theme.name} — 
+				<strong>Current:</strong>
+				{theme.state.theme.name} —
 				{theme.state.resolvedScheme} mode
 			</p>
 		</div>
@@ -101,10 +118,7 @@ registerTheme(myTheme);`;
 		<div class="color-grid">
 			{#each colorTokens as token}
 				<div class="color-swatch">
-					<div 
-						class="color-block"
-						style="background-color: {token.bg}; color: {token.text};"
-					>
+					<div class="color-block" style="background-color: {token.bg}; color: {token.text};">
 						Aa
 					</div>
 					<span class="color-name">{token.name}</span>
@@ -115,10 +129,7 @@ registerTheme(myTheme);`;
 		<h3>Surfaces</h3>
 		<div class="surface-list">
 			{#each surfaceTokens as token}
-				<div 
-					class="surface-item"
-					style="background-color: {token.bg}; color: {token.text};"
-				>
+				<div class="surface-item" style="background-color: {token.bg}; color: {token.text};">
 					{token.name}
 				</div>
 			{/each}
@@ -127,29 +138,41 @@ registerTheme(myTheme);`;
 
 	<section class="themes-list">
 		<h2>Available Themes</h2>
-		
+
 		<div class="theme-cards">
 			<div class="theme-card" class:active={theme.state.preset === 'material'}>
 				<h3>🔷 Material</h3>
-				<p>Modern Google Material Design 3 with refined colors and typography. Features vibrant blues, OLED-friendly dark mode, and multi-layer shadows.</p>
+				<p>
+					Modern Google Material Design 3 with refined colors and typography. Features vibrant
+					blues, OLED-friendly dark mode, and multi-layer shadows.
+				</p>
 				<code>preset="material"</code>
 			</div>
-			
+
 			<div class="theme-card" class:active={theme.state.preset === 'glass'}>
 				<h3>💎 Glass</h3>
-				<p>Apple-inspired glass morphism with backdrop blur effects. Translucent surfaces, system colors, and layered depth perception.</p>
+				<p>
+					Apple-inspired glass morphism with backdrop blur effects. Translucent surfaces, system
+					colors, and layered depth perception.
+				</p>
 				<code>preset="glass"</code>
 			</div>
-			
+
 			<div class="theme-card" class:active={theme.state.preset === 'studio'}>
 				<h3>◻️ Studio</h3>
-				<p>Google AI Studio flat design with minimal aesthetics. Monochromatic base with vibrant accents, minimal shadows.</p>
+				<p>
+					Google AI Studio flat design with minimal aesthetics. Monochromatic base with vibrant
+					accents, minimal shadows.
+				</p>
 				<code>preset="studio"</code>
 			</div>
-			
+
 			<div class="theme-card" class:active={theme.state.preset === ('swiss' as ThemePreset)}>
 				<h3>🇨🇭 Swiss</h3>
-				<p>Custom theme for havesmrt.com. Swiss/International Typographic Style with strong grid, clean typography, and minimal embellishment.</p>
+				<p>
+					Custom theme for havesmrt.com. Swiss/International Typographic Style with strong grid,
+					clean typography, and minimal embellishment.
+				</p>
 				<code>preset="swiss"</code>
 			</div>
 		</div>
@@ -169,7 +192,7 @@ registerTheme(myTheme);`;
 		<h2>Creating Custom Themes</h2>
 		<p>Use the <code>createTheme</code> helper to define your own theme:</p>
 		<CodeBlock code={customThemeCode} language="typescript" />
-		
+
 		<h3>CSS-Only Approach</h3>
 		<p>For simpler cases, you can define a theme entirely in CSS:</p>
 		<CodeBlock code={cssOnlyCode} language="css" />
@@ -191,27 +214,33 @@ registerTheme(myTheme);`;
 	<section class="tokens">
 		<h2>CSS Tokens</h2>
 		<p>All themes expose CSS custom properties:</p>
-		
+
 		<h3>Colors</h3>
-		<pre><code>--smrt-color-primary
+		<pre><code
+				>--smrt-color-primary
 --smrt-color-on-primary
 --smrt-color-surface
 --smrt-color-on-surface
 --smrt-color-background
 --smrt-color-error
 --smrt-color-success
---smrt-color-warning</code></pre>
+--smrt-color-warning</code
+			></pre>
 
 		<h3>Typography</h3>
-		<pre><code>--smrt-typography-body-large-size
+		<pre><code
+				>--smrt-typography-body-large-size
 --smrt-typography-body-large-line-height
 --smrt-typography-body-large-weight
---smrt-font-family</code></pre>
+--smrt-font-family</code
+			></pre>
 
 		<h3>Elevation</h3>
-		<pre><code>--smrt-elevation-1
+		<pre><code
+				>--smrt-elevation-1
 --smrt-elevation-2
---smrt-elevation-3</code></pre>
+--smrt-elevation-3</code
+			></pre>
 	</section>
 </Grid>
 
@@ -335,12 +364,14 @@ registerTheme(myTheme);`;
 		border: 2px solid var(--smrt-color-outline, #e5e5e5);
 		border-radius: var(--smrt-radius-lg, 0.75rem);
 		background: var(--smrt-color-surface, #ffffff);
-		transition: border-color 0.2s, box-shadow 0.2s;
+		transition:
+			border-color 0.2s,
+			box-shadow 0.2s;
 	}
 
 	.theme-card.active {
 		border-color: var(--smrt-color-primary, #e63946);
-		box-shadow: var(--smrt-elevation-2, 0 1px 3px rgba(0,0,0,0.1));
+		box-shadow: var(--smrt-elevation-2, 0 1px 3px rgba(0, 0, 0, 0.1));
 	}
 
 	.theme-card h3 {
@@ -378,7 +409,7 @@ registerTheme(myTheme);`;
 	}
 
 	.features li::before {
-		content: "✓";
+		content: '✓';
 		position: absolute;
 		left: 0;
 		color: var(--smrt-color-success, #059669);

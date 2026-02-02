@@ -14,31 +14,52 @@
 	</p>
 
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-		<a href="/components/projects/time-entry-card" class="block p-6 border rounded hover:border-blue-500 transition">
+		<a
+			href="/components/projects/time-entry-card"
+			class="block p-6 border rounded hover:border-blue-500 transition"
+		>
 			<h3 class="text-xl font-semibold mb-2">TimeEntryCard</h3>
 			<p class="text-gray-600">Display individual time entry</p>
 		</a>
-		<a href="/components/projects/time-entry-list" class="block p-6 border rounded hover:border-blue-500 transition">
+		<a
+			href="/components/projects/time-entry-list"
+			class="block p-6 border rounded hover:border-blue-500 transition"
+		>
 			<h3 class="text-xl font-semibold mb-2">TimeEntryList</h3>
 			<p class="text-gray-600">List of time entries with filtering</p>
 		</a>
-		<a href="/components/projects/time-summary" class="block p-6 border rounded hover:border-blue-500 transition">
+		<a
+			href="/components/projects/time-summary"
+			class="block p-6 border rounded hover:border-blue-500 transition"
+		>
 			<h3 class="text-xl font-semibold mb-2">TimeSummary</h3>
 			<p class="text-gray-600">Aggregated time statistics</p>
 		</a>
-		<a href="/components/projects/duration-display" class="block p-6 border rounded hover:border-blue-500 transition">
+		<a
+			href="/components/projects/duration-display"
+			class="block p-6 border rounded hover:border-blue-500 transition"
+		>
 			<h3 class="text-xl font-semibold mb-2">DurationDisplay</h3>
 			<p class="text-gray-600">Formatted duration with units</p>
 		</a>
-		<a href="/components/projects/approval-actions" class="block p-6 border rounded hover:border-blue-500 transition">
+		<a
+			href="/components/projects/approval-actions"
+			class="block p-6 border rounded hover:border-blue-500 transition"
+		>
 			<h3 class="text-xl font-semibold mb-2">ApprovalActions</h3>
 			<p class="text-gray-600">Approve/reject time entries</p>
 		</a>
-		<a href="/components/projects/bulk-actions" class="block p-6 border rounded hover:border-blue-500 transition">
+		<a
+			href="/components/projects/bulk-actions"
+			class="block p-6 border rounded hover:border-blue-500 transition"
+		>
 			<h3 class="text-xl font-semibold mb-2">BulkActions</h3>
 			<p class="text-gray-600">Batch operations on entries</p>
 		</a>
-		<a href="/components/projects/reject-dialog" class="block p-6 border rounded hover:border-blue-500 transition">
+		<a
+			href="/components/projects/reject-dialog"
+			class="block p-6 border rounded hover:border-blue-500 transition"
+		>
 			<h3 class="text-xl font-semibold mb-2">RejectDialog</h3>
 			<p class="text-gray-600">Modal for rejection with reason</p>
 		</a>

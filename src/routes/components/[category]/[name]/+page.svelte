@@ -42,7 +42,8 @@
 
 		<h2>Props</h2>
 		<p class="props-note">
-			Props documentation is generated from TypeScript types. See the component source for full type definitions.
+			Props documentation is generated from TypeScript types. See the component source for full type
+			definitions.
 		</p>
 	</article>
 {:else}

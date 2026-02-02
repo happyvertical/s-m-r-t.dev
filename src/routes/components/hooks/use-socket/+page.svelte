@@ -6,7 +6,8 @@
 		{
 			name: 'status',
 			type: 'SocketStatus',
-			description: "Current connection status (reactive): 'disconnected' | 'connecting' | 'connected' | 'reconnecting'"
+			description:
+				"Current connection status (reactive): 'disconnected' | 'connecting' | 'connected' | 'reconnecting'"
 		},
 		{
 			name: 'isConnected',
@@ -61,12 +62,15 @@
 
 	<h1>useSocket</h1>
 	<p class="lead">
-		Access WebSocket state and methods for real-time communication.
-		Provides connection status, message sending, and reconnection handling.
+		Access WebSocket state and methods for real-time communication. Provides connection status,
+		message sending, and reconnection handling.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { useSocket } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { useSocket } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display connection status and send messages.</p>

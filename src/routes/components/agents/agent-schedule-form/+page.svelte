@@ -57,12 +57,15 @@
 
 	<h1>AgentScheduleForm</h1>
 	<p class="lead">
-		A form component for creating and editing agent schedules. Includes cron presets,
-		timezone selection, and validation.
+		A form component for creating and editing agent schedules. Includes cron presets, timezone
+		selection, and validation.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { AgentScheduleForm } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { AgentScheduleForm } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Create Mode</h2>
 	<p>Use for creating new agent schedules.</p>

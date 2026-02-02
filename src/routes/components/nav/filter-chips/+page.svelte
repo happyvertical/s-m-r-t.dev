@@ -57,12 +57,15 @@
 
 	<h1>FilterChips</h1>
 	<p class="lead">
-		Material 3 styled filter chips for filtering lists. Supports optional
-		counts, "All" option, and size variants.
+		Material 3 styled filter chips for filtering lists. Supports optional counts, "All" option, and
+		size variants.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { FilterChips } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { FilterChips } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Simple filter selection with controlled state.</p>
@@ -135,7 +138,7 @@
 	/>
 
 	<h2>Props</h2>
-	<PropsTable props={props} />
+	<PropsTable {props} />
 
 	<h2>TypeScript</h2>
 	<CodeBlock

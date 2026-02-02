@@ -69,12 +69,15 @@
 
 	<h1>AgentScheduleList</h1>
 	<p class="lead">
-		A table display of scheduled agents showing status, cron schedule, last/next run times,
-		success rate, and action buttons.
+		A table display of scheduled agents showing status, cron schedule, last/next run times, success
+		rate, and action buttons.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { AgentScheduleList } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { AgentScheduleList } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display a list of agent schedules.</p>

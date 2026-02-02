@@ -107,7 +107,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { SelectInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { SelectInput } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Pass an array of options with <code>value</code> and <code>label</code> properties.</p>

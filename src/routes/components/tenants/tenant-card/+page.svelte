@@ -6,8 +6,18 @@
 
 	// Mock data
 	const mockTenant = { id: 'tenant_1', name: 'Acme Corporation', slug: 'acme' } as any;
-	const mockTenant2 = { id: 'tenant_2', name: 'TechStart Inc', slug: 'techstart', status: 'trial' } as any;
-	const mockTenant3 = { id: 'tenant_3', name: 'Enterprise Co', slug: 'enterprise', status: 'active' } as any;
+	const mockTenant2 = {
+		id: 'tenant_2',
+		name: 'TechStart Inc',
+		slug: 'techstart',
+		status: 'trial'
+	} as any;
+	const mockTenant3 = {
+		id: 'tenant_3',
+		name: 'Enterprise Co',
+		slug: 'enterprise',
+		status: 'active'
+	} as any;
 
 	let selectedTenant = $state<string | null>(null);
 
@@ -44,7 +54,10 @@
 
 <svelte:head>
 	<title>TenantCard | s-m-r-t Components</title>
-	<meta name="description" content="Display tenant information in a card format with status and member count." />
+	<meta
+		name="description"
+		content="Display tenant information in a card format with status and member count."
+	/>
 </svelte:head>
 
 <article class="prose">
@@ -58,19 +71,20 @@
 
 	<h1>TenantCard</h1>
 	<p class="lead">
-		Display tenant organization information in a Material Design 3 card. Shows tenant name,
-		slug, status badge, and member count with optional click interaction.
+		Display tenant organization information in a Material Design 3 card. Shows tenant name, slug,
+		status badge, and member count with optional click interaction.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { TenantCard } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { TenantCard } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display tenant information in a simple card.</p>
 
-	<ComponentExample
-		code={`<TenantCard tenant={tenant} />`}
-	>
+	<ComponentExample code={`<TenantCard tenant={tenant} />`}>
 		<TenantCard tenant={mockTenant} />
 	</ComponentExample>
 
@@ -90,16 +104,8 @@
 />`}
 	>
 		<div class="card-stack">
-			<TenantCard
-				tenant={mockTenant3}
-				status="active"
-				memberCount={24}
-			/>
-			<TenantCard
-				tenant={mockTenant2}
-				status="trial"
-				memberCount={5}
-			/>
+			<TenantCard tenant={mockTenant3} status="active" memberCount={24} />
+			<TenantCard tenant={mockTenant2} status="trial" memberCount={5} />
 		</div>
 	</ComponentExample>
 
@@ -122,21 +128,21 @@
 		<div class="card-stack">
 			<TenantCard
 				tenant={mockTenant}
-				onclick={() => selectedTenant = mockTenant.id}
+				onclick={() => (selectedTenant = mockTenant.id)}
 				selected={selectedTenant === mockTenant.id}
 				status="active"
 				memberCount={15}
 			/>
 			<TenantCard
 				tenant={mockTenant2}
-				onclick={() => selectedTenant = mockTenant2.id}
+				onclick={() => (selectedTenant = mockTenant2.id)}
 				selected={selectedTenant === mockTenant2.id}
 				status="trial"
 				memberCount={5}
 			/>
 			<TenantCard
 				tenant={mockTenant3}
-				onclick={() => selectedTenant = mockTenant3.id}
+				onclick={() => (selectedTenant = mockTenant3.id)}
 				selected={selectedTenant === mockTenant3.id}
 				status="active"
 				memberCount={24}
@@ -155,10 +161,22 @@
 <TenantCard tenant={tenant} status="inactive" />`}
 	>
 		<div class="card-stack">
-			<TenantCard tenant={{ ...mockTenant, name: 'Active Tenant' }} status="active" memberCount={42} />
+			<TenantCard
+				tenant={{ ...mockTenant, name: 'Active Tenant' }}
+				status="active"
+				memberCount={42}
+			/>
 			<TenantCard tenant={{ ...mockTenant, name: 'Trial Tenant' }} status="trial" memberCount={3} />
-			<TenantCard tenant={{ ...mockTenant, name: 'Suspended Tenant' }} status="suspended" memberCount={18} />
-			<TenantCard tenant={{ ...mockTenant, name: 'Inactive Tenant' }} status="inactive" memberCount={0} />
+			<TenantCard
+				tenant={{ ...mockTenant, name: 'Suspended Tenant' }}
+				status="suspended"
+				memberCount={18}
+			/>
+			<TenantCard
+				tenant={{ ...mockTenant, name: 'Inactive Tenant' }}
+				status="inactive"
+				memberCount={0}
+			/>
 		</div>
 	</ComponentExample>
 
@@ -180,9 +198,7 @@ interface Props {
 	/>
 
 	<h2>Multi-Tenancy Integration</h2>
-	<p>
-		TenantCard works seamlessly with the smrt-tenancy module:
-	</p>
+	<p>TenantCard works seamlessly with the smrt-tenancy module:</p>
 
 	<CodeBlock
 		code={`import { TenantsCollection } from '@happyvertical/smrt-tenancy';

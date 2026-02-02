@@ -27,9 +27,7 @@
 				{
 					label: 'Agents',
 					href: '/docs/agents',
-					children: [
-						{ label: 'Dispatch', href: '/docs/agents/dispatch' }
-					]
+					children: [{ label: 'Dispatch', href: '/docs/agents/dispatch' }]
 				}
 			]
 		},
@@ -52,15 +50,11 @@
 		},
 		{
 			title: 'Modules',
-			items: [
-				{ label: 'Overview', href: '/modules' }
-			]
+			items: [{ label: 'Overview', href: '/modules' }]
 		},
 		{
 			title: 'Reference',
-			items: [
-				{ label: 'API Reference', href: '/reference' }
-			]
+			items: [{ label: 'API Reference', href: '/reference' }]
 		}
 	];
 

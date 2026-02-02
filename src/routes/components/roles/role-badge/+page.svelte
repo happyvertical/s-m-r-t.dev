@@ -6,7 +6,12 @@
 
 	const badgeProps = [
 		{ name: 'role', type: 'string', description: 'Role name to display', required: true },
-		{ name: 'variant', type: "'primary' | 'secondary' | 'outline'", default: "'primary'", description: 'Visual style variant' },
+		{
+			name: 'variant',
+			type: "'primary' | 'secondary' | 'outline'",
+			default: "'primary'",
+			description: 'Visual style variant'
+		},
 		{ name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Badge size' }
 	];
 </script>
@@ -26,10 +31,15 @@
 	<p class="lead">Display user roles as styled badges with automatic color coding.</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { RoleBadge } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { RoleBadge } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
-	<ComponentExample code={`<RoleBadge role="Admin" />\n<RoleBadge role="Editor" />\n<RoleBadge role="Viewer" />`}>
+	<ComponentExample
+		code={`<RoleBadge role="Admin" />\n<RoleBadge role="Editor" />\n<RoleBadge role="Viewer" />`}
+	>
 		<div style="display: flex; gap: 8px; flex-wrap: wrap;">
 			<RoleBadge role="Admin" />
 			<RoleBadge role="Editor" />
@@ -38,7 +48,9 @@
 	</ComponentExample>
 
 	<h2>Variants</h2>
-	<ComponentExample code={`<RoleBadge role="Admin" variant="primary" />\n<RoleBadge role="Admin" variant="secondary" />\n<RoleBadge role="Admin" variant="outline" />`}>
+	<ComponentExample
+		code={`<RoleBadge role="Admin" variant="primary" />\n<RoleBadge role="Admin" variant="secondary" />\n<RoleBadge role="Admin" variant="outline" />`}
+	>
 		<div style="display: flex; gap: 8px;">
 			<RoleBadge role="Admin" variant="primary" />
 			<RoleBadge role="Admin" variant="secondary" />
@@ -47,7 +59,9 @@
 	</ComponentExample>
 
 	<h2>Sizes</h2>
-	<ComponentExample code={`<RoleBadge role="Admin" size="sm" />\n<RoleBadge role="Admin" size="md" />\n<RoleBadge role="Admin" size="lg" />`}>
+	<ComponentExample
+		code={`<RoleBadge role="Admin" size="sm" />\n<RoleBadge role="Admin" size="md" />\n<RoleBadge role="Admin" size="lg" />`}
+	>
 		<div style="display: flex; gap: 8px; align-items: center;">
 			<RoleBadge role="Admin" size="sm" />
 			<RoleBadge role="Admin" size="md" />
@@ -59,7 +73,10 @@
 	<PropsTable props={badgeProps} />
 
 	<h2>TypeScript</h2>
-	<CodeBlock code={`interface Props {\n  role: string;\n  variant?: 'primary' | 'secondary' | 'outline';\n  size?: 'sm' | 'md' | 'lg';\n}`} language="typescript" />
+	<CodeBlock
+		code={`interface Props {\n  role: string;\n  variant?: 'primary' | 'secondary' | 'outline';\n  size?: 'sm' | 'md' | 'lg';\n}`}
+		language="typescript"
+	/>
 </article>
 
 <style>

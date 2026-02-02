@@ -33,12 +33,15 @@
 
 	<h1>FormMicButton</h1>
 	<p class="lead">
-		A microphone icon button that appears in SMRT mode to trigger form-level voice filling.
-		Only visible when inside a Form component and when SMRT mode is active.
+		A microphone icon button that appears in SMRT mode to trigger form-level voice filling. Only
+		visible when inside a Form component and when SMRT mode is active.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { FormMicButton } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { FormMicButton } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Add a mic button next to a form title or label.</p>
@@ -98,8 +101,8 @@ interface FormMicButtonProps {
 
 	<h2>Context Requirement</h2>
 	<p>
-		FormMicButton requires being inside a <code>Form</code> component. It uses
-		the form context to toggle listening state. If used outside a Form, it renders nothing.
+		FormMicButton requires being inside a <code>Form</code> component. It uses the form context to toggle
+		listening state. If used outside a Form, it renders nothing.
 	</p>
 
 	<CodeBlock

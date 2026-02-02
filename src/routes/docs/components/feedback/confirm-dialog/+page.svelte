@@ -155,9 +155,8 @@
 
 	<h1>ConfirmDialog</h1>
 	<p class="lead">
-		Modal confirmation dialog for destructive actions or important decisions.
-		Provides a consistent UX pattern with backdrop blur, keyboard support (Escape to close),
-		and optional loading states.
+		Modal confirmation dialog for destructive actions or important decisions. Provides a consistent
+		UX pattern with backdrop blur, keyboard support (Escape to close), and optional loading states.
 	</p>
 
 	<h2>Installation</h2>
@@ -165,9 +164,7 @@
 
 	<h2>Basic Usage</h2>
 	<ComponentExample title="Default Confirm Dialog" code={basicCode}>
-		<button class="demo-button" onclick={() => (basicDialogOpen = true)}>
-			Open Dialog
-		</button>
+		<button class="demo-button" onclick={() => (basicDialogOpen = true)}> Open Dialog </button>
 		<ConfirmDialog
 			open={basicDialogOpen}
 			title="Confirm Action"
@@ -182,8 +179,8 @@
 
 	<h2>Destructive Actions</h2>
 	<p>
-		Use the <code>destructive</code> prop for actions like delete, remove, or any irreversible
-		operation. This displays the confirm button in red to indicate danger.
+		Use the <code>destructive</code> prop for actions like delete, remove, or any irreversible operation.
+		This displays the confirm button in red to indicate danger.
 	</p>
 	<ComponentExample title="Destructive Dialog" code={destructiveCode}>
 		<button class="demo-button demo-button-danger" onclick={() => (destructiveDialogOpen = true)}>
@@ -205,13 +202,11 @@
 
 	<h2>Loading State</h2>
 	<p>
-		Show a loading spinner while performing async operations. The <code>loading</code> prop
-		disables both buttons and shows a spinner on the confirm button.
+		Show a loading spinner while performing async operations. The <code>loading</code> prop disables both
+		buttons and shows a spinner on the confirm button.
 	</p>
 	<ComponentExample title="With Loading State" code={loadingCode}>
-		<button class="demo-button" onclick={() => (loadingDialogOpen = true)}>
-			Save Changes
-		</button>
+		<button class="demo-button" onclick={() => (loadingDialogOpen = true)}> Save Changes </button>
 		<ConfirmDialog
 			open={loadingDialogOpen}
 			title="Save Changes"
@@ -224,13 +219,9 @@
 	</ComponentExample>
 
 	<h2>Custom Labels</h2>
-	<p>
-		Customize the button labels to better describe the action context.
-	</p>
+	<p>Customize the button labels to better describe the action context.</p>
 	<ComponentExample title="Custom Button Labels" code={customLabelsCode}>
-		<button class="demo-button" onclick={() => (customDialogOpen = true)}>
-			Publish Article
-		</button>
+		<button class="demo-button" onclick={() => (customDialogOpen = true)}> Publish Article </button>
 		<ConfirmDialog
 			open={customDialogOpen}
 			title="Publish Article"
@@ -246,9 +237,7 @@
 	</ComponentExample>
 
 	<h2>Keyboard Support</h2>
-	<p>
-		The dialog supports keyboard navigation:
-	</p>
+	<p>The dialog supports keyboard navigation:</p>
 	<ul>
 		<li><code>Escape</code> - Closes the dialog (triggers <code>oncancel</code>)</li>
 		<li>Clicking the backdrop also closes the dialog</li>

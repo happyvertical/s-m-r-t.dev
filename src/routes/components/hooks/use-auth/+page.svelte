@@ -51,8 +51,8 @@
 
 	<h1>useAuth</h1>
 	<p class="lead">
-		Access authentication state and permission checking. Provides a simple
-		interface for building protected UI based on user roles.
+		Access authentication state and permission checking. Provides a simple interface for building
+		protected UI based on user roles.
 	</p>
 
 	<h2>Installation</h2>

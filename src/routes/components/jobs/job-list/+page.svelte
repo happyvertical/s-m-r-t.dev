@@ -87,8 +87,8 @@
 
 	<h1>JobList</h1>
 	<p class="lead">
-		A table component for displaying background jobs with status badges,
-		filtering, sorting, selection, and action buttons.
+		A table component for displaying background jobs with status badges, filtering, sorting,
+		selection, and action buttons.
 	</p>
 
 	<h2>Installation</h2>
@@ -189,7 +189,9 @@
 
 	<h2>Columns Displayed</h2>
 	<ul>
-		<li><strong>Status</strong> - Badge showing pending/ready/running/completed/failed/cancelled</li>
+		<li>
+			<strong>Status</strong> - Badge showing pending/ready/running/completed/failed/cancelled
+		</li>
 		<li><strong>Queue</strong> - Queue name</li>
 		<li><strong>Object</strong> - Object type and method</li>
 		<li><strong>Priority</strong> - Priority level with color coding</li>

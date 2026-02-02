@@ -86,12 +86,15 @@
 
 	<h1>TextInput</h1>
 	<p class="lead">
-		A Material Design 3 inspired text input with optional voice input support in smrt mode.
-		Supports text and email types with built-in validation.
+		A Material Design 3 inspired text input with optional voice input support in smrt mode. Supports
+		text and email types with built-in validation.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { TextInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { TextInput } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>The simplest text input with a label and bindable value.</p>
@@ -160,7 +163,10 @@
 	</ComponentExample>
 
 	<h2>With Description</h2>
-	<p>Add a <code>description</code> for context, shown when the field is focused. Also used by AI for voice extraction.</p>
+	<p>
+		Add a <code>description</code> for context, shown when the field is focused. Also used by AI for voice
+		extraction.
+	</p>
 
 	<ComponentExample
 		code={`<TextInput
@@ -180,9 +186,9 @@
 
 	<h2>Voice Input (smrt Mode)</h2>
 	<p>
-		When the application is in smrt mode, a microphone button appears. Users can hold to speak
-		and the input will be processed via speech-to-text. The <code>appendMode</code> prop controls
-		whether spoken text replaces or appends to existing content.
+		When the application is in smrt mode, a microphone button appears. Users can hold to speak and
+		the input will be processed via speech-to-text. The <code>appendMode</code> prop controls whether
+		spoken text replaces or appends to existing content.
 	</p>
 
 	<CodeBlock

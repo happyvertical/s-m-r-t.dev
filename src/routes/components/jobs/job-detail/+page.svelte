@@ -51,12 +51,15 @@
 
 	<h1>JobDetail</h1>
 	<p class="lead">
-		A detailed view of a single background job showing all properties,
-		arguments, timing, and error information.
+		A detailed view of a single background job showing all properties, arguments, timing, and error
+		information.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { JobDetail } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { JobDetail } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display complete job details.</p>

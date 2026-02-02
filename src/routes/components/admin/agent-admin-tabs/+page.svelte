@@ -69,12 +69,15 @@
 
 	<h1>AgentAdminTabs</h1>
 	<p class="lead">
-		Tab navigation component for displaying agent configuration slots.
-		Renders the appropriate admin panel for each tab from the component registry.
+		Tab navigation component for displaying agent configuration slots. Renders the appropriate admin
+		panel for each tab from the component registry.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { AgentAdminTabs } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { AgentAdminTabs } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display tabbed configuration panels for an agent.</p>

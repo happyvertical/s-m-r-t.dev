@@ -10,56 +10,201 @@
 	}
 
 	const foundation: Module[] = [
-		{ name: 'smrt-core', package: '@happyvertical/smrt-core', description: 'Core AI agent framework with ORM and code generation', href: '/modules/smrt-core' },
-		{ name: 'smrt-types', package: '@happyvertical/smrt-types', description: 'Shared TypeScript type definitions', href: '/modules/smrt-types' },
-		{ name: 'smrt-config', package: '@happyvertical/smrt-config', description: 'Configuration management', href: '/modules/smrt-config' },
-		{ name: 'smrt-scanner', package: '@happyvertical/smrt-scanner', description: 'TypeScript scanner for manifest generation', href: '/modules/smrt-scanner' }
+		{
+			name: 'smrt-core',
+			package: '@happyvertical/smrt-core',
+			description: 'Core AI agent framework with ORM and code generation',
+			href: '/modules/smrt-core'
+		},
+		{
+			name: 'smrt-types',
+			package: '@happyvertical/smrt-types',
+			description: 'Shared TypeScript type definitions',
+			href: '/modules/smrt-types'
+		},
+		{
+			name: 'smrt-config',
+			package: '@happyvertical/smrt-config',
+			description: 'Configuration management',
+			href: '/modules/smrt-config'
+		},
+		{
+			name: 'smrt-scanner',
+			package: '@happyvertical/smrt-scanner',
+			description: 'TypeScript scanner for manifest generation',
+			href: '/modules/smrt-scanner'
+		}
 	];
 
 	const userAccess: Module[] = [
-		{ name: 'smrt-users', package: '@happyvertical/smrt-users', description: 'Multi-tenant user management with RBAC', href: '/modules/smrt-users' },
-		{ name: 'smrt-profiles', package: '@happyvertical/smrt-profiles', description: 'Profile management with relationships', href: '/modules/smrt-profiles' },
-		{ name: 'smrt-tenancy', package: '@happyvertical/smrt-tenancy', description: 'Multi-tenancy framework with automatic tenant isolation', href: '/modules/smrt-tenancy' }
+		{
+			name: 'smrt-users',
+			package: '@happyvertical/smrt-users',
+			description: 'Multi-tenant user management with RBAC',
+			href: '/modules/smrt-users'
+		},
+		{
+			name: 'smrt-profiles',
+			package: '@happyvertical/smrt-profiles',
+			description: 'Profile management with relationships',
+			href: '/modules/smrt-profiles'
+		},
+		{
+			name: 'smrt-tenancy',
+			package: '@happyvertical/smrt-tenancy',
+			description: 'Multi-tenancy framework with automatic tenant isolation',
+			href: '/modules/smrt-tenancy'
+		}
 	];
 
 	const domain: Module[] = [
-		{ name: 'smrt-assets', package: '@happyvertical/smrt-assets', description: 'Asset management with versioning and AI', href: '/modules/smrt-assets' },
-		{ name: 'smrt-commerce', package: '@happyvertical/smrt-commerce', description: 'Commerce models (contracts, fulfillments, payments)', href: '/modules/smrt-commerce' },
-		{ name: 'smrt-events', package: '@happyvertical/smrt-events', description: 'Hierarchical event management', href: '/modules/smrt-events' },
-		{ name: 'smrt-ledgers', package: '@happyvertical/smrt-ledgers', description: 'Double-entry accounting', href: '/modules/smrt-ledgers' },
-		{ name: 'smrt-places', package: '@happyvertical/smrt-places', description: 'Hierarchical place management with geo', href: '/modules/smrt-places' },
-		{ name: 'smrt-products', package: '@happyvertical/smrt-products', description: 'Product catalog and inventory', href: '/modules/smrt-products' },
-		{ name: 'smrt-projects', package: '@happyvertical/smrt-projects', description: 'Provider-agnostic project management', href: '/modules/smrt-projects' },
-		{ name: 'smrt-properties', package: '@happyvertical/smrt-properties', description: 'Digital property and zone management', href: '/modules/smrt-properties' },
-		{ name: 'smrt-tags', package: '@happyvertical/smrt-tags', description: 'Reusable tagging system', href: '/modules/smrt-tags' }
+		{
+			name: 'smrt-assets',
+			package: '@happyvertical/smrt-assets',
+			description: 'Asset management with versioning and AI',
+			href: '/modules/smrt-assets'
+		},
+		{
+			name: 'smrt-commerce',
+			package: '@happyvertical/smrt-commerce',
+			description: 'Commerce models (contracts, fulfillments, payments)',
+			href: '/modules/smrt-commerce'
+		},
+		{
+			name: 'smrt-events',
+			package: '@happyvertical/smrt-events',
+			description: 'Hierarchical event management',
+			href: '/modules/smrt-events'
+		},
+		{
+			name: 'smrt-ledgers',
+			package: '@happyvertical/smrt-ledgers',
+			description: 'Double-entry accounting',
+			href: '/modules/smrt-ledgers'
+		},
+		{
+			name: 'smrt-places',
+			package: '@happyvertical/smrt-places',
+			description: 'Hierarchical place management with geo',
+			href: '/modules/smrt-places'
+		},
+		{
+			name: 'smrt-products',
+			package: '@happyvertical/smrt-products',
+			description: 'Product catalog and inventory',
+			href: '/modules/smrt-products'
+		},
+		{
+			name: 'smrt-projects',
+			package: '@happyvertical/smrt-projects',
+			description: 'Provider-agnostic project management',
+			href: '/modules/smrt-projects'
+		},
+		{
+			name: 'smrt-properties',
+			package: '@happyvertical/smrt-properties',
+			description: 'Digital property and zone management',
+			href: '/modules/smrt-properties'
+		},
+		{
+			name: 'smrt-tags',
+			package: '@happyvertical/smrt-tags',
+			description: 'Reusable tagging system',
+			href: '/modules/smrt-tags'
+		}
 	];
 
 	const content: Module[] = [
-		{ name: 'smrt-content', package: '@happyvertical/smrt-content', description: 'Content processing (documents, web, media)', href: '/modules/smrt-content' },
-		{ name: 'smrt-messages', package: '@happyvertical/smrt-messages', description: 'Email persistence with AI integration', href: '/modules/smrt-messages' },
-		{ name: 'smrt-analytics', package: '@happyvertical/smrt-analytics', description: 'Analytics integration (GA, Plausible)', href: '/modules/smrt-analytics' },
-		{ name: 'smrt-ads', package: '@happyvertical/smrt-ads', description: 'Advertising delivery and tracking', href: '/modules/smrt-ads' }
+		{
+			name: 'smrt-content',
+			package: '@happyvertical/smrt-content',
+			description: 'Content processing (documents, web, media)',
+			href: '/modules/smrt-content'
+		},
+		{
+			name: 'smrt-messages',
+			package: '@happyvertical/smrt-messages',
+			description: 'Email persistence with AI integration',
+			href: '/modules/smrt-messages'
+		},
+		{
+			name: 'smrt-analytics',
+			package: '@happyvertical/smrt-analytics',
+			description: 'Analytics integration (GA, Plausible)',
+			href: '/modules/smrt-analytics'
+		},
+		{
+			name: 'smrt-ads',
+			package: '@happyvertical/smrt-ads',
+			description: 'Advertising delivery and tracking',
+			href: '/modules/smrt-ads'
+		}
 	];
 
 	const agents: Module[] = [
-		{ name: 'smrt-agents', package: '@happyvertical/smrt-agents', description: 'Agent framework for autonomous actors', href: '/modules/smrt-agents' },
-		{ name: 'smrt-gnode', package: '@happyvertical/smrt-gnode', description: 'Federation library for local knowledge bases', href: '/modules/smrt-gnode' }
+		{
+			name: 'smrt-agents',
+			package: '@happyvertical/smrt-agents',
+			description: 'Agent framework for autonomous actors',
+			href: '/modules/smrt-agents'
+		},
+		{
+			name: 'smrt-gnode',
+			package: '@happyvertical/smrt-gnode',
+			description: 'Federation library for local knowledge bases',
+			href: '/modules/smrt-gnode'
+		}
 	];
 
 	const devTools: Module[] = [
-		{ name: 'smrt-cli', package: '@happyvertical/smrt-cli', description: 'Developer CLI for SMRT framework', href: '/modules/smrt-cli' },
-		{ name: 'smrt-dev-mcp', package: '@happyvertical/smrt-dev-mcp', description: 'Development MCP server', href: '/modules/smrt-dev-mcp' },
-		{ name: 'smrt-vitest', package: '@happyvertical/smrt-vitest', description: 'Vitest plugin for cross-package testing', href: '/modules/smrt-vitest' }
+		{
+			name: 'smrt-cli',
+			package: '@happyvertical/smrt-cli',
+			description: 'Developer CLI for SMRT framework',
+			href: '/modules/smrt-cli'
+		},
+		{
+			name: 'smrt-dev-mcp',
+			package: '@happyvertical/smrt-dev-mcp',
+			description: 'Development MCP server',
+			href: '/modules/smrt-dev-mcp'
+		},
+		{
+			name: 'smrt-vitest',
+			package: '@happyvertical/smrt-vitest',
+			description: 'Vitest plugin for cross-package testing',
+			href: '/modules/smrt-vitest'
+		}
 	];
 
 	const ui: Module[] = [
-		{ name: 'smrt-svelte', package: '@happyvertical/smrt-svelte', description: 'Svelte 5 components for SMRT', href: '/components' },
-		{ name: 'browser-ai', package: '@happyvertical/browser-ai', description: 'Framework-agnostic browser AI (STT, TTS, LLM)', href: '/modules/browser-ai' }
+		{
+			name: 'smrt-svelte',
+			package: '@happyvertical/smrt-svelte',
+			description: 'Svelte 5 components for SMRT',
+			href: '/components'
+		},
+		{
+			name: 'browser-ai',
+			package: '@happyvertical/browser-ai',
+			description: 'Framework-agnostic browser AI (STT, TTS, LLM)',
+			href: '/modules/browser-ai'
+		}
 	];
 
 	const templates: Module[] = [
-		{ name: 'template-site-static-json', package: '@happyvertical/template-site-static-json', description: 'Static site template with JSON storage', href: '/modules/template-site-static-json' },
-		{ name: 'template-sveltekit', package: '@happyvertical/template-sveltekit', description: 'SvelteKit project template with SMRT', href: '/modules/template-sveltekit' }
+		{
+			name: 'template-site-static-json',
+			package: '@happyvertical/template-site-static-json',
+			description: 'Static site template with JSON storage',
+			href: '/modules/template-site-static-json'
+		},
+		{
+			name: 'template-sveltekit',
+			package: '@happyvertical/template-sveltekit',
+			description: 'SvelteKit project template with SMRT',
+			href: '/modules/template-sveltekit'
+		}
 	];
 </script>
 
@@ -98,7 +243,9 @@
 
 	<section class="section">
 		<h2>User & Access Management (3 modules)</h2>
-		<p class="section-desc">Multi-tenancy, authentication, role-based access control, and tenant isolation.</p>
+		<p class="section-desc">
+			Multi-tenancy, authentication, role-based access control, and tenant isolation.
+		</p>
 		<div class="packages">
 			{#each userAccess as mod}
 				{#if mod.href}
@@ -238,18 +385,22 @@
 
 	<section class="section">
 		<h2>Installation</h2>
-		<pre><code>{`# Install core framework
+		<pre><code
+				>{`# Install core framework
 npm install @happyvertical/smrt-core
 
 # Add domain modules as needed
 npm install @happyvertical/smrt-profiles
 npm install @happyvertical/smrt-events
-npm install @happyvertical/smrt-content`}</code></pre>
+npm install @happyvertical/smrt-content`}</code
+			></pre>
 	</section>
 
 	<section class="section last">
 		<h2>SDK Dependencies</h2>
-		<p class="section-desc">SMRT builds on the HappyVertical SDK for foundational infrastructure.</p>
+		<p class="section-desc">
+			SMRT builds on the HappyVertical SDK for foundational infrastructure.
+		</p>
 		<div class="packages">
 			<div class="package">
 				<code>@happyvertical/ai</code>

@@ -99,12 +99,15 @@
 
 	<h1>DataTable</h1>
 	<p class="lead">
-		A flexible, accessible data table component with sorting, row selection,
-		custom cell renderers, and Material 3 styling.
+		A flexible, accessible data table component with sorting, row selection, custom cell renderers,
+		and Material 3 styling.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { DataTable } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { DataTable } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display data with column definitions.</p>
@@ -251,7 +254,7 @@
 	/>
 
 	<h2>Props</h2>
-	<PropsTable props={props} />
+	<PropsTable {props} />
 
 	<h2>TypeScript</h2>
 	<CodeBlock

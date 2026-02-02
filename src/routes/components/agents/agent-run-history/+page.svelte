@@ -45,12 +45,14 @@
 
 	<h1>AgentRunHistory</h1>
 	<p class="lead">
-		A table component displaying agent run history with status badges, duration,
-		and error messages.
+		A table component displaying agent run history with status badges, duration, and error messages.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { AgentRunHistory } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { AgentRunHistory } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display run history for agents.</p>

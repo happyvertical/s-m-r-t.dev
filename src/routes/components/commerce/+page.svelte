@@ -14,27 +14,45 @@
 	</p>
 
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-		<a href="/components/commerce/invoice-card" class="block p-6 border rounded hover:border-blue-500 transition">
+		<a
+			href="/components/commerce/invoice-card"
+			class="block p-6 border rounded hover:border-blue-500 transition"
+		>
 			<h3 class="text-xl font-semibold mb-2">InvoiceCard</h3>
 			<p class="text-gray-600">Display invoice summary in card format</p>
 		</a>
-		<a href="/components/commerce/invoice-header" class="block p-6 border rounded hover:border-blue-500 transition">
+		<a
+			href="/components/commerce/invoice-header"
+			class="block p-6 border rounded hover:border-blue-500 transition"
+		>
 			<h3 class="text-xl font-semibold mb-2">InvoiceHeader</h3>
 			<p class="text-gray-600">Invoice header with company info and invoice number</p>
 		</a>
-		<a href="/components/commerce/invoice-line-items" class="block p-6 border rounded hover:border-blue-500 transition">
+		<a
+			href="/components/commerce/invoice-line-items"
+			class="block p-6 border rounded hover:border-blue-500 transition"
+		>
 			<h3 class="text-xl font-semibold mb-2">InvoiceLineItems</h3>
 			<p class="text-gray-600">Editable line items table with calculations</p>
 		</a>
-		<a href="/components/commerce/invoice-totals" class="block p-6 border rounded hover:border-blue-500 transition">
+		<a
+			href="/components/commerce/invoice-totals"
+			class="block p-6 border rounded hover:border-blue-500 transition"
+		>
 			<h3 class="text-xl font-semibold mb-2">InvoiceTotals</h3>
 			<p class="text-gray-600">Subtotal, tax, and total calculations</p>
 		</a>
-		<a href="/components/commerce/invoice-actions" class="block p-6 border rounded hover:border-blue-500 transition">
+		<a
+			href="/components/commerce/invoice-actions"
+			class="block p-6 border rounded hover:border-blue-500 transition"
+		>
 			<h3 class="text-xl font-semibold mb-2">InvoiceActions</h3>
 			<p class="text-gray-600">Send, print, mark paid actions</p>
 		</a>
-		<a href="/components/commerce/unbilled-items" class="block p-6 border rounded hover:border-blue-500 transition">
+		<a
+			href="/components/commerce/unbilled-items"
+			class="block p-6 border rounded hover:border-blue-500 transition"
+		>
 			<h3 class="text-xl font-semibold mb-2">UnbilledItems</h3>
 			<p class="text-gray-600">List of items awaiting invoice</p>
 		</a>

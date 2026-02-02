@@ -56,14 +56,15 @@
 
 	<h1>Layout Components</h1>
 	<p class="lead">
-		Page structure and layout components for building consistent interfaces. These components
-		handle spacing, grids, headers, and common page patterns.
+		Page structure and layout components for building consistent interfaces. These components handle
+		spacing, grids, headers, and common page patterns.
 	</p>
 
 	<section class="install">
 		<h2>Installation</h2>
 		<pre><code>npm install @happyvertical/smrt-svelte</code></pre>
-		<pre><code>{`import { Container, Grid, EmptyState } from '@happyvertical/smrt-svelte';`}</code></pre>
+		<pre><code>{`import { Container, Grid, EmptyState } from '@happyvertical/smrt-svelte';`}</code
+			></pre>
 	</section>
 
 	<section class="components">

@@ -96,9 +96,8 @@
 
 	<h1>useTTS</h1>
 	<p class="lead">
-		A Svelte 5 hook for Text-to-Speech functionality. Provides reactive state
-		for voice synthesis with support for browser speech synthesis and local
-		voice models.
+		A Svelte 5 hook for Text-to-Speech functionality. Provides reactive state for voice synthesis
+		with support for browser speech synthesis and local voice models.
 	</p>
 
 	<h2>Installation</h2>
@@ -236,8 +235,8 @@ interface UseTTSReturn {
 
 	<h2>Cleanup</h2>
 	<p>
-		The hook automatically stops speaking when the component is destroyed.
-		No manual cleanup is required.
+		The hook automatically stops speaking when the component is destroyed. No manual cleanup is
+		required.
 	</p>
 </article>
 

@@ -23,7 +23,7 @@
 		},
 		{
 			name: 'applyTheme',
-			type: "(theme: Theme) => void",
+			type: '(theme: Theme) => void',
 			description: 'Apply a theme to the document. Call on mount and when theme changes.'
 		},
 		{
@@ -49,13 +49,16 @@
 
 	<h1>ThemeSwitcher</h1>
 	<p class="lead">
-		A SelectInput-based theme selector that allows users to choose between light, dark,
-		and system themes. Persists to localStorage and respects OS preferences.
+		A SelectInput-based theme selector that allows users to choose between light, dark, and system
+		themes. Persists to localStorage and respects OS preferences.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { SelectInput } from '@happyvertical/smrt-svelte';
-import { theme, applyTheme, type Theme } from '$lib/stores/theme';`} language="typescript" />
+	<CodeBlock
+		code={`import { SelectInput } from '@happyvertical/smrt-svelte';
+import { theme, applyTheme, type Theme } from '$lib/stores/theme';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Use SelectInput with the theme store for a simple theme switcher.</p>

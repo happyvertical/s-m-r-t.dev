@@ -51,12 +51,15 @@
 
 	<h1>AILoadingOverlay</h1>
 	<p class="lead">
-		A full-screen overlay that displays during AI model initialization.
-		Automatically tracks AI loading state and shows appropriate messages.
+		A full-screen overlay that displays during AI model initialization. Automatically tracks AI
+		loading state and shows appropriate messages.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { AILoadingOverlay } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { AILoadingOverlay } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Add to your layout to show during AI initialization.</p>
@@ -124,7 +127,7 @@
 	</ul>
 
 	<h2>Props</h2>
-	<PropsTable props={props} />
+	<PropsTable {props} />
 
 	<h2>TypeScript</h2>
 	<CodeBlock
@@ -142,8 +145,8 @@ interface Props {
 
 	<h2>Requirements</h2>
 	<p>
-		Must be used within a <code>&lt;Smrt&gt;</code> provider. Uses app state
-		context to track AI loading progress.
+		Must be used within a <code>&lt;Smrt&gt;</code> provider. Uses app state context to track AI loading
+		progress.
 	</p>
 </article>
 

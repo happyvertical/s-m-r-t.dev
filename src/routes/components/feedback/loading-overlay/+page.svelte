@@ -69,12 +69,15 @@
 
 	<h1>LoadingOverlay</h1>
 	<p class="lead">
-		A full-screen loading overlay for async operations. Shows progress,
-		completed items, and error states with a blurred backdrop.
+		A full-screen loading overlay for async operations. Shows progress, completed items, and error
+		states with a blurred backdrop.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { LoadingOverlay } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { LoadingOverlay } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Show a simple loading overlay during async operations.</p>
@@ -185,7 +188,7 @@
 	/>
 
 	<h2>Props</h2>
-	<PropsTable props={props} />
+	<PropsTable {props} />
 
 	<h2>TypeScript</h2>
 	<CodeBlock

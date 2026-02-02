@@ -80,7 +80,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { UserForm } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { UserForm } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Create Mode</h2>
 	<p>When no user is provided, the form operates in create mode with empty fields.</p>
@@ -106,7 +109,10 @@
 	</ComponentExample>
 
 	<h2>Edit Mode</h2>
-	<p>Provide existing user and profile data to pre-fill the form. Note that email cannot be changed after creation.</p>
+	<p>
+		Provide existing user and profile data to pre-fill the form. Note that email cannot be changed
+		after creation.
+	</p>
 
 	<ComponentExample
 		code={`<UserForm
@@ -121,7 +127,7 @@
 				user={mockUser}
 				profile={mockProfile}
 				onsubmit={handleEdit}
-				oncancel={() => editFormResult = 'Cancelled'}
+				oncancel={() => (editFormResult = 'Cancelled')}
 			/>
 			{#if editFormResult}
 				<div class="result">
@@ -142,10 +148,7 @@
 />`}
 	>
 		<div class="form-container">
-			<UserForm
-				onsubmit={simulateLoading}
-				{loading}
-			/>
+			<UserForm onsubmit={simulateLoading} {loading} />
 			<button class="simulate-btn" onclick={simulateLoading} disabled={loading}>
 				{loading ? 'Loading...' : 'Simulate Loading State'}
 			</button>

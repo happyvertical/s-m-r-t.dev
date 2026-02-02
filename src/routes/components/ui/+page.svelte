@@ -43,7 +43,9 @@
 	<section class="install">
 		<h2>Installation</h2>
 		<pre><code>npm install @happyvertical/smrt-svelte</code></pre>
-		<pre><code>{`import { Button, Badge, Card, Pagination } from '@happyvertical/smrt-svelte';`}</code></pre>
+		<pre><code
+				>{`import { Button, Badge, Card, Pagination } from '@happyvertical/smrt-svelte';`}</code
+			></pre>
 	</section>
 
 	<section class="components">
@@ -68,7 +70,9 @@
 		<div class="design-grid">
 			<div class="design-card">
 				<h3>Variants</h3>
-				<p>Components support multiple visual variants like primary, secondary, and ghost styles.</p>
+				<p>
+					Components support multiple visual variants like primary, secondary, and ghost styles.
+				</p>
 			</div>
 			<div class="design-card">
 				<h3>Sizes</h3>

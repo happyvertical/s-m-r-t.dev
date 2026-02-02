@@ -29,7 +29,11 @@ export const categories: CategoryMeta[] = [
 			{ name: 'Icon', slug: 'icon', description: 'SVG icon component' },
 			{ name: 'Badge', slug: 'badge', description: 'Status and label badges' },
 			{ name: 'ThemeSwitcher', slug: 'theme-switcher', description: 'Theme selection control' },
-			{ name: 'ColorSchemeToggle', slug: 'color-scheme-toggle', description: 'Light/dark mode toggle' }
+			{
+				name: 'ColorSchemeToggle',
+				slug: 'color-scheme-toggle',
+				description: 'Light/dark mode toggle'
+			}
 		]
 	},
 	{
@@ -37,7 +41,11 @@ export const categories: CategoryMeta[] = [
 		name: 'Forms',
 		description: 'Smart form components with validation',
 		components: [
-			{ name: 'TextInput', slug: 'text-input', description: 'Enhanced text input with SMRT integration' },
+			{
+				name: 'TextInput',
+				slug: 'text-input',
+				description: 'Enhanced text input with SMRT integration'
+			},
 			{ name: 'SelectInput', slug: 'smrt-select', description: 'Enhanced select with search' },
 			{ name: 'CheckboxInput', slug: 'checkbox', description: 'Checkbox with label' },
 			{ name: 'DateTimeInput', slug: 'datetime', description: 'Date and time picker' },
@@ -51,7 +59,10 @@ export function getCategoryBySlug(slug: string): CategoryMeta | undefined {
 	return categories.find((c) => c.slug === slug);
 }
 
-export function getComponentBySlug(categorySlug: string, componentSlug: string): ComponentMeta | undefined {
+export function getComponentBySlug(
+	categorySlug: string,
+	componentSlug: string
+): ComponentMeta | undefined {
 	const category = getCategoryBySlug(categorySlug);
 	return category?.components.find((c) => c.slug === componentSlug);
 }

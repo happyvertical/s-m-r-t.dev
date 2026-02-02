@@ -21,15 +21,17 @@
 
 	<h1>Theme Components</h1>
 	<p class="lead">
-		Components for managing application appearance. Support light, dark, and system-preference themes
-		with automatic persistence and system theme detection.
+		Components for managing application appearance. Support light, dark, and system-preference
+		themes with automatic persistence and system theme detection.
 	</p>
 
 	<section class="install">
 		<h2>Installation</h2>
 		<pre><code>npm install @happyvertical/smrt-svelte</code></pre>
-		<pre><code>{`import { SelectInput } from '@happyvertical/smrt-svelte';
-import { theme, applyTheme } from '$lib/stores/theme';`}</code></pre>
+		<pre><code
+				>{`import { SelectInput } from '@happyvertical/smrt-svelte';
+import { theme, applyTheme } from '$lib/stores/theme';`}</code
+			></pre>
 	</section>
 
 	<section class="components">
@@ -68,10 +70,9 @@ import { theme, applyTheme } from '$lib/stores/theme';`}</code></pre>
 
 	<section class="usage">
 		<h2>Quick Start</h2>
-		<p>
-			Add the theme store to your root layout to apply the theme on mount:
-		</p>
-		<pre><code>{`<script>
+		<p>Add the theme store to your root layout to apply the theme on mount:</p>
+		<pre><code
+				>{`<script>
   import { onMount } from 'svelte';
   import { theme, applyTheme } from '$lib/stores/theme';
 
@@ -87,7 +88,8 @@ import { theme, applyTheme } from '$lib/stores/theme';`}</code></pre>
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   });
-</script>`}</code></pre>
+</script>`}</code
+			></pre>
 	</section>
 </article>
 

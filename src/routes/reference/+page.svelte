@@ -155,7 +155,11 @@
 	<section class="section last">
 		<h2>TypeDoc Reference</h2>
 		<p>Full API documentation is generated from source with TypeDoc.</p>
-		<p><a href="https://github.com/happyvertical/smrt" target="_blank" rel="noopener">View on GitHub &rarr;</a></p>
+		<p>
+			<a href="https://github.com/happyvertical/smrt" target="_blank" rel="noopener"
+				>View on GitHub &rarr;</a
+			>
+		</p>
 	</section>
 </Grid>
 

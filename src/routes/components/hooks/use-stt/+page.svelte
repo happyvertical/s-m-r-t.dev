@@ -96,9 +96,8 @@
 
 	<h1>useSTT</h1>
 	<p class="lead">
-		A Svelte 5 hook for Speech-to-Text functionality. Provides reactive state
-		for voice transcription with support for browser speech recognition and
-		local Whisper models.
+		A Svelte 5 hook for Speech-to-Text functionality. Provides reactive state for voice
+		transcription with support for browser speech recognition and local Whisper models.
 	</p>
 
 	<h2>Installation</h2>
@@ -224,8 +223,8 @@ interface UseSTTReturn {
 
 	<h2>Cleanup</h2>
 	<p>
-		The hook automatically stops listening when the component is destroyed.
-		No manual cleanup is required.
+		The hook automatically stops listening when the component is destroyed. No manual cleanup is
+		required.
 	</p>
 </article>
 

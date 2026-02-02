@@ -63,12 +63,15 @@
 
 	<h1>AgentSettingsShell</h1>
 	<p class="lead">
-		A complete settings page layout for managing multiple agents. Includes a sidebar
-		for agent selection (when multiple agents exist) and tabbed panels for configuration slots.
+		A complete settings page layout for managing multiple agents. Includes a sidebar for agent
+		selection (when multiple agents exist) and tabbed panels for configuration slots.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { AgentSettingsShell } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { AgentSettingsShell } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display settings for multiple agents with automatic sidebar.</p>

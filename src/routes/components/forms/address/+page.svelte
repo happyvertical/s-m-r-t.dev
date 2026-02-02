@@ -65,13 +65,13 @@
 		{
 			name: 'countries',
 			type: 'Array<{value: string, label: string}>',
-			default: "Canada, United States",
+			default: 'Canada, United States',
 			description: 'Country options for dropdown'
 		},
 		{
 			name: 'provinces',
 			type: 'Array<{value: string, label: string}>',
-			default: "Canadian provinces + US states",
+			default: 'Canadian provinces + US states',
 			description: 'Province/state options for dropdown'
 		},
 		{
@@ -98,12 +98,15 @@
 
 	<h1>AddressInput</h1>
 	<p class="lead">
-		A comprehensive address input component with street, city, province/state, postal code,
-		and country fields. Supports voice input in smrt mode with intelligent address parsing.
+		A comprehensive address input component with street, city, province/state, postal code, and
+		country fields. Supports voice input in smrt mode with intelligent address parsing.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { AddressInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { AddressInput } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>A complete address form with all fields.</p>
@@ -119,11 +122,7 @@
   bind:value
 />`}
 	>
-		<AddressInput
-			name="shipping"
-			label="Shipping Address"
-			bind:value={fullAddress}
-		/>
+		<AddressInput name="shipping" label="Shipping Address" bind:value={fullAddress} />
 	</ComponentExample>
 
 	<h2>With Default Values</h2>
@@ -142,11 +141,7 @@
   }}
 />`}
 	>
-		<AddressInput
-			name="billing"
-			label="Billing Address"
-			bind:value={canadianAddress}
-		/>
+		<AddressInput name="billing" label="Billing Address" bind:value={canadianAddress} />
 	</ComponentExample>
 
 	<h2>Custom Fields</h2>
@@ -178,11 +173,7 @@
   required
 />`}
 	>
-		<AddressInput
-			name="required"
-			label="Delivery Address"
-			required
-		/>
+		<AddressInput name="required" label="Delivery Address" required />
 	</ComponentExample>
 
 	<h2>Disabled State</h2>
@@ -226,11 +217,7 @@
   error="Please enter a valid postal code"
 />`}
 	>
-		<AddressInput
-			name="error"
-			label="Address"
-			error="Please enter a valid postal code"
-		/>
+		<AddressInput name="error" label="Address" error="Please enter a valid postal code" />
 	</ComponentExample>
 
 	<h2>Custom Countries and Provinces</h2>
@@ -270,8 +257,8 @@
 
 	<h2>Voice Input (smrt Mode)</h2>
 	<p>
-		In smrt mode, users can speak their address naturally. The component parses spoken text
-		to extract:
+		In smrt mode, users can speak their address naturally. The component parses spoken text to
+		extract:
 	</p>
 	<ul>
 		<li>Street addresses (e.g., "123 Main Street")</li>
@@ -306,12 +293,13 @@
 />
 <pre>{JSON.stringify(value, null, 2)}</pre>`}
 	>
-		<AddressInput
-			name="interactive"
-			label="Your Address"
-			bind:value={fullAddress}
-		/>
-		<pre style="margin-top: 1rem; padding: 12px; background: #f5f5f5; border-radius: 6px; font-size: 0.85rem; overflow-x: auto;">{JSON.stringify(fullAddress, null, 2)}</pre>
+		<AddressInput name="interactive" label="Your Address" bind:value={fullAddress} />
+		<pre
+			style="margin-top: 1rem; padding: 12px; background: #f5f5f5; border-radius: 6px; font-size: 0.85rem; overflow-x: auto;">{JSON.stringify(
+				fullAddress,
+				null,
+				2
+			)}</pre>
 	</ComponentExample>
 
 	<h2>Props</h2>

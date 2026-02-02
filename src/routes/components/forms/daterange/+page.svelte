@@ -73,7 +73,10 @@
 
 <svelte:head>
 	<title>DateRangeInput | s-m-r-t Forms</title>
-	<meta name="description" content="Date range picker component for selecting start and end dates with validation." />
+	<meta
+		name="description"
+		content="Date range picker component for selecting start and end dates with validation."
+	/>
 </svelte:head>
 
 <article class="prose">
@@ -87,12 +90,15 @@
 
 	<h1>DateRangeInput</h1>
 	<p class="lead">
-		A date range picker with start and end date inputs. Automatically validates that end date
-		comes after start date, with support for natural language in smrt mode.
+		A date range picker with start and end date inputs. Automatically validates that end date comes
+		after start date, with support for natural language in smrt mode.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { DateRangeInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { DateRangeInput } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>A simple date range picker with start and end date fields.</p>
@@ -108,11 +114,7 @@
   bind:value
 />`}
 	>
-		<DateRangeInput
-			name="daterange"
-			label="Select Date Range"
-			bind:value={basicRange}
-		/>
+		<DateRangeInput name="daterange" label="Select Date Range" bind:value={basicRange} />
 	</ComponentExample>
 
 	<h2>With Default Values</h2>
@@ -125,11 +127,7 @@
   value={{ start: '2025-07-01', end: '2025-07-14' }}
 />`}
 	>
-		<DateRangeInput
-			name="vacation"
-			label="Vacation Period"
-			bind:value={vacationRange}
-		/>
+		<DateRangeInput name="vacation" label="Vacation Period" bind:value={vacationRange} />
 	</ComponentExample>
 
 	<h2>With Constraints</h2>
@@ -163,11 +161,7 @@
   required
 />`}
 	>
-		<DateRangeInput
-			name="availability"
-			label="Availability Period"
-			required
-		/>
+		<DateRangeInput name="availability" label="Availability Period" required />
 	</ComponentExample>
 
 	<h2>Disabled State</h2>
@@ -209,9 +203,7 @@
 	</ComponentExample>
 
 	<h2>Voice Input (smrt Mode)</h2>
-	<p>
-		In smrt mode, users can speak date ranges naturally. Examples:
-	</p>
+	<p>In smrt mode, users can speak date ranges naturally. Examples:</p>
 	<ul>
 		<li>"from March first to March fifteenth"</li>
 		<li>"July first through July fourteenth"</li>
@@ -250,16 +242,14 @@
 <p>Range: {value.start || '(none)'} to {value.end || '(none)'}</p>
 <p>Duration: {duration ? \`\${duration} days\` : 'N/A'}</p>`}
 	>
-		<DateRangeInput
-			name="interactive"
-			label="Select Range"
-			bind:value={flexibleRange}
-		/>
+		<DateRangeInput name="interactive" label="Select Range" bind:value={flexibleRange} />
 		<div style="margin-top: 1rem; color: #666;">
 			<p>Range: {flexibleRange.start || '(none)'} to {flexibleRange.end || '(none)'}</p>
-			<p>Duration: {flexibleRange.start && flexibleRange.end
-				? `${Math.ceil((new Date(flexibleRange.end).getTime() - new Date(flexibleRange.start).getTime()) / (1000 * 60 * 60 * 24))} days`
-				: 'N/A'}</p>
+			<p>
+				Duration: {flexibleRange.start && flexibleRange.end
+					? `${Math.ceil((new Date(flexibleRange.end).getTime() - new Date(flexibleRange.start).getTime()) / (1000 * 60 * 60 * 24))} days`
+					: 'N/A'}
+			</p>
 		</div>
 	</ComponentExample>
 
@@ -293,9 +283,7 @@ interface Props {
 	/>
 
 	<h2>Validation</h2>
-	<p>
-		The component automatically validates:
-	</p>
+	<p>The component automatically validates:</p>
 	<ul>
 		<li>End date must be after or equal to start date</li>
 		<li>Dates must be within <code>min</code>/<code>max</code> bounds if specified</li>
@@ -303,7 +291,8 @@ interface Props {
 		<li>ISO date format (YYYY-MM-DD)</li>
 	</ul>
 	<p>
-		Form submission includes two fields: <code>{`{name}_start`}</code> and <code>{`{name}_end`}</code>.
+		Form submission includes two fields: <code>{`{name}_start`}</code> and
+		<code>{`{name}_end`}</code>.
 	</p>
 </article>
 

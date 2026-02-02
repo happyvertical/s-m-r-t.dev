@@ -57,7 +57,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { StatusBadge } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { StatusBadge } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Default status badges with automatic coloring.</p>
@@ -162,9 +165,7 @@
 	<h2>Custom Label</h2>
 	<p>Override the displayed text while keeping the color scheme.</p>
 
-	<ComponentExample
-		code={`<StatusBadge status="paid" type="invoice" label="Complete" />`}
-	>
+	<ComponentExample code={`<StatusBadge status="paid" type="invoice" label="Complete" />`}>
 		<StatusBadge status="paid" type="invoice" label="Complete" />
 	</ComponentExample>
 

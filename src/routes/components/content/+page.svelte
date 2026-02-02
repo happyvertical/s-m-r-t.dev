@@ -31,14 +31,16 @@
 
 	<h1>Content Components</h1>
 	<p class="lead">
-		Components for displaying content like articles, blog posts, and markdown. Built for news
-		sites, blogs, and documentation.
+		Components for displaying content like articles, blog posts, and markdown. Built for news sites,
+		blogs, and documentation.
 	</p>
 
 	<section class="install">
 		<h2>Installation</h2>
 		<pre><code>npm install @happyvertical/smrt-svelte</code></pre>
-		<pre><code>{`import { ArticleCard, ArticleList, Markdown } from '@happyvertical/smrt-svelte';`}</code></pre>
+		<pre><code
+				>{`import { ArticleCard, ArticleList, Markdown } from '@happyvertical/smrt-svelte';`}</code
+			></pre>
 	</section>
 
 	<section class="components">

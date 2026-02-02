@@ -85,6 +85,7 @@ aws cloudfront create-invalidation --distribution-id <PRODUCTION_DIST_ID> --path
 - **Production**: Manual deployment via workflow dispatch
 
 Required GitHub Secrets:
+
 - `REPO_ACCESS_TOKEN`: GitHub PAT with access to happyvertical/smrt repo
 - `AWS_ROLE_ARN_STAGING`: AWS IAM role ARN for staging deployment
 - `AWS_ROLE_ARN_PRODUCTION`: AWS IAM role ARN for production deployment
@@ -92,18 +93,22 @@ Required GitHub Secrets:
 ## Infrastructure Resources
 
 ### S3 Buckets
+
 - `havesmrt-staging`: Staging static files
 - `havesmrt-production`: Production static files
 
 ### CloudFront Distributions
+
 - Staging: Caches content from staging S3 bucket
 - Production: Caches content from production S3 bucket
 
 ### ACM Certificates
+
 - Certificates created in us-east-1 (required for CloudFront)
 - Automatic DNS validation via Route53
 
 ### Route53 Records
+
 - `staging.havesmrt.com`: ALIAS to staging CloudFront distribution
 - `havesmrt.com`: ALIAS to production CloudFront distribution
 
@@ -127,27 +132,32 @@ tofu output site_url                    # Full site URL
 ## Troubleshooting
 
 ### Certificate validation stuck
+
 - Verify Route53 validation records are created
 - Wait up to 30 minutes for DNS propagation
 - Check ACM console in us-east-1 region
 
 ### S3 bucket access denied
+
 - Verify CloudFront Origin Access Control is configured
 - Check S3 bucket policy allows CloudFront service principal
 
 ### Site not updating after deployment
+
 - Invalidate CloudFront cache: `aws cloudfront create-invalidation --distribution-id <ID> --paths "/*"`
 - Cache invalidations can take 5-15 minutes
 
 ## Cost Estimate
 
 ### Staging (low traffic)
+
 - S3: $0.50/month
 - CloudFront: $1-2/month
 - Route53: $0.50/month
 - **Total**: ~$2-3/month
 
 ### Production (moderate traffic)
+
 - S3: $1/month
 - CloudFront: $5-10/month
 - Route53: $0.50/month

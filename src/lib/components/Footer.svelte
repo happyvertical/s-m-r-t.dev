@@ -13,7 +13,12 @@
 				<a href="/docs">Docs</a>
 				<a href="/components">Components</a>
 				<a href="/modules">Modules</a>
-				<a href="https://github.com/happyvertical/smrt" target="_blank" rel="noopener noreferrer" aria-label="s-m-r-t Framework on GitHub (opens in new tab)">GitHub</a>
+				<a
+					href="https://github.com/happyvertical/smrt"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="s-m-r-t Framework on GitHub (opens in new tab)">GitHub</a
+				>
 			</nav>
 		</div>
 	</Grid>

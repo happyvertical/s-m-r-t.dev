@@ -7,7 +7,8 @@
 	<p class="lead">Learn how to build AI-powered applications with the SMRT framework.</p>
 
 	<h2>Quick Start</h2>
-	<pre><code>{`npm install @happyvertical/smrt-core
+	<pre><code
+			>{`npm install @happyvertical/smrt-core
 
 import { SmrtObject, smrt } from '@happyvertical/smrt-core';
 
@@ -19,7 +20,8 @@ class Task extends SmrtObject {
 
 const tasks = await TaskCollection.create({ db: 'tasks.db' });
 const task = await tasks.create({ title: 'Learn SMRT' });
-console.log(task.id); // auto-generated UUID`}</code></pre>
+console.log(task.id); // auto-generated UUID`}</code
+		></pre>
 
 	<h2>Core Concepts</h2>
 	<ul>
