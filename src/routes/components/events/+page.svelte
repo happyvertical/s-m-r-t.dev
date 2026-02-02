@@ -14,7 +14,10 @@
 	</p>
 
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-		<a href="/components/events/meeting-view" class="block p-6 border rounded hover:border-blue-500 transition">
+		<a
+			href="/components/events/meeting-view"
+			class="block p-6 border rounded hover:border-blue-500 transition"
+		>
 			<h3 class="text-xl font-semibold mb-2">MeetingView</h3>
 			<p class="text-gray-600">Display meeting details with attendees and agenda</p>
 		</a>

@@ -81,12 +81,15 @@
 
 	<h1>AgentDashboard</h1>
 	<p class="lead">
-		A combined overview panel for managing SMRT agent schedules. Displays stats,
-		schedule list, and recent run history in a unified interface.
+		A combined overview panel for managing SMRT agent schedules. Displays stats, schedule list, and
+		recent run history in a unified interface.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { AgentDashboard } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { AgentDashboard } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display agent schedules with stats overview.</p>

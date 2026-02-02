@@ -97,14 +97,15 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { UserList } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { UserList } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display a list of users with their roles and status badges.</p>
 
-	<ComponentExample
-		code={`<UserList users={users} />`}
-	>
+	<ComponentExample code={`<UserList users={users} />`}>
 		<div class="list-container">
 			<UserList users={mockUsers} />
 		</div>
@@ -125,11 +126,7 @@
 />`}
 	>
 		<div class="list-container">
-			<UserList
-				users={mockUsers}
-				{selectedId}
-				onselect={handleSelect}
-			/>
+			<UserList users={mockUsers} {selectedId} onselect={handleSelect} />
 			<p class="selection-info">
 				Selected: {selectedUser || 'None'}
 			</p>
@@ -139,9 +136,7 @@
 	<h2>Loading State</h2>
 	<p>Show a loading spinner while fetching users.</p>
 
-	<ComponentExample
-		code={`<UserList users={users} loading={true} />`}
-	>
+	<ComponentExample code={`<UserList users={users} loading={true} />`}>
 		<div class="list-container">
 			<UserList users={mockUsers} loading={isLoading} />
 			<button class="simulate-btn" onclick={simulateLoading} disabled={isLoading}>
@@ -153,9 +148,7 @@
 	<h2>Empty State</h2>
 	<p>Show a message when the list has no users.</p>
 
-	<ComponentExample
-		code={`<UserList users={[]} emptyMessage="No team members found" />`}
-	>
+	<ComponentExample code={`<UserList users={[]} emptyMessage="No team members found" />`}>
 		<div class="list-container">
 			<UserList users={[]} emptyMessage="No team members found" />
 		</div>
@@ -178,7 +171,14 @@
 			<UserList users={[]}>
 				{#snippet empty()}
 					<div class="custom-empty">
-						<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+						<svg
+							width="48"
+							height="48"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.5"
+						>
 							<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
 							<circle cx="9" cy="7" r="4" />
 							<path d="M19 8v6M22 11h-6" />

@@ -1,51 +1,55 @@
 <script lang="ts">
-  import ModulePage from '$lib/components/ModulePage.svelte';
-  import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import ModulePage from '$lib/components/ModulePage.svelte';
+	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<ModulePage 
-  name="smrt-scanner" 
-  description="High-performance TypeScript scanner using OXC for automatic SMRT class discovery, inheritance resolution, and manifest generation. 2-3x faster than TypeScript compiler."
-  badges={['v0.19.0', 'Core Foundation', 'Rust-powered']}
+<ModulePage
+	name="smrt-scanner"
+	description="High-performance TypeScript scanner using OXC for automatic SMRT class discovery, inheritance resolution, and manifest generation. 2-3x faster than TypeScript compiler."
+	badges={['v0.19.0', 'Core Foundation', 'Rust-powered']}
 >
-  <section id="overview">
-    <h2>Overview</h2>
-    <p>
-      The smrt-scanner package uses the blazing-fast Rust-based OXC parser to scan TypeScript
-      projects and generate manifests for the SMRT framework. It automatically discovers classes,
-      resolves inheritance hierarchies, and handles STI (Single Table Inheritance) field merging.
-    </p>
+	<section id="overview">
+		<h2>Overview</h2>
+		<p>
+			The smrt-scanner package uses the blazing-fast Rust-based OXC parser to scan TypeScript
+			projects and generate manifests for the SMRT framework. It automatically discovers classes,
+			resolves inheritance hierarchies, and handles STI (Single Table Inheritance) field merging.
+		</p>
 
-    <h3>Key Features</h3>
-    <ul>
-      <li><strong>2-3x faster</strong> than TypeScript compiler using Rust-based OXC parser</li>
-      <li><strong>Automatic class discovery</strong> via <code>@smrt()</code> decorator detection</li>
-      <li><strong>Inheritance resolution</strong> with full chain tracking</li>
-      <li><strong>STI support</strong> with automatic field merging from parent classes</li>
-      <li><strong>Field type inference</strong> from TypeScript annotations and helper functions</li>
-      <li><strong>Cross-package resolution</strong> via external manifests</li>
-      <li><strong>CLI and programmatic API</strong> for flexible integration</li>
-      <li><strong>Manifest generation</strong> compatible with smrt-core</li>
-    </ul>
-  </section>
+		<h3>Key Features</h3>
+		<ul>
+			<li><strong>2-3x faster</strong> than TypeScript compiler using Rust-based OXC parser</li>
+			<li>
+				<strong>Automatic class discovery</strong> via <code>@smrt()</code> decorator detection
+			</li>
+			<li><strong>Inheritance resolution</strong> with full chain tracking</li>
+			<li><strong>STI support</strong> with automatic field merging from parent classes</li>
+			<li>
+				<strong>Field type inference</strong> from TypeScript annotations and helper functions
+			</li>
+			<li><strong>Cross-package resolution</strong> via external manifests</li>
+			<li><strong>CLI and programmatic API</strong> for flexible integration</li>
+			<li><strong>Manifest generation</strong> compatible with smrt-core</li>
+		</ul>
+	</section>
 
-  <section id="installation">
-    <h2>Installation</h2>
-    <CodeBlock
-      code={`npm install @happyvertical/smrt-scanner
+	<section id="installation">
+		<h2>Installation</h2>
+		<CodeBlock
+			code={`npm install @happyvertical/smrt-scanner
 # or
 pnpm add @happyvertical/smrt-scanner
 # or
 bun add @happyvertical/smrt-scanner`}
-    />
-  </section>
+		/>
+	</section>
 
-  <section id="quick-start">
-    <h2>Quick Start (5 Minutes)</h2>
+	<section id="quick-start">
+		<h2>Quick Start (5 Minutes)</h2>
 
-    <h3>Programmatic Usage</h3>
-    <CodeBlock
-      code={`import { OxcScanner } from '@happyvertical/smrt-scanner';
+		<h3>Programmatic Usage</h3>
+		<CodeBlock
+			code={`import { OxcScanner } from '@happyvertical/smrt-scanner';
 
 // Create scanner
 const scanner = new OxcScanner({
@@ -64,11 +68,11 @@ resolved.forEach(cls => {
     console.log(\`  STI base: \${cls.stiBase}\`);
   }
 });`}
-    />
+		/>
 
-    <h3>CLI Usage</h3>
-    <CodeBlock
-      code={`# Basic scan
+		<h3>CLI Usage</h3>
+		<CodeBlock
+			code={`# Basic scan
 smrt-scan
 
 # Custom directory and patterns
@@ -79,64 +83,63 @@ smrt-scan -o manifest.json --stats
 
 # Benchmark performance
 smrt-scan --benchmark`}
-    />
-  </section>
+		/>
+	</section>
 
-  <section id="architecture">
-    <h2>Architecture</h2>
+	<section id="architecture">
+		<h2>Architecture</h2>
 
-    <h3>Two-Phase Processing</h3>
-    <ol>
-      <li>
-        <strong>Phase 1 - OXC Parsing</strong>: Fast syntactic extraction using Rust-based parser.
-        Extracts class definitions, decorators, fields, and methods without semantic analysis.
-      </li>
-      <li>
-        <strong>Phase 2 - Inheritance Resolution</strong>: Builds class hierarchy, resolves inheritance
-        chains, merges STI fields, and identifies framework base classes.
-      </li>
-    </ol>
+		<h3>Two-Phase Processing</h3>
+		<ol>
+			<li>
+				<strong>Phase 1 - OXC Parsing</strong>: Fast syntactic extraction using Rust-based parser.
+				Extracts class definitions, decorators, fields, and methods without semantic analysis.
+			</li>
+			<li>
+				<strong>Phase 2 - Inheritance Resolution</strong>: Builds class hierarchy, resolves
+				inheritance chains, merges STI fields, and identifies framework base classes.
+			</li>
+		</ol>
 
-    <h3>Class Discovery</h3>
-    <p>The scanner finds classes in three ways:</p>
-    <ul>
-      <li>Classes with <code>@smrt()</code> decorator</li>
-      <li>Classes extending <code>SmrtObject</code></li>
-      <li>Classes extending <code>SmrtCollection</code> or <code>SmrtClass</code></li>
-    </ul>
+		<h3>Class Discovery</h3>
+		<p>The scanner finds classes in three ways:</p>
+		<ul>
+			<li>Classes with <code>@smrt()</code> decorator</li>
+			<li>Classes extending <code>SmrtObject</code></li>
+			<li>Classes extending <code>SmrtCollection</code> or <code>SmrtClass</code></li>
+		</ul>
 
-    <h3>Field Type Inference</h3>
-    <p>Type inference follows this priority:</p>
-    <ol>
-      <li>
-        <strong>Helper functions</strong>: <code>text()</code>, <code>integer()</code>, <code
-          >decimal()</code
-        >, <code>foreignKey()</code>
-      </li>
-      <li>
-        <strong>Field decorators</strong>: <code>@field({'{ type: "..." }'})</code>
-      </li>
-      <li>
-        <strong>TypeScript annotations</strong> with 0 vs 0.0 heuristic for numbers
-      </li>
-      <li><strong>Default</strong>: 'text' type</li>
-    </ol>
+		<h3>Field Type Inference</h3>
+		<p>Type inference follows this priority:</p>
+		<ol>
+			<li>
+				<strong>Helper functions</strong>: <code>text()</code>, <code>integer()</code>,
+				<code>decimal()</code>, <code>foreignKey()</code>
+			</li>
+			<li>
+				<strong>Field decorators</strong>: <code>@field({'{ type: "..." }'})</code>
+			</li>
+			<li>
+				<strong>TypeScript annotations</strong> with 0 vs 0.0 heuristic for numbers
+			</li>
+			<li><strong>Default</strong>: 'text' type</li>
+		</ol>
 
-    <h3>STI (Single Table Inheritance)</h3>
-    <p>
-      Classes with <code>tableStrategy: 'sti'</code> automatically merge fields from their entire
-      inheritance chain. All descendants inherit the STI strategy and share the same table.
-    </p>
-  </section>
+		<h3>STI (Single Table Inheritance)</h3>
+		<p>
+			Classes with <code>tableStrategy: 'sti'</code> automatically merge fields from their entire inheritance
+			chain. All descendants inherit the STI strategy and share the same table.
+		</p>
+	</section>
 
-  <section id="api-reference">
-    <h2>API Reference</h2>
+	<section id="api-reference">
+		<h2>API Reference</h2>
 
-    <h3>OxcScanner Class</h3>
+		<h3>OxcScanner Class</h3>
 
-    <h4>Constructor</h4>
-    <CodeBlock
-      code={`new OxcScanner(options?: OxcScannerOptions)
+		<h4>Constructor</h4>
+		<CodeBlock
+			code={`new OxcScanner(options?: OxcScannerOptions)
 
 interface OxcScannerOptions {
   include?: string[];                     // Glob patterns (default: ['**/*.ts', '**/*.tsx'])
@@ -149,49 +152,49 @@ interface OxcScannerOptions {
   includeStaticMethods?: boolean;         // Include static methods (default: true)
   externalManifests?: Map<string, ExternalManifest>;
 }`}
-    />
+		/>
 
-    <h4>Key Methods</h4>
-    <table>
-      <thead>
-        <tr>
-          <th>Method</th>
-          <th>Returns</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>scan()</code></td>
-          <td><code>Promise&lt;ScanResults&gt;</code></td>
-          <td>Parse files and extract raw class definitions</td>
-        </tr>
-        <tr>
-          <td><code>resolve()</code></td>
-          <td><code>ResolvedClassDefinition[]</code></td>
-          <td>Resolve inheritance after scan()</td>
-        </tr>
-        <tr>
-          <td><code>scanAndResolve()</code></td>
-          <td><code>{'{ results, resolved }'}</code></td>
-          <td>Combined scan + resolve operation</td>
-        </tr>
-        <tr>
-          <td><code>addExternalManifest()</code></td>
-          <td><code>void</code></td>
-          <td>Add external package manifest</td>
-        </tr>
-        <tr>
-          <td><code>getStats()</code></td>
-          <td><code>Statistics</code></td>
-          <td>Get performance statistics</td>
-        </tr>
-      </tbody>
-    </table>
+		<h4>Key Methods</h4>
+		<table>
+			<thead>
+				<tr>
+					<th>Method</th>
+					<th>Returns</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>scan()</code></td>
+					<td><code>Promise&lt;ScanResults&gt;</code></td>
+					<td>Parse files and extract raw class definitions</td>
+				</tr>
+				<tr>
+					<td><code>resolve()</code></td>
+					<td><code>ResolvedClassDefinition[]</code></td>
+					<td>Resolve inheritance after scan()</td>
+				</tr>
+				<tr>
+					<td><code>scanAndResolve()</code></td>
+					<td><code>{'{ results, resolved }'}</code></td>
+					<td>Combined scan + resolve operation</td>
+				</tr>
+				<tr>
+					<td><code>addExternalManifest()</code></td>
+					<td><code>void</code></td>
+					<td>Add external package manifest</td>
+				</tr>
+				<tr>
+					<td><code>getStats()</code></td>
+					<td><code>Statistics</code></td>
+					<td>Get performance statistics</td>
+				</tr>
+			</tbody>
+		</table>
 
-    <h3>Result Types</h3>
-    <CodeBlock
-      code={`interface ScanResults {
+		<h3>Result Types</h3>
+		<CodeBlock
+			code={`interface ScanResults {
   files: FileScanResult[];           // Per-file results
   classes: RawClassDefinition[];     // All classes (flattened)
   errors: ScanError[];               // Parse errors
@@ -213,11 +216,11 @@ interface ResolvedClassDefinition {
   allFields: RawFieldDefinition[];   // Merged fields for STI
   methods: RawMethodDefinition[];
 }`}
-    />
+		/>
 
-    <h3>ManifestAdapter</h3>
-    <CodeBlock
-      code={`import { ManifestAdapter } from '@happyvertical/smrt-scanner';
+		<h3>ManifestAdapter</h3>
+		<CodeBlock
+			code={`import { ManifestAdapter } from '@happyvertical/smrt-scanner';
 
 const adapter = new ManifestAdapter();
 const manifest = adapter.toManifest(resolvedClasses, {
@@ -227,17 +230,17 @@ const manifest = adapter.toManifest(resolvedClasses, {
 
 // Write to file
 await fs.writeFile('manifest.json', JSON.stringify(manifest, null, 2));`}
-    />
-  </section>
+		/>
+	</section>
 
-  <section id="tutorials">
-    <h2>Tutorials</h2>
+	<section id="tutorials">
+		<h2>Tutorials</h2>
 
-    <h3>Tutorial 1: Basic Project Scanning</h3>
+		<h3>Tutorial 1: Basic Project Scanning</h3>
 
-    <h4>Step 1: Create SMRT Classes</h4>
-    <CodeBlock
-      code={`// src/models/User.ts
+		<h4>Step 1: Create SMRT Classes</h4>
+		<CodeBlock
+			code={`// src/models/User.ts
 import { SmrtObject, smrt } from '@happyvertical/smrt-core';
 import { text, integer } from '@happyvertical/smrt-core/fields';
 
@@ -247,11 +250,11 @@ export class User extends SmrtObject {
   email = text();
   age = integer();
 }`}
-    />
+		/>
 
-    <h4>Step 2: Run Scanner</h4>
-    <CodeBlock
-      code={`import { OxcScanner } from '@happyvertical/smrt-scanner';
+		<h4>Step 2: Run Scanner</h4>
+		<CodeBlock
+			code={`import { OxcScanner } from '@happyvertical/smrt-scanner';
 
 const scanner = new OxcScanner({ cwd: './src' });
 const { resolved } = await scanner.scanAndResolve();
@@ -261,13 +264,13 @@ console.log(\`User has \${user.fields.length} fields\`);
 user.fields.forEach(f => {
   console.log(\`  - \${f.name}: \${f.typeAnnotation}\`);
 });`}
-    />
+		/>
 
-    <h3>Tutorial 2: STI Hierarchy Management</h3>
+		<h3>Tutorial 2: STI Hierarchy Management</h3>
 
-    <h4>Step 1: Create STI Base</h4>
-    <CodeBlock
-      code={`// Base class with STI
+		<h4>Step 1: Create STI Base</h4>
+		<CodeBlock
+			code={`// Base class with STI
 @smrt({ tableStrategy: 'sti' })
 export class Vehicle extends SmrtObject {
   make = text();
@@ -288,11 +291,11 @@ export class Truck extends Vehicle {
   bedLength = decimal();
   towingCapacity = integer();
 }`}
-    />
+		/>
 
-    <h4>Step 2: Scan and Examine</h4>
-    <CodeBlock
-      code={`const { resolved } = await scanner.scanAndResolve();
+		<h4>Step 2: Scan and Examine</h4>
+		<CodeBlock
+			code={`const { resolved } = await scanner.scanAndResolve();
 
 const car = resolved.find(c => c.className === 'Car');
 console.log('Car inheritance chain:', car.inheritanceChain);
@@ -306,13 +309,13 @@ console.log('STI base:', car.stiBase);
 
 console.log('All fields (merged from Vehicle):', car.allFields.length);
 // 5 fields: make, model, year, numDoors, trunkSize`}
-    />
+		/>
 
-    <h3>Tutorial 3: Generating Manifests</h3>
+		<h3>Tutorial 3: Generating Manifests</h3>
 
-    <h4>Step 1: Scan and Resolve</h4>
-    <CodeBlock
-      code={`import { OxcScanner, ManifestAdapter } from '@happyvertical/smrt-scanner';
+		<h4>Step 1: Scan and Resolve</h4>
+		<CodeBlock
+			code={`import { OxcScanner, ManifestAdapter } from '@happyvertical/smrt-scanner';
 import fs from 'fs/promises';
 
 const scanner = new OxcScanner();
@@ -330,13 +333,13 @@ await fs.writeFile(
 );
 
 console.log('Manifest generated with', manifest.classes.size, 'classes');`}
-    />
+		/>
 
-    <h3>Tutorial 4: Cross-Package Resolution</h3>
+		<h3>Tutorial 4: Cross-Package Resolution</h3>
 
-    <h4>Step 1: Load External Manifest</h4>
-    <CodeBlock
-      code={`import externalManifest from '@external/package/manifest.json';
+		<h4>Step 1: Load External Manifest</h4>
+		<CodeBlock
+			code={`import externalManifest from '@external/package/manifest.json';
 
 const scanner = new OxcScanner();
 scanner.addExternalManifest({
@@ -346,15 +349,15 @@ scanner.addExternalManifest({
 
 // Now scanner can resolve classes extending @external/package classes
 const { resolved } = await scanner.scanAndResolve();`}
-    />
-  </section>
+		/>
+	</section>
 
-  <section id="examples">
-    <h2>Examples</h2>
+	<section id="examples">
+		<h2>Examples</h2>
 
-    <h3>Example 1: Find All STI Hierarchies</h3>
-    <CodeBlock
-      code={`const { resolved } = await scanner.scanAndResolve();
+		<h3>Example 1: Find All STI Hierarchies</h3>
+		<CodeBlock
+			code={`const { resolved } = await scanner.scanAndResolve();
 const stiClasses = resolved.filter(c => c.isSTI);
 
 const hierarchies = new Map();
@@ -369,11 +372,11 @@ stiClasses.forEach(cls => {
 hierarchies.forEach((children, base) => {
   console.log(\`\${base} -> [\${children.join(', ')}]\`);
 });`}
-    />
+		/>
 
-    <h3>Example 2: Analyze Field Types</h3>
-    <CodeBlock
-      code={`const { resolved } = await scanner.scanAndResolve();
+		<h3>Example 2: Analyze Field Types</h3>
+		<CodeBlock
+			code={`const { resolved } = await scanner.scanAndResolve();
 
 resolved.forEach(cls => {
   const requiredFields = cls.fields.filter(f => !f.optional);
@@ -383,11 +386,11 @@ resolved.forEach(cls => {
   console.log(\`  Required: \${requiredFields.map(f => f.name).join(', ')}\`);
   console.log(\`  Optional: \${optionalFields.map(f => f.name).join(', ')}\`);
 });`}
-    />
+		/>
 
-    <h3>Example 3: Extract API Endpoints</h3>
-    <CodeBlock
-      code={`const { resolved } = await scanner.scanAndResolve();
+		<h3>Example 3: Extract API Endpoints</h3>
+		<CodeBlock
+			code={`const { resolved } = await scanner.scanAndResolve();
 
 resolved.forEach(cls => {
   const api = cls.decoratorConfig?.api;
@@ -398,15 +401,15 @@ resolved.forEach(cls => {
     });
   }
 });`}
-    />
-  </section>
+		/>
+	</section>
 
-  <section id="integration">
-    <h2>Integration Patterns</h2>
+	<section id="integration">
+		<h2>Integration Patterns</h2>
 
-    <h3>Vite Plugin Integration</h3>
-    <CodeBlock
-      code={`// vite.config.ts
+		<h3>Vite Plugin Integration</h3>
+		<CodeBlock
+			code={`// vite.config.ts
 import { defineConfig } from 'vite';
 import { OxcScanner, ManifestAdapter } from '@happyvertical/smrt-scanner';
 
@@ -427,11 +430,11 @@ export default defineConfig({
     }
   }]
 });`}
-    />
+		/>
 
-    <h3>Monorepo Scanning</h3>
-    <CodeBlock
-      code={`// Scan all packages in monorepo
+		<h3>Monorepo Scanning</h3>
+		<CodeBlock
+			code={`// Scan all packages in monorepo
 const packages = ['packages/users', 'packages/commerce', 'packages/assets'];
 const allClasses = [];
 
@@ -442,163 +445,167 @@ for (const pkg of packages) {
 }
 
 console.log(\`Total classes across monorepo: \${allClasses.length}\`);`}
-    />
-  </section>
+		/>
+	</section>
 
-  <section id="best-practices">
-    <h2>Best Practices</h2>
+	<section id="best-practices">
+		<h2>Best Practices</h2>
 
-    <h3>✅ DO</h3>
-    <ul>
-      <li>Always exclude test files: <code>**/*.test.ts</code>, <code>**/*.spec.ts</code></li>
-      <li>Use <code>0.0</code> for decimal fields, <code>0</code> for integers in initializers</li>
-      <li>Use helper functions (<code>text()</code>, <code>integer()</code>) for clearer type inference</li>
-      <li>Specify <code>tableStrategy: 'sti'</code> on base class before extending</li>
-      <li>Keep inheritance chains reasonably shallow (2-4 levels)</li>
-      <li>Cache external manifests during build process</li>
-      <li>Use <code>scanAndResolve()</code> for most use cases (convenience method)</li>
-    </ul>
+		<h3>✅ DO</h3>
+		<ul>
+			<li>Always exclude test files: <code>**/*.test.ts</code>, <code>**/*.spec.ts</code></li>
+			<li>Use <code>0.0</code> for decimal fields, <code>0</code> for integers in initializers</li>
+			<li>
+				Use helper functions (<code>text()</code>, <code>integer()</code>) for clearer type
+				inference
+			</li>
+			<li>Specify <code>tableStrategy: 'sti'</code> on base class before extending</li>
+			<li>Keep inheritance chains reasonably shallow (2-4 levels)</li>
+			<li>Cache external manifests during build process</li>
+			<li>Use <code>scanAndResolve()</code> for most use cases (convenience method)</li>
+		</ul>
 
-    <h3>❌ DON'T</h3>
-    <ul>
-      <li>Don't forget to add <code>@smrt()</code> decorator on SMRT classes</li>
-      <li>Don't mix STI and CTI strategies in same hierarchy</li>
-      <li>Don't scan unnecessary directories (use tight include/exclude patterns)</li>
-      <li>Don't forget to resolve inheritance when working with STI classes</li>
-      <li>Don't rely on external manifests being automatically discovered</li>
-    </ul>
-  </section>
+		<h3>❌ DON'T</h3>
+		<ul>
+			<li>Don't forget to add <code>@smrt()</code> decorator on SMRT classes</li>
+			<li>Don't mix STI and CTI strategies in same hierarchy</li>
+			<li>Don't scan unnecessary directories (use tight include/exclude patterns)</li>
+			<li>Don't forget to resolve inheritance when working with STI classes</li>
+			<li>Don't rely on external manifests being automatically discovered</li>
+		</ul>
+	</section>
 
-  <section id="troubleshooting">
-    <h2>Troubleshooting</h2>
+	<section id="troubleshooting">
+		<h2>Troubleshooting</h2>
 
-    <h3>Classes not found</h3>
-    <p><strong>Problem:</strong> Scanner doesn't detect SMRT classes.</p>
-    <p>
-      <strong>Solution:</strong> Ensure classes have <code>@smrt()</code> decorator or extend SMRT
-      base classes. Check include/exclude glob patterns.
-    </p>
+		<h3>Classes not found</h3>
+		<p><strong>Problem:</strong> Scanner doesn't detect SMRT classes.</p>
+		<p>
+			<strong>Solution:</strong> Ensure classes have <code>@smrt()</code> decorator or extend SMRT base
+			classes. Check include/exclude glob patterns.
+		</p>
 
-    <h3>Inheritance not resolved</h3>
-    <p><strong>Problem:</strong> Parent classes in external packages not found.</p>
-    <p><strong>Solution:</strong> Load external manifest via <code>addExternalManifest()</code>.</p>
+		<h3>Inheritance not resolved</h3>
+		<p><strong>Problem:</strong> Parent classes in external packages not found.</p>
+		<p><strong>Solution:</strong> Load external manifest via <code>addExternalManifest()</code>.</p>
 
-    <h3>STI fields not merged</h3>
-    <p><strong>Problem:</strong> <code>allFields</code> doesn't include parent fields.</p>
-    <p>
-      <strong>Solution:</strong> Use <code>scanAndResolve()</code> or call <code>resolve()</code> after
-      <code>scan()</code>.
-    </p>
+		<h3>STI fields not merged</h3>
+		<p><strong>Problem:</strong> <code>allFields</code> doesn't include parent fields.</p>
+		<p>
+			<strong>Solution:</strong> Use <code>scanAndResolve()</code> or call <code>resolve()</code>
+			after
+			<code>scan()</code>.
+		</p>
 
-    <h3>Parse errors</h3>
-    <p><strong>Problem:</strong> Syntax errors in files.</p>
-    <p>
-      <strong>Solution:</strong> Check <code>results.errors</code> array for detailed error messages
-      with file paths and line numbers.
-    </p>
+		<h3>Parse errors</h3>
+		<p><strong>Problem:</strong> Syntax errors in files.</p>
+		<p>
+			<strong>Solution:</strong> Check <code>results.errors</code> array for detailed error messages with
+			file paths and line numbers.
+		</p>
 
-    <h3>Decimal/Integer confusion</h3>
-    <p><strong>Problem:</strong> Wrong numeric types inferred.</p>
-    <p>
-      <strong>Solution:</strong> Use <code>0.0</code> for decimals, <code>0</code> for integers, or
-      use helper functions: <code>decimal()</code>, <code>integer()</code>.
-    </p>
-  </section>
+		<h3>Decimal/Integer confusion</h3>
+		<p><strong>Problem:</strong> Wrong numeric types inferred.</p>
+		<p>
+			<strong>Solution:</strong> Use <code>0.0</code> for decimals, <code>0</code> for integers, or
+			use helper functions: <code>decimal()</code>, <code>integer()</code>.
+		</p>
+	</section>
 
-  <section id="performance">
-    <h2>Performance</h2>
-    <p>
-      The smrt-scanner is 2-3x faster than the TypeScript compiler thanks to the Rust-based OXC
-      parser. Benchmark your project:
-    </p>
-    <CodeBlock code={`smrt-scan --benchmark`} />
+	<section id="performance">
+		<h2>Performance</h2>
+		<p>
+			The smrt-scanner is 2-3x faster than the TypeScript compiler thanks to the Rust-based OXC
+			parser. Benchmark your project:
+		</p>
+		<CodeBlock code={`smrt-scan --benchmark`} />
 
-    <h3>Performance Tips</h3>
-    <ul>
-      <li>Use tight include/exclude patterns to minimize files scanned</li>
-      <li>Disable unused options like <code>includePrivateMethods</code></li>
-      <li>Cache scan results when possible</li>
-      <li>Use <code>cwd</code> to scope scanning to specific directories</li>
-    </ul>
-  </section>
+		<h3>Performance Tips</h3>
+		<ul>
+			<li>Use tight include/exclude patterns to minimize files scanned</li>
+			<li>Disable unused options like <code>includePrivateMethods</code></li>
+			<li>Cache scan results when possible</li>
+			<li>Use <code>cwd</code> to scope scanning to specific directories</li>
+		</ul>
+	</section>
 </ModulePage>
 
 <style>
-  section {
-    grid-column: 1 / -1;
-    padding: 48px 0;
-    border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
-  }
+	section {
+		grid-column: 1 / -1;
+		padding: 48px 0;
+		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
+	}
 
-  section:last-child {
-    border-bottom: none;
-  }
+	section:last-child {
+		border-bottom: none;
+	}
 
-  h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 24px;
-  }
+	h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin-bottom: 24px;
+	}
 
-  h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-top: 32px;
-    margin-bottom: 16px;
-  }
+	h3 {
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin-top: 32px;
+		margin-bottom: 16px;
+	}
 
-  h4 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin-top: 24px;
-    margin-bottom: 12px;
-    font-family: var(--font-mono);
-  }
+	h4 {
+		font-size: 1.125rem;
+		font-weight: 600;
+		margin-top: 24px;
+		margin-bottom: 12px;
+		font-family: var(--font-mono);
+	}
 
-  p {
-    margin-bottom: 16px;
-    line-height: 1.7;
-    color: var(--smrt-color-on-background, #333);
-  }
+	p {
+		margin-bottom: 16px;
+		line-height: 1.7;
+		color: var(--smrt-color-on-background, #333);
+	}
 
-  ul,
-  ol {
-    margin-bottom: 16px;
-    padding-left: 24px;
-  }
+	ul,
+	ol {
+		margin-bottom: 16px;
+		padding-left: 24px;
+	}
 
-  li {
-    margin-bottom: 8px;
-    line-height: 1.6;
-  }
+	li {
+		margin-bottom: 8px;
+		line-height: 1.6;
+	}
 
-  code {
-    background: var(--smrt-color-surface-container, #f5f5f5);
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-family: var(--font-mono);
-    font-size: 0.9em;
-  }
+	code {
+		background: var(--smrt-color-surface-container, #f5f5f5);
+		padding: 2px 6px;
+		border-radius: 3px;
+		font-family: var(--font-mono);
+		font-size: 0.9em;
+	}
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 24px 0;
-  }
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		margin: 24px 0;
+	}
 
-  th,
-  td {
-    text-align: left;
-    padding: 12px;
-    border-bottom: 1px solid #e0e0e0;
-  }
+	th,
+	td {
+		text-align: left;
+		padding: 12px;
+		border-bottom: 1px solid #e0e0e0;
+	}
 
-  th {
-    font-weight: 600;
-    background: #f9f9f9;
-  }
+	th {
+		font-weight: 600;
+		background: #f9f9f9;
+	}
 
-  td code {
-    white-space: nowrap;
-  }
+	td code {
+		white-space: nowrap;
+	}
 </style>

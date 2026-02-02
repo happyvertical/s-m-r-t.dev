@@ -127,8 +127,8 @@ interface Props {
 
 	<h2>Responsive Behavior</h2>
 	<p>
-		On mobile, the header stacks vertically. On desktop, logo and nav are side-by-side.
-		Consider using a mobile menu for complex navigation.
+		On mobile, the header stacks vertically. On desktop, logo and nav are side-by-side. Consider
+		using a mobile menu for complex navigation.
 	</p>
 </article>
 

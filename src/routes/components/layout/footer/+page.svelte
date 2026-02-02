@@ -28,8 +28,8 @@
 
 	<h1>Footer</h1>
 	<p class="lead">
-		Site footer component with automatic copyright year and optional links. Uses a subtle
-		background color and centered layout.
+		Site footer component with automatic copyright year and optional links. Uses a subtle background
+		color and centered layout.
 	</p>
 
 	<h2>Installation</h2>

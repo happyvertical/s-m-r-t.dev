@@ -8,7 +8,7 @@ This project uses the SMRT framework. Below are the conventions and patterns for
 
 ### Framework Overview
 
-*Source: CLAUDE.md*
+_Source: CLAUDE.md_
 
 # SMRT Framework: Architecture and Development Guide
 
@@ -19,6 +19,7 @@ SMRT (Smart, Multi-modal, Real-time Transformation) is a TypeScript framework fo
 ### Core Value Proposition
 
 **Define business logic once, get everything else automatically:**
+
 - Define TypeScript classes with properties
 - Get REST APIs, CLI tools, and AI integration (MCP servers) automatically
 - Built-in AI operations (`is()`, `do()` methods) on every object
@@ -37,12 +38,14 @@ SMRT (Smart, Multi-modal, Real-time Transformation) is a TypeScript framework fo
 ### When to Use SMRT
 
 ✅ **Perfect for:**
+
 - Vertical AI agents (local news, research, content processing)
 - Domain-specific applications with AI operations
 - Rapid prototyping of AI-powered services
 - Applications needing APIs, CLIs, and AI integration
 
 ❌ **Not ideal for:**
+
 - Generic web frameworks (use SvelteKit, Next.js, etc.)
 - Pure data processing without AI
 - Applications requiring custom ORM behavior
@@ -70,44 +73,44 @@ import { SmrtObject, smrt } from '@happyvertical/smrt-core';
 import { foreignKey } from '@happyvertical/smrt-core/fields';
 
 @smrt({
-  api: { include: ['list', 'get', 'create', 'update'] },
-  mcp: { include: ['list', 'get', 'analyze'] },
-  cli: true
+	api: { include: ['list', 'get', 'create', 'update'] },
+	mcp: { include: ['list', 'get', 'analyze'] },
+	cli: true
 })
 class Document extends SmrtObject {
-  // TypeScript types → automatic schema generation
-  title: string = '';
-  content: string = '';
-  wordCount: number = 0;        // → INTEGER (no decimal point)
-  rating: number = 0.0;          // → DECIMAL (has decimal point)
-  isPublished: boolean = false;
-  publishedAt: Date = new Date();
-  tags: string[] = [];
+	// TypeScript types → automatic schema generation
+	title: string = '';
+	content: string = '';
+	wordCount: number = 0; // → INTEGER (no decimal point)
+	rating: number = 0.0; // → DECIMAL (has decimal point)
+	isPublished: boolean = false;
+	publishedAt: Date = new Date();
+	tags: string[] = [];
 
-  // Field helpers for relationships and constraints
-  categoryId = foreignKey(Category);
+	// Field helpers for relationships and constraints
+	categoryId = foreignKey(Category);
 
-  constructor(options: any = {}) {
-    super(options);
-    Object.assign(this, options);
-  }
+	constructor(options: any = {}) {
+		super(options);
+		Object.assign(this, options);
+	}
 
-  // AI-powered validation
-  async isHighQuality(): Promise<boolean> {
-    return await this.is(`
+	// AI-powered validation
+	async isHighQuality(): Promise<boolean> {
+		return await this.is(`
       - Contains more than 500 words
       - Has clear structure
       - Uses professional language
     `);
-  }
+	}
 
-  // AI-powered transformation
-  async generateSummary(): Promise<string> {
-    return await this.do(`
+	// AI-powered transformation
+	async generateSummary(): Promise<string> {
+		return await this.do(`
       Create a 2-sentence summary of this document.
       Focus on key points and conclusions.
     `);
-  }
+	}
 }
 ```
 
@@ -116,43 +119,46 @@ class Document extends SmrtObject {
 The `toJSON()` method in `SmrtObject` handles critical framework infrastructure. **DO NOT override** this method unless you call `super.toJSON()` first.
 
 **What toJSON() handles:**
+
 - **STI discriminator** (`_meta_type`) for polymorphic queries
 - **Meta field extraction** (`_meta_data`) for child-specific fields
 - **Automatic serialization** of all fields from manifest
 
 **The Safe Way - Use transformJSON() Hook:**
+
 ```typescript
 class Document extends SmrtObject {
-  title: string = '';
-  content: string = '';
+	title: string = '';
+	content: string = '';
 
-  // ✅ CORRECT - Use transformJSON() hook
-  protected transformJSON(data: any): any {
-    return {
-      ...data,
-      wordCount: this.content.split(/\s+/).length,
-      preview: this.content.substring(0, 100)
-    };
-  }
+	// ✅ CORRECT - Use transformJSON() hook
+	protected transformJSON(data: any): any {
+		return {
+			...data,
+			wordCount: this.content.split(/\s+/).length,
+			preview: this.content.substring(0, 100)
+		};
+	}
 }
 ```
 
 **The Dangerous Way - Overriding toJSON():**
+
 ```typescript
 // ❌ WRONG - breaks STI and meta fields
 class Document extends SmrtObject {
-  toJSON() {
-    return { id: this.id, title: this.title };
-    // Missing: _meta_type, _meta_data, other fields!
-  }
+	toJSON() {
+		return { id: this.id, title: this.title };
+		// Missing: _meta_type, _meta_data, other fields!
+	}
 }
 
 // ✅ CORRECT - calls super if you must override
 class Document extends SmrtObject {
-  toJSON() {
-    const data = super.toJSON();
-    return { ...data, customField: 'value' };
-  }
+	toJSON() {
+		const data = super.toJSON();
+		return { ...data, customField: 'value' };
+	}
 }
 ```
 
@@ -164,32 +170,32 @@ See [issue #377](https://github.com/happyvertical/smrt/issues/377) for details.
 import { SmrtCollection } from '@happyvertical/smrt-core';
 
 class DocumentCollection extends SmrtCollection<Document> {
-  static readonly _itemClass = Document;
+	static readonly _itemClass = Document;
 }
 
 // Create collection instance
 const documents = await DocumentCollection.create({
-  persistence: { type: 'sql', url: 'documents.db' },
-  ai: { provider: 'openai', apiKey: process.env.OPENAI_API_KEY }
+	persistence: { type: 'sql', url: 'documents.db' },
+	ai: { provider: 'openai', apiKey: process.env.OPENAI_API_KEY }
 });
 
 // Create and save a document
 const doc = await documents.create({
-  title: 'Getting Started with SMRT',
-  content: 'SMRT makes building AI agents simple...',
-  wordCount: 1250,
-  rating: 4.5
+	title: 'Getting Started with SMRT',
+	content: 'SMRT makes building AI agents simple...',
+	wordCount: 1250,
+	rating: 4.5
 });
 await doc.save();
 
 // Query with advanced filters
 const recentDocs = await documents.list({
-  where: {
-    'wordCount >': 1000,
-    'publishedAt >': '2024-01-01'
-  },
-  orderBy: 'rating DESC',
-  limit: 10
+	where: {
+		'wordCount >': 1000,
+		'publishedAt >': '2024-01-01'
+	},
+	orderBy: 'rating DESC',
+	limit: 10
 });
 
 // Batch ID lookup (avoids N+1 queries)
@@ -198,11 +204,12 @@ const batchDocs = await documents.listByIds(docIds);
 
 // Alternative: implicit IN with array values
 const sameDocs = await documents.list({
-  where: { id: docIds }  // Arrays auto-detect IN operator
+	where: { id: docIds } // Arrays auto-detect IN operator
 });
 
 // Raw SQL query for complex patterns (NOT EXISTS, JOINs, OR conditions, etc.)
-const unpublished = await documents.query(`
+const unpublished = await documents.query(
+	`
   SELECT * FROM documents
   WHERE is_published = false
   AND NOT EXISTS (
@@ -210,7 +217,9 @@ const unpublished = await documents.query(`
   )
   ORDER BY created_at DESC
   LIMIT ?
-`, [10]);
+`,
+	[10]
+);
 
 // Use AI-powered operations
 const isQuality = await doc.isHighQuality();
@@ -227,39 +236,37 @@ SMRT supports multi-level class inheritance, allowing you to build class hierarc
 // Level 1: Base Content class (from @happyvertical/smrt-content)
 @smrt()
 class Content extends SmrtObject {
-  title: string = '';
-  body: string = '';
-  publishedAt: Date | null = null;
-  wordCount: number = 0;
+	title: string = '';
+	body: string = '';
+	publishedAt: Date | null = null;
+	wordCount: number = 0;
 
-  async generateSummary(): Promise<string> {
-    return await this.do('Create a 2-sentence summary');
-  }
+	async generateSummary(): Promise<string> {
+		return await this.do('Create a 2-sentence summary');
+	}
 }
 
 // Level 2: Praeco Content extends Content (from praeco package)
 @smrt()
 class PraecoContent extends Content {
-  sourceUrl: string = '';
-  sentiment: string = '';
+	sourceUrl: string = '';
+	sentiment: string = '';
 
-  async analyzeSentiment(): Promise<string> {
-    return await this.is('The content has positive sentiment')
-      ? 'positive'
-      : 'negative';
-  }
+	async analyzeSentiment(): Promise<string> {
+		return (await this.is('The content has positive sentiment')) ? 'positive' : 'negative';
+	}
 }
 
 // Level 3: Bentley Content extends PraecoContent (from bentleyalberta.com)
 @smrt()
 class BentleyContent extends PraecoContent {
-  localTags: string[] = [];
-  featured: boolean = false;
+	localTags: string[] = [];
+	featured: boolean = false;
 
-  async analyzeLocalRelevance(): Promise<number> {
-    // Custom local analysis
-    return 0.95;
-  }
+	async analyzeLocalRelevance(): Promise<number> {
+		// Custom local analysis
+		return 0.95;
+	}
 }
 
 // BentleyContent automatically inherits ALL fields and methods:
@@ -272,20 +279,20 @@ class BentleyContent extends PraecoContent {
 
 // Schema generation includes all inherited fields
 const bentley = new BentleyContent({
-  title: 'Local News',
-  body: 'Story content...',
-  sourceUrl: 'https://example.com',
-  localTags: ['bentley', 'alberta'],
-  db: { type: 'sqlite', url: 'bentley.db' }
+	title: 'Local News',
+	body: 'Story content...',
+	sourceUrl: 'https://example.com',
+	localTags: ['bentley', 'alberta'],
+	db: { type: 'sqlite', url: 'bentley.db' }
 });
 
 await bentley.initialize();
-await bentley.save();  // Table has ALL inherited columns
+await bentley.save(); // Table has ALL inherited columns
 
 // Call methods from any level of the hierarchy
-const summary = await bentley.generateSummary();  // Content
-const sentiment = await bentley.analyzeSentiment();  // PraecoContent
-const relevance = await bentley.analyzeLocalRelevance();  // BentleyContent
+const summary = await bentley.generateSummary(); // Content
+const sentiment = await bentley.analyzeSentiment(); // PraecoContent
+const relevance = await bentley.analyzeLocalRelevance(); // BentleyContent
 ```
 
 ### Generate APIs, CLI, and MCP
@@ -316,34 +323,35 @@ Define custom methods on your SMRT objects, and the CLI generator will automatic
 
 ```typescript
 @smrt({
-  cli: { include: ['list', 'get', 'research', 'report'] }  // Include custom methods
+	cli: { include: ['list', 'get', 'research', 'report'] } // Include custom methods
 })
 class Agent extends SmrtObject {
-  name: string = '';
-  source: string = '';
+	name: string = '';
+	source: string = '';
 
-  // Custom method with parameters
-  async research(options: { query: string, depth?: number }) {
-    return {
-      action: 'research',
-      query: options.query,
-      depth: options.depth || 3,
-      results: await this.do(`Research: ${options.query}`)
-    };
-  }
+	// Custom method with parameters
+	async research(options: { query: string; depth?: number }) {
+		return {
+			action: 'research',
+			query: options.query,
+			depth: options.depth || 3,
+			results: await this.do(`Research: ${options.query}`)
+		};
+	}
 
-  // Another custom method
-  async report(options: { type?: string }) {
-    return {
-      action: 'report',
-      type: options.type || 'summary',
-      content: await this.do(`Generate ${options.type} report for ${this.name}`)
-    };
-  }
+	// Another custom method
+	async report(options: { type?: string }) {
+		return {
+			action: 'report',
+			type: options.type || 'summary',
+			content: await this.do(`Generate ${options.type} report for ${this.name}`)
+		};
+	}
 }
 ```
 
 **Auto-generated CLI commands:**
+
 ```bash
 # Standard CRUD (as before)
 smrt agent:list
@@ -355,6 +363,7 @@ smrt agent:report <id> --type detailed
 ```
 
 **How it works:**
+
 - CLI generator scans `ObjectRegistry.getMethods()` for public methods
 - Method parameters are converted to kebab-case CLI options (`researchQuery` → `--research-query`)
 - Include/exclude lists work for both CRUD commands and custom methods
@@ -379,34 +388,36 @@ Use TypeScript types for most properties - the AST scanner automatically generat
 
 ```typescript
 class Product extends SmrtObject {
-  // String → TEXT
-  name: string = '';
-  description: string = '';
+	// String → TEXT
+	name: string = '';
+	description: string = '';
 
-  // Numbers with 0 vs 0.0 heuristic
-  quantity: number = 0;      // → INTEGER (no decimal point)
-  price: number = 0.0;       // → DECIMAL (has decimal point)
-  rating: number = 4.5;      // → DECIMAL (has decimal point)
+	// Numbers with 0 vs 0.0 heuristic
+	quantity: number = 0; // → INTEGER (no decimal point)
+	price: number = 0.0; // → DECIMAL (has decimal point)
+	rating: number = 4.5; // → DECIMAL (has decimal point)
 
-  // Boolean → BOOLEAN
-  active: boolean = true;
+	// Boolean → BOOLEAN
+	active: boolean = true;
 
-  // Date → DATETIME
-  created: Date = new Date();
+	// Date → DATETIME
+	created: Date = new Date();
 
-  // Arrays → JSON
-  tags: string[] = [];
-  metadata: Record<string, any> = {};
+	// Arrays → JSON
+	tags: string[] = [];
+	metadata: Record<string, any> = {};
 }
 ```
 
 ### The 0 vs 0.0 Heuristic
 
 Numeric literals **without** decimal point → INTEGER:
+
 - `count: number = 0` → INTEGER
 - `quantity: number = 42` → INTEGER
 
 Numeric literals **with** decimal point → DECIMAL:
+
 - `price: number = 0.0` → DECIMAL
 - `rating: number = 4.5` → DECIMAL
 
@@ -417,37 +428,40 @@ This semantic distinction enables proper database schema generation without fiel
 Field helpers are **only required** for:
 
 #### 1. Relationships
+
 ```typescript
 class Order extends SmrtObject {
-  customerId = foreignKey(Customer);
-  items = oneToMany(OrderItem);
-  relatedOrders = manyToMany(Order);
+	customerId = foreignKey(Customer);
+	items = oneToMany(OrderItem);
+	relatedOrders = manyToMany(Order);
 }
 ```
 
 #### 2. Constraints and Validation
+
 ```typescript
 class User extends SmrtObject {
-  username = text({
-    required: true,
-    unique: true,
-    minLength: 3,
-    maxLength: 20
-  });
+	username = text({
+		required: true,
+		unique: true,
+		minLength: 3,
+		maxLength: 20
+	});
 
-  email = text({
-    required: true,
-    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  });
+	email = text({
+		required: true,
+		pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+	});
 }
 ```
 
 #### 3. Nullable Decimals
+
 ```typescript
 class Place extends SmrtObject {
-  // Optional decimal needs explicit helper
-  latitude = decimal({ nullable: true });
-  longitude = decimal({ nullable: true });
+	// Optional decimal needs explicit helper
+	latitude = decimal({ nullable: true });
+	longitude = decimal({ nullable: true });
 }
 ```
 
@@ -484,11 +498,13 @@ The SMRT framework is organized as a pnpm workspace:
 ### Core Framework Packages
 
 **Foundation:**
+
 - **types**: Shared TypeScript type definitions
 - **config**: Configuration management with cosmiconfig
 - **core**: Core framework with ORM, code generation, and AI integration
 
 **Domain Modules:**
+
 - **accounts**: Accounting ledger with multi-currency support
 - **agents**: Agent framework for autonomous actors
 - **assets**: Asset management with versioning and metadata
@@ -503,6 +519,7 @@ The SMRT framework is organized as a pnpm workspace:
 ### External SDK Dependencies
 
 Infrastructure packages from [@happyvertical/sdk](https://github.com/happyvertical/sdk):
+
 - **@happyvertical/ai**: Multi-provider AI client (OpenAI, Anthropic, Google, AWS)
 - **@happyvertical/files**: File system operations
 - **@happyvertical/sql**: Database operations (SQLite, Postgres, DuckDB)
@@ -510,6 +527,7 @@ Infrastructure packages from [@happyvertical/sdk](https://github.com/happyvertic
 - **@happyvertical/logger**: Logging infrastructure
 
 Standalone packages (separate repositories):
+
 - **@happyvertical/spider**: Web content scraping
 - **@happyvertical/pdf**: PDF text extraction
 - **@happyvertical/ocr**: OCR text extraction
@@ -517,12 +535,14 @@ Standalone packages (separate repositories):
 ### Package Dependencies
 
 **Within SMRT framework:**
+
 - `@happyvertical/smrt-types`: No internal dependencies
 - `@happyvertical/smrt-config`: No internal dependencies
 - `@happyvertical/smrt-core`: Depends on types, config, and external SDK packages
 - Domain modules: All depend on core; some have cross-dependencies
 
 **Build order** (managed by Turborepo):
+
 1. types, config (parallel)
 2. core (depends on types + config)
 3. Domain modules (depend on core)
@@ -590,16 +610,19 @@ npx vitest run
 ```
 
 **Why?** Tests require a manifest file that maps SMRT objects for schema generation. The `smrt test` command:
+
 1. **Generates the test manifest** from `@smrt()` decorated classes
 2. **Runs vitest** with the manifest loaded
 
 Without the manifest, tests fail with errors like:
+
 ```
 Cannot generate schema for unregistered class 'Council'.
 Ensure the class is decorated with @smrt() for schema generation to work.
 ```
 
 **For individual test files:**
+
 ```bash
 # Generate manifest first, then run specific test
 smrt test --manifest-only
@@ -609,6 +632,7 @@ npx vitest run src/specific-test.test.ts
 **Database Adapter Testing:**
 
 The framework includes comprehensive adapter parity tests to ensure consistent behavior across all database backends (SQLite, JSON/DuckDB). These tests verify:
+
 - STI (Single Table Inheritance) operations
 - UPSERT conflict resolution
 - Type preservation across save/load cycles
@@ -626,31 +650,32 @@ import { createIsolatedTestDb } from '@happyvertical/smrt-vitest';
 import { MyObject, MyCollection } from './my-object.js';
 
 describe('MyObject', () => {
-  let collection: MyCollection;
+	let collection: MyCollection;
 
-  beforeEach(async () => {
-    // Creates isolated in-memory SQLite database
-    const db = await createIsolatedTestDb();
-    collection = await MyCollection.create({
-      persistence: { type: 'sql', db }
-    });
-  });
+	beforeEach(async () => {
+		// Creates isolated in-memory SQLite database
+		const db = await createIsolatedTestDb();
+		collection = await MyCollection.create({
+			persistence: { type: 'sql', db }
+		});
+	});
 
-  it('should create and save object', async () => {
-    const obj = await collection.create({
-      name: 'Test',
-      value: 42
-    });
-    await obj.save();
+	it('should create and save object', async () => {
+		const obj = await collection.create({
+			name: 'Test',
+			value: 42
+		});
+		await obj.save();
 
-    const loaded = await collection.get({ id: obj.id });
-    expect(loaded?.name).toBe('Test');
-    expect(loaded?.value).toBe(42);
-  });
+		const loaded = await collection.get({ id: obj.id });
+		expect(loaded?.name).toBe('Test');
+		expect(loaded?.value).toBe(42);
+	});
 });
 ```
 
 **Key patterns**:
+
 - **Isolated databases**: Use `createIsolatedTestDb()` for each test suite
 - **Real resources**: Prefer in-memory databases over mocks
 - **Readable tests**: Tests should read like documentation
@@ -661,12 +686,14 @@ describe('MyObject', () => {
 ### Build System
 
 The framework uses **Turborepo** for intelligent task orchestration:
+
 - Intelligent caching: Only rebuilds when dependencies change
 - Parallel execution: Builds packages in parallel when possible
 - GitHub Actions cache: CI/CD benefits from cached builds
 - Dependency awareness: Automatically respects package dependencies
 
 **Performance:**
+
 - First build: ~8 seconds
 - Cached builds: ~80ms (100x faster)
 
@@ -684,18 +711,21 @@ The framework uses **Turborepo** for intelligent task orchestration:
 SMRT uses **AST-based manifest generation** instead of runtime introspection:
 
 **How it works:**
+
 1. **Build Time**: AST scanner finds all `@smrt()` decorated classes
 2. **Manifest Generation**: Creates JSON manifest with class metadata, fields, and types
 3. **Schema Generation**: Uses manifest data to generate database schemas
 4. **No Runtime Introspection**: All metadata determined at build time
 
 **Benefits:**
+
 - **Performance**: No runtime reflection overhead
 - **Tree-Shaking**: Unused classes can be eliminated
 - **Type Safety**: Full TypeScript type information preserved
 - **Predictable**: Schema determined at build time, not runtime
 
 **The Manifest Process:**
+
 ```bash
 # During build
 smrt scan           # Scans TypeScript AST
@@ -708,14 +738,15 @@ ObjectRegistry      # Reads manifest.json
 ```
 
 **TypeScript Type Inference:**
+
 ```typescript
 // AST scanner infers types from TypeScript
 class Product extends SmrtObject {
-  name: string = '';        // AST → TEXT column
-  count: number = 0;        // AST → INTEGER (no decimal)
-  price: number = 0.0;      // AST → DECIMAL (has decimal)
-  active: boolean = true;   // AST → BOOLEAN
-  tags: string[] = [];      // AST → JSON
+	name: string = ''; // AST → TEXT column
+	count: number = 0; // AST → INTEGER (no decimal)
+	price: number = 0.0; // AST → DECIMAL (has decimal)
+	active: boolean = true; // AST → BOOLEAN
+	tags: string[] = []; // AST → JSON
 }
 ```
 
@@ -728,6 +759,7 @@ When using external SMRT packages (e.g., `@happyvertical/smrt-profiles`), by def
 #### Enabling Tree Shaking
 
 **Option 1: Import-Based (Automatic)**
+
 ```typescript
 // smrt.config.js or ManifestBuilder options
 {
@@ -737,6 +769,7 @@ When using external SMRT packages (e.g., `@happyvertical/smrt-profiles`), by def
 ```
 
 When enabled, the AST scanner analyzes your imports:
+
 ```typescript
 // Your code
 import { Person, Organization } from '@happyvertical/smrt-profiles';
@@ -746,6 +779,7 @@ import { Person, Organization } from '@happyvertical/smrt-profiles';
 ```
 
 **Option 2: Explicit Whitelist**
+
 ```typescript
 // smrt.config.js or ManifestBuilder options
 {
@@ -759,6 +793,7 @@ import { Person, Organization } from '@happyvertical/smrt-profiles';
 ```
 
 **Option 3: Combined (Imports + Whitelist)**
+
 ```typescript
 // Both imported classes AND whitelisted classes are included
 {
@@ -778,19 +813,19 @@ Tree shaking automatically includes transitive dependencies:
 
 #### Configuration Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `treeShake` | boolean | `false` | Enable import-based filtering |
-| `externalObjectsWhitelist` | string[] | `[]` | Explicit list of classes to include |
-| `discoverExternalPackages` | boolean | `false` | Scan node_modules for SMRT packages |
+| Option                     | Type     | Default | Description                         |
+| -------------------------- | -------- | ------- | ----------------------------------- |
+| `treeShake`                | boolean  | `false` | Enable import-based filtering       |
+| `externalObjectsWhitelist` | string[] | `[]`    | Explicit list of classes to include |
+| `discoverExternalPackages` | boolean  | `false` | Scan node_modules for SMRT packages |
 
 #### Example Manifest Size Impact
 
-| Configuration | Objects Included | Manifest Size |
-|---------------|------------------|---------------|
-| Default (no filtering) | All 27 from smrt-profiles | ~180KB |
-| treeShake with 3 imports | 5 (imports + dependencies) | ~35KB |
-| Whitelist with 2 classes | 3 (whitelist + dependencies) | ~25KB |
+| Configuration            | Objects Included             | Manifest Size |
+| ------------------------ | ---------------------------- | ------------- |
+| Default (no filtering)   | All 27 from smrt-profiles    | ~180KB        |
+| treeShake with 3 imports | 5 (imports + dependencies)   | ~35KB         |
+| Whitelist with 2 classes | 3 (whitelist + dependencies) | ~25KB         |
 
 ### Qualified Class Names (Namespace Isolation)
 
@@ -800,20 +835,22 @@ SMRT uses **qualified class names** to prevent collisions when multiple packages
 
 ```typescript
 // Examples of qualified names
-'@happyvertical/smrt-core:Product'
-'@happyvertical/smrt-profiles:Person'
-'@happyvertical/praeco:Article'
+'@happyvertical/smrt-core:Product';
+'@happyvertical/smrt-profiles:Person';
+'@happyvertical/praeco:Article';
 ```
 
 **Why Qualified Names?**
 
 Without qualified names, two packages defining `class Product` would collide:
+
 ```
 Package A: class Product → manifest.objects["Product"]  ❌ Collision!
 Package B: class Product → manifest.objects["Product"]  ❌
 ```
 
 With qualified names:
+
 ```
 Package A: class Product → manifest.objects["@pkg-a:Product"]  ✅
 Package B: class Product → manifest.objects["@pkg-b:Product"]  ✅
@@ -837,9 +874,9 @@ When creating STI objects, use the qualified `_meta_type`:
 
 ```typescript
 const event = await eventCollection.create({
-  _meta_type: '@happyvertical/smrt-events:Meeting',
-  title: 'Team Standup',
-  location: 'Room A'
+	_meta_type: '@happyvertical/smrt-events:Meeting',
+	title: 'Team Standup',
+	location: 'Room A'
 });
 ```
 
@@ -850,7 +887,7 @@ Filter by qualified `_meta_type`:
 ```typescript
 // Get all meetings
 const meetings = await eventCollection.list({
-  where: { _meta_type: '@happyvertical/smrt-events:Meeting' }
+	where: { _meta_type: '@happyvertical/smrt-events:Meeting' }
 });
 ```
 
@@ -867,6 +904,7 @@ smrt db:migrate --upgrade-sti
 ```
 
 This updates all `_meta_type` values from simple class names to qualified format:
+
 ```sql
 -- Generated migration
 UPDATE events SET _meta_type = '@happyvertical/smrt-events:Meeting'
@@ -893,13 +931,13 @@ const methods = ObjectRegistry.getMethods('Product');
 Classes can specify visibility to control manifest inclusion:
 
 ```typescript
-@smrt({ visibility: 'public' })   // Default - exported to consumers
+@smrt({ visibility: 'public' }) // Default - exported to consumers
 class Product extends SmrtObject {}
 
 @smrt({ visibility: 'internal' }) // Package-only, not in published manifest
 class InternalHelper extends SmrtObject {}
 
-@smrt({ visibility: 'test' })     // Test-only, never published
+@smrt({ visibility: 'test' }) // Test-only, never published
 class TestFixture extends SmrtObject {}
 ```
 
@@ -930,6 +968,7 @@ Test files (`*.test.ts`, `__tests__/*`) automatically get `visibility: 'test'`.
 ### Git Branching Strategy
 
 **Branch naming**: `{type}/issue-{number}-{short-description}`
+
 - `feat/issue-123-new-feature`
 - `fix/issue-45-bug-fix`
 - `docs/issue-89-update-readme`
@@ -964,14 +1003,14 @@ All packages must be added to the `fixed` array in `.changeset/config.json` to e
 
 ```json
 {
-  "fixed": [
-    [
-      "@happyvertical/smrt-agents",
-      "@happyvertical/smrt-assets",
-      // ... existing packages ...
-      "@happyvertical/smrt-YOUR-NEW-PACKAGE"  // ADD HERE
-    ]
-  ]
+	"fixed": [
+		[
+			"@happyvertical/smrt-agents",
+			"@happyvertical/smrt-assets",
+			// ... existing packages ...
+			"@happyvertical/smrt-YOUR-NEW-PACKAGE" // ADD HERE
+		]
+	]
 }
 ```
 
@@ -981,8 +1020,8 @@ Set the new package's version to match all other packages:
 
 ```json
 {
-  "name": "@happyvertical/smrt-your-package",
-  "version": "0.17.34"  // Match current version of other packages
+	"name": "@happyvertical/smrt-your-package",
+	"version": "0.17.34" // Match current version of other packages
 }
 ```
 
@@ -994,13 +1033,13 @@ Ensure these fields are set correctly:
 
 ```json
 {
-  "name": "@happyvertical/smrt-your-package",
-  "version": "0.17.34",
-  "type": "module",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "public"
-  }
+	"name": "@happyvertical/smrt-your-package",
+	"version": "0.17.34",
+	"type": "module",
+	"publishConfig": {
+		"registry": "https://npm.pkg.github.com",
+		"access": "public"
+	}
 }
 ```
 
@@ -1017,6 +1056,7 @@ All `@happyvertical/smrt-*` packages are **version-locked** using Changeset's `f
 ### Testing Requirements
 
 All code changes must include tests following [TESTING_STANDARD.md](../TESTING_STANDARD.md):
+
 - Use real resources (in-memory DBs, temp files) over mocks
 - Tests should read like documentation
 - README examples must have corresponding tests
@@ -1031,11 +1071,13 @@ All code changes must include tests following [TESTING_STANDARD.md](../TESTING_S
 When adding features, maintain the dependency hierarchy to avoid circular dependencies:
 
 **Within SMRT framework:**
+
 - `types`, `config` → No internal dependencies
 - `core` → Depends on types, config, and external SDK packages
 - Domain modules → Depend on core
 
 **Cross-dependencies:**
+
 - `assets` → depends on `tags`
 - `events` → depends on `places`, `profiles`
 
@@ -1044,19 +1086,23 @@ When adding features, maintain the dependency hierarchy to avoid circular depend
 The SMRT framework provides three tiers of Model Context Protocol servers for AI integration:
 
 **Tier 1: Auto-Generated Project MCP Servers**
+
 - Runtime MCP servers generated from your SMRT objects
 - Deploy alongside your application for AI-powered operations
 - See [packages/core/CLAUDE.md](./packages/core/CLAUDE.md) for MCPGenerator API
 
 **Tier 2: SMRT Advisor MCP** (`@happyvertical/smrt-dev-mcp`)
+
 - Development-focused tools for code generation
 - Tools: `generate-smrt-class`, `introspect-project`
 
 **Tier 3: SMRT Documentation MCP** (`@happyvertical/smrt-docs-mcp`)
+
 - Documentation and learning tools
 - Tools: `search-docs`, `get-example`, `explain-concept`
 
 **Example Development Flow:**
+
 1. **Learn** (Tier 3): Query framework documentation
 2. **Generate** (Tier 2): Create SMRT classes
 3. **Develop**: Write business logic
@@ -1068,6 +1114,7 @@ The SMRT framework provides three tiers of Model Context Protocol servers for AI
 The framework uses TypeScript project references for proper type resolution across packages:
 
 **Configuration requirements:**
+
 - `composite: true` in tsconfig.json
 - `outDir`, `rootDir`, and `tsBuildInfoFile` properly configured
 - Entry in root tsconfig.json `references` array
@@ -1075,16 +1122,19 @@ The framework uses TypeScript project references for proper type resolution acro
 ### Performance Optimizations
 
 **Registry Caching:**
+
 - Class metadata cached on first access
 - Field definitions analyzed once
 - Collection instances use singleton pattern (60-80% faster)
 
 **Query Optimization:**
+
 - Eager loading with JOINs (40-70% improvement for relationship-heavy queries)
 - Prepared statement reuse
 - Result set streaming for large queries
 
 **Build Caching:**
+
 - Manifest generated once at build time
 - Virtual modules cached by Vite
 - Type declarations cached in `node_modules/.vite`
@@ -1137,19 +1187,20 @@ smrt db:generate add_user_roles --ts  # TypeScript format
 
 All migrations are tracked in the `_smrt_schema_migrations` table:
 
-| Column | Description |
-|--------|-------------|
-| `id` | Unique identifier |
-| `name` | Migration name (e.g., `0001_initial_schema`) |
-| `checksum` | SHA-256 of normalized SQL |
-| `status` | `pending`, `completed`, `failed`, `rolled_back` |
-| `applied_at` | When migration was applied |
-| `execution_time_ms` | Execution duration |
-| `is_reversible` | Whether DOWN script exists |
+| Column              | Description                                     |
+| ------------------- | ----------------------------------------------- |
+| `id`                | Unique identifier                               |
+| `name`              | Migration name (e.g., `0001_initial_schema`)    |
+| `checksum`          | SHA-256 of normalized SQL                       |
+| `status`            | `pending`, `completed`, `failed`, `rolled_back` |
+| `applied_at`        | When migration was applied                      |
+| `execution_time_ms` | Execution duration                              |
+| `is_reversible`     | Whether DOWN script exists                      |
 
 ### Migration File Formats
 
 **SQL Format (Default):**
+
 ```sql
 -- migrations/0001_add_users.sql
 -- @id: 0001_add_users
@@ -1169,23 +1220,24 @@ DROP TABLE IF EXISTS users;
 ```
 
 **TypeScript Format:**
+
 ```typescript
 // migrations/0001_add_users.ts
 import type { Migration } from '@happyvertical/smrt-core';
 
 export default {
-  id: '0001_add_users',
-  description: 'Add users table',
+	id: '0001_add_users',
+	description: 'Add users table',
 
-  up: async (db) => {
-    await db.query(`CREATE TABLE users (id TEXT PRIMARY KEY, name TEXT NOT NULL)`);
-    await db.query(`CREATE INDEX idx_users_email ON users(email)`);
-  },
+	up: async (db) => {
+		await db.query(`CREATE TABLE users (id TEXT PRIMARY KEY, name TEXT NOT NULL)`);
+		await db.query(`CREATE INDEX idx_users_email ON users(email)`);
+	},
 
-  down: async (db) => {
-    await db.query(`DROP INDEX IF EXISTS idx_users_email`);
-    await db.query(`DROP TABLE IF EXISTS users`);
-  },
+	down: async (db) => {
+		await db.query(`DROP INDEX IF EXISTS idx_users_email`);
+		await db.query(`DROP TABLE IF EXISTS users`);
+	}
 } satisfies Migration;
 ```
 
@@ -1199,7 +1251,7 @@ Migrations use SHA-256 checksums to ensure idempotency:
 
 ```typescript
 // Normalized for checksum (comments removed, whitespace collapsed)
-'CREATE TABLE users (id TEXT PRIMARY KEY);'
+'CREATE TABLE users (id TEXT PRIMARY KEY);';
 ```
 
 ### PostgreSQL-Specific Handling
@@ -1211,6 +1263,7 @@ smrt db:migrate --postgres-safe
 ```
 
 This automatically:
+
 - Uses `CREATE INDEX CONCURRENTLY` for non-blocking index creation
 - Sets `lock_timeout` and `statement_timeout` for safer execution
 - Handles CONCURRENTLY statements outside transactions (required by PostgreSQL)
@@ -1221,26 +1274,26 @@ Configure migrations in `smrt.config.js`:
 
 ```javascript
 export default {
-  packages: {
-    cli: {
-      database: {
-        type: 'postgres',
-        url: process.env.DATABASE_URL,
-      },
-      migrations: {
-        directory: './migrations',
-        table: '_smrt_schema_migrations',
-        format: 'sql',           // 'sql' or 'typescript'
-        naming: 'sequence',      // 'sequence' (0001, 0002) or 'timestamp'
-        autoGenerateDown: true,
-        postgres: {
-          useConcurrently: true,
-          lockTimeout: '30s',
-          statementTimeout: '60s',
-        },
-      },
-    },
-  },
+	packages: {
+		cli: {
+			database: {
+				type: 'postgres',
+				url: process.env.DATABASE_URL
+			},
+			migrations: {
+				directory: './migrations',
+				table: '_smrt_schema_migrations',
+				format: 'sql', // 'sql' or 'typescript'
+				naming: 'sequence', // 'sequence' (0001, 0002) or 'timestamp'
+				autoGenerateDown: true,
+				postgres: {
+					useConcurrently: true,
+					lockTimeout: '30s',
+					statementTimeout: '60s'
+				}
+			}
+		}
+	}
 };
 ```
 
@@ -1249,7 +1302,11 @@ export default {
 Use the migration system programmatically:
 
 ```typescript
-import { MigrationTracker, SchemaComparer, MigrationGenerator } from '@happyvertical/smrt-core/migrations';
+import {
+	MigrationTracker,
+	SchemaComparer,
+	MigrationGenerator
+} from '@happyvertical/smrt-core/migrations';
 import { getDatabase } from '@happyvertical/sql';
 
 // Initialize tracker
@@ -1262,15 +1319,15 @@ const pending = await tracker.getPendingMigrations(migrationDir);
 
 // Apply a migration
 const result = await tracker.apply({
-  id: '0001_initial',
-  description: 'Initial schema',
-  version: '1.0.0',
-  up: ['CREATE TABLE users (id TEXT PRIMARY KEY);'],
-  down: ['DROP TABLE users;'],
+	id: '0001_initial',
+	description: 'Initial schema',
+	version: '1.0.0',
+	up: ['CREATE TABLE users (id TEXT PRIMARY KEY);'],
+	down: ['DROP TABLE users;']
 });
 
 if (result.success) {
-  console.log(`Applied: ${result.name} in ${result.execution_time_ms}ms`);
+	console.log(`Applied: ${result.name} in ${result.execution_time_ms}ms`);
 }
 
 // Compare manifest to database
@@ -1278,20 +1335,20 @@ const comparer = new SchemaComparer(db);
 const diff = await comparer.compare(manifestSchemas);
 
 if (diff.has_changes) {
-  console.log(`New tables: ${diff.added_tables.length}`);
-  console.log(`Changes: ${diff.changes.length}`);
+	console.log(`New tables: ${diff.added_tables.length}`);
+	console.log(`Changes: ${diff.changes.length}`);
 }
 
 // Generate migration file from diff
 const generator = new MigrationGenerator({
-  engine: 'sqlite',
-  format: 'sql',
-  includeDown: true,
+	engine: 'sqlite',
+	format: 'sql',
+	includeDown: true
 });
 
 const migration = generator.generateFromDiff(diff, {
-  name: '0002_add_profiles',
-  description: 'Add profiles table',
+	name: '0002_add_profiles',
+	description: 'Add profiles table'
 });
 
 console.log(migration.content);
@@ -1318,6 +1375,7 @@ The SMRT repository uses automated AI-powered issue triage:
 - **Stale Management**: Automatic cleanup after 30+ days inactive
 
 **Response Time Targets:**
+
 - **P0-Critical**: < 1 hour (production outages, security issues)
 - **P1-High**: < 4 hours (major functionality broken)
 - **P2-Medium**: < 2 business days (non-blocking bugs)
@@ -1340,6 +1398,7 @@ pnpm run changeset:publish  # Publish packages to registry
 ```
 
 **Important**: Package releases are fully automated:
+
 1. PRs generate changesets from conventional commits
 2. Merging to main triggers the on-merge-main workflow
 3. Workflow builds, versions, and publishes packages automatically
@@ -1366,19 +1425,19 @@ The Renovate configuration is defined in `renovate.json` and extends the shared 
 
 ```json
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["local>happyvertical/renovate-config:smrt"]
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": ["local>happyvertical/renovate-config:smrt"]
 }
 ```
 
 ### Expected Behavior
 
-| Scenario | Renovate Action |
-|----------|-----------------|
-| SDK patch release (0.x.Y) | Auto-create PR, automerge after tests pass |
-| SDK minor release (0.X.0) | Create PR, requires manual review |
-| External dependency update | Grouped weekly PRs |
-| Security vulnerability | Immediate PR with priority label |
+| Scenario                   | Renovate Action                            |
+| -------------------------- | ------------------------------------------ |
+| SDK patch release (0.x.Y)  | Auto-create PR, automerge after tests pass |
+| SDK minor release (0.X.0)  | Create PR, requires manual review          |
+| External dependency update | Grouped weekly PRs                         |
+| Security vulnerability     | Immediate PR with priority label           |
 
 ### Dependency Flow
 
@@ -1414,14 +1473,13 @@ MIT License - see [LICENSE](./LICENSE) file for details.
 
 ---
 
-*This framework was split from the HAppyVertical SDK in October 2024 to create a focused, self-contained foundation for building vertical AI agents.*
-
+_This framework was split from the HAppyVertical SDK in October 2024 to create a focused, self-contained foundation for building vertical AI agents._
 
 ---
 
 ### Testing Guide
 
-*Source: TESTING_STANDARD.md*
+_Source: TESTING_STANDARD.md_
 
 # SMRT Testing Standard
 
@@ -1451,10 +1509,12 @@ npx vitest run
 ```
 
 **Why?** Tests require a manifest file that maps SMRT objects for schema generation. The `smrt test` command:
+
 1. Generates the test manifest from `@smrt()` decorated classes
 2. Runs vitest with the manifest loaded
 
 Without the manifest, tests fail with errors like:
+
 ```
 Cannot generate schema for unregistered class 'Council'.
 Ensure the class is decorated with @smrt() for schema generation to work.
@@ -1484,81 +1544,81 @@ import { createIsolatedTestDb } from '@happyvertical/smrt-vitest';
 import { MyObject, MyCollection } from './my-object.js';
 
 describe('MyObject', () => {
-  let collection: MyCollection;
+	let collection: MyCollection;
 
-  beforeEach(async () => {
-    // Creates isolated in-memory SQLite database
-    const db = await createIsolatedTestDb();
-    collection = await MyCollection.create({
-      persistence: { type: 'sql', db }
-    });
-  });
+	beforeEach(async () => {
+		// Creates isolated in-memory SQLite database
+		const db = await createIsolatedTestDb();
+		collection = await MyCollection.create({
+			persistence: { type: 'sql', db }
+		});
+	});
 
-  describe('basic CRUD operations', () => {
-    it('should create and save object', async () => {
-      const obj = await collection.create({
-        name: 'Test',
-        value: 42
-      });
-      await obj.save();
+	describe('basic CRUD operations', () => {
+		it('should create and save object', async () => {
+			const obj = await collection.create({
+				name: 'Test',
+				value: 42
+			});
+			await obj.save();
 
-      const loaded = await collection.get({ id: obj.id });
-      expect(loaded?.name).toBe('Test');
-      expect(loaded?.value).toBe(42);
-    });
+			const loaded = await collection.get({ id: obj.id });
+			expect(loaded?.name).toBe('Test');
+			expect(loaded?.value).toBe(42);
+		});
 
-    it('should update object', async () => {
-      const obj = await collection.create({ name: 'Initial' });
-      await obj.save();
+		it('should update object', async () => {
+			const obj = await collection.create({ name: 'Initial' });
+			await obj.save();
 
-      obj.name = 'Updated';
-      await obj.save();
+			obj.name = 'Updated';
+			await obj.save();
 
-      const loaded = await collection.get({ id: obj.id });
-      expect(loaded?.name).toBe('Updated');
-    });
+			const loaded = await collection.get({ id: obj.id });
+			expect(loaded?.name).toBe('Updated');
+		});
 
-    it('should delete object', async () => {
-      const obj = await collection.create({ name: 'Delete Me' });
-      await obj.save();
+		it('should delete object', async () => {
+			const obj = await collection.create({ name: 'Delete Me' });
+			await obj.save();
 
-      await obj.delete();
+			await obj.delete();
 
-      const loaded = await collection.get({ id: obj.id });
-      expect(loaded).toBeUndefined();
-    });
-  });
+			const loaded = await collection.get({ id: obj.id });
+			expect(loaded).toBeUndefined();
+		});
+	});
 
-  describe('querying', () => {
-    it('should filter by field', async () => {
-      await collection.create({ name: 'Active', status: 'active' }).then(o => o.save());
-      await collection.create({ name: 'Inactive', status: 'inactive' }).then(o => o.save());
+	describe('querying', () => {
+		it('should filter by field', async () => {
+			await collection.create({ name: 'Active', status: 'active' }).then((o) => o.save());
+			await collection.create({ name: 'Inactive', status: 'inactive' }).then((o) => o.save());
 
-      const active = await collection.list({ where: { status: 'active' } });
-      expect(active).toHaveLength(1);
-      expect(active[0].name).toBe('Active');
-    });
+			const active = await collection.list({ where: { status: 'active' } });
+			expect(active).toHaveLength(1);
+			expect(active[0].name).toBe('Active');
+		});
 
-    it('should support comparison operators', async () => {
-      await collection.create({ price: 50 }).then(o => o.save());
-      await collection.create({ price: 150 }).then(o => o.save());
-      await collection.create({ price: 250 }).then(o => o.save());
+		it('should support comparison operators', async () => {
+			await collection.create({ price: 50 }).then((o) => o.save());
+			await collection.create({ price: 150 }).then((o) => o.save());
+			await collection.create({ price: 250 }).then((o) => o.save());
 
-      const expensive = await collection.list({ where: { 'price >': 100 } });
-      expect(expensive).toHaveLength(2);
-    });
+			const expensive = await collection.list({ where: { 'price >': 100 } });
+			expect(expensive).toHaveLength(2);
+		});
 
-    it('should support IN operator', async () => {
-      await collection.create({ category: 'A' }).then(o => o.save());
-      await collection.create({ category: 'B' }).then(o => o.save());
-      await collection.create({ category: 'C' }).then(o => o.save());
+		it('should support IN operator', async () => {
+			await collection.create({ category: 'A' }).then((o) => o.save());
+			await collection.create({ category: 'B' }).then((o) => o.save());
+			await collection.create({ category: 'C' }).then((o) => o.save());
 
-      const selected = await collection.list({
-        where: { category: ['A', 'B'] }
-      });
-      expect(selected).toHaveLength(2);
-    });
-  });
+			const selected = await collection.list({
+				where: { category: ['A', 'B'] }
+			});
+			expect(selected).toHaveLength(2);
+		});
+	});
 });
 ```
 
@@ -1572,14 +1632,15 @@ The `@happyvertical/smrt-vitest` package provides `createIsolatedTestDb()` for c
 import { createIsolatedTestDb } from '@happyvertical/smrt-vitest';
 
 beforeEach(async () => {
-  const db = await createIsolatedTestDb();
-  collection = await MyCollection.create({
-    persistence: { type: 'sql', db }
-  });
+	const db = await createIsolatedTestDb();
+	collection = await MyCollection.create({
+		persistence: { type: 'sql', db }
+	});
 });
 ```
 
 **Benefits**:
+
 - **Isolation**: Each test suite gets its own database
 - **Speed**: In-memory databases are fast
 - **Cleanup**: Automatically cleaned up after tests
@@ -1597,23 +1658,23 @@ import { join } from 'node:path';
 import { rmSync } from 'node:fs';
 
 describe('File-based tests', () => {
-  let tempDir: string;
+	let tempDir: string;
 
-  beforeEach(() => {
-    tempDir = mkdtempSync(join(tmpdir(), 'smrt-test-'));
-  });
+	beforeEach(() => {
+		tempDir = mkdtempSync(join(tmpdir(), 'smrt-test-'));
+	});
 
-  afterEach(() => {
-    rmSync(tempDir, { recursive: true, force: true });
-  });
+	afterEach(() => {
+		rmSync(tempDir, { recursive: true, force: true });
+	});
 
-  it('should work with temp files', async () => {
-    const dbPath = join(tempDir, 'test.db');
-    const collection = await MyCollection.create({
-      persistence: { type: 'sql', url: dbPath }
-    });
-    // Test operations...
-  });
+	it('should work with temp files', async () => {
+		const dbPath = join(tempDir, 'test.db');
+		const collection = await MyCollection.create({
+			persistence: { type: 'sql', url: dbPath }
+		});
+		// Test operations...
+	});
 });
 ```
 
@@ -1623,52 +1684,52 @@ describe('File-based tests', () => {
 
 ```typescript
 describe('relationships', () => {
-  let authorCollection: AuthorCollection;
-  let bookCollection: BookCollection;
+	let authorCollection: AuthorCollection;
+	let bookCollection: BookCollection;
 
-  beforeEach(async () => {
-    const db = await createIsolatedTestDb();
-    authorCollection = await AuthorCollection.create({
-      persistence: { type: 'sql', db }
-    });
-    bookCollection = await BookCollection.create({
-      persistence: { type: 'sql', db }
-    });
-  });
+	beforeEach(async () => {
+		const db = await createIsolatedTestDb();
+		authorCollection = await AuthorCollection.create({
+			persistence: { type: 'sql', db }
+		});
+		bookCollection = await BookCollection.create({
+			persistence: { type: 'sql', db }
+		});
+	});
 
-  it('should load related objects', async () => {
-    const author = await authorCollection.create({ name: 'Author' });
-    await author.save();
+	it('should load related objects', async () => {
+		const author = await authorCollection.create({ name: 'Author' });
+		await author.save();
 
-    const book = await bookCollection.create({
-      title: 'Book',
-      authorId: author.id
-    });
-    await book.save();
+		const book = await bookCollection.create({
+			title: 'Book',
+			authorId: author.id
+		});
+		await book.save();
 
-    await book.loadRelated('authorId');
-    const loadedAuthor = book.getRelated('authorId');
-    expect(loadedAuthor?.name).toBe('Author');
-  });
+		await book.loadRelated('authorId');
+		const loadedAuthor = book.getRelated('authorId');
+		expect(loadedAuthor?.name).toBe('Author');
+	});
 
-  it('should support eager loading', async () => {
-    const author = await authorCollection.create({ name: 'Author' });
-    await author.save();
+	it('should support eager loading', async () => {
+		const author = await authorCollection.create({ name: 'Author' });
+		await author.save();
 
-    await bookCollection.create({ title: 'Book 1', authorId: author.id }).then(b => b.save());
-    await bookCollection.create({ title: 'Book 2', authorId: author.id }).then(b => b.save());
+		await bookCollection.create({ title: 'Book 1', authorId: author.id }).then((b) => b.save());
+		await bookCollection.create({ title: 'Book 2', authorId: author.id }).then((b) => b.save());
 
-    const books = await bookCollection.list({
-      include: ['authorId']
-    });
+		const books = await bookCollection.list({
+			include: ['authorId']
+		});
 
-    expect(books).toHaveLength(2);
-    for (const book of books) {
-      const author = book.getRelated('authorId');
-      expect(author).toBeDefined();
-      expect(author?.name).toBe('Author');
-    }
-  });
+		expect(books).toHaveLength(2);
+		for (const book of books) {
+			const author = book.getRelated('authorId');
+			expect(author).toBeDefined();
+			expect(author?.name).toBe('Author');
+		}
+	});
 });
 ```
 
@@ -1676,47 +1737,51 @@ describe('relationships', () => {
 
 ```typescript
 describe('STI polymorphism', () => {
-  let eventCollection: EventCollection;
+	let eventCollection: EventCollection;
 
-  beforeEach(async () => {
-    const db = await createIsolatedTestDb();
-    eventCollection = await EventCollection.create({
-      persistence: { type: 'sql', db }
-    });
-  });
+	beforeEach(async () => {
+		const db = await createIsolatedTestDb();
+		eventCollection = await EventCollection.create({
+			persistence: { type: 'sql', db }
+		});
+	});
 
-  it('should save and load correct subclass', async () => {
-    const meeting = await eventCollection.create({
-      _meta_type: '@my-package:Meeting',
-      title: 'Team Standup',
-      location: 'Room A'
-    });
-    await meeting.save();
+	it('should save and load correct subclass', async () => {
+		const meeting = await eventCollection.create({
+			_meta_type: '@my-package:Meeting',
+			title: 'Team Standup',
+			location: 'Room A'
+		});
+		await meeting.save();
 
-    const loaded = await eventCollection.get({ id: meeting.id });
-    expect(loaded).toBeInstanceOf(Meeting);
-    expect(loaded?.title).toBe('Team Standup');
-    expect(loaded?.location).toBe('Room A');
-  });
+		const loaded = await eventCollection.get({ id: meeting.id });
+		expect(loaded).toBeInstanceOf(Meeting);
+		expect(loaded?.title).toBe('Team Standup');
+		expect(loaded?.location).toBe('Room A');
+	});
 
-  it('should filter by _meta_type', async () => {
-    await eventCollection.create({
-      _meta_type: '@my-package:Meeting',
-      title: 'Meeting 1'
-    }).then(e => e.save());
+	it('should filter by _meta_type', async () => {
+		await eventCollection
+			.create({
+				_meta_type: '@my-package:Meeting',
+				title: 'Meeting 1'
+			})
+			.then((e) => e.save());
 
-    await eventCollection.create({
-      _meta_type: '@my-package:Conference',
-      title: 'Conference 1'
-    }).then(e => e.save());
+		await eventCollection
+			.create({
+				_meta_type: '@my-package:Conference',
+				title: 'Conference 1'
+			})
+			.then((e) => e.save());
 
-    const meetings = await eventCollection.list({
-      where: { _meta_type: '@my-package:Meeting' }
-    });
+		const meetings = await eventCollection.list({
+			where: { _meta_type: '@my-package:Meeting' }
+		});
 
-    expect(meetings).toHaveLength(1);
-    expect(meetings[0]).toBeInstanceOf(Meeting);
-  });
+		expect(meetings).toHaveLength(1);
+		expect(meetings[0]).toBeInstanceOf(Meeting);
+	});
 });
 ```
 
@@ -1726,27 +1791,27 @@ When testing AI-powered methods (`is()`, `do()`), use test mode to avoid API cal
 
 ```typescript
 describe('AI operations', () => {
-  it('should validate with is()', async () => {
-    const doc = await collection.create({
-      title: 'Test Doc',
-      content: 'This is a test document with enough words to be quality content.'
-    });
+	it('should validate with is()', async () => {
+		const doc = await collection.create({
+			title: 'Test Doc',
+			content: 'This is a test document with enough words to be quality content.'
+		});
 
-    // In tests, you may want to mock AI responses
-    // Or use a test AI provider that returns deterministic results
-    const isQuality = await doc.is('This document is high quality');
-    expect(typeof isQuality).toBe('boolean');
-  });
+		// In tests, you may want to mock AI responses
+		// Or use a test AI provider that returns deterministic results
+		const isQuality = await doc.is('This document is high quality');
+		expect(typeof isQuality).toBe('boolean');
+	});
 
-  it('should transform with do()', async () => {
-    const doc = await collection.create({
-      title: 'Test',
-      content: 'Test content'
-    });
+	it('should transform with do()', async () => {
+		const doc = await collection.create({
+			title: 'Test',
+			content: 'Test content'
+		});
 
-    const summary = await doc.do('Create a summary');
-    expect(typeof summary).toBe('string');
-  });
+		const summary = await doc.do('Create a summary');
+		expect(typeof summary).toBe('string');
+	});
 });
 ```
 
@@ -1756,28 +1821,28 @@ describe('AI operations', () => {
 
 ```typescript
 describe('error handling', () => {
-  it('should throw on invalid data', async () => {
-    await expect(async () => {
-      await collection.create({ invalid: 'field' });
-    }).rejects.toThrow();
-  });
+	it('should throw on invalid data', async () => {
+		await expect(async () => {
+			await collection.create({ invalid: 'field' });
+		}).rejects.toThrow();
+	});
 
-  it('should validate required fields', async () => {
-    await expect(async () => {
-      const obj = await collection.create({});
-      await obj.save();
-    }).rejects.toThrow();
-  });
+	it('should validate required fields', async () => {
+		await expect(async () => {
+			const obj = await collection.create({});
+			await obj.save();
+		}).rejects.toThrow();
+	});
 
-  it('should handle duplicate IDs', async () => {
-    const obj1 = await collection.create({ id: 'duplicate' });
-    await obj1.save();
+	it('should handle duplicate IDs', async () => {
+		const obj1 = await collection.create({ id: 'duplicate' });
+		await obj1.save();
 
-    await expect(async () => {
-      const obj2 = await collection.create({ id: 'duplicate' });
-      await obj2.save();
-    }).rejects.toThrow();
-  });
+		await expect(async () => {
+			const obj2 = await collection.create({ id: 'duplicate' });
+			await obj2.save();
+		}).rejects.toThrow();
+	});
 });
 ```
 
@@ -1790,16 +1855,16 @@ import { describe, it, expect } from 'vitest';
 import { CLIGenerator } from '@happyvertical/smrt-core/codegen';
 
 describe('CLI generation', () => {
-  it('should generate list command', () => {
-    const generator = new CLIGenerator({
-      className: 'Product',
-      packageName: '@test/package'
-    });
+	it('should generate list command', () => {
+		const generator = new CLIGenerator({
+			className: 'Product',
+			packageName: '@test/package'
+		});
 
-    const code = generator.generateCommand('list');
-    expect(code).toContain('list');
-    expect(code).toContain('Product');
-  });
+		const code = generator.generateCommand('list');
+		expect(code).toContain('list');
+		expect(code).toContain('Product');
+	});
 });
 ```
 
@@ -1807,16 +1872,16 @@ describe('CLI generation', () => {
 
 ```typescript
 describe('API generation', () => {
-  it('should generate REST endpoint', () => {
-    const generator = new APIGenerator({
-      className: 'Product',
-      packageName: '@test/package'
-    });
+	it('should generate REST endpoint', () => {
+		const generator = new APIGenerator({
+			className: 'Product',
+			packageName: '@test/package'
+		});
 
-    const code = generator.generateEndpoint('list');
-    expect(code).toContain('GET');
-    expect(code).toContain('/products');
-  });
+		const code = generator.generateEndpoint('list');
+		expect(code).toContain('GET');
+		expect(code).toContain('/products');
+	});
 });
 ```
 
@@ -1834,18 +1899,18 @@ When fixing a bug, follow Test-Driven Development:
 
 ```typescript
 describe('Bug #123: WHERE clause with null', () => {
-  it('should handle null equality checks', async () => {
-    // Reproduce the bug with a test
-    await collection.create({ name: 'Active', deleted_at: null }).then(o => o.save());
-    await collection.create({ name: 'Deleted', deleted_at: new Date() }).then(o => o.save());
+	it('should handle null equality checks', async () => {
+		// Reproduce the bug with a test
+		await collection.create({ name: 'Active', deleted_at: null }).then((o) => o.save());
+		await collection.create({ name: 'Deleted', deleted_at: new Date() }).then((o) => o.save());
 
-    const active = await collection.list({
-      where: { deleted_at: null }
-    });
+		const active = await collection.list({
+			where: { deleted_at: null }
+		});
 
-    expect(active).toHaveLength(1);
-    expect(active[0].name).toBe('Active');
-  });
+		expect(active).toHaveLength(1);
+		expect(active[0].name).toBe('Active');
+	});
 });
 ```
 
@@ -1854,6 +1919,7 @@ describe('Bug #123: WHERE clause with null', () => {
 **Every code example in a README must have a corresponding test.**
 
 This ensures:
+
 - Examples are always accurate
 - Breaking changes are caught
 - Documentation stays in sync with code
@@ -1862,18 +1928,18 @@ This ensures:
 
 ```typescript
 describe('README examples', () => {
-  it('should match Quick Start example', async () => {
-    // Copy-paste README example here and add assertions
-    const collection = await MyCollection.create({
-      persistence: { type: 'sql', url: ':memory:' }
-    });
+	it('should match Quick Start example', async () => {
+		// Copy-paste README example here and add assertions
+		const collection = await MyCollection.create({
+			persistence: { type: 'sql', url: ':memory:' }
+		});
 
-    const obj = await collection.create({ name: 'Test' });
-    await obj.save();
+		const obj = await collection.create({ name: 'Test' });
+		await obj.save();
 
-    expect(obj.name).toBe('Test');
-    expect(obj.id).toBeDefined();
-  });
+		expect(obj.name).toBe('Test');
+		expect(obj.id).toBeDefined();
+	});
 });
 ```
 
@@ -1897,12 +1963,11 @@ npm run test:coverage
 - [packages/core/CLAUDE.md](./packages/core/CLAUDE.md) - Framework internals
 - [WORKFLOW.md](./WORKFLOW.md) - Development workflows
 
-
 ---
 
 ### Contributing
 
-*Source: CONTRIBUTING.md*
+_Source: CONTRIBUTING.md_
 
 # Contributing to SMRT Framework
 
@@ -1952,10 +2017,12 @@ npm test
 ### 2. Follow the Development Workflow
 
 See [WORKFLOW.md](./WORKFLOW.md) for detailed SOPs:
+
 - **Starting Work**: Pre-work checklist, git setup, branch creation, planning
 - **Creating PRs**: Quality checks, commit squashing, PR description
 
 **Quick Summary**:
+
 1. Create feature branch: `{type}/issue-{number}-{short-description}`
 2. Implement changes following coding standards
 3. Write tests following [TESTING_STANDARD.md](../TESTING_STANDARD.md)
@@ -1965,6 +2032,7 @@ See [WORKFLOW.md](./WORKFLOW.md) for detailed SOPs:
 ### 3. Code Review
 
 All contributions go through code review:
+
 - Maintainers review PRs for quality, tests, and documentation
 - Address feedback promptly
 - Keep PRs focused and reasonably sized
@@ -1980,6 +2048,7 @@ All contributions go through code review:
 - **Modules**: ESM only, no CommonJS
 
 **Auto-format**:
+
 ```bash
 npm run format       # Format all files
 npm run lint --fix   # Auto-fix linting issues
@@ -1997,12 +2066,14 @@ npm run lint --fix   # Auto-fix linting issues
 All code changes must include tests. See [TESTING_STANDARD.md](../TESTING_STANDARD.md) for complete requirements.
 
 **Key Principles**:
+
 - Use real resources (in-memory DBs, temp files) over mocks
 - Tests should read like documentation
 - Follow BDD/TDD for bug fixes
 - README examples must have corresponding tests
 
 **Test Types**:
+
 - **Unit tests** (`*.test.ts`): Fast, isolated component tests
 - **Integration tests** (`*.spec.ts`): Real resource integration
 - **Example tests** (`*.examples.test.ts`): Demonstrate common patterns
@@ -2011,20 +2082,22 @@ All code changes must include tests. See [TESTING_STANDARD.md](../TESTING_STANDA
 ### SMRT-Specific Patterns
 
 **TypeScript-First Approach**:
+
 ```typescript
 // ✅ PREFERRED: Use TypeScript types for most properties
 class Product extends SmrtObject {
-  name: string = '';
-  price: number = 0.0;    // DECIMAL (has decimal point)
-  quantity: number = 0;   // INTEGER (no decimal point)
+	name: string = '';
+	price: number = 0.0; // DECIMAL (has decimal point)
+	quantity: number = 0; // INTEGER (no decimal point)
 
-  // Field helpers only when needed
-  categoryId = foreignKey(Category);
-  sku = text({ required: true, unique: true });
+	// Field helpers only when needed
+	categoryId = foreignKey(Category);
+	sku = text({ required: true, unique: true });
 }
 ```
 
 **The 0 vs 0.0 Heuristic**:
+
 - `number = 0` → INTEGER column (no decimal point)
 - `number = 0.0` → DECIMAL column (has decimal point)
 
@@ -2035,6 +2108,7 @@ See [packages/core/CLAUDE.md](./packages/core/CLAUDE.md#typescript-types-vs-fiel
 ### When to Update Documentation
 
 Update documentation when you:
+
 - Add new features or APIs
 - Change existing behavior
 - Fix bugs that aren't obvious
@@ -2078,6 +2152,7 @@ Closes #<issue-number>
 ```
 
 **Examples**:
+
 ```
 feat(core): add TypeScript-first pattern support
 fix(agents): resolve memory leak in agent pool
@@ -2098,22 +2173,26 @@ See [WORKFLOW.md](./WORKFLOW.md#sop-creating-a-pull-request) for detailed PR cre
 ### What We Look For
 
 ✅ **Code Quality**:
+
 - Follows TypeScript and ESM standards
 - Proper error handling
 - No security vulnerabilities
 
 ✅ **Testing**:
+
 - All tests pass
 - New code has test coverage
 - Tests follow TESTING_STANDARD.md
 - README examples have tests
 
 ✅ **Documentation**:
+
 - API changes documented
 - Examples provided
 - CLAUDE.md updated if needed
 
 ✅ **Process**:
+
 - Conventional commit message
 - Issue referenced
 - No unrelated changes
@@ -2180,12 +2259,11 @@ By contributing, you agree that your contributions will be licensed under the MI
 
 Thank you for contributing to SMRT! Your efforts help make this framework better for everyone. 🎉
 
-
 ---
 
 ### Development Workflow
 
-*Source: WORKFLOW.md*
+_Source: WORKFLOW.md_
 
 # SMRT Framework: Development Workflow Guide
 
@@ -2211,6 +2289,7 @@ This document contains the standard operating procedures (SOPs) for development 
 **⚠️ NEVER PUSH DIRECTLY TO MAIN** - Always use feature branches and pull requests.
 
 **Feature branch naming**: `{type}/issue-{number}-{short-description}`
+
 - Examples: `feat/issue-123-new-feature`, `fix/issue-45-bug-fix`, `docs/issue-89-update-readme`
 - Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
 
@@ -2221,6 +2300,7 @@ This document contains the standard operating procedures (SOPs) for development 
 **IMPORTANT**: This SOP should be followed automatically whenever beginning implementation work, whether explicitly asked or implied.
 
 **Related Standards**:
+
 - [Organization-Wide Testing Standard](../TESTING_STANDARD.md) - Must be followed for all test writing
 - [Definition of Ready](https://github.com/happyvertical/sdk/blob/main/docs/workflow/DEFINITION_OF_READY.md) - Issue readiness criteria
 - [Definition of Done](https://github.com/happyvertical/sdk/blob/main/docs/workflow/DEFINITION_OF_DONE.md) - PR completion checklist
@@ -2228,6 +2308,7 @@ This document contains the standard operating procedures (SOPs) for development 
 ### When This SOP Triggers
 
 This procedure triggers in these scenarios:
+
 - User mentions implementing/working on an issue (e.g., "let's work on #270")
 - User asks to start implementing a feature/fix
 - Beginning any implementation work (even without explicit issue number)
@@ -2246,12 +2327,14 @@ git status
 ```
 
 **If uncommitted changes exist**:
+
 - Stop the SOP immediately
 - Inform the user: "You have uncommitted changes. Please commit or stash them before starting new work."
 - Do not attempt to stash or commit automatically
 - Wait for user to resolve
 
 **If clean working tree**:
+
 - Proceed to Step 2
 
 ### Step 2: Sync with Main Branch
@@ -2267,6 +2350,7 @@ git pull origin main
 ```
 
 **If already on a feature branch**:
+
 - First verify working tree is clean (Step 1)
 - Then checkout main and sync
 - Claude will create/checkout the correct feature branch in Step 4
@@ -2274,16 +2358,19 @@ git pull origin main
 ### Step 3: Identify Issue(s) and Context
 
 **Interactive Mode** (default):
+
 - If no issue number mentioned, use wizard to ask which issue(s) to work on
 - If user mentions issue(s), fetch issue details using `gh issue view #XXX`
 - Read the issue description, labels, and comments for context
 
 **Non-Interactive/CI Mode**:
+
 - Issue number must be provided as input
 - If missing, exit with error: "Issue number required for non-interactive mode"
 - Fetch issue details using `gh issue view #XXX`
 
 **Multiple Issues**:
+
 - If working on multiple related issues, note all issue numbers
 - Branch will be named: `{type}/issue-XXX-YYY-short-desc`
 - PR will use: `Closes #XXX, Fixes #YYY` syntax
@@ -2291,6 +2378,7 @@ git pull origin main
 ### Step 4: Create or Checkout Feature Branch
 
 **Branch Naming Convention**:
+
 ```
 {type}/issue-{numbers}-{short-description}
 
@@ -2304,10 +2392,12 @@ feat/issue-270-271-combined-work  # Multiple issues
 ```
 
 **Determining Branch Type**:
+
 - Read issue labels and title to infer type (feat/fix/docs/refactor/test)
 - Default to `feat` if unclear
 
 **Branch Creation**:
+
 ```bash
 # Check if branch already exists remotely
 git fetch origin
@@ -2323,6 +2413,7 @@ git checkout -b {type}/issue-XXX-short-desc origin/{type}/issue-XXX-short-desc
 ```
 
 **Context Awareness**:
+
 - If branch already exists: Assume continuing previous work
 - Check last commit message to understand current state
 - Review existing changes since branching from main
@@ -2332,6 +2423,7 @@ git checkout -b {type}/issue-XXX-short-desc origin/{type}/issue-XXX-short-desc
 **IMPORTANT**: Use the AskUserQuestion wizard for ALL clarifying questions.
 
 **Standard Questions to Ask** (use wizard):
+
 1. **Implementation Approach**
    - Technical approach (architecture, design patterns)
    - Library/tool choices
@@ -2358,6 +2450,7 @@ git checkout -b {type}/issue-XXX-short-desc origin/{type}/issue-XXX-short-desc
    - Is this fixing a bug? (if yes, write failing test first per BDD/TDD workflow)
 
 **Wizard Question Format**:
+
 ```typescript
 // Use AskUserQuestion with 1-4 questions
 // Focus on decisions that can't be standardized
@@ -2423,11 +2516,13 @@ For complex issues with multiple steps, use TodoWrite to create task list:
 ```
 
 **When to use TodoWrite**:
+
 - Issue has 3+ distinct steps
 - Multi-package changes required
 - Complex workflow with dependencies
 
 **When to skip TodoWrite**:
+
 - Single straightforward change
 - Trivial update
 - Simple bug fix
@@ -2437,23 +2532,27 @@ For complex issues with multiple steps, use TodoWrite to create task list:
 **Implementation Order** (following Testing Standard):
 
 For **bug fixes**:
+
 1. Write failing test that reproduces the issue (BDD/TDD approach)
 2. Implement fix to make test pass
 3. Verify test passes and provides regression protection
 
 For **new features**:
+
 1. Write tests from user stories (integration tests with real resources)
 2. Implement feature to make tests pass
 3. Add example tests for common usage patterns
 4. Update README with examples (and corresponding tests)
 
 For **SMRT-specific work**:
+
 - **Agent features**: Test with real Agent instances, mock only external AI API calls
 - **Smart objects**: Test with real database operations (in-memory SQLite), mock AI providers
 - **Code generation**: Test the generator logic, verify generated code compiles and runs
 - **Framework integration**: Test with real instances, avoid excessive mocking
 
 For **all work**:
+
 - Follow the plan established in Step 5
 - Update TodoWrite task list as you progress
 - Mark tasks as in_progress → completed as you work
@@ -2467,20 +2566,24 @@ For **all work**:
 ### Exception Handling
 
 **Merge Conflicts on Main Sync**:
+
 - Stop SOP, inform user
 - Ask user to resolve conflicts before continuing
 
 **Branch Already Exists with Different Type**:
+
 - Example: `fix/issue-270-X` exists but labels indicate `feat`
 - Use existing branch (don't rename)
 - Note the discrepancy for user
 
 **Issue Not Found**:
+
 - If `gh issue view` fails, stop SOP
 - Inform user the issue doesn't exist or isn't accessible
 - Ask user to verify issue number
 
 **Multiple Remote Branches for Same Issue**:
+
 - List branches and ask user which to use
 - Use wizard to present options
 
@@ -2491,6 +2594,7 @@ For **all work**:
 **IMPORTANT**: This SOP should be followed automatically when work is complete, before pushing changes.
 
 **Related Standards**:
+
 - [Organization-Wide Testing Standard](../TESTING_STANDARD.md) - Enforced by code reviewer
 - [Definition of Done](https://github.com/happyvertical/sdk/blob/main/docs/workflow/DEFINITION_OF_DONE.md) - Verified before PR creation
 - [Code Reviewer Agent](./.claude/agents/code-reviewer.md) - Automated review process
@@ -2498,11 +2602,13 @@ For **all work**:
 ### When This SOP Triggers
 
 This procedure triggers when:
+
 - User indicates work is complete ("ready", "done", "create PR", etc.)
 - User says "push" or "ready for review"
 - Work appears complete based on context
 
 **DO NOT trigger** when:
+
 - Work is still in progress
 - Tests are failing
 - User is experimenting or exploring
@@ -2520,11 +2626,13 @@ git branch --show-current
 ```
 
 **If not on feature branch**:
+
 - Stop SOP immediately
 - Inform user: "You're on main branch. Create a feature branch first."
 - Reference "Start Work on Issue" SOP
 
 **If on feature branch**:
+
 - Proceed to Step 2
 
 ### Step 2: Run Quality Checks
@@ -2546,6 +2654,7 @@ npm test
 ```
 
 **Track results**:
+
 - Note which checks passed/failed
 - Capture error messages for failed checks
 
@@ -2564,22 +2673,26 @@ npm run format
 ```
 
 **If auto-fix succeeds**:
+
 - Continue to next check
 - Note auto-fixes applied
 
 **If auto-fix fails**:
+
 - Stop SOP
 - Show errors to user
 - Message: "Please fix lint/format errors manually and try again"
 - Exit
 
 **If typecheck or tests fail**:
+
 - Stop SOP immediately (cannot auto-fix)
 - Show errors to user
 - Message: "Fix TypeScript errors / failing tests before creating PR"
 - Exit
 
 **If all checks pass**:
+
 - Proceed to Step 4
 
 ### Step 4: Run Code Review Agent (Optional)
@@ -2594,18 +2707,21 @@ If code-reviewer agent exists, invoke it to verify quality standards:
 ```
 
 **Code Reviewer Checks** (when available):
+
 1. Testing standards (TESTING_STANDARD.md)
 2. Coding standards (CLAUDE.md)
 3. Definition of Done
 4. Gemini code review (non-trivial files only, via Gemini MCP)
 
 **If blocking issues found**:
+
 - Stop SOP
 - Show code review report to user
 - Message: "Code review found {N} blocking issues. Please fix and try again."
 - Exit
 
 **If code reviewer not available**:
+
 - Skip this step and proceed to Step 5
 - Manual review will happen during PR review process
 
@@ -2628,6 +2744,7 @@ fi
 ```
 
 **Commit Message Format** (Conventional Commits):
+
 ```
 {type}({scope}): {description}
 
@@ -2637,6 +2754,7 @@ Closes #{issue-number}
 ```
 
 **Examples**:
+
 ```
 feat(agents): add retry mechanism for failed operations
 
@@ -2661,6 +2779,7 @@ Closes #45
 ```
 
 **Generate commit message**:
+
 - Use `{type}` from branch name (feat/fix/docs/refactor/test)
 - Use `{scope}` from package name or area changed (agents, core, assets, etc.)
 - Use `{description}` from issue title or summary
@@ -2679,6 +2798,7 @@ Generate comprehensive PR description using this template:
 ## Changes
 
 {Bullet list of key changes:}
+
 - {Feature/fix/refactor implemented}
 - {Files modified or added}
 - {Integration points}
@@ -2688,17 +2808,20 @@ Generate comprehensive PR description using this template:
 Following [Organization-Wide Testing Standard](../TESTING_STANDARD.md):
 
 **Test Types Added**:
+
 - [x] Unit tests (`*.test.ts`) - {describe what}
 - [x] Integration tests (`*.spec.ts`) - {describe what}
 - [x] Example tests (`*.examples.test.ts`) - {if applicable}
 - [ ] Optional tests (`*.optional.test.ts`) - {if applicable}
 
 **SMRT-Specific Testing**:
+
 - Agent testing: {Real instances, mock AI providers, etc.}
 - Smart object testing: {Real DB operations, mock AI, etc.}
 - Code generation testing: {Generator tests, verification of generated code}
 
 **Testing Approach**:
+
 - Used real resources: {SQLite in-memory / temp directories / test server / etc.}
 - Mocked only: {list exceptions with justification, or "None"}
 - README examples: {list examples with corresponding tests, or "No examples affected"}
@@ -2706,9 +2829,11 @@ Following [Organization-Wide Testing Standard](../TESTING_STANDARD.md):
 
 **Test Results**:
 ```
+
 ✅ All tests pass (X passing)
 ✅ New tests: Y added
 ✅ Coverage: Z% of changed code
+
 ```
 
 ## Code Review
@@ -2734,6 +2859,7 @@ Closes #{issue-number}
 ```
 
 **Variables to fill**:
+
 - `{Summary}`: From issue planning notes or commit body
 - `{Changes}`: Extract from git diff and commit message
 - `{Test Types}`: Check which test files were added
@@ -2760,6 +2886,7 @@ EOF
 **PR Title**: Use the commit subject line (first line of squashed commit)
 
 **PR Labels** (auto-apply based on type):
+
 - `feat/*` → label: `enhancement`
 - `fix/*` → label: `bug`
 - `docs/*` → label: `documentation`
@@ -2784,6 +2911,7 @@ echo "You can continue with other work or wait for review feedback"
 ```
 
 **Leave feature branch**:
+
 - Feature branch remains on remote for review
 - User can return to it if review feedback requires changes
 - Branch will be deleted automatically after PR merge (GitHub setting)
@@ -2791,17 +2919,20 @@ echo "You can continue with other work or wait for review feedback"
 ### Exception Handling
 
 **Not on Feature Branch**:
+
 - Stop immediately
 - Message: "You're on {branch}. Please create a feature branch first."
 - Reference "Start Work on Issue" SOP
 
 **Quality Checks Fail (Non-Auto-Fixable)**:
+
 - Stop immediately
 - Show errors clearly
 - Message: "Fix {lint/typecheck/tests} errors and try again"
 - Do not create PR
 
 **Code Review Finds Blocking Issues**:
+
 - Stop immediately
 - Show code review report
 - List each blocking issue with file:line
@@ -2830,6 +2961,7 @@ All commits must follow the Conventional Commits specification:
 **Format**: `<type>(<scope>): <subject>`
 
 **Types**:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -2845,6 +2977,7 @@ All commits must follow the Conventional Commits specification:
 **Scope**: Package name or affected area (e.g., `core`, `agents`, `assets`)
 
 **Examples**:
+
 ```
 feat(core): add TypeScript-first pattern support
 fix(agents): resolve memory leak in agent pool
@@ -2859,19 +2992,18 @@ For more info: https://www.conventionalcommits.org/
 
 This workflow guide is optimized for Claude Code integration and ensures consistent, high-quality contributions to the SMRT framework. For high-level contribution guidelines, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
-
 ---
 
 ## Package Documentation
 
 ## Installed Packages
 
-| Package | Version |
-|---------|---------|
+| Package                    | Version |
+| -------------------------- | ------- |
 | @happyvertical/smrt-agents | 0.19.46 |
 | @happyvertical/smrt-config | 0.19.46 |
-| @happyvertical/smrt-core | 0.19.46 |
-| @happyvertical/smrt-types | 0.19.46 |
+| @happyvertical/smrt-core   | 0.19.46 |
+| @happyvertical/smrt-types  | 0.19.46 |
 
 ---
 
@@ -2895,38 +3027,40 @@ Agent framework for building autonomous actors with lifecycle management, status
 #### Agent lifecycle
 
 Agents have managed lifecycle with init, validate, run, and shutdown hooks.
+
 ```typescript
 import { Agent } from '@happyvertical/smrt-agents';
 
 class MyAgent extends Agent {
-  async onInitialize() {
-    // Setup resources
-  }
+	async onInitialize() {
+		// Setup resources
+	}
 
-  async onValidate(): Promise<boolean> {
-    // Return true if ready to run
-    return true;
-  }
+	async onValidate(): Promise<boolean> {
+		// Return true if ready to run
+		return true;
+	}
 
-  async onRun() {
-    // Main agent logic
-  }
+	async onRun() {
+		// Main agent logic
+	}
 
-  async onShutdown() {
-    // Cleanup resources
-  }
+	async onShutdown() {
+		// Cleanup resources
+	}
 }
 ```
 
 #### Agent status
 
 Built-in status tracking (idle, initializing, running, error, shutdown).
+
 ```typescript
 const agent = await MyAgent.create({ name: 'worker-1' });
-console.log(agent.status);  // 'idle'
+console.log(agent.status); // 'idle'
 
 await agent.run();
-console.log(agent.status);  // 'running'
+console.log(agent.status); // 'running'
 ```
 
 ### Pitfalls
@@ -2961,25 +3095,27 @@ Configuration management for SMRT modules with support for multiple formats (JS,
 #### Package configuration
 
 Get configuration for a specific SMRT package with defaults.
+
 ```typescript
 import { getPackageConfig } from '@happyvertical/smrt-config';
 
 const config = getPackageConfig('cli', {
-  database: { type: 'sqlite', url: ':memory:' }
+	database: { type: 'sqlite', url: ':memory:' }
 });
 ```
 
 #### Config file
 
 Create smrt.config.js in project root for framework-wide configuration.
+
 ```typescript
 // smrt.config.js
 export default {
-  packages: {
-    cli: {
-      database: { type: 'sqlite', url: 'app.db' }
-    }
-  }
+	packages: {
+		cli: {
+			database: { type: 'sqlite', url: 'app.db' }
+		}
+	}
 };
 ```
 
@@ -3015,22 +3151,22 @@ Collections support flexible querying with multiple operators:
 
 ```typescript
 const results = await collection.list({
-  where: {
-    'price >': 10,              // Greater than
-    'price <=': 100,            // Less than or equal
-    'name like': '%widget%',    // Pattern matching
-    'category in': ['A', 'B'],  // IN operator
-    'active': true,             // Equals (default)
-    'deleted_at !=': null       // Not equals
-  },
-  orderBy: ['price DESC', 'name ASC'],
-  limit: 20,
-  offset: 0
+	where: {
+		'price >': 10, // Greater than
+		'price <=': 100, // Less than or equal
+		'name like': '%widget%', // Pattern matching
+		'category in': ['A', 'B'], // IN operator
+		active: true, // Equals (default)
+		'deleted_at !=': null // Not equals
+	},
+	orderBy: ['price DESC', 'name ASC'],
+	limit: 20,
+	offset: 0
 });
 
 // Count records with same filtering
 const total = await collection.count({
-  where: { 'price >': 50 }
+	where: { 'price >': 50 }
 });
 ```
 
@@ -3041,33 +3177,34 @@ SMRT supports eager loading to optimize queries that access related objects, sol
 ```typescript
 // Define relationships
 class Order extends SmrtObject {
-  customerId = foreignKey(Customer);
-  productId = foreignKey(Product);
-  status: string = 'pending';
+	customerId = foreignKey(Customer);
+	productId = foreignKey(Product);
+	status: string = 'pending';
 }
 
 // ❌ Without eager loading: N+1 queries (slow)
 const orders = await orderCollection.list({ limit: 100 });
 for (const order of orders) {
-  const customer = await order.loadRelated('customerId'); // 100 separate queries!
-  console.log(customer.name);
+	const customer = await order.loadRelated('customerId'); // 100 separate queries!
+	console.log(customer.name);
 }
 
 // ✅ With eager loading: Single query (fast)
 const orders = await orderCollection.list({
-  limit: 100,
-  include: ['customerId', 'productId'] // Pre-load relationships
+	limit: 100,
+	include: ['customerId', 'productId'] // Pre-load relationships
 });
 
 for (const order of orders) {
-  const customer = order.getRelated('customerId'); // Already loaded!
-  console.log(customer.name);
+	const customer = order.getRelated('customerId'); // Already loaded!
+	console.log(customer.name);
 }
 ```
 
 **Performance Impact**: 40-70% faster for relationship-heavy queries
 
 **How it works**:
+
 - **SQL adapters**: Generates efficient `LEFT JOIN` queries
 - **REST adapters**: Uses batch loading for related objects
 - Only works with `foreignKey` relationships
@@ -3083,9 +3220,9 @@ All SMRT objects have public `db` property for direct database access via @have/
 import { SmrtObject, SmrtCollection } from '@happyvertical/smrt-core';
 
 class Product extends SmrtObject {
-  name = text({ required: true });
-  price = decimal({ required: true });
-  category = text({ required: true });
+	name = text({ required: true });
+	price = decimal({ required: true });
+	category = text({ required: true });
 }
 
 const products = await ProductCollection.create({ db: 'products.db' });
@@ -3118,6 +3255,7 @@ const results = await products.db.query`
 ```
 
 **Key Benefits**:
+
 - **Direct database access**: Use any SQL query, not limited to ORM methods
 - **Template literal safety**: Automatic SQL injection protection via tagged templates
 - **Full @have/sql power**: Access all DatabaseInterface methods (many, single, pluck, execute)
@@ -3125,18 +3263,19 @@ const results = await products.db.query`
 - **Performance**: Direct queries can be more efficient for complex operations
 
 **Configuration Options**:
+
 ```typescript
 // String shortcut (auto-detects database type)
 const collection = await ProductCollection.create({
-  db: 'products.db'
+	db: 'products.db'
 });
 
 // Config object (explicit type)
 const collection = await ProductCollection.create({
-  db: {
-    type: 'sqlite',
-    url: 'products.db'
-  }
+	db: {
+		type: 'sqlite',
+		url: 'products.db'
+	}
 });
 
 // DatabaseInterface instance (pre-configured)
@@ -3154,14 +3293,16 @@ const collection = await ProductCollection.create({ db });
 **Cause**: In versions before v0.32.1, collections used their own class name for table naming instead of the item class name.
 
 **Fixed in v0.32.1**: Collections now correctly use the item class name for table naming:
+
 ```typescript
 class PlaceCollection extends SmrtCollection<Place> {
-  static readonly _itemClass = Place;
-  // Table name: 'places' (from Place class), not 'place_collections'
+	static readonly _itemClass = Place;
+	// Table name: 'places' (from Place class), not 'place_collections'
 }
 ```
 
 **Migration**: If you have data in the incorrectly-named table:
+
 ```sql
 -- Rename the table to match the item class name
 ALTER TABLE place_collections RENAME TO places;
@@ -3174,10 +3315,11 @@ ALTER TABLE place_collections RENAME TO places;
 **Cause**: Collection constructors are protected to prevent partially-initialized instances.
 
 **Solution**: Always use the static `create()` factory method:
+
 ```typescript
 // ✅ CORRECT - Fully initialized collection
 const collection = await ProductCollection.create({
-  db: { type: 'sqlite', url: 'products.db' }
+	db: { type: 'sqlite', url: 'products.db' }
 });
 
 // ❌ WRONG - Constructor is protected
@@ -3186,16 +3328,17 @@ const collection = new ProductCollection(options); // Error!
 
 The static factory method ensures collections are fully initialized with database connections, AI clients, and file system access before use.
 
-### Collection _itemClass Requirement
+### Collection \_itemClass Requirement
 
-**Issue**: Error "Collection must define a static _itemClass property".
+**Issue**: Error "Collection must define a static \_itemClass property".
 
 **Cause**: Collections require a static `_itemClass` property to know which object type they manage.
 
-**Solution**: Always define the static _itemClass:
+**Solution**: Always define the static \_itemClass:
+
 ```typescript
 class DocumentCollection extends SmrtCollection<Document> {
-  static readonly _itemClass = Document; // Required!
+	static readonly _itemClass = Document; // Required!
 }
 ```
 
@@ -3206,6 +3349,7 @@ class DocumentCollection extends SmrtCollection<Document> {
 **Cause**: SMRT enforces a unique constraint on `(slug, context)` pairs.
 
 **Understanding**: Objects can have the same slug if they have different contexts:
+
 ```typescript
 // These are DIFFERENT objects (different contexts)
 const blog = await collection.create({ slug: 'intro', context: '/blog' });
@@ -3223,38 +3367,41 @@ const blog2 = await collection.create({ slug: 'intro', context: '/blog' });
 #### @smrt() decorator
 
 Registers class for automatic API/CLI/MCP generation. Configure which endpoints, tools, and commands to generate.
+
 ```typescript
 @smrt({
-  api: { include: ['list', 'get', 'create', 'update'] },
-  mcp: { include: ['list', 'get', 'analyze'] },
-  cli: true
+	api: { include: ['list', 'get', 'create', 'update'] },
+	mcp: { include: ['list', 'get', 'analyze'] },
+	cli: true
 })
 class Product extends SmrtObject {
-  name: string = '';
-  price: number = 0.0;
+	name: string = '';
+	price: number = 0.0;
 }
 ```
 
 #### TypeScript types for schema
 
 Use TypeScript types for automatic database schema generation. The AST scanner infers column types from default values.
+
 ```typescript
 class Product extends SmrtObject {
-  name: string = '';        // TEXT
-  quantity: number = 0;     // INTEGER (no decimal)
-  price: number = 0.0;      // DECIMAL (has decimal)
-  active: boolean = true;   // BOOLEAN
-  tags: string[] = [];      // JSON
+	name: string = ''; // TEXT
+	quantity: number = 0; // INTEGER (no decimal)
+	price: number = 0.0; // DECIMAL (has decimal)
+	active: boolean = true; // BOOLEAN
+	tags: string[] = []; // JSON
 }
 ```
 
 #### Static factory for collections
 
 Collections use static create() method for guaranteed initialization. Never use 'new' directly.
+
 ```typescript
 // Correct
 const collection = await ProductCollection.create({
-  db: { type: 'sqlite', url: 'products.db' }
+	db: { type: 'sqlite', url: 'products.db' }
 });
 
 // Wrong - constructor is protected
@@ -3264,34 +3411,36 @@ const collection = new ProductCollection(options); // Error!
 #### AI-powered operations
 
 Built-in is() and do() methods for AI-powered validation and transformation on every object.
+
 ```typescript
 class Document extends SmrtObject {
-  content: string = '';
+	content: string = '';
 
-  async isHighQuality(): Promise<boolean> {
-    return await this.is('Content is well-written and professional');
-  }
+	async isHighQuality(): Promise<boolean> {
+		return await this.is('Content is well-written and professional');
+	}
 
-  async generateSummary(): Promise<string> {
-    return await this.do('Create a 2-sentence summary');
-  }
+	async generateSummary(): Promise<string> {
+		return await this.do('Create a 2-sentence summary');
+	}
 }
 ```
 
 #### Custom action methods
 
 Define custom methods on SMRT objects and expose them via API, MCP, or CLI by including them in the decorator config.
+
 ```typescript
 @smrt({
-  mcp: { include: ['list', 'get', 'research'] }
+	mcp: { include: ['list', 'get', 'research'] }
 })
 class Agent extends SmrtObject {
-  async research(options: { query: string }) {
-    return {
-      action: 'research',
-      results: await this.do(`Research: ${options.query}`)
-    };
-  }
+	async research(options: { query: string }) {
+		return {
+			action: 'research',
+			results: await this.do(`Research: ${options.query}`)
+		};
+	}
 }
 ```
 
@@ -3299,7 +3448,7 @@ class Agent extends SmrtObject {
 
 - Always use `smrt test` instead of `npx vitest` directly - tests require manifest generation first
 - Never override toJSON() without calling super.toJSON() - breaks STI and meta fields
-- Collections require static _itemClass property: `static readonly _itemClass = Product;`
+- Collections require static \_itemClass property: `static readonly _itemClass = Product;`
 - Always call initialize() after creating objects with 'new', or use collection.create() which calls it automatically
 - UNIQUE constraint is on (slug, context) pair - same slug allowed in different contexts
 - Query operators go in field name: `{ 'price >': 100 }` not `{ price: '> 100' }`
@@ -3320,6 +3469,7 @@ Shared TypeScript type definitions for the SMRT framework. Prevents circular dep
 #### Import types
 
 Import shared types from this package to avoid circular dependencies.
+
 ```typescript
 import type { SmrtObjectOptions, FieldDefinition } from '@happyvertical/smrt-types';
 ```
@@ -3342,9 +3492,11 @@ If you discover gotchas, patterns, or information that should be included in the
 **https://github.com/happyvertical/smrt/issues**
 
 Include:
+
 - The package name (e.g., `@happyvertical/smrt-core`)
 - Description of the gotcha or pattern
 - Example code if applicable
 
 ---
-*Generated by `smrt docs:claude` — regenerate after dependency updates*
+
+_Generated by `smrt docs:claude` — regenerate after dependency updates_

@@ -1,40 +1,40 @@
 <script lang="ts">
-  import ModulePage from '$lib/components/ModulePage.svelte';
-  import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import ModulePage from '$lib/components/ModulePage.svelte';
+	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<ModulePage 
-  name="smrt-ads" 
-  description="Ad management system with waterfall priority, zone targeting, weighted A/B testing, and immutable event tracking."
-  badges={['v0.19.0', 'Waterfall', 'A/B Testing', 'IAB Formats']}
+<ModulePage
+	name="smrt-ads"
+	description="Ad management system with waterfall priority, zone targeting, weighted A/B testing, and immutable event tracking."
+	badges={['v0.19.0', 'Waterfall', 'A/B Testing', 'IAB Formats']}
 >
-  <section>
-    <h2>Overview</h2>
-    <p>
-      <strong>smrt-ads</strong> provides ad campaign management with waterfall priority delivery,
-      zone-based targeting, weighted variation selection, and immutable event tracking.
-    </p>
-    <aside>
-      <p>Key Features:</p>
-      <ul>
-        <li>Waterfall priority system (1=highest, 2, 3...)</li>
-        <li>Zone targeting with smrt-properties integration</li>
-        <li>Weighted A/B testing for ad variations</li>
-        <li>IAB-standard ad formats</li>
-        <li>Immutable event tracking (impressions, clicks, conversions)</li>
-      </ul>
-    </aside>
-  </section>
+	<section>
+		<h2>Overview</h2>
+		<p>
+			<strong>smrt-ads</strong> provides ad campaign management with waterfall priority delivery, zone-based
+			targeting, weighted variation selection, and immutable event tracking.
+		</p>
+		<aside>
+			<p>Key Features:</p>
+			<ul>
+				<li>Waterfall priority system (1=highest, 2, 3...)</li>
+				<li>Zone targeting with smrt-properties integration</li>
+				<li>Weighted A/B testing for ad variations</li>
+				<li>IAB-standard ad formats</li>
+				<li>Immutable event tracking (impressions, clicks, conversions)</li>
+			</ul>
+		</aside>
+	</section>
 
-  <section>
-    <h2>Installation</h2>
-    <CodeBlock code={`npm install @happyvertical/smrt-ads`} language="bash" />
-  </section>
+	<section>
+		<h2>Installation</h2>
+		<CodeBlock code={`npm install @happyvertical/smrt-ads`} language="bash" />
+	</section>
 
-  <section>
-    <h2>Quick Start</h2>
-    <CodeBlock
-      code={`import {
+	<section>
+		<h2>Quick Start</h2>
+		<CodeBlock
+			code={`import {
   AdDeliveryTierCollection, AdGroupCollection,
   AdVariationCollection, AdEventCollection
 } from '@happyvertical/smrt-ads';
@@ -90,16 +90,16 @@ await events.create({
   zoneId: 'zone-1',
   siteId: property.id
 });`}
-      language="typescript"
-    />
-  </section>
+			language="typescript"
+		/>
+	</section>
 
-  <section>
-    <h2>Core Models</h2>
+	<section>
+		<h2>Core Models</h2>
 
-    <h3>AdDeliveryTier (Priority)</h3>
-    <CodeBlock
-      code={`class AdDeliveryTier extends SmrtObject {
+		<h3>AdDeliveryTier (Priority)</h3>
+		<CodeBlock
+			code={`class AdDeliveryTier extends SmrtObject {
   name: string
   priority: number          // 1=highest, 2, 3...
   pricingModel: 'FIXED' | 'CPM' | 'CPC' | 'CPA'
@@ -109,12 +109,12 @@ await events.create({
   isFixedPricing(): boolean
   isPerformanceBased(): boolean
 }`}
-      language="typescript"
-    />
+			language="typescript"
+		/>
 
-    <h3>AdGroup (Campaign)</h3>
-    <CodeBlock
-      code={`class AdGroup extends SmrtObject {
+		<h3>AdGroup (Campaign)</h3>
+		<CodeBlock
+			code={`class AdGroup extends SmrtObject {
   contractId: string        // FK to Contract (smrt-commerce)
   tierName: string          // Delivery tier
   verticalSlug?: string     // FK to Tag (smrt-tags)
@@ -131,12 +131,12 @@ await events.create({
   addZoneId(zoneId: string): void
   removeZoneId(zoneId: string): void
 }`}
-      language="typescript"
-    />
+			language="typescript"
+		/>
 
-    <h3>AdVariation (Creative)</h3>
-    <CodeBlock
-      code={`class AdVariation extends SmrtObject {
+		<h3>AdVariation (Creative)</h3>
+		<CodeBlock
+			code={`class AdVariation extends SmrtObject {
   groupId: string
   formatName: string        // FK to AdFormat
   assetId: string           // FK to Asset (smrt-assets)
@@ -151,14 +151,14 @@ await events.create({
   recordImpression(): void
   recordClick(): void
 }`}
-      language="typescript"
-    />
-  </section>
+			language="typescript"
+		/>
+	</section>
 
-  <section>
-    <h2>Waterfall Priority & Selection</h2>
-    <CodeBlock
-      code={`// Ad selection algorithm
+	<section>
+		<h2>Waterfall Priority & Selection</h2>
+		<CodeBlock
+			code={`// Ad selection algorithm
 async function selectAd(zoneId: string) {
   // 1. Find eligible groups for zone
   const eligibleGroups = await groups.findEligibleForZone(zoneId);
@@ -181,14 +181,14 @@ async function selectAd(zoneId: string) {
 // Weighted selection (A/B testing)
 const selected = await variations.selectByWeight(groupId);
 // Weight 70 vs 30 = 70% chance of first variation`}
-      language="typescript"
-    />
-  </section>
+			language="typescript"
+		/>
+	</section>
 
-  <section>
-    <h2>Performance Tracking</h2>
-    <CodeBlock
-      code={`// Track events (immutable)
+	<section>
+		<h2>Performance Tracking</h2>
+		<CodeBlock
+			code={`// Track events (immutable)
 await events.create({
   eventType: 'IMPRESSION',
   variationId: variation.id,
@@ -216,58 +216,58 @@ const weekEvents = await events.findByDateRange(
   new Date('2025-01-20'),
   new Date('2025-01-27')
 );`}
-      language="typescript"
-    />
-  </section>
+			language="typescript"
+		/>
+	</section>
 
-  <section>
-    <h2>Best Practices</h2>
-    <article>
-      <h3>DOs</h3>
-      <ul>
-        <li>Use lower priority numbers for premium tiers (1=highest)</li>
-        <li>Set reasonable weights for A/B tests (sum doesn't need to be 100)</li>
-        <li>Track impressions before serving to prevent double-counting</li>
-        <li>Use targeting JSON for flexible audience rules</li>
-        <li>Link to smrt-commerce contracts for billing</li>
-      </ul>
-    </article>
-    <article>
-      <h3>DON'Ts</h3>
-      <ul>
-        <li>Don't modify AdEvent records (immutable by design)</li>
-        <li>Don't set weight to 0 (makes variation unselectable)</li>
-        <li>Don't forget to filter by date range and status</li>
-        <li>Don't serve ads without zone eligibility check</li>
-        <li>Don't ignore tier priority ordering</li>
-      </ul>
-    </article>
-  </section>
+	<section>
+		<h2>Best Practices</h2>
+		<article>
+			<h3>DOs</h3>
+			<ul>
+				<li>Use lower priority numbers for premium tiers (1=highest)</li>
+				<li>Set reasonable weights for A/B tests (sum doesn't need to be 100)</li>
+				<li>Track impressions before serving to prevent double-counting</li>
+				<li>Use targeting JSON for flexible audience rules</li>
+				<li>Link to smrt-commerce contracts for billing</li>
+			</ul>
+		</article>
+		<article>
+			<h3>DON'Ts</h3>
+			<ul>
+				<li>Don't modify AdEvent records (immutable by design)</li>
+				<li>Don't set weight to 0 (makes variation unselectable)</li>
+				<li>Don't forget to filter by date range and status</li>
+				<li>Don't serve ads without zone eligibility check</li>
+				<li>Don't ignore tier priority ordering</li>
+			</ul>
+		</article>
+	</section>
 
-  <section>
-    <h2>Related Modules</h2>
-    <nav>
-      <a href="/modules/smrt-properties">
-        <h3>smrt-properties</h3>
-        <p>Zone targeting integration</p>
-      </a>
-      <a href="/modules/smrt-commerce">
-        <h3>smrt-commerce</h3>
-        <p>Contract and billing management</p>
-      </a>
-      <a href="/modules/smrt-assets">
-        <h3>smrt-assets</h3>
-        <p>Creative asset management</p>
-      </a>
-      <a href="/modules/smrt-tags">
-        <h3>smrt-tags</h3>
-        <p>Vertical categorization</p>
-      </a>
-    </nav>
-  </section>
+	<section>
+		<h2>Related Modules</h2>
+		<nav>
+			<a href="/modules/smrt-properties">
+				<h3>smrt-properties</h3>
+				<p>Zone targeting integration</p>
+			</a>
+			<a href="/modules/smrt-commerce">
+				<h3>smrt-commerce</h3>
+				<p>Contract and billing management</p>
+			</a>
+			<a href="/modules/smrt-assets">
+				<h3>smrt-assets</h3>
+				<p>Creative asset management</p>
+			</a>
+			<a href="/modules/smrt-tags">
+				<h3>smrt-tags</h3>
+				<p>Vertical categorization</p>
+			</a>
+		</nav>
+	</section>
 
-  <nav>
-    <a href="/modules">Back to Modules</a>
-    <a href="/modules/smrt-gnode">Next: smrt-gnode</a>
-  </nav>
+	<nav>
+		<a href="/modules">Back to Modules</a>
+		<a href="/modules/smrt-gnode">Next: smrt-gnode</a>
+	</nav>
 </ModulePage>

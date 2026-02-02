@@ -74,7 +74,10 @@
 
 <svelte:head>
 	<title>PhoneInput | s-m-r-t Forms</title>
-	<meta name="description" content="Phone number input component with formatting and validation for CA and US numbers." />
+	<meta
+		name="description"
+		content="Phone number input component with formatting and validation for CA and US numbers."
+	/>
 </svelte:head>
 
 <article class="prose">
@@ -88,12 +91,15 @@
 
 	<h1>PhoneInput</h1>
 	<p class="lead">
-		A phone number input with automatic formatting for Canadian and US numbers. Supports voice
-		input in smrt mode with natural language number parsing.
+		A phone number input with automatic formatting for Canadian and US numbers. Supports voice input
+		in smrt mode with natural language number parsing.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { PhoneInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { PhoneInput } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>A simple phone input with automatic formatting as you type.</p>
@@ -109,11 +115,7 @@
   bind:value
 />`}
 	>
-		<PhoneInput
-			name="phone"
-			label="Phone Number"
-			bind:value={basicPhone}
-		/>
+		<PhoneInput name="phone" label="Phone Number" bind:value={basicPhone} />
 	</ComponentExample>
 
 	<h2>With Default Value</h2>
@@ -126,11 +128,7 @@
   value="+1 (416) 555-0123"
 />`}
 	>
-		<PhoneInput
-			name="contact"
-			label="Contact Phone"
-			bind:value={canadianPhone}
-		/>
+		<PhoneInput name="contact" label="Contact Phone" bind:value={canadianPhone} />
 	</ComponentExample>
 
 	<h2>US Phone Number</h2>
@@ -164,11 +162,7 @@
   required
 />`}
 	>
-		<PhoneInput
-			name="required-phone"
-			label="Mobile Number"
-			required
-		/>
+		<PhoneInput name="required-phone" label="Mobile Number" required />
 	</ComponentExample>
 
 	<h2>Disabled State</h2>
@@ -182,12 +176,7 @@
   disabled
 />`}
 	>
-		<PhoneInput
-			name="verified"
-			label="Verified Phone"
-			value="+1 (416) 555-0199"
-			disabled
-		/>
+		<PhoneInput name="verified" label="Verified Phone" value="+1 (416) 555-0199" disabled />
 	</ComponentExample>
 
 	<h2>With Error</h2>
@@ -227,9 +216,7 @@
 	</ComponentExample>
 
 	<h2>Voice Input (smrt Mode)</h2>
-	<p>
-		In smrt mode, users can speak phone numbers naturally. The component parses spoken digits:
-	</p>
+	<p>In smrt mode, users can speak phone numbers naturally. The component parses spoken digits:</p>
 	<ul>
 		<li>"four one six five five five zero one two three" → +1 (416) 555-0123</li>
 		<li>"four one six, five five five, zero one two three" → +1 (416) 555-0123</li>
@@ -261,11 +248,7 @@
 />
 <p>Raw value: {value || '(empty)'}</p>`}
 	>
-		<PhoneInput
-			name="interactive"
-			label="Enter Phone"
-			bind:value={interactivePhone}
-		/>
+		<PhoneInput name="interactive" label="Enter Phone" bind:value={interactivePhone} />
 		<p style="margin-top: 1rem; color: #666;">Raw value: {interactivePhone || '(empty)'}</p>
 	</ComponentExample>
 
@@ -293,9 +276,7 @@ interface Props {
 	/>
 
 	<h2>Format Details</h2>
-	<p>
-		The component automatically formats numbers as you type:
-	</p>
+	<p>The component automatically formats numbers as you type:</p>
 	<ul>
 		<li>Canadian format: <code>+1 (416) 555-0123</code></li>
 		<li>US format: <code>+1 (555) 555-5555</code></li>

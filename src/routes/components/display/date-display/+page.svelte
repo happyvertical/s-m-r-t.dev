@@ -63,7 +63,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { DateDisplay } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { DateDisplay } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display dates in medium format (default).</p>

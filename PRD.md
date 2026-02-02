@@ -11,6 +11,7 @@ havesmrt.com is the official documentation and marketing site for the SMRT frame
 ## Product Vision
 
 Create a comprehensive, developer-friendly documentation site that:
+
 - Showcases SMRT's core value propositions (no vendor lock, adaptability, brevity, scalability)
 - Provides complete API documentation with interactive examples
 - Enables developers to quickly understand and adopt SMRT
@@ -19,11 +20,13 @@ Create a comprehensive, developer-friendly documentation site that:
 ## Goals & Success Metrics
 
 ### Primary Goals
+
 1. **Complete Documentation Coverage**: 100% of SMRT components, objects, agents, and modules documented with working examples
 2. **Fast Time-to-Value**: Developers can find and implement SMRT solutions within 5 minutes
 3. **Production-Ready Infrastructure**: Reliable hosting on AWS with <2s page load times globally
 
 ### Success Metrics
+
 - [ ] 100% component documentation completion
 - [ ] <2s Time to First Byte (TTFB) on CloudFront
 - [ ] Zero build/deployment failures on main branch
@@ -33,6 +36,7 @@ Create a comprehensive, developer-friendly documentation site that:
 ## Technical Architecture
 
 ### Stack
+
 - **Framework**: SvelteKit 2.x with adapter-static
 - **Language**: TypeScript 5.x
 - **Package Manager**: pnpm 9.x
@@ -42,6 +46,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - **CI/CD**: GitHub Actions
 
 ### Build System
+
 - **Development**: Vite dev server with HMR
 - **Production**: Static site generation (SSG) with pre-rendering
 - **Dependencies**:
@@ -51,6 +56,7 @@ Create a comprehensive, developer-friendly documentation site that:
   - `gray-matter` (frontmatter extraction)
 
 ### Infrastructure
+
 - **Environments**:
   - Staging: `staging.havesmrt.com`
   - Production: `havesmrt.com`
@@ -66,6 +72,7 @@ Create a comprehensive, developer-friendly documentation site that:
 **Status**: ✅ Complete
 
 **Requirements**:
+
 - [x] Hero section with SMRT value propositions
 - [x] Four core tenets (No vendor lock, Adaptability, Brevity, Scalability)
 - [x] Simple example showcasing basic SmrtObject usage
@@ -77,6 +84,7 @@ Create a comprehensive, developer-friendly documentation site that:
 **Status**: 🔄 In Progress (Need working examples for all components)
 
 **Requirements**:
+
 - [ ] Complete documentation for all form components
   - [x] SMRTTextInput (Complete)
   - [ ] SMRTSelect
@@ -101,6 +109,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] TypeScript interface definitions
 
 **Each Component Page Must Include**:
+
 1. Clear description and use cases
 2. Installation/import instructions
 3. 3-5 interactive examples showing different use cases
@@ -116,6 +125,7 @@ Create a comprehensive, developer-friendly documentation site that:
 **Overview**: Document all 28 SMRT modules with comprehensive examples and tutorials. Each module will be analyzed by a dedicated subagent to ensure deep understanding and accurate documentation.
 
 **Approach**: Use Task tool with Explore subagent for each module to:
+
 1. Understand module architecture and purpose
 2. Identify key APIs and usage patterns
 3. Generate realistic examples
@@ -125,6 +135,7 @@ Create a comprehensive, developer-friendly documentation site that:
 #### 3.1 Core Foundation Modules (4 modules)
 
 **smrt-core**:
+
 - [ ] Overview and architecture
 - [ ] Installation and setup
 - [ ] SmrtObject base class guide
@@ -137,6 +148,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Advanced: Custom generators
 
 **smrt-types**:
+
 - [ ] Type system overview
 - [ ] Core type definitions
 - [ ] Using types in your project
@@ -144,6 +156,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Tutorial: Type-safe SMRT development
 
 **smrt-config**:
+
 - [ ] Configuration structure
 - [ ] Environment-based config
 - [ ] Module configuration
@@ -151,6 +164,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Tutorial: Configuring a multi-environment project
 
 **smrt-scanner**:
+
 - [ ] How the scanner works
 - [ ] Performance characteristics
 - [ ] Manifest generation process
@@ -160,6 +174,7 @@ Create a comprehensive, developer-friendly documentation site that:
 #### 3.2 User & Access Management (2 modules)
 
 **smrt-users**:
+
 - [ ] Multi-tenant architecture overview
 - [ ] User model and fields
 - [ ] Tenant management
@@ -175,6 +190,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Example: SaaS application with teams
 
 **smrt-profiles**:
+
 - [ ] Profile model architecture
 - [ ] Relationship management
 - [ ] Reciprocal associations
@@ -187,6 +203,7 @@ Create a comprehensive, developer-friendly documentation site that:
 #### 3.3 Domain Models & Data (9 modules)
 
 **smrt-assets**:
+
 - [ ] Asset model and versioning
 - [ ] Metadata management
 - [ ] AI-powered operations
@@ -198,6 +215,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Example: Document management system
 
 **smrt-commerce**:
+
 - [ ] Commerce models overview
 - [ ] Contracts and agreements
 - [ ] Fulfillment workflow
@@ -208,6 +226,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Example: Marketplace
 
 **smrt-events**:
+
 - [ ] Event hierarchy
 - [ ] Participant management
 - [ ] Event lifecycle
@@ -217,6 +236,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Example: Webinar platform
 
 **smrt-ledgers**:
+
 - [ ] Double-entry accounting principles
 - [ ] Ledger architecture
 - [ ] Transaction handling
@@ -228,6 +248,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Example: Expense management
 
 **smrt-places**:
+
 - [ ] Hierarchical place model
 - [ ] Geo integration
 - [ ] Location queries
@@ -237,6 +258,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Example: Real estate listings
 
 **smrt-products**:
+
 - [ ] Product model architecture
 - [ ] Standalone vs federated vs NPM
 - [ ] Microservice patterns
@@ -245,6 +267,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Example: Multi-vendor marketplace
 
 **smrt-projects**:
+
 - [ ] Provider-agnostic project models
 - [ ] Issues and PRs
 - [ ] Repository management
@@ -255,6 +278,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Example: Internal task manager
 
 **smrt-properties**:
+
 - [ ] Digital property model
 - [ ] Zone management
 - [ ] Property metadata
@@ -263,6 +287,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Example: Digital asset registry
 
 **smrt-tags**:
+
 - [ ] Tagging architecture
 - [ ] Hierarchical tags
 - [ ] Context-aware tagging
@@ -275,6 +300,7 @@ Create a comprehensive, developer-friendly documentation site that:
 #### 3.4 Content & Communication (4 modules)
 
 **smrt-content**:
+
 - [ ] Content processing pipeline
 - [ ] Document handling
 - [ ] Web content extraction
@@ -285,6 +311,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Example: Knowledge base
 
 **smrt-messages**:
+
 - [ ] Email persistence
 - [ ] AI integration
 - [ ] Message threading
@@ -294,6 +321,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Example: Newsletter platform
 
 **smrt-analytics**:
+
 - [ ] Analytics integration overview
 - [ ] Google Analytics setup
 - [ ] Plausible integration
@@ -303,6 +331,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Example: Application metrics
 
 **smrt-ads**:
+
 - [ ] Ad delivery model
 - [ ] Tracking and attribution
 - [ ] Campaign management
@@ -313,6 +342,7 @@ Create a comprehensive, developer-friendly documentation site that:
 #### 3.5 Agents & Automation (2 modules)
 
 **smrt-agents**:
+
 - [ ] Agent framework overview
 - [ ] Building autonomous agents
 - [ ] Agent communication
@@ -323,6 +353,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Example: Data processing agent
 
 **smrt-gnode**:
+
 - [ ] Federation architecture
 - [ ] Local knowledge bases
 - [ ] Gnode communication
@@ -334,6 +365,7 @@ Create a comprehensive, developer-friendly documentation site that:
 #### 3.6 Developer Tools & CLI (3 modules)
 
 **smrt-cli**:
+
 - [ ] CLI overview and commands
 - [ ] Project introspection
 - [ ] Testing utilities
@@ -343,6 +375,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Command reference guide
 
 **smrt-dev-mcp**:
+
 - [ ] Development MCP server
 - [ ] Code generation tools
 - [ ] Project introspection
@@ -351,6 +384,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Example: AI-assisted coding
 
 **smrt-vitest**:
+
 - [ ] Vitest plugin overview
 - [ ] Cross-package testing
 - [ ] Manifest loading
@@ -360,6 +394,7 @@ Create a comprehensive, developer-friendly documentation site that:
 #### 3.7 UI Components & Frontend (2 modules)
 
 **smrt-svelte**:
+
 - [ ] Component library overview
 - [ ] Component Browser: All SMRT Svelte components organized by category (Forms, UI, Layout, Display, Feedback, etc.)
 - [ ] Auth components
@@ -372,6 +407,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] (Note: Detailed component docs in Section 2)
 
 **browser-ai**:
+
 - [ ] Framework-agnostic AI
 - [ ] Speech-to-text (STT)
 - [ ] Text-to-speech (TTS)
@@ -386,6 +422,7 @@ Create a comprehensive, developer-friendly documentation site that:
 #### 3.8 Project Templates (2 modules)
 
 **template-site-static-json**:
+
 - [ ] Template overview
 - [ ] JSON data storage
 - [ ] Static site generation
@@ -393,6 +430,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Tutorial: Customization guide
 
 **template-sveltekit**:
+
 - [ ] SvelteKit template overview
 - [ ] SMRT integration
 - [ ] Best practices
@@ -402,6 +440,7 @@ Create a comprehensive, developer-friendly documentation site that:
 **Module Documentation Standards**:
 
 Each module must include:
+
 1. **Overview**: Purpose, use cases, when to use it
 2. **Installation**: Package installation and setup
 3. **Quick Start**: 5-minute getting started guide
@@ -417,6 +456,7 @@ Each module must include:
 **Subagent Documentation Process**:
 
 For each module:
+
 1. Launch Explore subagent with thoroughness: "very thorough"
 2. Agent explores module source code, README, tests, examples
 3. Agent identifies:
@@ -437,6 +477,7 @@ For each module:
 **Status**: 📝 Not Started
 
 **Requirements**:
+
 - [ ] Objects documentation
   - [ ] SmrtObject base class
   - [ ] Field types and decorators
@@ -460,6 +501,7 @@ For each module:
 **Status**: 📝 Not Started
 
 **Requirements**:
+
 - [ ] FAQ page
   - [ ] Common setup questions
   - [ ] Troubleshooting
@@ -481,6 +523,7 @@ For each module:
 **Status**: 📝 Not Started
 
 **Requirements**:
+
 - [ ] Global search functionality
 - [ ] Keyboard shortcuts (⌘K for search)
 - [ ] Category-based navigation
@@ -493,11 +536,13 @@ For each module:
 **Status**: 🔄 In Progress
 
 **Current Implementation**:
+
 - [x] CodeBlock component with syntax highlighting
 - [x] ComponentExample component with live rendering
 - [x] Copy-to-clipboard functionality
 
 **Requirements**:
+
 - [x] Syntax highlighting
 - [x] Copy button
 - [x] Live preview for components
@@ -510,6 +555,7 @@ For each module:
 **Status**: 🔄 In Progress
 
 **Current State**:
+
 - [x] OpenTofu configuration complete
 - [x] S3 buckets configured
 - [x] CloudFront distributions
@@ -522,6 +568,7 @@ For each module:
 - [ ] Error pages (404, 500)
 
 **Requirements**:
+
 - [ ] Verify staging deployment
 - [ ] Production deployment
 - [ ] Custom error pages
@@ -538,6 +585,7 @@ For each module:
 **Status**: 📝 Not Started
 
 **Requirements**:
+
 - [ ] Page titles for all routes
 - [ ] Meta descriptions
 - [ ] Open Graph tags
@@ -552,6 +600,7 @@ For each module:
 **Status**: 📝 Not Started
 
 **Requirements**:
+
 - [ ] Analytics integration (Plausible/Simple Analytics)
 - [ ] Error tracking (Sentry)
 - [ ] Performance monitoring
@@ -564,6 +613,7 @@ For each module:
 **Status**: 📝 Not Started
 
 **Requirements**:
+
 - [ ] WCAG 2.1 AA compliance
 - [ ] Keyboard navigation
 - [ ] Screen reader testing
@@ -577,12 +627,14 @@ For each module:
 ### Build Configuration
 
 **SvelteKit Config** (`svelte.config.js`):
+
 - Adapter: `@sveltejs/adapter-static`
 - Prerender: All pages
 - Fallback: `404.html` for SPA-like routing
 - Trailing slash: Always
 
 **Vite Config** (`vite.config.ts`):
+
 - Test environment: jsdom
 - Coverage reporting
 - Build optimization
@@ -591,12 +643,14 @@ For each module:
 ### Pre-rendering Strategy
 
 **Current Implementation**:
+
 ```javascript
 // src/routes/+layout.ts
 export const prerender = true;
 ```
 
 **Required Entries** (from recent commit):
+
 - All component routes
 - All documentation pages
 - Dynamic routes: `/docs/[...slug]`, `/components/[category]`, `/components/[category]/[name]`
@@ -605,11 +659,12 @@ export const prerender = true;
 ### Deployment Pipeline
 
 **GitHub Actions Workflow**:
+
 ```yaml
 on:
   push:
-    branches: [main]  # Auto-deploy staging
-  workflow_dispatch:   # Manual production deploy
+    branches: [main] # Auto-deploy staging
+  workflow_dispatch: # Manual production deploy
 
 jobs:
   build:
@@ -630,6 +685,7 @@ jobs:
 ```
 
 **Required Secrets**:
+
 - `GH_TOKEN`: Access to happyvertical/smrt repo
 - `AWS_ROLE_ARN_STAGING`: IAM role for staging
 - `AWS_ROLE_ARN_PRODUCTION`: IAM role for production
@@ -637,14 +693,17 @@ jobs:
 ### Cache Strategy
 
 **HTML Pages**:
+
 - Cache-Control: `public, max-age=3600` (1 hour)
 - Reason: Allow updates to propagate quickly
 
 **Static Assets** (`/_app/*`):
+
 - Cache-Control: `public, max-age=31536000, immutable` (1 year)
 - Reason: Versioned assets, safe to cache indefinitely
 
 **CloudFront**:
+
 - Default TTL: 1 hour
 - Max TTL: 1 year (for versioned assets)
 - Origin failover to S3 website endpoint
@@ -661,28 +720,36 @@ Each component page should follow this structure:
 Brief description (1-2 sentences)
 
 ## Installation
+
 Import statement
 
 ## Basic Usage
+
 Simple example with explanation
 
 ## Examples
+
 3-5 examples covering:
+
 - Basic usage
 - Common variants
 - Advanced features
 - Edge cases
 
 ## Props
+
 Complete props table
 
 ## TypeScript
+
 Interface definition
 
 ## Accessibility (if applicable)
+
 ARIA, keyboard support notes
 
 ## SMRT Mode (if applicable)
+
 Voice input, AI integration behavior
 ```
 
@@ -698,6 +765,7 @@ Voice input, AI integration behavior
 ## Dependencies & External Systems
 
 ### SMRT Monorepo
+
 - **Location**: `../smrt`
 - **Required Packages**:
   - `@happyvertical/smrt-svelte`: Component library
@@ -705,6 +773,7 @@ Voice input, AI integration behavior
 - **Build Dependency**: Must build smrt packages before havesmrt.com
 
 ### AWS Services
+
 - **S3**: Static file storage
 - **CloudFront**: CDN
 - **Route53**: DNS
@@ -712,6 +781,7 @@ Voice input, AI integration behavior
 - **IAM**: Authentication/authorization
 
 ### GitHub
+
 - **Repository**: happyvertical/havesmrt.com
 - **Monorepo Dependency**: happyvertical/smrt
 - **Actions**: CI/CD pipeline
@@ -719,12 +789,14 @@ Voice input, AI integration behavior
 ## Known Issues & Current Limitations
 
 ### From Recent Commits
+
 1. **Prerender entries**: Dynamic component routes needed explicit prerender entries
 2. **SSR for forms**: Form components had SSR disabled to prevent hydration issues
 3. **Build system**: Initially had issues with pnpm vs npm in CI
 4. **NPM token**: Required for private smrt package access
 
 ### Outstanding Issues
+
 - [ ] Complete component documentation coverage (17 components)
 - [ ] Complete module documentation coverage (28 modules)
 - [ ] Search functionality not implemented
@@ -757,6 +829,7 @@ To ensure comprehensive and accurate documentation for all 28 SMRT modules, we w
 7. **Validation**: Test all code examples
 
 **Benefits of Subagent Approach**:
+
 - Deep understanding of each module's implementation
 - Consistent documentation quality
 - Discovery of undocumented features
@@ -765,6 +838,7 @@ To ensure comprehensive and accurate documentation for all 28 SMRT modules, we w
 - Identification of integration patterns
 
 **Documentation Location**:
+
 - Module docs will live at `/modules/[module-name]`
 - Each module gets its own route with subroutes for tutorials, examples, API reference
 - Cross-linking between related modules
@@ -773,6 +847,7 @@ To ensure comprehensive and accurate documentation for all 28 SMRT modules, we w
 ## Implementation Phases
 
 ### Phase 1: Foundation (Current)
+
 **Goal**: Complete core infrastructure and build system
 
 - [x] SvelteKit project setup
@@ -784,15 +859,18 @@ To ensure comprehensive and accurate documentation for all 28 SMRT modules, we w
 - [ ] Verify staging deployment
 
 ### Phase 2: Component Documentation
+
 **Goal**: Complete documentation for all components with working examples
 
 Priority Order:
+
 1. Forms components (most used)
 2. User components
 3. Feedback components
 4. Layout components (if any)
 
 For each component:
+
 1. Create documentation page
 2. Add 3-5 interactive examples
 3. Document all props
@@ -800,15 +878,18 @@ For each component:
 5. Test on mobile
 
 ### Phase 3: SMRT Modules Documentation
+
 **Goal**: Comprehensive documentation for all 28 SMRT modules using subagent-driven approach
 
 **Approach**:
+
 - Use Explore subagent for each module (thoroughness: "very thorough")
 - Generate 2-4 tutorials per module
 - Create 3-5 realistic examples per module
 - Document API reference, integration patterns, best practices
 
 **Module Priority**:
+
 1. **Core Foundation** (4 modules): smrt-core, smrt-types, smrt-config, smrt-scanner
 2. **High-Usage Feature Modules** (5 modules): smrt-users, smrt-agents, smrt-profiles, smrt-content, smrt-assets
 3. **Domain Models** (9 modules): smrt-commerce, smrt-ledgers, smrt-events, smrt-places, smrt-products, smrt-projects, smrt-properties, smrt-tags, smrt-messages
@@ -817,6 +898,7 @@ For each component:
 6. **UI & Templates** (4 modules): smrt-svelte, browser-ai, template-site-static-json, template-sveltekit
 
 **Per Module Process**:
+
 1. Launch Explore subagent to analyze module
 2. Review subagent findings
 3. Approve tutorial/example outlines
@@ -826,6 +908,7 @@ For each component:
 7. Test all code examples
 
 ### Phase 4: Core Documentation
+
 **Goal**: Document SMRT framework concepts
 
 1. Objects documentation (SmrtObject, fields, relationships, AI methods)
@@ -833,6 +916,7 @@ For each component:
 3. Collections documentation (APIs, querying, pagination)
 
 ### Phase 5: Polish & Launch Prep
+
 **Goal**: Production-ready site
 
 1. FAQ page completion
@@ -845,6 +929,7 @@ For each component:
 8. Production deployment
 
 ### Phase 6: Post-Launch
+
 **Goal**: Continuous improvement
 
 1. Monitor analytics
@@ -877,6 +962,7 @@ For each component:
 ### Launch Checklist
 
 **Content**:
+
 - [ ] All components documented with working examples (17 components)
 - [ ] All SMRT modules documented with tutorials and examples (28 modules)
   - [ ] Core Foundation modules (4/4)
@@ -893,6 +979,7 @@ For each component:
 - [ ] Getting Started guide complete
 
 **Technical**:
+
 - [ ] All pages pre-render successfully
 - [ ] Build passes without errors/warnings
 - [ ] Tests passing
@@ -902,12 +989,14 @@ For each component:
 - [ ] Mobile responsive on all pages
 
 **SEO**:
+
 - [ ] All pages have titles and meta descriptions
 - [ ] Sitemap.xml generated
 - [ ] robots.txt configured
 - [ ] Open Graph tags on all pages
 
 **Quality**:
+
 - [ ] No console errors
 - [ ] All links working
 - [ ] All code examples tested
@@ -917,6 +1006,7 @@ For each component:
 ## Maintenance Plan
 
 ### Content Updates
+
 - Component docs: Update when SMRT components change
 - Module docs: Update with each module release
 - API docs: Update with each SMRT release
@@ -924,12 +1014,14 @@ For each component:
 - Tutorial updates: Refresh when best practices evolve
 
 ### Infrastructure
+
 - Monitor CloudFront costs
 - Review cache hit ratios monthly
 - Update dependencies quarterly
 - Security patches as needed
 
 ### Deployment
+
 - Staging: Auto-deploy on every main branch push
 - Production: Manual deploy via GitHub Actions workflow_dispatch
 - Rollback: Revert S3 sync and invalidate CloudFront cache
@@ -937,6 +1029,7 @@ For each component:
 ## Appendix
 
 ### File Structure
+
 ```
 havesmrt.com/
 ├── src/
@@ -1003,6 +1096,7 @@ havesmrt.com/
 Each module that includes UI components should have its own component browser at `/modules/[module-name]/components/`:
 
 **Structure for modules with components:**
+
 ```
 /modules/[module-name]/
 ├── +page.svelte (module overview)
@@ -1016,6 +1110,7 @@ Each module that includes UI components should have its own component browser at
 ```
 
 **Modules with Component Browsers:**
+
 - **smrt-users**: UserCard, UserAvatar, UserList, UserForm, UserMenu, InviteUser, TenantCard, TenantSwitcher, RoleBadge, RoleSelector, PermissionCheck, MembershipCard, MembershipList
 - **smrt-svelte**: All SMRT Svelte form components, UI components, layout components, display components, feedback components
 - **browser-ai**: STT/TTS control components, voice input buttons, transcription displays (if applicable)
@@ -1023,6 +1118,7 @@ Each module that includes UI components should have its own component browser at
 
 **Component Browser Requirements:**
 Each component page must follow the same standards as Section 2 (Component Documentation):
+
 1. Clear description and use cases
 2. Installation/import instructions
 3. 3-5 interactive examples
@@ -1034,22 +1130,26 @@ Each component page must follow the same standards as Section 2 (Component Docum
 ### Key Technologies
 
 **Frontend**:
+
 - Svelte 5 (with runes: $state, $derived, $effect)
 - SvelteKit 2
 - TypeScript 5
 - Vite 7
 
 **Documentation**:
+
 - Marked (Markdown parsing)
 - gray-matter (YAML frontmatter)
 - Syntax highlighting (via CodeBlock component)
 
 **Infrastructure**:
+
 - OpenTofu 1.6+
 - AWS CLI
 - GitHub Actions
 
 **Build Tools**:
+
 - pnpm (for smrt monorepo)
 - npm (for havesmrt.com)
 - Vitest (testing)
@@ -1067,48 +1167,25 @@ Each component page must follow the same standards as Section 2 (Component Docum
 ### Complete Module List (28 Total)
 
 **Core Foundation (4)**:
+
 1. smrt-core - Core AI agent framework
 2. smrt-types - Shared type definitions
 3. smrt-config - Configuration management
 4. smrt-scanner - TypeScript scanner for manifest generation
 
-**User & Access Management (2)**:
-5. smrt-users - Multi-tenant user management with RBAC
-6. smrt-profiles - Profile management with relationships
+**User & Access Management (2)**: 5. smrt-users - Multi-tenant user management with RBAC 6. smrt-profiles - Profile management with relationships
 
-**Domain Models & Data (9)**:
-7. smrt-assets - Asset management with versioning and AI
-8. smrt-commerce - Commerce models (contracts, fulfillments, payments)
-9. smrt-events - Hierarchical event management
-10. smrt-ledgers - Double-entry accounting
-11. smrt-places - Hierarchical place management with geo
-12. smrt-products - Product catalog and inventory
-13. smrt-projects - Provider-agnostic project management
-14. smrt-properties - Digital property and zone management
-15. smrt-tags - Reusable tagging system
+**Domain Models & Data (9)**: 7. smrt-assets - Asset management with versioning and AI 8. smrt-commerce - Commerce models (contracts, fulfillments, payments) 9. smrt-events - Hierarchical event management 10. smrt-ledgers - Double-entry accounting 11. smrt-places - Hierarchical place management with geo 12. smrt-products - Product catalog and inventory 13. smrt-projects - Provider-agnostic project management 14. smrt-properties - Digital property and zone management 15. smrt-tags - Reusable tagging system
 
-**Content & Communication (4)**:
-16. smrt-content - Content processing (documents, web, media)
-17. smrt-messages - Email persistence with AI integration
-18. smrt-analytics - Analytics integration (GA, Plausible)
-19. smrt-ads - Advertising delivery and tracking
+**Content & Communication (4)**: 16. smrt-content - Content processing (documents, web, media) 17. smrt-messages - Email persistence with AI integration 18. smrt-analytics - Analytics integration (GA, Plausible) 19. smrt-ads - Advertising delivery and tracking
 
-**Agents & Automation (2)**:
-20. smrt-agents - Agent framework for autonomous actors
-21. smrt-gnode - Federation library for local knowledge bases
+**Agents & Automation (2)**: 20. smrt-agents - Agent framework for autonomous actors 21. smrt-gnode - Federation library for local knowledge bases
 
-**Developer Tools & CLI (3)**:
-22. smrt-cli - Developer CLI for SMRT framework
-23. smrt-dev-mcp - Development MCP server
-24. smrt-vitest - Vitest plugin for cross-package testing
+**Developer Tools & CLI (3)**: 22. smrt-cli - Developer CLI for SMRT framework 23. smrt-dev-mcp - Development MCP server 24. smrt-vitest - Vitest plugin for cross-package testing
 
-**UI Components & Frontend (2)**:
-25. smrt-svelte - Svelte 5 components for SMRT
-26. browser-ai - Framework-agnostic browser AI (STT, TTS, LLM)
+**UI Components & Frontend (2)**: 25. smrt-svelte - Svelte 5 components for SMRT 26. browser-ai - Framework-agnostic browser AI (STT, TTS, LLM)
 
-**Project Templates (2)**:
-27. template-site-static-json - Static site template with JSON storage
-28. template-sveltekit - SvelteKit project template with SMRT
+**Project Templates (2)**: 27. template-site-static-json - Static site template with JSON storage 28. template-sveltekit - SvelteKit project template with SMRT
 
 ---
 

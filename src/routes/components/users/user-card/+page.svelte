@@ -11,7 +11,11 @@
 	const mockUserPending = { id: 'user_2', email: 'john.doe@example.com', status: 'pending' } as any;
 	const mockProfilePending = { name: 'John Doe' } as any;
 
-	const mockUserSuspended = { id: 'user_3', email: 'alice.j@example.com', status: 'suspended' } as any;
+	const mockUserSuspended = {
+		id: 'user_3',
+		email: 'alice.j@example.com',
+		status: 'suspended'
+	} as any;
 	const mockProfileSuspended = { name: 'Alice Johnson' } as any;
 
 	let selectedUser = $state<string | null>(null);
@@ -73,14 +77,15 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { UserCard } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { UserCard } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display user information in a clean, compact card format.</p>
 
-	<ComponentExample
-		code={`<UserCard user={user} profile={profile} />`}
-	>
+	<ComponentExample code={`<UserCard user={user} profile={profile} />`}>
 		<UserCard user={mockUser} profile={mockProfile} />
 	</ComponentExample>
 
@@ -94,8 +99,18 @@
 	>
 		<div class="card-stack">
 			<UserCard user={mockUser} profile={mockProfile} role="Admin" status="active" />
-			<UserCard user={mockUserPending} profile={mockProfilePending} role="Member" status="pending" />
-			<UserCard user={mockUserSuspended} profile={mockProfileSuspended} role="Guest" status="suspended" />
+			<UserCard
+				user={mockUserPending}
+				profile={mockProfilePending}
+				role="Member"
+				status="pending"
+			/>
+			<UserCard
+				user={mockUserSuspended}
+				profile={mockProfileSuspended}
+				role="Guest"
+				status="suspended"
+			/>
 		</div>
 	</ComponentExample>
 
@@ -119,21 +134,21 @@
 				user={mockUser}
 				profile={mockProfile}
 				role="Admin"
-				onclick={() => selectedUser = mockUser.id}
+				onclick={() => (selectedUser = mockUser.id)}
 				selected={selectedUser === mockUser.id}
 			/>
 			<UserCard
 				user={mockUserPending}
 				profile={mockProfilePending}
 				role="Member"
-				onclick={() => selectedUser = mockUserPending.id}
+				onclick={() => (selectedUser = mockUserPending.id)}
 				selected={selectedUser === mockUserPending.id}
 			/>
 			<UserCard
 				user={mockUserSuspended}
 				profile={mockProfileSuspended}
 				role="Guest"
-				onclick={() => selectedUser = mockUserSuspended.id}
+				onclick={() => (selectedUser = mockUserSuspended.id)}
 				selected={selectedUser === mockUserSuspended.id}
 			/>
 		</div>
@@ -152,8 +167,16 @@
 		<div class="card-stack">
 			<UserCard user={{ ...mockUser, status: 'active' }} profile={mockProfile} status="active" />
 			<UserCard user={{ ...mockUser, status: 'pending' }} profile={mockProfile} status="pending" />
-			<UserCard user={{ ...mockUser, status: 'suspended' }} profile={mockProfile} status="suspended" />
-			<UserCard user={{ ...mockUser, status: 'deactivated' }} profile={mockProfile} status="deactivated" />
+			<UserCard
+				user={{ ...mockUser, status: 'suspended' }}
+				profile={mockProfile}
+				status="suspended"
+			/>
+			<UserCard
+				user={{ ...mockUser, status: 'deactivated' }}
+				profile={mockProfile}
+				status="deactivated"
+			/>
 		</div>
 	</ComponentExample>
 

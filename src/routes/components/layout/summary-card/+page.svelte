@@ -62,12 +62,15 @@
 
 	<h1>SummaryCard</h1>
 	<p class="lead">
-		Compact info card for dashboards and metrics. Shows a label with a prominent value,
-		optionally with count badge, icon, and link functionality.
+		Compact info card for dashboards and metrics. Shows a label with a prominent value, optionally
+		with count badge, icon, and link functionality.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { SummaryCard } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { SummaryCard } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Simple metric display with label and value.</p>
@@ -92,9 +95,7 @@
 	<h2>With Count Badge</h2>
 	<p>Show a count badge next to the label.</p>
 
-	<ComponentExample
-		code={`<SummaryCard label="Pending Tasks" value="12" count={3} />`}
-	>
+	<ComponentExample code={`<SummaryCard label="Pending Tasks" value="12" count={3} />`}>
 		<SummaryCard label="Pending Tasks" value="12" count={3} />
 	</ComponentExample>
 
@@ -114,9 +115,7 @@
 	<h2>Highlighted</h2>
 	<p>Use highlight for important metrics.</p>
 
-	<ComponentExample
-		code={`<SummaryCard label="Today's Sales" value="$12,345" highlight />`}
-	>
+	<ComponentExample code={`<SummaryCard label="Today's Sales" value="$12,345" highlight />`}>
 		<SummaryCard label="Today's Sales" value="$12,345" highlight />
 	</ComponentExample>
 

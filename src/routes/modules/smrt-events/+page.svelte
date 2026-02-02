@@ -1,46 +1,50 @@
 <script lang="ts">
-  import ModulePage from '$lib/components/ModulePage.svelte';
-  import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import ModulePage from '$lib/components/ModulePage.svelte';
+	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
 <svelte:head>
-  <title>smrt-events - Event Management | SMRT Framework</title>
-  <meta name="description" content="Hierarchical event management with calendar integration, recurrence patterns, and participant tracking." />
+	<title>smrt-events - Event Management | SMRT Framework</title>
+	<meta
+		name="description"
+		content="Hierarchical event management with calendar integration, recurrence patterns, and participant tracking."
+	/>
 </svelte:head>
 
-<ModulePage 
-  name="smrt-events" 
-  description="Hierarchical event management with scheduling, ticketing, and calendar integration."
-  badges={['v0.19.0', 'Events', 'Calendar']}
+<ModulePage
+	name="smrt-events"
+	description="Hierarchical event management with scheduling, ticketing, and calendar integration."
+	badges={['v0.19.0', 'Events', 'Calendar']}
 >
-  <section>
-    <h2>Overview</h2>
-    <p>
-      <strong>smrt-events</strong> provides comprehensive event management with infinite hierarchical nesting, recurring patterns,
-      participant tracking, and conflict detection. Perfect for sports, entertainment, conferences, and municipal meetings.
-    </p>
-    <aside>
-      <p><strong>Key Features:</strong></p>
-      <ul>
-        <li>Hierarchical events with unlimited nesting (games → quarters → goals)</li>
-        <li>Event series with flexible recurrence patterns (iCal RRULE compatible)</li>
-        <li>Participant tracking with roles, placement, and performance data</li>
-        <li>Calendar integration with conflict detection</li>
-        <li>MeetingView component (NEW v0.19.0)</li>
-        <li>Integration with smrt-places for venue tracking</li>
-      </ul>
-    </aside>
-  </section>
+	<section>
+		<h2>Overview</h2>
+		<p>
+			<strong>smrt-events</strong> provides comprehensive event management with infinite hierarchical
+			nesting, recurring patterns, participant tracking, and conflict detection. Perfect for sports, entertainment,
+			conferences, and municipal meetings.
+		</p>
+		<aside>
+			<p><strong>Key Features:</strong></p>
+			<ul>
+				<li>Hierarchical events with unlimited nesting (games → quarters → goals)</li>
+				<li>Event series with flexible recurrence patterns (iCal RRULE compatible)</li>
+				<li>Participant tracking with roles, placement, and performance data</li>
+				<li>Calendar integration with conflict detection</li>
+				<li>MeetingView component (NEW v0.19.0)</li>
+				<li>Integration with smrt-places for venue tracking</li>
+			</ul>
+		</aside>
+	</section>
 
-  <section>
-    <h2>Installation</h2>
-    <CodeBlock code={`npm install @happyvertical/smrt-events`} language="bash" />
-  </section>
+	<section>
+		<h2>Installation</h2>
+		<CodeBlock code={`npm install @happyvertical/smrt-events`} language="bash" />
+	</section>
 
-  <section>
-    <h2>Quick Start</h2>
-    <CodeBlock
-      code={`import { EventCollection, EventSeriesCollection, EventParticipantCollection } from '@happyvertical/smrt-events';
+	<section>
+		<h2>Quick Start</h2>
+		<CodeBlock
+			code={`import { EventCollection, EventSeriesCollection, EventParticipantCollection } from '@happyvertical/smrt-events';
 
 // Initialize
 const events = await EventCollection.create({ db: {...} });
@@ -86,16 +90,16 @@ const warriors = await participants.create({
   placement: 1
 });
 await warriors.save();`}
-      language="typescript"
-    />
-  </section>
+			language="typescript"
+		/>
+	</section>
 
-  <section>
-    <h2>Core Models</h2>
+	<section>
+		<h2>Core Models</h2>
 
-    <h3>Event (Hierarchical)</h3>
-    <CodeBlock
-      code={`class Event extends SmrtObject {
+		<h3>Event (Hierarchical)</h3>
+		<CodeBlock
+			code={`class Event extends SmrtObject {
   name: string
   seriesId?: string         // FK to EventSeries
   parentEventId?: string    // Self-referencing hierarchy
@@ -128,12 +132,12 @@ await warriors.save();`}
   updateStatus(newStatus: EventStatus): void
   isInProgress(): boolean
 }`}
-      language="typescript"
-    />
+			language="typescript"
+		/>
 
-    <h3>EventSeries (Recurring)</h3>
-    <CodeBlock
-      code={`class EventSeries extends SmrtObject {
+		<h3>EventSeries (Recurring)</h3>
+		<CodeBlock
+			code={`class EventSeries extends SmrtObject {
   name: string
   typeId: string
   organizerId: string       // FK to Profile
@@ -156,12 +160,12 @@ interface RecurrencePattern {
   byMonthDay?: number[]      // [1, 15]
   byMonth?: number[]         // [1-12]
 }`}
-      language="typescript"
-    />
+			language="typescript"
+		/>
 
-    <h3>EventParticipant</h3>
-    <CodeBlock
-      code={`class EventParticipant extends SmrtObject {
+		<h3>EventParticipant</h3>
+		<CodeBlock
+			code={`class EventParticipant extends SmrtObject {
   eventId: string           // FK to Event
   profileId: string         // FK to Profile
   role: string              // 'home' | 'away' | 'speaker' | 'performer' | etc.
@@ -175,14 +179,14 @@ interface RecurrencePattern {
   async getProfile(): Promise<Profile | null>
   async getGroupParticipants(): Promise<EventParticipant[]>
 }`}
-      language="typescript"
-    />
-  </section>
+			language="typescript"
+		/>
+	</section>
 
-  <section>
-    <h2>Hierarchical Events</h2>
-    <CodeBlock
-      code={`// Create hierarchical game structure
+	<section>
+		<h2>Hierarchical Events</h2>
+		<CodeBlock
+			code={`// Create hierarchical game structure
 const game = await events.create({
   name: 'Lakers vs Warriors',
   startDate: new Date('2025-01-20T19:00:00'),
@@ -212,16 +216,16 @@ await goal.save();
 const children = await game.getChildren(); // [q1, q2, q3, q4]
 const ancestors = await goal.getAncestors(); // [q1, game]
 const root = await goal.getRootEvent(); // game`}
-      language="typescript"
-    />
-  </section>
+			language="typescript"
+		/>
+	</section>
 
-  <section>
-    <h2>Calendar Integration</h2>
+	<section>
+		<h2>Calendar Integration</h2>
 
-    <h3>Date Range Queries</h3>
-    <CodeBlock
-      code={`// Get events for week
+		<h3>Date Range Queries</h3>
+		<CodeBlock
+			code={`// Get events for week
 const weekEvents = await events.getByDateRange(
   new Date('2025-01-20'),
   new Date('2025-01-27')
@@ -240,12 +244,12 @@ const hasConflict = checkSchedulingConflict(
   event1Start, event1End,
   event2Start, event2End
 );`}
-      language="typescript"
-    />
+			language="typescript"
+		/>
 
-    <h3>Recurrence Patterns</h3>
-    <CodeBlock
-      code={`// Weekly meeting series
+		<h3>Recurrence Patterns</h3>
+		<CodeBlock
+			code={`// Weekly meeting series
 const weeklySeries = await series.create({
   name: 'Team Standup',
   recurrence: {
@@ -268,14 +272,14 @@ const monthlySeries = await series.create({
 // Calculate next occurrence
 import { calculateNextOccurrence } from '@happyvertical/smrt-events/utils';
 const nextDate = calculateNextOccurrence(pattern, new Date());`}
-      language="typescript"
-    />
-  </section>
+			language="typescript"
+		/>
+	</section>
 
-  <section>
-    <h2>MeetingView Component (NEW v0.19.0)</h2>
-    <CodeBlock
-      code={`<script>
+	<section>
+		<h2>MeetingView Component (NEW v0.19.0)</h2>
+		<CodeBlock
+			code={`<script>
   import { MeetingView } from '@happyvertical/smrt-events/svelte';
 
   const meeting = {
@@ -296,54 +300,54 @@ const nextDate = calculateNextOccurrence(pattern, new Date());`}
 </script>
 
 <MeetingView {meeting} calendarUrl="/calendar" />`}
-      language="svelte"
-    />
-  </section>
+			language="svelte"
+		/>
+	</section>
 
-  <section>
-    <h2>Best Practices</h2>
-    <article>
-      <h3>DOs</h3>
-      <ul>
-        <li>Use event series for recurring events</li>
-        <li>Check for conflicts before scheduling</li>
-        <li>Store performance data in participant metadata</li>
-        <li>Initialize default event types with initializeDefaults()</li>
-        <li>Use placement field for home/away or speaker order</li>
-      </ul>
-    </article>
-    <article>
-      <h3>DON'Ts</h3>
-      <ul>
-        <li>Don't create circular hierarchies (parent references child)</li>
-        <li>Don't transition completed events to other states</li>
-        <li>Don't skip validation when changing event status</li>
-        <li>Don't delete parent events without handling children</li>
-        <li>Don't store large binary data in metadata (use smrt-assets)</li>
-      </ul>
-    </article>
-  </section>
+	<section>
+		<h2>Best Practices</h2>
+		<article>
+			<h3>DOs</h3>
+			<ul>
+				<li>Use event series for recurring events</li>
+				<li>Check for conflicts before scheduling</li>
+				<li>Store performance data in participant metadata</li>
+				<li>Initialize default event types with initializeDefaults()</li>
+				<li>Use placement field for home/away or speaker order</li>
+			</ul>
+		</article>
+		<article>
+			<h3>DON'Ts</h3>
+			<ul>
+				<li>Don't create circular hierarchies (parent references child)</li>
+				<li>Don't transition completed events to other states</li>
+				<li>Don't skip validation when changing event status</li>
+				<li>Don't delete parent events without handling children</li>
+				<li>Don't store large binary data in metadata (use smrt-assets)</li>
+			</ul>
+		</article>
+	</section>
 
-  <section>
-    <h2>Related Modules</h2>
-    <nav>
-      <a href="/modules/smrt-places">
-        <h3>smrt-places</h3>
-        <p>Venue and location tracking</p>
-      </a>
-      <a href="/modules/smrt-profiles">
-        <h3>smrt-profiles</h3>
-        <p>Participant and organizer profiles</p>
-      </a>
-      <a href="/modules/smrt-core">
-        <h3>smrt-core</h3>
-        <p>Base classes and framework</p>
-      </a>
-    </nav>
-  </section>
+	<section>
+		<h2>Related Modules</h2>
+		<nav>
+			<a href="/modules/smrt-places">
+				<h3>smrt-places</h3>
+				<p>Venue and location tracking</p>
+			</a>
+			<a href="/modules/smrt-profiles">
+				<h3>smrt-profiles</h3>
+				<p>Participant and organizer profiles</p>
+			</a>
+			<a href="/modules/smrt-core">
+				<h3>smrt-core</h3>
+				<p>Base classes and framework</p>
+			</a>
+		</nav>
+	</section>
 
-  <nav>
-    <a href="/modules">← Back to Modules</a>
-    <a href="/modules/smrt-projects">Next: smrt-projects →</a>
-  </nav>
+	<nav>
+		<a href="/modules">← Back to Modules</a>
+		<a href="/modules/smrt-projects">Next: smrt-projects →</a>
+	</nav>
 </ModulePage>

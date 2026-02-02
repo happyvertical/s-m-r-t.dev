@@ -61,12 +61,15 @@
 
 	<h1>useAppState</h1>
 	<p class="lead">
-		Access the global app state manager from context. This is the core hook
-		for interacting with the SMRT framework state.
+		Access the global app state manager from context. This is the core hook for interacting with the
+		SMRT framework state.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { useAppState } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { useAppState } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Access the app state manager to read and modify state.</p>
@@ -142,8 +145,8 @@ if (permissions.has('articles.create')) {
 
 	<h2>Requirements</h2>
 	<p>
-		Must be called within a <code>&lt;Smrt&gt;</code> provider. Throws an error if called
-		outside the provider context.
+		Must be called within a <code>&lt;Smrt&gt;</code> provider. Throws an error if called outside the
+		provider context.
 	</p>
 
 	<CodeBlock

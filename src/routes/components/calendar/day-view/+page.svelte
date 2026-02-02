@@ -7,8 +7,19 @@
 	const today = new Date();
 
 	const mockEvents = [
-		{ type: 'meeting' as const, name: 'Town Council Meeting', startTime: '7:00 PM', venue: 'Town Hall' },
-		{ type: 'game' as const, name: 'Minor Hockey - Atoms vs Stars', startTime: '6:00 PM', venue: 'Community Arena', slug: 'atoms-vs-stars' },
+		{
+			type: 'meeting' as const,
+			name: 'Town Council Meeting',
+			startTime: '7:00 PM',
+			venue: 'Town Hall'
+		},
+		{
+			type: 'game' as const,
+			name: 'Minor Hockey - Atoms vs Stars',
+			startTime: '6:00 PM',
+			venue: 'Community Arena',
+			slug: 'atoms-vs-stars'
+		},
 		{ type: 'event' as const, name: 'Farmers Market', startTime: '8:00 AM', venue: 'Main Street' }
 	];
 
@@ -114,8 +125,20 @@
 		<DayView
 			date={today}
 			events={[
-				{ type: 'game' as const, name: 'Atoms vs Stars', startTime: '6:00 PM', venue: 'Arena', slug: 'atoms-vs-stars' },
-				{ type: 'game' as const, name: 'Novice Tournament', startTime: '8:00 PM', venue: 'Arena', slug: 'novice-tournament' },
+				{
+					type: 'game' as const,
+					name: 'Atoms vs Stars',
+					startTime: '6:00 PM',
+					venue: 'Arena',
+					slug: 'atoms-vs-stars'
+				},
+				{
+					type: 'game' as const,
+					name: 'Novice Tournament',
+					startTime: '8:00 PM',
+					venue: 'Arena',
+					slug: 'novice-tournament'
+				},
 				{ type: 'meeting' as const, name: 'Town Council', startTime: '7:00 PM', venue: 'Town Hall' }
 			]}
 		/>
@@ -124,10 +147,10 @@
 	<h2>Custom Calendar URL</h2>
 	<p>Change the back link destination.</p>
 
-	<ComponentExample
-		code={`<DayView date={date} events={events} calendarUrl="/schedule" />`}
-	>
-		<div style="font-size: 0.875rem; color: #666; padding: 16px; background: #f5f5f5; border-radius: 4px;">
+	<ComponentExample code={`<DayView date={date} events={events} calendarUrl="/schedule" />`}>
+		<div
+			style="font-size: 0.875rem; color: #666; padding: 16px; background: #f5f5f5; border-radius: 4px;"
+		>
 			Back link will navigate to: <code>/schedule</code>
 		</div>
 	</ComponentExample>

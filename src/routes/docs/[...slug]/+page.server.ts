@@ -3,14 +3,14 @@ import { error } from '@sveltejs/kit';
 import type { PageServerLoad, EntryGenerator } from './$types';
 
 const MAPPINGS: Record<string, string> = {
-	'objects': 'api/core/classes/SmrtObject',
-	'collection': 'api/core/classes/SmrtCollection',
-	'agent': 'api/agents/classes/Agent',
+	objects: 'api/core/classes/SmrtObject',
+	collection: 'api/core/classes/SmrtCollection',
+	agent: 'api/agents/classes/Agent',
 	'smrt-cli': 'cli',
 	'smrt-auth': 'api/accounts/index',
 	'smrt-db': 'core',
 	'smrt-ai': 'api/core/interfaces/AiConfig',
-	'foundations': 'core'
+	foundations: 'core'
 };
 
 export const prerender = true;

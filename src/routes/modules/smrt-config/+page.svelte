@@ -3,10 +3,10 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
-<ModulePage 
-  name="smrt-config" 
-  description="Centralized configuration management for SMRT modules and applications with support for multiple file formats, environment variables, and powerful orchestration via top-level await."
-  badges={['v0.19.0', 'Core Foundation', 'ESM']}
+<ModulePage
+	name="smrt-config"
+	description="Centralized configuration management for SMRT modules and applications with support for multiple file formats, environment variables, and powerful orchestration via top-level await."
+	badges={['v0.19.0', 'Core Foundation', 'ESM']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
@@ -19,7 +19,9 @@
 		<h3>Key Features</h3>
 		<ul>
 			<li><strong>Multi-format support</strong> - JS, TS, JSON, YAML, TOML with auto-detection</li>
-			<li><strong>Type-safe TypeScript</strong> - Full type safety with <code>defineConfig()</code></li>
+			<li>
+				<strong>Type-safe TypeScript</strong> - Full type safety with <code>defineConfig()</code>
+			</li>
 			<li><strong>Secure secrets handling</strong> - Auto-detects and sanitizes sensitive data</li>
 			<li><strong>Remote configuration</strong> - Load from APIs with top-level await</li>
 			<li><strong>Configuration merging</strong> - Priority hierarchy for flexible overrides</li>
@@ -106,15 +108,16 @@ console.log(\`Scraper runs at: \${scraperConfig.cronSchedule}\`);`}
 		<p>smrt-config supports three hierarchical scopes:</p>
 		<ul>
 			<li>
-				<strong>Global scope</strong> (<code>smrt.*</code>) - Framework-wide settings like log level,
-				cache directory
+				<strong>Global scope</strong> (<code>smrt.*</code>) - Framework-wide settings like log
+				level, cache directory
 			</li>
 			<li>
 				<strong>Package scope</strong> (<code>packages.*</code>) - Per-package settings for reusable
 				packages
 			</li>
 			<li>
-				<strong>Module scope</strong> (<code>modules.*</code>) - Application-specific module configurations
+				<strong>Module scope</strong> (<code>modules.*</code>) - Application-specific module
+				configurations
 			</li>
 		</ul>
 
@@ -129,8 +132,7 @@ console.log(\`Scraper runs at: \${scraperConfig.cronSchedule}\`);`}
 
 		<h3>File Discovery</h3>
 		<p>
-			Searches upward from current directory for <code>smrt.config.*</code> files. Supports
-			multiple formats:
+			Searches upward from current directory for <code>smrt.config.*</code> files. Supports multiple formats:
 		</p>
 		<ul>
 			<li><code>.js</code>, <code>.mjs</code> - JavaScript with ESM</li>
@@ -491,7 +493,9 @@ export function initializeMyPackage() {
 		<h3>✅ DO</h3>
 		<ul>
 			<li>Keep secrets in environment variables, never hardcoded in config files</li>
-			<li>Use sensible defaults in <code>getPackageConfig()</code> / <code>getModuleConfig()</code></li>
+			<li>
+				Use sensible defaults in <code>getPackageConfig()</code> / <code>getModuleConfig()</code>
+			</li>
 			<li>Validate remote configurations before using them</li>
 			<li>Cache remote configs with appropriate TTL for performance</li>
 			<li>Use <code>defineConfig()</code> for TypeScript type safety</li>
@@ -520,7 +524,8 @@ export function initializeMyPackage() {
 			<strong>Problem:</strong> Configuration file is not being detected.
 		</p>
 		<p>
-			<strong>Solution:</strong> Ensure <code>smrt.config.*</code> is in your project root, or specify
+			<strong>Solution:</strong> Ensure <code>smrt.config.*</code> is in your project root, or
+			specify
 			<code>configPath</code> explicitly:
 		</p>
 		<CodeBlock code={`await loadConfig({ configPath: './config/smrt.config.js' });`} />

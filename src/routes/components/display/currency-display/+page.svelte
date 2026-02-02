@@ -64,7 +64,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { CurrencyDisplay } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { CurrencyDisplay } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display currency values (amounts are in cents).</p>

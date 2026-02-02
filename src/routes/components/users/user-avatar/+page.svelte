@@ -51,19 +51,26 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { UserAvatar } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { UserAvatar } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
-	<p>The avatar displays initials derived from the user's name with a color consistently generated from the name.</p>
+	<p>
+		The avatar displays initials derived from the user's name with a color consistently generated
+		from the name.
+	</p>
 
-	<ComponentExample
-		code={`<UserAvatar profile={{ name: 'Jane Smith' }} />`}
-	>
+	<ComponentExample code={`<UserAvatar profile={{ name: 'Jane Smith' }} />`}>
 		<UserAvatar profile={mockProfile} />
 	</ComponentExample>
 
 	<h2>Sizes</h2>
-	<p>Four sizes are available: <code>sm</code>, <code>md</code> (default), <code>lg</code>, and <code>xl</code>.</p>
+	<p>
+		Four sizes are available: <code>sm</code>, <code>md</code> (default), <code>lg</code>, and
+		<code>xl</code>.
+	</p>
 
 	<ComponentExample
 		code={`<UserAvatar profile={profile} size="sm" />
@@ -89,7 +96,10 @@
 	</ComponentExample>
 
 	<h2>Consistent Colors</h2>
-	<p>Each user gets a consistent color based on their name, making it easy to identify users across the application.</p>
+	<p>
+		Each user gets a consistent color based on their name, making it easy to identify users across
+		the application.
+	</p>
 
 	<ComponentExample
 		code={`<UserAvatar profile={{ name: 'Jane Smith' }} showName />

@@ -74,7 +74,10 @@
 
 <svelte:head>
 	<title>TextareaInput | s-m-r-t Forms</title>
-	<meta name="description" content="Multi-line text input component with character counting and voice input support." />
+	<meta
+		name="description"
+		content="Multi-line text input component with character counting and voice input support."
+	/>
 </svelte:head>
 
 <article class="prose">
@@ -88,12 +91,15 @@
 
 	<h1>TextareaInput</h1>
 	<p class="lead">
-		A Material Design 3 styled multi-line text input with character counting, auto-resizing,
-		and voice input support in smrt mode for longer text content.
+		A Material Design 3 styled multi-line text input with character counting, auto-resizing, and
+		voice input support in smrt mode for longer text content.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { TextareaInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { TextareaInput } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>A simple textarea with 4 rows by default.</p>
@@ -128,11 +134,7 @@
   value="Software developer passionate about building elegant solutions."
 />`}
 	>
-		<TextareaInput
-			name="description"
-			label="Description"
-			bind:value={bioValue}
-		/>
+		<TextareaInput name="description" label="Description" bind:value={bioValue} />
 	</ComponentExample>
 
 	<h2>Custom Height</h2>
@@ -212,9 +214,7 @@
 	</ComponentExample>
 
 	<h2>Voice Input (smrt Mode)</h2>
-	<p>
-		In smrt mode, users can dictate longer text content. The component supports:
-	</p>
+	<p>In smrt mode, users can dictate longer text content. The component supports:</p>
 	<ul>
 		<li>Continuous dictation for paragraphs</li>
 		<li>Natural punctuation commands ("period", "comma", "question mark")</li>
@@ -282,9 +282,7 @@ interface Props {
 	/>
 
 	<h2>Accessibility</h2>
-	<p>
-		TextareaInput follows WCAG 2.1 AA guidelines:
-	</p>
+	<p>TextareaInput follows WCAG 2.1 AA guidelines:</p>
 	<ul>
 		<li>Proper ARIA labels for screen readers</li>
 		<li>Keyboard navigation support (Tab, Shift+Tab)</li>

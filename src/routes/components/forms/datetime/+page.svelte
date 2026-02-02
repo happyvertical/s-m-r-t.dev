@@ -80,12 +80,15 @@
 
 	<h1>DateTimeInput</h1>
 	<p class="lead">
-		A smart date and time picker with natural language support in smrt mode. Users can speak
-		dates like "next Tuesday at 3pm" and the component parses them automatically using chrono-node.
+		A smart date and time picker with natural language support in smrt mode. Users can speak dates
+		like "next Tuesday at 3pm" and the component parses them automatically using chrono-node.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { DateTimeInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { DateTimeInput } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>A date and time picker with native browser controls in standard mode.</p>
@@ -101,11 +104,7 @@
   bind:value
 />`}
 	>
-		<DateTimeInput
-			name="appointment"
-			label="Appointment Date & Time"
-			bind:value={dateTimeValue}
-		/>
+		<DateTimeInput name="appointment" label="Appointment Date & Time" bind:value={dateTimeValue} />
 	</ComponentExample>
 
 	<h2>Date Only</h2>
@@ -139,11 +138,7 @@
   value="2025-03-15T14:30"
 />`}
 	>
-		<DateTimeInput
-			name="meeting"
-			label="Meeting Time"
-			bind:value={presetValue}
-		/>
+		<DateTimeInput name="meeting" label="Meeting Time" bind:value={presetValue} />
 	</ComponentExample>
 
 	<h2>Required Field</h2>
@@ -156,11 +151,7 @@
   required
 />`}
 	>
-		<DateTimeInput
-			name="deadline"
-			label="Deadline"
-			required
-		/>
+		<DateTimeInput name="deadline" label="Deadline" required />
 	</ComponentExample>
 
 	<h2>Disabled State</h2>
@@ -174,12 +165,7 @@
   disabled
 />`}
 	>
-		<DateTimeInput
-			name="locked"
-			label="Locked Date"
-			value="2025-01-01T00:00"
-			disabled
-		/>
+		<DateTimeInput name="locked" label="Locked Date" value="2025-01-01T00:00" disabled />
 	</ComponentExample>
 
 	<h2>With Description</h2>
@@ -192,11 +178,7 @@
   description="When should the event begin?"
 />`}
 	>
-		<DateTimeInput
-			name="event"
-			label="Event Start"
-			description="When should the event begin?"
-		/>
+		<DateTimeInput name="event" label="Event Start" description="When should the event begin?" />
 	</ComponentExample>
 
 	<h2>Natural Language Input (smrt Mode)</h2>
@@ -238,11 +220,7 @@
 />
 <p>ISO Value: {value || '(none)'}</p>`}
 	>
-		<DateTimeInput
-			name="interactive"
-			label="Pick a date and time"
-			bind:value={dateTimeValue}
-		/>
+		<DateTimeInput name="interactive" label="Pick a date and time" bind:value={dateTimeValue} />
 		<p style="margin-top: 1rem; color: #666;">ISO Value: {dateTimeValue || '(none)'}</p>
 	</ComponentExample>
 

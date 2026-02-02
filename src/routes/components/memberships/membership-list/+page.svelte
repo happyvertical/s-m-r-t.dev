@@ -5,14 +5,45 @@
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
 	const mockMemberships = [
-		{ id: 'mem_1', user: { id: 'u1', email: 'alice@example.com' } as any, profile: { name: 'Alice' } as any, role: 'Admin', status: 'active', joinedAt: new Date('2024-01-01') },
-		{ id: 'mem_2', user: { id: 'u2', email: 'bob@example.com' } as any, profile: { name: 'Bob' } as any, role: 'Editor', status: 'active', joinedAt: new Date('2024-02-15') },
-		{ id: 'mem_3', user: { id: 'u3', email: 'charlie@example.com' } as any, profile: { name: 'Charlie' } as any, role: 'Viewer', status: 'pending', joinedAt: new Date('2024-03-10') }
+		{
+			id: 'mem_1',
+			user: { id: 'u1', email: 'alice@example.com' } as any,
+			profile: { name: 'Alice' } as any,
+			role: 'Admin',
+			status: 'active',
+			joinedAt: new Date('2024-01-01')
+		},
+		{
+			id: 'mem_2',
+			user: { id: 'u2', email: 'bob@example.com' } as any,
+			profile: { name: 'Bob' } as any,
+			role: 'Editor',
+			status: 'active',
+			joinedAt: new Date('2024-02-15')
+		},
+		{
+			id: 'mem_3',
+			user: { id: 'u3', email: 'charlie@example.com' } as any,
+			profile: { name: 'Charlie' } as any,
+			role: 'Viewer',
+			status: 'pending',
+			joinedAt: new Date('2024-03-10')
+		}
 	] as any[];
 
 	const listProps = [
-		{ name: 'memberships', type: 'Membership[]', description: 'Array of memberships', required: true },
-		{ name: 'showActions', type: 'boolean', default: 'false', description: 'Show edit/remove actions' },
+		{
+			name: 'memberships',
+			type: 'Membership[]',
+			description: 'Array of memberships',
+			required: true
+		},
+		{
+			name: 'showActions',
+			type: 'boolean',
+			default: 'false',
+			description: 'Show edit/remove actions'
+		},
 		{ name: 'onedit', type: '(membership: Membership) => void', description: 'Edit callback' },
 		{ name: 'onremove', type: '(membership: Membership) => void', description: 'Remove callback' },
 		{ name: 'loading', type: 'boolean', default: 'false', description: 'Show loading state' }
@@ -34,7 +65,10 @@
 	<p class="lead">Display tenant memberships with filtering, sorting, and actions.</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { MembershipList } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { MembershipList } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<ComponentExample code={`<MembershipList memberships={memberships} />`}>
@@ -42,7 +76,9 @@
 	</ComponentExample>
 
 	<h2>With Actions</h2>
-	<ComponentExample code={`<MembershipList\n  memberships={memberships}\n  showActions={true}\n  onedit={handleEdit}\n  onremove={handleRemove}\n/>`}>
+	<ComponentExample
+		code={`<MembershipList\n  memberships={memberships}\n  showActions={true}\n  onedit={handleEdit}\n  onremove={handleRemove}\n/>`}
+	>
 		<MembershipList
 			memberships={mockMemberships}
 			showActions={true}
@@ -55,7 +91,10 @@
 	<PropsTable props={listProps} />
 
 	<h2>TypeScript</h2>
-	<CodeBlock code={`interface Props {\n  memberships: Membership[];\n  showActions?: boolean;\n  onedit?: (membership: Membership) => void;\n  onremove?: (membership: Membership) => void;\n  loading?: boolean;\n}`} language="typescript" />
+	<CodeBlock
+		code={`interface Props {\n  memberships: Membership[];\n  showActions?: boolean;\n  onedit?: (membership: Membership) => void;\n  onremove?: (membership: Membership) => void;\n  loading?: boolean;\n}`}
+		language="typescript"
+	/>
 </article>
 
 <style>

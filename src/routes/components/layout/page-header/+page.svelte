@@ -60,7 +60,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { PageHeader } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { PageHeader } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Simple page header with just a title.</p>

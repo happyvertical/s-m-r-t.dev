@@ -17,6 +17,14 @@ export default [
 				...globals.browser,
 				...globals.node
 			}
+		},
+		rules: {
+			// Catch undefined variables - this will error on {UndefinedVar} in templates
+			'no-undef': 'error',
+			// Additional strictness for variable usage
+			'no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+			// Prevent using variables before they're defined
+			'no-use-before-define': ['error', { functions: false, classes: false }]
 		}
 	},
 	{
@@ -25,6 +33,14 @@ export default [
 			parserOptions: {
 				parser: ts.parser
 			}
+		},
+		rules: {
+			// Svelte-specific rules to catch template issues
+			'svelte/valid-compile': 'error',
+			// This catches invalid expressions in templates
+			'svelte/no-unused-svelte-ignore': 'error',
+			// Ensure reactive values are properly used
+			'svelte/require-reactive-cleanup': 'error'
 		}
 	},
 	{

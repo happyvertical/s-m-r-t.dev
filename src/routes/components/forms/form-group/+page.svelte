@@ -57,13 +57,16 @@
 
 	<h1>FormGroup</h1>
 	<p class="lead">
-		A layout wrapper for form fields that provides consistent label, hint text,
-		and error message styling. Use when building custom inputs or when you need
-		more control than the built-in labeled inputs.
+		A layout wrapper for form fields that provides consistent label, hint text, and error message
+		styling. Use when building custom inputs or when you need more control than the built-in labeled
+		inputs.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { FormGroup } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { FormGroup } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Wrap any input element with a label and optional hint.</p>

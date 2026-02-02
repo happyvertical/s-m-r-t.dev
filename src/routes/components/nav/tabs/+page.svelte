@@ -57,8 +57,8 @@
 
 	<h1>Tabs</h1>
 	<p class="lead">
-		Material 3 styled tab navigation with optional counts, content slots,
-		and animated active indicators.
+		Material 3 styled tab navigation with optional counts, content slots, and animated active
+		indicators.
 	</p>
 
 	<h2>Installation</h2>
@@ -147,7 +147,7 @@
 	/>
 
 	<h2>Props</h2>
-	<PropsTable props={props} />
+	<PropsTable {props} />
 
 	<h2>TypeScript</h2>
 	<CodeBlock

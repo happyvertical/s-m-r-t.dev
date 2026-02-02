@@ -103,7 +103,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { MoneyInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { MoneyInput } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>
@@ -121,11 +124,7 @@
   bind:value
 />`}
 	>
-		<MoneyInput
-			name="amount"
-			label="Amount"
-			bind:value={basicValue}
-		/>
+		<MoneyInput name="amount" label="Amount" bind:value={basicValue} />
 	</ComponentExample>
 
 	<h2>Currency Selection</h2>
@@ -139,12 +138,7 @@
   value={15000}
 />`}
 	>
-		<MoneyInput
-			name="usd-amount"
-			label="Price (USD)"
-			currency="USD"
-			bind:value={usdValue}
-		/>
+		<MoneyInput name="usd-amount" label="Price (USD)" currency="USD" bind:value={usdValue} />
 	</ComponentExample>
 
 	<h2>With Constraints</h2>
@@ -179,11 +173,7 @@
   required
 />`}
 	>
-		<MoneyInput
-			name="payment"
-			label="Payment Amount"
-			required
-		/>
+		<MoneyInput name="payment" label="Payment Amount" required />
 	</ComponentExample>
 
 	<h2>Disabled State</h2>
@@ -197,12 +187,7 @@
   disabled
 />`}
 	>
-		<MoneyInput
-			name="total"
-			label="Order Total"
-			value={24999}
-			disabled
-		/>
+		<MoneyInput name="total" label="Order Total" value={24999} disabled />
 	</ComponentExample>
 
 	<h2>With Error</h2>
@@ -261,11 +246,7 @@
 <p>Value in cents: {value ?? 'null'}</p>
 <p>Display: {value ? '$' + (value / 100).toFixed(2) : '(empty)'}</p>`}
 	>
-		<MoneyInput
-			name="interactive"
-			label="Enter Price"
-			bind:value={basicValue}
-		/>
+		<MoneyInput name="interactive" label="Enter Price" bind:value={basicValue} />
 		<div style="margin-top: 1rem; color: #666;">
 			<p>Value in cents: {basicValue ?? 'null'}</p>
 			<p>Display: {basicValue ? 'CA$' + (basicValue / 100).toFixed(2) : '(empty)'}</p>
@@ -299,8 +280,8 @@ interface Props {
 
 	<h2>Value Format</h2>
 	<p>
-		The component stores values in <strong>cents</strong> to avoid floating-point precision issues
-		common with monetary calculations:
+		The component stores values in <strong>cents</strong> to avoid floating-point precision issues common
+		with monetary calculations:
 	</p>
 	<ul>
 		<li><code>$150.00</code> is stored as <code>15000</code></li>

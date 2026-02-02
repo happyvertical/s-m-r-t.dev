@@ -35,8 +35,8 @@
 
 	<h1>Grid</h1>
 	<p class="lead">
-		Responsive grid layout with configurable columns and gaps. Uses CSS Grid with smart
-		auto-fill behavior by default.
+		Responsive grid layout with configurable columns and gaps. Uses CSS Grid with smart auto-fill
+		behavior by default.
 	</p>
 
 	<h2>Installation</h2>

@@ -56,12 +56,15 @@
 
 	<h1>Masthead</h1>
 	<p class="lead">
-		Subheader component for news-style layouts. Shows location, date, and navigation with
-		responsive desktop/mobile layouts.
+		Subheader component for news-style layouts. Shows location, date, and navigation with responsive
+		desktop/mobile layouts.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Masthead } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { Masthead } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Simple masthead with date (defaults to current date).</p>

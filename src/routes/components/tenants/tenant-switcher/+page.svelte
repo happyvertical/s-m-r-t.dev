@@ -55,7 +55,10 @@
 
 <svelte:head>
 	<title>TenantSwitcher | s-m-r-t Components</title>
-	<meta name="description" content="Dropdown component for switching between multiple tenant organizations." />
+	<meta
+		name="description"
+		content="Dropdown component for switching between multiple tenant organizations."
+	/>
 </svelte:head>
 
 <article class="prose">
@@ -74,7 +77,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { TenantSwitcher } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { TenantSwitcher } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Simple tenant switcher with callback handling.</p>
@@ -104,7 +110,7 @@
 		<TenantSwitcher
 			tenants={mockTenants}
 			currentTenantId={currentTenant}
-			onswitch={(id) => currentTenant = id}
+			onswitch={(id) => (currentTenant = id)}
 		/>
 		<p style="margin-top: 1rem; color: #666;">Current tenant: {currentTenant}</p>
 	</ComponentExample>
@@ -123,7 +129,7 @@
 		<TenantSwitcher
 			tenants={mockTenants}
 			currentTenantId={currentTenant}
-			onswitch={(id) => currentTenant = id}
+			onswitch={(id) => (currentTenant = id)}
 			position="header"
 		/>
 	</ComponentExample>
@@ -145,7 +151,7 @@
 		<TenantSwitcher
 			tenants={mockTenants}
 			currentTenantId={currentTenant}
-			onswitch={(id) => currentTenant = id}
+			onswitch={(id) => (currentTenant = id)}
 			showCreateNew={true}
 			oncreate={() => alert('Create new tenant clicked')}
 		/>
@@ -170,9 +176,7 @@ interface Props {
 	/>
 
 	<h2>Integration with smrt-tenancy</h2>
-	<p>
-		Complete example with tenant context switching:
-	</p>
+	<p>Complete example with tenant context switching:</p>
 
 	<CodeBlock
 		code={`import { TenantSwitcher } from '@happyvertical/smrt-svelte';
@@ -231,9 +235,7 @@ import { TenantContext } from '@happyvertical/smrt-tenancy';
 	</ul>
 
 	<h2>Accessibility</h2>
-	<p>
-		TenantSwitcher follows accessibility best practices:
-	</p>
+	<p>TenantSwitcher follows accessibility best practices:</p>
 	<ul>
 		<li>Keyboard navigation (Tab, Enter, Arrow keys)</li>
 		<li>ARIA labels for screen readers</li>

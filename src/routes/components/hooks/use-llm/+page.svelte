@@ -87,8 +87,8 @@
 
 	<h1>useLLM</h1>
 	<p class="lead">
-		A Svelte 5 hook for in-browser LLM chat. Run language models locally using
-		WebLLM with reactive state for loading progress and generation status.
+		A Svelte 5 hook for in-browser LLM chat. Run language models locally using WebLLM with reactive
+		state for loading progress and generation status.
 	</p>
 
 	<h2>Installation</h2>

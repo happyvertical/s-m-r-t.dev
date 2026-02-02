@@ -93,9 +93,8 @@
 
 	<h1>ProgressBar</h1>
 	<p class="lead">
-		Visual progress indicator with optional status-based coloring. Useful for budget tracking,
-		task completion, loading states, and any scenario where you need to display progress toward
-		a goal.
+		Visual progress indicator with optional status-based coloring. Useful for budget tracking, task
+		completion, loading states, and any scenario where you need to display progress toward a goal.
 	</p>
 
 	<h2>Installation</h2>
@@ -148,15 +147,21 @@
 	<ComponentExample title="Size Variants" code={sizesCode}>
 		<div style="width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 24px;">
 			<div>
-				<span style="font-size: 0.75rem; color: #666; display: block; margin-bottom: 4px;">Small</span>
+				<span style="font-size: 0.75rem; color: #666; display: block; margin-bottom: 4px;"
+					>Small</span
+				>
 				<ProgressBar value={60} size="sm" showLabel />
 			</div>
 			<div>
-				<span style="font-size: 0.75rem; color: #666; display: block; margin-bottom: 4px;">Medium</span>
+				<span style="font-size: 0.75rem; color: #666; display: block; margin-bottom: 4px;"
+					>Medium</span
+				>
 				<ProgressBar value={60} size="md" showLabel />
 			</div>
 			<div>
-				<span style="font-size: 0.75rem; color: #666; display: block; margin-bottom: 4px;">Large</span>
+				<span style="font-size: 0.75rem; color: #666; display: block; margin-bottom: 4px;"
+					>Large</span
+				>
 				<ProgressBar value={60} size="lg" showLabel />
 			</div>
 		</div>

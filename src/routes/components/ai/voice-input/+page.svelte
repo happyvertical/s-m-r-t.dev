@@ -51,12 +51,15 @@
 
 	<h1>VoiceInput</h1>
 	<p class="lead">
-		A microphone button component for voice transcription. Handles model
-		initialization, listening states, and error display automatically.
+		A microphone button component for voice transcription. Handles model initialization, listening
+		states, and error display automatically.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { VoiceInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { VoiceInput } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Capture voice input and handle the transcription.</p>
@@ -129,7 +132,7 @@
 	</ul>
 
 	<h2>Props</h2>
-	<PropsTable props={props} />
+	<PropsTable {props} />
 
 	<h2>TypeScript</h2>
 	<CodeBlock
@@ -147,8 +150,8 @@ interface Props {
 
 	<h2>Requirements</h2>
 	<p>
-		Must be used within a <code>&lt;Smrt&gt;</code> provider. The component uses
-		the <code>useSTT</code> hook internally.
+		Must be used within a <code>&lt;Smrt&gt;</code> provider. The component uses the
+		<code>useSTT</code> hook internally.
 	</p>
 </article>
 

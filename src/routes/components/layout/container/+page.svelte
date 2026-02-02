@@ -29,12 +29,15 @@
 
 	<h1>Container</h1>
 	<p class="lead">
-		Centered max-width container with responsive padding. Use to constrain content width and
-		provide consistent horizontal spacing.
+		Centered max-width container with responsive padding. Use to constrain content width and provide
+		consistent horizontal spacing.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Container } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { Container } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>The default container with lg max-width (1024px).</p>
@@ -119,8 +122,8 @@ interface Props {
 
 	<h2>Responsive Behavior</h2>
 	<p>
-		Container automatically adjusts padding on smaller screens. On mobile, padding is reduced
-		while maintaining centered content.
+		Container automatically adjusts padding on smaller screens. On mobile, padding is reduced while
+		maintaining centered content.
 	</p>
 </article>
 

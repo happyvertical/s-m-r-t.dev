@@ -94,7 +94,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { ConfirmDialog } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { ConfirmDialog } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Simple confirmation dialog with title and message.</p>

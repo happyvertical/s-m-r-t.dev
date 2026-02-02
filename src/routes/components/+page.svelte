@@ -6,7 +6,11 @@
 			href: '/components/layout',
 			components: [
 				{ name: 'Grid', href: '/components/layout/grid', description: 'Responsive grid system' },
-				{ name: 'SummaryCard', href: '/components/layout/summary-card', description: 'Metric display card' }
+				{
+					name: 'SummaryCard',
+					href: '/components/layout/summary-card',
+					description: 'Metric display card'
+				}
 			]
 		},
 		{
@@ -23,12 +27,36 @@
 			description: 'Form components with voice input support',
 			href: '/components/forms',
 			components: [
-				{ name: 'TextInput', href: '/components/forms/text-input', description: 'Text input with voice support' },
-				{ name: 'SelectInput', href: '/components/forms/smrt-select', description: 'Dropdown with voice selection' },
-				{ name: 'CheckboxInput', href: '/components/forms/checkbox', description: 'Checkbox with voice control' },
-				{ name: 'DateTimeInput', href: '/components/forms/datetime', description: 'Date/time with natural language' },
-				{ name: 'AddressInput', href: '/components/forms/address', description: 'Address input with parsing' },
-				{ name: 'MoneyInput', href: '/components/forms/money', description: 'Monetary input with cents' }
+				{
+					name: 'TextInput',
+					href: '/components/forms/text-input',
+					description: 'Text input with voice support'
+				},
+				{
+					name: 'SelectInput',
+					href: '/components/forms/smrt-select',
+					description: 'Dropdown with voice selection'
+				},
+				{
+					name: 'CheckboxInput',
+					href: '/components/forms/checkbox',
+					description: 'Checkbox with voice control'
+				},
+				{
+					name: 'DateTimeInput',
+					href: '/components/forms/datetime',
+					description: 'Date/time with natural language'
+				},
+				{
+					name: 'AddressInput',
+					href: '/components/forms/address',
+					description: 'Address input with parsing'
+				},
+				{
+					name: 'MoneyInput',
+					href: '/components/forms/money',
+					description: 'Monetary input with cents'
+				}
 			]
 		}
 	];
@@ -73,11 +101,13 @@
 
 	<section class="usage">
 		<h2>Basic Usage</h2>
-		<pre><code>{`// Core UI components
+		<pre><code
+				>{`// Core UI components
 import { Button, Card, Badge } from '@happyvertical/svelte';
 
 // smrt-specific components
-import { TextInput, StatusBadge } from '@happyvertical/smrt-svelte';`}</code></pre>
+import { TextInput, StatusBadge } from '@happyvertical/smrt-svelte';`}</code
+			></pre>
 	</section>
 
 	<section class="voice">
@@ -153,7 +183,9 @@ import { TextInput, StatusBadge } from '@happyvertical/smrt-svelte';`}</code></p
 		border: 1px solid var(--color-grid, #e5e5e5);
 		border-radius: 8px;
 		text-decoration: none;
-		transition: border-color 0.2s, box-shadow 0.2s;
+		transition:
+			border-color 0.2s,
+			box-shadow 0.2s;
 	}
 
 	.component-card:hover {

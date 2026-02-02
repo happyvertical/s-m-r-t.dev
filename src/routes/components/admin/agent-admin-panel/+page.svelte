@@ -75,12 +75,15 @@
 
 	<h1>AgentAdminPanel</h1>
 	<p class="lead">
-		A dynamic component renderer that looks up and displays the appropriate
-		admin panel from the component registry based on agent class and slot ID.
+		A dynamic component renderer that looks up and displays the appropriate admin panel from the
+		component registry based on agent class and slot ID.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { AgentAdminPanel } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { AgentAdminPanel } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Render a single configuration panel.</p>

@@ -46,7 +46,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { ConfidenceBadge } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { ConfidenceBadge } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display confidence scores with automatic color coding.</p>
@@ -108,9 +111,7 @@
 	<h2>Without Percentage</h2>
 	<p>Hide the percentage text for a minimal bar-only display.</p>
 
-	<ComponentExample
-		code={`<ConfidenceBadge confidence={75} showPercent={false} />`}
-	>
+	<ComponentExample code={`<ConfidenceBadge confidence={75} showPercent={false} />`}>
 		<ConfidenceBadge confidence={75} showPercent={false} />
 	</ComponentExample>
 

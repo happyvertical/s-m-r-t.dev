@@ -33,9 +33,9 @@
 
 	<section class="intro">
 		<p>
-			Form components extend standard HTML inputs with Material Design 3 styling and
-			voice input capabilities in smrt mode. All components support natural language
-			input when voice mode is active.
+			Form components extend standard HTML inputs with Material Design 3 styling and voice input
+			capabilities in smrt mode. All components support natural language input when voice mode is
+			active.
 		</p>
 	</section>
 
@@ -105,7 +105,7 @@
 				name="agree"
 				label="I agree to the terms"
 				description="Say yes or no"
-				bind:checked={checked}
+				bind:checked
 			/>
 		</ComponentExample>
 
@@ -154,9 +154,9 @@
 	<section class="voice-section">
 		<h2>Voice Input</h2>
 		<p>
-			In smrt mode, form inputs display a microphone button. Users can hold the button
-			and speak naturally to fill in values. Each component type has specific voice
-			command patterns - see individual component docs for details.
+			In smrt mode, form inputs display a microphone button. Users can hold the button and speak
+			naturally to fill in values. Each component type has specific voice command patterns - see
+			individual component docs for details.
 		</p>
 		<CodeBlock
 			code={`<!-- Example voice commands for TextInput -->

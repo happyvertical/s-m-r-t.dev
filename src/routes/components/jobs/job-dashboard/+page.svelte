@@ -63,12 +63,15 @@
 
 	<h1>JobDashboard</h1>
 	<p class="lead">
-		A comprehensive overview panel for monitoring background jobs. Displays
-		statistics, queue breakdown, recent jobs, and failed jobs requiring attention.
+		A comprehensive overview panel for monitoring background jobs. Displays statistics, queue
+		breakdown, recent jobs, and failed jobs requiring attention.
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { JobDashboard } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { JobDashboard } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage</h2>
 	<p>Display job statistics and recent activity.</p>

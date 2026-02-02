@@ -75,9 +75,9 @@
 
 	<h1>Form</h1>
 	<p class="lead">
-		A smart form wrapper that enables voice-powered form filling. In SMRT mode,
-		users can speak to fill all fields at once. The Form component provides context
-		to child inputs and manages the speech-to-text flow.
+		A smart form wrapper that enables voice-powered form filling. In SMRT mode, users can speak to
+		fill all fields at once. The Form component provides context to child inputs and manages the
+		speech-to-text flow.
 	</p>
 
 	<h2>Installation</h2>
@@ -102,7 +102,9 @@
 	<h2>How Voice Filling Works</h2>
 	<ol>
 		<li>User clicks "Speak all fields" button</li>
-		<li>User speaks naturally: "First name John, last name Smith, email john at example dot com"</li>
+		<li>
+			User speaks naturally: "First name John, last name Smith, email john at example dot com"
+		</li>
 		<li>User says "done" or waits for silence timeout</li>
 		<li>Form extracts field values and populates inputs</li>
 	</ol>

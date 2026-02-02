@@ -3,10 +3,10 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-	let heightValue = $state<{ value: number | null, unit: string }>({ value: null, unit: 'cm' });
-	let weightValue = $state<{ value: number | null, unit: string }>({ value: 75, unit: 'kg' });
-	let temperatureValue = $state<{ value: number | null, unit: string }>({ value: null, unit: 'C' });
-	let interactiveValue = $state<{ value: number | null, unit: string }>({ value: null, unit: 'm' });
+	let heightValue = $state<{ value: number | null; unit: string }>({ value: null, unit: 'cm' });
+	let weightValue = $state<{ value: number | null; unit: string }>({ value: 75, unit: 'kg' });
+	let temperatureValue = $state<{ value: number | null; unit: string }>({ value: null, unit: 'C' });
+	let interactiveValue = $state<{ value: number | null; unit: string }>({ value: null, unit: 'm' });
 
 	const measurementProps = [
 		{
@@ -113,7 +113,10 @@
 
 <svelte:head>
 	<title>MeasurementInput | s-m-r-t Forms</title>
-	<meta name="description" content="Measurement input component with unit selection for physical quantities like length, weight, and temperature." />
+	<meta
+		name="description"
+		content="Measurement input component with unit selection for physical quantities like length, weight, and temperature."
+	/>
 </svelte:head>
 
 <article class="prose">
@@ -132,7 +135,10 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { MeasurementInput } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock
+		code={`import { MeasurementInput } from '@happyvertical/smrt-svelte';`}
+		language="typescript"
+	/>
 
 	<h2>Basic Usage - Height</h2>
 	<p>Measure height with common units like centimeters, meters, inches, or feet.</p>
@@ -156,12 +162,7 @@
   bind:value
 />`}
 	>
-		<MeasurementInput
-			name="height"
-			label="Height"
-			units={heightUnits}
-			bind:value={heightValue}
-		/>
+		<MeasurementInput name="height" label="Height" units={heightUnits} bind:value={heightValue} />
 	</ComponentExample>
 
 	<h2>Weight Measurement</h2>
@@ -175,12 +176,7 @@
   value={{ value: 75, unit: 'kg' }}
 />`}
 	>
-		<MeasurementInput
-			name="weight"
-			label="Weight"
-			units={weightUnits}
-			bind:value={weightValue}
-		/>
+		<MeasurementInput name="weight" label="Weight" units={weightUnits} bind:value={weightValue} />
 	</ComponentExample>
 
 	<h2>Temperature with Precision</h2>
@@ -219,12 +215,7 @@
   required
 />`}
 	>
-		<MeasurementInput
-			name="distance"
-			label="Distance"
-			units={distanceUnits}
-			required
-		/>
+		<MeasurementInput name="distance" label="Distance" units={distanceUnits} required />
 	</ComponentExample>
 
 	<h2>Disabled State</h2>
@@ -270,9 +261,7 @@
 	</ComponentExample>
 
 	<h2>Voice Input (smrt Mode)</h2>
-	<p>
-		In smrt mode, users can speak measurements with units naturally:
-	</p>
+	<p>In smrt mode, users can speak measurements with units naturally:</p>
 	<ul>
 		<li>"one hundred seventy five centimeters" → {'{'} value: 175, unit: 'cm' {'}'}</li>
 		<li>"five foot ten" → {'{'} value: 5.83, unit: 'ft' {'}'} (converts 5'10" to decimal)</li>
@@ -315,7 +304,8 @@
 			bind:value={interactiveValue}
 		/>
 		<p style="margin-top: 1rem; color: #666;">
-			Value: {interactiveValue.value ?? '(empty)'} {interactiveValue.unit}
+			Value: {interactiveValue.value ?? '(empty)'}
+			{interactiveValue.unit}
 		</p>
 	</ComponentExample>
 
@@ -402,15 +392,14 @@ const volumeUnits = [
 	/>
 
 	<h2>Form Submission</h2>
-	<p>
-		The component submits two hidden fields for form integration:
-	</p>
+	<p>The component submits two hidden fields for form integration:</p>
 	<ul>
 		<li><code>{`{name}_value`}</code> - The numeric value</li>
 		<li><code>{`{name}_unit`}</code> - The selected unit</li>
 	</ul>
 	<p>
-		For example, <code>name="height"</code> creates <code>height_value</code> and <code>height_unit</code> fields.
+		For example, <code>name="height"</code> creates <code>height_value</code> and
+		<code>height_unit</code> fields.
 	</p>
 </article>
 
