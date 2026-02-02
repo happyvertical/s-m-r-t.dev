@@ -48,12 +48,16 @@
     <h2 class="text-3xl font-bold mb-4">Quick Start</h2>
     <CodeBlock
       code={`<script>
-  import { TextInput, UserCard, ModuleUIRegistry } from '@happyvertical/smrt-svelte';
-  import { createProfileStore } from '@happyvertical/smrt-svelte/stores';
+  import { TextInput, UserCard } from '@happyvertical/smrt-svelte';
+  import { ModuleUIRegistry } from '@happyvertical/smrt-svelte/registry';
+  import { createAppState, setAppStateContext } from '@happyvertical/smrt-svelte';
 
-  // Reactive store
-  const profileStore = createProfileStore();
-  await profileStore.loadProfile('profile-123');
+  // Initialize app state
+  const appState = createAppState({
+    initialMode: 'smrt',
+    session: { user: null, isAuthenticated: false }
+  });
+  setAppStateContext(appState);
 
   let name = $state('');
 </script>
@@ -68,17 +72,16 @@
 
 <!-- User component -->
 <UserCard
-  user={'{'}
+  user={{
     id: 'user-1',
-    displayName: profileStore.profile?.displayName,
-    email: profileStore.profile?.email,
-    avatarUrl: profileStore.profile?.avatarUrl
-  {'}'}
+    displayName: 'John Doe',
+    email: 'john@example.com'
+  }}
 />
 
 <!-- Dynamic component loading -->
 {#each ModuleUIRegistry.getComponents('@happyvertical/smrt-commerce') as component}
-  <component.component {...props} />
+  <svelte:component this={component.component} {...props} />
 {/each}`}
       language="svelte"
     />
@@ -107,19 +110,33 @@
   </section>
 
   <section class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Reactive Stores</h2>
+    <h2 class="text-3xl font-bold mb-4">App State Management</h2>
     <CodeBlock
-      code={`import { createProfileStore, createEventStore } from '@happyvertical/smrt-svelte/stores';
+      code={`import { createAppState, setAppStateContext, getAppStateContext } from '@happyvertical/smrt-svelte';
 
-// Profile store
-const profileStore = createProfileStore();
-await profileStore.loadProfile('profile-123');
-console.log(profileStore.profile); // Reactive
+// Create app state manager
+const appState = createAppState({
+  initialMode: 'smrt',
+  session: {
+    user: null,
+    isAuthenticated: false,
+    permissions: [],
+    preferences: {}
+  },
+  ai: {
+    preload: 'idle',
+    stt: { type: 'whisper-cpp' },
+    showLoadingOverlay: true
+  }
+});
 
-// Event store
-const eventStore = createEventStore();
-await eventStore.loadEvents({ status: 'scheduled' });
-console.log(eventStore.events); // Reactive array`}
+// Initialize and set context
+await appState.initialize();
+setAppStateContext(appState);
+
+// Access state anywhere in the app
+const state = getAppStateContext();
+console.log(state.state); // Reactive SmrtAppState`}
       language="typescript"
     />
   </section>

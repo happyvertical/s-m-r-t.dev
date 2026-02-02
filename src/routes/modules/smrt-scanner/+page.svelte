@@ -127,12 +127,7 @@ smrt-scan --benchmark`}
 		<p>Type inference follows this priority:</p>
 		<ol>
 			<li>
-				<strong>Helper functions</strong>: <code>text()</code>, <code>integer()</code>, <code
-					>decimal()</code
-				>, <code>foreignKey()</code>
-			</li>
-			<li>
-				<strong>Field decorators</strong>: <code>@field({'{ type: "..." }'})</code>
+				<strong>Field decorators</strong>: <code>@foreignKey()</code>, <code>@field()</code>, <code>@oneToMany()</code>, <code>@manyToMany()</code>
 			</li>
 			<li>
 				<strong>TypeScript annotations</strong> with 0 vs 0.0 heuristic for numbers
@@ -257,13 +252,12 @@ await fs.writeFile('manifest.json', JSON.stringify(manifest, null, 2));`}
 		<CodeBlock
 			code={`// src/models/User.ts
 import { SmrtObject, smrt } from '@happyvertical/smrt-core';
-import { text, integer } from '@happyvertical/smrt-core/fields';
 
 @smrt()
 export class User extends SmrtObject {
-  name = text();
-  email = text();
-  age = integer();
+  name: string = '';
+  email: string = '';
+  age: number = 0;
 }`}
 		/>
 
@@ -288,23 +282,23 @@ user.fields.forEach(f => {
 			code={`// Base class with STI
 @smrt({ tableStrategy: 'sti' })
 export class Vehicle extends SmrtObject {
-  make = text();
-  model = text();
-  year = integer();
+  make: string = '';
+  model: string = '';
+  year: number = 0;
 }
 
 // Car inherits STI strategy
 @smrt()
 export class Car extends Vehicle {
-  numDoors = integer();
-  trunkSize = decimal();
+  numDoors: number = 0;
+  trunkSize: number = 0.0;
 }
 
 // Truck also inherits STI
 @smrt()
 export class Truck extends Vehicle {
-  bedLength = decimal();
-  towingCapacity = integer();
+  bedLength: number = 0.0;
+  towingCapacity: number = 0;
 }`}
 		/>
 
@@ -470,7 +464,7 @@ console.log(\`Total classes across monorepo: \${allClasses.length}\`);`}
 		<ul>
 			<li>Always exclude test files: <code>**/*.test.ts</code>, <code>**/*.spec.ts</code></li>
 			<li>Use <code>0.0</code> for decimal fields, <code>0</code> for integers in initializers</li>
-			<li>Use helper functions (<code>text()</code>, <code>integer()</code>) for clearer type inference</li>
+			<li>Use decorators (<code>@foreignKey()</code>, <code>@field()</code>) for relationships and constraints</li>
 			<li>Specify <code>tableStrategy: 'sti'</code> on base class before extending</li>
 			<li>Keep inheritance chains reasonably shallow (2-4 levels)</li>
 			<li>Cache external manifests during build process</li>
@@ -518,8 +512,8 @@ console.log(\`Total classes across monorepo: \${allClasses.length}\`);`}
 		<h3>Decimal/Integer confusion</h3>
 		<p><strong>Problem:</strong> Wrong numeric types inferred.</p>
 		<p>
-			<strong>Solution:</strong> Use <code>0.0</code> for decimals, <code>0</code> for integers, or
-			use helper functions: <code>decimal()</code>, <code>integer()</code>.
+			<strong>Solution:</strong> Use <code>0.0</code> for decimals, <code>0</code> for integers in default values.
+			The scanner uses the presence of a decimal point to determine the column type.
 		</p>
 	</section>
 

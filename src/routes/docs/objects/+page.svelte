@@ -79,13 +79,19 @@ class Product extends SmrtObject {
 
 		<h3>Field Decorators (When Required)</h3>
 		<p>Use decorators for relationships, constraints, or nullable decimals.</p>
-		<pre><code>{`import { foreignKey, oneToMany, manyToMany, field, meta } from '@happyvertical/smrt-core';
+		<pre><code>{`import { SmrtObject, smrt, foreignKey, oneToMany, manyToMany, field, meta } from '@happyvertical/smrt-core';
 
+@smrt()
 class Order extends SmrtObject {
   // Relationships
-  customerId = foreignKey(Customer);
-  items = oneToMany(OrderItem);
-  tags = manyToMany(Tag, { through: 'order_tags' });
+  @foreignKey(Customer)
+  customerId: string = '';
+
+  @oneToMany(OrderItem, { foreignKey: 'orderId' })
+  items: OrderItem[] = [];
+
+  @manyToMany(Tag, { through: 'order_tags' })
+  tags: Tag[] = [];
 
   // Constraints
   @field({ required: true, unique: true, maxLength: 100 })
@@ -368,10 +374,14 @@ class Article extends SmrtObject {
 
 		<h2 id="relationships">Relationships</h2>
 
-		<h3>foreignKey</h3>
+		<h3>@foreignKey</h3>
 		<p>Many-to-one relationship. Creates a column with the referenced object's ID.</p>
-		<pre><code>{`class Order extends SmrtObject {
-  customerId = foreignKey(Customer);
+		<pre><code>{`import { SmrtObject, smrt, foreignKey } from '@happyvertical/smrt-core';
+
+@smrt()
+class Order extends SmrtObject {
+  @foreignKey(Customer)
+  customerId: string = '';
 }
 
 // Usage
@@ -379,37 +389,49 @@ const order = await orders.get('order-123');
 const customer = await order.loadRelated('customerId');
 console.log(customer.name);`}</code></pre>
 
-		<h3>oneToMany</h3>
+		<h3>@oneToMany</h3>
 		<p>One-to-many relationship. No column created; queries via inverse foreign key.</p>
-		<pre><code>{`class Customer extends SmrtObject {
-  orders = oneToMany(Order, { foreignKey: 'customerId' });
+		<pre><code>{`import { SmrtObject, smrt, oneToMany } from '@happyvertical/smrt-core';
+
+@smrt()
+class Customer extends SmrtObject {
+  @oneToMany(Order, { foreignKey: 'customerId' })
+  orders: Order[] = [];
 }
 
 // Usage
 const customer = await customers.get('cust-456');
 const orders = await customer.loadRelatedMany('orders');`}</code></pre>
 
-		<h3>manyToMany</h3>
+		<h3>@manyToMany</h3>
 		<p>Many-to-many relationship via join table.</p>
-		<pre><code>{`class Product extends SmrtObject {
-  tags = manyToMany(Tag, { through: 'product_tags' });
+		<pre><code>{`import { SmrtObject, smrt, manyToMany } from '@happyvertical/smrt-core';
+
+@smrt()
+class Product extends SmrtObject {
+  @manyToMany(Tag, { through: 'product_tags' })
+  tags: Tag[] = [];
 }`}</code></pre>
 
 		<h2 id="best-practices">Best Practices</h2>
 
 		<h3>1. Use TypeScript Types by Default</h3>
-		<pre><code>{`// Preferred
+		<pre><code>{`// Preferred - TypeScript types for simple properties
+@smrt()
 class Product extends SmrtObject {
   name: string = '';
   price: number = 0.0;
   quantity: number = 0;
 }
 
-// Only when necessary
+// Use decorators only when necessary
+@smrt()
 class Product extends SmrtObject {
   @field({ required: true, unique: true })
   sku: string = '';
-  categoryId = foreignKey(Category);
+
+  @foreignKey(Category)
+  categoryId: string = '';
 }`}</code></pre>
 
 		<h3>2. Always Initialize Objects</h3>

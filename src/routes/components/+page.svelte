@@ -105,18 +105,19 @@
 
 	<section class="install">
 		<h2>Installation</h2>
-		<pre><code>npm install @happyvertical/svelte @happyvertical/smrt-svelte</code></pre>
-		<pre><code>{`// Core UI components
-import { Button, Card, Badge } from '@happyvertical/svelte';
+		<pre><code>npm install @happyvertical/smrt-svelte</code></pre>
+		<pre><code>{`// UI and form components
+import { Button, Card, Badge, TextInput, StatusBadge } from '@happyvertical/smrt-svelte';
 
-// smrt-specific components
-import { TextInput, StatusBadge } from '@happyvertical/smrt-svelte';`}</code></pre>
+// Or import from specific subpaths
+import { TextInput, SelectInput } from '@happyvertical/smrt-svelte/forms';
+import { Button, Badge } from '@happyvertical/smrt-svelte/ui';`}</code></pre>
 	</section>
 
 	<section class="preview">
 		<h2>Quick Preview</h2>
 		<pre><code>{`<script>
-  import { Button, Badge, Card } from '@happyvertical/svelte';
+  import { Button, Badge, Card } from '@happyvertical/smrt-svelte/ui';
 </script>
 
 <Button variant="primary">Primary</Button>

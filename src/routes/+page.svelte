@@ -43,11 +43,16 @@
 	<section class="example">
 		<h3>Simple</h3>
 		<p class="example-desc">Extend SmrtObject. That's it.</p>
-		<pre><code>{`class Product extends SmrtObject {
+		<pre><code>{`import { SmrtObject, smrt, foreignKey } from '@happyvertical/smrt-core';
+
+@smrt()
+class Product extends SmrtObject {
   name: string = '';
   price: number = 0.0;    // DECIMAL (inferred from decimal)
   quantity: number = 0;   // INTEGER (inferred from integer)
-  categoryId = foreignKey(Category);
+
+  @foreignKey(Category)
+  categoryId: string = '';
 }
 
 // That's it. You get:

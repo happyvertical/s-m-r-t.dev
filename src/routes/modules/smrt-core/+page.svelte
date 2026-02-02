@@ -166,13 +166,19 @@ console.log(description);
   createdAt: Date = new Date();   // → DATETIME
 }`} language="typescript" />
 
-			<p>Or use field helpers when constraints are needed:</p>
-			<CodeBlock code={`import { text, decimal, foreignKey } from '@happyvertical/smrt-core/decorators';
+			<p>Or use decorators when constraints or relationships are needed:</p>
+			<CodeBlock code={`import { SmrtObject, smrt, field, foreignKey } from '@happyvertical/smrt-core';
 
+@smrt()
 class Product extends SmrtObject {
-  name = text({ required: true, maxLength: 100 });
-  price = decimal({ min: 0, max: 999999.99, required: true });
-  categoryId = foreignKey(Category, { onDelete: 'restrict' });
+  @field({ required: true, maxLength: 100 })
+  name: string = '';
+
+  @field({ required: true })
+  price: number = 0.0;
+
+  @foreignKey(Category, { onDelete: 'restrict' })
+  categoryId: string = '';
 }`} language="typescript" />
 		</section>
 
@@ -384,11 +390,16 @@ await object.forgetScope({ scope, includeDescendants: true });`} language="types
 			<h2>Relationships</h2>
 
 			<h3>Foreign Keys</h3>
-			<CodeBlock code={`import { foreignKey } from '@happyvertical/smrt-core/decorators';
+			<CodeBlock code={`import { SmrtObject, smrt, foreignKey } from '@happyvertical/smrt-core';
 
+@smrt()
 class Order extends SmrtObject {
-  customerId = foreignKey(Customer, { onDelete: 'cascade' });
-  productId = foreignKey(Product, { onDelete: 'restrict' });
+  @foreignKey(Customer, { onDelete: 'cascade' })
+  customerId: string = '';
+
+  @foreignKey(Product, { onDelete: 'restrict' })
+  productId: string = '';
+
   total: number = 0.0;
 }
 
@@ -397,22 +408,28 @@ await order.loadRelated('customerId');
 const customer = order.getRelated('customerId');`} language="typescript" />
 
 			<h3>One-to-Many</h3>
-			<CodeBlock code={`import { oneToMany } from '@happyvertical/smrt-core/decorators';
+			<CodeBlock code={`import { SmrtObject, smrt, oneToMany } from '@happyvertical/smrt-core';
 
+@smrt()
 class Customer extends SmrtObject {
-  orders = oneToMany(Order, { foreignKey: 'customerId' });
+  name: string = '';
+
+  @oneToMany(Order, { foreignKey: 'customerId' })
+  orders: Order[] = [];
 }
 
 // Access related records
 const orders = await customer.loadRelated('orders');`} language="typescript" />
 
 			<h3>Many-to-Many</h3>
-			<CodeBlock code={`import { manyToMany } from '@happyvertical/smrt-core/decorators';
+			<CodeBlock code={`import { SmrtObject, smrt, manyToMany } from '@happyvertical/smrt-core';
 
+@smrt()
 class Product extends SmrtObject {
-  relatedProducts = manyToMany(Product, {
-    through: 'product_relations'
-  });
+  name: string = '';
+
+  @manyToMany(Product, { through: 'product_relations' })
+  relatedProducts: Product[] = [];
 }
 
 // Access related products
@@ -527,7 +544,7 @@ const collection = await ProductCollection.create({ db });`} language="typescrip
 			<h2>Best Practices</h2>
 			<ol>
 				<li><strong>Use TypeScript types</strong> for simple properties - let the framework infer the schema</li>
-				<li><strong>Use field helpers</strong> only when you need constraints or validation</li>
+				<li><strong>Use decorators</strong> (<code>@field()</code>, <code>@foreignKey()</code>) only when you need constraints, validation, or relationships</li>
 				<li><strong>Always define static _itemClass</strong> on collection classes</li>
 				<li><strong>Use factory pattern</strong> for collection creation (<code>create()</code> method)</li>
 				<li><strong>Leverage eager loading</strong> to prevent N+1 query problems</li>
