@@ -35,7 +35,8 @@
 		<h2>Quick Start</h2>
 		<CodeBlock
 			code={`<script>
-  import { TextInput, UserCard, ModuleUIRegistry } from '@happyvertical/smrt-svelte';
+  import { TextInput } from '@happyvertical/smrt-svelte';
+  import { UserCard } from '@happyvertical/smrt-users/svelte';
 
   let name = $state('');
 </script>

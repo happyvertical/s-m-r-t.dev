@@ -67,7 +67,7 @@
   InvoiceLineItems,
   InvoiceTotals,
   InvoiceActions
-} from '@happyvertical/smrt-svelte';
+} from '@happyvertical/smrt-commerce/svelte';
 
 <!-- Full invoice view -->
 <InvoiceHeader {invoice} />

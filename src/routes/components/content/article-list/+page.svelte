@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { ArticleList, Grid } from '@happyvertical/smrt-svelte';
+	import { ArticleList } from '@happyvertical/smrt-content/svelte';
+	import { Grid } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -101,7 +102,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { ArticleList } from '@happyvertical/smrt-svelte';`}
+		code={`import { ArticleList } from '@happyvertical/smrt-content/svelte';`}
 		language="typescript"
 	/>
 
@@ -156,7 +157,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { ArticleList } from '@happyvertical/smrt-svelte';
+		code={`import { ArticleList } from '@happyvertical/smrt-content/svelte';
 
 interface Article {
   id: string;

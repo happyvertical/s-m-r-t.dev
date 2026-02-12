@@ -4,14 +4,33 @@
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
+	const mockUserPermissions = ['users.edit', 'users.view', 'articles.create'];
+
 	const checkProps = [
 		{
 			name: 'permission',
 			type: 'string',
-			description: 'Permission identifier to check',
+			description: 'Single permission to check'
+		},
+		{
+			name: 'permissions',
+			type: 'string[]',
+			description: 'Multiple permissions to check'
+		},
+		{
+			name: 'userPermissions',
+			type: 'string[]',
+			description: "User's current permissions array",
 			required: true
 		},
-		{ name: 'fallback', type: 'string', description: 'Message shown when permission denied' }
+		{
+			name: 'mode',
+			type: "'all' | 'any'",
+			default: "'all'",
+			description: "Require 'all' or 'any' of the listed permissions"
+		},
+		{ name: 'children', type: 'Snippet', description: 'Content shown when permission check passes', required: true },
+		{ name: 'fallback', type: 'Snippet', description: 'Content shown when permission denied' }
 	];
 </script>
 
@@ -39,16 +58,17 @@
 
 	<h2>Basic Usage</h2>
 	<ComponentExample
-		code={`<PermissionCheck permission="users.edit">\n  <button>Edit User</button>\n</PermissionCheck>\n\n<PermissionCheck permission="admin.access" fallback="Admin access required">\n  <a href="/admin">Admin Panel</a>\n</PermissionCheck>`}
+		code={`<PermissionCheck permission="users.edit" userPermissions={currentPermissions}>\n  <button>Edit User</button>\n</PermissionCheck>\n\n<PermissionCheck permission="admin.access" userPermissions={currentPermissions}>\n  {#snippet fallback()}Admin access required{/snippet}\n  <a href="/admin">Admin Panel</a>\n</PermissionCheck>`}
 	>
 		<div style="display: flex; flex-direction: column; gap: 12px;">
-			<PermissionCheck permission="users.edit">
+			<PermissionCheck permission="users.edit" userPermissions={mockUserPermissions}>
 				<button
 					style="padding: 8px 16px; border-radius: 4px; background: #0066cc; color: white; border: none;"
 					>Edit User</button
 				>
 			</PermissionCheck>
-			<PermissionCheck permission="admin.access" fallback="Admin access required">
+			<PermissionCheck permission="admin.access" userPermissions={mockUserPermissions}>
+				{#snippet fallback()}<span style="color: #999;">Admin access required</span>{/snippet}
 				<a href="/admin" style="color: #0066cc;">Admin Panel</a>
 			</PermissionCheck>
 		</div>
@@ -56,7 +76,7 @@
 
 	<h2>Integration with smrt-users</h2>
 	<CodeBlock
-		code={`import { PermissionCheck } from '@happyvertical/smrt-svelte';\nimport { PermissionsService } from '@happyvertical/smrt-users';\n\n// Check permissions programmatically\nconst canEdit = await PermissionsService.check({\n  userId: currentUser.id,\n  tenantId: currentTenant.id,\n  permission: 'users.edit'\n});\n\nif (canEdit) {\n  // Perform action\n}\n\n// Or use component for UI\n<PermissionCheck permission="users.delete">\n  <button onclick={deleteUser}>Delete</button>\n</PermissionCheck>`}
+		code={`import { PermissionCheck } from '@happyvertical/smrt-svelte';\nimport { PermissionsService } from '@happyvertical/smrt-users';\n\n// Check permissions programmatically\nconst canEdit = await PermissionsService.check({\n  userId: currentUser.id,\n  tenantId: currentTenant.id,\n  permission: 'users.edit'\n});\n\nif (canEdit) {\n  // Perform action\n}\n\n// Or use component for UI\n<PermissionCheck permission="users.delete" userPermissions={currentPermissions}>\n  <button onclick={deleteUser}>Delete</button>\n</PermissionCheck>`}
 		language="typescript"
 	/>
 
@@ -65,7 +85,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`interface Props {\n  permission: string;\n  fallback?: string;\n  children?: Snippet;\n}`}
+		code={`interface Props {\n  permission?: string;\n  permissions?: string[];\n  userPermissions: string[];\n  mode?: 'all' | 'any';\n  children: Snippet;\n  fallback?: Snippet;\n}`}
 		language="typescript"
 	/>
 </article>

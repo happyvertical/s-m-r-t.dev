@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { UserList } from '@happyvertical/smrt-svelte';
+	import { UserList } from '@happyvertical/smrt-users/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -98,7 +98,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { UserList } from '@happyvertical/smrt-svelte';`}
+		code={`import { UserList } from '@happyvertical/smrt-users/svelte';`}
 		language="typescript"
 	/>
 

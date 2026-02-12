@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { TenantCard } from '@happyvertical/smrt-svelte';
+	import { TenantCard } from '@happyvertical/smrt-tenancy/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -77,7 +77,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { TenantCard } from '@happyvertical/smrt-svelte';`}
+		code={`import { TenantCard } from '@happyvertical/smrt-tenancy/svelte';`}
 		language="typescript"
 	/>
 

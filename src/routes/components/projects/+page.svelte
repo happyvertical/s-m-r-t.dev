@@ -72,7 +72,7 @@
   TimeEntryList,
   TimeSummary,
   ApprovalActions
-} from '@happyvertical/smrt-svelte';
+} from '@happyvertical/smrt-projects/svelte';
 
 <!-- Time tracking dashboard -->
 <TimeSummary entries={weekEntries} />

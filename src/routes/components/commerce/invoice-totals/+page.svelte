@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InvoiceTotals } from '@happyvertical/smrt-svelte';
+	import { InvoiceTotals } from '@happyvertical/smrt-commerce/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
@@ -10,7 +10,7 @@
 	<p class="lead">Display subtotal, tax, discounts, and total with automatic calculations.</p>
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { InvoiceTotals } from '@happyvertical/smrt-svelte';`}
+		code={`import { InvoiceTotals } from '@happyvertical/smrt-commerce/svelte';`}
 		language="typescript"
 	/>
 	<h2>Usage</h2>

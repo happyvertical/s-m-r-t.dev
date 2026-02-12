@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InvoiceCard } from '@happyvertical/smrt-svelte';
+	import { InvoiceCard } from '@happyvertical/smrt-commerce/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -29,7 +29,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { InvoiceCard } from '@happyvertical/smrt-svelte';`}
+		code={`import { InvoiceCard } from '@happyvertical/smrt-commerce/svelte';`}
 		language="typescript"
 	/>
 

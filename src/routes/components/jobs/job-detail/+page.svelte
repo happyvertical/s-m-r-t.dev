@@ -57,7 +57,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { JobDetail } from '@happyvertical/smrt-svelte';`}
+		code={`import { JobDetail } from '@happyvertical/smrt-jobs/svelte';`}
 		language="typescript"
 	/>
 
@@ -66,8 +66,8 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { JobDetail } from '@happyvertical/smrt-svelte';
-  import type { JobData } from '@happyvertical/smrt-svelte';
+  import { JobDetail } from '@happyvertical/smrt-jobs/svelte';
+  import type { JobData } from '@happyvertical/smrt-jobs/svelte';
 
   const { job } = $props<{ job: JobData }>();
 </script>
@@ -131,8 +131,8 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { JobDetail } from '@happyvertical/smrt-svelte';
-import type { JobData, TimeoutBehavior } from '@happyvertical/smrt-svelte';
+		code={`import { JobDetail } from '@happyvertical/smrt-jobs/svelte';
+import type { JobData, TimeoutBehavior } from '@happyvertical/smrt-jobs/svelte';
 
 interface JobData {
   id: string;

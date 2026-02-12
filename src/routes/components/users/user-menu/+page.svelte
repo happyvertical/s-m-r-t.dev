@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { UserMenu } from '@happyvertical/smrt-svelte';
+	import { UserMenu } from '@happyvertical/smrt-users/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -57,7 +57,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { UserMenu } from '@happyvertical/smrt-svelte';`}
+		code={`import { UserMenu } from '@happyvertical/smrt-users/svelte';`}
 		language="typescript"
 	/>
 

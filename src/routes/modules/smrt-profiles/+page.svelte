@@ -98,6 +98,13 @@
 		<h3>Using bun</h3>
 		<CodeBlock code={`bun add @happyvertical/smrt-profiles`} language="bash" />
 
+		<h3>Peer Dependencies</h3>
+		<p>
+			As of v0.20, <code>@happyvertical/smrt-tenancy</code> is a peer dependency. Install it
+			alongside profiles if you use multi-tenant features:
+		</p>
+		<CodeBlock code={`pnpm add @happyvertical/smrt-tenancy`} language="bash" />
+
 		<h3>Database Setup</h3>
 		<p>Requires database configuration (SQLite, PostgreSQL, etc.):</p>
 		<CodeBlock

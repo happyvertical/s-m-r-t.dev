@@ -26,7 +26,7 @@
 	<section class="mb-12">
 		<h2 class="text-2xl font-bold mb-4">Usage Example</h2>
 		<CodeBlock
-			code={`import { MeetingView } from '@happyvertical/smrt-svelte';
+			code={`import { MeetingView } from '@happyvertical/smrt-events/svelte';
 
 <MeetingView
   meeting={meeting}

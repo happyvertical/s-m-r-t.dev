@@ -1,23 +1,35 @@
 <script lang="ts">
-	import { TenantSwitcher } from '@happyvertical/smrt-svelte';
+	import { TenantSwitcher } from '@happyvertical/smrt-tenancy/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
 
 	// Mock data
-	const mockTenants = [
-		{ id: 'tenant_1', name: 'Acme Corporation', slug: 'acme' },
-		{ id: 'tenant_2', name: 'TechStart Inc', slug: 'techstart' },
-		{ id: 'tenant_3', name: 'Enterprise Co', slug: 'enterprise' }
+	const mockTenants = new Map([
+		['tenant_1', { id: 'tenant_1', name: 'Acme Corporation', slug: 'acme' }],
+		['tenant_2', { id: 'tenant_2', name: 'TechStart Inc', slug: 'techstart' }],
+		['tenant_3', { id: 'tenant_3', name: 'Enterprise Co', slug: 'enterprise' }]
+	]) as any;
+
+	const mockMemberships = [
+		{ tenantId: 'tenant_1', role: 'admin' },
+		{ tenantId: 'tenant_2', role: 'member' },
+		{ tenantId: 'tenant_3', role: 'member' }
 	] as any[];
 
 	let currentTenant = $state('tenant_1');
 
 	const switcherProps = [
 		{
+			name: 'memberships',
+			type: 'Membership[]',
+			description: "User's tenant memberships with role info",
+			required: true
+		},
+		{
 			name: 'tenants',
-			type: 'Tenant[]',
-			description: 'Array of available tenants',
+			type: 'Map<string, Tenant>',
+			description: 'Map of tenant ID to tenant data',
 			required: true
 		},
 		{
@@ -27,28 +39,9 @@
 			required: true
 		},
 		{
-			name: 'onswitch',
+			name: 'onchange',
 			type: '(tenantId: string) => void',
-			description: 'Callback when tenant is switched',
-			required: true
-		},
-		{
-			name: 'position',
-			type: "'header' | 'dropdown'",
-			default: "'dropdown'",
-			description: 'Display position/style variant'
-		},
-		{
-			name: 'showCreateNew',
-			type: 'boolean',
-			default: 'false',
-			description: 'Show "Create New Tenant" option'
-		},
-		{
-			name: 'oncreate',
-			type: '() => void',
-			default: 'undefined',
-			description: 'Callback when "Create New" is clicked'
+			description: 'Callback when tenant is switched'
 		}
 	];
 </script>
@@ -73,12 +66,12 @@
 	<h1>TenantSwitcher</h1>
 	<p class="lead">
 		A dropdown selector for switching between tenant organizations in multi-tenant applications.
-		Displays current tenant and allows quick switching with optional create new tenant action.
+		Displays current tenant and allows quick switching.
 	</p>
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { TenantSwitcher } from '@happyvertical/smrt-svelte';`}
+		code={`import { TenantSwitcher } from '@happyvertical/smrt-tenancy/svelte';`}
 		language="typescript"
 	/>
 
@@ -87,74 +80,35 @@
 
 	<ComponentExample
 		code={`<script lang="ts">
-  let currentTenant = $state('tenant_1');
+  import { TenantSwitcher } from '@happyvertical/smrt-tenancy/svelte';
 
-  const tenants = [
-    { id: 'tenant_1', name: 'Acme Corporation', slug: 'acme' },
-    { id: 'tenant_2', name: 'TechStart Inc', slug: 'techstart' },
-    { id: 'tenant_3', name: 'Enterprise Co', slug: 'enterprise' }
+  let currentTenantId = $state('tenant_1');
+
+  const tenants = new Map([
+    ['tenant_1', { id: 'tenant_1', name: 'Acme Corporation', slug: 'acme' }],
+    ['tenant_2', { id: 'tenant_2', name: 'TechStart Inc', slug: 'techstart' }],
+  ]);
+
+  const memberships = [
+    { tenantId: 'tenant_1', role: 'admin' },
+    { tenantId: 'tenant_2', role: 'member' },
   ];
-
-  function handleSwitch(tenantId: string) {
-    currentTenant = tenantId;
-    // Trigger tenant context switch
-  }
 </script>
 
 <TenantSwitcher
+  {memberships}
   {tenants}
-  currentTenantId={currentTenant}
-  onswitch={handleSwitch}
+  currentTenantId={currentTenantId}
+  onchange={(id) => (currentTenantId = id)}
 />`}
 	>
 		<TenantSwitcher
+			memberships={mockMemberships}
 			tenants={mockTenants}
 			currentTenantId={currentTenant}
-			onswitch={(id) => (currentTenant = id)}
+			onchange={(id) => (currentTenant = id)}
 		/>
 		<p style="margin-top: 1rem; color: #666;">Current tenant: {currentTenant}</p>
-	</ComponentExample>
-
-	<h2>Header Position Variant</h2>
-	<p>Use <code>position="header"</code> for a compact header-friendly layout.</p>
-
-	<ComponentExample
-		code={`<TenantSwitcher
-  {tenants}
-  currentTenantId={currentTenant}
-  onswitch={handleSwitch}
-  position="header"
-/>`}
-	>
-		<TenantSwitcher
-			tenants={mockTenants}
-			currentTenantId={currentTenant}
-			onswitch={(id) => (currentTenant = id)}
-			position="header"
-		/>
-	</ComponentExample>
-
-	<h2>With Create New Option</h2>
-	<p>Add <code>showCreateNew</code> to allow creating new tenants.</p>
-
-	<ComponentExample
-		code={`<TenantSwitcher
-  {tenants}
-  currentTenantId={currentTenant}
-  onswitch={handleSwitch}
-  showCreateNew={true}
-  oncreate={() => {
-    // Open create tenant modal
-  }}
-/>`}
-	>
-		<TenantSwitcher
-			tenants={mockTenants}
-			currentTenantId={currentTenant}
-			onswitch={(id) => (currentTenant = id)}
-			showCreateNew={true}
-			oncreate={() => alert('Create new tenant clicked')}
-		/>
 	</ComponentExample>
 
 	<h2>Props</h2>
@@ -162,15 +116,13 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import type { Tenant } from '@happyvertical/smrt-tenancy';
+		code={`import type { Membership, Tenant } from '@happyvertical/smrt-users';
 
 interface Props {
-  tenants: Tenant[];
+  memberships: Membership[];
+  tenants: Map<string, Tenant>;
   currentTenantId: string;
-  onswitch: (tenantId: string) => void;
-  position?: 'header' | 'dropdown';
-  showCreateNew?: boolean;
-  oncreate?: () => void;
+  onchange?: (tenantId: string) => void;
 }`}
 		language="typescript"
 	/>
@@ -179,48 +131,42 @@ interface Props {
 	<p>Complete example with tenant context switching:</p>
 
 	<CodeBlock
-		code={`import { TenantSwitcher } from '@happyvertical/smrt-svelte';
-import { TenantContext } from '@happyvertical/smrt-tenancy';
+		code={`<script lang="ts">
+  import { TenantSwitcher } from '@happyvertical/smrt-tenancy/svelte';
+  import { TenantContext } from '@happyvertical/smrt-tenancy';
+  import type { Membership, Tenant } from '@happyvertical/smrt-users';
 
-<script lang="ts">
-  let tenants = $state([]);
+  let tenants = $state<Map<string, Tenant>>(new Map());
+  let memberships = $state<Membership[]>([]);
   let currentTenantId = $state('');
 
   // Load user's tenants
   onMount(async () => {
-    const memberships = await MembershipsCollection.create({ db });
-    const userMemberships = await memberships.list({
+    const membershipCollection = await MembershipsCollection.create({ db });
+    memberships = await membershipCollection.list({
       where: { userId: currentUser.id, status: 'active' }
     });
 
-    tenants = await Promise.all(
-      userMemberships.map(m =>
-        TenantsCollection.get({ db }, m.tenantId)
-      )
-    );
+    const tenantCollection = await TenantsCollection.create({ db });
+    for (const m of memberships) {
+      const tenant = await tenantCollection.get(m.tenantId);
+      if (tenant) tenants.set(tenant.id, tenant);
+    }
 
     currentTenantId = TenantContext.getCurrentTenantId();
   });
 
-  async function handleTenantSwitch(tenantId: string) {
-    // Set tenant context
+  async function handleTenantChange(tenantId: string) {
     await TenantContext.setTenant(tenantId);
-
-    // Reload page or update app state
     window.location.href = '/' + tenantId + '/dashboard';
-  }
-
-  function handleCreateTenant() {
-    goto('/tenants/new');
   }
 </script>
 
 <TenantSwitcher
+  {memberships}
   {tenants}
   {currentTenantId}
-  onswitch={handleTenantSwitch}
-  showCreateNew={true}
-  oncreate={handleCreateTenant}
+  onchange={handleTenantChange}
 />`}
 		language="typescript"
 	/>

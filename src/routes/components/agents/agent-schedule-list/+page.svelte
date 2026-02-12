@@ -75,7 +75,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { AgentScheduleList } from '@happyvertical/smrt-svelte';`}
+		code={`import { AgentScheduleList } from '@happyvertical/smrt-agents/svelte';`}
 		language="typescript"
 	/>
 
@@ -84,8 +84,8 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { AgentScheduleList } from '@happyvertical/smrt-svelte';
-  import type { AgentScheduleData } from '@happyvertical/smrt-svelte';
+  import { AgentScheduleList } from '@happyvertical/smrt-agents/svelte';
+  import type { AgentScheduleData } from '@happyvertical/smrt-agents/svelte';
 
   let schedules: AgentScheduleData[] = $state([]);
 </script>
@@ -165,8 +165,8 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { AgentScheduleList } from '@happyvertical/smrt-svelte';
-import type { AgentScheduleData } from '@happyvertical/smrt-svelte';
+		code={`import { AgentScheduleList } from '@happyvertical/smrt-agents/svelte';
+import type { AgentScheduleData } from '@happyvertical/smrt-agents/svelte';
 
 interface AgentScheduleListProps {
   schedules: AgentScheduleData[];

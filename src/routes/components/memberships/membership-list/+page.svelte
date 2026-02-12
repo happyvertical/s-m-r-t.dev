@@ -6,46 +6,36 @@
 
 	const mockMemberships = [
 		{
-			id: 'mem_1',
-			user: { id: 'u1', email: 'alice@example.com' } as any,
-			profile: { name: 'Alice' } as any,
-			role: 'Admin',
-			status: 'active',
-			joinedAt: new Date('2024-01-01')
+			membership: { id: 'mem_1', status: 'active', created_at: new Date('2024-01-01') },
+			tenant: { id: 't1', name: 'Acme Corp', slug: 'acme' },
+			role: { id: 'r1', name: 'Admin', slug: 'admin' }
 		},
 		{
-			id: 'mem_2',
-			user: { id: 'u2', email: 'bob@example.com' } as any,
-			profile: { name: 'Bob' } as any,
-			role: 'Editor',
-			status: 'active',
-			joinedAt: new Date('2024-02-15')
+			membership: { id: 'mem_2', status: 'active', created_at: new Date('2024-02-15') },
+			tenant: { id: 't1', name: 'Acme Corp', slug: 'acme' },
+			role: { id: 'r2', name: 'Editor', slug: 'member' }
 		},
 		{
-			id: 'mem_3',
-			user: { id: 'u3', email: 'charlie@example.com' } as any,
-			profile: { name: 'Charlie' } as any,
-			role: 'Viewer',
-			status: 'pending',
-			joinedAt: new Date('2024-03-10')
+			membership: { id: 'mem_3', status: 'pending', created_at: new Date('2024-03-10') },
+			tenant: { id: 't2', name: 'TechStart Inc', slug: 'techstart' },
+			role: { id: 'r3', name: 'Viewer', slug: 'member' }
 		}
 	] as any[];
 
 	const listProps = [
 		{
 			name: 'memberships',
-			type: 'Membership[]',
-			description: 'Array of memberships',
+			type: 'MembershipWithContext[]',
+			description: 'Array of { membership, tenant, role } objects',
 			required: true
 		},
 		{
-			name: 'showActions',
-			type: 'boolean',
-			default: 'false',
-			description: 'Show edit/remove actions'
+			name: 'onchangerole',
+			type: '(membership: Membership) => void',
+			description: 'Change role callback'
 		},
-		{ name: 'onedit', type: '(membership: Membership) => void', description: 'Edit callback' },
 		{ name: 'onremove', type: '(membership: Membership) => void', description: 'Remove callback' },
+		{ name: 'emptyMessage', type: 'string', default: "'No memberships found'", description: 'Message when list is empty' },
 		{ name: 'loading', type: 'boolean', default: 'false', description: 'Show loading state' }
 	];
 </script>
@@ -71,19 +61,18 @@
 	/>
 
 	<h2>Basic Usage</h2>
-	<ComponentExample code={`<MembershipList memberships={memberships} />`}>
+	<ComponentExample code={`<MembershipList {memberships} />`}>
 		<MembershipList memberships={mockMemberships} />
 	</ComponentExample>
 
 	<h2>With Actions</h2>
 	<ComponentExample
-		code={`<MembershipList\n  memberships={memberships}\n  showActions={true}\n  onedit={handleEdit}\n  onremove={handleRemove}\n/>`}
+		code={`<MembershipList\n  {memberships}\n  onchangerole={handleChangeRole}\n  onremove={handleRemove}\n/>`}
 	>
 		<MembershipList
 			memberships={mockMemberships}
-			showActions={true}
-			onedit={(m) => alert(`Edit ${m.profile.name}`)}
-			onremove={(m) => alert(`Remove ${m.profile.name}`)}
+			onchangerole={(m) => console.log(`Change role for ${m.id}`)}
+			onremove={(m) => console.log(`Remove ${m.id}`)}
 		/>
 	</ComponentExample>
 
@@ -92,7 +81,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`interface Props {\n  memberships: Membership[];\n  showActions?: boolean;\n  onedit?: (membership: Membership) => void;\n  onremove?: (membership: Membership) => void;\n  loading?: boolean;\n}`}
+		code={`interface MembershipWithContext {\n  membership: Membership;\n  tenant: Tenant;\n  role: Role;\n}\n\ninterface Props {\n  memberships: MembershipWithContext[];\n  onchangerole?: (membership: Membership) => void;\n  onremove?: (membership: Membership) => void;\n  emptyMessage?: string;\n  loading?: boolean;\n}`}
 		language="typescript"
 	/>
 </article>

@@ -117,7 +117,7 @@
 	<h2>TypeScript</h2>
 	<CodeBlock
 		code={`import { DownloadProgress } from '@happyvertical/smrt-svelte';
-import type { DownloadProgress as DownloadProgressType } from '@happyvertical/browser-ai';
+import type { DownloadProgress as DownloadProgressType } from '@happyvertical/smrt-svelte';
 
 interface Props {
   progress: DownloadProgressType | null;
