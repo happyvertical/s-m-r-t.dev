@@ -13,67 +13,73 @@
 
 <ModulePage
 	name="browser-ai"
-	description="Client-side AI inference with WebGPU acceleration, ONNX Runtime, and offline-first capabilities."
-	badges={['v0.19.0', 'Browser AI', 'ONNX', 'WebGPU']}
+	description="Browser-based AI capabilities including STT, TTS, and LLM — now built into smrt-svelte."
+	badges={['Deprecated in 0.20', 'Merged into smrt-svelte']}
 >
 	<section>
-		<h2>Overview</h2>
+		<h2>Consolidated into smrt-svelte</h2>
 		<p>
-			<strong>browser-ai</strong> enables client-side AI inference in the browser using ONNX Runtime Web
-			with WebGPU/WebAssembly. Provides embedding generation, text generation, and model management.
+			As of <strong>v0.20</strong>, the <code>browser-ai</code> package has been consolidated into
+			<a href="/modules/smrt-svelte"><code>@happyvertical/smrt-svelte</code></a>. All browser AI
+			functionality — speech-to-text (STT), text-to-speech (TTS), LLM inference, capability
+			detection, and model management — is now available directly from smrt-svelte.
 		</p>
 		<aside>
-			<p>Key Features:</p>
+			<p>This change:</p>
 			<ul>
-				<li>Client-side AI inference with ONNX Runtime Web</li>
-				<li>Text embedding generation for semantic search</li>
-				<li>Model downloading and caching</li>
-				<li>WebGPU acceleration support</li>
-				<li>Zero server-side AI costs</li>
+				<li>Eliminates a circular dependency between browser-ai and smrt-svelte</li>
+				<li>Simplifies installation — one package instead of two</li>
+				<li>Keeps all Svelte components and their AI adapters co-located</li>
+				<li>Reduces bundle configuration complexity</li>
 			</ul>
 		</aside>
 	</section>
 
 	<section>
-		<h2>Installation</h2>
-		<CodeBlock code={`npm install @happyvertical/browser-ai`} language="bash" />
+		<h2>Migration from browser-ai</h2>
+		<p>Update your imports to use <code>@happyvertical/smrt-svelte</code>:</p>
+		<CodeBlock
+			code={`// Before (0.19)
+import { BrowserAI } from '@happyvertical/browser-ai';
+import type { STTAdapter } from '@happyvertical/browser-ai';
+
+// After (0.20)
+import { useSTT, useTTS, useLLM } from '@happyvertical/smrt-svelte';
+import { VoiceInput, DownloadProgress, AILoadingOverlay } from '@happyvertical/smrt-svelte';`}
+			language="typescript"
+		/>
+		<p>
+			See the <a href="/components/hooks/use-stt">useSTT</a>,
+			<a href="/components/hooks/use-tts">useTTS</a>, and
+			<a href="/components/hooks/use-llm">useLLM</a> hook documentation for the new API.
+		</p>
 	</section>
 
 	<section>
-		<h2>Quick Start</h2>
-		<CodeBlock
-			code={`import { BrowserAI } from '@happyvertical/browser-ai';
-
-// Initialize (loads ONNX Runtime in browser)
-const ai = await BrowserAI.create();
-
-// Generate embeddings
-const embedding = await ai.embed('Hello world');
-// Returns: Float32Array of 384 dimensions
-
-// Semantic search
-const documents = [
-  { id: 1, text: 'Paris is the capital of France' },
-  { id: 2, text: 'Tokyo is the capital of Japan' },
-  { id: 3, text: 'Berlin is the capital of Germany' }
-];
-
-const results = await ai.semanticSearch('What is the capital of France?', documents);
-// Returns documents sorted by similarity
-
-// Generate embeddings
-const embedding = await ai.generateEmbedding('Machine learning is fascinating');
-console.log(embedding); // Float32Array[384]`}
-			language="typescript"
-		/>
+		<h2>AI Components</h2>
+		<p>All AI-related Svelte components are now in smrt-svelte:</p>
+		<nav>
+			<a href="/components/ai/voice-input">
+				<h3>VoiceInput</h3>
+				<p>Microphone button with speech-to-text</p>
+			</a>
+			<a href="/components/ai/download-progress">
+				<h3>DownloadProgress</h3>
+				<p>Progress bar for AI model downloads</p>
+			</a>
+			<a href="/components/ai/loading-overlay">
+				<h3>AILoadingOverlay</h3>
+				<p>Full-screen overlay during AI initialization</p>
+			</a>
+		</nav>
 	</section>
 
 	<section>
 		<h2>Related Modules</h2>
 		<nav>
-			<a href="/modules/smrt-core">
-				<h3>smrt-core</h3>
-				<p>AI integration framework</p>
+			<a href="/modules/smrt-svelte">
+				<h3>smrt-svelte</h3>
+				<p>Svelte 5 components and AI integration</p>
 			</a>
 			<a href="/modules/smrt-agents">
 				<h3>smrt-agents</h3>
@@ -85,7 +91,7 @@ console.log(embedding); // Float32Array[384]`}
 	<footer>
 		<nav>
 			<a href="/modules">← Back to Modules</a>
-			<a href="/modules/template-site-static-json">Next: template-site-static-json →</a>
+			<a href="/modules/smrt-svelte">smrt-svelte →</a>
 		</nav>
 	</footer>
 </ModulePage>

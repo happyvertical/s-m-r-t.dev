@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { TimeSummary } from '@happyvertical/smrt-svelte';
+	import { TimeSummary } from '@happyvertical/smrt-projects/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
@@ -10,7 +10,7 @@
 	<p class="lead">Aggregated time statistics by project, user, or date range.</p>
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { TimeSummary } from '@happyvertical/smrt-svelte';`}
+		code={`import { TimeSummary } from '@happyvertical/smrt-projects/svelte';`}
 		language="typescript"
 	/>
 	<h2>Usage</h2>

@@ -50,7 +50,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { AgentRunHistory } from '@happyvertical/smrt-svelte';`}
+		code={`import { AgentRunHistory } from '@happyvertical/smrt-agents/svelte';`}
 		language="typescript"
 	/>
 
@@ -59,8 +59,8 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { AgentRunHistory } from '@happyvertical/smrt-svelte';
-  import type { AgentRunHistoryEntry } from '@happyvertical/smrt-svelte';
+  import { AgentRunHistory } from '@happyvertical/smrt-agents/svelte';
+  import type { AgentRunHistoryEntry } from '@happyvertical/smrt-agents/svelte';
 
   let history: AgentRunHistoryEntry[] = $state([]);
   let loading = $state(true);
@@ -117,8 +117,8 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { AgentRunHistory } from '@happyvertical/smrt-svelte';
-import type { AgentRunHistoryEntry, RunStatus } from '@happyvertical/smrt-svelte';
+		code={`import { AgentRunHistory } from '@happyvertical/smrt-agents/svelte';
+import type { AgentRunHistoryEntry, RunStatus } from '@happyvertical/smrt-agents/svelte';
 
 interface AgentRunHistoryEntry {
   id: string;

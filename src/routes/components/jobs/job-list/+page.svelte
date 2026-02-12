@@ -92,15 +92,15 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { JobList } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { JobList } from '@happyvertical/smrt-jobs/svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>Display a list of background jobs.</p>
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { JobList } from '@happyvertical/smrt-svelte';
-  import type { JobData } from '@happyvertical/smrt-svelte';
+  import { JobList } from '@happyvertical/smrt-jobs/svelte';
+  import type { JobData } from '@happyvertical/smrt-jobs/svelte';
 
   let jobs: JobData[] = $state([]);
 </script>
@@ -117,8 +117,8 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { JobList } from '@happyvertical/smrt-svelte';
-  import type { JobFilter } from '@happyvertical/smrt-svelte';
+  import { JobList } from '@happyvertical/smrt-jobs/svelte';
+  import type { JobFilter } from '@happyvertical/smrt-jobs/svelte';
 
   let filter: JobFilter = $state({
     status: 'failed',
@@ -140,7 +140,7 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { JobList } from '@happyvertical/smrt-svelte';
+  import { JobList } from '@happyvertical/smrt-jobs/svelte';
 
   let selected = $state(new Set<string>());
 
@@ -206,14 +206,14 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { JobList } from '@happyvertical/smrt-svelte';
+		code={`import { JobList } from '@happyvertical/smrt-jobs/svelte';
 import type {
   JobData,
   JobFilter,
   JobSort,
   JobStatus,
   JobPriority
-} from '@happyvertical/smrt-svelte';
+} from '@happyvertical/smrt-jobs/svelte';
 
 interface JobFilter {
   status?: JobStatus | JobStatus[] | 'all';

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DurationDisplay } from '@happyvertical/smrt-svelte';
+	import { DurationDisplay } from '@happyvertical/smrt-projects/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
@@ -10,7 +10,7 @@
 	<p class="lead">Format and display duration in hours, minutes, or decimal format.</p>
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { DurationDisplay } from '@happyvertical/smrt-svelte';`}
+		code={`import { DurationDisplay } from '@happyvertical/smrt-projects/svelte';`}
 		language="typescript"
 	/>
 	<h2>Usage</h2>

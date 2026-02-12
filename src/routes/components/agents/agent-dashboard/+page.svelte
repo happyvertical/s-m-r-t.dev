@@ -87,7 +87,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { AgentDashboard } from '@happyvertical/smrt-svelte';`}
+		code={`import { AgentDashboard } from '@happyvertical/smrt-agents/svelte';`}
 		language="typescript"
 	/>
 
@@ -96,8 +96,8 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { AgentDashboard } from '@happyvertical/smrt-svelte';
-  import type { AgentScheduleData } from '@happyvertical/smrt-svelte';
+  import { AgentDashboard } from '@happyvertical/smrt-agents/svelte';
+  import type { AgentScheduleData } from '@happyvertical/smrt-agents/svelte';
 
   let schedules: AgentScheduleData[] = $state([]);
   let loading = $state(true);
@@ -125,8 +125,8 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { AgentDashboard } from '@happyvertical/smrt-svelte';
-  import type { AgentScheduleData, AgentRunHistoryEntry } from '@happyvertical/smrt-svelte';
+  import { AgentDashboard } from '@happyvertical/smrt-agents/svelte';
+  import type { AgentScheduleData, AgentRunHistoryEntry } from '@happyvertical/smrt-agents/svelte';
 
   let schedules: AgentScheduleData[] = $state([]);
   let recentHistory: AgentRunHistoryEntry[] = $state([]);
@@ -187,13 +187,13 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { AgentDashboard } from '@happyvertical/smrt-svelte';
+		code={`import { AgentDashboard } from '@happyvertical/smrt-agents/svelte';
 import type {
   AgentScheduleData,
   AgentRunHistoryEntry,
   ScheduleStatus,
   RunStatus
-} from '@happyvertical/smrt-svelte';
+} from '@happyvertical/smrt-agents/svelte';
 
 interface AgentScheduleData {
   id: string;
@@ -244,7 +244,7 @@ interface AgentRunHistoryEntry {
   calculateSuccessRate,
   getScheduleStatusVariant,
   getRunStatusVariant
-} from '@happyvertical/smrt-svelte';
+} from '@happyvertical/smrt-agents/svelte';
 
 // Convert cron to human-readable
 formatCronExpression('0 2 * * *');  // "Daily at 2:00"

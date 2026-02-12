@@ -6,27 +6,42 @@
 
 	const mockMembership = {
 		id: 'mem_1',
-		user: { id: 'user_1', email: 'jane@example.com' } as any,
-		profile: { name: 'Jane Smith' } as any,
-		role: 'Editor',
 		status: 'active',
-		joinedAt: new Date('2024-01-15')
+		created_at: new Date('2024-01-15')
+	} as any;
+
+	const mockTenant = {
+		id: 'tenant_1',
+		name: 'Acme Corporation',
+		slug: 'acme'
+	} as any;
+
+	const mockRole = {
+		id: 'role_1',
+		name: 'Editor',
+		slug: 'member'
 	} as any;
 
 	const cardProps = [
 		{
 			name: 'membership',
 			type: 'Membership',
-			description: 'Membership object with user, role, status',
+			description: 'Membership object with status and timestamps',
 			required: true
 		},
 		{
-			name: 'showActions',
-			type: 'boolean',
-			default: 'false',
-			description: 'Show edit/remove actions'
+			name: 'tenant',
+			type: 'Tenant',
+			description: 'Tenant the membership belongs to',
+			required: true
 		},
-		{ name: 'onedit', type: '() => void', description: 'Callback for edit action' },
+		{
+			name: 'role',
+			type: 'Role',
+			description: 'Role assigned to the member',
+			required: true
+		},
+		{ name: 'onchangerole', type: '() => void', description: 'Callback for change role action' },
 		{ name: 'onremove', type: '() => void', description: 'Callback for remove action' }
 	];
 </script>
@@ -52,19 +67,20 @@
 	/>
 
 	<h2>Basic Usage</h2>
-	<ComponentExample code={`<MembershipCard membership={membership} />`}>
-		<MembershipCard membership={mockMembership} />
+	<ComponentExample code={`<MembershipCard {membership} {tenant} {role} />`}>
+		<MembershipCard membership={mockMembership} tenant={mockTenant} role={mockRole} />
 	</ComponentExample>
 
 	<h2>With Actions</h2>
 	<ComponentExample
-		code={`<MembershipCard\n  membership={membership}\n  showActions={true}\n  onedit={() => {}}\n  onremove={() => {}}\n/>`}
+		code={`<MembershipCard\n  {membership}\n  {tenant}\n  {role}\n  onchangerole={() => {}}\n  onremove={() => {}}\n/>`}
 	>
 		<MembershipCard
 			membership={mockMembership}
-			showActions={true}
-			onedit={() => alert('Edit clicked')}
-			onremove={() => alert('Remove clicked')}
+			tenant={mockTenant}
+			role={mockRole}
+			onchangerole={() => console.log('Change role clicked')}
+			onremove={() => console.log('Remove clicked')}
 		/>
 	</ComponentExample>
 
@@ -73,7 +89,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`interface Membership {\n  id: string;\n  user: User;\n  profile: Profile;\n  role: string;\n  status: string;\n  joinedAt: Date;\n}\n\ninterface Props {\n  membership: Membership;\n  showActions?: boolean;\n  onedit?: () => void;\n  onremove?: () => void;\n}`}
+		code={`interface Props {\n  membership: Membership;\n  tenant: Tenant;\n  role: Role;\n  onchangerole?: () => void;\n  onremove?: () => void;\n}`}
 		language="typescript"
 	/>
 </article>

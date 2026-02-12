@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InvoiceLineItems } from '@happyvertical/smrt-svelte';
+	import { InvoiceLineItems } from '@happyvertical/smrt-commerce/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
@@ -12,7 +12,7 @@
 	</p>
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { InvoiceLineItems } from '@happyvertical/smrt-svelte';`}
+		code={`import { InvoiceLineItems } from '@happyvertical/smrt-commerce/svelte';`}
 		language="typescript"
 	/>
 	<h2>Usage</h2>

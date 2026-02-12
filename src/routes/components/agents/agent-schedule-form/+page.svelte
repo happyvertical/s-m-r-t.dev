@@ -63,7 +63,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { AgentScheduleForm } from '@happyvertical/smrt-svelte';`}
+		code={`import { AgentScheduleForm } from '@happyvertical/smrt-agents/svelte';`}
 		language="typescript"
 	/>
 
@@ -72,7 +72,7 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { AgentScheduleForm } from '@happyvertical/smrt-svelte';
+  import { AgentScheduleForm } from '@happyvertical/smrt-agents/svelte';
 
   let loading = $state(false);
 
@@ -96,7 +96,7 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { AgentScheduleForm } from '@happyvertical/smrt-svelte';
+  import { AgentScheduleForm } from '@happyvertical/smrt-agents/svelte';
 
   const { schedule } = $props();
 </script>
@@ -158,8 +158,8 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { AgentScheduleForm } from '@happyvertical/smrt-svelte';
-import type { ScheduleFormData } from '@happyvertical/smrt-svelte';
+		code={`import { AgentScheduleForm } from '@happyvertical/smrt-agents/svelte';
+import type { ScheduleFormData } from '@happyvertical/smrt-agents/svelte';
 
 interface ScheduleFormData {
   agentType: string;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { UnbilledItems } from '@happyvertical/smrt-svelte';
+	import { UnbilledItems } from '@happyvertical/smrt-commerce/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
@@ -10,7 +10,7 @@
 	<p class="lead">List of unbilled time entries, expenses, and items awaiting invoice creation.</p>
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { UnbilledItems } from '@happyvertical/smrt-svelte';`}
+		code={`import { UnbilledItems } from '@happyvertical/smrt-commerce/svelte';`}
 		language="typescript"
 	/>
 	<h2>Usage</h2>

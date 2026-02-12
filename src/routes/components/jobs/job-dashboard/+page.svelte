@@ -69,7 +69,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { JobDashboard } from '@happyvertical/smrt-svelte';`}
+		code={`import { JobDashboard } from '@happyvertical/smrt-jobs/svelte';`}
 		language="typescript"
 	/>
 
@@ -78,8 +78,8 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { JobDashboard } from '@happyvertical/smrt-svelte';
-  import type { JobStats, JobData, QueueStats } from '@happyvertical/smrt-svelte';
+  import { JobDashboard } from '@happyvertical/smrt-jobs/svelte';
+  import type { JobStats, JobData, QueueStats } from '@happyvertical/smrt-jobs/svelte';
 
   let stats: JobStats = $state({
     total: 0,
@@ -152,13 +152,13 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { JobDashboard } from '@happyvertical/smrt-svelte';
+		code={`import { JobDashboard } from '@happyvertical/smrt-jobs/svelte';
 import type {
   JobStats,
   QueueStats,
   JobData,
   JobStatus
-} from '@happyvertical/smrt-svelte';
+} from '@happyvertical/smrt-jobs/svelte';
 
 interface JobStats {
   total: number;

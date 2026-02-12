@@ -51,7 +51,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { JobStats } from '@happyvertical/smrt-svelte';`}
+		code={`import { JobStats } from '@happyvertical/smrt-jobs/svelte';`}
 		language="typescript"
 	/>
 
@@ -60,8 +60,8 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { JobStats } from '@happyvertical/smrt-svelte';
-  import type { JobStats as Stats } from '@happyvertical/smrt-svelte';
+  import { JobStats } from '@happyvertical/smrt-jobs/svelte';
+  import type { JobStats as Stats } from '@happyvertical/smrt-jobs/svelte';
 
   let stats: Stats = $state({
     total: 1250,
@@ -85,8 +85,8 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { JobStats } from '@happyvertical/smrt-svelte';
-  import type { QueueStats } from '@happyvertical/smrt-svelte';
+  import { JobStats } from '@happyvertical/smrt-jobs/svelte';
+  import type { QueueStats } from '@happyvertical/smrt-jobs/svelte';
 
   let queues: QueueStats[] = $state([
     {
@@ -141,11 +141,11 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { JobStats } from '@happyvertical/smrt-svelte';
+		code={`import { JobStats } from '@happyvertical/smrt-jobs/svelte';
 import type {
   JobStats as JobStatsData,
   QueueStats
-} from '@happyvertical/smrt-svelte';
+} from '@happyvertical/smrt-jobs/svelte';
 
 interface JobStats {
   total: number;
@@ -178,7 +178,7 @@ interface QueueStats {
   getPriorityLabel,
   getPriorityClass,
   getStatusVariant
-} from '@happyvertical/smrt-svelte';
+} from '@happyvertical/smrt-jobs/svelte';
 
 // Format duration
 formatDuration(3400);  // "3.4s"

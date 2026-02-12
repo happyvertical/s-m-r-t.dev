@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RejectDialog } from '@happyvertical/smrt-svelte';
+	import { RejectDialog } from '@happyvertical/smrt-projects/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
@@ -10,7 +10,7 @@
 	<p class="lead">Modal dialog for rejecting time entries with required reason field.</p>
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { RejectDialog } from '@happyvertical/smrt-svelte';`}
+		code={`import { RejectDialog } from '@happyvertical/smrt-projects/svelte';`}
 		language="typescript"
 	/>
 	<h2>Usage</h2>

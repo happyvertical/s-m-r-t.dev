@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { MeetingView } from '@happyvertical/smrt-svelte';
+	import { MeetingView } from '@happyvertical/smrt-events/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
@@ -10,7 +10,7 @@
 	<p class="lead">Meeting details with agenda, attendees, notes, and action items.</p>
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { MeetingView } from '@happyvertical/smrt-svelte';`}
+		code={`import { MeetingView } from '@happyvertical/smrt-events/svelte';`}
 		language="typescript"
 	/>
 	<h2>Usage</h2>

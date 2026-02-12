@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BulkActions } from '@happyvertical/smrt-svelte';
+	import { BulkActions } from '@happyvertical/smrt-projects/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
@@ -10,7 +10,7 @@
 	<p class="lead">Batch operations toolbar for selected time entries.</p>
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { BulkActions } from '@happyvertical/smrt-svelte';`}
+		code={`import { BulkActions } from '@happyvertical/smrt-projects/svelte';`}
 		language="typescript"
 	/>
 	<h2>Usage</h2>

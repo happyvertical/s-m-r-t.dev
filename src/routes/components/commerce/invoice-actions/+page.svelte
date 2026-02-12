@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InvoiceActions } from '@happyvertical/smrt-svelte';
+	import { InvoiceActions } from '@happyvertical/smrt-commerce/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
@@ -10,7 +10,7 @@
 	<p class="lead">Action buttons for send, print, mark paid, and delete operations.</p>
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { InvoiceActions } from '@happyvertical/smrt-svelte';`}
+		code={`import { InvoiceActions } from '@happyvertical/smrt-commerce/svelte';`}
 		language="typescript"
 	/>
 	<h2>Usage</h2>

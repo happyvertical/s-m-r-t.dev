@@ -30,6 +30,14 @@ console.log(task.id); // auto-generated UUID`}</code
 		<li><a href="/docs/agents">Agents</a> — Autonomous actors with persistent state</li>
 		<li><a href="/docs/agents/dispatch">Dispatch</a> — Inter-agent async messaging</li>
 	</ul>
+
+	<h2>Migration Guides</h2>
+	<ul>
+		<li>
+			<a href="/docs/migration">0.19 → 0.20</a> — Component reorganization, browser-ai consolidation,
+			API changes
+		</li>
+	</ul>
 </article>
 
 <style>

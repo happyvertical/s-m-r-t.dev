@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { TimeEntryCard } from '@happyvertical/smrt-svelte';
+	import { TimeEntryCard } from '@happyvertical/smrt-projects/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
@@ -10,7 +10,7 @@
 	<p class="lead">Display individual time entry with duration, project, task, and notes.</p>
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { TimeEntryCard } from '@happyvertical/smrt-svelte';`}
+		code={`import { TimeEntryCard } from '@happyvertical/smrt-projects/svelte';`}
 		language="typescript"
 	/>
 	<h2>Usage</h2>

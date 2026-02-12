@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { TimeEntryList } from '@happyvertical/smrt-svelte';
+	import { TimeEntryList } from '@happyvertical/smrt-projects/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 </script>
 
@@ -10,7 +10,7 @@
 	<p class="lead">List of time entries with filtering, sorting, and bulk selection.</p>
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { TimeEntryList } from '@happyvertical/smrt-svelte';`}
+		code={`import { TimeEntryList } from '@happyvertical/smrt-projects/svelte';`}
 		language="typescript"
 	/>
 	<h2>Usage</h2>

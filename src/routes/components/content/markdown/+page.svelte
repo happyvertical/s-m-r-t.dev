@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Markdown } from '@happyvertical/smrt-svelte';
+	import { Markdown } from '@happyvertical/smrt-content/svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -55,7 +55,7 @@ You can also combine **bold and *nested italic* text**.`;
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Markdown } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { Markdown } from '@happyvertical/smrt-content/svelte';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>Render markdown content with automatic styling.</p>
@@ -112,7 +112,7 @@ You can also combine **bold and *nested italic* text**.`;
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { Markdown } from '@happyvertical/smrt-svelte';
+		code={`import { Markdown } from '@happyvertical/smrt-content/svelte';
 
 interface Props {
   content: string;
