@@ -40,7 +40,7 @@
 	},
 	"dependencies": {
 		"@happyvertical/smrt-docs": "file:../smrt/docs",
-		"@happyvertical/smrt-svelte": "^0.19.65",
+		"@happyvertical/smrt-svelte": "^0.20.0",
 		"gray-matter": "^4.0.3",
 		"marked": "^17.0.1"
 	}
