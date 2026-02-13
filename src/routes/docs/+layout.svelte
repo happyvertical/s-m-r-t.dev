@@ -8,16 +8,6 @@
 			title: 'Documentation',
 			items: [
 				{
-					label: 'Enterprise',
-					href: '/docs/enterprise',
-					children: [
-						{ label: 'Governance', href: '/docs/enterprise#governance' },
-						{ label: 'Deployment', href: '/docs/enterprise#deployment' },
-						{ label: 'Observability', href: '/docs/enterprise#observability' },
-						{ label: 'AI Future-Proofing', href: '/docs/enterprise#ai-future-proofing' }
-					]
-				},
-				{
 					label: 'Objects',
 					href: '/docs/objects',
 					children: [
