@@ -101,16 +101,16 @@ class Invoice extends SmrtObject {
 				</p>
 			</div>
 			<div class="tenet">
-				<h2>Adaptability</h2>
-				<p>Evolve as quickly as possible through abstraction.</p>
+				<h2>AI Future-Proofing</h2>
+				<p>Model-agnostic by design. Switch from OpenAI to self-hosted models without code changes.</p>
 			</div>
 			<div class="tenet">
 				<h2>Brevity</h2>
 				<p>Agent context focuses on application logic, not implementation boilerplate.</p>
 			</div>
 			<div class="tenet">
-				<h2>Scalability</h2>
-				<p>Startup to enterprise seamlessly.</p>
+				<h2>Event-Driven</h2>
+				<p>Persistent inter-agent messaging with guaranteed delivery. Survives restarts.</p>
 			</div>
 		</div>
 	</section>
