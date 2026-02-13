@@ -603,6 +603,53 @@ await withTenant(
 		</ul>
 	</section>
 
+	<section id="ui-components">
+		<h2>UI Components</h2>
+		<p>
+			The <code>smrt-tenancy</code> module provides the backend framework for multi-tenancy.
+			While it doesn't have dedicated UI components, tenant-related UI components are
+			available through the <a href="/modules/smrt-users">smrt-users</a> module and
+			<a href="/modules/smrt-svelte">smrt-svelte</a> integration.
+		</p>
+
+		<h3>Available Components</h3>
+		<div class="link-grid">
+			<a href="/components/tenants/tenant-card" class="link-card">
+				<strong>TenantCard</strong>
+				<span>Tenant info card</span>
+			</a>
+			<a href="/components/tenants/tenant-switcher" class="link-card">
+				<strong>TenantSwitcher</strong>
+				<span>Tenant switcher dropdown</span>
+			</a>
+		</div>
+
+		<h3>Usage Example</h3>
+		<CodeBlock
+			code={`import { TenantCard, TenantSwitcher } from '@happyvertical/smrt-users/components';
+
+<!-- Display tenant information -->
+<TenantCard tenant={currentTenant} />
+
+<!-- Switch between tenants -->
+<TenantSwitcher
+	tenants={availableTenants}
+	currentTenant={currentTenant}
+	on:switch={(e) => switchTenant(e.detail.tenantId)}
+/>`}
+			language="svelte"
+		/>
+
+		<p>
+			<a href="/components/tenants">View tenant components →</a>
+		</p>
+
+		<p class="note">
+			<strong>Note:</strong> These components are part of the smrt-users integration and require
+			the smrt-users module to be installed and configured.
+		</p>
+	</section>
+
 	<section id="related">
 		<h2>Related Modules</h2>
 		<ul>

@@ -50,62 +50,61 @@
 
 <style>
 	.example {
-		border: 1px solid var(--color-grid);
-		border-radius: 4px;
 		margin: 24px 0;
 	}
 
 	.example-title {
 		font-size: 1rem;
 		font-weight: 600;
-		padding: 16px 20px;
+		padding: 16px 0;
 		margin: 0;
-		border-bottom: 1px solid var(--color-grid);
-		background: #fafafa;
+		color: var(--smrt-color-on-surface, #1a1a1a);
 	}
 
 	.example-description {
 		font-size: 0.9rem;
-		color: #666;
-		padding: 12px 20px;
+		color: var(--smrt-color-on-surface-variant, #666);
+		padding: 0 0 16px 0;
 		margin: 0;
-		border-bottom: 1px solid var(--color-grid);
 	}
 
 	.example-preview {
-		padding: 32px 20px;
+		padding: 32px;
 		display: flex;
 		flex-wrap: wrap;
 		gap: 16px;
 		align-items: center;
-		justify-content: center;
+		justify-content: flex-start;
 		min-height: 80px;
-		background: #fff;
+		background: var(--smrt-color-surface-container-low, #fafafa);
+		border-radius: var(--smrt-radius-md, 8px);
 	}
 
 	.example-code {
-		border-top: 1px solid var(--color-grid);
+		margin-top: 16px;
 	}
 
 	.toggle-code {
 		display: flex;
 		align-items: center;
 		gap: 8px;
-		width: 100%;
-		padding: 12px 20px;
-		background: #fafafa;
+		width: auto;
+		padding: 8px 16px;
+		background: var(--smrt-color-surface-container, #f0f0f0);
 		border: none;
+		border-radius: var(--smrt-radius-md, 8px);
 		font-family: var(--font-sans);
 		font-size: 0.8rem;
 		font-weight: 500;
-		color: #666;
+		color: var(--smrt-color-on-surface-variant, #666);
 		cursor: pointer;
 		text-align: left;
 		transition: background 0.15s ease;
+		margin-bottom: 12px;
 	}
 
 	.toggle-code:hover {
-		background: #f0f0f0;
+		background: var(--smrt-color-surface-container-high, #e8e8e8);
 	}
 
 	.toggle-code svg {
@@ -118,6 +117,5 @@
 
 	.example-code :global(.code-block) {
 		margin: 0;
-		border-radius: 0;
 	}
 </style>

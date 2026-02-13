@@ -1,13 +1,78 @@
 <script lang="ts">
-	import ModulePage from '$lib/components/ModulePage.svelte';
+	import ModuleTabs from '$lib/components/ModuleTabs.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import ComponentExample from '$lib/components/ComponentExample.svelte';
+	import { ArticleCard, ArticleList, Markdown } from '@happyvertical/smrt-content/svelte';
+
+	const sampleArticle = {
+		id: '1',
+		slug: 'getting-started-with-smrt',
+		title: 'Getting Started with SMRT',
+		excerpt: 'Learn how to build scalable applications with the SMRT framework. This guide covers installation, configuration, and best practices.',
+		body: '<p>Full article content here...</p>',
+		author: 'Jane Developer',
+		publishedAt: new Date('2025-01-15'),
+		tags: ['tutorial', 'beginner', 'framework'],
+		status: 'published',
+		createdAt: new Date('2025-01-10'),
+		updatedAt: new Date('2025-01-15')
+	};
+
+	const sampleArticles = [
+		sampleArticle,
+		{
+			id: '2',
+			slug: 'advanced-patterns',
+			title: 'Advanced SMRT Patterns',
+			excerpt: 'Deep dive into advanced patterns for building complex applications with SMRT.',
+			body: '<p>Advanced content...</p>',
+			author: 'John Architect',
+			publishedAt: new Date('2025-01-12'),
+			tags: ['advanced', 'patterns'],
+			status: 'published',
+			createdAt: new Date('2025-01-08'),
+			updatedAt: new Date('2025-01-12')
+		},
+		{
+			id: '3',
+			slug: 'content-management',
+			title: 'Content Management Guide',
+			excerpt: 'How to effectively manage content using the smrt-content module.',
+			body: '<p>Content management...</p>',
+			author: 'Sarah Writer',
+			publishedAt: new Date('2025-01-10'),
+			tags: ['content', 'cms'],
+			status: 'published',
+			createdAt: new Date('2025-01-05'),
+			updatedAt: new Date('2025-01-10')
+		}
+	];
+
+	const sampleMarkdown = `# Hello SMRT
+
+This is **markdown** content rendered with the \`Markdown\` component.
+
+## Features
+
+- Lists
+- **Bold** and *italic* text
+- \`inline code\`
+
+> Blockquotes work too!
+
+\`\`\`typescript
+const greeting = "Hello World";
+console.log(greeting);
+\`\`\`
+`;
 </script>
 
-<ModulePage
+<ModuleTabs
 	name="smrt-content"
 	description="Content management system with flexible organization, publishing workflows, asset management, and AI-powered analysis."
-	badges={['v0.19.0', 'Content Management', 'AI-Powered']}
+	badges={['v0.19.0', 'Content Management', '3 Components']}
 >
+	{#snippet docs()}
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
@@ -889,12 +954,93 @@ content.context = '';            // → slug/index.md`}
 		</table>
 	</section>
 
-	<section id="related">
-		<h2>Related Modules</h2>
-		<ul>
-			<li><a href="/modules/smrt-core">smrt-core</a> - SmrtObject, STI support</li>
-			<li><a href="/modules/smrt-assets">smrt-assets</a> - Media management</li>
-			<li><a href="/modules/smrt-users">smrt-users</a> - Author profiles</li>
-		</ul>
-	</section>
-</ModulePage>
+		<section id="related">
+			<h2>Related Modules</h2>
+			<ul>
+				<li><a href="/modules/smrt-core">smrt-core</a> - SmrtObject, STI support</li>
+				<li><a href="/modules/smrt-assets">smrt-assets</a> - Media management</li>
+				<li><a href="/modules/smrt-users">smrt-users</a> - Author profiles</li>
+			</ul>
+		</section>
+	{/snippet}
+
+	{#snippet components()}
+		<section>
+			<h2>Content Components</h2>
+			<p>
+				The <code>@happyvertical/smrt-content</code> package includes Svelte 5 components for displaying
+				content in your applications. These components handle common content presentation patterns
+				with minimal configuration.
+			</p>
+
+			<h2>ArticleCard</h2>
+			<p>Display a single article with title, excerpt, author, and metadata.</p>
+
+			<ComponentExample
+				code={`<script>
+  const article = {
+    title: 'Getting Started with SMRT',
+    excerpt: 'Learn how to build scalable applications...',
+    author: 'Jane Developer',
+    publishedAt: new Date('2025-01-15'),
+    tags: ['tutorial', 'beginner']
+  };
+</script>
+
+<ArticleCard {article} showTags showDate showAuthor />`}
+			>
+				<ArticleCard article={sampleArticle} showTags showDate showAuthor />
+			</ComponentExample>
+
+			<h2>ArticleList</h2>
+			<p>Display a grid of article cards.</p>
+
+			<ComponentExample
+				code={`<ArticleList articles={articles} columns={3} showTags />`}
+			>
+				<ArticleList articles={sampleArticles} columns={3} showTags />
+			</ComponentExample>
+
+			<h2>Markdown</h2>
+			<p>Render markdown content with syntax highlighting.</p>
+
+			<ComponentExample
+				code={`<Markdown content={markdownText} />`}
+			>
+				<div class="markdown-wrapper">
+					<Markdown content={sampleMarkdown} />
+				</div>
+			</ComponentExample>
+
+			<h2>Installation</h2>
+			<CodeBlock
+				code={`npm install @happyvertical/smrt-content
+
+import { ArticleCard, ArticleList, Markdown } from '@happyvertical/smrt-content/svelte';`}
+				language="bash"
+			/>
+
+			<p>
+				<a href="/components/content">View detailed component docs →</a>
+			</p>
+		</section>
+
+		<section>
+			<h2>Related Modules</h2>
+			<div class="link-grid">
+				<a href="/modules/smrt-core" class="link-card">
+					<h3>smrt-core</h3>
+					<p>SmrtObject, STI support</p>
+				</a>
+				<a href="/modules/smrt-assets" class="link-card">
+					<h3>smrt-assets</h3>
+					<p>Media management</p>
+				</a>
+				<a href="/modules/smrt-users" class="link-card">
+					<h3>smrt-users</h3>
+					<p>Author profiles</p>
+				</a>
+			</div>
+		</section>
+	{/snippet}
+</ModuleTabs>

@@ -63,32 +63,67 @@
 
 	<section>
 		<h2>Component Categories</h2>
-
-		<h3>Form Components (11)</h3>
 		<p>
-			TextInput, SelectInput, CheckboxInput, DateTimeInput, AddressInput, MoneyInput, PhoneInput,
-			TextareaInput, NumberInput, DateRangeInput, MeasurementInput
+			Browse components by category. Each category includes multiple production-ready Svelte 5
+			components with full TypeScript support.
 		</p>
 
-		<h3>User Components (6)</h3>
-		<p>UserCard, UserAvatar, UserList, UserForm, UserMenu, InviteUserModal</p>
+		<h3>Form Components</h3>
+		<div class="link-grid">
+			<a href="/components/forms/text-input" class="link-card"><h3>TextInput</h3><p>Text input with validation</p></a>
+			<a href="/components/forms/smrt-select" class="link-card"><h3>SelectInput</h3><p>Select dropdown with search</p></a>
+			<a href="/components/forms/checkbox" class="link-card"><h3>CheckboxInput</h3><p>Checkbox with label</p></a>
+			<a href="/components/forms/datetime" class="link-card"><h3>DateTimeInput</h3><p>Date and time picker</p></a>
+			<a href="/components/forms/address" class="link-card"><h3>AddressInput</h3><p>Address with autocomplete</p></a>
+			<a href="/components/forms/money" class="link-card"><h3>MoneyInput</h3><p>Currency input in cents</p></a>
+			<a href="/components/forms/phone" class="link-card"><h3>PhoneInput</h3><p>Phone with formatting</p></a>
+			<a href="/components/forms/textarea" class="link-card"><h3>TextareaInput</h3><p>Multi-line text input</p></a>
+			<a href="/components/forms/number" class="link-card"><h3>NumberInput</h3><p>Numeric input component</p></a>
+			<a href="/components/forms/daterange" class="link-card"><h3>DateRangeInput</h3><p>Start/end date picker</p></a>
+			<a href="/components/forms/measurement" class="link-card"><h3>MeasurementInput</h3><p>Measurement with units</p></a>
+		</div>
+		<p><a href="/components/forms">View all form components →</a></p>
 
-		<h3>Tenant/Role Components (6)</h3>
-		<p>TenantCard, TenantSwitcher, RoleBadge, RoleSelector, PermissionCheck, MembershipCard</p>
+		<h3>Display Components</h3>
+		<div class="link-grid">
+			<a href="/components/display/icon" class="link-card"><h3>Icon</h3><p>SVG icon component</p></a>
+			<a href="/components/display/status-badge" class="link-card"><h3>StatusBadge</h3><p>Status indicator badge</p></a>
+			<a href="/components/display/confidence-badge" class="link-card"><h3>ConfidenceBadge</h3><p>Confidence score badge</p></a>
+			<a href="/components/display/date-display" class="link-card"><h3>DateDisplay</h3><p>Formatted date display</p></a>
+			<a href="/components/display/currency-display" class="link-card"><h3>CurrencyDisplay</h3><p>Formatted currency display</p></a>
+		</div>
+		<p><a href="/components/display">View all display components →</a></p>
 
-		<h3>Commerce Components (6 - NEW v0.19.0)</h3>
-		<p>
-			InvoiceCard, InvoiceHeader, InvoiceLineItems, InvoiceTotals, InvoiceActions, UnbilledItems
-		</p>
+		<h3>User & Tenant Components</h3>
+		<div class="link-grid">
+			<a href="/components/users/user-card" class="link-card"><h3>UserCard</h3><p>User profile card</p></a>
+			<a href="/components/users/user-avatar" class="link-card"><h3>UserAvatar</h3><p>User avatar with fallback</p></a>
+			<a href="/components/users/user-list" class="link-card"><h3>UserList</h3><p>List of users</p></a>
+			<a href="/components/tenants/tenant-card" class="link-card"><h3>TenantCard</h3><p>Tenant info card</p></a>
+			<a href="/components/tenants/tenant-switcher" class="link-card"><h3>TenantSwitcher</h3><p>Tenant switcher dropdown</p></a>
+			<a href="/components/roles/role-badge" class="link-card"><h3>RoleBadge</h3><p>User role badge</p></a>
+		</div>
+		<p><a href="/components/users">View all user components →</a></p>
 
-		<h3>Project Components (7 - NEW v0.19.0)</h3>
-		<p>
-			TimeEntryCard, TimeEntryList, TimeSummary, DurationDisplay, ApprovalActions, BulkActions,
-			RejectDialog
-		</p>
+		<h3>Commerce Components</h3>
+		<div class="link-grid">
+			<a href="/components/commerce/invoice-card" class="link-card"><h3>InvoiceCard</h3><p>Invoice summary card</p></a>
+			<a href="/components/commerce/invoice-header" class="link-card"><h3>InvoiceHeader</h3><p>Invoice header display</p></a>
+			<a href="/components/commerce/invoice-line-items" class="link-card"><h3>InvoiceLineItems</h3><p>Editable line items table</p></a>
+			<a href="/components/commerce/invoice-totals" class="link-card"><h3>InvoiceTotals</h3><p>Totals calculation display</p></a>
+			<a href="/components/commerce/invoice-actions" class="link-card"><h3>InvoiceActions</h3><p>Invoice action buttons</p></a>
+		</div>
+		<p><a href="/components/commerce">View all commerce components →</a></p>
 
-		<h3>Event Components (1 - NEW v0.19.0)</h3>
-		<p>MeetingView</p>
+		<h3>Project & Time Tracking Components</h3>
+		<div class="link-grid">
+			<a href="/components/projects/time-entry-card" class="link-card"><h3>TimeEntryCard</h3><p>Time entry display card</p></a>
+			<a href="/components/projects/time-entry-list" class="link-card"><h3>TimeEntryList</h3><p>List of time entries</p></a>
+			<a href="/components/projects/time-summary" class="link-card"><h3>TimeSummary</h3><p>Time statistics display</p></a>
+			<a href="/components/projects/approval-actions" class="link-card"><h3>ApprovalActions</h3><p>Approve/reject actions</p></a>
+			<a href="/components/projects/bulk-actions" class="link-card"><h3>BulkActions</h3><p>Batch operations UI</p></a>
+		</div>
+		<p><a href="/components/projects">View all project components →</a></p>
 	</section>
 
 	<section>

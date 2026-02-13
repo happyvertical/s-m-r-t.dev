@@ -14,7 +14,7 @@
 <ModulePage
 	name="smrt-projects"
 	description="Provider-agnostic project management with time tracking, task management, and team collaboration."
-	badges={['v0.19.0', 'Project Management', 'Time Tracking']}
+	badges={['v0.19.0', 'Project Management', '7 Components']}
 >
 	<section>
 		<h2>Overview</h2>
@@ -288,6 +288,70 @@ await issue.rollback();
 />`}
 			language="svelte"
 		/>
+	</section>
+
+	<section>
+		<h2>UI Components</h2>
+		<p>
+			Seven specialized Svelte components for time tracking and project management workflows.
+			Each component is fully typed, accessible, and follows the SMRT design system.
+		</p>
+		<div class="link-grid">
+			<a href="/components/projects/time-entry-card" class="link-card">
+				<h3>TimeEntryCard</h3>
+				<p>Display individual time entry with status and amount</p>
+			</a>
+			<a href="/components/projects/time-entry-list" class="link-card">
+				<h3>TimeEntryList</h3>
+				<p>List of time entries with filtering and pagination</p>
+			</a>
+			<a href="/components/projects/time-summary" class="link-card">
+				<h3>TimeSummary</h3>
+				<p>Aggregated time statistics and totals display</p>
+			</a>
+			<a href="/components/projects/duration-display" class="link-card">
+				<h3>DurationDisplay</h3>
+				<p>Formatted duration with configurable units</p>
+			</a>
+			<a href="/components/projects/approval-actions" class="link-card">
+				<h3>ApprovalActions</h3>
+				<p>Approve/reject controls for time entries</p>
+			</a>
+			<a href="/components/projects/bulk-actions" class="link-card">
+				<h3>BulkActions</h3>
+				<p>Batch operations on selected entries</p>
+			</a>
+			<a href="/components/projects/reject-dialog" class="link-card">
+				<h3>RejectDialog</h3>
+				<p>Modal for rejection with reason input</p>
+			</a>
+		</div>
+		<CodeBlock
+			code={`import {
+  TimeEntryCard,
+  TimeEntryList,
+  TimeSummary,
+  DurationDisplay,
+  ApprovalActions,
+  BulkActions,
+  RejectDialog
+} from '@happyvertical/smrt-projects/svelte';
+
+// Example: Time entry with approval workflow
+<TimeEntryCard {entry} href="/entries/{entry.id}">
+  <svelte:fragment slot="actions">
+    <ApprovalActions
+      status={entry.status}
+      onapprove={() => approve(entry.id)}
+      onreject={() => openRejectDialog(entry)}
+    />
+  </svelte:fragment>
+</TimeEntryCard>`}
+			language="svelte"
+		/>
+		<p>
+			<a href="/components/projects">View all project components →</a>
+		</p>
 	</section>
 
 	<section>

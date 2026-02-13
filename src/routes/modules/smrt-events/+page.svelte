@@ -14,7 +14,7 @@
 <ModulePage
 	name="smrt-events"
 	description="Hierarchical event management with scheduling, ticketing, and calendar integration."
-	badges={['v0.19.0', 'Events', 'Calendar']}
+	badges={['v0.19.0', 'Events', '1 Component']}
 >
 	<section>
 		<h2>Overview</h2>
@@ -277,31 +277,43 @@ const nextDate = calculateNextOccurrence(pattern, new Date());`}
 	</section>
 
 	<section>
-		<h2>MeetingView Component (NEW v0.19.0)</h2>
+		<h2>UI Components</h2>
+		<p>
+			The <code>@happyvertical/smrt-events</code> package includes Svelte 5 components for displaying
+			event and meeting information.
+		</p>
+
+		<h3>Available Components</h3>
+		<div class="link-grid">
+			<a href="/components/events/meeting-view" class="link-card">
+				<h3>MeetingView</h3>
+				<p>Display meeting details with agenda, minutes, and video links</p>
+			</a>
+		</div>
+
+		<h3>Usage Example</h3>
 		<CodeBlock
 			code={`<script>
   import { MeetingView } from '@happyvertical/smrt-events/svelte';
 
   const meeting = {
     id: 'meeting-123',
-    slug: 'town-council-2025-01-15',
     name: 'Town Council Meeting',
     startDate: '2025-01-15T19:00:00',
     status: 'scheduled',
     agendaUrl: '/docs/agenda.pdf',
     minutesUrl: '/docs/minutes.pdf',
-    videoUrl: 'https://youtube.com/watch?v=...',
-    council: {
-      id: 'council-1',
-      name: 'Oak Creek Town Council',
-      timezone: 'America/Denver'
-    }
+    videoUrl: 'https://youtube.com/watch?v=...'
   };
 </script>
 
 <MeetingView {meeting} calendarUrl="/calendar" />`}
 			language="svelte"
 		/>
+
+		<p>
+			<a href="/components/events">View all event components →</a>
+		</p>
 	</section>
 
 	<section>
@@ -330,24 +342,19 @@ const nextDate = calculateNextOccurrence(pattern, new Date());`}
 
 	<section>
 		<h2>Related Modules</h2>
-		<nav>
-			<a href="/modules/smrt-places">
+		<div class="link-grid">
+			<a href="/modules/smrt-places" class="link-card">
 				<h3>smrt-places</h3>
 				<p>Venue and location tracking</p>
 			</a>
-			<a href="/modules/smrt-profiles">
+			<a href="/modules/smrt-profiles" class="link-card">
 				<h3>smrt-profiles</h3>
 				<p>Participant and organizer profiles</p>
 			</a>
-			<a href="/modules/smrt-core">
+			<a href="/modules/smrt-core" class="link-card">
 				<h3>smrt-core</h3>
 				<p>Base classes and framework</p>
 			</a>
-		</nav>
+		</div>
 	</section>
-
-	<nav>
-		<a href="/modules">← Back to Modules</a>
-		<a href="/modules/smrt-projects">Next: smrt-projects →</a>
-	</nav>
 </ModulePage>

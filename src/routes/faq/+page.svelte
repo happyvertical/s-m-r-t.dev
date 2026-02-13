@@ -330,6 +330,102 @@ class Order extends SmrtObject {
 		</div>
 	</section>
 
+	<!-- Enterprise -->
+	<section>
+		<h2>Enterprise</h2>
+
+		<div class="faq-item">
+			<h3>Is s-m-r-t compliant with SOX, HIPAA, GDPR?</h3>
+			<p>
+				s-m-r-t provides the technical controls needed for compliance: field-level encryption, 
+				comprehensive audit trails, access controls, and data retention policies. However, 
+				compliance is ultimately about how you use the tools. We recommend:
+				</p>
+			<ul>
+				<li>Using <code>@field(&#123; encrypted: true, pii: true &#125;)</code> for sensitive data</li>
+				<li>Enabling audit logging for all financial/regulated actions</li>
+				<li>Implementing proper access controls with <code>@action(&#123; roles: [...] &#125;)</code></li>
+				<li>Regular security reviews and penetration testing</li>
+			</ul>
+		</div>
+
+		<div class="faq-item">
+			<h3>Can we use our own AI models?</h3>
+			<p>
+				Yes. s-m-r-t is model-agnostic. You can use:
+			</p>
+			<ul>
+				<li>OpenAI, Anthropic, Google via API</li>
+				<li>Self-hosted models (Llama, Mixtral, etc.) via Ollama or vLLM</li>
+				<li>Private cloud models (AWS Bedrock, Azure OpenAI)</li>
+				<li>Fully air-gapped on-premise deployments</li>
+			</ul>
+			<p>
+				Your business logic remains identical regardless of provider. Switch providers 
+				by changing configuration, not code.
+			</p>
+		</div>
+
+		<div class="faq-item">
+			<h3>Can we deploy on-premise or in air-gapped environments?</h3>
+			<p>
+				Yes. s-m-r-t supports full air-gapped deployments with no internet connectivity:
+			</p>
+			<ul>
+				<li>Self-hosted PostgreSQL database</li>
+				<li>Self-hosted AI models (via Ollama)</li>
+				<li>Internal observability stack (Jaeger, Prometheus)</li>
+				<li>No external API dependencies</li>
+			</ul>
+			<p>
+				See the <a href="/docs/enterprise#deployment">Enterprise Deployment</a> guide for examples.
+			</p>
+		</div>
+
+		<div class="faq-item">
+			<h3>How do we monitor s-m-r-t in production?</h3>
+			<p>
+				s-m-r-t includes built-in OpenTelemetry instrumentation:
+			</p>
+			<ul>
+				<li>Traces for all requests, DB queries, and AI calls</li>
+				<li>Prometheus metrics for token usage, latency, errors</li>
+				<li>Structured JSON logging compatible with ELK/Datadog</li>
+				<li>Automatic correlation IDs for request tracing</li>
+			</ul>
+			<p>
+				Export to your existing observability stack—no proprietary tools required.
+			</p>
+		</div>
+
+		<div class="faq-item">
+			<h3>Can s-m-r-t integrate with our existing systems?</h3>
+			<p>
+				Yes. The headless architecture is designed for integration:
+			</p>
+			<ul>
+				<li>REST API for modern microservices</li>
+				<li>Bridge classes for legacy systems (SAP, Salesforce, etc.)</li>
+				<li>Event-driven dispatch for async communication</li>
+				<li>Database adapters for existing schemas</li>
+			</ul>
+		</div>
+
+		<div class="faq-item">
+			<h3>What happens if we need to migrate away from s-m-r-t?</h3>
+			<p>
+				No vendor lock-in. Your data remains in standard PostgreSQL with clear schemas. 
+				Your business logic is plain TypeScript. If you ever need to migrate:
+			</p>
+			<ul>
+				<li>Data: Standard SQL exports, no proprietary formats</li>
+				<li>Code: Plain TypeScript classes, no runtime dependencies</li>
+				<li>API: REST endpoints follow OpenAPI standards</li>
+				<li>AI: Provider-agnostic design means prompts transfer anywhere</li>
+			</ul>
+		</div>
+	</section>
+
 	<!-- Deployment -->
 	<section>
 		<h2>Deployment</h2>

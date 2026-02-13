@@ -1,13 +1,54 @@
 <script lang="ts">
-	import ModulePage from '$lib/components/ModulePage.svelte';
+	import ModuleTabs from '$lib/components/ModuleTabs.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import ComponentExample from '$lib/components/ComponentExample.svelte';
+	import {
+		InvoiceCard,
+		InvoiceHeader,
+		InvoiceLineItems,
+		InvoiceTotals,
+		InvoiceActions
+	} from '@happyvertical/smrt-commerce/svelte';
+
+	const sampleInvoice = {
+		id: 'inv-123',
+		invoiceNumber: 'INV-2025-0001',
+		status: 'sent' as const,
+		issueDate: new Date('2025-01-15'),
+		dueDate: new Date('2025-02-15'),
+		totalAmount: 525000, // $5,250.00 in cents
+		customerName: 'Acme Corporation',
+		projectName: 'Website Redesign'
+	};
+
+	const sampleLineItems = [
+		{
+			id: 'item-1',
+			description: 'Web Design Services',
+			quantity: 40,
+			unitPrice: 10000, // $100.00 in cents
+			amount: 400000,
+			category: 'Design',
+			sourceType: 'time' as const
+		},
+		{
+			id: 'item-2',
+			description: 'Development Hours',
+			quantity: 25,
+			unitPrice: 5000, // $50.00 in cents
+			amount: 125000,
+			category: 'Development',
+			sourceType: 'time' as const
+		}
+	];
 </script>
 
-<ModulePage
+<ModuleTabs
 	name="smrt-commerce"
 	description="Complete commerce system with contracts, invoicing, payments, fulfillment tracking, and accounting integration."
-	badges={['v0.19.0', 'Invoicing', 'Payments', '6 Components']}
+	badges={['v0.19.0', 'Invoicing', '6 Components']}
 >
+	{#snippet docs()}
 	<section>
 		<h2>Overview</h2>
 		<p>
@@ -292,119 +333,130 @@ await invoice2.save(); // Status becomes PARTIAL or PAID`}
 		/>
 	</section>
 
-	<section>
-		<h2>Svelte Components (NEW v0.19.0)</h2>
+		<section>
+			<h2>Best Practices</h2>
+			<div>
+				<div>
+					<h3>DOs</h3>
+					<ul>
+						<li>Use generateInvoiceNumber() for consistent numbering</li>
+						<li>Always allocate payments to specific invoices</li>
+						<li>Check getUnallocatedFromPayment() before allocating</li>
+						<li>Call recognizeRevenue() after sending invoices</li>
+						<li>Recalculate invoice totals after line item changes</li>
+					</ul>
+				</div>
+				<div>
+					<h3>DON'Ts</h3>
+					<ul>
+						<li>Don't manually set invoice numbers (race conditions)</li>
+						<li>Don't over-allocate payments (check available first)</li>
+						<li>Don't cancel paid invoices (use writeOff if needed)</li>
+						<li>Don't skip updatePaymentStatus() after allocation</li>
+						<li>Don't modify line items without recalculating totals</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+	{/snippet}
 
-		<h3>Component Registration</h3>
-		<CodeBlock
-			code={`import '@happyvertical/smrt-commerce/svelte';
-// Auto-registers all 6 invoice components`}
-			language="typescript"
-		/>
+	{#snippet components()}
+		<section>
+			<h2>Commerce Components</h2>
+			<p>
+				The <code>@happyvertical/smrt-commerce</code> package includes 6 Svelte 5 components for building
+				complete invoicing and billing interfaces.
+			</p>
 
-		<h3>InvoiceCard</h3>
-		<CodeBlock
-			code={`<InvoiceCard
-  invoice={{'
+			<h2>InvoiceCard</h2>
+			<p>Display a summary of an invoice in card format.</p>
+
+			<ComponentExample
+				code={`<InvoiceCard
+  invoice={{
     invoiceNumber: 'INV-2025-0001',
-    status: 'SENT',
-    totalAmount: 1050,
-    dueDate: new Date('2025-02-15'),
-    customerName: 'Acme Corp'
-  '}}
+    status: 'sent',
+    totalAmount: 525000,
+    customerName: 'Acme Corporation'
+  }}
   currency="USD"
-  href="/invoices/123"
 />`}
-			language="svelte"
-		/>
+			>
+				<InvoiceCard invoice={sampleInvoice} currency="USD" />
+			</ComponentExample>
 
-		<h3>InvoiceLineItems</h3>
-		<CodeBlock
-			code={`<InvoiceLineItems
-  items={[
-    {
-      description: 'Consulting',
-      quantity: 40,
-      unitPrice: 125,
-      amount: 5000,
-      sourceType: 'time'
-    }
-  ]}
-  editable={true}
+			<h2>InvoiceLineItems</h2>
+			<p>Editable table for invoice line items with calculations.</p>
+
+			<ComponentExample
+				code={`<InvoiceLineItems
+  items={lineItems}
   currency="USD"
-  showSource={true}
-  onupdate={(item) => saveLineItem(item)}
-  ondelete={(item) => deleteLineItem(item)}
-  onadd={() => addLineItem()}
+  editable={false}
 />`}
-			language="svelte"
-		/>
+			>
+				<InvoiceLineItems items={sampleLineItems} currency="USD" editable={false} />
+			</ComponentExample>
 
-		<h3>InvoiceActions</h3>
-		<CodeBlock
-			code={`<InvoiceActions
-  status="DRAFT"
-  onsend={() => sendInvoice()}
-  onedit={() => editInvoice()}
-  ondelete={() => deleteInvoice()}
-  onprint={() => printInvoice()}
-/>`}
-			language="svelte"
-		/>
-	</section>
+			<h2>Full Invoice View</h2>
+			<p>Combine multiple components for a complete invoice display.</p>
 
-	<section>
-		<h2>Best Practices</h2>
-		<div>
-			<div>
-				<h3>DOs</h3>
-				<ul>
-					<li>Use generateInvoiceNumber() for consistent numbering</li>
-					<li>Always allocate payments to specific invoices</li>
-					<li>Check getUnallocatedFromPayment() before allocating</li>
-					<li>Call recognizeRevenue() after sending invoices</li>
-					<li>Recalculate invoice totals after line item changes</li>
-				</ul>
+			<ComponentExample
+				code={`<div class="invoice">
+  <InvoiceHeader {invoice} />
+  <InvoiceLineItems {items} currency="USD" />
+  <InvoiceTotals {invoice} currency="USD" />
+  <InvoiceActions
+    status={invoice.status}
+    onsend={() => {}}
+    onprint={() => {}}
+  />
+</div>`}
+			>
+				<div class="invoice-demo">
+					<InvoiceLineItems items={sampleLineItems} currency="USD" editable={false} />
+				</div>
+			</ComponentExample>
+
+			<h2>Installation</h2>
+			<CodeBlock
+				code={`npm install @happyvertical/smrt-commerce
+
+import {
+  InvoiceCard,
+  InvoiceHeader,
+  InvoiceLineItems,
+  InvoiceTotals,
+  InvoiceActions
+} from '@happyvertical/smrt-commerce/svelte';`}
+				language="bash"
+			/>
+
+			<p>
+				<a href="/components/commerce">View detailed component docs →</a>
+			</p>
+		</section>
+
+		<section>
+			<h2>Related Modules</h2>
+			<div class="link-grid">
+				<a href="/modules/smrt-ledgers" class="link-card">
+					<h3>smrt-ledgers</h3>
+					<p>Double-entry accounting integration</p>
+				</a>
+				<a href="/modules/smrt-profiles" class="link-card">
+					<h3>smrt-profiles</h3>
+					<p>Customer/vendor profile links</p>
+				</a>
+				<a href="/modules/smrt-products" class="link-card">
+					<h3>smrt-products</h3>
+					<p>Product catalog for line items</p>
+				</a>
+				<a href="/modules/smrt-projects" class="link-card">
+					<h3>smrt-projects</h3>
+					<p>Time tracking for invoicing</p>
+				</a>
 			</div>
-			<div>
-				<h3>DON'Ts</h3>
-				<ul>
-					<li>Don't manually set invoice numbers (race conditions)</li>
-					<li>Don't over-allocate payments (check available first)</li>
-					<li>Don't cancel paid invoices (use writeOff if needed)</li>
-					<li>Don't skip updatePaymentStatus() after allocation</li>
-					<li>Don't modify line items without recalculating totals</li>
-				</ul>
-			</div>
-		</div>
-	</section>
-
-	<section>
-		<h2>Related Modules</h2>
-		<div>
-			<a href="/modules/smrt-ledgers">
-				<h3>smrt-ledgers</h3>
-				<p>Double-entry accounting integration</p>
-			</a>
-			<a href="/modules/smrt-profiles">
-				<h3>smrt-profiles</h3>
-				<p>Customer/vendor profile links</p>
-			</a>
-			<a href="/modules/smrt-products">
-				<h3>smrt-products</h3>
-				<p>Product catalog for line items</p>
-			</a>
-			<a href="/modules/smrt-projects">
-				<h3>smrt-projects</h3>
-				<p>Time tracking for invoicing</p>
-			</a>
-		</div>
-	</section>
-
-	<div>
-		<div>
-			<a href="/modules">Back to Modules</a>
-			<a href="/modules/smrt-events">Next: smrt-events</a>
-		</div>
-	</div>
-</ModulePage>
+		</section>
+	{/snippet}
+</ModuleTabs>

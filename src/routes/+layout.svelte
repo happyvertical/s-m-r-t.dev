@@ -17,7 +17,7 @@
 </script>
 
 <svelte:head>
-	<title>s-m-r-t — Your agent's favorite typescript framework</title>
+	<title>s-m-r-t — The Business Logic Operating System</title>
 	<link rel="icon" href={favicon} />
 </svelte:head>
 

@@ -7,7 +7,7 @@
 		<div class="footer-content">
 			<div class="brand">
 				<span class="name" aria-label="s-m-r-t Framework">s-m-r-t</span>
-				<span class="tagline">Your agent's favorite typescript framework</span>
+				<span class="tagline">The Business Logic Operating System</span>
 			</div>
 			<nav role="navigation" aria-label="Footer navigation">
 				<a href="/docs">Docs</a>
