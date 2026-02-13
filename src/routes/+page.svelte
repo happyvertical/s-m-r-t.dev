@@ -6,7 +6,7 @@
 
 <SEO
 	title="s-m-r-t Framework"
-	description="Full-stack TypeScript framework with AI agents, auto-generated APIs, MCP tools, and CLI commands. Build faster with no vendor lock, adaptability, brevity, and scalability."
+	description="The Business Logic Operating System. Model-agnostic AI framework with event-driven architecture. No vendor lock, from SQLite to PostgreSQL without refactoring."
 	url="https://havesmrt.com"
 	type="website"
 />
@@ -18,7 +18,7 @@
 		url: 'https://havesmrt.com',
 		logo: 'https://havesmrt.com/logo.png',
 		description:
-			'Full-stack TypeScript framework for building AI-powered applications with automatic API generation, CLI tools, and MCP integration.',
+			'The Business Logic Operating System. Model-agnostic AI framework with event-driven architecture.',
 		sameAs: ['https://github.com/happyvertical/smrt']
 	}}
 />
@@ -35,11 +35,58 @@
 			priceCurrency: 'USD'
 		},
 		description:
-			'Full-stack TypeScript framework with AI agents, auto-generated APIs, MCP tools, and CLI commands.'
+			'The Business Logic Operating System. Model-agnostic AI framework with event-driven architecture.'
 	}}
 />
 
 <Grid>
+	<!-- Hero Section -->
+	<section class="hero-enterprise">
+		<div class="hero-content">
+			<h1>The Business Logic Operating System</h1>
+			<p class="hero-subtitle">
+				Full-stack TypeScript framework with model-agnostic AI, event-driven architecture, 
+				and no vendor lock. From prototype to production without refactoring.
+			</p>
+			<div class="hero-ctas">
+				<a href="/docs" class="cta-primary">Get Started</a>
+				<a href="/modules" class="cta-secondary">Explore Modules</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- Four Tenets -->
+	<section class="hero">
+		<div class="tenets">
+			<div class="tenet">
+				<h2>No vendor lock</h2>
+				<p>
+					Abstract away implementation details. Switch SQLite to PostgreSQL without refactoring.
+				</p>
+			</div>
+			<div class="tenet">
+				<h2>AI Future-Proofing</h2>
+				<p>
+					Model-agnostic by design. Switch from OpenAI to self-hosted models without code changes.
+				</p>
+			</div>
+			<div class="tenet">
+				<h2>Brevity</h2>
+				<p>Agent context focuses on application logic, not implementation boilerplate.</p>
+			</div>
+			<div class="tenet">
+				<h2>Event-Driven</h2>
+				<p>Persistent inter-agent messaging with guaranteed delivery. Survives restarts.</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Simple/Advanced Examples -->
+	<section class="section-header">
+		<h2>Core Framework</h2>
+		<p>Everything you need to build, deploy, and scale business logic with AI.</p>
+	</section>
+
 	<section class="example">
 		<h3>Simple</h3>
 		<p class="example-desc">Extend SmrtObject. That's it.</p>
@@ -92,29 +139,7 @@ class Invoice extends SmrtObject {
 			></pre>
 	</section>
 
-	<section class="hero">
-		<div class="tenets">
-			<div class="tenet">
-				<h2>No vendor lock</h2>
-				<p>
-					Abstract away implementation details. Switch SQLite to PostgreSQL without refactoring.
-				</p>
-			</div>
-			<div class="tenet">
-				<h2>AI Future-Proofing</h2>
-				<p>Model-agnostic by design. Switch from OpenAI to self-hosted models without code changes.</p>
-			</div>
-			<div class="tenet">
-				<h2>Brevity</h2>
-				<p>Agent context focuses on application logic, not implementation boilerplate.</p>
-			</div>
-			<div class="tenet">
-				<h2>Event-Driven</h2>
-				<p>Persistent inter-agent messaging with guaranteed delivery. Survives restarts.</p>
-			</div>
-		</div>
-	</section>
-
+	<!-- Objects Section -->
 	<section class="section-header">
 		<h2>Objects</h2>
 		<p>AI-powered data models with built-in persistence, validation, and intelligence.</p>
@@ -173,6 +198,7 @@ const selector = await scraper.recall({
 			></pre>
 	</section>
 
+	<!-- Collections Section -->
 	<section class="section-header">
 		<h2>Collections</h2>
 		<p>Query, search, and manage objects with powerful collection operations.</p>
@@ -209,6 +235,7 @@ const user = await users.getOrUpsert(
 			></pre>
 	</section>
 
+	<!-- Agents Section -->
 	<section class="section-header">
 		<h2>Agents</h2>
 		<p>Autonomous actors with full object capabilities and inter-agent communication.</p>
@@ -239,8 +266,67 @@ await dispatch.process('Roboto', async (payload, meta) => {
 </Grid>
 
 <style>
-	/* Use SMRT theme variables throughout */
+	/* Hero Section */
+	.hero-enterprise {
+		grid-column: 1 / -1;
+		padding: 64px 0 32px;
+		text-align: center;
+	}
 
+	.hero-content h1 {
+		font-size: 3rem;
+		font-weight: 700;
+		margin-bottom: 24px;
+		color: var(--smrt-color-on-background, #1a1a1a);
+		line-height: 1.2;
+	}
+
+	.hero-subtitle {
+		font-size: 1.25rem;
+		color: var(--smrt-color-on-background-variant, #666);
+		max-width: 700px;
+		margin: 0 auto 32px;
+		line-height: 1.6;
+	}
+
+	.hero-ctas {
+		display: flex;
+		gap: 16px;
+		justify-content: center;
+	}
+
+	.cta-primary {
+		display: inline-block;
+		padding: 12px 24px;
+		background: var(--smrt-color-primary, #1976d2);
+		color: var(--smrt-color-on-primary, #ffffff);
+		text-decoration: none;
+		border-radius: var(--smrt-radius-md, 8px);
+		font-weight: 500;
+		transition: background 0.15s ease;
+	}
+
+	.cta-primary:hover {
+		background: var(--smrt-color-primary-container, #1565c0);
+	}
+
+	.cta-secondary {
+		display: inline-block;
+		padding: 12px 24px;
+		background: transparent;
+		color: var(--smrt-color-primary, #1976d2);
+		text-decoration: none;
+		border-radius: var(--smrt-radius-md, 8px);
+		font-weight: 500;
+		border: 1px solid var(--smrt-color-outline, #e5e5e5);
+		transition: background 0.15s ease;
+	}
+
+	.cta-secondary:hover {
+		background: var(--smrt-color-surface-container-low, #fafafa);
+	}
+
+	/* Tenets Section */
 	.hero {
 		grid-column: 1 / -1;
 		padding: 32px 0;
@@ -272,6 +358,7 @@ await dispatch.process('Roboto', async (payload, meta) => {
 		line-height: 1.5;
 	}
 
+	/* Section Headers */
 	.section-header {
 		grid-column: 1 / -1;
 		padding: 48px 0 16px;
@@ -289,12 +376,12 @@ await dispatch.process('Roboto', async (payload, meta) => {
 		color: var(--smrt-color-on-background-variant, #666);
 	}
 
+	/* Examples */
 	.example {
 		grid-column: 1 / -1;
 		padding: 24px 0;
 	}
 
-	/* Add padding to last section for footer spacing */
 	section:last-of-type {
 		padding-bottom: 64px;
 	}
@@ -325,15 +412,28 @@ await dispatch.process('Roboto', async (payload, meta) => {
 		border-radius: var(--smrt-shape-medium, 8px);
 	}
 
+	/* Responsive */
 	@media (max-width: 900px) {
 		.tenets {
 			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.hero-content h1 {
+			font-size: 2.25rem;
 		}
 	}
 
 	@media (max-width: 500px) {
 		.tenets {
 			grid-template-columns: 1fr;
+		}
+
+		.hero-content h1 {
+			font-size: 1.75rem;
+		}
+
+		.hero-ctas {
+			flex-direction: column;
 		}
 	}
 </style>
