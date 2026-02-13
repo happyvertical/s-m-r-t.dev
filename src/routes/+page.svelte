@@ -342,9 +342,13 @@ const classified = await App.create({
 
 	<section class="example">
 		<h3>Advanced</h3>
-		<p class="example-desc">Decorators for complex use cases.</p>
+		<p class="example-desc">Governance, security, and observability built-in.</p>
 		<pre><code
-				>{`@smrt({ api: { rateLimit: 100 }, mcp: { tools: ['search', 'create'] } })
+				>{`@smrt({
+  api: { rateLimit: 100 },
+  mcp: { tools: ['search', 'create'] },
+  audit: { enabled: true, retention: '7years' }
+})
 class Invoice extends SmrtObject {
   @field({ index: true, unique: true })
   invoiceNumber: string = '';
@@ -355,6 +359,10 @@ class Invoice extends SmrtObject {
   @field({ enum: ['draft', 'sent', 'paid', 'overdue'] })
   status: string = 'draft';
 
+  // Governance: encrypted PII
+  @field({ encrypted: true, pii: true })
+  customerTaxId: string = '';
+
   @field({ encrypted: true })
   notes: string = '';
 
@@ -363,10 +371,22 @@ class Invoice extends SmrtObject {
     return this.status === 'sent' && this.dueDate < new Date();
   }
 
-  @action({ requiresAuth: true, audit: true })
+  // Governance: audit trail + RBAC
+  @action({ requiresAuth: true, audit: true, roles: ['finance', 'admin'] })
   async markAsPaid(paymentMethod: string) {
     this.status = 'paid';
     await this.save();
+  }
+
+  // Deterministic AI with structured output
+  async analyzeRisk() {
+    return await this.analyze({
+      schema: {
+        riskLevel: 'low|medium|high|critical',
+        anomalies: 'string[]',
+        confidence: 'number'
+      }
+    });
   }
 }`}</code
 			></pre>
