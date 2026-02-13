@@ -82,8 +82,8 @@
 			<div class="tenet">
 				<h2>Legacy Compatible</h2>
 				<p>
-					Headless architecture integrates with existing monoliths. Bridge SAP, Salesforce, 
-					Shopify, and custom systems.
+					Headless architecture integrates with existing systems via REST APIs. 
+					Use the framework as a backend for any frontend.
 				</p>
 			</div>
 		</div>

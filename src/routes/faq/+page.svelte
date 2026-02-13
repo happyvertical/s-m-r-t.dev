@@ -337,15 +337,15 @@ class Order extends SmrtObject {
 		<div class="faq-item">
 			<h3>Is s-m-r-t compliant with SOX, HIPAA, GDPR?</h3>
 			<p>
-				s-m-r-t provides the technical controls needed for compliance: field-level encryption, 
-				comprehensive audit trails, access controls, and data retention policies. However, 
-				compliance is ultimately about how you use the tools. We recommend:
+				Governance features like field-level encryption and audit trails are on the roadmap. 
+				Currently, you can implement compliance controls at the application level. Future 
+				releases will provide built-in support for:
 				</p>
 			<ul>
-				<li>Using <code>@field(&#123; encrypted: true, pii: true &#125;)</code> for sensitive data</li>
-				<li>Enabling audit logging for all financial/regulated actions</li>
-				<li>Implementing proper access controls with <code>@action(&#123; roles: [...] &#125;)</code></li>
-				<li>Regular security reviews and penetration testing</li>
+				<li>Field-level encryption for sensitive data</li>
+				<li>Automatic audit logging for data changes</li>
+				<li>Role-based access control integration</li>
+				<li>Data retention policies</li>
 			</ul>
 		</div>
 
@@ -405,7 +405,7 @@ class Order extends SmrtObject {
 			</p>
 			<ul>
 				<li>REST API for modern microservices</li>
-				<li>Bridge classes for legacy systems (SAP, Salesforce, etc.)</li>
+				<li>Bridge pattern for custom integrations</li>
 				<li>Event-driven dispatch for async communication</li>
 				<li>Database adapters for existing schemas</li>
 			</ul>

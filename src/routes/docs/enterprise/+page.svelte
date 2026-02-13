@@ -17,94 +17,47 @@
 	enterprise teams require.
 </p>
 
-<h2 id="governance">Built-in Governance</h2>
+<h2 id="governance">Governance Roadmap</h2>
 
 <p>
-	Data protection and compliance aren't afterthoughts—they're core to the framework's design. 
-	Every field, action, and interaction can be secured, audited, and controlled.
+	Governance features are on the roadmap for future releases. The framework's decorator-based 
+	architecture will support audit trails, field-level encryption, and role-based access control.
 </p>
 
-<h3>Field-Level Encryption</h3>
+<h3>Planned: Field-Level Encryption</h3>
 
 <p>
-	Mark any field as encrypted and it will be automatically encrypted at rest. The framework 
-	uses industry-standard AES-256 encryption with keys managed via your existing infrastructure 
-	(AWS KMS, HashiCorp Vault, or environment variables).
+	Future versions will support marking fields for encryption at rest, with transparent 
+	encryption/decryption and key management integration.
 </p>
 
-<pre><code>{`@smrt()
+<pre><code>{`// Planned feature
+@smrt()
 class Customer extends SmrtObject {
   name: string = '';
   email: string = '';
 
-  @field({ encrypted: true, pii: true })
-  ssn: string = '';
-
-  @field({ encrypted: true, pii: true })
-  dateOfBirth: string = '';
-
+  // Coming soon: encrypted PII fields
   @field({ encrypted: true })
-  bankAccountNumber: string = '';
-}
+  ssn: string = '';
+}`}</code></pre>
 
-// Encrypted fields are transparently handled
-const customer = await Customer.get('cust-123');
-console.log(customer.ssn); // Decrypted automatically: "123-45-6789"
-await customer.save();     // Re-encrypted before storage`}</code></pre>
-
-<h3>Comprehensive Audit Trails</h3>
+<h3>Planned: Audit Trails</h3>
 
 <p>
-	Every action can be logged with full context—who performed it, when, what changed, and why. 
-	Integrate with your existing SIEM or use the built-in audit log storage.
+	Built-in audit logging is planned for tracking data changes with full context—who, when, 
+	and what changed.
 </p>
 
-<pre><code>{`@smrt({ audit: { enabled: true, retention: '7years' } })
+<pre><code>{`// Planned feature
+@smrt({ audit: true })
 class FinancialTransaction extends SmrtObject {
-  @field()
-  amount: number = 0;
-
-  @field({ enum: ['pending', 'completed', 'reversed'] })
-  status: string = 'pending';
-
   @action({ audit: true, requiresAuth: true })
   async reverse(reason: string) {
-    // Automatically logged with:
-    // - User who performed the action
-    // - Timestamp
-    // - Before/after values
-    // - Reason provided
+    // Automatically logged with user, timestamp, changes
     this.status = 'reversed';
     await this.save();
   }
-}
-
-// Query audit history
-const audits = await FinancialTransaction.getAudits({
-  objectId: 'txn-123',
-  since: new Date('2024-01-01')
-});
-// Returns: [{ user: 'alice@corp.com', action: 'reverse', 
-//            before: {status: 'completed'}, after: {status: 'reversed'}, 
-//            timestamp: '...', reason: 'Customer request' }]`}</code></pre>
-
-<h3>Role-Based Access Control</h3>
-
-<p>
-	Actions can be restricted to specific roles, with automatic integration into your 
-	authentication system.
-</p>
-
-<pre><code>{`@action({ 
-  requiresAuth: true,
-  roles: ['finance', 'admin'],
-  permissions: ['transactions.write']
-})
-async processRefund(amount: number, reason: string) {
-  // Only executes if the authenticated user has:
-  // - 'finance' OR 'admin' role
-  // - 'transactions.write' permission
-  await this.createRefundTransaction(amount, reason);
 }`}</code></pre>
 
 <h2 id="deployment">Deployment Patterns</h2>
@@ -455,41 +408,42 @@ class DocumentProcessor {
 
 <p>
 	s-m-r-t's headless architecture makes it ideal for integrating with existing 
-	enterprise systems—whether they're modern APIs or legacy monoliths.
+	systems via REST APIs and custom bridges.
 </p>
 
-<h3>Legacy System Integration</h3>
+<h3>Building Integration Bridges</h3>
 
-<pre><code>{`// Bridge to SAP
-@smrt()
-class SAPBridge extends SmrtObject {
+<p>
+	Create bridge objects to sync data with external systems. Use actions to encapsulate 
+	integration logic.
+</p>
+
+<pre><code>{`@smrt()
+class ExternalSystemBridge extends SmrtObject {
+  @field()
+  externalId: string = '';
+
+  @field()
+  lastSyncedAt: Date | null = null;
+
   @action()
-  async syncPurchaseOrder(po: PurchaseOrder) {
-    // Call SAP RFC
-    const sapResult = await this.sap.call('BAPI_PO_CREATE1', {
-      PO_HEADER: this.mapToSAPHeader(po),
-      PO_ITEMS: po.items.map(i => this.mapToSAPItem(i))
-    });
-    
-    // Store the SAP reference
-    this.sapPONumber = sapResult.PO_NUMBER;
+  async syncToExternal() {
+    // Implement your integration logic here
+    // Call external APIs, map data, handle errors
+    const result = await this.callExternalApi();
+    this.externalId = result.id;
+    this.lastSyncedAt = new Date();
     await this.save();
   }
-}
 
-// Bridge to Salesforce
-@smrt()
-class SalesforceBridge extends SmrtObject {
-  @action()
-  async syncAccount(customer: Customer) {
-    const sfAccount = await this.salesforce.sobject('Account').create({
-      Name: customer.companyName,
-      BillingStreet: customer.address.street,
-      // ... mapping
+  private async callExternalApi() {
+    // Custom API integration
+    const response = await fetch(this.getExternalUrl(), {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + this.getApiKey() },
+      body: JSON.stringify(this.toExternalFormat())
     });
-    
-    customer.salesforceId = sfAccount.id;
-    await customer.save();
+    return await response.json();
   }
 }`}</code></pre>
 
