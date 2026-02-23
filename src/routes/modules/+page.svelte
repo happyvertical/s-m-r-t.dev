@@ -217,8 +217,11 @@
 
 <Grid>
 	<div class="header">
-		<h1>Modules</h1>
-		<p>SMRT packages organized by purpose. Mix and match based on your needs.</p>
+		<div class="header-content">
+			<h1>Modules</h1>
+			<p class="tagline">The Business Logic Operating System</p>
+			<p class="description">SMRT packages organized by purpose. Mix and match based on your needs.</p>
+		</div>
 	</div>
 
 	<section class="section">
@@ -429,6 +432,10 @@ npm install @happyvertical/smrt-content`}</code
 		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
 	}
 
+	.header-content {
+		text-align: center;
+	}
+
 	.header h1 {
 		font-size: 2.5rem;
 		font-weight: 600;
@@ -436,7 +443,16 @@ npm install @happyvertical/smrt-content`}</code
 		color: var(--smrt-color-on-background, #1a1a1a);
 	}
 
-	.header p {
+	.header .tagline {
+		font-size: 0.875rem;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--smrt-color-primary, #1976d2);
+		margin-bottom: 16px;
+	}
+
+	.header .description {
 		font-size: 1.1rem;
 		color: var(--smrt-color-on-surface-variant, #666);
 	}
