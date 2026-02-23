@@ -6,7 +6,7 @@
 
 <SEO
 	title="s-m-r-t Framework"
-	description="The Business Logic Operating System. Model-agnostic AI framework with event-driven architecture. No vendor lock, from SQLite to PostgreSQL without refactoring."
+	description="Agentic Application Framework for building AI-powered applications. Model-agnostic, event-driven architecture with no vendor lock."
 	url="https://havesmrt.com"
 	type="website"
 />
@@ -18,7 +18,7 @@
 		url: 'https://havesmrt.com',
 		logo: 'https://havesmrt.com/logo.png',
 		description:
-			'The Business Logic Operating System. Model-agnostic AI framework with event-driven architecture.',
+			'Agentic Application Framework for building AI-powered applications.',
 		sameAs: ['https://github.com/happyvertical/smrt']
 	}}
 />
@@ -35,7 +35,7 @@
 			priceCurrency: 'USD'
 		},
 		description:
-			'The Business Logic Operating System. Model-agnostic AI framework with event-driven architecture.'
+			'Agentic Application Framework for building AI-powered applications.'
 	}}
 />
 
@@ -43,10 +43,10 @@
 	<!-- Hero Section -->
 	<section class="hero-enterprise">
 		<div class="hero-content">
-			<h1>The Business Logic Operating System</h1>
+			<h1>Agentic Application Framework</h1>
 			<p class="hero-subtitle">
-				Full-stack TypeScript framework with model-agnostic AI, event-driven architecture, 
-				and no vendor lock. From prototype to production without refactoring.
+				Build AI-powered applications with model-agnostic architecture, 
+				event-driven messaging, and zero vendor lock.
 			</p>
 			<div class="hero-ctas">
 				<a href="/docs" class="cta-primary">Get Started</a>
@@ -55,28 +55,26 @@
 		</div>
 	</section>
 
-	<!-- Four Tenets -->
+	<!-- Quick Start -->
 	<section class="hero">
-		<div class="tenets">
-			<div class="tenet">
-				<h2>No vendor lock</h2>
-				<p>
-					Abstract away implementation details. Switch SQLite to PostgreSQL without refactoring.
-				</p>
-			</div>
-			<div class="tenet">
-				<h2>AI Future-Proofing</h2>
-				<p>
-					Model-agnostic by design. Switch from OpenAI to self-hosted models without code changes.
-				</p>
-			</div>
-			<div class="tenet">
-				<h2>Brevity</h2>
-				<p>Agent context focuses on application logic, not implementation boilerplate.</p>
-			</div>
-			<div class="tenet">
-				<h2>Event-Driven</h2>
-				<p>Persistent inter-agent messaging with guaranteed delivery. Survives restarts.</p>
+		<div class="quick-start">
+			<h2>Quick Start</h2>
+			<pre class="quick-start-code"><code>npm install @happyvertical/smrt-core
+
+import &#123; SmrtObject, smrt &#125; from '@happyvertical/smrt-core';
+
+@smrt()
+class Task extends SmrtObject &#123;
+  title: string = '';
+  completed: boolean = false;
+&#125;
+
+const tasks = await TaskCollection.create(&#123; db: 'tasks.db' &#125;);
+const task = await tasks.create(&#123; title: 'Learn SMRT' &#125;);</code></pre>
+			<div class="quick-start-links">
+				<a href="/docs/getting-started">Installation Guide →</a>
+				<a href="/docs/objects">Objects API →</a>
+				<a href="/docs/collections">Collections API →</a>
 			</div>
 		</div>
 	</section>
@@ -326,36 +324,53 @@ await dispatch.process('Roboto', async (payload, meta) => {
 		background: var(--smrt-color-surface-container-low, #fafafa);
 	}
 
-	/* Tenets Section */
+	/* Quick Start Section */
 	.hero {
 		grid-column: 1 / -1;
 		padding: 32px 0;
 	}
 
-	.tenets {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 24px;
-	}
-
-	.tenet {
-		padding: 24px;
+	.quick-start {
+		padding: 32px;
 		background: var(--smrt-color-surface, #ffffff);
 		border: 1px solid var(--smrt-color-outline, #e5e5e5);
 		border-radius: var(--smrt-shape-medium, 8px);
 	}
 
-	.tenet h2 {
-		font-size: 1rem;
+	.quick-start h2 {
+		font-size: 1.25rem;
 		font-weight: 600;
-		margin-bottom: 8px;
+		margin-bottom: 16px;
 		color: var(--smrt-color-on-surface, #1a1a1a);
 	}
 
-	.tenet p {
+	.quick-start-code {
+		background: var(--smrt-color-surface-variant, #1a1a1a);
+		color: var(--smrt-color-on-surface-variant, #f0f0f0);
+		padding: 20px;
+		overflow-x: auto;
+		font-family: var(--smrt-font-family-mono, monospace);
+		font-size: 0.85rem;
+		line-height: 1.6;
+		border-radius: var(--smrt-shape-medium, 8px);
+		margin-bottom: 16px;
+	}
+
+	.quick-start-links {
+		display: flex;
+		gap: 24px;
+		flex-wrap: wrap;
+	}
+
+	.quick-start-links a {
+		color: var(--smrt-color-primary, #1976d2);
+		text-decoration: none;
+		font-weight: 500;
 		font-size: 0.9rem;
-		color: var(--smrt-color-on-surface-variant, #666);
-		line-height: 1.5;
+	}
+
+	.quick-start-links a:hover {
+		text-decoration: underline;
 	}
 
 	/* Section Headers */
@@ -414,10 +429,6 @@ await dispatch.process('Roboto', async (payload, meta) => {
 
 	/* Responsive */
 	@media (max-width: 900px) {
-		.tenets {
-			grid-template-columns: repeat(2, 1fr);
-		}
-
 		.hero-content h1 {
 			font-size: 2.25rem;
 		}

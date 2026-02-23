@@ -7,7 +7,6 @@
 		<div class="footer-content">
 			<div class="brand">
 				<span class="name" aria-label="s-m-r-t Framework">s-m-r-t</span>
-				<span class="tagline">The Business Logic Operating System</span>
 			</div>
 			<nav role="navigation" aria-label="Footer navigation">
 				<a href="/docs">Docs</a>
@@ -50,11 +49,6 @@
 		font-weight: bold;
 		font-size: 1.1rem;
 		color: var(--smrt-color-on-surface, #1a1a1a);
-	}
-
-	.tagline {
-		font-size: 0.85rem;
-		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	nav {
