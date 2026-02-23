@@ -6,7 +6,6 @@
 	<div class="header-content">
 		<a href="/" class="branding">
 			<span class="logo">s-m-r-t</span>
-			<span class="tagline">The Business Logic Operating System</span>
 		</a>
 		<nav>
 			<a href="/docs">Docs</a>
@@ -54,8 +53,7 @@
 
 	.branding {
 		display: flex;
-		flex-direction: column;
-		gap: 2px;
+		align-items: center;
 		text-decoration: none;
 	}
 
@@ -64,14 +62,6 @@
 		font-weight: bold;
 		font-size: 1.5rem;
 		color: var(--smrt-color-on-surface, #1a1a1a);
-		white-space: nowrap;
-	}
-
-	.tagline {
-		font-size: 0.65rem;
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-		color: var(--smrt-color-on-surface-variant, #666);
 		white-space: nowrap;
 	}
 

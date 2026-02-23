@@ -6,7 +6,7 @@
 
 <SEO
 	title="s-m-r-t Framework"
-	description="The Business Logic Operating System. Model-agnostic AI framework with event-driven architecture. No vendor lock, from SQLite to PostgreSQL without refactoring."
+	description="Agentic Application Framework for building AI-powered applications. Model-agnostic, event-driven architecture with no vendor lock."
 	url="https://havesmrt.com"
 	type="website"
 />
@@ -18,7 +18,7 @@
 		url: 'https://havesmrt.com',
 		logo: 'https://havesmrt.com/logo.png',
 		description:
-			'The Business Logic Operating System. Model-agnostic AI framework with event-driven architecture.',
+			'Agentic Application Framework for building AI-powered applications.',
 		sameAs: ['https://github.com/happyvertical/smrt']
 	}}
 />
@@ -35,7 +35,7 @@
 			priceCurrency: 'USD'
 		},
 		description:
-			'The Business Logic Operating System. Model-agnostic AI framework with event-driven architecture.'
+			'Agentic Application Framework for building AI-powered applications.'
 	}}
 />
 
@@ -43,40 +43,14 @@
 	<!-- Hero Section -->
 	<section class="hero-enterprise">
 		<div class="hero-content">
-			<h1>The Business Logic Operating System</h1>
+			<h1>Agentic Application Framework</h1>
 			<p class="hero-subtitle">
-				Full-stack TypeScript framework with model-agnostic AI, event-driven architecture, 
-				and no vendor lock. From prototype to production without refactoring.
+				Build AI-powered applications with model-agnostic architecture, 
+				event-driven messaging, and zero vendor lock.
 			</p>
 			<div class="hero-ctas">
 				<a href="/docs" class="cta-primary">Get Started</a>
 				<a href="/modules" class="cta-secondary">Explore Modules</a>
-			</div>
-		</div>
-	</section>
-
-	<!-- Four Tenets -->
-	<section class="hero">
-		<div class="tenets">
-			<div class="tenet">
-				<h2>No vendor lock</h2>
-				<p>
-					Abstract away implementation details. Switch SQLite to PostgreSQL without refactoring.
-				</p>
-			</div>
-			<div class="tenet">
-				<h2>AI Future-Proofing</h2>
-				<p>
-					Model-agnostic by design. Switch from OpenAI to self-hosted models without code changes.
-				</p>
-			</div>
-			<div class="tenet">
-				<h2>Brevity</h2>
-				<p>Agent context focuses on application logic, not implementation boilerplate.</p>
-			</div>
-			<div class="tenet">
-				<h2>Event-Driven</h2>
-				<p>Persistent inter-agent messaging with guaranteed delivery. Survives restarts.</p>
 			</div>
 		</div>
 	</section>
@@ -326,38 +300,6 @@ await dispatch.process('Roboto', async (payload, meta) => {
 		background: var(--smrt-color-surface-container-low, #fafafa);
 	}
 
-	/* Tenets Section */
-	.hero {
-		grid-column: 1 / -1;
-		padding: 32px 0;
-	}
-
-	.tenets {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 24px;
-	}
-
-	.tenet {
-		padding: 24px;
-		background: var(--smrt-color-surface, #ffffff);
-		border: 1px solid var(--smrt-color-outline, #e5e5e5);
-		border-radius: var(--smrt-shape-medium, 8px);
-	}
-
-	.tenet h2 {
-		font-size: 1rem;
-		font-weight: 600;
-		margin-bottom: 8px;
-		color: var(--smrt-color-on-surface, #1a1a1a);
-	}
-
-	.tenet p {
-		font-size: 0.9rem;
-		color: var(--smrt-color-on-surface-variant, #666);
-		line-height: 1.5;
-	}
-
 	/* Section Headers */
 	.section-header {
 		grid-column: 1 / -1;
@@ -414,10 +356,6 @@ await dispatch.process('Roboto', async (payload, meta) => {
 
 	/* Responsive */
 	@media (max-width: 900px) {
-		.tenets {
-			grid-template-columns: repeat(2, 1fr);
-		}
-
 		.hero-content h1 {
 			font-size: 2.25rem;
 		}
