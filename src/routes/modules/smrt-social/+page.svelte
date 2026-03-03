@@ -100,6 +100,9 @@ await state.save();
 }`}
 			language="typescript"
 		/>
+		<aside>
+			<p><strong>Security note:</strong> OAuth tokens are stored as plain strings. For production deployments, consider integrating <a href="/modules/smrt-secrets">smrt-secrets</a> for envelope encryption of sensitive credentials.</p>
+		</aside>
 
 		<h3>SocialPost</h3>
 		<CodeBlock

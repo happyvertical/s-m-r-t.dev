@@ -192,13 +192,16 @@ describe('Task Tests', () => {
 		<div class="faq-item">
 			<h3>How do I define relationships between models?</h3>
 			<p>
-				Use <code>foreignKey()</code> for same-package references and plain string IDs for cross-package references:
+				Use the <code>@foreignKey()</code> decorator for same-package references and plain string IDs for cross-package references:
 			</p>
 			<CodeBlock
-				code={`@smrt()
+				code={`import { smrt, SmrtObject, foreignKey } from '@happyvertical/smrt-core';
+
+@smrt()
 class Order extends SmrtObject {
-  // Same-package: use foreignKey() helper
-  customerId = foreignKey(Customer);
+  // Same-package: use @foreignKey() decorator
+  @foreignKey(Customer)
+  customerId: string = '';
 
   // Cross-package: plain string ID (avoids circular deps)
   tenantId: string = '';

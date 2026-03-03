@@ -6,7 +6,7 @@
 <ModuleTabs
 	name="smrt-agents"
 	description="Build autonomous actors with persistent state, inter-agent communication via DispatchBus, and comprehensive lifecycle management."
-	badges={['v0.20.44', 'Agents', '4 Components']}
+	badges={['v0.20.44', 'Agents', 'DispatchBus']}
 >
 	{#snippet docs()}
 		<section id="overview">

@@ -46,7 +46,7 @@
 <ModuleTabs
 	name="smrt-commerce"
 	description="E-commerce with Contract STI hierarchy (5 types), invoice lifecycle, payment tracking, fulfillment, and optional ledger integration."
-	badges={['v0.20.44', 'Invoicing', '6 Components']}
+	badges={['v0.20.44', 'Invoicing', '5 STI Types']}
 >
 	{#snippet docs()}
 	<section>

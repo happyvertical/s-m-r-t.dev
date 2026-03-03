@@ -14,7 +14,7 @@
 <ModulePage
 	name="smrt-projects"
 	description="Provider-agnostic project management -- GitHub-style issues, PRs, projects, and repositories with Living Spec AI synthesis."
-	badges={['v0.20.44', 'Project Management', '7 Components']}
+	badges={['v0.20.44', 'Project Management', 'GitHub-style']}
 >
 	<section>
 		<h2>Overview</h2>
