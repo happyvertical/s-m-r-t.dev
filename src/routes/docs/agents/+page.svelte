@@ -20,15 +20,16 @@
 		requiring state management.
 	</p>
 	<pre><code
-			>{`import { Agent } from '@happyvertical/smrt-agents';
+			>{`import { Agent, type AgentOptions } from '@happyvertical/smrt-agents';
 import { smrt } from '@happyvertical/smrt-core';
+import { getModuleConfig } from '@happyvertical/smrt-config';
 
 @smrt()
 class DataProcessor extends Agent {
-  protected config = {
+  protected config = getModuleConfig('data-processor', {
     batchSize: 100,
     maxRetries: 3
-  };
+  });
 
   // State properties (auto-persisted)
   lastProcessedId: string = '';
@@ -46,6 +47,7 @@ class DataProcessor extends Agent {
 		<li>All properties auto-persist to database via SmrtObject</li>
 		<li>Uses Single Table Inheritance (STI) - all agents share the <code>agents</code> table</li>
 		<li>Must apply <code>@smrt()</code> decorator on subclasses</li>
+		<li>Automatic SIGTERM/SIGINT signal handling for graceful shutdown</li>
 	</ul>
 
 	<h2>Agent Lifecycle</h2>
@@ -69,7 +71,7 @@ class DataProcessor extends Agent {
 			<tr><td><code>validate()</code></td><td>Check configuration and dependencies</td></tr>
 			<tr><td><code>run()</code></td><td>Main agent logic (abstract, must implement)</td></tr>
 			<tr
-				><td><code>shutdown()</code></td><td>Cleanup resources, handle graceful termination</td></tr
+				><td><code>shutdown()</code></td><td>Cleanup resources, remove signal handlers</td></tr
 			>
 			<tr><td><code>execute()</code></td><td>Orchestrates full lifecycle</td></tr>
 		</tbody>
@@ -78,7 +80,9 @@ class DataProcessor extends Agent {
 	<pre><code
 			>{`@smrt()
 class WebScraper extends Agent {
-  protected config = { targetUrl: 'https://example.com' };
+  protected config = getModuleConfig('web-scraper', {
+    targetUrl: 'https://example.com'
+  });
 
   async initialize(): Promise<this> {
     await super.initialize();
@@ -99,13 +103,39 @@ class WebScraper extends Agent {
 
   async shutdown(): Promise<void> {
     this.logger.info('Cleaning up');
-    await super.shutdown();
+    await super.shutdown(); // Cleans up signal handlers
   }
 }
 
 // Execute
 const agent = new WebScraper({ name: 'scraper-1' });
 await agent.execute();`}</code
+		></pre>
+
+	<h2>Signal Handling (Graceful Shutdown)</h2>
+	<p>
+		Agents automatically register SIGTERM and SIGINT handlers during <code>initialize()</code>.
+		When a signal is received, the agent transitions to <code>shutdown</code> status and calls
+		<code>shutdown()</code> for cleanup. Signal handlers are automatically removed during shutdown.
+	</p>
+	<pre><code
+			>{`@smrt()
+class LongRunningAgent extends Agent {
+  protected config = {};
+
+  async run(): Promise<void> {
+    while (this.status !== 'shutdown') {
+      await this.processNextBatch();
+      await this.save(); // Persist progress
+    }
+  }
+
+  async shutdown(): Promise<void> {
+    this.logger.info('Graceful shutdown initiated');
+    // Finish current work, flush buffers, etc.
+    await super.shutdown(); // Always call super to clean up signal handlers
+  }
+}`}</code
 		></pre>
 
 	<h2>Agent Status</h2>
@@ -127,7 +157,7 @@ await agent.execute();`}</code
 	<pre><code
 			>{`@smrt()
 class Crawler extends Agent {
-  protected config = { maxPages: 50 };
+  protected config = getModuleConfig('crawler', { maxPages: 50 });
 
   // These persist to database
   lastCrawledUrl: string = '';
@@ -142,8 +172,43 @@ class Crawler extends Agent {
 }`}</code
 		></pre>
 
-	<h3>Configuration Storage</h3>
-	<p>Agents support slot-based configuration:</p>
+	<h2>TenantAgent -- Multi-Tenant Bindings</h2>
+	<p>
+		The <code>TenantAgent</code> model provides a junction table (<code>tenant_agents</code>)
+		binding agents to tenants with permission overrides and hierarchy resolution:
+	</p>
+	<ul>
+		<li><strong>Explicit binding:</strong> Row exists for tenant (source: 'explicit')</li>
+		<li><strong>Inherited:</strong> Walks up tenant hierarchy (source: 'inherited')</li>
+		<li><strong>Permissions:</strong> Manifest defaults merged with per-tenant overrides</li>
+	</ul>
+	<pre><code
+			>{`import { TenantAgent, TenantAgentCollection } from '@happyvertical/smrt-agents';
+
+// Check if agent is available for a tenant
+const tenantAgents = await TenantAgentCollection.create({ db: 'app.db' });
+const binding = await tenantAgents.list({
+  where: { agentType: 'Praeco', tenantId: 'tenant-123' }
+});`}</code
+		></pre>
+
+	<h2>AgentSchedule</h2>
+	<p>
+		Cron-based scheduling stored in the <code>_smrt_agent_schedules</code> table.
+		Executed by <code>ScheduleRunner</code> from <code>smrt-jobs</code>.
+	</p>
+	<pre><code
+			>{`import { AgentSchedule, AgentScheduleCollection } from '@happyvertical/smrt-agents';
+
+// Fields: agentType, cron, method (default: 'run'),
+//         maxConcurrent, timeout`}</code
+		></pre>
+
+	<h2>AgentConfig -- DB-Persisted Configuration</h2>
+	<p>
+		The <code>AgentConfig</code> model stores slot-based configuration in the database,
+		merged with file-based config at runtime:
+	</p>
 	<pre><code
 			>{`// Save config for a UI slot
 await agent.saveSlotConfig('sources', {
@@ -322,14 +387,44 @@ AgentUIRegistry.register('Praeco', 'sources', SourcesPanel);`}</code
 		</tbody>
 	</table>
 
+	<h3>_smrt_agent_schedules</h3>
+	<p>Stores agent schedule definitions:</p>
+	<table>
+		<thead><tr><th>Column</th><th>Type</th><th>Description</th></tr></thead>
+		<tbody>
+			<tr><td><code>agentType</code></td><td>TEXT</td><td>Agent class name</td></tr>
+			<tr><td><code>cron</code></td><td>TEXT</td><td>Cron expression</td></tr>
+			<tr><td><code>method</code></td><td>TEXT</td><td>Method to invoke (default: 'run')</td></tr>
+			<tr><td><code>maxConcurrent</code></td><td>INTEGER</td><td>Max concurrent executions</td></tr>
+			<tr><td><code>timeout</code></td><td>INTEGER</td><td>Execution timeout (ms)</td></tr>
+		</tbody>
+	</table>
+
+	<h3>tenant_agents</h3>
+	<p>Junction table binding agents to tenants:</p>
+	<table>
+		<thead><tr><th>Column</th><th>Type</th><th>Description</th></tr></thead>
+		<tbody>
+			<tr><td><code>agentType</code></td><td>TEXT</td><td>Agent class name</td></tr>
+			<tr><td><code>tenantId</code></td><td>TEXT</td><td>Tenant ID</td></tr>
+			<tr><td><code>permissions</code></td><td>JSON</td><td>Per-tenant permission overrides</td></tr>
+			<tr><td><code>status</code></td><td>TEXT</td><td>Binding status</td></tr>
+		</tbody>
+	</table>
+
 	<h2>Best Practices</h2>
 
 	<h3>1. Always Call super Methods</h3>
 	<pre><code
 			>{`async initialize(): Promise<this> {
-  await super.initialize(); // Important!
+  await super.initialize(); // Sets up signal handlers
   // Your initialization...
   return this;
+}
+
+async shutdown(): Promise<void> {
+  // Your cleanup...
+  await super.shutdown(); // Removes signal handlers
 }`}</code
 		></pre>
 
@@ -354,6 +449,20 @@ AgentUIRegistry.register('Praeco', 'sources', SourcesPanel);`}</code
     await this.save();
     throw error; // Re-throw to set status to 'error'
   }
+}`}</code
+		></pre>
+
+	<h3>4. Use getModuleConfig() for Configuration</h3>
+	<pre><code
+			>{`import { getModuleConfig } from '@happyvertical/smrt-config';
+
+@smrt()
+class MyAgent extends Agent {
+  // Loads from smrt.config.ts modules.my-agent section
+  protected config = getModuleConfig('my-agent', {
+    cronSchedule: '0 2 * * *',
+    maxRetries: 3
+  });
 }`}</code
 		></pre>
 </article>

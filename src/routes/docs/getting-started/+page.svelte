@@ -49,18 +49,18 @@
 	<section class="mb-12">
 		<h2 class="text-3xl font-bold mb-4">Installation</h2>
 
-		<h3 class="text-2xl font-semibold mb-3">Option 1: Create New Project (Recommended)</h3>
+		<h3 class="text-2xl font-semibold mb-3">Install Core Packages</h3>
 		<CodeBlock
-			code={`npm create smrt-app@latest my-app
-cd my-app
-npm install
-npm run dev`}
+			code={`pnpm add @happyvertical/smrt-core @happyvertical/smrt-types @happyvertical/smrt-config`}
 			language="bash"
 		/>
 
-		<h3 class="text-2xl font-semibold mb-3 mt-6">Option 2: Add to Existing Project</h3>
+		<h3 class="text-2xl font-semibold mb-3 mt-6">Add Domain Packages as Needed</h3>
+		<p class="mb-4">
+			Install additional packages for your use case. For example, for agents and background jobs:
+		</p>
 		<CodeBlock
-			code={`npm install @happyvertical/smrt-core @happyvertical/smrt-types`}
+			code={`pnpm add @happyvertical/smrt-agents @happyvertical/smrt-jobs`}
 			language="bash"
 		/>
 	</section>
@@ -73,7 +73,7 @@ npm run dev`}
 			Create a file <code class="bg-gray-100 px-2 py-1 rounded">src/models/Task.ts</code>:
 		</p>
 		<CodeBlock
-			code={`import { SmrtObject, field, smrt } from '@happyvertical/smrt-core';
+			code={`import { SmrtObject, smrt } from '@happyvertical/smrt-core';
 
 @smrt({
   api: true,    // Generate REST API
@@ -81,17 +81,10 @@ npm run dev`}
   mcp: true     // Generate MCP tools
 })
 export class Task extends SmrtObject {
-  @field({ required: true })
   title: string = '';
-
-  @field()
   description: string = '';
-
-  @field({ default: 'todo' })
-  status: 'todo' | 'in_progress' | 'done' = 'todo';
-
-  @field()
-  dueDate?: Date;
+  status: string = 'todo';
+  dueDate: string = '';
 
   // Custom method
   complete() {
@@ -107,7 +100,7 @@ export class Task extends SmrtObject {
 import { Task } from './Task.js';
 
 export class TaskCollection extends SmrtCollection<Task> {
-  static itemClass = Task;
+  static readonly _itemClass = Task;
 
   // Custom query methods
   async findByStatus(status: string) {
@@ -117,8 +110,8 @@ export class TaskCollection extends SmrtCollection<Task> {
   async findOverdue() {
     return this.list({
       where: {
-        status: { $ne: 'done' },
-        dueDate: { $lt: new Date() }
+        'status !=': 'done',
+        'dueDate <': new Date().toISOString()
       }
     });
   }
@@ -130,16 +123,16 @@ export class TaskCollection extends SmrtCollection<Task> {
 		<CodeBlock
 			code={`import { TaskCollection } from './models/TaskCollection.js';
 
-// Initialize
+// Create collection via static factory
 const tasks = await TaskCollection.create({
-  db: { /* database config */ }
+  db: 'tasks.db'
 });
 
 // Create
 const task = await tasks.create({
   title: 'Learn SMRT Framework',
   description: 'Read the getting started guide',
-  dueDate: new Date('2025-01-20')
+  dueDate: '2025-01-20'
 });
 await task.save();
 
@@ -203,29 +196,38 @@ smrt tasks delete <id>`}
 			code={`import { defineConfig } from '@happyvertical/smrt-config';
 
 export default defineConfig({
-  database: {
-    type: 'postgresql',
-    host: process.env.DB_HOST,
-    port: 5432,
-    database: 'myapp',
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD
+  smrt: {
+    logLevel: 'info',
+    environment: 'development',
+    embeddings: { provider: 'local' }
   },
-  api: {
-    enabled: true,
-    port: 3000,
-    prefix: '/api'
+  modules: {
+    // Module-scoped configs keyed by module name
+    'my-agent': {
+      cronSchedule: '0 2 * * *',
+      maxRetries: 3
+    }
   },
-  cli: {
-    enabled: true
-  },
-  mcp: {
-    enabled: true,
-    port: 3100
+  packages: {
+    // Package-scoped configs keyed by package name
+    ai: { defaultModel: 'gpt-4o' }
   }
 });`}
 			language="typescript"
 		/>
+
+		<div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mt-4 mb-4">
+			<p class="font-semibold mb-2">Note:</p>
+			<p>
+				The config top-level keys are <code class="bg-gray-100 px-2 py-1 rounded">smrt</code> (global options),
+				<code class="bg-gray-100 px-2 py-1 rounded">modules</code> (module-scoped config),
+				<code class="bg-gray-100 px-2 py-1 rounded">packages</code> (package-scoped config),
+				<code class="bg-gray-100 px-2 py-1 rounded">site</code> (site templates), and
+				<code class="bg-gray-100 px-2 py-1 rounded">export</code> (SSG export).
+				Use <code class="bg-gray-100 px-2 py-1 rounded">getModuleConfig()</code> and
+				<code class="bg-gray-100 px-2 py-1 rounded">getPackageConfig()</code> to retrieve them at runtime.
+			</p>
+		</div>
 	</section>
 
 	<section class="mb-12">
@@ -233,28 +235,28 @@ export default defineConfig({
 
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 			<a href="/docs/objects" class="block p-6 border rounded hover:border-blue-500 transition">
-				<h3 class="text-xl font-semibold mb-2">→ Learn About Objects</h3>
+				<h3 class="text-xl font-semibold mb-2">Learn About Objects</h3>
 				<p class="text-sm text-gray-600">
 					Deep dive into SmrtObject, fields, relationships, and computed properties
 				</p>
 			</a>
 
 			<a href="/docs/collections" class="block p-6 border rounded hover:border-blue-500 transition">
-				<h3 class="text-xl font-semibold mb-2">→ Learn About Collections</h3>
+				<h3 class="text-xl font-semibold mb-2">Learn About Collections</h3>
 				<p class="text-sm text-gray-600">Querying, filtering, pagination, and bulk operations</p>
 			</a>
 
 			<a href="/docs/agents" class="block p-6 border rounded hover:border-blue-500 transition">
-				<h3 class="text-xl font-semibold mb-2">→ Learn About Agents</h3>
+				<h3 class="text-xl font-semibold mb-2">Learn About Agents</h3>
 				<p class="text-sm text-gray-600">
 					Build autonomous agents with persistent state and AI integration
 				</p>
 			</a>
 
 			<a href="/modules" class="block p-6 border rounded hover:border-blue-500 transition">
-				<h3 class="text-xl font-semibold mb-2">→ Explore Modules</h3>
+				<h3 class="text-xl font-semibold mb-2">Explore Modules</h3>
 				<p class="text-sm text-gray-600">
-					Discover 29 production-ready modules for common use cases
+					Discover 38 production-ready modules for common use cases
 				</p>
 			</a>
 		</div>
@@ -265,17 +267,16 @@ export default defineConfig({
 
 		<h3 class="text-2xl font-semibold mb-3">Relationships</h3>
 		<CodeBlock
-			code={`import { foreignKey, manyToMany } from '@happyvertical/smrt-core';
+			code={`import { SmrtObject, smrt, foreignKey, manyToMany } from '@happyvertical/smrt-core';
 
 @smrt()
 class Project extends SmrtObject {
-  @field({ required: true })
   name: string = '';
 
-  @foreignKey(() => User)
+  @foreignKey(User)
   ownerId: string = '';
 
-  @manyToMany(() => Tag, { through: 'project_tags' })
+  @manyToMany(Tag, { through: 'project_tags' })
   tags: Tag[] = [];
 }`}
 			language="typescript"
@@ -285,10 +286,7 @@ class Project extends SmrtObject {
 		<CodeBlock
 			code={`@smrt()
 class Order extends SmrtObject {
-  @field()
-  subtotal: number = 0;
-
-  @field()
+  subtotal: number = 0.0;
   taxRate: number = 0.08;
 
   get total(): number {
@@ -300,20 +298,18 @@ class Order extends SmrtObject {
 
 		<h3 class="text-2xl font-semibold mb-3 mt-6">AI-Powered Methods</h3>
 		<CodeBlock
-			code={`@smrt()
-class Document extends SmrtObject {
-  @field()
-  content: string = '';
+			code={`// is() — evaluate criteria against the object, returns boolean
+const isValid = await product.is(\`
+  - Has a non-empty description
+  - Price is greater than $10
+  - Name does not contain profanity
+\`);
 
-  // AI automatically generates these methods
-  async summarize(): Promise<string> {
-    // AI-powered summarization
-  }
-
-  async extractKeywords(): Promise<string[]> {
-    // AI-powered keyword extraction
-  }
-}`}
+// do() — perform an action based on instructions, returns string
+const summary = await product.do(\`
+  Write a 50-word marketing description.
+  Highlight key features and target audience.
+\`);`}
 			language="typescript"
 		/>
 	</section>
@@ -322,7 +318,7 @@ class Document extends SmrtObject {
 		<h2 class="text-3xl font-bold mb-4">Need Help?</h2>
 		<ul class="space-y-2">
 			<li>
-				<a href="/faq" class="text-blue-600 hover:underline"> → Check the FAQ </a>
+				<a href="/faq" class="text-blue-600 hover:underline"> Check the FAQ </a>
 			</li>
 			<li>
 				<a
@@ -331,12 +327,12 @@ class Document extends SmrtObject {
 					target="_blank"
 					rel="noopener"
 				>
-					→ Report an issue on GitHub
+					Report an issue on GitHub
 				</a>
 			</li>
 			<li>
 				<a href="/modules/smrt-core" class="text-blue-600 hover:underline">
-					→ Read the smrt-core documentation
+					Read the smrt-core documentation
 				</a>
 			</li>
 		</ul>

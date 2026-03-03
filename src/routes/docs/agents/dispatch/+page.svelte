@@ -337,19 +337,14 @@ smrt dispatch:list
 smrt dispatch:list --status pending
 smrt dispatch:list --source Suasor
 
-# Process pending
-smrt dispatch:process --subscriber Fiscus
+# Process pending dispatches for a subscriber
+smrt dispatch:process Fiscus
 
-# Retry failed
+# Retry failed dispatches
 smrt dispatch:retry --max-attempts 3
 
-# Cleanup old
-smrt dispatch:cleanup --completed-older-than 30
-
-# Manage subscriptions
-smrt dispatch:subscriptions --subscriber Fiscus
-smrt dispatch:subscribe --signal-type campaign.* --subscriber Fiscus
-smrt dispatch:unsubscribe --signal-type campaign.* --subscriber Fiscus`}</code
+# Cleanup old dispatches
+smrt dispatch:cleanup --completed-older-than 30`}</code
 		></pre>
 
 	<h2>Best Practices</h2>
