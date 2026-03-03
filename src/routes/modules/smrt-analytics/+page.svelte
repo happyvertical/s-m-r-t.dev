@@ -6,7 +6,7 @@
 <ModulePage
 	name="smrt-analytics"
 	description="Server-side analytics tracking with GA4 and Plausible integration, event logging, scheduled reports, and AI-powered performance analysis."
-	badges={['v0.19.0', 'GA4', 'Plausible', 'AI Insights']}
+	badges={['v0.20.44', 'GA4', 'Plausible', 'AI Insights']}
 >
 	<section>
 		<h2>Overview</h2>
@@ -35,49 +35,48 @@
 		<h2>Quick Start</h2>
 		<CodeBlock
 			code={`import {
-  AnalyticsPropertyCollection,
-  AnalyticsDataStreamCollection,
-  AnalyticsEventCollection
+  AnalyticsProperty, AnalyticsPropertyCollection,
+  AnalyticsDataStream, AnalyticsDataStreamCollection,
+  AnalyticsEvent, AnalyticsEventCollection,
+  AnalyticsProvider, DataStreamType
 } from '@happyvertical/smrt-analytics';
 
-// Initialize
-const properties = await AnalyticsPropertyCollection.create({ db: {...} });
-const streams = await AnalyticsDataStreamCollection.create({ db: {...} });
-const events = await AnalyticsEventCollection.create({ db: {...} });
+// Initialize collections
+const properties = new AnalyticsPropertyCollection(db);
+const streams = new AnalyticsDataStreamCollection(db);
+const events = new AnalyticsEventCollection(db);
 
 // Create GA4 property
 const property = await properties.create({
-  name: 'My Website',
-  providerType: 'GA4',
+  name: 'main-site',
+  displayName: 'Main Site Analytics',
+  provider: AnalyticsProvider.GA4,
+  externalId: 'properties/123456789',
   measurementId: 'G-XXXXXXXXXX',
-  apiSecret: 'your-api-secret'
+  apiSecret: 'server-side-secret',
+  status: 'active',
 });
-await property.save();
 
-// Create web data stream
-const stream = await streams.create({
+// Add a web data stream
+await streams.create({
   propertyId: property.id,
-  type: 'WEB_DATA_STREAM',
-  name: 'Web Stream',
-  measurementId: 'G-XXXXXXXXXX'
+  displayName: 'Web Traffic',
+  streamType: DataStreamType.WEB,
+  measurementId: 'G-XXXXXXXXXX',
+  defaultUri: 'https://example.com',
+  status: 'active',
 });
-await stream.save();
 
-// Track event
+// Track a server-side event with retry support
 const event = await events.create({
   propertyId: property.id,
-  eventName: 'page_view',
-  clientId: 'client-123',
-  userId: 'user-456',
-  params: {
-    page_location: 'https://example.com/products',
-    page_title: 'Products'
-  },
-  eventTimestamp: new Date()
+  eventName: 'purchase',
+  clientId: 'client-uuid',
+  params: JSON.stringify({ value: 99.99, currency: 'USD' }),
+  status: 'pending',
 });
-await event.save();
 
-// Send to GA4
+// After sending: markSent() or markFailed('timeout')
 await event.markSent();`}
 			language="typescript"
 		/>
@@ -90,14 +89,17 @@ await event.markSent();`}
 		<CodeBlock
 			code={`class AnalyticsProperty extends SmrtObject {
   name: string
-  providerType: 'GA4' | 'PLAUSIBLE'
-  measurementId?: string      // GA4
-  apiSecret?: string          // GA4 (encrypted)
-  siteDomain?: string         // Plausible
+  displayName: string
+  provider: 'ga4' | 'plausible'   // AnalyticsProvider enum
+  externalId?: string              // e.g. 'properties/123456789'
+  measurementId?: string           // GA4 (G-XXXXXXXXXX)
+  apiSecret?: string               // GA4 server-side secret
+  siteDomain?: string              // Plausible site domain
+  status: 'active' | 'inactive' | 'pending'
   lastSyncAt?: Date
 
-  async analyzePerformance(): Promise<string>  // AI
-  async isPerformingWell(): Promise<boolean>   // AI
+  async analyzePerformance(): Promise<string>  // AI (do())
+  async isPerformingWell(): Promise<boolean>   // AI (is())
 }`}
 			language="typescript"
 		/>
@@ -109,19 +111,20 @@ await event.markSent();`}
   eventName: string           // 'page_view', 'purchase', 'sign_up', etc.
   clientId: string            // Anonymous client identifier
   userId?: string             // Authenticated user
-  params: Record<string, any> // Event parameters
+  params: string              // JSON string (use getter/setter helpers)
   eventTimestamp: Date
-  status: 'PENDING' | 'SENT' | 'FAILED'
+  status: 'pending' | 'sent' | 'failed'  // TrackingEventStatus enum
   retryCount: number
-  lastAttemptAt?: Date
+  sentAt?: Date
   errorMessage?: string
 
   isPageview(): boolean
   isConversion(): boolean
-  async markSent(): Promise<void>
-  async markFailed(error: string): Promise<void>
-  shouldRetry(): boolean
-  toTrackEvent(): TrackEvent   // Convert to SDK format
+  async markSent(): Promise<void>       // Sets sentAt timestamp
+  async markFailed(error: string): Promise<void>  // Increments retryCount
+  shouldRetry(maxRetries: number): boolean
+  resetForRetry(): void                 // Reset to pending for retry
+  toTrackEvent(): SDKTrackEvent         // Convert to SDK payload
 }`}
 			language="typescript"
 		/>
@@ -131,20 +134,21 @@ await event.markSent();`}
 			code={`class AnalyticsReport extends SmrtObject {
   propertyId: string
   name: string
-  dimensions: string[]        // ['country', 'deviceCategory']
-  metrics: string[]           // ['activeUsers', 'sessions']
-  dateRange: string           // 'last7Days', 'last30Days', 'custom'
-  filters?: Record<string, any>
-  frequency: 'ONCE' | 'DAILY' | 'WEEKLY' | 'MONTHLY'
-  status: 'DRAFT' | 'SCHEDULED' | 'RUNNING' | 'COMPLETED' | 'FAILED'
-  resultData?: any[]          // Cached results
+  dimensions: string          // JSON array of dimension objects
+  metrics: string             // JSON array of metric objects
+  dateRangeStart: string      // e.g. '7daysAgo'
+  dateRangeEnd: string        // e.g. 'today'
+  frequency: 'once' | 'daily' | 'weekly' | 'monthly'  // ReportFrequency
+  status: 'draft' | 'scheduled' | 'running' | 'completed' | 'failed'
+  resultData?: string         // Cached results (JSON)
   rowCount?: number
   lastRunAt?: Date
+  nextRunAt?: Date
 
   isDue(): boolean
   calculateNextRun(): Date | null
-  async analyzeResults(): Promise<string>    // AI
-  async hasPositiveTrends(): Promise<boolean> // AI
+  async analyzeResults(): Promise<string>     // AI (do())
+  async hasPositiveTrends(): Promise<boolean> // AI (is())
 }`}
 			language="typescript"
 		/>

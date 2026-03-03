@@ -4,36 +4,37 @@
 </script>
 
 <svelte:head>
-	<title>smrt-messages - Email Management | SMRT Framework</title>
+	<title>smrt-messages - Multi-Channel Messaging | SMRT Framework</title>
 	<meta
 		name="description"
-		content="Email persistence and management with multi-provider support, threading, attachments, and intelligent sync capabilities."
+		content="Unified multi-channel messaging with STI-based channel hierarchies for Email, Slack, and Twitter. Encrypted credential storage via smrt-secrets."
 	/>
 </svelte:head>
 
 <ModulePage
 	name="smrt-messages"
-	description="Email persistence with AI integration, templating, and delivery tracking."
-	badges={['v0.19.0', 'Email', 'Messaging']}
+	description="Multi-channel messaging with STI hierarchies for Email, Slack, and Twitter. Credential encryption via smrt-secrets."
+	badges={['v0.20.44', 'Email', 'Slack', 'Twitter']}
 >
 	<!-- Overview -->
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-messages</strong> provides TypeScript-first abstractions for managing email across
-			multiple providers. It persists email data with rich metadata (threading, attachments, flags, labels)
-			and synchronizes emails from remote servers with configurable options.
+			<strong>smrt-messages</strong> provides unified multi-channel messaging with STI-based channel
+			hierarchies. Messages and accounts each use single-table inheritance, so Email, SlackMessage,
+			and Tweet all share a single <code>messages</code> table, while EmailAccount, SlackAccount, and
+			TwitterAccount share a single <code>accounts</code> table.
 		</p>
 		<aside>
 			<p><strong>Key Features:</strong></p>
 			<ul>
-				<li>Multi-provider support (IMAP, POP3, SMTP, Gmail API)</li>
-				<li>Message threading with conversation reconstruction</li>
-				<li>Attachment lifecycle management (inline and external storage)</li>
-				<li>Folder/label management across email systems</li>
-				<li>Incremental sync with progress tracking</li>
-				<li>Rich metadata (headers, flags, labels, read status)</li>
-				<li>Collection-based queries with advanced filtering</li>
+				<li>STI message hierarchy: Email, SlackMessage, Tweet (share <code>messages</code> table)</li>
+				<li>STI account hierarchy: EmailAccount, SlackAccount, TwitterAccount (share <code>accounts</code> table)</li>
+				<li>Send lifecycle: draft → sending → sent/failed with retry budget</li>
+				<li>Credential encryption via <code>credentialSecretId</code> → smrt-secrets</li>
+				<li>Per-channel senders: EmailSender, SlackSender, TweetSender</li>
+				<li>Email filtering: Whitelist/Blacklist models for address-based filtering</li>
+				<li>Svelte 5 UI components including EmailAccountManager and EmailFilterManager</li>
 			</ul>
 		</aside>
 	</section>
@@ -48,8 +49,8 @@ pnpm add @happyvertical/smrt-messages`}
 			language="bash"
 		/>
 		<p>
-			Depends on <code>@happyvertical/smrt-core</code>, <code>@happyvertical/email</code>, and
-			<code>@happyvertical/sql</code>.
+			Depends on <code>@happyvertical/smrt-core</code>, <code>@happyvertical/smrt-secrets</code> (credential encryption),
+			and <code>@happyvertical/email</code> (SMTP/IMAP client).
 		</p>
 	</section>
 
@@ -57,69 +58,57 @@ pnpm add @happyvertical/smrt-messages`}
 	<section>
 		<h2>Quick Start (5 Minutes)</h2>
 
-		<h3>1. Set Up Email Account</h3>
+		<h3>1. Create an Email Account with Encrypted Credentials</h3>
 		<CodeBlock
-			code={`import { EmailAccount, EmailAccountCollection } from '@happyvertical/smrt-messages';
+			code={`import {
+  Email, EmailCollection,
+  EmailAccount, EmailAccountCollection,
+  EmailSender, MessageCollection,
+} from '@happyvertical/smrt-messages';
 
-const accounts = new EmailAccountCollection({ db: {...} });
-
-// Create Gmail account
-const account = new EmailAccount({
-  name: 'Personal Gmail',
-  email: 'user@gmail.com',
-  providerType: 'gmail'
+const accounts = new EmailAccountCollection(db);
+const account = await accounts.create({
+  name: 'Support',
+  providerType: 'smtp',
 });
 
-account.setSettings({
-  host: 'imap.gmail.com',
-  port: 993,
-  secure: true,
-  auth: {
-    user: 'user@gmail.com',
-    pass: 'app-specific-password'  // NOT your Gmail password
-  }
-});
-
-await account.save();`}
+// Credentials stored via smrt-secrets envelope encryption
+await account.setCredentials({
+  host: 'smtp.example.com',
+  user: 'support@example.com',
+  pass: process.env.SMTP_PASSWORD,
+});`}
 			language="typescript"
 		/>
 
-		<h3>2. Sync Emails</h3>
+		<h3>2. Send an Email</h3>
 		<CodeBlock
-			code={`// Perform initial sync
-const result = await account.syncFrom({
-  folders: ['INBOX', 'SENT'],
-  fullSync: true,
-  downloadAttachments: true,
-  maxConcurrency: 5,
-  onProgress: (stats) => {
-    console.log(\`Synced \${stats.processed}/\${stats.total}\`);
-  }
+			code={`const emails = new EmailCollection(db);
+const email = await emails.create({
+  accountId: account.id,
+  subject: 'Welcome',
+  toAddresses: JSON.stringify([{ address: 'user@example.com' }]),
+  textBody: 'Thanks for signing up!',
 });
 
-console.log(\`Downloaded: \${result.messagesDownloaded}\`);
-console.log(\`Duration: \${result.duration}ms\`);`}
+// Send lifecycle: draft -> sending -> sent (or failed)
+const result = await email.send();
+
+// Retry a failed message (respects maxRetries budget)
+if (!result.success) {
+  await email.retrySend();
+}`}
 			language="typescript"
 		/>
 
-		<h3>3. Query Emails</h3>
+		<h3>3. Query Messages Across Channels</h3>
 		<CodeBlock
-			code={`import { EmailCollection } from '@happyvertical/smrt-messages';
-
-const emails = new EmailCollection({ db: {...} });
-
-// Get unread emails
-const unread = await emails.getUnread(account.id);
-
-// Get recent emails
-const recent = await emails.getRecent(20, account.id);
-
-// Get emails with attachments
-const withAttachments = await emails.getWithAttachments(account.id);
-
-// Get thread conversation
-const email = await emails.get(emailId);
-const threadEmails = await email.getThreadEmails();`}
+			code={`// Query all messages (Email, Slack, Twitter) via base collection
+const messages = new MessageCollection(db);
+const recent = await messages.list({
+  orderBy: 'createdAt DESC',
+  limit: 20,
+});`}
 			language="typescript"
 		/>
 	</section>
@@ -128,158 +117,181 @@ const threadEmails = await email.getThreadEmails();`}
 	<section>
 		<h2>Core Concepts</h2>
 
-		<h3>Data Model</h3>
-		<p>Four core entities form the email management system:</p>
+		<h3>STI Message Hierarchy</h3>
+		<p>All message types share a single <code>messages</code> table via STI (<code>_meta_type</code> discriminator):</p>
 
-		<article>
-			<h4>Email Model</h4>
-			<CodeBlock
-				code={`class Email extends SmrtObject {
-  accountId: string           // Parent account
-  folderId: string            // Current folder
-  messageId: string           // RFC 822 Message-ID (unique)
-  threadId: string | null     // Conversation grouping
-  subject: string
-  fromAddress: string
-  fromName: string
-  toAddresses: string         // JSON array
-  ccAddresses: string         // JSON array
-  bccAddresses: string        // JSON array
-  replyTo: string | null
-  date: Date | null
-  textBody: string
-  htmlBody: string
-  isRead: boolean
-  isFlagged: boolean
-  isAnswered: boolean
-  isDraft: boolean
-  hasAttachments: boolean
-  size: number                // Bytes
-  labels: string              // JSON array (Gmail)
-  flags: string               // JSON array (IMAP)
-  headers: string             // JSON object
-  inReplyTo: string | null    // Parent message-ID
-  references: string | null   // Thread references
-  rawMessage: string | null   // Full MIME message
-}`}
-				language="typescript"
-			/>
-		</article>
+		<table>
+			<thead>
+				<tr>
+					<th>Type</th>
+					<th>STI Discriminator</th>
+					<th>Key Fields</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>Message</code></td>
+					<td>(base class)</td>
+					<td>accountId, threadId, subject, body, fromAddress, toAddresses, sendStatus, retryCount</td>
+				</tr>
+				<tr>
+					<td><code>Email</code></td>
+					<td><code>@happyvertical/smrt-messages:Email</code></td>
+					<td>messageId (RFC 822), inReplyTo, ccAddresses, bccAddresses, htmlBody, textBody, folderId, labels, headers</td>
+				</tr>
+				<tr>
+					<td><code>Tweet</code></td>
+					<td><code>@happyvertical/smrt-messages:Tweet</code></td>
+					<td>tweetId, retweetCount, likeCount, mediaUrls, hashtags, mentions</td>
+				</tr>
+				<tr>
+					<td><code>SlackMessage</code></td>
+					<td><code>@happyvertical/smrt-messages:SlackMessage</code></td>
+					<td>channelId, slackTs, slackThreadTs, reactions, blocks</td>
+				</tr>
+			</tbody>
+		</table>
 
-		<article>
-			<h4>EmailAccount Model</h4>
-			<CodeBlock
-				code={`class EmailAccount extends SmrtObject {
-  name: string
-  email: string
-  providerType: 'smtp' | 'imap' | 'pop3' | 'gmail'
-  settings: string            // JSON (encrypt in production)
-  lastSyncAt: Date | null
-  active: boolean
+		<h3>STI Account Hierarchy</h3>
+		<p>Accounts also use STI, sharing the <code>accounts</code> table:</p>
 
-  // Methods
-  async syncFrom(options): Promise<SyncResult>
-  async createClient(): Promise<EmailClient>
-  async getFolders(): Promise<EmailFolder[]>
-  async getEmails(limit?): Promise<Email[]>
-  async getUnreadCount(): Promise<number>
-}`}
-				language="typescript"
-			/>
-		</article>
+		<table>
+			<thead>
+				<tr>
+					<th>Type</th>
+					<th>Key Fields</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>Account</code></td>
+					<td>providerType, credentialSecretId, isActive, lastSyncAt, settings</td>
+				</tr>
+				<tr>
+					<td><code>EmailAccount</code></td>
+					<td>SMTP/IMAP provider-specific fields + sync methods</td>
+				</tr>
+				<tr>
+					<td><code>SlackAccount</code></td>
+					<td>Slack workspace connection</td>
+				</tr>
+				<tr>
+					<td><code>TwitterAccount</code></td>
+					<td>Twitter API connection</td>
+				</tr>
+			</tbody>
+		</table>
 
-		<article>
-			<h4>EmailFolder Model</h4>
-			<CodeBlock
-				code={`class EmailFolder extends SmrtObject {
-  accountId: string
-  name: string
-  path: string
-  delimiter: string
-  specialUse: string | null   // 'Inbox', 'Sent', 'Drafts', etc.
-  messageCount: number
-  unreadCount: number
-  subscribed: boolean
-
-  // Helper methods
-  isInbox(): boolean
-  isSent(): boolean
-  isDrafts(): boolean
-  isSpam(): boolean
-  isSystemFolder(): boolean
-}`}
-				language="typescript"
-			/>
-		</article>
-
-		<article>
-			<h4>EmailAttachment Model</h4>
-			<CodeBlock
-				code={`class EmailAttachment extends SmrtObject {
-  emailId: string
-  filename: string
-  contentType: string
-  size: number
-  contentDisposition: string  // 'attachment' | 'inline'
-  contentId: string | null    // For inline images
-  filePath: string | null     // External storage path
-
-  // Helper methods
-  isImage(): boolean
-  isPdf(): boolean
-  isInline(): boolean
-  getExtension(): string
-  getFormattedSize(): string
-  async readContent(): Promise<Buffer | null>
-}`}
-				language="typescript"
-			/>
-		</article>
-
-		<h3>Message Threading</h3>
+		<h3>Credential Security</h3>
 		<p>
-			Emails are grouped into conversations using <code>threadId</code>:
+			Account credentials are stored via <code>credentialSecretId</code> pointing to
+			smrt-secrets envelope encryption. Never store passwords as plain fields.
 		</p>
 		<CodeBlock
-			code={`// Get all emails in a thread
-const email = await emails.get(emailId);
-const thread = await email.getThreadEmails();
-
-// Sort chronologically
-const sorted = thread.sort((a, b) => {
-  return (a.date?.getTime() || 0) - (b.date?.getTime() || 0);
+			code={`// Always use setCredentials/getCredentials
+await account.setCredentials({
+  host: 'smtp.example.com',
+  user: 'support@example.com',
+  pass: process.env.SMTP_PASSWORD,
 });
 
-console.log(\`Thread has \${sorted.length} messages\`);`}
+const creds = await account.getCredentials();`}
 			language="typescript"
 		/>
 
-		<h3>Sync Engine</h3>
+		<h3>Send Lifecycle</h3>
 		<p>
-			The <code>syncFrom()</code> method synchronizes emails from remote servers:
+			<code>message.send()</code> resolves the account, creates a provider-specific sender,
+			and transitions through send statuses:
 		</p>
 		<CodeBlock
-			code={`const result = await account.syncFrom({
-  folders: ['INBOX'],          // Specific folders or omit for all
-  fullSync: false,             // true = re-download everything
-  downloadAttachments: true,   // Save attachment files
-  maxAttachmentSize: 10485760, // 10MB limit
-  batchSize: 100,              // Messages per batch
-  maxConcurrency: 5,           // Parallel connections
-  since: new Date('2024-01-01'), // Incremental sync
-  onProgress: (stats) => {
-    // stats: { total, processed, current, folder }
-  },
-  onError: (error, message) => {
-    // Handle sync errors
-  }
-});
+			code={`// Status flow: draft -> sending -> sent (or failed)
+const result = await email.send();
 
-// Result contains:
-// - messagesDownloaded: number
-// - attachmentsDownloaded: number
-// - errors: Array<{ error, message }>
-// - duration: number (ms)`}
+// Each channel has a dedicated sender
+// EmailSender, SlackSender, TweetSender
+// All implement MessageSenderInterface`}
+			language="typescript"
+		/>
+	</section>
+
+	<!-- Email Filtering -->
+	<section>
+		<h2>Email Filtering (Whitelist/Blacklist)</h2>
+		<p>
+			New in v0.20.42: Whitelist and Blacklist models for address-based email filtering.
+		</p>
+		<CodeBlock
+			code={`import {
+  Whitelist, WhitelistCollection,
+  Blacklist, BlacklistCollection,
+} from '@happyvertical/smrt-messages';
+
+// Create whitelist/blacklist entries
+const whitelist = new WhitelistCollection(db);
+await whitelist.create({ address: 'trusted@example.com' });
+
+const blacklist = new BlacklistCollection(db);
+await blacklist.create({ address: 'spam@example.com' });`}
+			language="typescript"
+		/>
+	</section>
+
+	<!-- Per-Channel Senders -->
+	<section>
+		<h2>Per-Channel Senders</h2>
+		<p>Each channel has a dedicated sender implementing <code>MessageSenderInterface</code>:</p>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Sender</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>EmailSender</code></td>
+					<td>Send emails via <code>@happyvertical/email</code> client</td>
+				</tr>
+				<tr>
+					<td><code>SlackSender</code></td>
+					<td>Send Slack messages via API</td>
+				</tr>
+				<tr>
+					<td><code>TweetSender</code></td>
+					<td>Post tweets via Twitter API</td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<!-- Svelte Components -->
+	<section>
+		<h2>Svelte 5 Components</h2>
+		<p>
+			The package includes UI components for managing email accounts and filters:
+		</p>
+		<ul>
+			<li><strong>EmailAccountManager</strong>: Admin UI for managing email account connections and credentials</li>
+			<li><strong>EmailFilterManager</strong>: Admin UI for managing whitelist/blacklist rules</li>
+			<li><strong>MessageCard</strong>, <strong>MessageList</strong>: Display message summaries</li>
+			<li><strong>ComposeForm</strong>, <strong>ReplyForm</strong>, <strong>ForwardForm</strong>: Message composition</li>
+			<li><strong>ThreadView</strong>, <strong>MessageDetail</strong>: Conversation display</li>
+			<li><strong>FolderNav</strong>, <strong>MessageFilters</strong>: Navigation and filtering</li>
+			<li><strong>AccountCard</strong>, <strong>AccountList</strong>, <strong>AccountAvatar</strong>: Account management</li>
+			<li><strong>AttachmentChip</strong>, <strong>AttachmentUpload</strong>: Attachment handling</li>
+			<li><strong>SendStatusBadge</strong>, <strong>MessageStatusIndicator</strong>, <strong>MessageTypeBadge</strong>: Status display</li>
+			<li><strong>MessageToolbar</strong>, <strong>RecipientInput</strong>: Toolbar and input components</li>
+		</ul>
+
+		<CodeBlock
+			code={`import {
+  EmailAccountManager,
+  EmailFilterManager,
+  MessageCard,
+  MessageList,
+} from '@happyvertical/smrt-messages/svelte';`}
 			language="typescript"
 		/>
 	</section>
@@ -288,222 +300,24 @@ console.log(\`Thread has \${sorted.length} messages\`);`}
 	<section>
 		<h2>API Reference</h2>
 
-		<h3>EmailCollection Methods</h3>
+		<h3>Collections</h3>
 		<CodeBlock
-			code={`// Queries
-await emails.getByMessageId(accountId, messageId)
-await emails.getByAccount(accountId)
-await emails.getByFolder(folderId)
-await emails.getByThread(threadId)
-await emails.getUnread(accountId?)
-await emails.getFlagged(accountId?)
-await emails.getWithAttachments(accountId?)
-await emails.getRecent(limit, accountId?)
+			code={`// Base collections (query across all channels)
+MessageCollection
+AccountCollection
+AttachmentCollection
 
-// Counts
-await emails.countByFolder(folderId)
-await emails.countUnreadByFolder(folderId)
-await emails.countByAccount(accountId)
+// Email-specific collections
+EmailCollection
+EmailAccountCollection
+EmailAttachmentCollection
+EmailFolderCollection
 
-// CRUD
-await emails.list(options)
-await emails.get(id)
-await emails.create(data)
-await emails.update(id, data)
-await emails.delete(id)`}
+// Email filtering
+WhitelistCollection
+BlacklistCollection`}
 			language="typescript"
 		/>
-
-		<h3>Email Instance Methods</h3>
-		<CodeBlock
-			code={`// Status management
-await email.markRead()
-await email.markUnread()
-await email.toggleFlagged()
-
-// Relationships
-await email.getAccount()
-await email.getFolder()
-await email.getAttachments()
-await email.getThreadEmails()
-
-// Address parsing
-email.getToAddresses(): Array<{ name: string, address: string }>
-email.getCcAddresses(): Array<{ name: string, address: string }>
-email.getBccAddresses(): Array<{ name: string, address: string }>
-
-// Metadata
-email.getLabels(): string[]
-email.setLabels(labels: string[]): void
-email.getFlags(): string[]
-email.setFlags(flags: string[]): void
-email.getHeaders(): Record<string, string>
-email.setHeaders(headers: Record): void
-
-// Utilities
-email.isUnread(): boolean
-email.getPreview(maxLength: number): string`}
-			language="typescript"
-		/>
-
-		<h3>EmailAccountCollection Methods</h3>
-		<CodeBlock
-			code={`await accounts.getByEmail(email: string)
-await accounts.getByProviderType(type: string)
-await accounts.getActive()
-await accounts.getInactive()
-await accounts.getNeedingSync(maxAgeMinutes: number)
-await accounts.search(query: string, filters?)`}
-			language="typescript"
-		/>
-	</section>
-
-	<!-- Examples -->
-	<section>
-		<h2>Real-World Examples</h2>
-
-		<h3>Example 1: Email Dashboard Widget</h3>
-		<CodeBlock
-			code={`// Show unread counts per folder
-const account = await accounts.get(accountId);
-const folders = await account.getFolders();
-
-for (const folder of folders) {
-  if (folder.isSystemFolder()) {
-    console.log(\`\${folder.name}: \${folder.unreadCount} unread\`);
-  }
-}`}
-			language="typescript"
-		/>
-
-		<h3>Example 2: Conversation Thread UI</h3>
-		<CodeBlock
-			code={`const email = await emails.get(emailId);
-const thread = await email.getThreadEmails();
-
-const sorted = thread.sort((a, b) => {
-  return (a.date?.getTime() || 0) - (b.date?.getTime() || 0);
-});
-
-const conversation = await Promise.all(
-  sorted.map(async (e) => ({
-    from: e.fromName || e.fromAddress,
-    subject: e.subject,
-    date: e.date,
-    preview: e.getPreview(100),
-    isRead: e.isRead,
-    attachments: await e.getAttachments()
-  }))
-);
-
-console.log(\`Thread with \${conversation.length} messages\`);`}
-			language="typescript"
-		/>
-
-		<h3>Example 3: Attachment Processing</h3>
-		<CodeBlock
-			code={`// Process all PDF attachments
-const withAttachments = await emails.getWithAttachments(accountId);
-
-for (const email of withAttachments) {
-  const attachments = await email.getAttachments();
-  const pdfs = attachments.filter(a => a.isPdf());
-
-  for (const pdf of pdfs) {
-    console.log(\`Processing: \${pdf.filename} (\${pdf.getFormattedSize()})\`);
-
-    const content = await pdf.readContent();
-    if (content) {
-      // Process PDF content
-      await processPdfData(content);
-    }
-  }
-}`}
-			language="typescript"
-		/>
-
-		<h3>Example 4: Automated Email Archive</h3>
-		<CodeBlock
-			code={`// Archive emails older than 6 months
-const sixMonthsAgo = new Date();
-sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-
-const all = await emails.list({ where: { accountId } });
-const older = all.filter(e => e.date && e.date < sixMonthsAgo);
-
-for (const email of older) {
-  // Mark as archived
-  email.flags = JSON.stringify(['\\\\Archive']);
-  await email.save();
-
-  console.log(\`Archived: \${email.subject}\`);
-}`}
-			language="typescript"
-		/>
-	</section>
-
-	<!-- Integration Patterns -->
-	<section>
-		<h2>Integration Patterns</h2>
-
-		<article>
-			<h3>With @happyvertical/email</h3>
-			<p>EmailAccount creates provider clients for sync:</p>
-			<CodeBlock
-				code={`const client = await account.createClient();
-const folders = await client.listFolders();
-const messages = await client.fetch({ folder: 'INBOX' });`}
-				language="typescript"
-			/>
-		</article>
-
-		<article>
-			<h3>With @happyvertical/ai</h3>
-			<p>Email model inherits SmrtObject with AI capabilities:</p>
-			<CodeBlock
-				code={`// AI-powered email summarization
-const summary = await email.do('summarize this email thread');
-
-// Sentiment analysis
-const sentiment = await email.is('positive or negative');`}
-				language="typescript"
-			/>
-		</article>
-
-		<article>
-			<h3>With smrt-users</h3>
-			<p>Link email accounts to user profiles:</p>
-			<CodeBlock
-				code={`// User can have multiple email accounts
-const userAccounts = await accounts.list({
-  where: { userId: user.id, active: true }
-});
-
-// Permission-based access
-if (user.can('view:emails')) {
-  const emails = await emails.getByAccount(accountId);
-}`}
-				language="typescript"
-			/>
-		</article>
-
-		<article>
-			<h3>With smrt-assets</h3>
-			<p>Store attachments as assets:</p>
-			<CodeBlock
-				code={`// Save attachment to asset system
-const attachment = await attachments.get(attachmentId);
-const content = await attachment.readContent();
-
-const asset = await assets.create({
-  filename: attachment.filename,
-  contentType: attachment.contentType,
-  size: attachment.size,
-  content: content
-});`}
-				language="typescript"
-			/>
-		</article>
 	</section>
 
 	<!-- Best Practices -->
@@ -513,90 +327,23 @@ const asset = await assets.create({
 		<article>
 			<h3>DOs</h3>
 			<ul>
-				<li>Use app-specific passwords for Gmail/Outlook (not main password)</li>
-				<li>Encrypt settings JSON before storing in database</li>
-				<li>Implement incremental sync with <code>since</code> option</li>
-				<li>Handle sync errors gracefully with <code>onError</code> callback</li>
-				<li>Set reasonable batch sizes (100-500) to balance memory/speed</li>
-				<li>Cache folder lists in UI (they change infrequently)</li>
-				<li>Use thread IDs for conversation grouping</li>
-				<li>Parse address arrays with <code>getToAddresses()</code> helpers</li>
+				<li>Use <code>setCredentials()</code>/<code>getCredentials()</code> for all account credentials</li>
+				<li>Use JSON address helpers: <code>getToAddresses()</code>, <code>getCcAddresses()</code></li>
+				<li>Handle send failures with retry logic (<code>maxRetries</code> budget)</li>
+				<li>Use <code>MessageCollection</code> to query across all channel types</li>
+				<li>Store attachment references via <code>messageId</code> field</li>
 			</ul>
 		</article>
 
 		<article>
 			<h3>DON'Ts</h3>
 			<ul>
-				<li>Don't store passwords in plaintext (always encrypt)</li>
-				<li>Don't assume all providers support same features</li>
-				<li>Don't download all attachments unconditionally</li>
-				<li>Don't skip threadId during sync</li>
-				<li>Don't modify JSON fields directly (use accessor methods)</li>
-				<li>Don't run concurrent syncs on same account</li>
-				<li>Don't ignore <code>onError</code> callbacks</li>
-				<li>Don't bulk-delete without backup</li>
+				<li>Don't store passwords directly -- always use smrt-secrets encryption</li>
+				<li>Don't modify JSON fields directly -- use accessor methods (<code>getX()</code>/<code>setX()</code>)</li>
+				<li>Don't override <code>toJSON()</code> -- use <code>transformJSON()</code></li>
+				<li>Don't use <code>emailId</code> on Attachment -- use <code>messageId</code> (old field is deprecated)</li>
+				<li>Don't run concurrent syncs on the same account</li>
 			</ul>
-		</article>
-	</section>
-
-	<!-- Troubleshooting -->
-	<section>
-		<h2>Common Issues and Troubleshooting</h2>
-
-		<article>
-			<h3>Issue: "Message already exists" after sync</h3>
-			<p><strong>Cause:</strong> Incremental sync skips existing messages</p>
-			<p>
-				<strong>Solution:</strong> Use <code>fullSync: true</code> for complete re-sync
-			</p>
-		</article>
-
-		<article>
-			<h3>Issue: Attachment reads return null</h3>
-			<p><strong>Cause:</strong> File not found or file service not configured</p>
-			<p>
-				<strong>Solution:</strong> Check <code>attachment.filePath</code> exists and file service is set
-				up
-			</p>
-		</article>
-
-		<article>
-			<h3>Issue: ThreadId is empty after sync</h3>
-			<p><strong>Cause:</strong> Email provider didn't return threadId</p>
-			<p>
-				<strong>Solution:</strong> Reconstruct threads using <code>inReplyTo</code> and message-ID headers
-			</p>
-		</article>
-
-		<article>
-			<h3>Issue: Sync takes too long</h3>
-			<p><strong>Cause:</strong> Large mailbox (10k+ emails) on first sync</p>
-			<p>
-				<strong>Solution:</strong> Use smaller <code>batchSize</code>, higher
-				<code>maxConcurrency</code>, or sync only recent emails with <code>since</code>
-			</p>
-			<CodeBlock
-				code={`await account.syncFrom({
-  batchSize: 50,
-  maxConcurrency: 10,
-  since: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000) // 90 days
-});`}
-				language="typescript"
-			/>
-		</article>
-
-		<article>
-			<h3>Issue: Unread count stale after marking read</h3>
-			<p><strong>Cause:</strong> Folder counts not updated after email operations</p>
-			<p>
-				<strong>Solution:</strong> Call <code>folder.refreshCounts()</code> after bulk operations
-			</p>
-			<CodeBlock
-				code={`await email.markRead();
-const folder = await email.getFolder();
-await folder?.refreshCounts();`}
-				language="typescript"
-			/>
 		</article>
 	</section>
 
@@ -606,19 +353,15 @@ await folder?.refreshCounts();`}
 		<nav>
 			<a href="/modules/smrt-core">
 				<h3>smrt-core</h3>
-				<p>Base classes and database operations</p>
+				<p>ORM base classes and code generation</p>
 			</a>
-			<a href="/modules/smrt-users">
-				<h3>smrt-users</h3>
-				<p>Link email accounts to user profiles</p>
-			</a>
-			<a href="/modules/smrt-assets">
-				<h3>smrt-assets</h3>
-				<p>Store attachments as managed assets</p>
+			<a href="/modules/smrt-secrets">
+				<h3>smrt-secrets</h3>
+				<p>Envelope encryption for credentials</p>
 			</a>
 			<a href="/modules/smrt-agents">
 				<h3>smrt-agents</h3>
-				<p>AI-powered email processing agents</p>
+				<p>AI-powered message processing agents</p>
 			</a>
 		</nav>
 	</section>
