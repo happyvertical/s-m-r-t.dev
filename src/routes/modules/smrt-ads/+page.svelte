@@ -6,7 +6,7 @@
 <ModulePage
 	name="smrt-ads"
 	description="Ad management system with waterfall priority, zone targeting, weighted A/B testing, and immutable event tracking."
-	badges={['v0.19.0', 'Waterfall', 'A/B Testing', 'IAB Formats']}
+	badges={['v0.20.44', 'Waterfall', 'A/B Testing', 'IAB Formats']}
 >
 	<section>
 		<h2>Overview</h2>
@@ -35,60 +35,60 @@
 		<h2>Quick Start</h2>
 		<CodeBlock
 			code={`import {
-  AdDeliveryTierCollection, AdGroupCollection,
-  AdVariationCollection, AdEventCollection
+  AdDeliveryTier, AdDeliveryTierCollection,
+  AdGroup, AdGroupCollection,
+  AdVariation, AdVariationCollection,
+  AdEvent, AdEventCollection,
+  AdEventType, PricingModel, AdGroupStatus
 } from '@happyvertical/smrt-ads';
 
-// Create delivery tier
-const tier1 = await tiers.create({
-  name: 'Premium',
-  priority: 1,  // Highest priority
-  pricingModel: 'CPM'
+// Define delivery tiers (lower priority number = served first)
+const tiers = new AdDeliveryTierCollection(db);
+const sponsorship = await tiers.create({
+  name: 'Sponsorship',
+  priority: 1,
+  pricingModel: PricingModel.FIXED,
 });
-await tier1.save();
 
-// Create ad group
-const group = await groups.create({
-  contractId: contract.id,
-  tierName: tier1.name,
-  verticalSlug: 'automotive',
-  zoneIds: ['zone-1', 'zone-2'],  // smrt-properties zones
-  targeting: { device: 'mobile', geo: 'US' },
-  dailyBudget: 500,
-  startDate: new Date('2025-01-20'),
-  endDate: new Date('2025-02-20'),
-  status: 'ACTIVE'
+const standard = await tiers.create({
+  name: 'Standard',
+  priority: 2,
+  pricingModel: PricingModel.CPM,
 });
+
+// Create an ad group with targeting and budget
+const groups = new AdGroupCollection(db);
+const group = await groups.create({
+  name: 'Holiday Campaign',
+  tierId: sponsorship.id,
+  contractId: 'contract-uuid',     // plain string FK to smrt-commerce
+  status: AdGroupStatus.ACTIVE,
+  dailyBudget: 100.00,
+  totalBudget: 3000.00,
+  startDate: new Date('2025-06-01'),
+  endDate: new Date('2025-08-31'),
+});
+group.setTargeting({ device: 'desktop', geo: 'US' });
+group.setZoneIds(['zone-1', 'zone-2']);  // FK to smrt-properties zones
 await group.save();
 
-// Create variations with weights
+// Add variations with relative weights for A/B testing
+// weight=2 is selected 2x more often than weight=1
+const variations = new AdVariationCollection(db);
 const varA = await variations.create({
   groupId: group.id,
-  formatName: 'leaderboard-728x90',
-  assetId: asset1.id,
-  clickUrl: 'https://example.com/promo',
-  weight: 70  // 70% traffic
+  name: 'Version A - Blue CTA',
+  weight: 2,
+  status: 'active',
 });
-await varA.save();
 
-const varB = await variations.create({
-  groupId: group.id,
-  formatName: 'leaderboard-728x90',
-  assetId: asset2.id,
-  clickUrl: 'https://example.com/promo2',
-  weight: 30  // 30% traffic
-});
-await varB.save();
-
-// Select variation (weighted random)
-const selected = await variations.selectByWeight(group.id);
-
-// Track impression
+// Track an immutable event (create-only, no update/delete)
+const events = new AdEventCollection(db);
 await events.create({
-  eventType: 'IMPRESSION',
-  variationId: selected.id,
-  zoneId: 'zone-1',
-  siteId: property.id
+  variationId: varA.id,
+  zoneId: 'zone-uuid',
+  siteId: 'site-uuid',
+  eventType: AdEventType.IMPRESSION,
 });`}
 			language="typescript"
 		/>
@@ -97,17 +97,19 @@ await events.create({
 	<section>
 		<h2>Core Models</h2>
 
-		<h3>AdDeliveryTier (Priority)</h3>
+		<h3>AdDeliveryTier (Priority Waterfall)</h3>
+		<p>Lower priority number = higher priority in selection. Typical tiers:</p>
+		<ul>
+			<li><strong>Sponsorship</strong> (priority 1): guaranteed premium placements, FIXED pricing</li>
+			<li><strong>Standard</strong> (priority 2): regular programmatic ads, CPM pricing</li>
+			<li><strong>House</strong> (priority 3): self-promotional fallback ads</li>
+		</ul>
 		<CodeBlock
 			code={`class AdDeliveryTier extends SmrtObject {
   name: string
   priority: number          // 1=highest, 2, 3...
-  pricingModel: 'FIXED' | 'CPM' | 'CPC' | 'CPA'
+  pricingModel: 'fixed' | 'cpm' | 'cpc' | 'cpa'  // PricingModel enum
   description?: string
-
-  isHigherPriorityThan(other: AdDeliveryTier): boolean
-  isFixedPricing(): boolean
-  isPerformanceBased(): boolean
 }`}
 			language="typescript"
 		/>
@@ -115,41 +117,34 @@ await events.create({
 		<h3>AdGroup (Campaign)</h3>
 		<CodeBlock
 			code={`class AdGroup extends SmrtObject {
-  contractId: string        // FK to Contract (smrt-commerce)
-  tierName: string          // Delivery tier
-  verticalSlug?: string     // FK to Tag (smrt-tags)
-  zoneIds: string[]         // FK to Zone[] (smrt-properties)
-  targeting: Record<string, any>
-  dailyBudget?: number
-  totalBudget?: number
+  name: string
+  tierId: string            // FK to AdDeliveryTier
+  contractId: string        // FK to Contract (smrt-commerce, plain string)
+  status: 'draft' | 'active' | 'paused' | 'completed'  // AdGroupStatus
+  dailyBudget: number = 0.0  // DECIMAL
+  totalBudget: number = 0.0  // DECIMAL
   startDate: Date
   endDate: Date
-  status: 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'COMPLETED'
 
-  isActive(): boolean
-  hasZoneId(zoneId: string): boolean
-  addZoneId(zoneId: string): void
-  removeZoneId(zoneId: string): void
+  // JSON fields with getter/setter helpers
+  setTargeting(rules: Record<string, any>): void
+  getTargeting(): Record<string, any>
+  setZoneIds(ids: string[]): void   // FK to Zone[] (smrt-properties)
+  getZoneIds(): string[]
 }`}
 			language="typescript"
 		/>
 
-		<h3>AdVariation (Creative)</h3>
+		<h3>AdVariation (Creative, STI)</h3>
+		<p>Weight is a relative integer, not a percentage. A variation with <code>weight: 2</code> is twice as likely to be chosen as one with <code>weight: 1</code>.</p>
 		<CodeBlock
 			code={`class AdVariation extends SmrtObject {
   groupId: string
-  formatName: string        // FK to AdFormat
-  assetId: string           // FK to Asset (smrt-assets)
-  clickUrl: string
-  altText?: string
-  weight: number            // For A/B testing (default: 100)
-  impressions: number       // Denormalized
-  clicks: number            // Denormalized
-  status: 'DRAFT' | 'ACTIVE' | 'PAUSED'
-
-  getCTR(): number
-  recordImpression(): void
-  recordClick(): void
+  name: string
+  weight: number = 0        // Relative weight for A/B (2 = 2x more likely than 1)
+  impressions: number = 0   // Denormalized count
+  clicks: number = 0        // Denormalized count
+  status: 'draft' | 'active' | 'paused'  // AdVariationStatus
 }`}
 			language="typescript"
 		/>
@@ -186,36 +181,27 @@ const selected = await variations.selectByWeight(groupId);
 	</section>
 
 	<section>
-		<h2>Performance Tracking</h2>
+		<h2>Immutable Event Tracking</h2>
+		<p>
+			AdEvent is <strong>create-only</strong> -- no update or delete in API/MCP.
+			Event types: <code>impression</code>, <code>click</code>, <code>conversion</code>.
+			<code>cli: false</code> due to high volume.
+		</p>
 		<CodeBlock
-			code={`// Track events (immutable)
+			code={`// Track events (immutable -- create only)
 await events.create({
-  eventType: 'IMPRESSION',
+  eventType: AdEventType.IMPRESSION,
   variationId: variation.id,
   zoneId: zoneId,
   siteId: propertyId,
-  metadata: { userAgent: req.headers['user-agent'] }
 });
 
 await events.create({
-  eventType: 'CLICK',
+  eventType: AdEventType.CLICK,
   variationId: variation.id,
   zoneId: zoneId,
-  siteId: propertyId
-});
-
-// Get stats
-const stats = await events.getVariationStats(variation.id);
-console.log(\`CTR: \${stats.ctr}%, Conversions: \${stats.conversions}\`);
-
-// Top performers
-const topAds = await events.findTopPerformers(10);
-
-// Date range analysis
-const weekEvents = await events.findByDateRange(
-  new Date('2025-01-20'),
-  new Date('2025-01-27')
-);`}
+  siteId: propertyId,
+});`}
 			language="typescript"
 		/>
 	</section>

@@ -107,32 +107,28 @@ const task = await tasks.create(&#123; title: 'Learn SMRT' &#125;);</code></pre>
 
 	<section class="example">
 		<h3>Advanced</h3>
-		<p class="example-desc">Decorators for complex use cases.</p>
+		<p class="example-desc">Configure API, MCP, and CLI generation per class.</p>
 		<pre><code
-				>{`@smrt({ api: { rateLimit: 100 }, mcp: { tools: ['search', 'create'] } })
+				>{`@smrt({
+  api: { include: ['list', 'get', 'create'] },
+  mcp: true,
+  cli: true,
+  tableStrategy: 'sti',
+  conflictColumns: ['invoiceNumber'],
+  hooks: {
+    beforeSave: async (obj) => { /* validation */ },
+    afterSave: async (obj) => { /* side effects */ }
+  }
+})
 class Invoice extends SmrtObject {
-  @field({ index: true, unique: true })
   invoiceNumber: string = '';
-
-  @field({ precision: 2, min: 0 })
-  amount: number = 0.0;
-
-  @field({ enum: ['draft', 'sent', 'paid', 'overdue'] })
+  amount: number = 0.0;       // DECIMAL (from 0.0)
   status: string = 'draft';
+  customerId = foreignKey(Customer);
 
-  @field({ encrypted: true })
-  notes: string = '';
-
-  @computed()
-  get isPastDue() {
-    return this.status === 'sent' && this.dueDate < new Date();
-  }
-
-  @action({ requiresAuth: true, audit: true })
-  async markAsPaid(paymentMethod: string) {
-    this.status = 'paid';
-    await this.save();
-  }
+  // AI-powered operations
+  // await invoice.is("Is this invoice overdue?")
+  // await invoice.do("Generate a payment reminder email")
 }`}</code
 			></pre>
 	</section>

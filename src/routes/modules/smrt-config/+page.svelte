@@ -5,28 +5,28 @@
 
 <ModulePage
 	name="smrt-config"
-	description="Centralized configuration management for SMRT modules and applications with support for multiple file formats, environment variables, and powerful orchestration via top-level await."
-	badges={['v0.19.0', 'Core Foundation', 'ESM']}
+	description="Configuration management with cosmiconfig, secret sanitization, and SSG-safe export. Loads smrt.config.{js,ts,json} with globalThis caching for cross-module sharing."
+	badges={['v0.20.44', 'Core Foundation', 'ESM']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			The smrt-config package provides a flexible, type-safe configuration system for SMRT
-			applications and modules. It supports multiple configuration file formats, environment
-			variables, runtime overrides, and seamless integration across monorepos.
+			The smrt-config package provides centralized configuration for the SMRT framework.
+			It uses <a href="https://github.com/cosmiconfig/cosmiconfig">cosmiconfig</a> to load
+			<code>smrt.config.{'{'}js,ts,json{'}'}</code> files, with secret sanitization and SSG-safe export.
 		</p>
 
 		<h3>Key Features</h3>
 		<ul>
-			<li><strong>Multi-format support</strong> - JS, TS, JSON, YAML, TOML with auto-detection</li>
+			<li><strong>cosmiconfig loader</strong> - Searches for <code>smrt.config.{'{'}js,ts,json{'}'}</code> files</li>
 			<li>
-				<strong>Type-safe TypeScript</strong> - Full type safety with <code>defineConfig()</code>
+				<strong>Type-safe config</strong> - <code>defineConfig()</code> helper for IDE autocomplete
 			</li>
-			<li><strong>Secure secrets handling</strong> - Auto-detects and sanitizes sensitive data</li>
-			<li><strong>Remote configuration</strong> - Load from APIs with top-level await</li>
-			<li><strong>Configuration merging</strong> - Priority hierarchy for flexible overrides</li>
-			<li><strong>Monorepo support</strong> - globalThis-based caching for package sharing</li>
-			<li><strong>Three-tier scoping</strong> - Global, package-level, and module-level configs</li>
+			<li><strong>Secret sanitization</strong> - Strips keys matching apiKey, password, secret, token, credential, private, auth, key</li>
+			<li><strong>SSG-safe export</strong> - Export config without secrets for static site generation</li>
+			<li><strong>globalThis caching</strong> - All modules share one config instance via <code>globalThis.__smrtConfigCache</code></li>
+			<li><strong>Three-tier scoping</strong> - Global (<code>smrt</code>), package (<code>packages</code>), and module (<code>modules</code>) sections</li>
+			<li><strong>Runtime overrides</strong> - <code>setConfig()</code> takes highest priority</li>
 		</ul>
 	</section>
 
@@ -47,24 +47,29 @@ bun add @happyvertical/smrt-config`}
 		<h3>1. Create Configuration File</h3>
 		<p>Create <code>smrt.config.js</code> in your project root:</p>
 		<CodeBlock
-			code={`export default {
+			code={`// smrt.config.js
+export default {
   smrt: {
-    logLevel: 'info',
     cacheDir: '.cache',
-    environment: 'development'
+    logLevel: 'info',
   },
+
   packages: {
     ai: {
       defaultProvider: 'anthropic',
-      defaultModel: 'claude-3-5-sonnet-20241022'
-    }
+      defaultModel: 'claude-sonnet-4-20250514',
+      apiKeys: {
+        anthropic: process.env.ANTHROPIC_API_KEY,
+      },
+    },
   },
+
   modules: {
-    'my-scraper': {
+    'town-scraper': {
       cronSchedule: '0 0 * * *',
-      maxPages: 100
-    }
-  }
+      maxPages: 100,
+    },
+  },
 };`}
 		/>
 
@@ -82,22 +87,26 @@ console.log('Configuration loaded successfully');`}
 		<h3>3. Use Configuration</h3>
 		<p>Access config in your modules or packages:</p>
 		<CodeBlock
-			code={`import { getPackageConfig, getModuleConfig } from '@happyvertical/smrt-config';
+			code={`import { getPackageConfig, getModuleConfig, setConfig } from '@happyvertical/smrt-config';
 
-// Get package-level config with defaults
+// Get package-scoped config with defaults
 const aiConfig = getPackageConfig('ai', {
   defaultProvider: 'openai',
-  defaultModel: 'gpt-4'
+  defaultModel: 'gpt-4',
 });
 
-// Get module-level config with defaults
-const scraperConfig = getModuleConfig('my-scraper', {
-  cronSchedule: '0 6 * * *',
-  maxPages: 50
+// Get module-scoped config with defaults
+const scraperConfig = getModuleConfig('town-scraper', {
+  cronSchedule: '0 0 * * *',
+  maxPages: 50,
 });
 
-console.log(\`Using AI model: \${aiConfig.defaultModel}\`);
-console.log(\`Scraper runs at: \${scraperConfig.cronSchedule}\`);`}
+// Runtime overrides (highest priority)
+setConfig({
+  packages: {
+    ai: { defaultModel: 'gpt-4-turbo' },
+  },
+});`}
 		/>
 	</section>
 
@@ -108,15 +117,15 @@ console.log(\`Scraper runs at: \${scraperConfig.cronSchedule}\`);`}
 		<p>smrt-config supports three hierarchical scopes:</p>
 		<ul>
 			<li>
-				<strong>Global scope</strong> (<code>smrt.*</code>) - Framework-wide settings like log
+				<strong>Global scope</strong> (<code>smrt.*</code>) -- Framework-wide settings like log
 				level, cache directory
 			</li>
 			<li>
-				<strong>Package scope</strong> (<code>packages.*</code>) - Per-package settings for reusable
-				packages
+				<strong>Package scope</strong> (<code>packages.*</code>) -- Per-package settings (used by
+				<code>@happyvertical/smrt-*</code> packages)
 			</li>
 			<li>
-				<strong>Module scope</strong> (<code>modules.*</code>) - Application-specific module
+				<strong>Module scope</strong> (<code>modules.*</code>) -- Application-specific module
 				configurations
 			</li>
 		</ul>
@@ -124,22 +133,20 @@ console.log(\`Scraper runs at: \${scraperConfig.cronSchedule}\`);`}
 		<h3>Merging Priority</h3>
 		<p>Configuration sources are merged with this priority (highest to lowest):</p>
 		<ol>
-			<li><strong>Runtime config</strong> - Set via <code>setConfig()</code></li>
-			<li><strong>Environment variables</strong> - <code>SMRT_*</code> prefix</li>
-			<li><strong>File-based config</strong> - <code>smrt.config.*</code> files</li>
-			<li><strong>Module/package defaults</strong> - Provided in code</li>
+			<li><strong>Runtime overrides</strong> - Set via <code>setConfig()</code></li>
+			<li><strong>Config file</strong> - <code>smrt.config.{'{'}js,ts,json{'}'}</code></li>
+			<li><strong>Environment variables</strong></li>
+			<li><strong>Package/module defaults</strong> - Provided in code via <code>getPackageConfig()</code> / <code>getModuleConfig()</code></li>
 		</ol>
 
 		<h3>File Discovery</h3>
 		<p>
-			Searches upward from current directory for <code>smrt.config.*</code> files. Supports multiple formats:
+			Uses cosmiconfig to search upward from the current directory for <code>smrt.config.*</code> files:
 		</p>
 		<ul>
-			<li><code>.js</code>, <code>.mjs</code> - JavaScript with ESM</li>
-			<li><code>.ts</code> - TypeScript (auto-compiled)</li>
-			<li><code>.json</code> - JSON</li>
-			<li><code>.yaml</code>, <code>.yml</code> - YAML</li>
-			<li><code>.toml</code> - TOML</li>
+			<li><code>.js</code>, <code>.mjs</code>, <code>.cjs</code> -- JavaScript</li>
+			<li><code>.ts</code> -- TypeScript (auto-compiled)</li>
+			<li><code>.json</code> -- JSON</li>
 		</ul>
 	</section>
 
@@ -149,18 +156,17 @@ console.log(\`Scraper runs at: \${scraperConfig.cronSchedule}\`);`}
 		<h3>Core Functions</h3>
 
 		<h4><code>loadConfig(options?): Promise&lt;SmrtConfig&gt;</code></h4>
-		<p>Load configuration from file and cache it.</p>
+		<p>Load configuration from file via cosmiconfig. Result is stored in <code>globalThis.__smrtConfigCache</code>.</p>
 		<CodeBlock
 			code={`import { loadConfig } from '@happyvertical/smrt-config';
 
-// Basic usage
+// Typical app startup
 await loadConfig();
 
-// With options
-await loadConfig({
-  configPath: './custom.config.js',  // Custom path
-  searchParents: true,                // Search up directory tree
-  cache: true                         // Cache the result
+// Load a specific file (tests / scripts)
+const config = await loadConfig({
+  configPath: './fixtures/smrt.config.js',
+  cache: false
 });`}
 		/>
 
@@ -237,170 +243,96 @@ clearCache();`}
 		/>
 
 		<h4><code>defineConfig(config): SmrtConfig</code></h4>
-		<p>Helper for type-safe configuration in TypeScript.</p>
+		<p>Identity function that provides TypeScript type-checking and IDE autocomplete for config files.</p>
 		<CodeBlock
 			code={`import { defineConfig } from '@happyvertical/smrt-config';
 
-// In smrt.config.ts
+// smrt.config.ts
 export default defineConfig({
-  smrt: {
-    logLevel: 'info',  // TypeScript autocomplete works here
-    cacheDir: '.cache'
-  }
+  smrt: { logLevel: 'info' },
+  site: { name: 'My Site' },
+  packages: {
+    ai: { defaultProvider: 'anthropic' },
+  },
 });`}
 		/>
 
 		<h3>Export Utilities</h3>
 
 		<h4><code>sanitizeConfig(config): unknown</code></h4>
-		<p>Remove secrets from configuration.</p>
+		<p>Strip keys matching secret-like patterns (apiKey, password, secret, token, credential, private, auth, key).</p>
 		<CodeBlock
 			code={`import { sanitizeConfig } from '@happyvertical/smrt-config';
 
-const config = {
-  apiKey: 'secret-key',
-  password: 'secret-password',
-  normalValue: 'safe'
-};
-
-const clean = sanitizeConfig(config);
-// Result: { apiKey: '[REDACTED]', password: '[REDACTED]', normalValue: 'safe' }`}
+const sanitized = sanitizeConfig(config);
+// Keys matching secret patterns are removed`}
 		/>
 
-		<h4><code>exportConfig(config, options?): string</code></h4>
-		<p>Export configuration as string (JSON or JS).</p>
+		<h4><code>exportConfig(options?): string</code></h4>
+		<p>SSG-safe export (defaults to no secrets).</p>
 		<CodeBlock
 			code={`import { exportConfig } from '@happyvertical/smrt-config';
 
-const config = { /* your config */ };
+// Export without secrets (default)
+const safeConfig = exportConfig({ includeSecrets: false });
 
-// Export as JSON (secrets removed by default)
-const jsonStr = exportConfig(config);
-
-// Export as JS module with secrets
-const jsStr = exportConfig(config, {
-  includeSecrets: true,
-  format: 'js',
-  indent: 2
-});`}
+// Must explicitly opt in to include secrets
+const fullConfig = exportConfig({ includeSecrets: true });`}
 		/>
 	</section>
 
-	<section id="environment-variables">
-		<h2>Environment Variables</h2>
-		<p>Use <code>SMRT_</code> prefix with double underscore for nesting:</p>
+	<section id="ssg-export">
+		<h2>SSG-Safe Export</h2>
+		<p>Export config without secrets for static site generation:</p>
 		<CodeBlock
-			code={`# Global config
-SMRT_LOG_LEVEL=debug
-SMRT_CACHE_DIR=/tmp/cache
-SMRT_ENVIRONMENT=production
+			code={`import { exportConfig, sanitizeConfig } from '@happyvertical/smrt-config';
 
-# Package config
-SMRT_AI__DEFAULT_MODEL=gpt-4-turbo
-SMRT_AI__TEMPERATURE=0.8
+// Export config without secrets (safe for static site generation)
+const safeConfig = exportConfig({ includeSecrets: false });
 
-# Module config
-SMRT_MODULES__MY_SCRAPER__ENABLED=true
-SMRT_MODULES__MY_SCRAPER__MAX_PAGES=500`}
+// Or manually sanitize — strips keys matching:
+// apiKey, password, secret, token, credential, private, auth, key
+const sanitized = sanitizeConfig(config);`}
 		/>
 	</section>
 
 	<section id="tutorials">
 		<h2>Tutorials</h2>
 
-		<h3>Tutorial 1: Multi-Environment Configuration</h3>
-		<p>Configure your application for different environments.</p>
+		<h3>Tutorial 1: Type-Safe Configuration</h3>
+		<p>Use <code>defineConfig()</code> for full TypeScript type-checking and IDE autocomplete.</p>
 
-		<h4>Step 1: Create base configuration</h4>
+		<h4>Step 1: Create typed config file</h4>
 		<CodeBlock
-			code={`// smrt.config.js
-export default {
+			code={`// smrt.config.ts
+import { defineConfig } from '@happyvertical/smrt-config';
+
+export default defineConfig({
   smrt: {
-    logLevel: process.env.NODE_ENV === 'production' ? 'warn' : 'debug',
-    cacheDir: '.cache'
+    logLevel: 'info',
   },
   packages: {
     ai: {
       defaultProvider: 'anthropic',
-      defaultModel: 'claude-3-5-sonnet-20241022'
-    }
-  }
-};`}
+    },
+  },
+});`}
 		/>
 
-		<h4>Step 2: Environment-specific overrides</h4>
-		<CodeBlock
-			code={`# Development (.env.development)
-SMRT_LOG_LEVEL=debug
-SMRT_AI__DEFAULT_MODEL=claude-3-haiku-20240307
-
-# Production (.env.production)
-SMRT_LOG_LEVEL=error
-SMRT_AI__DEFAULT_MODEL=claude-3-5-sonnet-20241022
-SMRT_CACHE_DIR=/var/cache/smrt`}
-		/>
-
-		<h4>Step 3: Load and verify</h4>
+		<h4>Step 2: Load and use</h4>
 		<CodeBlock
 			code={`import { loadConfig, getPackageConfig } from '@happyvertical/smrt-config';
 
 await loadConfig();
 
-const aiConfig = getPackageConfig('ai');
-console.log(\`Running with \${aiConfig.defaultModel}\`);
-// Development: claude-3-haiku-20240307
-// Production: claude-3-5-sonnet-20241022`}
+const aiConfig = getPackageConfig('ai', {
+  defaultProvider: 'openai',
+  defaultModel: 'gpt-4',
+});
+console.log(\`Using: \${aiConfig.defaultProvider}\`);`}
 		/>
 
-		<h3>Tutorial 2: Remote Configuration Loading</h3>
-		<p>Load configuration from a remote API at startup using top-level await.</p>
-
-		<h4>Step 1: Fetch remote config</h4>
-		<CodeBlock
-			code={`// smrt.config.js
-const remoteConfig = await fetch('https://api.example.com/config')
-  .then(res => res.json())
-  .catch(err => {
-    console.error('Failed to load remote config:', err);
-    return {}; // Fallback to empty config
-  });
-
-export default {
-  smrt: {
-    logLevel: remoteConfig.logLevel || 'info',
-    ...remoteConfig.global
-  },
-  packages: remoteConfig.packages || {},
-  modules: remoteConfig.modules || {}
-};`}
-		/>
-
-		<h4>Step 2: Merge with local overrides</h4>
-		<CodeBlock
-			code={`// smrt.config.js
-const remoteConfig = await fetch('https://api.example.com/config')
-  .then(res => res.json())
-  .catch(() => ({}));
-
-export default {
-  smrt: {
-    ...remoteConfig.global,
-    // Local overrides take precedence
-    cacheDir: './.cache',
-    logLevel: process.env.LOG_LEVEL || remoteConfig.logLevel || 'info'
-  },
-  packages: {
-    ...remoteConfig.packages,
-    // Keep secrets local, never remote
-    ai: {
-      ...remoteConfig.packages?.ai,
-      apiKey: process.env.ANTHROPIC_API_KEY
-    }
-  }
-};`}
-		/>
-
-		<h3>Tutorial 3: Testing with Configuration</h3>
+		<h3>Tutorial 2: Testing with Configuration</h3>
 		<p>Use runtime configuration for test-specific settings.</p>
 
 		<CodeBlock
@@ -435,26 +367,20 @@ test('uses test configuration', () => {
 		<h2>Integration with SMRT Modules</h2>
 
 		<h3>smrt-core Integration</h3>
-		<p>Configure core framework behavior:</p>
+		<p>The <code>smrt</code> section holds framework-wide settings, and <code>packages</code> holds per-package config:</p>
 		<CodeBlock
 			code={`// smrt.config.js
 export default {
   smrt: {
-    // Schema migration strategy
-    schemaMigration: 'auto-add', // or 'warn'
-
-    // Inheritance cache for performance
-    inheritance: {
-      cacheSize: 1000,
-      ttl: 3600
+    cacheDir: '.cache',
+    logLevel: 'info',
+  },
+  packages: {
+    ai: {
+      defaultProvider: 'anthropic',
+      defaultModel: 'claude-sonnet-4-20250514',
     },
-
-    // Embedding provider
-    embeddings: {
-      provider: 'local', // 'local' | 'ai' | 'auto'
-      model: 'all-MiniLM-L6-v2'
-    }
-  }
+  },
 };`}
 		/>
 
@@ -490,29 +416,21 @@ export function initializeMyPackage() {
 	<section id="best-practices">
 		<h2>Best Practices</h2>
 
-		<h3>✅ DO</h3>
+		<h3>Do</h3>
 		<ul>
-			<li>Keep secrets in environment variables, never hardcoded in config files</li>
-			<li>
-				Use sensible defaults in <code>getPackageConfig()</code> / <code>getModuleConfig()</code>
-			</li>
-			<li>Validate remote configurations before using them</li>
-			<li>Cache remote configs with appropriate TTL for performance</li>
-			<li>Use <code>defineConfig()</code> for TypeScript type safety</li>
-			<li>Handle fetch errors gracefully with fallback configurations</li>
-			<li>Test configuration loading in CI/CD pipeline</li>
-			<li>Document expected configuration structure for your modules</li>
+			<li>Keep secrets in environment variables, reference via <code>process.env</code> in config files</li>
+			<li>Use sensible defaults in <code>getPackageConfig()</code> / <code>getModuleConfig()</code></li>
+			<li>Use <code>defineConfig()</code> for TypeScript type safety and autocomplete</li>
+			<li>Call <code>clearCache()</code> between tests to reset shared state</li>
+			<li>Remember <code>clearCache()</code> is global -- it affects all modules sharing the config instance</li>
 		</ul>
 
-		<h3>❌ DON'T</h3>
+		<h3>Don't</h3>
 		<ul>
 			<li>Hardcode API keys or secrets in configuration files</li>
-			<li>Call <code>loadConfig()</code> multiple times unnecessarily</li>
-			<li>Store sensitive data in version control</li>
-			<li>Share credentials across different environments</li>
-			<li>Rely on undocumented internal configuration structure</li>
-			<li>Mix configuration scopes incorrectly (use appropriate scope)</li>
-			<li>Forget to call <code>clearCache()</code> between tests</li>
+			<li>Call <code>loadConfig()</code> multiple times unnecessarily (result is cached in globalThis)</li>
+			<li>Forget that <code>exportConfig()</code> defaults to no secrets -- must explicitly set <code>includeSecrets: true</code></li>
+			<li>Forget that deep merge means later values override earlier ones at each key level</li>
 		</ul>
 	</section>
 
@@ -524,46 +442,21 @@ export function initializeMyPackage() {
 			<strong>Problem:</strong> Configuration file is not being detected.
 		</p>
 		<p>
-			<strong>Solution:</strong> Ensure <code>smrt.config.*</code> is in your project root, or
-			specify
-			<code>configPath</code> explicitly:
+			<strong>Solution:</strong> Ensure <code>smrt.config.{'{'}js,ts,json{'}'}</code> is in your project root, or
+			specify <code>configPath</code> explicitly:
 		</p>
 		<CodeBlock code={`await loadConfig({ configPath: './config/smrt.config.js' });`} />
-
-		<h3>Environment variables not working</h3>
-		<p><strong>Problem:</strong> Environment variables are not being applied.</p>
-		<p>
-			<strong>Solution:</strong> Verify you're using the <code>SMRT_</code> prefix and double underscore
-			for nesting:
-		</p>
-		<CodeBlock
-			code={`# Correct
-SMRT_AI__DEFAULT_MODEL=gpt-4
-
-# Incorrect (missing SMRT_ prefix)
-AI__DEFAULT_MODEL=gpt-4`}
-		/>
-
-		<h3>TypeScript errors in config file</h3>
-		<p><strong>Problem:</strong> Getting type errors in <code>smrt.config.ts</code>.</p>
-		<p><strong>Solution:</strong> Use the <code>defineConfig()</code> helper:</p>
-		<CodeBlock
-			code={`import { defineConfig } from '@happyvertical/smrt-config';
-
-export default defineConfig({
-  // Full type safety and autocomplete here
-  smrt: {
-    logLevel: 'info' // TypeScript will validate this
-  }
-});`}
-		/>
 
 		<h3>Config not shared across packages in monorepo</h3>
 		<p><strong>Problem:</strong> Different packages see different configurations.</p>
 		<p>
 			<strong>Solution:</strong> Ensure <code>loadConfig()</code> is called early in your application
-			lifecycle. The package uses globalThis caching to share config across all package instances.
+			lifecycle. The package uses <code>globalThis.__smrtConfigCache</code> to share config across all package instances.
 		</p>
+
+		<h3>TypeScript errors in config file</h3>
+		<p><strong>Problem:</strong> Getting type errors in <code>smrt.config.ts</code>.</p>
+		<p><strong>Solution:</strong> Use the <code>defineConfig()</code> helper for full type safety and autocomplete.</p>
 	</section>
 
 	<section id="api-summary">
@@ -579,53 +472,63 @@ export default defineConfig({
 			<tbody>
 				<tr>
 					<td><code>loadConfig(options?)</code></td>
-					<td>Load config from file</td>
+					<td>Async load from file via cosmiconfig</td>
 					<td><code>Promise&lt;SmrtConfig&gt;</code></td>
 				</tr>
 				<tr>
 					<td><code>getConfig()</code></td>
-					<td>Get cached config</td>
+					<td>Get full merged config</td>
 					<td><code>SmrtConfig | null</code></td>
 				</tr>
 				<tr>
-					<td><code>getModuleConfig(name, defaults?)</code></td>
-					<td>Get module config</td>
+					<td><code>getPackageConfig(name, defaults?)</code></td>
+					<td>Get package-scoped config section</td>
 					<td><code>T</code></td>
 				</tr>
 				<tr>
-					<td><code>getPackageConfig(name, defaults?)</code></td>
-					<td>Get package config</td>
+					<td><code>getModuleConfig(name, defaults?)</code></td>
+					<td>Get module-scoped config section</td>
 					<td><code>T</code></td>
 				</tr>
 				<tr>
 					<td><code>getSiteConfig()</code></td>
-					<td>Get site identity</td>
+					<td>Get site-level config</td>
 					<td><code>SiteConfig | null</code></td>
 				</tr>
 				<tr>
 					<td><code>setConfig(config)</code></td>
-					<td>Set runtime config</td>
+					<td>Runtime overrides (highest priority)</td>
 					<td><code>void</code></td>
 				</tr>
 				<tr>
 					<td><code>clearCache()</code></td>
-					<td>Clear all caches</td>
+					<td>Reset cached config (global)</td>
 					<td><code>void</code></td>
 				</tr>
 				<tr>
 					<td><code>defineConfig(config)</code></td>
-					<td>Type-safe helper</td>
+					<td>Type-safe config file helper</td>
 					<td><code>SmrtConfig</code></td>
 				</tr>
 				<tr>
+					<td><code>exportConfig(options?)</code></td>
+					<td>SSG-safe export (no secrets by default)</td>
+					<td><code>string</code></td>
+				</tr>
+				<tr>
 					<td><code>sanitizeConfig(config)</code></td>
-					<td>Remove secrets</td>
+					<td>Strip secret-matching keys</td>
 					<td><code>unknown</code></td>
 				</tr>
 				<tr>
-					<td><code>exportConfig(config, opts?)</code></td>
-					<td>Export to string</td>
-					<td><code>string</code></td>
+					<td><code>mergeExportedConfig(configs)</code></td>
+					<td>Merge multiple exported configs</td>
+					<td><code>SmrtConfig</code></td>
+				</tr>
+				<tr>
+					<td><code>parseExportedConfig(raw)</code></td>
+					<td>Parse an exported config string</td>
+					<td><code>SmrtConfig</code></td>
 				</tr>
 			</tbody>
 		</table>

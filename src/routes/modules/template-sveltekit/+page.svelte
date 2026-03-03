@@ -7,48 +7,264 @@
 	<title>template-sveltekit - Full-Stack Template | SMRT Framework</title>
 	<meta
 		name="description"
-		content="Full-stack SvelteKit template with SMRT integration, database, and authentication."
+		content="SvelteKit project template with SMRT framework integration, auto-generated REST API routes, TypeScript, and SQLite."
 	/>
 </svelte:head>
 
 <ModulePage
 	name="template-sveltekit"
-	description="Full-stack SvelteKit application template with SMRT framework, database integration, and authentication."
-	badges={['v0.19.0', 'Template', 'Full-Stack', 'Database']}
+	description="SvelteKit project template with SMRT framework integration. Scaffolds a full-stack app with auto-generated REST API routes, TypeScript, and SQLite."
+	badges={['v0.20.44', 'Template', 'SvelteKit', 'Full-Stack']}
 >
-	<section>
+	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			<strong>template-sveltekit</strong> is a production-ready SvelteKit template with SMRT framework
-			integration, database models, authentication, and deployment configuration.
+			<strong>@happyvertical/smrt-template-sveltekit</strong> provides the base SvelteKit project
+			template used by <code>smrt gnode create</code>. It scaffolds a full-stack app with the SMRT
+			Vite plugin for automatic REST API route generation, an example <code>@smrt()</code> object,
+			server-side initialization, and SQLite database configuration.
 		</p>
 	</section>
 
-	<section>
-		<h2>Features</h2>
+	<section id="whats-included">
+		<h2>What the Template Provides</h2>
 		<ul>
-			<li>SvelteKit 2.x with server-side rendering</li>
-			<li>SMRT framework with auto-generated APIs</li>
-			<li>PostgreSQL/SQLite database</li>
-			<li>Authentication with OIDC support</li>
-			<li>Multi-tenancy ready</li>
-			<li>Deployment configs (Docker, Kubernetes)</li>
+			<li>SvelteKit 2.x with Svelte 5 and TypeScript</li>
+			<li><code>smrtPlugin()</code> Vite integration for automatic REST API route generation</li>
+			<li>Example <code>@smrt()</code> object (<code>Item.ts</code>) with barrel export</li>
+			<li>Server-side SMRT initialization (<code>src/lib/server/smrt.ts</code>)</li>
+			<li><code>smrt.config.ts</code> with SQLite database and optional AI provider</li>
+			<li><code>.env.example</code> with starter environment variables</li>
 		</ul>
 	</section>
 
-	<section>
+	<section id="usage">
 		<h2>Usage</h2>
+
+		<h3>With smrt CLI (recommended)</h3>
 		<CodeBlock
-			code={`npm create smrt-app@latest my-app -- --template sveltekit
+			code={`smrt gnode create my-app --template sveltekit
 cd my-app
-npm install
-npm run dev`}
+pnpm install
+cp .env.example .env    # Edit with your values
+pnpm dev                # Start dev server at http://localhost:5173`}
 			language="bash"
+		/>
+
+		<h3>Programmatic Usage</h3>
+		<CodeBlock
+			code={`import { copyTemplate } from '@happyvertical/smrt-template-sveltekit';
+
+copyTemplate('./my-new-project', {
+  name: 'my-app',
+  overwrite: false,
+});`}
+			language="typescript"
 		/>
 	</section>
 
-	<nav>
-		<a href="/modules">← Back to Modules</a>
-		<a href="/modules/smrt-core">Next: smrt-core →</a>
-	</nav>
+	<section id="exports">
+		<h2>Package Exports</h2>
+		<ul>
+			<li><code>getTemplatePath()</code> -- returns absolute path to the <code>template/</code> directory</li>
+			<li><code>copyTemplate(destination, options)</code> -- copies template files with project name substitution in <code>package.json</code></li>
+			<li><code>templateInfo</code> -- metadata object describing the template (SvelteKit 2.x, Svelte 5, REST API, SMRT CLI, SQLite)</li>
+		</ul>
+	</section>
+
+	<section id="env-vars">
+		<h2>Environment Variables</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Variable</th>
+					<th>Required</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>DATABASE_URL</code></td>
+					<td>Yes</td>
+					<td>Database path (default: <code>./data/app.db</code>)</td>
+				</tr>
+				<tr>
+					<td><code>DATABASE_TYPE</code></td>
+					<td>Yes</td>
+					<td>Database engine (default: <code>sqlite</code>)</td>
+				</tr>
+				<tr>
+					<td><code>PUBLIC_SITE_NAME</code></td>
+					<td>No</td>
+					<td>Display name for the site</td>
+				</tr>
+				<tr>
+					<td><code>PUBLIC_SITE_URL</code></td>
+					<td>No</td>
+					<td>Public URL (default: <code>http://localhost:5173</code>)</td>
+				</tr>
+				<tr>
+					<td><code>OPENAI_API_KEY</code></td>
+					<td>No</td>
+					<td>OpenAI API key for AI features</td>
+				</tr>
+				<tr>
+					<td><code>ANTHROPIC_API_KEY</code></td>
+					<td>No</td>
+					<td>Anthropic API key (alternative AI provider)</td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<section id="placeholders">
+		<h2>Placeholder Substitution</h2>
+		<p>During <code>smrt gnode create</code>, these placeholders are replaced in template files:</p>
+		<table>
+			<thead>
+				<tr>
+					<th>Placeholder</th>
+					<th>Value</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>{'{{PROJECT_NAME}}'}</code></td>
+					<td>Project name from CLI</td>
+				</tr>
+				<tr>
+					<td><code>{'{{PACKAGE_NAME}}'}</code></td>
+					<td>Lowercase, hyphenated package name</td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<section id="related">
+		<h2>Related</h2>
+		<div class="link-grid">
+			<a href="/modules/smrt-core" class="link-card">
+				<h3>smrt-core</h3>
+				<p>Core framework and ORM</p>
+			</a>
+			<a href="/modules/smrt-cli" class="link-card">
+				<h3>smrt-cli</h3>
+				<p>CLI tools including smrt gnode create</p>
+			</a>
+			<a href="/modules/template-site-static-json" class="link-card">
+				<h3>template-site-static-json</h3>
+				<p>Static site template with JSON data</p>
+			</a>
+		</div>
+	</section>
 </ModulePage>
+
+<style>
+	section {
+		grid-column: 1 / -1;
+		padding: 48px 0;
+		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
+	}
+
+	section:last-child {
+		border-bottom: none;
+	}
+
+	h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin-bottom: 24px;
+	}
+
+	h3 {
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin-top: 32px;
+		margin-bottom: 16px;
+	}
+
+	p {
+		margin-bottom: 16px;
+		line-height: 1.7;
+		color: var(--smrt-color-on-background, #333);
+	}
+
+	ul {
+		margin-bottom: 16px;
+		padding-left: 24px;
+	}
+
+	li {
+		margin-bottom: 8px;
+		line-height: 1.6;
+	}
+
+	code {
+		background: var(--smrt-color-surface-container, #f5f5f5);
+		padding: 2px 6px;
+		border-radius: 3px;
+		font-family: var(--font-mono);
+		font-size: 0.9em;
+	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		margin: 24px 0;
+	}
+
+	th,
+	td {
+		text-align: left;
+		padding: 12px;
+		border-bottom: 1px solid #e0e0e0;
+	}
+
+	th {
+		font-weight: 600;
+		background: #f9f9f9;
+	}
+
+	td code {
+		white-space: nowrap;
+	}
+
+	.link-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 16px;
+		margin: 24px 0;
+	}
+
+	.link-card {
+		padding: 20px;
+		background: #fafafa;
+		text-decoration: none;
+		transition: all 0.2s;
+		border: 1px solid transparent;
+	}
+
+	.link-card:hover {
+		background: var(--smrt-color-surface-container, #f0f0f0);
+		transform: translateY(-2px);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		border-color: var(--smrt-color-primary, #1976d2);
+	}
+
+	.link-card h3 {
+		font-size: 1rem;
+		font-weight: 600;
+		margin: 0 0 8px 0;
+		color: #1a1a1a;
+	}
+
+	.link-card:hover h3 {
+		color: var(--smrt-color-primary, #1976d2);
+	}
+
+	.link-card p {
+		font-size: 0.85rem;
+		color: var(--smrt-color-on-surface-variant, #666);
+		margin: 0;
+	}
+</style>

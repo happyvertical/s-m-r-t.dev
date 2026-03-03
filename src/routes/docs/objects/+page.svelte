@@ -19,9 +19,9 @@
 
 @smrt({
   api: { include: ['list', 'get', 'create'] },
-  mcp: { include: ['list', 'get', 'analyze'] },
+  mcp: true,
   cli: true,
-  tableStrategy: 'cti'  // or 'sti' for Single Table Inheritance
+  tableStrategy: 'sti'  // or 'cti' (default) for Class Table Inheritance
 })
 class Product extends SmrtObject {
   name: string = '';
@@ -40,14 +40,16 @@ class Product extends SmrtObject {
 		</thead>
 		<tbody>
 			<tr
-				><td><code>name</code></td><td>string</td><td
-					>Custom registration name (defaults to class name)</td
-				></tr
+				><td><code>tableName</code></td><td>string</td><td>Custom database table name</td></tr
 			>
-			<tr><td><code>tableName</code></td><td>string</td><td>Custom database table name</td></tr>
 			<tr
 				><td><code>tableStrategy</code></td><td>'cti' | 'sti'</td><td
 					>Inheritance strategy (default: 'cti')</td
+				></tr
+			>
+			<tr
+				><td><code>conflictColumns</code></td><td>string[]</td><td
+					>Natural key columns for upsert (required on junction tables)</td
 				></tr
 			>
 			<tr><td><code>api</code></td><td>boolean | object</td><td>REST API generation config</td></tr>
@@ -60,6 +62,7 @@ class Product extends SmrtObject {
 			<tr><td><code>ai</code></td><td>object</td><td>AI-callable methods config</td></tr>
 			<tr><td><code>hooks</code></td><td>object</td><td>Lifecycle hooks</td></tr>
 			<tr><td><code>embeddings</code></td><td>object</td><td>Semantic search config</td></tr>
+			<tr><td><code>tenantScoped</code></td><td>boolean</td><td>Enable tenant scoping</td></tr>
 		</tbody>
 	</table>
 
@@ -104,10 +107,15 @@ class Product extends SmrtObject {
 			>{`import { foreignKey, oneToMany, manyToMany, field, meta } from '@happyvertical/smrt-core';
 
 class Order extends SmrtObject {
-  // Relationships
-  customerId = foreignKey(Customer);
-  items = oneToMany(OrderItem);
-  tags = manyToMany(Tag, { through: 'order_tags' });
+  // Relationships — these are decorators, not plain assignments
+  @foreignKey(Customer)
+  customerId: string = '';
+
+  @oneToMany(OrderItem)
+  items: OrderItem[] = [];
+
+  @manyToMany(Tag, { through: 'order_tags' })
+  tags: Tag[] = [];
 
   // Constraints
   @field({ required: true, unique: true, maxLength: 100 })
@@ -210,16 +218,6 @@ const isValid = await product.is(\`
 // Returns: "Introducing the premium Widget..."`}</code
 		></pre>
 
-	<h3>describe()</h3>
-	<p>Generate a description of the object.</p>
-	<pre><code
-			>{`const description = await product.describe();
-// Returns: "A high-quality widget for home improvement..."
-
-const brief = await product.describe({ maxTokens: 50 });
-// Returns: "Premium widget, steel construction"`}</code
-		></pre>
-
 	<h2 id="migrations">Automatic Migrations</h2>
 	<p>Schema evolves with your code. Add a field, SMRT handles the migration.</p>
 	<pre><code
@@ -260,19 +258,145 @@ class Product extends SmrtObject {
 // MCP:  product_list, product_create tools for AI agents`}</code
 		></pre>
 
-	<h3>Runtime Introspection</h3>
-	<p>Query object metadata at runtime for dynamic behavior.</p>
+	<h2 id="relationships">Relationships</h2>
+
+	<h3>@foreignKey()</h3>
+	<p>Many-to-one relationship. Creates a column with the referenced object's ID.</p>
 	<pre><code
-			>{`// Get field definitions
-const fields = Product.getFields();
-// { name: { type: 'string' }, price: { type: 'number', decimal: true } }
+			>{`@smrt()
+class Order extends SmrtObject {
+  @foreignKey(Customer)
+  customerId: string = '';
+}
 
-// Check relationships
-const relationships = Product.getRelationships();
-// { categoryId: { type: 'foreignKey', target: 'Category' } }
-
-// Generate forms, validate input, build queries dynamically`}</code
+// Usage
+const order = await orders.get('order-123');
+const customer = await order.loadRelated('customerId');
+console.log(customer.name);`}</code
 		></pre>
+
+	<h3>@oneToMany()</h3>
+	<p>One-to-many relationship. No column created; queries via inverse foreign key.</p>
+	<pre><code
+			>{`@smrt()
+class Customer extends SmrtObject {
+  @oneToMany(Order)
+  orders: Order[] = [];
+}
+
+// Usage
+const customer = await customers.get('cust-456');
+const orders = await customer.loadRelatedMany('orders');`}</code
+		></pre>
+
+	<h3>@manyToMany()</h3>
+	<p>Many-to-many relationship via join table.</p>
+	<pre><code
+			>{`@smrt()
+class Product extends SmrtObject {
+  @manyToMany(Tag, { through: 'product_tags' })
+  tags: Tag[] = [];
+}`}</code
+		></pre>
+
+	<h3>Cross-Package References</h3>
+	<p>For references across packages, use plain string IDs to avoid circular dependencies:</p>
+	<pre><code
+			>{`@smrt()
+class Post extends SmrtObject {
+  // Cross-package: plain string, NOT @foreignKey()
+  authorId: string = '';
+}`}</code
+		></pre>
+
+	<h2 id="serialization">Serialization</h2>
+
+	<h3>toJSON()</h3>
+	<p>
+		Framework method handling STI, meta fields, and serialization. <strong>Do not override.</strong>
+	</p>
+
+	<h3>transformJSON() Hook</h3>
+	<p>Safe customization point for adding computed fields.</p>
+	<pre><code
+			>{`@smrt()
+class Article extends SmrtObject {
+  title: string = '';
+  body: string = '';
+
+  protected transformJSON(data: any): any {
+    return {
+      ...data,
+      wordCount: this.body.split(/\\s+/).length,
+      preview: this.body.substring(0, 100),
+      readingTime: Math.ceil(this.body.split(/\\s+/).length / 200)
+    };
+  }
+}`}</code
+		></pre>
+
+	<h3>Dangerous Pattern</h3>
+	<pre><code
+			>{`// DO NOT DO THIS - breaks STI and causes "Missing _meta_type discriminator" errors
+class Article extends SmrtObject {
+  toJSON() {
+    return { id: this.id, title: this.title };
+    // Missing: _meta_type, _meta_data, other fields
+  }
+}
+
+// INSTEAD: use transformJSON() to add computed fields
+class Article extends SmrtObject {
+  protected transformJSON(data: any): any {
+    return { ...data, custom: 'value' };
+  }
+}`}</code
+		></pre>
+
+	<h2 id="lifecycle-hooks">Lifecycle Hooks</h2>
+	<p>Configure hooks in the <code>@smrt()</code> decorator.</p>
+	<pre><code
+			>{`@smrt({
+  hooks: {
+    beforeSave: 'validateData',
+    afterSave: async (instance) => {
+      await notifySubscribers(instance);
+    },
+    beforeDelete: 'checkDependencies',
+    afterDelete: 'cleanupRelated'
+  }
+})
+class Document extends SmrtObject {
+  title: string = '';
+  wordCount: number = 0;
+
+  async validateData() {
+    this.wordCount = this.content.split(/\\s+/).length;
+  }
+
+  async checkDependencies() {
+    const refs = await this.getReferences();
+    if (refs.length > 0) {
+      throw new Error('Cannot delete: has references');
+    }
+  }
+}`}</code
+		></pre>
+
+	<h3>Available Hooks</h3>
+	<table>
+		<thead><tr><th>Hook</th><th>Trigger</th></tr></thead>
+		<tbody>
+			<tr><td><code>beforeSave</code></td><td>Before save() executes</td></tr>
+			<tr><td><code>afterSave</code></td><td>After save() completes</td></tr>
+			<tr><td><code>beforeCreate</code></td><td>Before first save (new object)</td></tr>
+			<tr><td><code>afterCreate</code></td><td>After first save (new object)</td></tr>
+			<tr><td><code>beforeUpdate</code></td><td>Before save (existing object)</td></tr>
+			<tr><td><code>afterUpdate</code></td><td>After save (existing object)</td></tr>
+			<tr><td><code>beforeDelete</code></td><td>Before delete() executes</td></tr>
+			<tr><td><code>afterDelete</code></td><td>After delete() completes</td></tr>
+		</tbody>
+	</table>
 
 	<h2 id="context-memory">Context Memory</h2>
 	<p>Objects can remember and recall learned patterns with confidence scoring.</p>
@@ -328,148 +452,24 @@ const similar = await articles.findSimilar(article, {
 });`}</code
 		></pre>
 
-	<h2 id="lifecycle-hooks">Lifecycle Hooks</h2>
-	<p>Configure hooks in the <code>@smrt()</code> decorator.</p>
-	<pre><code
-			>{`@smrt({
-  hooks: {
-    beforeSave: 'validateData',
-    afterSave: async (instance) => {
-      await notifySubscribers(instance);
-    },
-    beforeDelete: 'checkDependencies',
-    afterDelete: 'cleanupRelated'
-  }
-})
-class Document extends SmrtObject {
-  title: string = '';
-  wordCount: number = 0;
-
-  async validateData() {
-    this.wordCount = this.content.split(/\\s+/).length;
-  }
-
-  async checkDependencies() {
-    const refs = await this.getReferences();
-    if (refs.length > 0) {
-      throw new Error('Cannot delete: has references');
-    }
-  }
-}`}</code
-		></pre>
-
-	<h3>Available Hooks</h3>
-	<table>
-		<thead><tr><th>Hook</th><th>Trigger</th></tr></thead>
-		<tbody>
-			<tr><td><code>beforeSave</code></td><td>Before save() executes</td></tr>
-			<tr><td><code>afterSave</code></td><td>After save() completes</td></tr>
-			<tr><td><code>beforeCreate</code></td><td>Before first save (new object)</td></tr>
-			<tr><td><code>afterCreate</code></td><td>After first save (new object)</td></tr>
-			<tr><td><code>beforeUpdate</code></td><td>Before save (existing object)</td></tr>
-			<tr><td><code>afterUpdate</code></td><td>After save (existing object)</td></tr>
-			<tr><td><code>beforeDelete</code></td><td>Before delete() executes</td></tr>
-			<tr><td><code>afterDelete</code></td><td>After delete() completes</td></tr>
-		</tbody>
-	</table>
-
-	<h2 id="serialization">Serialization</h2>
-
-	<h3>toJSON()</h3>
-	<p>
-		Framework method handling STI, meta fields, and serialization. <strong>Do not override.</strong>
-	</p>
-
-	<h3>transformJSON() Hook</h3>
-	<p>Safe customization point for adding computed fields.</p>
-	<pre><code
-			>{`@smrt()
-class Article extends SmrtObject {
-  title: string = '';
-  body: string = '';
-
-  protected transformJSON(data: any): any {
-    return {
-      ...data,
-      wordCount: this.body.split(/\\s+/).length,
-      preview: this.body.substring(0, 100),
-      readingTime: Math.ceil(this.body.split(/\\s+/).length / 200)
-    };
-  }
-}`}</code
-		></pre>
-
-	<h3>Dangerous Pattern</h3>
-	<pre><code
-			>{`// DO NOT DO THIS
-class Article extends SmrtObject {
-  toJSON() {
-    return { id: this.id, title: this.title };
-    // Missing: _meta_type, _meta_data, other fields
-    // Breaks STI and causes "Missing _meta_type discriminator" errors
-  }
-}
-
-// If you must override, call super first
-class Article extends SmrtObject {
-  toJSON() {
-    const data = super.toJSON();
-    return { ...data, custom: 'value' };
-  }
-}`}</code
-		></pre>
-
-	<h2 id="relationships">Relationships</h2>
-
-	<h3>foreignKey</h3>
-	<p>Many-to-one relationship. Creates a column with the referenced object's ID.</p>
-	<pre><code
-			>{`class Order extends SmrtObject {
-  customerId = foreignKey(Customer);
-}
-
-// Usage
-const order = await orders.get('order-123');
-const customer = await order.loadRelated('customerId');
-console.log(customer.name);`}</code
-		></pre>
-
-	<h3>oneToMany</h3>
-	<p>One-to-many relationship. No column created; queries via inverse foreign key.</p>
-	<pre><code
-			>{`class Customer extends SmrtObject {
-  orders = oneToMany(Order, { foreignKey: 'customerId' });
-}
-
-// Usage
-const customer = await customers.get('cust-456');
-const orders = await customer.loadRelatedMany('orders');`}</code
-		></pre>
-
-	<h3>manyToMany</h3>
-	<p>Many-to-many relationship via join table.</p>
-	<pre><code
-			>{`class Product extends SmrtObject {
-  tags = manyToMany(Tag, { through: 'product_tags' });
-}`}</code
-		></pre>
-
 	<h2 id="best-practices">Best Practices</h2>
 
 	<h3>1. Use TypeScript Types by Default</h3>
 	<pre><code
-			>{`// Preferred
+			>{`// Preferred — no decorators needed for plain fields
 class Product extends SmrtObject {
   name: string = '';
   price: number = 0.0;
   quantity: number = 0;
 }
 
-// Only when necessary
+// Only use decorators when necessary
 class Product extends SmrtObject {
   @field({ required: true, unique: true })
   sku: string = '';
-  categoryId = foreignKey(Category);
+
+  @foreignKey(Category)
+  categoryId: string = '';
 }`}</code
 		></pre>
 

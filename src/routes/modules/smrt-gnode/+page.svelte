@@ -7,193 +7,115 @@
 	<title>smrt-gnode - Federation Library | SMRT Framework</title>
 	<meta
 		name="description"
-		content="Federated local knowledge bases with P2P discovery, WebFinger, and cross-gnode communication."
+		content="Federation library for inter-gnode peer-to-peer discovery and communication. Stubs only -- not implemented."
 	/>
 </svelte:head>
 
 <ModulePage
 	name="smrt-gnode"
-	description="Federation library for building federated local knowledge bases (gnodes) with P2P discovery and cross-gnode communication."
-	badges={['v0.19.0', 'Federation', 'WebFinger', 'P2P']}
+	description="Federation library for inter-gnode peer-to-peer discovery and communication."
+	badges={['v0.20.44', 'Stubs Only', 'Not Implemented']}
 >
+	<!-- Warning -->
 	<section>
-		<h2>Overview</h2>
-		<p>
-			<strong>smrt-gnode</strong> enables federated local knowledge bases that transform government documents
-			into accessible, multi-modal knowledge. Provides P2P discovery, peer exchange, and ActivityPub-inspired
-			protocols.
-		</p>
-		<aside>
-			<p><strong>Key Features:</strong></p>
-			<ul>
-				<li>P2P peer discovery via WebFinger and DNS</li>
-				<li>Peer exchange between gnodes</li>
-				<li>ActivityPub-inspired federation protocols</li>
-				<li>Cross-gnode queries and communication</li>
-				<li>SMRT object federation</li>
-			</ul>
+		<aside style="background: #fff3cd; border: 2px solid #ffc107; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+			<h2 style="color: #856404; margin-top: 0;">Not Implemented -- Stubs Only</h2>
+			<p style="color: #856404; margin-bottom: 0;">
+				This package contains <strong>stub implementations only</strong>. All methods return empty arrays
+				or null. No SMRT models are present -- this is a library-stage package. The API surface described
+				below represents the <em>planned</em> architecture, not current functionality.
+			</p>
 		</aside>
 	</section>
 
+	<!-- Overview -->
+	<section>
+		<h2>Overview</h2>
+		<p>
+			<strong>smrt-gnode</strong> is intended to provide federation protocols for inter-gnode
+			peer-to-peer discovery and communication. Gnodes are federated local knowledge bases
+			that will eventually support P2P discovery and cross-gnode communication.
+		</p>
+	</section>
+
+	<!-- Installation -->
 	<section>
 		<h2>Installation</h2>
-		<CodeBlock code={`npm install @happyvertical/smrt-gnode`} language="bash" />
+		<CodeBlock code={`pnpm add @happyvertical/smrt-gnode`} language="bash" />
+		<p>No dependencies. Standalone stub package.</p>
 	</section>
 
+	<!-- Stub Exports -->
 	<section>
-		<h2>Quick Start</h2>
-		<CodeBlock
-			code={`import { Federation, WebFingerProtocol } from '@happyvertical/smrt-gnode';
+		<h2>Exports (All Stubs)</h2>
 
-// Configure federation
-const federation = new Federation({
-  enabled: true,
-  discoverability: 'public',
-  peers: ['https://example.gnode'],
-  autodiscovery: true,
-  peerExchange: true
-});
+		<h3>Classes</h3>
+		<table>
+			<thead>
+				<tr>
+					<th>Export</th>
+					<th>Status</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>Federation</code></td>
+					<td>Stub</td>
+					<td><code>discoverPeers()</code> and <code>exchangePeers()</code> return <code>[]</code></td>
+				</tr>
+				<tr>
+					<td><code>WebFingerProtocol</code></td>
+					<td>Stub</td>
+					<td><code>.well-known/gnode</code> discovery. <code>discover()</code> returns <code>null</code></td>
+				</tr>
+				<tr>
+					<td><code>PeerExchangeProtocol</code></td>
+					<td>Stub</td>
+					<td><code>/api/federation/peers</code> peer list exchange. <code>exchange()</code> returns <code>[]</code></td>
+				</tr>
+			</tbody>
+		</table>
 
-// Discover peers
-const peers = await federation.discoverPeers();
+		<h3>Types</h3>
+		<table>
+			<thead>
+				<tr>
+					<th>Export</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>GnodePeer</code></td>
+					<td>Peer descriptor: <code>url</code>, <code>name</code>, <code>discoveredAt</code>, <code>lastSeen?</code></td>
+				</tr>
+				<tr>
+					<td><code>FederationConfig</code></td>
+					<td>Config: <code>enabled</code>, <code>discoverability</code>, <code>peers</code>, <code>autodiscovery</code>, <code>peerExchange</code></td>
+				</tr>
+				<tr>
+					<td><code>WebFingerResponse</code></td>
+					<td>WebFinger response: <code>subject</code>, <code>links[]</code></td>
+				</tr>
+			</tbody>
+		</table>
 
-// Use WebFinger for discovery
-const gnodeInfo = await WebFingerProtocol.discover('example.com');
-// Returns: {
-//   subject: 'acct:gnode@example.com',
-//   links: [{ rel: 'self', href: 'https://example.com/.well-known/gnode' }]
-// }`}
-			language="typescript"
-		/>
+		<h3>Constants</h3>
+		<p><code>version</code>: Package version string (<code>'0.1.0'</code>)</p>
 	</section>
 
+	<!-- Planned Architecture -->
 	<section>
-		<h2>Federation Concepts</h2>
-
-		<h3>Gnode (Local Knowledge Base)</h3>
-		<p>A gnode is a federated local knowledge base that:</p>
+		<h2>Planned Architecture</h2>
 		<ul>
-			<li>Stores and indexes government documents</li>
-			<li>Provides multi-modal access (web, API, voice)</li>
-			<li>Discovers and communicates with peer gnodes</li>
-			<li>Shares knowledge while maintaining local autonomy</li>
+			<li>WebFinger-based peer discovery via <code>GET /.well-known/gnode</code></li>
+			<li>Peer exchange protocol via <code>GET /api/federation/peers</code></li>
+			<li>ActivityPub-inspired cross-gnode queries</li>
 		</ul>
-
-		<h3>Discovery Methods</h3>
-		<CodeBlock
-			code={`// WebFinger discovery
-const info = await WebFingerProtocol.discover('city.gov');
-
-// DNS-based discovery
-const dnsRecords = await federation.discoverViaDNS('city.gov');
-
-// Peer exchange
-const morePeers = await federation.exchangePeersWithGnode('https://peer.gnode');`}
-			language="typescript"
-		/>
-
-		<h3>Cross-Gnode Queries</h3>
-		<CodeBlock
-			code={`// Query remote gnode
-const results = await federation.queryGnode('https://peer.gnode', {
-  type: 'Meeting',
-  filters: { date: { gte: '2025-01-01' } },
-  limit: 10
-});
-
-// Aggregate from multiple gnodes
-const allResults = await federation.queryMultiple(
-  ['https://peer1.gnode', 'https://peer2.gnode'],
-  { type: 'Resolution', status: 'passed' }
-);`}
-			language="typescript"
-		/>
 	</section>
 
-	<section>
-		<h2>Federation Protocols</h2>
-
-		<h3>WebFinger</h3>
-		<p>RFC 7033 WebFinger protocol for resource discovery:</p>
-		<CodeBlock
-			code={`GET /.well-known/webfinger?resource=acct:gnode@example.com
-
-Response:
-{
-  "subject": "acct:gnode@example.com",
-  "links": [
-    {
-      "rel": "self",
-      "type": "application/activity+json",
-      "href": "https://example.com/.well-known/gnode"
-    }
-  ]
-}`}
-			language="json"
-		/>
-
-		<h3>Peer Exchange Protocol</h3>
-		<CodeBlock
-			code={`// Exchange peer lists
-const exchange = await federation.peerExchange({
-  myPeers: federation.getPeerList(),
-  requestPeers: true
-});
-
-console.log(\`Learned about \${exchange.newPeers.length} new gnodes\`);`}
-			language="typescript"
-		/>
-	</section>
-
-	<section>
-		<h2>Use Cases</h2>
-		<article>
-			<h3>Municipal Government Networks</h3>
-			<p>
-				Connect city councils, county boards, and regional authorities for shared meeting minutes,
-				resolutions, and public records.
-			</p>
-		</article>
-		<article>
-			<h3>Regional News Aggregation</h3>
-			<p>
-				Federate local news sources to provide comprehensive regional coverage while maintaining
-				editorial independence.
-			</p>
-		</article>
-		<article>
-			<h3>Public Records Networks</h3>
-			<p>
-				Enable citizens to search across multiple jurisdictions for permits, planning documents, and
-				public notices.
-			</p>
-		</article>
-	</section>
-
-	<section>
-		<h2>Best Practices</h2>
-		<section>
-			<h3>DOs</h3>
-			<ul>
-				<li>Use WebFinger for standard-compliant discovery</li>
-				<li>Enable peer exchange to grow the network</li>
-				<li>Cache peer lists to reduce discovery overhead</li>
-				<li>Implement rate limiting for cross-gnode queries</li>
-				<li>Document your gnode's API endpoints</li>
-			</ul>
-		</section>
-		<section>
-			<h3>DON'Ts</h3>
-			<ul>
-				<li>Don't expose private data through federation</li>
-				<li>Don't trust peer data without validation</li>
-				<li>Don't implement custom protocols (use standards)</li>
-				<li>Don't query peers excessively (implement caching)</li>
-				<li>Don't ignore security headers and HTTPS</li>
-			</ul>
-		</section>
-	</section>
-
+	<!-- Related Modules -->
 	<section>
 		<h2>Related Modules</h2>
 		<nav>

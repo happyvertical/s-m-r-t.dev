@@ -5,8 +5,8 @@
 
 <ModulePage
 	name="smrt-types"
-	description="Shared TypeScript type definitions and interfaces used across multiple SMRT packages to prevent circular dependencies and ensure type safety."
-	badges={['v0.17.100', 'Core Foundation', 'ESM', 'Zero Dependencies']}
+	description="Shared TypeScript types and enums for the SMRT framework. Prevents circular dependencies by centralizing types that multiple packages need. Zero runtime code except enums."
+	badges={['v0.20.44', 'Core Foundation', 'ESM', 'Zero Dependencies']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
@@ -16,14 +16,15 @@
 			and ensure consistent interfaces throughout the SDK.
 		</p>
 		<p>
-			Currently, this package exports the <strong>Signal System</strong> types, which power automatic
-			method tracking and event distribution across SMRT objects.
+			This package exports three categories: <strong>Signal System</strong> types (method tracking and observability),
+			<strong>Module UI</strong> types (module registration and admin panels), and
+			<strong>User/Tenant Status</strong> enums (lifecycle status values with runtime code).
 		</p>
 	</section>
 
 	<section id="installation">
 		<h2>Installation</h2>
-		<CodeBlock code={`npm install @happyvertical/smrt-types`} language="bash" />
+		<CodeBlock code={`pnpm add @happyvertical/smrt-types`} language="bash" />
 		<p class="note">
 			<strong>Note:</strong> This package is typically installed as a dependency of other SMRT packages.
 			You rarely need to install it directly.
@@ -99,6 +100,43 @@ class MyAdapter implements SignalAdapter {
 // - Metrics: Track execution counts, durations, errors
 // - Pub/Sub: Broadcast real-time updates to clients
 // - Tracing: Send spans to distributed tracing systems`}
+			language="typescript"
+		/>
+	</section>
+
+	<section id="module-types">
+		<h2>Module UI Types</h2>
+		<p>
+			Types for module registration and admin panel UI slots. Used by packages that register
+			UI components for admin interfaces.
+		</p>
+		<CodeBlock
+			code={`import type {
+  SmrtModuleMeta,      // Module metadata (name, version, description)
+  ModuleUISlot,        // UI slot definition for module admin panels
+  ModuleComponentType, // Component type classification
+  ModuleUIBaseProps,   // Base props interface for module UI components
+  ModuleUIRegistryInterface  // Registry for module UI registration
+} from '@happyvertical/smrt-types';`}
+			language="typescript"
+		/>
+	</section>
+
+	<section id="user-status">
+		<h2>User/Tenant Status Enums</h2>
+		<p>
+			Runtime enum values for user and tenant lifecycle status. These are the only exports
+			with runtime code -- use regular imports (not <code>import type</code>).
+		</p>
+		<CodeBlock
+			code={`import {
+  UserStatus,              // User lifecycle status
+  TenantStatus,            // Tenant lifecycle status
+  MembershipStatus,        // Membership lifecycle status
+  SessionStatus,           // Session lifecycle status
+  OverrideEffect,          // Permission override effect
+  TenantPermissionEffect   // Tenant-level permission effect
+} from '@happyvertical/smrt-types';`}
 			language="typescript"
 		/>
 	</section>
@@ -270,10 +308,20 @@ class LoggingAdapter implements SignalAdapter {
 
 		<h3>Exports</h3>
 		<CodeBlock
-			code={`// Type exports (no runtime code)
-export type { Signal } from './signals.js';
-export type { SignalAdapter } from './signals.js';
-export type { SignalType } from './signals.js';`}
+			code={`// Signal System (types — no runtime code)
+import type { Signal, SignalType, SignalAdapter } from '@happyvertical/smrt-types';
+
+// Module UI (types — no runtime code)
+import type {
+  SmrtModuleMeta, ModuleUISlot, ModuleComponentType,
+  ModuleUIBaseProps, ModuleUIRegistryInterface
+} from '@happyvertical/smrt-types';
+
+// User/Tenant Status (enums — have runtime values, use regular import)
+import {
+  UserStatus, TenantStatus, MembershipStatus,
+  SessionStatus, OverrideEffect, TenantPermissionEffect
+} from '@happyvertical/smrt-types';`}
 			language="typescript"
 		/>
 
@@ -355,11 +403,13 @@ export type { SignalType } from './signals.js';`}
 		<h2>Best Practices</h2>
 		<ol>
 			<li>
-				<strong>Don't install directly</strong> - Let other SMRT packages bring it in as a dependency
+				<strong>Use <code>import type</code></strong> for non-enum imports to avoid unnecessary runtime dependencies
 			</li>
 			<li>
-				<strong>Use type-only imports</strong> -
-				<code>import type {'{'} Signal {'}'} from '@happyvertical/smrt-types'</code>
+				<strong>Use regular <code>import</code></strong> for enums (UserStatus, TenantStatus, etc.) which need runtime values
+			</li>
+			<li>
+				<strong>Add shared types here</strong> if two or more packages need the same type definition
 			</li>
 			<li>
 				<strong>Handle adapter errors</strong> - SignalAdapter.handle() should catch its own errors

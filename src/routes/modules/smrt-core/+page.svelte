@@ -5,8 +5,8 @@
 
 <ModulePage
 	name="smrt-core"
-	description="The foundational AI agent framework providing ORM, code generation, AI operations, and standardized collections for building intelligent TypeScript applications."
-	badges={['v0.17.100', 'Core Foundation', 'ESM']}
+	description="ORM, code generation, AI integration, and the DispatchBus. Everything else in the SMRT framework builds on this."
+	badges={['v0.20.44', 'Core Foundation', 'ESM']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
@@ -15,21 +15,20 @@
 		</p>
 		<ul>
 			<li>
-				<strong>AI-First Object Framework</strong> - TypeScript classes with built-in AI operations (is,
-				do, describe)
+				<strong>SmrtObject</strong> - Persistent entities with save, delete, is(), do(), loadFromId/Slug
 			</li>
 			<li>
-				<strong>Object-Relational Mapping</strong> - Automatic database schema generation from TypeScript
-				definitions
+				<strong>SmrtCollection</strong> - CRUD collection with list, get, create, upsert, advanced querying
 			</li>
-			<li><strong>Standardized Collections</strong> - Advanced CRUD with SQL-like querying</li>
 			<li>
-				<strong>Code Generators</strong> - Auto-generate REST APIs, MCP servers, CLI commands, and Swagger
-				docs
+				<strong>Code Generators</strong> - Auto-generate REST APIs, MCP servers, and CLI commands from
+				<code>@smrt()</code>
 			</li>
-			<li><strong>Vite Plugin</strong> - Virtual modules for seamless development integration</li>
-			<li><strong>Context Memory</strong> - Persistent storage for learned patterns</li>
-			<li><strong>Semantic Search</strong> - Built-in embedding support for similarity</li>
+			<li><strong>DispatchBus</strong> - Inter-agent messaging with persistent subscriptions and wildcards</li>
+			<li><strong>Single Table Inheritance</strong> - Polymorphic object hierarchies in a single table</li>
+			<li><strong>Context Memory</strong> - remember/recall with hierarchical scoped storage</li>
+			<li><strong>Embeddings</strong> - Built-in semantic search via AI provider or local models</li>
+			<li><strong>GlobalInterceptors</strong> - Plugin hooks for beforeList/Get/Save/Delete</li>
 		</ul>
 	</section>
 
@@ -51,18 +50,18 @@
 
 		<h3>1. Define Your Object</h3>
 		<CodeBlock
-			code={`import { SmrtObject, SmrtCollection, smrt } from '@happyvertical/smrt-core';
+			code={`import { smrt, SmrtObject, SmrtCollection, foreignKey } from '@happyvertical/smrt-core';
 
-@smrt({ cli: true, api: true })
-export class Product extends SmrtObject {
+@smrt({ api: true, cli: true, mcp: true })
+class Product extends SmrtObject {
   name: string = '';
-  description: string = '';
-  price: number = 0.0;    // Decimal point → DECIMAL type
-  quantity: number = 0;   // No decimal → INTEGER type
-  active: boolean = true;
+  price: number = 0.0;          // DECIMAL (has decimal point)
+  quantity: number = 0;          // INTEGER (no decimal point)
+  isPublished: boolean = false;
+  categoryId = foreignKey(Category);
 }
 
-export class ProductCollection extends SmrtCollection<Product> {
+class ProductCollection extends SmrtCollection<Product> {
   static readonly _itemClass = Product;
 }`}
 			language="typescript"
@@ -70,33 +69,27 @@ export class ProductCollection extends SmrtCollection<Product> {
 
 		<h3>2. Initialize Collection</h3>
 		<CodeBlock
-			code={`// Create and initialize collection
+			code={`// Create collection (lazy table creation on first DB op)
 const products = await ProductCollection.create({
-  db: 'products.db',  // SQLite database
-  ai: {
-    provider: 'openai',
-    apiKey: process.env.OPENAI_API_KEY
-  }
-});
-
-await products.initialize();`}
+  db: 'products.db'  // SQLite database
+});`}
 			language="typescript"
 		/>
 
 		<h3>3. CRUD Operations</h3>
 		<CodeBlock
 			code={`// Create
-const product = await products.create({
-  name: 'Widget',
-  description: 'A useful widget',
-  price: 29.99,
-  quantity: 100,
-  active: true
-});
+const product = await products.create({ name: 'Widget', price: 9.99 });
 await product.save();
 
+// Query
+const results = await products.list({
+  where: { isPublished: true, price: { op: '>', value: 5 } },
+  orderBy: 'price DESC',
+  limit: 20,
+});
+
 // Read
-const all = await products.list({ limit: 10 });
 const one = await products.get(product.id);
 
 // Update
@@ -110,22 +103,11 @@ await product.delete();`}
 
 		<h3>4. AI Operations</h3>
 		<CodeBlock
-			code={`// Ask yes/no questions
-const isExpensive = await product.is(\`
-  - Price is above $50
-  - Premium quality product
-\`);
+			code={`// Ask yes/no questions about your objects
+const isExpensive = await product.is('costs more than the average product');
 
-// Perform AI actions
-const summary = await product.do(\`
-  Create a compelling 2-sentence product description
-  that highlights the key benefits.
-\`);
-
-// Generate descriptions
-const description = await product.describe();
-console.log(description);
-// "Widget is a useful product priced at $29.99..."`}
+// Perform AI-powered actions
+const description = await product.do('Write a short marketing description');`}
 			language="typescript"
 		/>
 	</section>
@@ -156,16 +138,22 @@ console.log(description);
 			language="text"
 		/>
 
-		<h3>Three Core Classes</h3>
+		<h3>Core Classes</h3>
 		<ul>
 			<li>
-				<strong>SmrtClass</strong> - Foundation providing database, filesystem, and AI client access
+				<strong>SmrtClass</strong> - Foundation with database, filesystem, and AI client access
 			</li>
 			<li>
-				<strong>SmrtObject</strong> - Persistent entities with unique IDs, timestamps, and AI operations
+				<strong>SmrtObject</strong> - Persistent entities with save, delete, is(), do(), context memory
 			</li>
 			<li>
-				<strong>SmrtCollection&lt;T&gt;</strong> - Manages sets of SmrtObject instances with CRUD operations
+				<strong>SmrtCollection&lt;T&gt;</strong> - CRUD collection with list, get, create, upsert, getOrUpsert
+			</li>
+			<li>
+				<strong>ObjectRegistry</strong> - Global singleton (globalThis) for class metadata, fields, STI chains
+			</li>
+			<li>
+				<strong>DispatchBus</strong> - Inter-agent messaging with emit, subscribe (persistent), process
 			</li>
 		</ul>
 
@@ -185,12 +173,15 @@ console.log(description);
 
 		<p>Or use field helpers when constraints are needed:</p>
 		<CodeBlock
-			code={`import { text, decimal, foreignKey } from '@happyvertical/smrt-core/decorators';
+			code={`import { field, foreignKey } from '@happyvertical/smrt-core';
 
 class Product extends SmrtObject {
-  name = text({ required: true, maxLength: 100 });
-  price = decimal({ min: 0, max: 999999.99, required: true });
-  categoryId = foreignKey(Category, { onDelete: 'restrict' });
+  @field({ required: true })
+  name: string = '';
+
+  price: number = 0.0;
+
+  categoryId = foreignKey(Category);
 }`}
 			language="typescript"
 		/>
@@ -261,14 +252,14 @@ const result = await document.do(\`
 		<CodeBlock
 			code={`const products = await collection.list({
   where: {
-    'price >': 10,          // Greater than
-    'price <=': 100,        // Less than or equal
-    'name like': '%widget%', // Pattern matching
-    'category in': ['A', 'B', 'C'],
-    'inStock': true,         // Equals (default)
-    'deletedAt !=': null    // Not equal
+    isPublished: true,                    // Equals (default)
+    price: { op: '>', value: 10 },        // Object syntax
+    'price <=': 100,                      // String-operator syntax
+    'name like': '%widget%',              // Pattern matching
+    category: ['A', 'B', 'C'],           // Arrays auto-detect IN
+    'deletedAt !=': null                  // Not equal
   },
-  orderBy: ['price DESC', 'name ASC'],
+  orderBy: 'price DESC',
   limit: 20,
   offset: 0
 });`}
@@ -325,18 +316,15 @@ export class Product extends SmrtObject { }`}
 
 		<h3>REST API Generator</h3>
 		<CodeBlock
-			code={`import { APIGenerator } from '@happyvertical/smrt-core/generators';
+			code={`import { APIGenerator } from '@happyvertical/smrt-core';
 
 const generator = new APIGenerator({
-  basePath: '/api/v1',
-  enableCors: true,
-  port: 3000
+  basePath: '/api/v1'
 });
 
 generator.registerCollection('products', productCollection);
-const { server, url } = generator.createServer();
 
-// Generated endpoints:
+// Generated OpenAPI-compliant endpoints:
 // GET    /api/v1/products       - List
 // POST   /api/v1/products       - Create
 // GET    /api/v1/products/:id   - Get
@@ -347,7 +335,7 @@ const { server, url } = generator.createServer();
 
 		<h3>MCP Server Generator</h3>
 		<CodeBlock
-			code={`import { MCPGenerator } from '@happyvertical/smrt-core/generators';
+			code={`import { MCPGenerator } from '@happyvertical/smrt-core';
 
 const generator = new MCPGenerator({
   name: 'smrt-mcp-server',
@@ -355,7 +343,6 @@ const generator = new MCPGenerator({
 });
 
 generator.registerCollection('products', productCollection);
-const tools = generator.generateTools();
 
 // Generated MCP tools:
 // list_products, get_product_by_id, create_product,
@@ -444,15 +431,15 @@ await object.forgetScope({ scope, includeDescendants: true });`}
 
 		<h3>Foreign Keys</h3>
 		<CodeBlock
-			code={`import { foreignKey } from '@happyvertical/smrt-core/decorators';
+			code={`import { foreignKey } from '@happyvertical/smrt-core';
 
 class Order extends SmrtObject {
-  customerId = foreignKey(Customer, { onDelete: 'cascade' });
-  productId = foreignKey(Product, { onDelete: 'restrict' });
+  customerId = foreignKey(Customer);
+  productId = foreignKey(Product);
   total: number = 0.0;
 }
 
-// Load relationship
+// Load relationship (lazy, cached in _loadedRelationships Map)
 await order.loadRelated('customerId');
 const customer = order.getRelated('customerId');`}
 			language="typescript"
@@ -460,7 +447,7 @@ const customer = order.getRelated('customerId');`}
 
 		<h3>One-to-Many</h3>
 		<CodeBlock
-			code={`import { oneToMany } from '@happyvertical/smrt-core/decorators';
+			code={`import { oneToMany } from '@happyvertical/smrt-core';
 
 class Customer extends SmrtObject {
   orders = oneToMany(Order, { foreignKey: 'customerId' });
@@ -473,7 +460,7 @@ const orders = await customer.loadRelated('orders');`}
 
 		<h3>Many-to-Many</h3>
 		<CodeBlock
-			code={`import { manyToMany } from '@happyvertical/smrt-core/decorators';
+			code={`import { manyToMany } from '@happyvertical/smrt-core';
 
 class Product extends SmrtObject {
   relatedProducts = manyToMany(Product, {
@@ -492,7 +479,7 @@ const related = await product.loadRelated('relatedProducts');`}
 		<p>Polymorphic object hierarchies in a single database table:</p>
 
 		<CodeBlock
-			code={`import { Meta } from '@happyvertical/smrt-core';
+			code={`import { smrt, SmrtObject, meta } from '@happyvertical/smrt-core';
 
 @smrt({ tableStrategy: 'sti' })
 class Event extends SmrtObject {
@@ -503,23 +490,20 @@ class Event extends SmrtObject {
 @smrt()
 class Meeting extends Event {
   location: string = '';       // Base table column
-  roomNumber: Meta<string> = ''; // Stored in _meta_data JSONB
-  attendees: Meta<string[]> = [];
+  @meta() roomNumber: string = '';   // Stored in _meta_data JSONB
+  @meta() attendees: string[] = [];
 }
 
 @smrt()
 class Concert extends Event {
   venue: string = '';          // Base table column
-  artist: Meta<string> = '';   // Stored in _meta_data JSONB
-  ticketPrice: Meta<number> = 0;
+  @meta() artist: string = '';       // Stored in _meta_data JSONB
+  @meta() ticketPrice: number = 0;
 }
 
-// Polymorphic queries
-const events = await eventCollection.list({
-  where: { '_meta_type': ['Meeting', 'Concert'] }
-});
+// Polymorphic queries — collection loads correct subclass automatically
+const events = await eventCollection.list();
 
-// Returns correct subclass instances
 events.forEach(event => {
   if (event instanceof Meeting) {
     console.log(\`Meeting at \${event.location}\`);
@@ -537,36 +521,26 @@ events.forEach(event => {
 
 		<CodeBlock
 			code={`// vite.config.ts
-import { smrtPlugin } from '@happyvertical/smrt-core/vite-plugin';
+import { smrtPlugin } from '@happyvertical/smrt-core';
+import { defineConfig } from 'vite';
 
-export default {
-  plugins: [
-    smrtPlugin({
-      include: ['src/**/*.ts'],
-      exclude: ['**/*.test.ts'],
-      generateTypes: true,
-      hmr: true,
-      svelteKit: {
-        enabled: true,
-        routesDir: 'src/routes/api',
-        objectsDir: 'src/lib/objects'
+export default defineConfig({
+  plugins: [smrtPlugin()],
+  // Required for @smrt() decorators
+  esbuild: {
+    tsconfigRaw: {
+      compilerOptions: {
+        experimentalDecorators: true,
+        emitDecoratorMetadata: true
       }
-    })
-  ]
-};`}
+    }
+  }
+});`}
 			language="typescript"
 		/>
 
-		<h3>Virtual Modules</h3>
-		<CodeBlock
-			code={`// Auto-generated type-safe imports
-import { setupRoutes } from '@smrt/routes';
-import { createClient } from '@smrt/client';
-import { tools } from '@smrt/mcp';
-import { manifest } from '@smrt/manifest';
-import type { Product } from '@smrt/types';`}
-			language="typescript"
-		/>
+		<h3>Generated Output</h3>
+		<p>The Vite plugin generates virtual modules for routes, clients, and manifests at dev time. Code generators produce OpenAPI REST endpoints, Commander CLI commands, and MCP server tools from your <code>@smrt()</code> configuration.</p>
 	</section>
 
 	<section id="databases">
@@ -611,19 +585,15 @@ const collection = await ProductCollection.create({ db });`}
 		<h2>Best Practices</h2>
 		<ol>
 			<li>
-				<strong>Use TypeScript types</strong> for simple properties - let the framework infer the schema
+				<strong>Use TypeScript types</strong> for simple properties -- let the framework infer the schema
 			</li>
-			<li><strong>Use field helpers</strong> only when you need constraints or validation</li>
-			<li><strong>Always define static _itemClass</strong> on collection classes</li>
-			<li>
-				<strong>Use factory pattern</strong> for collection creation (<code>create()</code> method)
-			</li>
+			<li><strong>Use <code>0</code> for INTEGER, <code>0.0</code> for DECIMAL</strong> in field defaults</li>
+			<li><strong>Always define <code>static readonly _itemClass</code></strong> on collection classes</li>
+			<li><strong>Never override <code>toJSON()</code></strong> -- use <code>transformJSON()</code> instead (toJSON handles STI + meta fields)</li>
+			<li><strong>Cross-package FKs</strong>: use plain string IDs, not <code>foreignKey()</code> (avoids circular deps)</li>
 			<li><strong>Leverage eager loading</strong> to prevent N+1 query problems</li>
-			<li><strong>Set confidence scores</strong> in context memory for pattern reliability</li>
-			<li><strong>Use hierarchical scopes</strong> for context organization</li>
-			<li><strong>Cache AI responses</strong> in object properties to avoid redundant calls</li>
-			<li><strong>Use direct SQL</strong> for complex queries when the ORM is insufficient</li>
-			<li><strong>Organize by concerns</strong> - one object class per business entity</li>
+			<li><strong>Use direct SQL</strong> via template literals for complex queries</li>
+			<li><strong>Manifest is build-time</strong> -- restart vitest after adding new <code>@smrt()</code> classes</li>
 		</ol>
 	</section>
 

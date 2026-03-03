@@ -5,25 +5,26 @@
 
 <ModulePage
 	name="smrt-properties"
-	description="Digital property and zone management for websites, apps, and advertising inventory."
-	badges={['v0.19.0', 'Properties', 'Zones']}
+	description="Digital properties (websites, apps) with hierarchical zones for content and ad placement."
+	badges={['v0.20.44', 'Properties', 'Zones']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-properties</strong> manages digital properties (websites, applications) and their hierarchical
-			zones (pages, sections, ad slots). It provides tree-structured organization with flexible metadata,
-			dimension tracking, and format validation.
+			<strong>smrt-properties</strong> manages digital properties (websites, apps, publications) and
+			their hierarchical zones for content and ad placement. Property is STI-enabled with domain, URL,
+			and optional repository/owner links. Zones form an arbitrarily nested tree within each property.
 		</p>
 		<aside>
 			<p><strong>Key Features:</strong></p>
 			<ul>
-				<li>Property management with domain, URL, and status tracking</li>
-				<li>Hierarchical zones with unlimited nesting depth</li>
-				<li>Dimension tracking (width/height) for ad slots</li>
-				<li>Format validation and allowed formats per zone</li>
-				<li>Tree operations with cycle prevention</li>
-				<li>Path traversal (ancestors/descendants)</li>
+				<li>Property (STI) with domain, URL, status (active/inactive/pending)</li>
+				<li>Zone hierarchy via parentId with tree operations and cycle detection</li>
+				<li>Zone types: page, section, slot, container, widget</li>
+				<li>Dimension tracking (width/height) and allowedFormats per zone</li>
+				<li>Empty allowedFormats = all formats allowed (no restrictions)</li>
+				<li><code>deleteZone(cascade=false)</code> orphans children to parent, not deletes them</li>
+				<li>In-memory depth caching prevents N+1 queries during tree operations</li>
 			</ul>
 		</aside>
 	</section>
@@ -107,23 +108,22 @@ console.log(\`Property has \${tree.roots.length} top-level zones\`);`}
   propertyId: string
   parentId?: string         // Self-referencing hierarchy
   name: string
-  type: string              // 'page', 'section', 'slot', etc.
-  path?: string
+  type: string              // 'page', 'section', 'slot', 'container', 'widget'
+  path?: string             // URL path pattern
   selector?: string         // CSS selector
-  width?: number
+  width?: number            // Nullable independently -- check hasDimensions()
   height?: number
-  allowedFormats?: string[] // ['display', 'video', 'native']
+  allowedFormats?: string[] // Empty array = all formats (no restrictions)
   metadata?: Record<string, any>
 
-  async getProperty(): Promise<Property>
-  async getParent(): Promise<Zone | null>
-  async getChildren(): Promise<Zone[]>
+  // Hierarchy traversal
   async getAncestors(): Promise<Zone[]>
   async getDescendants(): Promise<Zone[]>
   async getFullPath(): string
-  async getDepth(): number
+
+  // Format/dimension helpers
   isFormatAllowed(format: string): boolean
-  hasDimensions(): boolean
+  hasDimensions(): boolean   // Check before using width/height
   getDimensionString(): string
 }`}
 			language="typescript"
@@ -146,12 +146,12 @@ await properties.countByStatus()`}
 		<h3>ZoneCollection</h3>
 		<CodeBlock
 			code={`await zones.findByProperty(propertyId: string)
-await zones.findTopLevel(propertyId: string)
-await zones.getTree(propertyId: string): Promise<ZoneTree>
+await zones.getTree(propertyId: string): Promise<ZoneTree>  // Builds nested structure
 await zones.getAncestors(zoneId: string)
 await zones.getDescendants(zoneId: string)
-await zones.moveZone(zoneId: string, newParentId?: string)
-await zones.deleteZone(zoneId: string, cascade: boolean)`}
+await zones.moveZone(zoneId: string, newParentId?: string)  // Validates against descendant cycles
+await zones.deleteZone(zoneId: string, cascade: boolean)    // cascade=false orphans children to parent
+await zones.findWithGlobals(tenantId: string)               // Tenant + global zones`}
 			language="typescript"
 		/>
 	</section>

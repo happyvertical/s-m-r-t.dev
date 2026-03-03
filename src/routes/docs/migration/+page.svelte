@@ -3,18 +3,18 @@
 </script>
 
 <svelte:head>
-	<title>Migration Guide: 0.19 → 0.20 | s-m-r-t</title>
+	<title>Migration Guide: 0.19 to 0.20+ | s-m-r-t</title>
 	<meta
 		name="description"
-		content="Migration guide for upgrading from SMRT 0.19 to 0.20, covering component moves, import changes, and API updates."
+		content="Migration guide for upgrading from SMRT 0.19 to 0.20+, covering component moves, import changes, CLI updates, and API changes."
 	/>
 </svelte:head>
 
 <article class="prose">
-	<h1>Migration Guide: 0.19 → 0.20</h1>
+	<h1>Migration Guide: 0.19 to 0.20+</h1>
 	<p class="lead">
 		Version 0.20 reorganizes Svelte components into their domain packages and consolidates
-		browser-ai into smrt-svelte. This guide covers all breaking changes.
+		browser-ai into smrt-svelte. This guide covers all breaking changes through 0.20.44.
 	</p>
 
 	<h2>Component Import Changes</h2>
@@ -217,6 +217,109 @@ import { useSTT, useTTS, useLLM } from '@happyvertical/smrt-svelte';`}
 --smrt-color-surface-variant
 --smrt-color-outline`}
 		language="css"
+	/>
+
+	<h2>Post-0.20.0 Changes (through 0.20.44)</h2>
+
+	<h3>CLI Migration Commands</h3>
+	<p>
+		Migration commands have been updated. The old <code>smrt migrations generate</code> syntax
+		is replaced:
+	</p>
+	<CodeBlock
+		code={`# Generate migration from schema changes
+smrt db:diff --generate
+
+# Check pending schema changes
+smrt db:status
+
+# Apply migrations
+smrt db:migrate
+
+# Rollback migrations
+smrt db:rollback`}
+		language="bash"
+	/>
+
+	<h3>Config Shape</h3>
+	<p>
+		The <code>smrt.config.ts</code> top-level keys have been reorganized.
+		Replace old <code>database</code>/<code>api</code>/<code>cli</code>/<code>mcp</code> keys
+		with the new structure:
+	</p>
+	<CodeBlock
+		code={`import { defineConfig } from '@happyvertical/smrt-config';
+
+// Before (old shape - no longer valid)
+export default defineConfig({
+  database: { type: 'postgresql', host: '...' },
+  api: { enabled: true, port: 3000 },
+  cli: { enabled: true },
+  mcp: { enabled: true, port: 3100 }
+});
+
+// After (current shape)
+export default defineConfig({
+  smrt: {
+    logLevel: 'info',
+    environment: 'production',
+    embeddings: { provider: 'local' }
+  },
+  modules: {
+    'my-agent': { cronSchedule: '0 2 * * *' }
+  },
+  packages: {
+    ai: { defaultModel: 'gpt-4o' }
+  }
+});`}
+		language="typescript"
+	/>
+
+	<h3>Agent Signal Handling</h3>
+	<p>
+		Agents now automatically register SIGTERM/SIGINT handlers during <code>initialize()</code>
+		for graceful shutdown. If you had custom signal handling, it is now built-in. Always call
+		<code>super.shutdown()</code> to clean up signal handlers.
+	</p>
+
+	<h3>Relationship Decorators</h3>
+	<p>
+		Relationship fields (<code>foreignKey</code>, <code>oneToMany</code>, <code>manyToMany</code>)
+		are now decorators, not plain assignment helpers:
+	</p>
+	<CodeBlock
+		code={`// Before (plain assignment - no longer valid)
+class Order extends SmrtObject {
+  customerId = foreignKey(Customer);
+  items = oneToMany(OrderItem);
+}
+
+// After (decorators)
+class Order extends SmrtObject {
+  @foreignKey(Customer)
+  customerId: string = '';
+
+  @oneToMany(OrderItem)
+  items: OrderItem[] = [];
+}`}
+		language="typescript"
+	/>
+
+	<h3>Collection _itemClass</h3>
+	<p>
+		The <code>_itemClass</code> static property must now be <code>readonly</code>:
+	</p>
+	<CodeBlock
+		code={`// Before
+class MyCollection extends SmrtCollection<MyObject> {
+  static itemClass = MyObject;
+}
+
+// After
+class MyCollection extends SmrtCollection<MyObject> {
+  static readonly _itemClass = MyObject;
+}`}
+		language="typescript"
 	/>
 </article>
 

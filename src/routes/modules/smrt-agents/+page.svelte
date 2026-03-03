@@ -6,7 +6,7 @@
 <ModuleTabs
 	name="smrt-agents"
 	description="Build autonomous actors with persistent state, inter-agent communication via DispatchBus, and comprehensive lifecycle management."
-	badges={['v0.19.0', 'Agents', '4 Components']}
+	badges={['v0.20.44', 'Agents', 'DispatchBus']}
 >
 	{#snippet docs()}
 		<section id="overview">
@@ -462,6 +462,107 @@ async run() {
 			/>
 		</section>
 
+		<section id="tenant-agent">
+			<h2>TenantAgent -- Multi-Tenant Bindings</h2>
+			<p>
+				The <code>TenantAgent</code> model provides a junction table (<code>tenant_agents</code>)
+				binding agents to tenants with permission overrides and hierarchy resolution.
+			</p>
+			<ul>
+				<li><strong>Explicit binding</strong>: row exists for tenant (source: 'explicit')</li>
+				<li><strong>Inherited</strong>: walks up tenant hierarchy (source: 'inherited')</li>
+				<li><strong>Permissions</strong>: manifest defaults merged with per-tenant overrides</li>
+			</ul>
+			<CodeBlock
+				code={`import { TenantAgent, TenantAgentCollection } from '@happyvertical/smrt-agents';
+
+const bindings = new TenantAgentCollection(db);
+const binding = await bindings.create({
+  agentId: agent.id,
+  tenantId: tenant.id,
+  // permission overrides here
+});`}
+				language="typescript"
+			/>
+		</section>
+
+		<section id="agent-schedule">
+			<h2>AgentSchedule</h2>
+			<p>
+				Cron-based scheduling stored in <code>_smrt_agent_schedules</code>. Executed by
+				ScheduleRunner from smrt-jobs.
+			</p>
+			<CodeBlock
+				code={`import { AgentSchedule, AgentScheduleCollection } from '@happyvertical/smrt-agents';
+
+const schedules = new AgentScheduleCollection(db);
+await schedules.create({
+  agentType: 'DataProcessorAgent',
+  cron: '0 2 * * *',        // Run at 2am daily
+  method: 'run',             // Default method to call
+  maxConcurrent: 1,
+  timeout: 300000,           // 5 minutes
+});`}
+				language="typescript"
+			/>
+		</section>
+
+		<section id="agent-config">
+			<h2>AgentConfig</h2>
+			<p>
+				DB-persisted configuration via <code>AgentConfig</code> model. Supports UI slot
+				overrides for admin panels.
+			</p>
+			<CodeBlock
+				code={`import { AgentConfig, AgentConfigCollection } from '@happyvertical/smrt-agents';
+
+// Save UI slot config
+await agent.saveSlotConfig('settings', {
+  batchSize: 200,
+  maxRetries: 5,
+});
+
+// Get merged config (DB overrides file config)
+const config = await agent.getMergedConfig('settings');`}
+				language="typescript"
+			/>
+		</section>
+
+		<section id="signal-handlers">
+			<h2>Signal Handler Infrastructure</h2>
+			<p>
+				New in v0.20.44: agents automatically register SIGTERM/SIGINT handlers for
+				graceful shutdown. Override <code>shutdown()</code> to add custom cleanup logic.
+			</p>
+			<CodeBlock
+				code={`@smrt()
+class MyAgent extends Agent {
+  async shutdown(): Promise<void> {
+    this.logger.info('Cleaning up connections...');
+    await this.closeConnections();
+    await super.shutdown(); // Clean up signal handlers
+  }
+}`}
+				language="typescript"
+			/>
+		</section>
+
+		<section id="summary-article">
+			<h2>SummaryArticleResult Type</h2>
+			<p>
+				New in v0.20.44: the <code>SummaryArticleResult</code> type provides a structured
+				return type for agents that generate article summaries.
+			</p>
+			<CodeBlock
+				code={`import type {
+  SummaryArticleResult,
+  SummaryArticleOptions,
+  SummaryArticleImage,
+} from '@happyvertical/smrt-agents';`}
+				language="typescript"
+			/>
+		</section>
+
 		<section id="integration">
 			<h2>Integration with Other Modules</h2>
 
@@ -562,22 +663,22 @@ async shutdown(): Promise<void> {
 				language="typescript"
 			/>
 
-			<h3>4. Use Type-Safe Config</h3>
+			<h3>4. Use Config from smrt-config</h3>
 			<CodeBlock
-				code={`interface MyAgentConfig {
-  batchSize: number;
-  apiUrl: string;
-}
+				code={`import { getModuleConfig } from '@happyvertical/smrt-config';
 
 @smrt()
 class MyAgent extends Agent {
-  protected config!: MyAgentConfig; // Override base type
+  // Three-layer config: file + database + defaults
+  protected config = getModuleConfig('my-agent', {
+    batchSize: 100,
+    apiUrl: 'https://api.example.com',
+  });
 
-  protected override getDefaultConfig(): MyAgentConfig {
-    return {
-      batchSize: 100,
-      apiUrl: 'https://api.example.com'
-    };
+  async run() {
+    // DB overrides file config overrides defaults
+    const merged = await this.getMergedConfig();
+    console.log(merged.batchSize);
   }
 }`}
 				language="typescript"
