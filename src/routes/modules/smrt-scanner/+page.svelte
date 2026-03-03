@@ -5,15 +5,16 @@
 
 <ModulePage
 	name="smrt-scanner"
-	description="High-performance TypeScript scanner using OXC for automatic SMRT class discovery, inheritance resolution, and manifest generation. 2-3x faster than TypeScript compiler."
-	badges={['v0.19.0', 'Core Foundation', 'Rust-powered']}
+	description="AST-based scanner using oxc-parser (Rust) for class/field metadata extraction. Discovers @smrt() classes, resolves inheritance, and generates manifests for code generators."
+	badges={['v0.20.44', 'Core Foundation', 'Rust-powered']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			The smrt-scanner package uses the blazing-fast Rust-based OXC parser to scan TypeScript
-			projects and generate manifests for the SMRT framework. It automatically discovers classes,
-			resolves inheritance hierarchies, and handles STI (Single Table Inheritance) field merging.
+			The smrt-scanner package uses the Rust-based OXC parser to scan TypeScript
+			source files and extract class, field, method, and decorator metadata without executing them.
+			It discovers <code>@smrt()</code> decorated classes, resolves inheritance hierarchies,
+			and generates manifests consumed by code generators, the vitest plugin, and CLI.
 		</p>
 
 		<h3>Key Features</h3>
@@ -49,56 +50,43 @@ bun add @happyvertical/smrt-scanner`}
 
 		<h3>Programmatic Usage</h3>
 		<CodeBlock
-			code={`import { OxcScanner } from '@happyvertical/smrt-scanner';
+			code={`import { OxcScanner, InheritanceResolver, ManifestAdapter } from '@happyvertical/smrt-scanner';
+import { parseFile, parseSource, extractSmrtImports } from '@happyvertical/smrt-scanner';
 
-// Create scanner
-const scanner = new OxcScanner({
-  cwd: process.cwd(),
-  include: ['src/**/*.ts'],
-  exclude: ['**/*.test.ts']
-});
+// Scan a single file
+const result = parseFile('/path/to/Product.ts');
+// result.classes → RawClassDefinition[]
 
-// Scan and resolve inheritance
-const { results, resolved } = await scanner.scanAndResolve();
+// Full scanner with glob support
+const scanner = new OxcScanner({ include: ['src/**/*.ts'] });
+const results = await scanner.scan();
 
-console.log(\`Found \${resolved.length} SMRT classes\`);
-resolved.forEach(cls => {
-  console.log(\`- \${cls.className}: \${cls.fields.length} fields\`);
-  if (cls.isSTI) {
-    console.log(\`  STI base: \${cls.stiBase}\`);
-  }
-});`}
+// Resolve inheritance across files
+const resolver = new InheritanceResolver();
+resolver.addClasses(results.classes);
+const resolved = resolver.resolveAll();
+
+// Convert to SMRT manifest format
+const adapter = new ManifestAdapter();
+const manifest = adapter.toManifest(resolved);`}
 		/>
 
 		<h3>CLI Usage</h3>
 		<CodeBlock
-			code={`# Basic scan
-smrt-scan
-
-# Custom directory and patterns
-smrt-scan ./src -i "**/*.ts" -e "**/*.test.ts"
-
-# Output manifest to file
-smrt-scan -o manifest.json --stats
-
-# Benchmark performance
-smrt-scan --benchmark`}
+			code={`# Scan and output manifest
+smrt-scan src/**/*.ts`}
 		/>
 	</section>
 
 	<section id="architecture">
 		<h2>Architecture</h2>
 
-		<h3>Two-Phase Processing</h3>
+		<h3>Processing Pipeline</h3>
 		<ol>
-			<li>
-				<strong>Phase 1 - OXC Parsing</strong>: Fast syntactic extraction using Rust-based parser.
-				Extracts class definitions, decorators, fields, and methods without semantic analysis.
-			</li>
-			<li>
-				<strong>Phase 2 - Inheritance Resolution</strong>: Builds class hierarchy, resolves
-				inheritance chains, merges STI fields, and identifies framework base classes.
-			</li>
+			<li><strong>fast-glob</strong> finds <code>.ts</code> files matching include/exclude patterns</li>
+			<li><strong>oxc-parser</strong> parses each file's AST</li>
+			<li><strong>Extraction</strong>: <code>@smrt()</code> config, class hierarchy, field defaults (0 vs 0.0 heuristic), relationships, static properties</li>
+			<li><strong>Manifest output</strong>: JSON consumed by code generators, vitest plugin, and CLI</li>
 		</ol>
 
 		<h3>Class Discovery</h3>
@@ -135,101 +123,88 @@ smrt-scan --benchmark`}
 	<section id="api-reference">
 		<h2>API Reference</h2>
 
-		<h3>OxcScanner Class</h3>
+		<h3>Exports</h3>
 
-		<h4>Constructor</h4>
-		<CodeBlock
-			code={`new OxcScanner(options?: OxcScannerOptions)
-
-interface OxcScannerOptions {
-  include?: string[];                     // Glob patterns (default: ['**/*.ts', '**/*.tsx'])
-  exclude?: string[];                     // Exclude patterns
-  cwd?: string;                           // Base directory
-  tsconfig?: string;                      // Path to tsconfig.json
-  followImports?: boolean;                // Follow imports for base classes
-  baseClasses?: string[];                 // Known base classes
-  includePrivateMethods?: boolean;        // Include private methods
-  includeStaticMethods?: boolean;         // Include static methods (default: true)
-  externalManifests?: Map<string, ExternalManifest>;
-}`}
-		/>
-
-		<h4>Key Methods</h4>
+		<h4>Classes</h4>
 		<table>
 			<thead>
 				<tr>
-					<th>Method</th>
-					<th>Returns</th>
+					<th>Export</th>
 					<th>Description</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td><code>scan()</code></td>
-					<td><code>Promise&lt;ScanResults&gt;</code></td>
-					<td>Parse files and extract raw class definitions</td>
+					<td><code>OxcScanner</code></td>
+					<td>Scans TypeScript files for <code>@smrt()</code> decorated classes</td>
 				</tr>
 				<tr>
-					<td><code>resolve()</code></td>
-					<td><code>ResolvedClassDefinition[]</code></td>
-					<td>Resolve inheritance after scan()</td>
+					<td><code>InheritanceResolver</code></td>
+					<td>Resolves class inheritance chains across files</td>
 				</tr>
 				<tr>
-					<td><code>scanAndResolve()</code></td>
-					<td><code>{'{ results, resolved }'}</code></td>
-					<td>Combined scan + resolve operation</td>
-				</tr>
-				<tr>
-					<td><code>addExternalManifest()</code></td>
-					<td><code>void</code></td>
-					<td>Add external package manifest</td>
-				</tr>
-				<tr>
-					<td><code>getStats()</code></td>
-					<td><code>Statistics</code></td>
-					<td>Get performance statistics</td>
+					<td><code>ManifestAdapter</code></td>
+					<td>Converts raw scan results to SMRT manifest format</td>
 				</tr>
 			</tbody>
 		</table>
 
-		<h3>Result Types</h3>
-		<CodeBlock
-			code={`interface ScanResults {
-  files: FileScanResult[];           // Per-file results
-  classes: RawClassDefinition[];     // All classes (flattened)
-  errors: ScanError[];               // Parse errors
-  totalParseTimeMs: number;          // Total parse duration
-  fileCount: number;                 // Number of files scanned
-}
+		<h4>Functions</h4>
+		<table>
+			<thead>
+				<tr>
+					<th>Export</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>parseFile</code></td>
+					<td>Parse a single TypeScript file and extract metadata</td>
+				</tr>
+				<tr>
+					<td><code>parseSource</code></td>
+					<td>Parse a TypeScript source string</td>
+				</tr>
+				<tr>
+					<td><code>extractSmrtImports</code></td>
+					<td>Extract SMRT-related imports from a file</td>
+				</tr>
+			</tbody>
+		</table>
 
-interface ResolvedClassDefinition {
-  className: string;
-  filePath: string;
-  extendsClause: string | null;
-  inheritanceChain: string[];        // Full chain from base to this class
-  stiBase: string | null;            // STI base if in STI hierarchy
-  effectiveTableStrategy: 'sti' | 'cti';
-  isSTI: boolean;
-  isFrameworkBase: boolean;
-  decoratorConfig: RawDecoratorConfig | null;
-  fields: RawFieldDefinition[];
-  allFields: RawFieldDefinition[];   // Merged fields for STI
-  methods: RawMethodDefinition[];
-}`}
+		<h3>Key Types</h3>
+		<p>The following types are exported from the package:</p>
+		<CodeBlock
+			code={`// Core scan result types
+RawClassDefinition
+RawFieldDefinition
+RawMethodDefinition
+RawDecoratorConfig
+ResolvedClassDefinition
+ScanResults
+FileScanResult
+OxcScannerOptions
+
+// Field type inference
+InferredFieldType
+FieldTypeInference`}
 		/>
 
 		<h3>ManifestAdapter</h3>
 		<CodeBlock
-			code={`import { ManifestAdapter } from '@happyvertical/smrt-scanner';
+			code={`import { OxcScanner, InheritanceResolver, ManifestAdapter } from '@happyvertical/smrt-scanner';
+
+// Full pipeline: scan → resolve → manifest
+const scanner = new OxcScanner({ include: ['src/**/*.ts'] });
+const results = await scanner.scan();
+
+const resolver = new InheritanceResolver();
+resolver.addClasses(results.classes);
+const resolved = resolver.resolveAll();
 
 const adapter = new ManifestAdapter();
-const manifest = adapter.toManifest(resolvedClasses, {
-  packageName: '@my/package',
-  packageVersion: '1.0.0'
-});
-
-// Write to file
-await fs.writeFile('manifest.json', JSON.stringify(manifest, null, 2));`}
+const manifest = adapter.toManifest(resolved);`}
 		/>
 	</section>
 
@@ -241,14 +216,13 @@ await fs.writeFile('manifest.json', JSON.stringify(manifest, null, 2));`}
 		<h4>Step 1: Create SMRT Classes</h4>
 		<CodeBlock
 			code={`// src/models/User.ts
-import { SmrtObject, smrt } from '@happyvertical/smrt-core';
-import { text, integer } from '@happyvertical/smrt-core/fields';
+import { smrt, SmrtObject } from '@happyvertical/smrt-core';
 
 @smrt()
 export class User extends SmrtObject {
-  name = text();
-  email = text();
-  age = integer();
+  name: string = '';
+  email: string = '';
+  age: number = 0;
 }`}
 		/>
 
@@ -257,7 +231,10 @@ export class User extends SmrtObject {
 			code={`import { OxcScanner } from '@happyvertical/smrt-scanner';
 
 const scanner = new OxcScanner({ cwd: './src' });
-const { resolved } = await scanner.scanAndResolve();
+const results = await scanner.scan();
+const resolver = new InheritanceResolver();
+resolver.addClasses(results.classes);
+const resolved = resolver.resolveAll();
 
 const user = resolved.find(c => c.className === 'User');
 console.log(\`User has \${user.fields.length} fields\`);
@@ -273,29 +250,32 @@ user.fields.forEach(f => {
 			code={`// Base class with STI
 @smrt({ tableStrategy: 'sti' })
 export class Vehicle extends SmrtObject {
-  make = text();
-  model = text();
-  year = integer();
+  make: string = '';
+  model: string = '';
+  year: number = 0;
 }
 
 // Car inherits STI strategy
 @smrt()
 export class Car extends Vehicle {
-  numDoors = integer();
-  trunkSize = decimal();
+  numDoors: number = 0;
+  trunkSize: number = 0.0;   // 0.0 → DECIMAL
 }
 
 // Truck also inherits STI
 @smrt()
 export class Truck extends Vehicle {
-  bedLength = decimal();
-  towingCapacity = integer();
+  bedLength: number = 0.0;
+  towingCapacity: number = 0;
 }`}
 		/>
 
 		<h4>Step 2: Scan and Examine</h4>
 		<CodeBlock
-			code={`const { resolved } = await scanner.scanAndResolve();
+			code={`const results = await scanner.scan();
+const resolver = new InheritanceResolver();
+resolver.addClasses(results.classes);
+const resolved = resolver.resolveAll();
 
 const car = resolved.find(c => c.className === 'Car');
 console.log('Car inheritance chain:', car.inheritanceChain);
@@ -315,40 +295,37 @@ console.log('All fields (merged from Vehicle):', car.allFields.length);
 
 		<h4>Step 1: Scan and Resolve</h4>
 		<CodeBlock
-			code={`import { OxcScanner, ManifestAdapter } from '@happyvertical/smrt-scanner';
+			code={`import { OxcScanner, InheritanceResolver, ManifestAdapter } from '@happyvertical/smrt-scanner';
 import fs from 'fs/promises';
 
-const scanner = new OxcScanner();
-const { resolved } = await scanner.scanAndResolve();
+const scanner = new OxcScanner({ include: ['src/**/*.ts'] });
+const results = await scanner.scan();
+
+const resolver = new InheritanceResolver();
+resolver.addClasses(results.classes);
+const resolved = resolver.resolveAll();
 
 const adapter = new ManifestAdapter();
-const manifest = adapter.toManifest(resolved, {
-  packageName: '@my/models',
-  packageVersion: '1.0.0'
-});
+const manifest = adapter.toManifest(resolved);
 
 await fs.writeFile(
   'manifest.json',
   JSON.stringify(manifest, null, 2)
-);
-
-console.log('Manifest generated with', manifest.classes.size, 'classes');`}
+);`}
 		/>
 
-		<h3>Tutorial 4: Cross-Package Resolution</h3>
+		<h3>Key Files</h3>
+		<ul>
+			<li><code>src/oxc-scanner.ts</code> -- core AST scanning logic</li>
+			<li><code>src/manifest-builder.ts</code> -- orchestrates scanning to manifest</li>
+			<li><code>src/base-class-discovery.ts</code> -- resolves base classes from node_modules</li>
+		</ul>
 
-		<h4>Step 1: Load External Manifest</h4>
-		<CodeBlock
-			code={`import externalManifest from '@external/package/manifest.json';
-
-const scanner = new OxcScanner();
-scanner.addExternalManifest({
-  packageName: '@external/package',
-  classes: new Map(Object.entries(externalManifest.classes))
-});
-
-// Now scanner can resolve classes extending @external/package classes
-const { resolved } = await scanner.scanAndResolve();`}
+		<p>
+			Internally, <code>ManifestBuilder</code> provides a high-level API that scans source files
+			and builds a <code>SmartObjectManifest</code> in one call. It is used by <code>smrtVitestPlugin()</code>
+			at startup to generate the build-time manifest.
+		</p>
 		/>
 	</section>
 
@@ -357,7 +334,10 @@ const { resolved } = await scanner.scanAndResolve();`}
 
 		<h3>Example 1: Find All STI Hierarchies</h3>
 		<CodeBlock
-			code={`const { resolved } = await scanner.scanAndResolve();
+			code={`const results = await scanner.scan();
+const resolver = new InheritanceResolver();
+resolver.addClasses(results.classes);
+const resolved = resolver.resolveAll();
 const stiClasses = resolved.filter(c => c.isSTI);
 
 const hierarchies = new Map();
@@ -376,7 +356,10 @@ hierarchies.forEach((children, base) => {
 
 		<h3>Example 2: Analyze Field Types</h3>
 		<CodeBlock
-			code={`const { resolved } = await scanner.scanAndResolve();
+			code={`const results = await scanner.scan();
+const resolver = new InheritanceResolver();
+resolver.addClasses(results.classes);
+const resolved = resolver.resolveAll();
 
 resolved.forEach(cls => {
   const requiredFields = cls.fields.filter(f => !f.optional);
@@ -390,7 +373,10 @@ resolved.forEach(cls => {
 
 		<h3>Example 3: Extract API Endpoints</h3>
 		<CodeBlock
-			code={`const { resolved } = await scanner.scanAndResolve();
+			code={`const results = await scanner.scan();
+const resolver = new InheritanceResolver();
+resolver.addClasses(results.classes);
+const resolved = resolver.resolveAll();
 
 resolved.forEach(cls => {
   const api = cls.decoratorConfig?.api;
@@ -418,7 +404,10 @@ export default defineConfig({
     name: 'smrt-manifest',
     async buildStart() {
       const scanner = new OxcScanner({ cwd: './src' });
-      const { resolved } = await scanner.scanAndResolve();
+      const results = await scanner.scan();
+const resolver = new InheritanceResolver();
+resolver.addClasses(results.classes);
+const resolved = resolver.resolveAll();
 
       const adapter = new ManifestAdapter();
       const manifest = adapter.toManifest(resolved);
@@ -440,7 +429,10 @@ const allClasses = [];
 
 for (const pkg of packages) {
   const scanner = new OxcScanner({ cwd: pkg });
-  const { resolved } = await scanner.scanAndResolve();
+  const results = await scanner.scan();
+const resolver = new InheritanceResolver();
+resolver.addClasses(results.classes);
+const resolved = resolver.resolveAll();
   allClasses.push(...resolved);
 }
 
