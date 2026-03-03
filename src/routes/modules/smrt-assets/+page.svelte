@@ -5,25 +5,26 @@
 
 <ModulePage
 	name="smrt-assets"
-	description="Production-grade asset management with versioning, derivatives, hierarchical tagging, and AI-powered operations."
-	badges={['v0.19.0', 'Asset Management', 'AI-Powered']}
+	description="Provider-agnostic asset management with versioning, type classification, metadata fields, and polymorphic associations."
+	badges={['v0.20.44', 'Asset Management', 'Provider-Agnostic']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			The <code>@happyvertical/smrt-assets</code> package provides sophisticated asset organization, versioning,
-			and lifecycle management built on the SMRT framework.
+			The <code>@happyvertical/smrt-assets</code> package provides provider-agnostic asset management
+			with versioning via <code>primaryVersionId</code> chains, hierarchical derivatives via <code>parentId</code>,
+			polymorphic associations via <code>AssetAssociation</code>, and folder organization via STI.
 		</p>
 
 		<h3>Key Features</h3>
 		<ul>
-			<li><strong>Flexible Asset Types</strong>: Images, videos, documents, audio with STI</li>
-			<li><strong>Versioning System</strong>: Parent-child relationships for derivatives</li>
-			<li><strong>Controlled Metadata</strong>: EAV pattern with validation</li>
-			<li><strong>Hierarchical Tagging</strong>: Integration with smrt-tags</li>
-			<li><strong>AI-Powered</strong>: Auto-generate alt text, descriptions, analysis</li>
-			<li><strong>Storage Agnostic</strong>: Works with S3, local, CDN, etc.</li>
-			<li><strong>Auto-Generated APIs</strong>: REST, CLI, MCP tools</li>
+			<li><strong>STI Asset Model</strong>: Asset base with Folder STI subclass for hierarchical organization</li>
+			<li><strong>Versioning</strong>: Sequential via <code>primaryVersionId</code> chain + <code>version</code> number</li>
+			<li><strong>Derivatives</strong>: Parent-child hierarchy via <code>parentId</code> for thumbnails, crops, format conversions</li>
+			<li><strong>Polymorphic Association</strong>: <code>AssetAssociation</code> links assets to any SmrtObject via <code>metaType</code> + <code>metaId</code></li>
+			<li><strong>Metadata Fields</strong>: <code>AssetMetafield</code> with JSON validation rules</li>
+			<li><strong>Tag Integration</strong>: <code>addTag()</code>/<code>removeTag()</code> via raw join table</li>
+			<li><strong>Provider-Agnostic</strong>: <code>AssetStore</code> abstraction for S3, local, GCS, CDN</li>
 		</ul>
 
 		<h3>Architecture</h3>
@@ -32,27 +33,27 @@
 ┌─────────────────────────────────────────────┐
 │        Asset Management System               │
 ├─────────────────────────────────────────────┤
-│  SmrtObject (Base)                           │
-│  • ORM capabilities                          │
-│  • Auto-generated REST/CLI/MCP               │
-│  • AI methods (is, do, describe)             │
+│  Asset (STI base)                            │
+│  • name, slug, sourceUri, mimeType           │
+│  • versioning: primaryVersionId + version    │
+│  • hierarchy: parentId (derivatives)         │
+│  • ownerProfileId, typeSlug, statusSlug      │
 ├─────────────────────────────────────────────┤
-│  Asset (Core Model)                          │
-│  • name, slug, sourceUri                     │
-│  • MIME type, versioning                     │
-│  • parent/child relationships                │
-│  • tag integration                           │
+│  Folder (STI subclass, typeSlug='folder')    │
+│  • Hierarchical organization                 │
 ├─────────────────────────────────────────────┤
-│  Image (Specialized)                         │
-│  • width, height, alt text                   │
-│  • aspect ratio calculations                 │
-│  • AI alt text generation                    │
+│  AssetAssociation (polymorphic join)         │
+│  • assetId + metaType + metaId + role        │
+│  • sortOrder for ordering                    │
 ├─────────────────────────────────────────────┤
-│  Collections                                 │
-│  • AssetCollection - bulk operations         │
-│  • ImageCollection - image queries           │
-│  • Tag management                            │
-│  • Version history                           │
+│  Lookup Tables                               │
+│  • AssetType - classification                │
+│  • AssetStatus - lifecycle                   │
+│  • AssetMetafield - custom metadata defs     │
+├─────────────────────────────────────────────┤
+│  AssetStore                                  │
+│  • Provider-agnostic file I/O               │
+│  • S3, local, GCS, CDN backends              │
 └─────────────────────────────────────────────┘
 			</pre>
 		</div>
@@ -69,14 +70,16 @@
 
 		<h3>Setup</h3>
 		<CodeBlock
-			code={`import { AssetCollection, ImageCollection @happyvertical '@happyvertical/smrt-assets';
+			code={`import {
+  Asset, AssetCollection,
+  AssetAssociation, AssetAssociationCollection,
+  AssetType, AssetStatus, AssetMetafield,
+  Folder, FolderCollection,
+  AssetStore
+} from '@happyvertical/smrt-assets';
 
 const assets = await AssetCollection.create({
-  db: { type: \\'sqlite\\', url: \\'./assets.db\\' }
-});
-
-const images = await ImageCollection.create({
-  db: { type: \\'sqlite\\', url: \\'./assets.db\\' }
+  db: { type: 'sqlite', url: './assets.db' }
 });`}
 			language="typescript"
 		/>
@@ -87,51 +90,71 @@ const images = await ImageCollection.create({
 
 		<h3>1. Create Asset</h3>
 		<CodeBlock
-			code={`const asset = await assets.create({
+			code={`// Create lookup records first
+const imageType = new AssetType({ slug: 'image', name: 'Image' });
+await imageType.save();
+
+const published = new AssetStatus({ slug: 'published', name: 'Published' });
+await published.save();
+
+// Create an asset
+const photo = new Asset({
   name: 'Product Photo',
   slug: 'product-photo-001',
   sourceUri: 's3://mybucket/products/photo.jpg',
   mimeType: 'image/jpeg',
-  description: 'Main product photograph',
   typeSlug: 'image',
   statusSlug: 'published',
   version: 1
-});`}
+});
+await photo.save();`}
 			language="typescript"
 		/>
 
-		<h3>2. Create Image with Dimensions</h3>
+		<h3>2. Versioning (primaryVersionId chain)</h3>
 		<CodeBlock
-			code={`const image = await images.create({
-  name: 'hero-image.jpg',
-  sourceUri: 'file:///images/hero.jpg',
+			code={`// Create version 2 -- chain via primaryVersionId
+const v2 = new Asset({
+  name: 'Product Photo',
+  slug: 'product-photo-002',
+  version: 2,
+  primaryVersionId: photo.id,
+  sourceUri: 's3://mybucket/products/photo-v2.jpg',
   mimeType: 'image/jpeg',
-  width: 1920,
-  height: 1080,
-  alt: 'Hero banner',
   typeSlug: 'image',
   statusSlug: 'published'
 });
-
-console.log('Aspect ratio: ' + image.aspectRatio);  // 1.777
-console.log('Is landscape: ' + image.isLandscape);  // true`}
+await v2.save();`}
 			language="typescript"
 		/>
 
-		<h3>3. Manage Versions</h3>
+		<h3>3. Derivatives via parentId</h3>
 		<CodeBlock
-			code={`// Create new version
-const newVersion = await assets.createNewVersion(
-  asset.id,
-  's3://mybucket/products/photo-v2.jpg',
-  { description: \\'Updated product photo\\' }
-);
+			code={`// Create thumbnail derivative
+const thumb = new Asset({
+  name: 'Thumbnail',
+  slug: 'product-photo-001-thumb',
+  parentId: photo.id,
+  sourceUri: 's3://mybucket/products/photo-001-thumb.jpg',
+  mimeType: 'image/jpeg',
+  typeSlug: 'image',
+  statusSlug: 'published'
+});
+await thumb.save();`}
+			language="typescript"
+		/>
 
-// Get latest version
-const latest = await assets.getLatestVersion(asset.id);
-
-// List all versions
-const versions = await assets.listVersions(asset.id);`}
+		<h3>3b. Polymorphic Association</h3>
+		<CodeBlock
+			code={`// Link asset to any SmrtObject via AssetAssociation
+const assoc = new AssetAssociation({
+  assetId: photo.id,
+  metaType: '@happyvertical/smrt-content:Article',
+  metaId: 'article-123',
+  role: 'hero',
+  sortOrder: 0
+});
+await assoc.save();`}
 			language="typescript"
 		/>
 
@@ -157,25 +180,28 @@ const featuredAssets = await assets.getByTag('featured');`}
 		<h2>Core Concepts</h2>
 
 		<h3>1. Versioning System</h3>
-		<p>Track sequential evolution of assets:</p>
+		<p>Track sequential evolution of assets via <code>primaryVersionId</code> chain and <code>version</code> number:</p>
 
 		<CodeBlock
 			code={`// Version 1 created
-const v1 = await assets.create({
-  name: 'Photo',
-  sourceUri: 'v1.jpg'
+const v1 = new Asset({
+  name: 'Photo', sourceUri: 'v1.jpg',
+  mimeType: 'image/jpeg', typeSlug: 'image',
+  statusSlug: 'published', version: 1
 });
-// primaryVersionId = v1.id
+await v1.save();
+// v1.primaryVersionId = v1.id (self-reference)
 
-// Version 2 created
-const v2 = await assets.createNewVersion(v1.id, 'v2.jpg');
-// primaryVersionId = v1.id (same lineage)
+// Version 2 -- chain via primaryVersionId
+const v2 = new Asset({
+  ...v1, slug: 'photo-v2', version: 2,
+  primaryVersionId: v1.id,
+  sourceUri: 'v2.jpg'
+});
+await v2.save();
 
-// Get latest
-const latest = await assets.getLatestVersion(v1.id);
-
-// List history
-const history = await assets.listVersions(v1.id);`}
+// findVersions() to retrieve history
+const history = await collection.findVersions(v1.id);`}
 			language="typescript"
 		/>
 
@@ -275,9 +301,9 @@ const widthField = new AssetMetafield({
 });
 
 // Validation examples
-{ type: \\'integer\\', minimum: 0, maximum: 10000 }
-{ type: \\'string\\', enum: [\\'portrait\\', \\'landscape\\', \\'square\\'] }
-{ type: \\'string\\', pattern: \\'^#[0-9A-Fa-f]{6}$\\' }`}
+// { type: 'integer', minimum: 0, maximum: 10000 }
+// { type: 'string', enum: ['portrait', 'landscape', 'square'] }
+// { type: 'string', pattern: '^#[0-9A-Fa-f]{6}$' }`}
 			language="typescript"
 		/>
 
@@ -301,26 +327,19 @@ const featured = await assets.getByTag('featured/homepage');`}
 
 	<section id="ai-features">
 		<h2>AI-Powered Features</h2>
+		<p>
+			Assets inherit <code>is()</code> and <code>do()</code> from SmrtObject (smrt-core).
+			Image-specific AI features (alt text generation, categorization) are provided by the
+			<a href="/modules/smrt-images">smrt-images</a> package, which extends Asset via STI.
+		</p>
 
-		<h3>Auto-Generate Alt Text</h3>
+		<h3>Content Analysis (via smrt-core)</h3>
 		<CodeBlock
-			code={`const image = await images.get({ id: imageId });
-const altText = await image.generateAltText();
-image.alt = altText;
-await image.save();`}
-			language="typescript"
-		/>
-
-		<h3>Content Analysis</h3>
-		<CodeBlock
-			code={`// Boolean validation
+			code={`// Boolean validation (is)
 const isHighQuality = await asset.is('a high-quality product image');
-const isSafeForWork = await asset.is('appropriate for all audiences');
-const containsPeople = await asset.is('contains human faces');
 
-// Generate descriptions
-const description = await asset.do('generate a brief caption');
-const details = await asset.describe('what this image shows');`}
+// Generate descriptions (do)
+const description = await asset.do('generate a brief caption');`}
 			language="typescript"
 		/>
 	</section>
@@ -348,13 +367,13 @@ const details = await asset.describe('what this image shows');`}
 		<h4>Step 2: Create Responsive Derivatives</h4>
 		<CodeBlock
 			code={`const sizes = [
-  { slug: \\'thumb\\', width: 150, height: 150 },
-  { slug: \\'preview\\', width: 400, height: 300 },
-  { slug: \\'full\\', width: 1000, height: 750 }
+  { slug: 'thumb', width: 150, height: 150 },
+  { slug: 'preview', width: 400, height: 300 },
+  { slug: 'full', width: 1000, height: 750 }
 ];
 
 for (const size of sizes) {
-  await images.create({
+  const deriv = new Asset({
     name: master.name + ' - ' + size.slug,
     slug: master.slug + '-' + size.slug,
     sourceUri: 's3://products/sneakers/xyz-' + size.slug + '.jpg',
@@ -365,6 +384,7 @@ for (const size of sizes) {
     typeSlug: 'product-image',
     statusSlug: 'published'
   });
+  await deriv.save();
 }`}
 			language="typescript"
 		/>
@@ -377,38 +397,27 @@ await assets.addTag(master.id, 'featured/homepage');`}
 			language="typescript"
 		/>
 
-		<h3>Tutorial 2: Auto-Processing Pipeline</h3>
+		<h3>Tutorial 2: AssetStore Pipeline</h3>
 
 		<CodeBlock
-			code={`async function processUpload(file: File, userId: string) {
-  // Create asset
-  const asset = await assets.create({
-    name: file.name,
-    sourceUri: 's3://uploads/' + file.name,
-    mimeType: file.type,
-    typeSlug: detectAssetType(file.type),
-    statusSlug: 'draft',
-    ownerProfileId: userId
-  });
+			code={`import { AssetStore } from '@happyvertical/smrt-assets';
 
-  if (file.type.startsWith('image/')) {
-    const image = asset as Image;
+// AssetStore provides provider-agnostic file I/O
+const store = new AssetStore({ collection, filesystem });
 
-    // Generate alt text
-    const altText = await image.generateAltText();
-    image.alt = altText;
+// Store writes buffer to storage and creates Asset record
+const asset = await store.store({
+  buffer: fileBuffer,
+  mimeType: 'image/png',
+  name: 'screenshot'
+});
 
-    // Validate quality
-    const isHighQuality = await image.is(
-      'high-quality image suitable for professional use'
-    );
-
-    image.statusSlug = isHighQuality ? 'published' : 'review';
-    await image.save();
-  }
-
-  return asset;
-}`}
+// Use Folder STI subclass for organization
+const folder = new Folder({
+  name: 'Product Images',
+  slug: 'product-images'
+});
+await folder.save();`}
 			language="typescript"
 		/>
 	</section>
@@ -419,7 +428,7 @@ await assets.addTag(master.id, 'featured/homepage');`}
 		<h3>smrt-core</h3>
 		<ul>
 			<li>Asset extends <strong>SmrtObject</strong> for persistence</li>
-			<li>STI support for Image specialization</li>
+			<li>STI support (Folder subclass)</li>
 			<li>Auto-generated REST API, CLI, MCP tools</li>
 		</ul>
 
@@ -434,9 +443,15 @@ const products = await assets.getByTag('media-type/image/product');`}
 			language="typescript"
 		/>
 
-		<h3>Storage Backends</h3>
+		<h3>AssetStore (Provider-Agnostic File I/O)</h3>
 		<CodeBlock
-			code={`// Storage-agnostic sourceUri
+			code={`import { AssetStore } from '@happyvertical/smrt-assets';
+
+// AssetStore writes buffers to storage and creates Asset records
+const store = new AssetStore({ collection, filesystem });
+await store.store({ buffer, mimeType: 'image/png', name: 'screenshot' });
+
+// Storage-agnostic sourceUri formats
 sourceUri: 's3://my-bucket/images/image.jpg'
 sourceUri: 'file:///var/assets/image.jpg'
 sourceUri: 'gs://my-bucket/images/image.jpg'
@@ -600,83 +615,86 @@ const history = await assets.listVersions(v1.id);`}
 			</tbody>
 		</table>
 
-		<h3>Image Class</h3>
+		<h3>Other Models</h3>
 		<table>
 			<thead>
 				<tr>
-					<th>Property/Method</th>
-					<th>Type/Returns</th>
+					<th>Export</th>
 					<th>Description</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td><code>width</code></td>
-					<td><code>number</code></td>
-					<td>Image width in pixels</td>
+					<td><code>AssetAssociation</code></td>
+					<td>Polymorphic join: assetId + metaType + metaId + role + sortOrder</td>
 				</tr>
 				<tr>
-					<td><code>height</code></td>
-					<td><code>number</code></td>
-					<td>Image height in pixels</td>
+					<td><code>AssetType</code></td>
+					<td>Lookup table for asset type classification</td>
 				</tr>
 				<tr>
-					<td><code>aspectRatio</code></td>
-					<td><code>number</code></td>
-					<td>Computed width / height</td>
+					<td><code>AssetStatus</code></td>
+					<td>Lookup table for lifecycle status</td>
 				</tr>
 				<tr>
-					<td><code>isLandscape</code></td>
-					<td><code>boolean</code></td>
-					<td>Computed width > height</td>
+					<td><code>AssetMetafield</code></td>
+					<td>Custom metadata field definitions with JSON validation rules</td>
 				</tr>
 				<tr>
-					<td><code>generateAltText()</code></td>
-					<td><code>Promise&lt;string&gt;</code></td>
-					<td>AI alt text generation</td>
+					<td><code>Folder</code></td>
+					<td>STI subclass of Asset (typeSlug='folder') for hierarchical organization</td>
 				</tr>
 			</tbody>
 		</table>
 
-		<h3>AssetCollection</h3>
+		<h3>Collections</h3>
 		<table>
 			<thead>
 				<tr>
-					<th>Method</th>
-					<th>Returns</th>
+					<th>Export</th>
 					<th>Description</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td><code>getByType(slug)</code></td>
-					<td><code>Promise&lt;Asset[]&gt;</code></td>
-					<td>Filter by type</td>
+					<td><code>AssetCollection</code></td>
+					<td>CRUD for Asset</td>
 				</tr>
 				<tr>
-					<td><code>getByStatus(slug)</code></td>
-					<td><code>Promise&lt;Asset[]&gt;</code></td>
-					<td>Filter by status</td>
+					<td><code>AssetAssociationCollection</code></td>
+					<td>CRUD for AssetAssociation</td>
 				</tr>
 				<tr>
-					<td><code>getByTag(slug)</code></td>
-					<td><code>Promise&lt;Asset[]&gt;</code></td>
-					<td>Filter by tag</td>
+					<td><code>AssetTypeCollection</code></td>
+					<td>CRUD for AssetType</td>
 				</tr>
 				<tr>
-					<td><code>createNewVersion(id, uri, updates?)</code></td>
-					<td><code>Promise&lt;Asset&gt;</code></td>
-					<td>Create new version</td>
+					<td><code>AssetStatusCollection</code></td>
+					<td>CRUD for AssetStatus</td>
 				</tr>
 				<tr>
-					<td><code>getLatestVersion(id)</code></td>
-					<td><code>Promise&lt;Asset | null&gt;</code></td>
-					<td>Get latest version</td>
+					<td><code>AssetMetafieldCollection</code></td>
+					<td>CRUD for AssetMetafield</td>
 				</tr>
 				<tr>
-					<td><code>listVersions(id)</code></td>
-					<td><code>Promise&lt;Asset[]&gt;</code></td>
-					<td>List all versions</td>
+					<td><code>FolderCollection</code></td>
+					<td>CRUD for Folder</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<h3>Utilities</h3>
+		<table>
+			<thead>
+				<tr>
+					<th>Export</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>AssetStore</code></td>
+					<td>Provider-agnostic file I/O that writes buffers to storage and creates Asset records</td>
 				</tr>
 			</tbody>
 		</table>
@@ -686,8 +704,9 @@ const history = await assets.listVersions(v1.id);`}
 		<h2>Related Modules</h2>
 		<ul>
 			<li><a href="/modules/smrt-core">smrt-core</a> - SmrtObject, STI support</li>
-			<li><a href="/modules/smrt-tags">smrt-tags</a> - Hierarchical tagging</li>
-			<li><a href="/modules/smrt-content">smrt-content</a> - Content management</li>
+			<li><a href="/modules/smrt-tags">smrt-tags</a> - Tag integration (addTag/removeTag)</li>
+			<li><a href="/modules/smrt-images">smrt-images</a> - Image ops, AI categorization (extends Asset via STI)</li>
+			<li><a href="/modules/smrt-tenancy">smrt-tenancy</a> - Optional tenant scoping</li>
 		</ul>
 	</section>
 </ModulePage>

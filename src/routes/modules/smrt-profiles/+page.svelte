@@ -5,85 +5,69 @@
 
 <ModulePage
 	name="smrt-profiles"
-	description="Comprehensive profile management system with flexible metadata, complex relationships, and multi-provider authentication support (OIDC, Nostr, API keys)."
-	badges={['v0.19.0', 'Identity', 'Auth', 'ESM']}
+	description="Central identity system with multi-auth (Nostr/OIDC/API keys/magic links), relationships, controlled metadata, and audit logging."
+	badges={['v0.20.44', 'Identity', 'Auth', 'ESM']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			The <code>@happyvertical/smrt-profiles</code> package enables managing profiles of any type (people,
-			organizations, robots) with flexible metadata, complex relationships, and integrated authentication
-			support.
+			The <code>@happyvertical/smrt-profiles</code> package provides central identity management with
+			STI-based profiles (Person, Organization, Bot), multi-auth support, bidirectional relationships,
+			controlled metadata, and audit logging.
 		</p>
 
 		<h3>Key Features</h3>
 		<ul>
 			<li>
-				<strong>Flexible Profile Types</strong>: Define custom types (Person, Organization, Team,
-				Robot)
+				<strong>STI Profile Types</strong>: Profile base with Bot, Organization, Person subclasses, plus custom types via ProfileType
 			</li>
 			<li>
-				<strong>Controlled Metadata</strong>: EAV pattern with controlled vocabulary and validation
+				<strong>Controlled Metadata</strong>: EAV pattern via ProfileMetafield (controlled vocabulary with validation schema) and ProfileMetadata
 			</li>
 			<li>
-				<strong>Complex Relationships</strong>: Reciprocal, directional, with temporal terms and
-				context
+				<strong>Bidirectional Relationships</strong>: Auto-creates reciprocal inverse. Context profiles for tertiary relationships. Temporal tracking via ProfileRelationshipTerm
 			</li>
 			<li>
-				<strong>Multi-Provider Auth</strong>: OIDC (Google, GitHub, Keycloak), Nostr, API keys
+				<strong>Multi-Provider Auth</strong>: OIDC (Keycloak/Google/GitHub), Nostr (encrypted keypairs, NIP-05), API keys (SHA-256 hashed, scoped), Magic link tokens
 			</li>
-			<li><strong>Email-Based Linking</strong>: Same verified email = same profile</li>
-			<li><strong>Temporal Tracking</strong>: Employment history, membership periods</li>
-			<li><strong>Audit Logging</strong>: Complete action trail for compliance</li>
-			<li><strong>Multi-Tenancy</strong>: Database-level isolation</li>
+			<li><strong>Email-Based Linking</strong>: Same verified email = same profile across providers</li>
+			<li><strong>Audit Logging</strong>: Action/resource trail with source tracking (web/cli/ci/webhook/mcp), onBehalfOfId for CI pass-through</li>
+			<li><strong>Optional Tenancy</strong>: Profiles can be global or tenant-scoped</li>
 		</ul>
 
 		<h3>Architecture</h3>
 		<div class="diagram">
 			<pre>
-┌─────────────────────────────────────────────────────────────┐
-│                   SMRT Profiles System                       │
-├─────────────────────────────────────────────────────────────┤
-│                                                               │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │              Core Models                              │  │
-│  ├──────────────────────────────────────────────────────┤  │
-│  │ • Profile (Person, Org, Robot, etc.)                 │  │
-│  │ • ProfileType (type definitions with slugs)          │  │
-│  │ • ProfileMetadata + ProfileMetafield (controlled)    │  │
-│  │ • ProfileRelationship + ProfileRelationshipType      │  │
-│  │ • ProfileRelationshipTerm (temporal tracking)        │  │
-│  └──────────────────────────────────────────────────────┘  │
-│                                                               │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │         Authentication Models                        │  │
-│  ├──────────────────────────────────────────────────────┤  │
-│  │ • OidcIdentity (Google, GitHub, Keycloak)           │  │
-│  │ • NostrIdentity (encrypted keypairs)                 │  │
-│  │ • ApiKey (hashed, scoped, expirable)                 │  │
-│  │ • MagicLinkToken (passwordless)                     │  │
-│  └──────────────────────────────────────────────────────┘  │
-│                                                               │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │           Security & Compliance                      │  │
-│  ├──────────────────────────────────────────────────────┤  │
-│  │ • AuditLog (all actions tracked)                    │  │
-│  │ • Email verification (OIDC)                          │  │
-│  │ • Master secret encryption (Nostr)                   │  │
-│  └──────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────┐
+│              SMRT Profiles System                     │
+├─────────────────────────────────────────────────────┤
+│                                                       │
+│  Core Models                                          │
+│  • Profile (STI base -> Bot, Organization, Person)   │
+│  • ProfileType (classification lookup table)          │
+│  • ProfileMetadata + ProfileMetafield (controlled)   │
+│  • ProfileRelationship (auto-creates reciprocal)     │
+│  • ProfileRelationshipType (reciprocal flag)          │
+│  • ProfileRelationshipTerm (start/end dates)          │
+│                                                       │
+│  Authentication Models                                │
+│  • OidcIdentity (issuer + subject, Keycloak/Google)  │
+│  • NostrIdentity (AES-256-GCM encrypted keypairs)    │
+│  • ApiKey (SHA-256 hashed, scope + expiry)            │
+│  • MagicLinkToken (one-time passwordless auth)        │
+│                                                       │
+│  Security & Compliance                                │
+│  • AuditLog (action/resource, source tracking)        │
+│  • resolveIdentity() (multi-auth resolution)          │
+│  • NIP-05 address generation (Nostr)                  │
+│                                                       │
+│  Auth Functions                                       │
+│  • createProfileFromOidc / createProfileFromNostr    │
+│  • createMagicLinkService / createNip05Handler       │
+│  • Nostr crypto (sign, verify, bech32 encode/decode) │
+└─────────────────────────────────────────────────────┘
 			</pre>
 		</div>
-
-		<h3>Use Cases</h3>
-		<ul>
-			<li>Multi-tenant SaaS platforms with user profiles</li>
-			<li>Social networks and collaboration tools</li>
-			<li>Employee directories and organizational charts</li>
-			<li>Web3 identity systems with Nostr</li>
-			<li>Healthcare provider networks</li>
-			<li>Educational institutions (students, teachers, courses)</li>
-		</ul>
 	</section>
 
 	<section id="installation">
@@ -100,8 +84,8 @@
 
 		<h3>Peer Dependencies</h3>
 		<p>
-			As of v0.20, <code>@happyvertical/smrt-tenancy</code> is a peer dependency. Install it
-			alongside profiles if you use multi-tenant features:
+			<code>@happyvertical/smrt-tenancy</code> is a peer dependency for tenant scoping.
+			Also depends on <code>@noble/curves</code> and <code>bech32</code> for Nostr cryptography.
 		</p>
 		<CodeBlock code={`pnpm add @happyvertical/smrt-tenancy`} language="bash" />
 
@@ -407,26 +391,13 @@ const activeTerm = await employeeRel.getActiveTerm();`}
 } from '@happyvertical/smrt-profiles';
 
 // On OIDC login callback
-const oidcClaims = {
-  sub: 'google-user-123',
-  iss: 'https://accounts.google.com',
+const oidcProfile = await createProfileFromOidc({
+  issuer: 'https://accounts.google.com',
+  subject: 'google-user-123',
   email: 'user@example.com',
-  email_verified: true,
   name: 'John Doe'
-};
-
-// Create or link profile
-const { profile, oidcIdentity, created } = await createProfileFromOidc(
-  oidcClaims,
-  'google',
-  { db: {...} }
-);
-
-if (created) {
-  console.log('New profile created');
-} else {
-  console.log('Linked to existing profile via email');
-}`}
+});
+// Creates Profile + OidcIdentity, links by email if verified`}
 			language="typescript"
 		/>
 
@@ -439,20 +410,15 @@ if (created) {
 
 		<h3>Authentication Resolution</h3>
 		<CodeBlock
-			code={`// In authentication middleware
-const { profile, source } = await resolveIdentity({
+			code={`import { resolveIdentity } from '@happyvertical/smrt-profiles';
+
+// Resolves profile from any auth method
+const result = await resolveIdentity({
   oidcSession: event.locals.session,
   apiKey: event.request.headers.get('X-API-Key'),
   db: event.locals.db
 });
-
-if (!profile) {
-  return error(401, 'Unauthorized');
-}
-
-// Store in context
-event.locals.profile = profile;
-event.locals.authSource = source; // 'oidc', 'api-key', etc.`}
+// Returns: { profile, source } | null`}
 			language="typescript"
 		/>
 
@@ -469,40 +435,25 @@ event.locals.authSource = source; // 'oidc', 'api-key', etc.`}
 		<p>Secure API keys for programmatic access with scopes and expiration.</p>
 
 		<CodeBlock
-			code={`// Generate API key for profile
-const apiKey = await profile.generateApiKey({
-  name: 'CI/CD Bot',
-  scopes: ['read:profiles', 'write:profiles'],
+			code={`import { ApiKey } from '@happyvertical/smrt-profiles';
+
+// Generate API key (plaintext returned once only!)
+const { key, apiKey } = await ApiKey.generate({
+  profileId: profile.id,
+  scope: 'read:profiles',
   expiresAt: new Date('2025-12-31')
 });
 
-console.log(apiKey.key); // 'smrt_1234567890abcdef...'
-console.log(apiKey.keyPrefix); // 'smrt_123' (for identification)
-
-// Verify API key
-const verified = await ApiKey.verify(apiKey.key);
-if (verified?.isValid()) {
-  const profile = await verified.getProfile();
-  if (verified.hasScope('read:profiles')) {
-    // Allow access
-  }
-}
-
-// Revoke key
-await apiKey.revoke();
-
-// List active keys
-const activeKeys = await profile.getActiveApiKeys();`}
+console.log(key); // plaintext - store now, never returned again
+console.log(apiKey.keyPrefix); // visible identifier for management`}
 			language="typescript"
 		/>
 
 		<h4>API Key Security</h4>
 		<ul>
-			<li>SHA-256 hashed storage (never plaintext)</li>
-			<li>Prefix stored for identification</li>
-			<li>Scopes/permissions system</li>
-			<li>Expiration and revocation support</li>
-			<li>Usage tracking (lastUsedAt)</li>
+			<li>SHA-256 hashed storage (plaintext returned once only on generate)</li>
+			<li><code>keyPrefix</code> stored for identification</li>
+			<li>Scope-based access control with expiry</li>
 		</ul>
 
 		<h3>Nostr Identity</h3>
@@ -511,27 +462,27 @@ const activeKeys = await profile.getActiveApiKeys();`}
 		<CodeBlock
 			code={`import {
   generateNostrKeypair,
-  createMagicLinkToken
+  createProfileFromNostr,
+  NostrIdentity
 } from '@happyvertical/smrt-profiles';
 
-// Generate keypair (encrypted with master secret)
-const keypair = await generateNostrKeypair('user@example.com');
+// Generate keypair (requires SERVER_MASTER_SECRET env var)
+const keypair = generateNostrKeypair();
 
-// Create magic link token
-const token = await createMagicLinkToken(profile, keypair);
-
-// Send email with magic link
-await sendEmail({
-  to: profile.email,
-  subject: 'Sign in to your account',
-  body: \`Click here: https://app.example.com/auth/magic?\${token}\`
+// Create profile with Nostr identity
+const nostr = new NostrIdentity({
+  profileId: profile.id,
+  pubkey: keypair.pubkey,
 });
+await nostr.save();
 
-// Verify magic link
-const verified = await verifyMagicLinkToken(token);
-if (verified) {
-  // Sign in user
-}`}
+// NIP-05 address handler
+import { createNip05Handler } from '@happyvertical/smrt-profiles';
+const nip05 = createNip05Handler(config);
+
+// Magic link service
+import { createMagicLinkService } from '@happyvertical/smrt-profiles';
+const magicLink = createMagicLinkService(config);`}
 			language="typescript"
 		/>
 	</section>
@@ -1165,30 +1116,42 @@ const tenantBCollection = await ProfileCollection.create({
 			</tbody>
 		</table>
 
-		<h3>Utility Functions</h3>
+		<h3>Auth Functions</h3>
 		<table>
 			<thead>
 				<tr>
 					<th>Function</th>
-					<th>Returns</th>
 					<th>Description</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td><code>createProfileFromOidc(claims, provider, options)</code></td>
-					<td><code>{`Promise&lt;{ profile, oidcIdentity, created }&gt;`}</code></td>
-					<td>Create or link profile from OIDC</td>
-				</tr>
-				<tr>
 					<td><code>resolveIdentity(context)</code></td>
-					<td><code>{`Promise&lt;{ profile, source } | null&gt;`}</code></td>
-					<td>Resolve authentication</td>
+					<td>Resolve profile from any auth method</td>
 				</tr>
 				<tr>
-					<td><code>ApiKey.verify(key)</code></td>
-					<td><code>Promise&lt;ApiKey | null&gt;</code></td>
-					<td>Verify and validate API key</td>
+					<td><code>createProfileFromOidc(claims)</code></td>
+					<td>Create profile + OIDC identity in one call</td>
+				</tr>
+				<tr>
+					<td><code>createProfileFromNostr(options)</code></td>
+					<td>Create profile + Nostr identity in one call</td>
+				</tr>
+				<tr>
+					<td><code>createMagicLinkService(config)</code></td>
+					<td>Factory for magic link auth service</td>
+				</tr>
+				<tr>
+					<td><code>createNip05Handler(config)</code></td>
+					<td>Factory for NIP-05 address handler</td>
+				</tr>
+				<tr>
+					<td><code>generateNostrKeypair()</code></td>
+					<td>Generate new Nostr keypair</td>
+				</tr>
+				<tr>
+					<td><code>ApiKey.generate(options)</code></td>
+					<td>Generate API key (plaintext returned once)</td>
 				</tr>
 			</tbody>
 		</table>
