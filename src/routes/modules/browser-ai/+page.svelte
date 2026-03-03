@@ -4,94 +4,149 @@
 </script>
 
 <svelte:head>
-	<title>browser-ai - On-Device AI | SMRT Framework</title>
+	<title>browser-ai - Consolidated into smrt-svelte | SMRT Framework</title>
 	<meta
 		name="description"
-		content="Browser-based AI with WebGPU acceleration, ONNX models, and offline capabilities."
+		content="The browser-ai package has been consolidated into @happyvertical/smrt-svelte as of v0.20."
 	/>
 </svelte:head>
 
 <ModulePage
 	name="browser-ai"
-	description="Browser-based AI capabilities including STT, TTS, and LLM — now built into smrt-svelte."
-	badges={['Deprecated in 0.20', 'Merged into smrt-svelte']}
+	description="Browser-based AI capabilities including STT, TTS, and LLM -- consolidated into smrt-svelte as of v0.20."
+	badges={['v0.20.44', 'Consolidated', 'See smrt-svelte']}
 >
-	<section>
+	<section id="consolidated">
 		<h2>Consolidated into smrt-svelte</h2>
 		<p>
 			As of <strong>v0.20</strong>, the <code>browser-ai</code> package has been consolidated into
 			<a href="/modules/smrt-svelte"><code>@happyvertical/smrt-svelte</code></a>. All browser AI
-			functionality — speech-to-text (STT), text-to-speech (TTS), LLM inference, capability
-			detection, and model management — is now available directly from smrt-svelte.
+			functionality -- speech-to-text (STT), text-to-speech (TTS), LLM inference, capability
+			detection, and model management -- is now available via the <code>@happyvertical/smrt-svelte/browser-ai</code>
+			subpath export.
 		</p>
 		<aside>
-			<p>This change:</p>
+			<p>This consolidation:</p>
 			<ul>
 				<li>Eliminates a circular dependency between browser-ai and smrt-svelte</li>
-				<li>Simplifies installation — one package instead of two</li>
+				<li>Simplifies installation -- one package instead of two</li>
 				<li>Keeps all Svelte components and their AI adapters co-located</li>
 				<li>Reduces bundle configuration complexity</li>
 			</ul>
 		</aside>
 	</section>
 
-	<section>
-		<h2>Migration from browser-ai</h2>
+	<section id="migration">
+		<h2>Migration</h2>
 		<p>Update your imports to use <code>@happyvertical/smrt-svelte</code>:</p>
 		<CodeBlock
-			code={`// Before (0.19)
+			code={`// Before (v0.19)
 import { BrowserAI } from '@happyvertical/browser-ai';
-import type { STTAdapter } from '@happyvertical/browser-ai';
 
-// After (0.20)
+// After (v0.20+)
 import { useSTT, useTTS, useLLM } from '@happyvertical/smrt-svelte';
-import { VoiceInput, DownloadProgress, AILoadingOverlay } from '@happyvertical/smrt-svelte';`}
+import { getCachedSTT, getCachedTTS, getCachedLLM } from '@happyvertical/smrt-svelte/browser-ai';
+import { VoiceInput, CapabilityGate, DownloadProgress } from '@happyvertical/smrt-svelte/browser-ai/svelte';`}
 			language="typescript"
 		/>
-		<p>
-			See the <a href="/components/hooks/use-stt">useSTT</a>,
-			<a href="/components/hooks/use-tts">useTTS</a>, and
-			<a href="/components/hooks/use-llm">useLLM</a> hook documentation for the new API.
-		</p>
 	</section>
 
-	<section>
-		<h2>AI Components</h2>
-		<p>All AI-related Svelte components are now in smrt-svelte:</p>
-		<nav>
-			<a href="/components/ai/voice-input">
-				<h3>VoiceInput</h3>
-				<p>Microphone button with speech-to-text</p>
-			</a>
-			<a href="/components/ai/download-progress">
-				<h3>DownloadProgress</h3>
-				<p>Progress bar for AI model downloads</p>
-			</a>
-			<a href="/components/ai/loading-overlay">
-				<h3>AILoadingOverlay</h3>
-				<p>Full-screen overlay during AI initialization</p>
-			</a>
-		</nav>
-	</section>
-
-	<section>
-		<h2>Related Modules</h2>
-		<nav>
-			<a href="/modules/smrt-svelte">
+	<section id="related">
+		<h2>Go to smrt-svelte</h2>
+		<div class="link-grid">
+			<a href="/modules/smrt-svelte" class="link-card">
 				<h3>smrt-svelte</h3>
-				<p>Svelte 5 components and AI integration</p>
+				<p>Svelte 5 components, hooks, browser AI, themes, and more</p>
 			</a>
-			<a href="/modules/smrt-agents">
-				<h3>smrt-agents</h3>
-				<p>Agent framework for AI workflows</p>
-			</a>
-		</nav>
+		</div>
 	</section>
-
-	<footer>
-		<nav>
-			<a href="/modules">← Back to Modules</a>
-			<a href="/modules/smrt-svelte">smrt-svelte →</a>
-		</nav>
-	</footer>
 </ModulePage>
+
+<style>
+	section {
+		grid-column: 1 / -1;
+		padding: 48px 0;
+		border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
+	}
+
+	section:last-child {
+		border-bottom: none;
+	}
+
+	h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin-bottom: 24px;
+	}
+
+	p {
+		margin-bottom: 16px;
+		line-height: 1.7;
+		color: var(--smrt-color-on-background, #333);
+	}
+
+	ul {
+		margin-bottom: 16px;
+		padding-left: 24px;
+	}
+
+	li {
+		margin-bottom: 8px;
+		line-height: 1.6;
+	}
+
+	code {
+		background: var(--smrt-color-surface-container, #f5f5f5);
+		padding: 2px 6px;
+		border-radius: 3px;
+		font-family: var(--font-mono);
+		font-size: 0.9em;
+	}
+
+	aside {
+		background: var(--smrt-color-surface-container, #f5f5f5);
+		padding: 16px;
+		border-radius: 8px;
+		margin: 16px 0;
+		border-left: 4px solid var(--smrt-color-primary, #1976d2);
+	}
+
+	.link-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 16px;
+		margin: 24px 0;
+	}
+
+	.link-card {
+		padding: 20px;
+		background: #fafafa;
+		text-decoration: none;
+		transition: all 0.2s;
+		border: 1px solid transparent;
+	}
+
+	.link-card:hover {
+		background: var(--smrt-color-surface-container, #f0f0f0);
+		transform: translateY(-2px);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		border-color: var(--smrt-color-primary, #1976d2);
+	}
+
+	.link-card h3 {
+		font-size: 1rem;
+		font-weight: 600;
+		margin: 0 0 8px 0;
+		color: #1a1a1a;
+	}
+
+	.link-card:hover h3 {
+		color: var(--smrt-color-primary, #1976d2);
+	}
+
+	.link-card p {
+		font-size: 0.85rem;
+		color: var(--smrt-color-on-surface-variant, #666);
+		margin: 0;
+	}
+</style>
