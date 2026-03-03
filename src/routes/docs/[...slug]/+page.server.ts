@@ -7,7 +7,6 @@ const MAPPINGS: Record<string, string> = {
 	collection: 'api/core/classes/SmrtCollection',
 	agent: 'api/agents/classes/Agent',
 	'smrt-cli': 'cli',
-	'smrt-auth': 'api/accounts/index',
 	'smrt-db': 'core',
 	'smrt-ai': 'api/core/interfaces/AiConfig',
 	foundations: 'core'
