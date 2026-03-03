@@ -13,25 +13,26 @@
 
 <ModulePage
 	name="smrt-projects"
-	description="Provider-agnostic project management with time tracking, task management, and team collaboration."
-	badges={['v0.19.0', 'Project Management', '7 Components']}
+	description="Provider-agnostic project management -- GitHub-style issues, PRs, projects, and repositories with Living Spec AI synthesis."
+	badges={['v0.20.44', 'Project Management', '7 Components']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-projects</strong> provides project board management, repository integration, issue/PR
-			tracking, and AI-powered Living Spec pattern where comments are synthesized into issue bodies. Now
-			includes 7 new time tracking components for approval workflows.
+			<strong>smrt-projects</strong> manages repositories, issues, pull requests, and project boards
+			with sync support for external providers (GitHub primary, GitLab/Bitbucket/Azure types defined).
+			Features AI-powered Living Spec pattern where comments are synthesized into issue bodies, and
+			PullRequest extends Issue via STI.
 		</p>
 		<aside>
 			<p>Key Features:</p>
 			<ul>
-				<li>Project board management (GitHub Projects, Jira, Linear)</li>
-				<li>Living Spec: AI-synthesized issue bodies from comments</li>
-				<li>Issue/PR tracking with sync throttling</li>
-				<li>AI classification (bugs vs features)</li>
-				<li>7 time tracking components (NEW v0.19.0)</li>
-				<li>Token management with security</li>
+				<li>6 models: Repository, Issue, PullRequest (STI on Issue), Project, Comment, Label</li>
+				<li>Living Spec: AI-synthesized issue bodies from comments with rollback support</li>
+				<li>Token config reference: stores env var name, not the token itself</li>
+				<li>Sync throttle: operations skip if called within 5 minutes (override with force: true)</li>
+				<li>Provider-agnostic: GitHub primary via @happyvertical/repos and @happyvertical/projects SDK</li>
+				<li>Collection methods: discover(), findByRepository(), findOpen(), batchSync()</li>
 			</ul>
 		</aside>
 	</section>
@@ -45,13 +46,15 @@
 		<h2>Quick Start</h2>
 		<CodeBlock
 			code={`import {
-  RepositoryCollection, IssueCollection, ProjectCollection
+  Repository, RepositoryCollection,
+  Issue, IssueCollection,
+  PullRequest, PullRequestCollection,
+  Project, ProjectCollection
 } from '@happyvertical/smrt-projects';
 
 // Initialize
-const repos = await RepositoryCollection.create({ db: {...} });
-const issues = await IssueCollection.create({ db: {...} });
-const projects = await ProjectCollection.create({ db: {...} });
+const repos = new RepositoryCollection(db);
+const issues = new IssueCollection(db);
 
 // Connect repository
 const repo = await repos.create({
@@ -96,13 +99,8 @@ console.log(result.synthesized); // Updated body with comments`}
 			code={`class Repository extends SmrtObject {
   owner: string
   name: string
-  fullName: string         // owner/name
-  description?: string
-  defaultBranch: string
-  isPrivate: boolean
   providerType: 'github' | 'gitlab' | 'bitbucket' | 'azure'
-  baseUrl?: string         // For self-hosted
-  tokenConfigKey: string   // Env var name (not the token itself!)
+  tokenConfigKey: string   // Env var name (not the token!) -- resolved at runtime
   lastSyncedAt?: Date
 
   async sync(options?): Promise<void>
@@ -110,75 +108,67 @@ console.log(result.synthesized); // Updated body with comments`}
   async getPullRequests(filters?): Promise<PullRequest[]>
   async createIssue(data): Promise<Issue>
   async createPullRequest(data): Promise<PullRequest>
-  async hasOpenIssuesMatching(criteria): Promise<boolean>  // AI
   async summarizeActivity(): Promise<string>  // AI
 }`}
 			language="typescript"
 		/>
 
-		<h3>Issue (Living Spec)</h3>
+		<h3>Issue (Living Spec -- STI Base)</h3>
+		<p>PullRequest extends Issue via single-table inheritance. Both share the same table, discriminated by <code>_meta_type</code>.</p>
 		<CodeBlock
 			code={`class Issue extends SmrtObject {
-  repositoryId: string
+  repositoryId: string     // FK
   number: number
-  nodeId: string
   title: string
   body: string
   state: 'open' | 'closed'
-  author: string
   labels: string[]
-  assignees: string[]
-  commentsCount: number
   originalBody?: string    // Before synthesis
-  synthesisCount: number   // How many times synthesized
-  lastSyncedAt?: Date
+  synthesisCount: number   // Incremented on each incorporateFeedback apply
 
   // Living Spec Pattern
   async incorporateFeedback(options): Promise<IncorporateFeedbackResult>
   async rollback(): Promise<void>
 
   // AI-Powered
-  async needsReview(): Promise<boolean>
-  async isBugReport(): Promise<boolean>
-  async isFeatureRequest(): Promise<boolean>
   async suggestLabels(): Promise<string[]>
 
   // Operations
   async sync(options?): Promise<void>
-  async getComments(): Promise<Comment[]>
-  async addComment(body: string): Promise<Comment>
   async close(): Promise<void>
   async addLabels(labels: string[]): Promise<void>
-  async assign(username: string): Promise<void>
-  getUrl(): string
+  async addComment(body: string): Promise<Comment>
+}
+
+class PullRequest extends Issue {
+  headRef: string
+  baseRef: string
+  merged: boolean
+  draft: boolean
+  additions: number
+  deletions: number
+  changedFiles: number
+
+  async summarize(): Promise<string>
+  async merge(): Promise<void>
 }`}
 			language="typescript"
 		/>
 
-		<h3>Project</h3>
+		<h3>Project (GitHub Projects V2)</h3>
 		<CodeBlock
 			code={`class Project extends SmrtObject {
   projectId: string        // Provider-specific ID
-  projectNumber?: number
   title: string
-  owner: string
-  url?: string
   providerType: 'github' | 'jira' | 'linear' | 'zenhub'
   statuses: string[]       // Available columns/statuses
-  fields: Array<{id, name, type}>
   statusFieldId?: string
-  statusOptions?: Array<{id, name}>
-  lastSyncedAt?: Date
 
   async sync(): Promise<void>
   async addItem(issue | pr): Promise<void>
+  async moveItem(issue, status): Promise<void>
   async listItems(filters?): Promise<ProjectItem[]>
   async updateItemStatus(itemId, status): Promise<void>
-  async updateItemField(itemId, fieldId, value): Promise<void>
-  async getStatuses(): Promise<string[]>
-  async getFields(): Promise<Field[]>
-  async getItemsByStatus(status): Promise<ProjectItem[]>
-  async moveItem(issue, status): Promise<void>
   async analyzeHealth(): Promise<string>  // AI
 }`}
 			language="typescript"

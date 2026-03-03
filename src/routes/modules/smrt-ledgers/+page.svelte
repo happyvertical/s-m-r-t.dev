@@ -13,8 +13,8 @@
 
 <ModulePage
 	name="smrt-ledgers"
-	description="Double-entry accounting with chart of accounts, journals, and financial reporting."
-	badges={['v0.19.0', 'Accounting', 'Double-Entry']}
+	description="Double-entry accounting with chart of accounts, journal lifecycle, and balance enforcement."
+	badges={['v0.20.44', 'Accounting', 'Double-Entry']}
 >
 	<!-- Overview -->
 	<section>
@@ -126,7 +126,7 @@ const journal = await journals.createWithEntries({
 
 // Post the journal (validates balance first)
 await journal.post();
-console.log('Journal posted:', journal.number); // "JNL-1736640000000-abc123"`}
+console.log('Journal posted:', journal.number); // "JNL-0001"`}
 			language="typescript"
 		/>
 
@@ -155,17 +155,19 @@ console.log('Trial balance:', trialBalance);
 		<h3>Double-Entry Bookkeeping</h3>
 		<p>
 			Every transaction must balance: <strong>Total Debits = Total Credits</strong>. The system
-			enforces this rule before allowing journals to be posted. A floating-point tolerance
-			(BALANCE_EPSILON = 0.001) is used for comparisons.
+			enforces this rule before posting journals. Balance check uses
+			<code>Math.abs(totalDebits - totalCredits) &lt; BALANCE_EPSILON</code> where
+			<code>BALANCE_EPSILON = 0.001</code> (floating-point rounding tolerance).
 		</p>
 		<aside>
 			<p><strong>Key Rules:</strong></p>
 			<ul>
-				<li>Each entry is atomic: either debit OR credit (never both)</li>
-				<li>All amounts must be non-negative</li>
-				<li>Zero-amount entries are rejected</li>
-				<li>Journal must balance before posting</li>
-				<li>Posted journals are immutable</li>
+				<li>Each entry is debit XOR credit (not both, validated on save)</li>
+				<li>All amounts must be non-negative; zero-amount entries are rejected</li>
+				<li>Journal must balance before posting (BALANCE_EPSILON = 0.001)</li>
+				<li>Posted journals are <strong>immutable</strong> -- can only be voided, not edited</li>
+				<li>Entry requires journalId: save Journal first, then add entries</li>
+				<li>Account types are inherited by children (child cannot differ from parent type)</li>
 			</ul>
 		</aside>
 
@@ -342,7 +344,7 @@ console.log(journal.isVoided()); // true`}
 		<CodeBlock
 			code={`class Journal extends SmrtObject {
   // Core properties
-  number: string              // Auto-generated JNL-{timestamp}-{random}
+  number: string              // Auto-generated (e.g., "JNL-0001")
   date: Date
   description: string
   sourceModule: string        // e.g., "smrt-commerce", "manual"

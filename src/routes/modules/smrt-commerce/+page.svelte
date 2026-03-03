@@ -45,26 +45,27 @@
 
 <ModuleTabs
 	name="smrt-commerce"
-	description="Complete commerce system with contracts, invoicing, payments, fulfillment tracking, and accounting integration."
-	badges={['v0.19.0', 'Invoicing', '6 Components']}
+	description="E-commerce with Contract STI hierarchy (5 types), invoice lifecycle, payment tracking, fulfillment, and optional ledger integration."
+	badges={['v0.20.44', 'Invoicing', '6 Components']}
 >
 	{#snippet docs()}
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-commerce</strong> provides complete commerce management including orders, invoices,
-			payments, and fulfillment tracking. It integrates with smrt-ledgers for double-entry accounting
-			and supports external accounting systems via the @happyvertical/accounting SDK.
+			<strong>smrt-commerce</strong> covers customers, vendors, contracts (5 STI types), invoices with
+			ledger integration, payments, and fulfillment tracking. Customer and Vendor link to smrt-profiles
+			via plain string IDs. Invoice and Payment optionally integrate with smrt-ledgers via dynamic import.
 		</p>
 		<div>
 			<p>Key Features:</p>
 			<ul>
-				<li>Contract management with STI (orders, estimates, leases, agreements)</li>
-				<li>Invoice generation with auto-numbering and multi-status workflow</li>
-				<li>Payment recording with allocation to invoices</li>
-				<li>Ledger integration (AR/revenue recognition)</li>
-				<li>Fulfillment tracking with shipping/delivery</li>
-				<li>6 new Svelte 5 invoice components</li>
+				<li>Customer/Vendor linked to Profile via string ID (creditLimit, paymentTerms, leadTimeDays)</li>
+				<li>Contract STI hierarchy: Estimate, Order, Lease, Agreement, PurchaseOrder</li>
+				<li>Invoice lifecycle: DRAFT, SENT, VIEWED, PARTIAL, PAID, OVERDUE, CANCELLED, WRITTEN_OFF</li>
+				<li>Revenue recognition via <code>recognizeRevenue()</code> (DR: AR, CR: Revenue, CR: Tax Payable)</li>
+				<li>Payment allocation to invoices with status tracking</li>
+				<li>Fulfillment/FulfillmentLineItem for shipment/delivery tracking</li>
+				<li>Optional ledger integration via dynamic import (returns null if not installed)</li>
 			</ul>
 		</div>
 	</section>
@@ -78,57 +79,61 @@
 		<h2>Quick Start</h2>
 		<CodeBlock
 			code={`import {
-  CustomerCollection, InvoiceCollection,
-  InvoiceLineItemCollection, PaymentCollection
+  Customer, CustomerCollection,
+  Order, ContractCollection,
+  Invoice, InvoiceCollection,
+  Payment, PaymentCollection,
+  ContractStatus, InvoiceStatus, PaymentMethod
 } from '@happyvertical/smrt-commerce';
 
-// Initialize
-const customers = await CustomerCollection.create({ db: {...} });
-const invoices = await InvoiceCollection.create({ db: {...} });
-const lineItems = await InvoiceLineItemCollection.create({ db: {...} });
-const payments = await PaymentCollection.create({ db: {...} });
-
-// Create customer
+// Create a customer linked to a profile
+const customers = new CustomerCollection(db);
 const customer = await customers.create({
   profileId: 'profile-uuid',
-  creditLimit: 50000,
-  paymentTerms: 'Net 30'
+  creditLimit: 10000.00,
+  paymentTerms: 'Net 30',
 });
 await customer.save();
 
-// Create invoice
+// Create an order (STI contract type)
+const contracts = new ContractCollection(db);
+const order = await contracts.create({
+  _meta_type: 'Order',
+  customerId: customer.id,
+  subtotal: 1000.00,
+  taxAmount: 50.00,
+  totalAmount: 1050.00,
+  currency: 'CAD',
+});
+await order.save();
+
+// Create an invoice for the order
+const invoices = new InvoiceCollection(db);
+const invoiceNumber = await invoices.generateInvoiceNumber();
 const invoice = await invoices.create({
   customerId: customer.id,
-  invoiceNumber: await invoices.generateInvoiceNumber(), // INV-2025-0001
-  issueDate: new Date(),
-  dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-  subtotal: 1000,
-  taxAmount: 50,
-  totalAmount: 1050,
-  status: 'DRAFT'
+  contractId: order.id,
+  invoiceNumber,
+  subtotal: 1000.00,
+  taxAmount: 50.00,
+  totalAmount: 1050.00,
 });
 await invoice.save();
 
-// Add line items
-const item = await lineItems.create({
-  invoiceId: invoice.id,
-  description: 'Consulting Services',
-  quantity: 50,
-  unitPrice: 20,
-  taxRate: 0.05
+// Recognize revenue (creates balanced journal in smrt-ledgers)
+await invoice.recognizeRevenue({
+  arAccountId: 'ar-account-id',
+  revenueAccountId: 'revenue-account-id',
+  taxAccountId: 'tax-account-id',
 });
-item.amount = item.calculateAmount();
-await item.save();
 
-// Send invoice
-invoice.markSent();
-await invoice.save();
-
-// Record payment
+// Record a payment
+const payments = new PaymentCollection(db);
 const payment = await payments.create({
+  contractId: order.id,
   customerId: customer.id,
-  amount: 1050,
-  method: 'BANK_TRANSFER'
+  amount: 1050.00,
+  method: PaymentMethod.CREDIT_CARD,
 });
 await payment.save();`}
 			language="typescript"
@@ -138,86 +143,69 @@ await payment.save();`}
 	<section>
 		<h2>Core Models</h2>
 
-		<h3>Contract (STI Base)</h3>
+		<h3>Contract (STI Base -- 5 Types)</h3>
+		<p>Contract is an STI base class. Five concrete types share one table: <strong>Estimate</strong>, <strong>Order</strong>, <strong>Lease</strong>, <strong>Agreement</strong>, and <strong>PurchaseOrder</strong>.</p>
 		<CodeBlock
-			code={`class Contract extends SmrtObject {
-  contractType: 'ORDER' | 'ESTIMATE' | 'LEASE' | 'AGREEMENT' | 'PURCHASE_ORDER'
-  status: 'DRAFT' | 'SENT' | 'ACCEPTED' | 'DECLINED' | 'COMPLETED' | 'CANCELLED'
-  customerId?: string
+			code={`// STI types: Estimate, Order, Lease, Agreement, PurchaseOrder
+class Contract extends SmrtObject {
+  // Create via ContractCollection with _meta_type
+  customerId?: string    // FK within package
   vendorId?: string
-  subtotal: number
+  subtotal: number       // decimal (not integer cents)
   taxAmount: number
   totalAmount: number
+  currency: string
+  status: 'draft' | 'sent' | 'accepted' | 'declined' | 'completed' | 'cancelled'
   issueDate: Date
   dueDate?: Date
-  expiryDate?: Date  // For estimates
   reference?: string
   terms?: string
-
-  isDraft(): boolean
-  isAccepted(): boolean
-  isCompleted(): boolean
-  isExpired(): boolean
-  isOverdue(): boolean
-  recalculateTotals(): void
 }`}
 			language="typescript"
 		/>
 
 		<h3>Invoice</h3>
+		<p>Status machine: <code>DRAFT -> SENT -> VIEWED -> PARTIAL -> PAID</code> (also OVERDUE, CANCELLED, WRITTEN_OFF). <code>recognizeRevenue()</code> creates balanced AR journal entry. Ledger integration is optional via dynamic import.</p>
 		<CodeBlock
 			code={`class Invoice extends SmrtObject {
   invoiceNumber: string
   customerId: string
   contractId?: string
-  issueDate: Date
-  dueDate: Date
-  paidDate?: Date
-  status: 'DRAFT' | 'SENT' | 'VIEWED' | 'PARTIAL' | 'PAID' | 'OVERDUE' | 'CANCELLED' | 'WRITTEN_OFF'
-  subtotal: number
+  subtotal: number          // decimal (not integer cents)
   taxAmount: number
   totalAmount: number
   amountPaid: number
-  arJournalId?: string      // Ledger integration
-  revenueJournalId?: string
-  sentAt?: Date
-  viewedAt?: Date
+  status: 'draft' | 'sent' | 'viewed' | 'partial' | 'paid' | 'overdue' | 'cancelled' | 'written_off'
+  arJournalId?: string      // Plain string ref to smrt-ledgers
+  revenueJournalId?: string // Plain string ref to smrt-ledgers
 
-  // Status management
+  // Status management (Invoice controls payment status, not Payment model)
   markSent(): void
   markViewed(): void
   updatePaymentStatus(amountPaid: number): void
-  cancel(): void
-  writeOff(): void
 
-  // Financial
-  getAmountDue(): number
-  isPaid(): boolean
-  isOverdue(): boolean
-
-  // Accounting integration
-  async recognizeRevenue(options): Promise<Journal>
-  toAccountingInput(): any
+  // Accounting integration (optional -- returns null if smrt-ledgers not installed)
+  async recognizeRevenue(options: RecognizeRevenueOptions): Promise<Journal | null>
+  // Creates: DR Accounts Receivable, CR Revenue, CR Tax Payable
 }`}
 			language="typescript"
 		/>
 
-		<h3>Payment</h3>
+		<h3>Payment / PaymentAllocation</h3>
+		<p>Payment tracks payments against invoices. PaymentAllocation handles payment-to-invoice allocation. Note: <strong>Invoice controls payment status</strong>, not the Payment model -- use <code>Invoice.updatePaymentStatus()</code>.</p>
 		<CodeBlock
 			code={`class Payment extends SmrtObject {
   contractId: string
   customerId: string
-  amount: number
+  amount: number           // decimal
   currency: string
-  method: 'CASH' | 'CHECK' | 'CREDIT_CARD' | 'BANK_TRANSFER' | 'CRYPTO' | 'OTHER'
-  status: 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED' | 'CANCELLED'
-  transactionId?: string
-  journalId?: string  // Ledger integration
-  paidAt?: Date
+  method: 'cash' | 'check' | 'credit_card' | 'bank_transfer' | 'crypto' | 'other'
+  status: 'pending' | 'completed' | 'failed' | 'refunded' | 'cancelled'
+  journalId?: string       // Plain string ref to smrt-ledgers
 
-  async recordPayment(options): Promise<Journal>
-  markFailed(reason: string): void
-  cancel(): void
+  // Ledger integration (optional)
+  async recordPayment(options: RecordPaymentOptions): Promise<Journal | null>
+  // Creates: DR Cash, CR Accounts Receivable
 }`}
 			language="typescript"
 		/>
