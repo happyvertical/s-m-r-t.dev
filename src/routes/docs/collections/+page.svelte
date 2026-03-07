@@ -31,8 +31,7 @@ class ProductCollection extends SmrtCollection<Product> {
 
 // Create collection via static factory
 const products = await ProductCollection.create({
-  db: { type: 'sqlite', url: 'products.db' },
-  ai: { provider: 'openai', apiKey: process.env.OPENAI_API_KEY }
+  db: 'products.db'
 });
 
 // Wrong - constructor is protected
@@ -111,7 +110,7 @@ await product.delete();`}</code
 		></pre>
 
 	<h3>WHERE Operators</h3>
-	<p>Operators are specified in the field name:</p>
+	<p>Operators are specified as part of the field name string:</p>
 	<table>
 		<thead><tr><th>Operator</th><th>Example</th><th>SQL</th></tr></thead>
 		<tbody>
@@ -140,8 +139,8 @@ await product.delete();`}</code
 				></tr
 			>
 			<tr
-				><td><code>!=</code></td><td><code>{`{ 'deleted_at !=': null }`}</code></td><td
-					>deleted_at != NULL</td
+				><td><code>!=</code></td><td><code>{`{ 'status !=': 'archived' }`}</code></td><td
+					>status != 'archived'</td
 				></tr
 			>
 			<tr
@@ -150,12 +149,36 @@ await product.delete();`}</code
 				></tr
 			>
 			<tr
+				><td><code>not in</code></td><td><code>{`{ 'status not in': ['archived', 'deleted'] }`}</code></td><td
+					>status NOT IN ('archived', 'deleted')</td
+				></tr
+			>
+			<tr
 				><td><code>like</code></td><td><code>{`{ 'name like': '%widget%' }`}</code></td><td
 					>name LIKE '%widget%'</td
 				></tr
 			>
+			<tr
+				><td><code>contains</code></td><td><code>{`{ 'tags contains': 'featured' }`}</code></td><td
+					>JSON contains check</td
+				></tr
+			>
 		</tbody>
 	</table>
+
+	<p>Arrays are auto-detected as <code>IN</code> queries:</p>
+	<pre><code
+			>{`// These are equivalent:
+await products.list({ where: { 'status in': ['active', 'pending'] } });
+await products.list({ where: { status: ['active', 'pending'] } });`}</code
+		></pre>
+
+	<p>Dot notation works for JSON path queries:</p>
+	<pre><code
+			>{`await products.list({
+  where: { 'metadata.userId': 'user-123' }
+});`}</code
+		></pre>
 
 	<h3>Sorting</h3>
 	<pre><code
@@ -253,18 +276,18 @@ const products = await productCollection.query(\`
 		></pre>
 
 	<h2>Database Adapters</h2>
-	<p>SMRT supports three database backends:</p>
+	<p>SMRT supports multiple database backends:</p>
 
 	<h3>SQLite</h3>
 	<p>Default adapter. Uses LibSQL client.</p>
 	<pre><code
 			>{`const collection = await ProductCollection.create({
-  db: { type: 'sqlite', url: 'products.db' }
+  db: 'products.db'
 });
 
 // In-memory
 const collection = await ProductCollection.create({
-  db: { type: 'sqlite', url: ':memory:' }
+  db: ':memory:'
 });
 
 // Remote LibSQL/Turso
@@ -281,17 +304,6 @@ const collection = await ProductCollection.create({
 	<pre><code
 			>{`const collection = await ProductCollection.create({
   db: { type: 'postgres', url: 'postgres://user:pass@host:5432/db' }
-});`}</code
-		></pre>
-
-	<h3>DuckDB / JSON</h3>
-	<pre><code
-			>{`const collection = await ProductCollection.create({
-  db: {
-    type: 'json',
-    url: './data',
-    writeStrategy: 'immediate'
-  }
 });`}</code
 		></pre>
 

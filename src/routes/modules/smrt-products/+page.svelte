@@ -5,64 +5,59 @@
 
 <ModulePage
 	name="smrt-products"
-	description="Product catalog and inventory management with variants, pricing, and stock tracking."
-	badges={['v0.19.0', 'Catalog', 'Inventory']}
+	description="Product catalog -- reference template for triple-consumption: npm package library, module federation, and standalone REST API server."
+	badges={['v0.20.44', 'Catalog', 'Triple-Consumption']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-products</strong> is a comprehensive product catalog management system built on the
-			SMRT framework. It provides a complete solution for managing products, categories, inventory, and
-			specifications with auto-generated REST APIs, MCP tools for AI integration, and reactive Svelte
-			5 components.
+			<strong>smrt-products</strong> is a product catalog reference template demonstrating
+			triple-consumption: the same codebase is consumed three ways.
 		</p>
 		<p>
-			The module serves three purposes: (1) standalone application with its own dev server, (2)
-			federated modules that can be consumed by other micro-frontends, and (3) NPM package for
-			direct imports. All three consumption modes use the same source code, ensuring consistency and
-			maintainability.
+			The three consumption modes: (1) <strong>NPM library</strong> -- import classes, components,
+			and stores directly, (2) <strong>Module federation</strong> -- runtime component sharing
+			(experimental), and (3) <strong>Standalone API</strong> -- <code>startServer()</code> launches
+			Express with auto-generated routes. Virtual modules are auto-generated via Vite plugins.
 		</p>
 		<aside>
 			<p><strong>Key Features:</strong></p>
 			<ul>
-				<li>Hierarchical category system with parent-child relationships</li>
-				<li>
-					Comprehensive product model (name, description, price, stock status, specifications, tags)
-				</li>
-				<li>Extensible specifications system for product attributes</li>
-				<li>Reactive Svelte 5 components with runes-based state management</li>
-				<li>Auto-generated REST APIs (list, get, create, update)</li>
-				<li>MCP tools for AI integration</li>
-				<li>CLI commands for admin operations</li>
-				<li>STI (Single Table Inheritance) pattern for extensibility</li>
+				<li>Product and Category models, both STI enabled</li>
+				<li>Triple-consumption: NPM library, module federation (experimental), standalone API</li>
+				<li>Virtual modules auto-generated via Vite plugins (client, types, routes, MCP, manifest)</li>
+				<li>Svelte 5 stores using runes (<code>$state</code>, <code>$derived</code>, <code>$effect</code>)</li>
+				<li>Separate server/client store files for SSR safety</li>
+				<li>Auto-generated REST APIs, MCP tools, and CLI commands via <code>@smrt</code></li>
 			</ul>
 		</aside>
 
 		<h3>Architecture:</h3>
 		<figure class="diagram">
-			<pre>┌─────────────────────────────────────────┐
-│     smrt-products Module                 │
-├─────────────────────────────────────────┤
-│  Models (Decorated with @smrt)           │
-│  • Product (specifications, tags, price) │
-│  • Category (hierarchical, counts)       │
-├─────────────────────────────────────────┤
-│  Auto-Generated (Vite Plugin)            │
-│  • REST APIs                             │
-│  • TypeScript Client                     │
-│  • MCP Tools                             │
-│  • Type Definitions                      │
-├─────────────────────────────────────────┤
-│  UI Components (Svelte 5)                │
-│  • ProductCard, ProductForm              │
-│  • ProductCatalog, CategoryManager       │
-│  • Stores with runes                     │
-├─────────────────────────────────────────┤
-│  Consumption Modes                       │
-│  • Standalone: npm run dev:standalone    │
-│  • Federation: npm run dev:federation    │
-│  • Library: npm package imports          │
-└─────────────────────────────────────────┘</pre>
+			<pre>┌──────────────────────────────────────────┐
+│     smrt-products Module                  │
+├──────────────────────────────────────────┤
+│  Models (Decorated with @smrt)            │
+│  • Product (STI, specs, tags, price)      │
+│  • Category (STI, hierarchical, counts)   │
+├──────────────────────────────────────────┤
+│  Virtual Modules (Vite Plugin)            │
+│  • @happyvertical/smrt-client (TS client) │
+│  • @happyvertical/smrt-types              │
+│  • @happyvertical/smrt-routes (Express)   │
+│  • @happyvertical/smrt-mcp               │
+│  • @happyvertical/smrt-manifest           │
+├──────────────────────────────────────────┤
+│  UI (Svelte 5 Runes)                      │
+│  • ProductCard, ProductForm               │
+│  • product-store.server.svelte.ts (SSR)   │
+│  • product-store.client.svelte.ts         │
+├──────────────────────────────────────────┤
+│  Triple Consumption                       │
+│  • NPM: import classes/components         │
+│  • Federation: runtime sharing (exp.)     │
+│  • Standalone: startServer()              │
+└──────────────────────────────────────────┘</pre>
 		</figure>
 	</section>
 

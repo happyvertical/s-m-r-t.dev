@@ -34,18 +34,18 @@
 	<section>
 		<h2>Installation</h2>
 
-		<h3>Option 1: Create New Project</h3>
+		<h3>Install Core Packages</h3>
 		<CodeBlock
-			code={`npm create smrt-app@latest my-app
-cd my-app
-npm install
-npm run dev`}
+			code={`pnpm add @happyvertical/smrt-core @happyvertical/smrt-types @happyvertical/smrt-config`}
 			language="bash"
 		/>
 
-		<h3>Option 2: Add to Existing Project</h3>
+		<h3>Add Domain Packages as Needed</h3>
+		<p>
+			Install additional packages for your use case. For example, for agents and background jobs:
+		</p>
 		<CodeBlock
-			code={`npm install @happyvertical/smrt-core @happyvertical/smrt-types`}
+			code={`pnpm add @happyvertical/smrt-agents @happyvertical/smrt-jobs`}
 			language="bash"
 		/>
 	</section>
@@ -58,7 +58,7 @@ npm run dev`}
 			Create a file <code>src/models/Task.ts</code>:
 		</p>
 		<CodeBlock
-			code={`import { SmrtObject, field, smrt } from '@happyvertical/smrt-core';
+			code={`import { SmrtObject, smrt } from '@happyvertical/smrt-core';
 
 @smrt({
   api: true,    // Generate REST API
@@ -66,17 +66,10 @@ npm run dev`}
   mcp: true     // Generate MCP tools
 })
 export class Task extends SmrtObject {
-  @field({ required: true })
   title: string = '';
-
-  @field()
   description: string = '';
-
-  @field({ default: 'todo' })
-  status: 'todo' | 'in_progress' | 'done' = 'todo';
-
-  @field()
-  dueDate?: Date;
+  status: string = 'todo';
+  dueDate: string = '';
 
   complete() {
     this.status = 'done';
@@ -91,7 +84,7 @@ export class Task extends SmrtObject {
 import { Task } from './Task.js';
 
 export class TaskCollection extends SmrtCollection<Task> {
-  static itemClass = Task;
+  static readonly _itemClass = Task;
 
   async findByStatus(status: string) {
     return this.list({ where: { status } });
@@ -100,8 +93,8 @@ export class TaskCollection extends SmrtCollection<Task> {
   async findOverdue() {
     return this.list({
       where: {
-        status: { $ne: 'done' },
-        dueDate: { $lt: new Date() }
+        'status !=': 'done',
+        'dueDate <': new Date().toISOString()
       }
     });
   }
@@ -113,16 +106,16 @@ export class TaskCollection extends SmrtCollection<Task> {
 		<CodeBlock
 			code={`import { TaskCollection } from './models/TaskCollection.js';
 
-// Initialize
+// Create collection via static factory
 const tasks = await TaskCollection.create({
-  db: { /* database config */ }
+  db: 'tasks.db'
 });
 
 // Create
 const task = await tasks.create({
   title: 'Learn SMRT Framework',
   description: 'Read the getting started guide',
-  dueDate: new Date('2025-01-20')
+  dueDate: '2025-01-20'
 });
 await task.save();
 
@@ -186,29 +179,40 @@ smrt tasks delete <id>`}
 			code={`import { defineConfig } from '@happyvertical/smrt-config';
 
 export default defineConfig({
-  database: {
-    type: 'postgresql',
-    host: process.env.DB_HOST,
-    port: 5432,
-    database: 'myapp',
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD
+  smrt: {
+    logLevel: 'info',
+    environment: 'development',
+    embeddings: { provider: 'local' }
   },
-  api: {
-    enabled: true,
-    port: 3000,
-    prefix: '/api'
+  modules: {
+    // Module-scoped configs keyed by module name
+    'my-agent': {
+      cronSchedule: '0 2 * * *',
+      maxRetries: 3
+    }
   },
-  cli: {
-    enabled: true
-  },
-  mcp: {
-    enabled: true,
-    port: 3100
+  packages: {
+    // Package-scoped configs keyed by package name
+    ai: { defaultModel: 'gpt-4o' }
   }
 });`}
 			language="typescript"
 		/>
+
+		<div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mt-4 mb-4">
+			<p class="font-semibold mb-2">Note:</p>
+			<p>
+				The config top-level keys are <code class="bg-gray-100 px-2 py-1 rounded">smrt</code>
+				(global options),
+				<code class="bg-gray-100 px-2 py-1 rounded">modules</code> (module-scoped config),
+				<code class="bg-gray-100 px-2 py-1 rounded">packages</code> (package-scoped config),
+				<code class="bg-gray-100 px-2 py-1 rounded">site</code> (site templates), and
+				<code class="bg-gray-100 px-2 py-1 rounded">export</code> (SSG export). Use
+				<code class="bg-gray-100 px-2 py-1 rounded">getModuleConfig()</code>
+				and
+				<code class="bg-gray-100 px-2 py-1 rounded">getPackageConfig()</code> to retrieve them at runtime.
+			</p>
+		</div>
 	</section>
 
 	<section>
@@ -216,17 +220,16 @@ export default defineConfig({
 
 		<h3>Relationships</h3>
 		<CodeBlock
-			code={`import { foreignKey, manyToMany } from '@happyvertical/smrt-core';
+			code={`import { SmrtObject, smrt, foreignKey, manyToMany } from '@happyvertical/smrt-core';
 
 @smrt()
 class Project extends SmrtObject {
-  @field({ required: true })
   name: string = '';
 
-  @foreignKey(() => User)
+  @foreignKey(User)
   ownerId: string = '';
 
-  @manyToMany(() => Tag, { through: 'project_tags' })
+  @manyToMany(Tag, { through: 'project_tags' })
   tags: Tag[] = [];
 }`}
 			language="typescript"
@@ -236,16 +239,29 @@ class Project extends SmrtObject {
 		<CodeBlock
 			code={`@smrt()
 class Order extends SmrtObject {
-  @field()
-  subtotal: number = 0;
-
-  @field()
+  subtotal: number = 0.0;
   taxRate: number = 0.08;
 
   get total(): number {
     return this.subtotal * (1 + this.taxRate);
   }
 }`}
+			language="typescript"
+		/>
+		<h3>AI-Powered Methods</h3>
+		<CodeBlock
+			code={`// is() — evaluate criteria against the object, returns boolean
+const isValid = await product.is(\`
+  - Has a non-empty description
+  - Price is greater than $10
+  - Name does not contain profanity
+\`);
+
+// do() — perform an action based on instructions, returns string
+const summary = await product.do(\`
+  Write a 50-word marketing description.
+  Highlight key features and target audience.
+\`);`}
 			language="typescript"
 		/>
 	</section>

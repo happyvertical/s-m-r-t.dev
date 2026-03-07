@@ -50,10 +50,9 @@
 			<h3>Which databases does s-m-r-t support?</h3>
 			<p>s-m-r-t supports multiple databases through adapters:</p>
 			<ul>
-				<li>PostgreSQL (recommended for production)</li>
 				<li>SQLite (great for development and testing)</li>
-				<li>MySQL/MariaDB</li>
-				<li>JSON files (for static sites)</li>
+				<li>PostgreSQL (recommended for production)</li>
+				<li>DuckDB (analytical workloads)</li>
 			</ul>
 		</div>
 
@@ -82,19 +81,18 @@
 		<div class="faq-item">
 			<h3>How do I configure database connections?</h3>
 			<p>
-				Create a <code>smrt.config.ts</code> file:
+				Create a <code>smrt.config.ts</code> file with a <code>url</code> connection string:
 			</p>
 			<CodeBlock
 				code={`export default {
   database: {
-    type: 'postgresql',
-    host: process.env.DB_HOST || 'localhost',
-    port: 5432,
-    database: 'myapp',
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD
+    adapter: 'postgres',
+    url: process.env.DATABASE_URL || 'postgresql://user:password@localhost:5432/myapp'
   }
-};`}
+};
+
+// For SQLite:
+// database: { adapter: 'sqlite', url: 'myapp.db' }`}
 				language="typescript"
 			/>
 		</div>
@@ -136,8 +134,8 @@ class Product extends SmrtObject {
 			<h3>How do I run migrations?</h3>
 			<p>s-m-r-t can auto-generate migrations from your models. Use the CLI:</p>
 			<CodeBlock
-				code={`smrt migrations generate
-smrt migrations run`}
+				code={`smrt db:diff --generate
+smrt db:migrate`}
 				language="bash"
 			/>
 		</div>
@@ -145,17 +143,17 @@ smrt migrations run`}
 		<div class="faq-item">
 			<h3>How do I test s-m-r-t applications?</h3>
 			<p>
-				Use <a href="/modules/smrt-vitest">smrt-vitest</a> for testing:
+				Use <a href="/modules/smrt-vitest">smrt-vitest</a> for testing with <code>smrtVitestPlugin()</code> in your vitest config and <code>createIsolatedTestDb()</code> for DB isolation:
 			</p>
 			<CodeBlock
-				code={`import { createTestDb, createFixture } from '@happyvertical/smrt-vitest';
+				code={`import { createIsolatedTestDb } from '@happyvertical/smrt-vitest';
 
 describe('Task Tests', () => {
   it('should create task', async () => {
-    const db = await createTestDb();
+    const db = await createIsolatedTestDb();
     const tasks = await TaskCollection.create({ db });
 
-    const task = await createFixture(tasks, 'Task', {
+    const task = await tasks.create({
       title: 'Test Task'
     });
 
@@ -194,16 +192,19 @@ describe('Task Tests', () => {
 		<div class="faq-item">
 			<h3>How do I define relationships between models?</h3>
 			<p>
-				Use <code>@foreignKey</code> and <code>@manyToMany</code> decorators:
+				Use the <code>@foreignKey()</code> decorator for same-package references and plain string IDs for cross-package references:
 			</p>
 			<CodeBlock
-				code={`@smrt()
-class Order extends SmrtObject {
-  @foreignKey(() => User)
-  userId: string = '';
+				code={`import { smrt, SmrtObject, foreignKey } from '@happyvertical/smrt-core';
 
-  @manyToMany(() => Product, { through: 'order_products' })
-  products: Product[] = [];
+@smrt()
+class Order extends SmrtObject {
+  // Same-package: use @foreignKey() decorator
+  @foreignKey(Customer)
+  customerId: string = '';
+
+  // Cross-package: plain string ID (avoids circular deps)
+  tenantId: string = '';
 }`}
 				language="typescript"
 			/>
@@ -222,16 +223,14 @@ class Order extends SmrtObject {
 
 		<div class="faq-item">
 			<h3>How do I add computed properties?</h3>
-			<p>Use TypeScript getters:</p>
+			<p>Use TypeScript getters with <code>@field({'{'} transient: true {'}'})</code> for non-persisted properties:</p>
 			<CodeBlock
 				code={`@smrt()
 class Order extends SmrtObject {
-  @field()
-  subtotal: number = 0;
+  subtotal: number = 0.0;    // DECIMAL
+  taxRate: number = 0.0;     // DECIMAL
 
-  @field()
-  taxRate: number = 0.08;
-
+  @field({ transient: true })
   get total(): number {
     return this.subtotal * (1 + this.taxRate);
   }
@@ -248,11 +247,11 @@ class Order extends SmrtObject {
 		<div class="faq-item">
 			<h3>How do I optimize queries?</h3>
 			<ul>
-				<li>Use <code>select</code> to fetch only needed fields</li>
-				<li>Add indexes with <code>@field({'{'}index: true{'}'})</code></li>
-				<li>Use pagination with <code>limit</code> and <code>offset</code></li>
-				<li>Eager load relationships to avoid N+1 queries</li>
-				<li>Use connection pooling in production</li>
+				<li>Use <code>limit</code> and <code>offset</code> for pagination</li>
+				<li>Use <code>orderBy</code> for sorted results</li>
+				<li>Set <code>conflictColumns</code> in @smrt() for efficient upsert operations</li>
+				<li>Use <code>listByIds()</code> for batch fetching (single query)</li>
+				<li>Use <code>getOrUpsert()</code> for find-or-create patterns</li>
 			</ul>
 		</div>
 
@@ -350,7 +349,7 @@ class Order extends SmrtObject {
 			<h3>What environment variables do I need?</h3>
 			<p>At minimum:</p>
 			<ul>
-				<li><code>DB_HOST</code>, <code>DB_USER</code>, <code>DB_PASSWORD</code></li>
+				<li><code>DATABASE_URL</code> (connection string for PostgreSQL or path for SQLite)</li>
 				<li><code>NODE_ENV</code> (production, development)</li>
 				<li><code>PORT</code> for the API server</li>
 				<li>Any API keys for third-party services</li>

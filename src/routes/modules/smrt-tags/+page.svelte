@@ -5,31 +5,33 @@
 
 <ModulePage
 	name="smrt-tags"
-	description="Hierarchical tagging system with context scoping, multi-language aliases, and flexible metadata for building taxonomies across SMRT applications."
-	badges={['v0.19.0', 'Taxonomy', 'Multi-Language', 'ESM']}
+	description="Hierarchical tagging with context-scoped slugs, multi-language aliases, and slug utilities."
+	badges={['v0.20.44', 'Taxonomy', 'Multi-Language', 'ESM']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-tags</strong> provides a reusable hierarchical tagging system for organizing and categorizing
-			content across SMRT applications. It supports unlimited nesting depth, context-based namespace isolation,
-			multi-language aliases, and flexible JSON metadata for UI styling and custom properties.
+			<strong>smrt-tags</strong> provides hierarchical tagging with context-scoped slugs and
+			multi-language aliases. Tag (STI) is identified by <code>slug</code> + <code>context</code>
+			(default: 'global'). Hierarchical via <code>parentSlug</code>. Level is auto-calculated from parent.
 		</p>
 		<p>
-			The module is designed for multi-tenant SaaS applications where different contexts (blogs,
-			products, assets) need separate but consistent tagging vocabularies. Tags use slugs as
-			identifiers with automatic level tracking and circular reference prevention.
+			TagAlias provides language-specific translations/aliases using ISO 639-1 language codes with
+			optional context scoping. Key collection methods include <code>moveTag()</code> (with circular
+			reference detection and level recalculation), <code>mergeTag()</code> (moves children + aliases
+			from source to target, then deletes source), and <code>cleanupUnused()</code>.
 		</p>
 		<aside>
 			<p><strong>Key Features:</strong></p>
 			<ul>
-				<li>Hierarchical parent-child relationships with unlimited nesting</li>
-				<li>Context-based namespace isolation (e.g., "blog", "products", "global")</li>
-				<li>Multi-language alias support (ISO 639-1 language codes)</li>
-				<li>JSON metadata for colors, icons, emojis, and custom properties</li>
-				<li>Auto-generated REST APIs, CLI commands, and MCP tools</li>
-				<li>Circular reference prevention with validation utilities</li>
-				<li>Type-safe TypeScript support</li>
+				<li>Tag (STI): identified by slug + context, hierarchical via parentSlug</li>
+				<li>Context defaults to 'global' if not specified</li>
+				<li>Multi-language aliases via TagAlias (ISO 639-1 language codes)</li>
+				<li>moveTag(): circular reference detection, level recalculation</li>
+				<li>mergeTag(): moves children + aliases from source to target, deletes source</li>
+				<li>cleanupUnused(): deletes tags with no children AND no aliases</li>
+				<li>findWithGlobals(tenantId): tenant + global tags</li>
+				<li>Slug utilities: sanitizeSlug, validateSlug, generateUniqueSlug, hasCircularReference</li>
 			</ul>
 		</aside>
 	</section>
@@ -164,13 +166,14 @@ const descendants = await tag.getDescendants();
 		</p>
 		<CodeBlock
 			code={`class Tag extends SmrtObject {
+  // Note: slug stored in protected _slug (has override getter/setter)
   slug: string              // Unique identifier (lowercase, hyphens)
-  name: string              // Display name
-  context: string           // Namespace isolation (e.g., "blog", "products")
+  name: string              // Display name (auto-generated from slug via getOrCreate)
+  context: string           // Namespace isolation (default: 'global')
   parentSlug: string | null // Parent tag slug (for hierarchy)
-  level: number             // Depth in hierarchy (0 = root)
-  description: string       // Optional detailed description
-  metadata: Record<string, any>  // JSON storage for custom properties
+  level: number             // Auto-calculated from parent (0 = root)
+  description: string
+  metadata: Record<string, any>  // JSON storage
 
   // Hierarchy navigation
   async getParent(): Promise<Tag | null>
@@ -272,29 +275,25 @@ const aliasesByLang = await aliases.getAliasesByLanguage('technology');
 
 		<h3>TagCollection Methods</h3>
 		<CodeBlock
-			code={`// Create tag
-await tags.create(options: TagOptions): Promise<Tag>
-
-// Get single tag
-await tags.get(query: { slug, context }): Promise<Tag | null>
-
-// List tags
-await tags.list(options?: ListOptions): Promise<Tag[]>
-
-// Update tag
-await tags.update(tag: Tag): Promise<void>
-
-// Delete tag
-await tags.delete(query: { slug, context }): Promise<void>
-
-// Get or create (idempotent)
-await tags.getOrCreate(slug: string, context: string): Promise<Tag>
+			code={`// Get or create (idempotent, auto-generates name from slug)
+await tags.getOrCreate(slug: string, options?): Promise<Tag>
 
 // Query by context
 await tags.listByContext(context: string, parentSlug?: string): Promise<Tag[]>
 
-// Get root tags
-await tags.getRootTags(context: string): Promise<Tag[]>`}
+// Hierarchy operations
+await tags.moveTag(slug, newParentSlug)     // Circular reference detection, level recalculation
+await tags.mergeTag(sourceSlug, targetSlug)  // Moves children + aliases, then deletes source
+await tags.cleanupUnused()                   // Deletes tags with no children AND no aliases
+
+// Multi-tenant
+await tags.findWithGlobals(tenantId)         // Tenant + global (tenantId=null) tags
+
+// Standard CRUD
+await tags.create(options: TagOptions): Promise<Tag>
+await tags.get(query: { slug, context }): Promise<Tag | null>
+await tags.update(tag: Tag): Promise<void>
+await tags.delete(query: { slug, context }): Promise<void>`}
 			language="typescript"
 		/>
 

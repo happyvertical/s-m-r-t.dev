@@ -5,8 +5,8 @@
 
 <ModulePage
 	name="smrt-places"
-	description="Hierarchical place management with geo-coordinates, address validation, and territory mapping."
-	badges={['v0.19.0', 'Geography', 'Hierarchy']}
+	description="Hierarchical geographic database with organic growth via geocoding integration and Haversine proximity search."
+	badges={['v0.20.44', 'Geography', 'Hierarchy']}
 >
 	<!-- What is smrt-places? -->
 	<section>
@@ -50,9 +50,10 @@ pnpm add @happyvertical/smrt-places`}
 			language="bash"
 		/>
 		<p>
-			The module depends on <code>@happyvertical/smrt-core</code> for base classes and
-			<code>@happyvertical/geo</code> for geocoding integration. It works seamlessly with
-			<code>smrt-tenancy</code> for multi-tenant isolation.
+			Depends on <code>@happyvertical/smrt-core</code> for base classes,
+			<code>@happyvertical/geo</code> for geocoding providers (OpenStreetMap, Google Maps),
+			<code>@happyvertical/sql</code> for database operations, and optionally
+			<code>smrt-tenancy</code> for multi-tenant scoping.
 		</p>
 	</section>
 
@@ -354,22 +355,23 @@ await place.getHierarchy(): PlaceHierarchy`}
 
 		<h3>PlaceCollection Methods</h3>
 		<CodeBlock
-			code={`// Organic database growth
+			code={`// Organic database growth -- DB first, geocode if not found, create
 await places.lookupOrCreate(query, options?): Promise<Place | null>
 // query: address string OR { lat, lng }
 // options: { geoProvider?, typeSlug?, parentId?, createIfNotFound? }
 
-// Hierarchy traversal
-await places.getChildren(parentId): Promise<Place[]>
-await places.getRootPlaces(): Promise<Place[]>
-await places.getHierarchy(placeId): Promise<PlaceHierarchy>
+// Coordinate lookup (default 0.0001 degrees ~= 11m tolerance at equator)
+await places.findByCoordinates(lat, lng, threshold?): Promise<Place | null>
 
-// Type-based queries
+// Proximity search (Haversine distance, sorted nearest-first)
+await places.searchByProximity(lat, lng, radiusKm): Promise<Place[]>
+
+// Hierarchy traversal
+await places.getRootPlaces(): Promise<Place[]>
 await places.getByType(typeSlug): Promise<Place[]>
 
-// Proximity search
-await places.searchByProximity(lat, lng, radiusKm): Promise<Place[]>
-// Returns places sorted by distance with distance property added`}
+// Multi-tenant: returns tenant + global (tenantId=null) places
+await places.findWithGlobals(tenantId): Promise<Place[]>`}
 			language="typescript"
 		/>
 

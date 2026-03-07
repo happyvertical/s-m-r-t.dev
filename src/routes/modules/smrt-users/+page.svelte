@@ -5,32 +5,32 @@
 
 <ModuleTabs
 	name="smrt-users"
-	description="Multi-tenant user management with hierarchical RBAC, group-based permissions, and flexible tenant policies. Built for SaaS applications requiring sophisticated access control."
-	badges={['v0.19.0', 'Multi-tenant RBAC', '11 Components']}
+	description="Multi-tenant user management with RBAC, hierarchical tenants, session handling, and SvelteKit integration."
+	badges={['v0.20.44', 'Multi-tenant RBAC', '12 Models']}
 >
 	{#snippet docs()}
 		<section id="overview">
 			<h2>Overview</h2>
 			<p>
 				The smrt-users package provides a complete multi-tenant user management system with role-based
-				access control (RBAC), group-based permission inheritance, and per-user permission overrides.
+				access control (RBAC), hierarchical tenants, group-based permission inheritance, per-user
+				permission overrides, session handling, and SvelteKit integration.
 			</p>
-
 
 			<h3>Key Features</h3>
 			<ul>
 				<li>
-					<strong>Multi-tenant architecture</strong> - Users belong to multiple tenants with different roles
+					<strong>4-level permission cascade</strong> - Tenant hierarchy, membership role, group roles, membership overrides
 				</li>
-				<li><strong>Hierarchical RBAC</strong> - Base role → group roles → permission overrides</li>
-				<li><strong>Group-based teams</strong> - Flexible team structure within tenants</li>
-				<li><strong>DENY-takes-precedence</strong> - Security-first override system</li>
+				<li><strong>Hierarchical tenants</strong> - Parent-child trees (max depth 10) with cascading permissions</li>
+				<li><strong>Group-based teams</strong> - Flexible team structure within tenants via GroupRole</li>
+				<li><strong>DENY-takes-precedence</strong> - Security-first override system at both membership and tenant levels</li>
 				<li>
-					<strong>System & tenant roles</strong> - Reusable roles across tenants or tenant-specific
+					<strong>System & tenant roles</strong> - System roles (owner/admin/member/viewer) available to all tenants, plus tenant-specific custom roles
 				</li>
-				<li><strong>Session management</strong> - Tenant context switching and session lifecycle</li>
-				<li><strong>OIDC integration</strong> - Seamless authentication via smrt-profiles</li>
-				<li><strong>Tenant policies</strong> - Flexible, personal, or required tenant modes</li>
+				<li><strong>Session management</strong> - Server-side sessions with secure UUID, TTL in seconds, automatic expiry</li>
+				<li><strong>SvelteKit integration</strong> - Session hooks, cookie management, tenant context switching</li>
+				<li><strong>Tenant policies</strong> - Flexible, personal, or required tenant modes via TenantService</li>
 			</ul>
 		</section>
 
@@ -116,31 +116,32 @@ console.log('Can manage users:', hasAccess);`}
 
 			<h3>Multi-Tenancy Model</h3>
 			<CodeBlock
-				code={`User (authenticated identity)
+				code={`User (authenticated identity, email auto-lowercased)
   ↓
-Membership (user + tenant + role)
-  ├─→ Tenant (organizational boundary)
-  ├─→ Role (permission template)
+Membership (user + tenant + role, UNIQUE userId+tenantId)
+  ├─→ Tenant (organizational boundary, STI, hierarchical)
+  │    └─→ TenantPermissionOverride (INHERIT/GRANT/DENY)
+  ├─→ Role (permission template, tenantId=null → system role)
   │    ├─→ RolePermission
-  │    └─→ Permission (named capabilities)
-  ├─→ MembershipOverride (per-user grant/deny)
+  │    └─→ Permission (slug: resource.action)
+  ├─→ MembershipOverride (per-user grant/deny, DENY wins)
   └─→ Group (teams within tenant)
        ├─→ GroupMember (user → group)
        └─→ GroupRole (group → role)`}
 			/>
 
-			<h3>The Four Permission Layers</h3>
+			<h3>The Four Permission Layers (Cascade Order)</h3>
 			<ol>
 				<li>
-					<strong>Base Role Permissions</strong> - User's membership role defines base capabilities
+					<strong>Tenant hierarchy</strong> - Walk ancestors, apply TenantPermissionOverride at each level
 				</li>
 				<li>
-					<strong>Group Role Permissions</strong> - Additional roles from group membership (union)
+					<strong>Membership role</strong> - Base permissions from user's role in the tenant
 				</li>
 				<li>
-					<strong>Permission Overrides</strong> - Grant adds permissions, Deny removes them
+					<strong>Group roles</strong> - Permissions from all groups user belongs to in that tenant
 				</li>
-				<li><strong>Effective Permissions</strong> - Final resolved set (DENY takes precedence)</li>
+				<li><strong>Membership overrides</strong> - Per-user GRANT/DENY (DENY always wins)</li>
 			</ol>
 
 			<h3>System vs Tenant Roles</h3>
@@ -207,14 +208,13 @@ Membership (user + tenant + role)
 
 			<h3>Resolution Algorithm</h3>
 			<ol>
-				<li><strong>Find Membership</strong> - Get user's ACTIVE membership in tenant</li>
-				<li><strong>Base Permissions</strong> - Query RolePermission for membership's role</li>
+				<li><strong>Tenant hierarchy</strong> - Walk tenant ancestors, apply TenantPermissionOverride (INHERIT/GRANT/DENY) at each level</li>
+				<li><strong>Membership role</strong> - Query RolePermission for user's membership role in the tenant</li>
 				<li>
-					<strong>Group Permissions</strong> - For each group, get all group roles and their permissions
-					(union)
+					<strong>Group roles</strong> - For each group the user belongs to in that tenant, get all group roles and their permissions (union)
 				</li>
 				<li>
-					<strong>Apply Overrides</strong> - Add GRANT overrides, remove DENY overrides (DENY wins)
+					<strong>Membership overrides</strong> - Apply per-user GRANT/DENY overrides (DENY takes absolute precedence)
 				</li>
 			</ol>
 
@@ -430,32 +430,49 @@ const canDelete = await resolver.hasPermission(
 // false (DENY takes precedence)`}
 			/>
 
-			<h3>Tutorial 4: OIDC Integration</h3>
+			<h3>Tutorial 4: SvelteKit Integration</h3>
 
-			<h4>Login with OIDC</h4>
+			<h4>Session Hooks</h4>
 			<CodeBlock
-				code={`import { UserCollection, TenantService } from '@happyvertical/smrt-users';
+				code={`// hooks.server.ts
+import { createSessionHandler } from '@happyvertical/smrt-users/sveltekit';
 
-// In your OIDC callback handler
-const users = await UserCollection.create({ db });
-const { user, profile, created } = await users.getOrCreateFromOidc(
-  {
-    sub: tokenClaims.sub,
-    iss: tokenClaims.iss,
-    email: tokenClaims.email,
-    name: tokenClaims.name,
-    picture: tokenClaims.picture
-  },
-  'google' // or 'kanidm', 'okta', etc.
-);
-
-console.log('User logged in:', user.email);
-console.log('First login?', created);`}
+export const handle = createSessionHandler({
+  db: { type: 'postgres', url: process.env.DATABASE_URL },
+  ttl: 7 * 24 * 60 * 60, // 7 days in seconds
+  skipPaths: ['/api/health'],
+});
+// Populates event.locals: { user, permissions, tenantId, sessionId }`}
 			/>
 
-			<h4>Apply Tenant Policy</h4>
+			<h4>Login / Logout</h4>
 			<CodeBlock
-				code={`// Create tenant service with personal policy
+				code={`// +page.server.ts
+import {
+  createSessionCookie,
+  destroySessionCookie,
+  switchSessionTenant
+} from '@happyvertical/smrt-users/sveltekit';
+
+// Login
+await createSessionCookie(event, userId, tenantId, { db });
+
+// Logout
+await destroySessionCookie(event, { db });
+
+// Switch tenant context
+await switchSessionTenant(event, newTenantId, { db });`}
+			/>
+
+			<h4>Tenant Policy</h4>
+			<CodeBlock
+				code={`import { TenantService } from '@happyvertical/smrt-users';
+
+// TenantService supports three modes:
+// - flexible: no auto-create (multi-org SaaS)
+// - personal: auto-create on first login, deletable
+// - required: auto-create, must keep at least one
+
 const tenantService = await TenantService.create(db, {
   mode: 'personal',
   maxTenants: 5,
@@ -463,28 +480,11 @@ const tenantService = await TenantService.create(db, {
 });
 
 // Ensure user has a tenant
-const { tenant, membership, created: tenantCreated } =
+const { tenant, membership, created } =
   await tenantService.ensureTenantForUser(user.id, {
     email: user.email,
     name: profile.name
-  });
-
-if (tenantCreated) {
-  console.log('Created personal workspace:', tenant.name);
-}
-
-// Create session with tenant context
-const sessions = await SessionCollection.create({ db });
-const session = await sessions.createSession({
-  userId: user.id,
-  tenantId: tenant.id,
-  ttl: 7 * 24 * 60 * 60, // 7 days
-  userAgent: req.headers['user-agent'],
-  ipAddress: req.ip
-});
-
-// Store session ID in cookie
-res.cookie('session', session.id, { httpOnly: true });`}
+  });`}
 			/>
 		</section>
 

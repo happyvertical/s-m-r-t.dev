@@ -70,7 +70,7 @@ console.log(greeting);
 <ModuleTabs
 	name="smrt-content"
 	description="Content management system with flexible organization, publishing workflows, asset management, and AI-powered analysis."
-	badges={['v0.19.0', 'Content Management', '3 Components']}
+	badges={['v0.20.44', 'Content Management', 'STI']}
 >
 	{#snippet docs()}
 	<section id="overview">

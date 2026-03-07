@@ -7,31 +7,32 @@
 	<title>smrt-events - Event Management | SMRT Framework</title>
 	<meta
 		name="description"
-		content="Hierarchical event management with calendar integration, recurrence patterns, and participant tracking."
+		content="Infinite-nesting event hierarchy with series, participant tracking, and recurrence patterns."
 	/>
 </svelte:head>
 
 <ModulePage
 	name="smrt-events"
-	description="Hierarchical event management with scheduling, ticketing, and calendar integration."
-	badges={['v0.19.0', 'Events', '1 Component']}
+	description="Infinite-nesting event hierarchy with series, participant tracking, and recurrence patterns."
+	badges={['v0.20.44', 'Events', '1 Component']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-events</strong> provides comprehensive event management with infinite hierarchical
-			nesting, recurring patterns, participant tracking, and conflict detection. Perfect for sports, entertainment,
-			conferences, and municipal meetings.
+			<strong>smrt-events</strong> provides infinite-nesting event hierarchy with series, participant
+			tracking, and recurrence patterns. Events can model anything from conferences with sessions to
+			sports games with periods and goals.
 		</p>
 		<aside>
 			<p><strong>Key Features:</strong></p>
 			<ul>
-				<li>Hierarchical events with unlimited nesting (games → quarters → goals)</li>
-				<li>Event series with flexible recurrence patterns (iCal RRULE compatible)</li>
-				<li>Participant tracking with roles, placement, and performance data</li>
-				<li>Calendar integration with conflict detection</li>
-				<li>MeetingView component (NEW v0.19.0)</li>
-				<li>Integration with smrt-places for venue tracking</li>
+				<li>Infinite hierarchical events via self-referencing <code>parentEventId</code> (games, quarters, goals)</li>
+				<li>Event series with recurrence patterns (daily/weekly/monthly/yearly)</li>
+				<li>Participant tracking with <code>role</code> (home/away/speaker/etc.), <code>placement</code> (numeric), and <code>groupId</code></li>
+				<li>EventType with JSON schema for custom fields per type</li>
+				<li>Status lifecycle: scheduled, in_progress, completed, cancelled, postponed</li>
+				<li>Integration with smrt-places (venue via placeId) and smrt-profiles (participants via profileId)</li>
+				<li>Utility functions: scheduling conflict detection, recurrence calculation, date formatting</li>
 			</ul>
 		</aside>
 	</section>
@@ -165,12 +166,13 @@ interface RecurrencePattern {
 
 		<h3>EventParticipant</h3>
 		<CodeBlock
-			code={`class EventParticipant extends SmrtObject {
-  eventId: string           // FK to Event
-  profileId: string         // FK to Profile
-  role: string              // 'home' | 'away' | 'speaker' | 'performer' | etc.
-  placement?: number        // 0=home, 1=away, etc.
-  groupId?: string          // Team/group identifier
+			code={`// conflictColumns: ['event_id', 'profile_id', 'role']
+class EventParticipant extends SmrtObject {
+  eventId: string           // FK to Event (plain string, cross-package)
+  profileId: string         // FK to Profile (plain string, cross-package)
+  role: string              // 'home' | 'away' | 'speaker' | 'panelist' | etc.
+  placement?: number        // Numeric: 0=home, 1=away, or ranking position
+  groupId?: string          // Logical grouping (e.g., team members in a game)
   metadata?: Record<string, any>
 
   isHome(): boolean         // placement === 0
@@ -223,27 +225,36 @@ const root = await goal.getRootEvent(); // game`}
 	<section>
 		<h2>Calendar Integration</h2>
 
-		<h3>Date Range Queries</h3>
+		<h3>Utility Functions</h3>
 		<CodeBlock
-			code={`// Get events for week
-const weekEvents = await events.getByDateRange(
-  new Date('2025-01-20'),
-  new Date('2025-01-27')
-);
-
-// Get upcoming events
-const upcoming = await events.getUpcoming(10);
-
-// Get in-progress events
-const inProgress = await events.getInProgress();
+			code={`import {
+  checkSchedulingConflict,
+  calculateNextOccurrence,
+  formatEventDateRange,
+  generateEventSlug,
+  calculateDuration,
+  formatDuration,
+  isEventNow,
+  getEventStatusFromDates,
+  sortEventsByDate,
+  validateEventStatus,
+  parseRecurrencePattern
+} from '@happyvertical/smrt-events';
 
 // Check scheduling conflict
-import { checkSchedulingConflict } from '@happyvertical/smrt-events/utils';
-
 const hasConflict = checkSchedulingConflict(
   event1Start, event1End,
   event2Start, event2End
-);`}
+);
+
+// Duration and formatting
+const ms = calculateDuration(startDate, endDate);
+const readable = formatDuration(ms); // "2h 30m"
+const dateStr = formatEventDateRange(startDate, endDate);
+
+// Status helpers
+const status = getEventStatusFromDates(startDate, endDate);
+const valid = validateEventStatus('scheduled', 'in_progress');`}
 			language="typescript"
 		/>
 
@@ -252,8 +263,10 @@ const hasConflict = checkSchedulingConflict(
 			code={`// Weekly meeting series
 const weeklySeries = await series.create({
   name: 'Team Standup',
+  slug: 'team-standup-2025',
   recurrence: {
     frequency: 'weekly',
+    interval: 1,
     byDay: ['MO', 'WE', 'FR'],
     until: new Date('2025-12-31')
   }
@@ -262,6 +275,7 @@ const weeklySeries = await series.create({
 // Monthly board meeting
 const monthlySeries = await series.create({
   name: 'Board Meeting',
+  slug: 'board-meeting-2025',
   recurrence: {
     frequency: 'monthly',
     byMonthDay: [15],  // 15th of each month
@@ -270,7 +284,7 @@ const monthlySeries = await series.create({
 });
 
 // Calculate next occurrence
-import { calculateNextOccurrence } from '@happyvertical/smrt-events/utils';
+import { calculateNextOccurrence } from '@happyvertical/smrt-events';
 const nextDate = calculateNextOccurrence(pattern, new Date());`}
 			language="typescript"
 		/>
