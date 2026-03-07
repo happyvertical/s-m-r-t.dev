@@ -3,53 +3,38 @@
 </script>
 
 <svelte:head>
-	<title>Getting Started - SMRT Framework</title>
+	<title>Getting Started | s-m-r-t</title>
 	<meta
 		name="description"
-		content="Get started with SMRT - a full-stack TypeScript framework for building scalable applications with auto-generated APIs."
+		content="Install SMRT and create your first SmrtObject with auto-generated APIs, CLI commands, and MCP tools."
 	/>
 </svelte:head>
 
-<div class="max-w-4xl mx-auto px-4 py-8">
-	<div class="mb-8">
-		<h1 class="text-4xl font-bold mb-4">Getting Started with SMRT</h1>
-		<p class="text-xl text-gray-600">
-			Learn how to install SMRT, create your first project, and build your first SmrtObject in under
-			10 minutes.
-		</p>
-	</div>
+<article class="prose">
+	<h1>Getting Started</h1>
 
-	<section class="mb-12">
-		<h2 class="text-3xl font-bold mb-4">What is SMRT?</h2>
-		<p class="mb-4">
-			SMRT is a full-stack TypeScript framework that abstracts away implementation details for
-			databases, REST APIs, MCP tools, and CLI commands through simple object definitions. Define
-			your data models once, and SMRT automatically generates everything you need.
+	<section>
+		<h2>What is SMRT?</h2>
+		<p>
+			SMRT is a full-stack TypeScript framework that generates database schemas, REST APIs, MCP
+			tools, and CLI commands from simple object definitions. Define your data models once with the
+			<code>@smrt</code> decorator, and the framework handles the rest.
 		</p>
-		<div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
-			<p class="font-semibold mb-2">Core Benefits:</p>
-			<ul class="list-disc list-inside space-y-1">
-				<li><strong>No Vendor Lock:</strong> Works with PostgreSQL, SQLite, and more</li>
-				<li><strong>Adaptable:</strong> Easy to extend and customize</li>
-				<li><strong>Brief:</strong> Minimal boilerplate code</li>
-				<li><strong>Scalable:</strong> From prototypes to production</li>
-			</ul>
-		</div>
 	</section>
 
-	<section class="mb-12">
-		<h2 class="text-3xl font-bold mb-4">Prerequisites</h2>
-		<ul class="list-disc list-inside space-y-2">
-			<li>Node.js 20+ installed</li>
+	<section>
+		<h2>Prerequisites</h2>
+		<ul>
+			<li>Node.js 20+</li>
 			<li>Basic TypeScript knowledge</li>
-			<li>Familiarity with npm/pnpm</li>
+			<li>npm or pnpm</li>
 		</ul>
 	</section>
 
-	<section class="mb-12">
-		<h2 class="text-3xl font-bold mb-4">Installation</h2>
+	<section>
+		<h2>Installation</h2>
 
-		<h3 class="text-2xl font-semibold mb-3">Option 1: Create New Project (Recommended)</h3>
+		<h3>Option 1: Create New Project</h3>
 		<CodeBlock
 			code={`npm create smrt-app@latest my-app
 cd my-app
@@ -58,19 +43,19 @@ npm run dev`}
 			language="bash"
 		/>
 
-		<h3 class="text-2xl font-semibold mb-3 mt-6">Option 2: Add to Existing Project</h3>
+		<h3>Option 2: Add to Existing Project</h3>
 		<CodeBlock
 			code={`npm install @happyvertical/smrt-core @happyvertical/smrt-types`}
 			language="bash"
 		/>
 	</section>
 
-	<section class="mb-12">
-		<h2 class="text-3xl font-bold mb-4">Your First SmrtObject</h2>
+	<section>
+		<h2>Your First SmrtObject</h2>
 
-		<h3 class="text-2xl font-semibold mb-3">Step 1: Define Your Model</h3>
-		<p class="mb-4">
-			Create a file <code class="bg-gray-100 px-2 py-1 rounded">src/models/Task.ts</code>:
+		<h3>Step 1: Define Your Model</h3>
+		<p>
+			Create a file <code>src/models/Task.ts</code>:
 		</p>
 		<CodeBlock
 			code={`import { SmrtObject, field, smrt } from '@happyvertical/smrt-core';
@@ -93,7 +78,6 @@ export class Task extends SmrtObject {
   @field()
   dueDate?: Date;
 
-  // Custom method
   complete() {
     this.status = 'done';
   }
@@ -101,7 +85,7 @@ export class Task extends SmrtObject {
 			language="typescript"
 		/>
 
-		<h3 class="text-2xl font-semibold mb-3 mt-6">Step 2: Create the Collection</h3>
+		<h3>Step 2: Create the Collection</h3>
 		<CodeBlock
 			code={`import { SmrtCollection } from '@happyvertical/smrt-core';
 import { Task } from './Task.js';
@@ -109,7 +93,6 @@ import { Task } from './Task.js';
 export class TaskCollection extends SmrtCollection<Task> {
   static itemClass = Task;
 
-  // Custom query methods
   async findByStatus(status: string) {
     return this.list({ where: { status } });
   }
@@ -126,7 +109,7 @@ export class TaskCollection extends SmrtCollection<Task> {
 			language="typescript"
 		/>
 
-		<h3 class="text-2xl font-semibold mb-3 mt-6">Step 3: Use Your Object</h3>
+		<h3>Step 3: Use Your Object</h3>
 		<CodeBlock
 			code={`import { TaskCollection } from './models/TaskCollection.js';
 
@@ -162,14 +145,14 @@ await task.delete();`}
 		/>
 	</section>
 
-	<section class="mb-12">
-		<h2 class="text-3xl font-bold mb-4">Auto-Generated Features</h2>
+	<section>
+		<h2>Auto-Generated Interfaces</h2>
 
-		<p class="mb-4">
-			With the <code class="bg-gray-100 px-2 py-1 rounded">@smrt</code> decorator, you automatically get:
+		<p>
+			With the <code>@smrt</code> decorator, you get:
 		</p>
 
-		<h3 class="text-2xl font-semibold mb-3">REST API Endpoints</h3>
+		<h3>REST API Endpoints</h3>
 		<CodeBlock
 			code={`GET    /api/tasks          # List tasks
 GET    /api/tasks/:id      # Get task by ID
@@ -179,7 +162,7 @@ DELETE /api/tasks/:id      # Delete task`}
 			language="http"
 		/>
 
-		<h3 class="text-2xl font-semibold mb-3 mt-6">CLI Commands</h3>
+		<h3>CLI Commands</h3>
 		<CodeBlock
 			code={`smrt tasks list
 smrt tasks get <id>
@@ -189,15 +172,15 @@ smrt tasks delete <id>`}
 			language="bash"
 		/>
 
-		<h3 class="text-2xl font-semibold mb-3 mt-6">MCP Tools (Claude Integration)</h3>
-		<p class="mb-2">Claude Code can now interact with your tasks using natural language.</p>
+		<h3>MCP Tools</h3>
+		<p>Claude Code can interact with your objects using natural language via MCP.</p>
 	</section>
 
-	<section class="mb-12">
-		<h2 class="text-3xl font-bold mb-4">Configuration</h2>
+	<section>
+		<h2>Configuration</h2>
 
-		<p class="mb-4">
-			Create <code class="bg-gray-100 px-2 py-1 rounded">smrt.config.ts</code> in your project root:
+		<p>
+			Create <code>smrt.config.ts</code> in your project root:
 		</p>
 		<CodeBlock
 			code={`import { defineConfig } from '@happyvertical/smrt-config';
@@ -228,42 +211,10 @@ export default defineConfig({
 		/>
 	</section>
 
-	<section class="mb-12">
-		<h2 class="text-3xl font-bold mb-4">Next Steps</h2>
+	<section>
+		<h2>Common Patterns</h2>
 
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-			<a href="/docs/objects" class="block p-6 border rounded hover:border-blue-500 transition">
-				<h3 class="text-xl font-semibold mb-2">→ Learn About Objects</h3>
-				<p class="text-sm text-gray-600">
-					Deep dive into SmrtObject, fields, relationships, and computed properties
-				</p>
-			</a>
-
-			<a href="/docs/collections" class="block p-6 border rounded hover:border-blue-500 transition">
-				<h3 class="text-xl font-semibold mb-2">→ Learn About Collections</h3>
-				<p class="text-sm text-gray-600">Querying, filtering, pagination, and bulk operations</p>
-			</a>
-
-			<a href="/docs/agents" class="block p-6 border rounded hover:border-blue-500 transition">
-				<h3 class="text-xl font-semibold mb-2">→ Learn About Agents</h3>
-				<p class="text-sm text-gray-600">
-					Build autonomous agents with persistent state and AI integration
-				</p>
-			</a>
-
-			<a href="/modules" class="block p-6 border rounded hover:border-blue-500 transition">
-				<h3 class="text-xl font-semibold mb-2">→ Explore Modules</h3>
-				<p class="text-sm text-gray-600">
-					Discover 29 production-ready modules for common use cases
-				</p>
-			</a>
-		</div>
-	</section>
-
-	<section class="mb-12">
-		<h2 class="text-3xl font-bold mb-4">Common Patterns</h2>
-
-		<h3 class="text-2xl font-semibold mb-3">Relationships</h3>
+		<h3>Relationships</h3>
 		<CodeBlock
 			code={`import { foreignKey, manyToMany } from '@happyvertical/smrt-core';
 
@@ -281,7 +232,7 @@ class Project extends SmrtObject {
 			language="typescript"
 		/>
 
-		<h3 class="text-2xl font-semibold mb-3 mt-6">Computed Properties</h3>
+		<h3>Computed Properties</h3>
 		<CodeBlock
 			code={`@smrt()
 class Order extends SmrtObject {
@@ -297,48 +248,119 @@ class Order extends SmrtObject {
 }`}
 			language="typescript"
 		/>
-
-		<h3 class="text-2xl font-semibold mb-3 mt-6">AI-Powered Methods</h3>
-		<CodeBlock
-			code={`@smrt()
-class Document extends SmrtObject {
-  @field()
-  content: string = '';
-
-  // AI automatically generates these methods
-  async summarize(): Promise<string> {
-    // AI-powered summarization
-  }
-
-  async extractKeywords(): Promise<string[]> {
-    // AI-powered keyword extraction
-  }
-}`}
-			language="typescript"
-		/>
 	</section>
 
-	<section class="mb-12">
-		<h2 class="text-3xl font-bold mb-4">Need Help?</h2>
-		<ul class="space-y-2">
+	<section>
+		<h2>Next Steps</h2>
+		<ul class="next-steps">
 			<li>
-				<a href="/faq" class="text-blue-600 hover:underline"> → Check the FAQ </a>
+				<a href="/docs/objects">Objects</a> — SmrtObject fields, relationships, AI methods, and lifecycle
+				hooks
 			</li>
 			<li>
-				<a
-					href="https://github.com/happyvertical/smrt/issues"
-					class="text-blue-600 hover:underline"
-					target="_blank"
-					rel="noopener"
-				>
-					→ Report an issue on GitHub
+				<a href="/docs/collections">Collections</a> — Querying, filtering, pagination, and batch operations
+			</li>
+			<li><a href="/docs/agents">Agents</a> — Autonomous actors with persistent state</li>
+			<li><a href="/modules">Modules</a> — Available packages organized by purpose</li>
+		</ul>
+	</section>
+
+	<section>
+		<h2>Help</h2>
+		<ul>
+			<li>
+				<a href="/faq">FAQ</a>
+			</li>
+			<li>
+				<a href="https://github.com/happyvertical/smrt/issues" target="_blank" rel="noopener">
+					Report an issue on GitHub
 				</a>
 			</li>
 			<li>
-				<a href="/modules/smrt-core" class="text-blue-600 hover:underline">
-					→ Read the smrt-core documentation
-				</a>
+				<a href="/modules/smrt-core">smrt-core documentation</a>
 			</li>
 		</ul>
 	</section>
-</div>
+</article>
+
+<style>
+	.prose {
+		max-width: 100%;
+	}
+
+	.prose h1 {
+		font-size: 2.5rem;
+		font-weight: 600;
+		margin-bottom: 24px;
+	}
+
+	section {
+		margin-bottom: 48px;
+	}
+
+	.prose h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin-bottom: 16px;
+		padding-top: 24px;
+		border-top: 1px solid var(--smrt-color-outline, #e5e5e5);
+	}
+
+	section:first-of-type h2 {
+		border-top: none;
+		padding-top: 0;
+	}
+
+	.prose h3 {
+		font-size: 1.1rem;
+		font-weight: 600;
+		margin-top: 32px;
+		margin-bottom: 12px;
+	}
+
+	.prose p {
+		font-size: 1rem;
+		line-height: 1.7;
+		margin-bottom: 16px;
+	}
+
+	.prose ul {
+		margin: 0 0 16px;
+		padding-left: 24px;
+	}
+
+	.prose li {
+		line-height: 1.7;
+		margin-bottom: 8px;
+	}
+
+	.prose code {
+		font-family: var(--smrt-font-family-mono, monospace);
+		font-size: 0.9em;
+		background: var(--smrt-color-surface-container, #f5f5f5);
+		padding: 2px 6px;
+		border-radius: var(--smrt-radius-sm, 4px);
+	}
+
+	.prose a {
+		color: var(--smrt-color-primary, #1976d2);
+		text-decoration: none;
+	}
+
+	.prose a:hover {
+		text-decoration: underline;
+	}
+
+	.next-steps {
+		list-style: none;
+		padding: 0;
+	}
+
+	.next-steps li {
+		padding: 8px 0;
+	}
+
+	.next-steps a {
+		font-weight: 600;
+	}
+</style>

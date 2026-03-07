@@ -4,7 +4,6 @@
 
 <article class="prose">
 	<h1>Documentation</h1>
-	<p class="lead">Learn how to build AI-powered applications with the SMRT framework.</p>
 
 	<h2>Quick Start</h2>
 	<pre><code
@@ -49,12 +48,6 @@ console.log(task.id); // auto-generated UUID`}</code
 		font-size: 2.5rem;
 		font-weight: 600;
 		margin-bottom: 16px;
-	}
-
-	.prose .lead {
-		font-size: 1.2rem;
-		color: #666;
-		margin-bottom: 48px;
 	}
 
 	.prose h2 {
