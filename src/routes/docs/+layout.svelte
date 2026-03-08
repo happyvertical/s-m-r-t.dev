@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import '$lib/styles/prose.css';
 
 	let { children } = $props();
 
