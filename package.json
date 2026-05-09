@@ -46,7 +46,7 @@
 		"@happyvertical/smrt-events": "^0.20.44",
 		"@happyvertical/smrt-jobs": "^0.20.44",
 		"@happyvertical/smrt-ledgers": "^0.20.44",
-		"@happyvertical/smrt-profiles": "^0.20.44",
+		"@happyvertical/smrt-profiles": "^0.24.0",
 		"@happyvertical/smrt-projects": "^0.20.44",
 		"@happyvertical/smrt-svelte": "^0.20.44",
 		"@happyvertical/smrt-tenancy": "^0.20.44",
