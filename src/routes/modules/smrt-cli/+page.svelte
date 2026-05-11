@@ -13,7 +13,7 @@
 
 <ModulePage
 	name="smrt-cli"
-	description="Developer CLI with lazy-loaded commands, manifest discovery, and class introspection. Auto-generates CRUD commands for every SMRT object decorated with @smrt({ cli: true })."
+	description="Developer CLI with lazy-loaded commands, manifest discovery, and class introspection. Auto-generates CRUD commands for SMRT objects with cli: true in their @smrt() decorator."
 	badges={['v0.24.12', 'CLI', 'Developer Tools']}
 >
 	<section>
