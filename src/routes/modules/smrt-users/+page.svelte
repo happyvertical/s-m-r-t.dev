@@ -6,32 +6,74 @@
 <ModuleTabs
 	name="smrt-users"
 	description="Multi-tenant user management with RBAC, hierarchical tenants, session handling, and SvelteKit integration."
-	badges={['v0.20.44', 'Multi-tenant RBAC', '12 Models']}
+	badges={['v0.24.12', 'Multi-tenant RBAC', '13 Models']}
 >
 	{#snippet docs()}
 		<section id="overview">
 			<h2>Overview</h2>
 			<p>
-				The smrt-users package provides a complete multi-tenant user management system with role-based
-				access control (RBAC), hierarchical tenants, group-based permission inheritance, per-user
-				permission overrides, session handling, and SvelteKit integration.
+				The smrt-users package provides a complete multi-tenant user management system with
+				role-based access control (RBAC), hierarchical tenants, group-based permission inheritance,
+				per-user permission overrides, session handling, and SvelteKit integration. Authentication
+				identity (OIDC, Nostr, API keys, magic links) lives in
+				<a href="/modules/smrt-profiles">smrt-profiles</a>; smrt-users handles authorization and
+				session/cookie plumbing.
 			</p>
 
 			<h3>Key Features</h3>
 			<ul>
 				<li>
-					<strong>4-level permission cascade</strong> - Tenant hierarchy, membership role, group roles, membership overrides
+					<strong>4-level permission cascade</strong> — tenant hierarchy → membership role → group roles → membership overrides
 				</li>
-				<li><strong>Hierarchical tenants</strong> - Parent-child trees (max depth 10) with cascading permissions</li>
-				<li><strong>Group-based teams</strong> - Flexible team structure within tenants via GroupRole</li>
-				<li><strong>DENY-takes-precedence</strong> - Security-first override system at both membership and tenant levels</li>
+				<li><strong>Hierarchical tenants</strong> — STI, materialized <code>hierarchyPath</code>, max depth 10</li>
+				<li><strong>Group-based teams</strong> — flexible team structure within tenants via GroupRole</li>
 				<li>
-					<strong>System & tenant roles</strong> - System roles (owner/admin/member/viewer) available to all tenants, plus tenant-specific custom roles
+					<strong>DENY always wins</strong> — <code>MembershipOverride.DENY</code> beats any GRANT;
+					<code>TenantPermissionOverride</code> supports <code>INHERIT</code>/<code>GRANT</code>/<code>DENY</code> at each ancestor level
 				</li>
-				<li><strong>Session management</strong> - Server-side sessions with secure UUID, TTL in seconds, automatic expiry</li>
-				<li><strong>SvelteKit integration</strong> - Session hooks, cookie management, tenant context switching</li>
-				<li><strong>Tenant policies</strong> - Flexible, personal, or required tenant modes via TenantService</li>
+				<li>
+					<strong>System & tenant roles</strong> — system roles (owner/admin/member/viewer, <code>tenantId=null</code>) are available to all tenants
+				</li>
+				<li><strong>Session management</strong> — server-side sessions with secure UUID, TTL in <strong>seconds</strong>, auto-expiry on access</li>
+				<li><strong>SvelteKit integration</strong> — <code>createSessionHandler</code>, cookie helpers, tenant context switching</li>
+				<li><strong>Tenant policies</strong> — flexible, personal, or required tenant modes via TenantService</li>
 			</ul>
+		</section>
+
+		<section id="models">
+			<h2>Models (13)</h2>
+			<table>
+				<thead>
+					<tr><th>Model</th><th>Key Pattern</th></tr>
+				</thead>
+				<tbody>
+					<tr><td>User</td><td>Auth identity. <code>profileId</code> is a plain string (not FK) to smrt-profiles. Email auto-lowercased.</td></tr>
+					<tr><td>Tenant</td><td><strong>STI</strong> + hierarchical parent-child. Materialized <code>hierarchyPath</code> and <code>hierarchyLevel</code>. Max depth 10.</td></tr>
+					<tr><td>Session</td><td>Server-side. Secure UUID. TTL in <strong>seconds</strong>. Status auto-updates to <code>EXPIRED</code> on access.</td></tr>
+					<tr><td>MagicLinkToken</td><td>Single-use email login token. Backed by <code>MagicLinkService</code>.</td></tr>
+					<tr><td>Role</td><td><code>tenantId = null</code> → system role (available to all tenants). <code>isSystem: true</code> blocks deletion.</td></tr>
+					<tr><td>Permission</td><td>Slug format: <code>resource.action</code>. Parsed by PermissionResolver.</td></tr>
+					<tr><td>Membership</td><td>User + Tenant + Role junction. <code>UNIQUE(userId, tenantId)</code>.</td></tr>
+					<tr><td>Group</td><td>Team within a tenant. Multiple roles via GroupRole.</td></tr>
+					<tr><td>GroupMember, GroupRole, RolePermission</td><td>Join tables.</td></tr>
+					<tr><td>MembershipOverride</td><td>Per-user permission grant/deny. <strong>DENY always wins.</strong></td></tr>
+					<tr><td>TenantPermissionOverride</td><td>Tenant-level cascade overrides. Effect: <code>INHERIT</code> / <code>GRANT</code> / <code>DENY</code>.</td></tr>
+				</tbody>
+			</table>
+		</section>
+
+		<section id="tenancy">
+			<h2>Tenancy</h2>
+			<p>
+				<code>User</code> is intentionally <strong>not</strong> tenant-scoped — emails are globally
+				unique and a single user participates in many tenants via <code>Membership</code>. <code
+					>Tenant</code
+				>, <code>Role</code>, <code>Permission</code>, and the join tables use
+				<code>@TenantScoped({'{'} mode: 'optional' {'}'})</code>: a row with
+				<code>tenantId = null</code> is a system-wide row (e.g. the built-in <code>owner</code>
+				role), while a row with an explicit <code>tenantId</code> belongs to that tenant only.
+				Sessions are scoped to a specific tenant context via <code>switchSessionTenant()</code>.
+			</p>
 		</section>
 
 		<section id="installation">
@@ -45,11 +87,11 @@ npm install @happyvertical/smrt-users`}
 			<h3>Database Requirements</h3>
 			<ul>
 				<li>
-					<strong>SQLite</strong> (development): <code>{"{ type: 'sqlite', url: 'app.db' }"}</code>
+					<strong>SQLite</strong> (development): <code>{'{'} type: 'sqlite', url: 'app.db' {'}'}</code>
 				</li>
 				<li>
 					<strong>PostgreSQL</strong> (production):
-					<code>{"{ type: 'postgres', url: 'postgresql://...' }"}</code>
+					<code>{'{'} type: 'postgres', url: 'postgresql://...' {'}'}</code>
 				</li>
 			</ul>
 		</section>
@@ -67,9 +109,10 @@ const roles = await RoleCollection.create({ db: dbConfig });
 const memberships = await MembershipCollection.create({ db: dbConfig });`}
 			/>
 
-			<h3>Step 2: Seed System Roles</h3>
+			<h3>Step 2: Seed System Roles (Required)</h3>
 			<CodeBlock
 				code={`// Creates: owner, admin, member, viewer (idempotent)
+// Skipping this leads to "no role found" errors during PermissionResolver runs.
 await roles.seedSystemRoles();`}
 			/>
 
@@ -77,7 +120,7 @@ await roles.seedSystemRoles();`}
 			<CodeBlock
 				code={`const user = await users.create({
   email: 'user@example.com',
-  profileId: 'profile-123'
+  profileId: 'profile-123' // plain string FK to smrt-profiles
 });
 await user.save();
 
@@ -106,117 +149,37 @@ const hasAccess = await resolver.hasPermission(
   tenant.id,
   'users.manage'
 );
-
 console.log('Can manage users:', hasAccess);`}
 			/>
 		</section>
 
-		<section id="architecture">
-			<h2>Architecture</h2>
-
-			<h3>Multi-Tenancy Model</h3>
-			<CodeBlock
-				code={`User (authenticated identity, email auto-lowercased)
-  ↓
-Membership (user + tenant + role, UNIQUE userId+tenantId)
-  ├─→ Tenant (organizational boundary, STI, hierarchical)
-  │    └─→ TenantPermissionOverride (INHERIT/GRANT/DENY)
-  ├─→ Role (permission template, tenantId=null → system role)
-  │    ├─→ RolePermission
-  │    └─→ Permission (slug: resource.action)
-  ├─→ MembershipOverride (per-user grant/deny, DENY wins)
-  └─→ Group (teams within tenant)
-       ├─→ GroupMember (user → group)
-       └─→ GroupRole (group → role)`}
-			/>
-
-			<h3>The Four Permission Layers (Cascade Order)</h3>
-			<ol>
-				<li>
-					<strong>Tenant hierarchy</strong> - Walk ancestors, apply TenantPermissionOverride at each level
-				</li>
-				<li>
-					<strong>Membership role</strong> - Base permissions from user's role in the tenant
-				</li>
-				<li>
-					<strong>Group roles</strong> - Permissions from all groups user belongs to in that tenant
-				</li>
-				<li><strong>Membership overrides</strong> - Per-user GRANT/DENY (DENY always wins)</li>
-			</ol>
-
-			<h3>System vs Tenant Roles</h3>
-			<table>
-				<thead>
-					<tr>
-						<th>Type</th>
-						<th>Scope</th>
-						<th>Protected</th>
-						<th>Use Case</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>System</td>
-						<td>All tenants</td>
-						<td>Yes</td>
-						<td>Owner, Admin, Member, Viewer</td>
-					</tr>
-					<tr>
-						<td>Tenant</td>
-						<td>Single tenant</td>
-						<td>No</td>
-						<td>Custom roles (Editor, Moderator, etc.)</td>
-					</tr>
-				</tbody>
-			</table>
-
-			<h3>Tenant Policies</h3>
-			<table>
-				<thead>
-					<tr>
-						<th>Mode</th>
-						<th>Auto-create</th>
-						<th>Min Tenants</th>
-						<th>Use Case</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td><strong>flexible</strong></td>
-						<td>No</td>
-						<td>0</td>
-						<td>Multi-org SaaS</td>
-					</tr>
-					<tr>
-						<td><strong>personal</strong></td>
-						<td>Yes</td>
-						<td>0</td>
-						<td>Personal workspace apps</td>
-					</tr>
-					<tr>
-						<td><strong>required</strong></td>
-						<td>Yes</td>
-						<td>1</td>
-						<td>Single tenant per user</td>
-					</tr>
-				</tbody>
-			</table>
-		</section>
-
 		<section id="permission-resolver">
-			<h2>Permission Resolution</h2>
-
-			<h3>Resolution Algorithm</h3>
+			<h2>Permission Resolution -- 4-Level Cascade</h2>
+			<p>
+				<code>PermissionResolver</code> evaluates these levels in order. Each level can add or remove
+				permissions; <strong>DENY always wins</strong> on the membership-override level.
+			</p>
 			<ol>
-				<li><strong>Tenant hierarchy</strong> - Walk tenant ancestors, apply TenantPermissionOverride (INHERIT/GRANT/DENY) at each level</li>
-				<li><strong>Membership role</strong> - Query RolePermission for user's membership role in the tenant</li>
 				<li>
-					<strong>Group roles</strong> - For each group the user belongs to in that tenant, get all group roles and their permissions (union)
+					<strong>Tenant hierarchy</strong> — walk ancestors, applying
+					<code>TenantPermissionOverride</code> at each level
+					(<code>INHERIT</code>/<code>GRANT</code>/<code>DENY</code>)
+				</li>
+				<li><strong>Membership role</strong> — base permissions from the user's role in the tenant</li>
+				<li>
+					<strong>Group roles</strong> — permissions from all groups the user belongs to
+					<em>in that tenant</em> (union)
 				</li>
 				<li>
-					<strong>Membership overrides</strong> - Apply per-user GRANT/DENY overrides (DENY takes absolute precedence)
+					<strong>Membership overrides</strong> — final per-user GRANT/DENY.
+					<code>MembershipOverride.DENY</code> takes absolute precedence over every earlier GRANT.
 				</li>
 			</ol>
+			<p>
+				<strong>Critical:</strong> use <code>getGroupIdsForTenant(userId, tenantId)</code> — it joins
+				against the <code>groups</code> table to scope by tenant. Never use the cross-tenant
+				<code>getGroupIds()</code> in resolution code.
+			</p>
 
 			<h3>PermissionResolver Methods</h3>
 			<CodeBlock
@@ -224,18 +187,18 @@ Membership (user + tenant + role, UNIQUE userId+tenantId)
 
 // Full resolution with metadata
 const result = await resolver.resolvePermissions(userId, tenantId);
-// Returns: { permissions: Set<string>, membershipId, roleId, groupIds, deniedPermissionIds }
+// { permissions: Set<string>, membershipId, roleId, groupIds, deniedPermissionIds }
 
 // Single permission check
 const canManage = await resolver.hasPermission(userId, tenantId, 'users.manage');
 
-// Check multiple (AND logic)
+// Multiple (AND logic)
 const hasAll = await resolver.hasAllPermissions(userId, tenantId, [
   'articles.create',
   'articles.publish'
 ]);
 
-// Check multiple (OR logic)
+// Multiple (OR logic)
 const hasAny = await resolver.hasAnyPermission(userId, tenantId, [
   'articles.update',
   'articles.delete'
@@ -243,309 +206,90 @@ const hasAny = await resolver.hasAnyPermission(userId, tenantId, [
 			/>
 		</section>
 
-		<section id="tutorials">
-			<h2>Tutorials</h2>
-
-			<h3>Tutorial 1: Multi-Tenant Setup from Scratch</h3>
-
-			<h4>Initialize System</h4>
+		<section id="hierarchical-tenants">
+			<h2>Hierarchical Tenants</h2>
+			<ul>
+				<li>
+					<code>TenantCollection.createChild()</code> auto-calculates <code>hierarchyPath</code> and
+					<code>hierarchyLevel</code>, enforcing the max depth of 10
+				</li>
+				<li>
+					<code>moveToParent()</code> updates the tenant <strong>and all descendants'</strong> paths
+					and levels
+				</li>
+				<li>
+					<code>cascadePermissions</code> (parent pushes down) + <code>inheritPermissions</code>
+					(child accepts) — both must be true for permission cascade
+				</li>
+				<li><code>getTree(rootId?)</code> returns a nested structure for UI rendering</li>
+			</ul>
 			<CodeBlock
-				code={`import {
-  UserCollection,
-  TenantCollection,
-  RoleCollection,
-  MembershipCollection,
-  PermissionCollection
-} from '@happyvertical/smrt-users';
+				code={`const parent = await tenants.create({ name: 'Acme Corp' });
+await parent.save();
 
-// Initialize all collections
-const db = { type: 'sqlite', url: 'app.db' };
-const users = await UserCollection.create({ db });
-const tenants = await TenantCollection.create({ db });
-const roles = await RoleCollection.create({ db });
-const memberships = await MembershipCollection.create({ db });
-const permissions = await PermissionCollection.create({ db });
+const child = await tenants.createChild(parent.id, {
+  name: 'Acme East',
+  cascadePermissions: true,
+  inheritPermissions: true,
+});
 
-// Seed system roles (idempotent)
-await roles.seedSystemRoles();`}
+// Materialized path -- O(1) ancestor checks
+console.log(child.hierarchyPath);  // 'acme-corp.acme-east'
+console.log(child.hierarchyLevel); // 1`}
 			/>
+		</section>
 
-			<h4>Create Tenant Owner</h4>
-			<CodeBlock
-				code={`// Create user
-const owner = await users.create({
-  email: 'owner@company.com',
-  profileId: 'profile-owner-123'
-});
-await owner.save();
+		<section id="sveltekit">
+			<h2>SvelteKit Integration</h2>
 
-// Create tenant
-const company = await tenants.create({
-  name: 'Acme Corporation',
-  description: 'Our main tenant'
-});
-await company.save();
-
-// Make user the owner
-const ownerRole = await roles.findBySlug('owner');
-const ownerMembership = await memberships.create({
-  userId: owner.id,
-  tenantId: company.id,
-  roleId: ownerRole.id
-});
-await ownerMembership.save();`}
-			/>
-
-			<h4>Invite Team Members</h4>
-			<CodeBlock
-				code={`// Create team member
-const member = await users.create({
-  email: 'member@company.com',
-  profileId: 'profile-member-456'
-});
-await member.save();
-
-// Assign member role
-const memberRole = await roles.findBySlug('member');
-const memberMembership = await memberships.create({
-  userId: member.id,
-  tenantId: company.id,
-  roleId: memberRole.id,
-  status: 'PENDING' // Awaiting acceptance
-});
-await memberMembership.save();
-
-// Later: accept invitation
-memberMembership.status = 'ACTIVE';
-await memberMembership.save();`}
-			/>
-
-			<h3>Tutorial 2: Group-Based Team Access</h3>
-
-			<h4>Create Teams (Groups)</h4>
-			<CodeBlock
-				code={`import { GroupCollection, GroupMemberCollection, GroupRoleCollection } from '@happyvertical/smrt-users';
-
-const groups = await GroupCollection.create({ db });
-const groupMembers = await GroupMemberCollection.create({ db });
-const groupRoles = await GroupRoleCollection.create({ db });
-
-// Create editorial team
-const editorial = await groups.create({
-  tenantId: company.id,
-  name: 'Editorial Team',
-  description: 'Content creators and editors'
-});
-await editorial.save();
-
-// Create engineering team
-const engineering = await groups.create({
-  tenantId: company.id,
-  name: 'Engineering Team',
-  description: 'Developers and technical staff'
-});
-await engineering.save();`}
-			/>
-
-			<h4>Assign Roles to Groups</h4>
-			<CodeBlock
-				code={`// Create custom editor role
-const editorRole = await roles.create({
-  tenantId: company.id,
-  name: 'Content Editor',
-  description: 'Can create and edit content'
-});
-await editorRole.save();
-
-// Add permissions to editor role
-const createArticle = await permissions.findOrCreate('articles.create', {
-  name: 'Create Articles',
-  category: 'articles'
-});
-const editArticle = await permissions.findOrCreate('articles.update', {
-  name: 'Edit Articles',
-  category: 'articles'
-});
-
-await rolePermissions.addPermission(editorRole.id, createArticle.id);
-await rolePermissions.addPermission(editorRole.id, editArticle.id);
-
-// Assign role to editorial group
-await groupRoles.addRole(editorial.id, editorRole.id);`}
-			/>
-
-			<h4>Add Users to Groups</h4>
-			<CodeBlock
-				code={`// Add users to editorial team
-await groupMembers.addMember(editorial.id, user1.id);
-await groupMembers.addMember(editorial.id, user2.id);
-await groupMembers.addMember(editorial.id, user3.id);
-
-// Users now have editor permissions through group membership
-// No need to update individual memberships`}
-			/>
-
-			<h3>Tutorial 3: Permission Overrides</h3>
-
-			<h4>Grant Extra Permission</h4>
-			<CodeBlock
-				code={`import { MembershipOverrideCollection } from '@happyvertical/smrt-users';
-
-const overrides = await MembershipOverrideCollection.create({ db });
-
-// User is a viewer but needs to publish articles
-const publishPerm = await permissions.findOrCreate('articles.publish', {
-  name: 'Publish Articles',
-  category: 'articles'
-});
-
-await overrides.grantPermission(membership.id, publishPerm.id);
-
-// Verify permission granted
-const resolver = await PermissionResolver.create({ db });
-const canPublish = await resolver.hasPermission(
-  user.id,
-  tenant.id,
-  'articles.publish'
-);
-// true`}
-			/>
-
-			<h4>Deny Dangerous Permission</h4>
-			<CodeBlock
-				code={`// User is an admin but shouldn't delete users
-const deleteUserPerm = await permissions.findOrCreate('users.delete', {
-  name: 'Delete Users',
-  category: 'users'
-});
-
-await overrides.denyPermission(membership.id, deleteUserPerm.id);
-
-// Permission resolution now excludes this permission
-const canDelete = await resolver.hasPermission(
-  user.id,
-  tenant.id,
-  'users.delete'
-);
-// false (DENY takes precedence)`}
-			/>
-
-			<h3>Tutorial 4: SvelteKit Integration</h3>
-
-			<h4>Session Hooks</h4>
+			<h3>Session Hooks</h3>
 			<CodeBlock
 				code={`// hooks.server.ts
 import { createSessionHandler } from '@happyvertical/smrt-users/sveltekit';
 
 export const handle = createSessionHandler({
   db: { type: 'postgres', url: process.env.DATABASE_URL },
-  ttl: 7 * 24 * 60 * 60, // 7 days in seconds
+  ttl: 7 * 24 * 60 * 60, // 7 days in SECONDS (not ms)
   skipPaths: ['/api/health'],
 });
-// Populates event.locals: { user, permissions, tenantId, sessionId }`}
+// Populates event.locals: { user, permissions: string[], tenantId, sessionId }`}
 			/>
 
-			<h4>Login / Logout</h4>
+			<h3>Login / Logout / Tenant Switch</h3>
 			<CodeBlock
-				code={`// +page.server.ts
-import {
+				code={`import {
   createSessionCookie,
   destroySessionCookie,
   switchSessionTenant
 } from '@happyvertical/smrt-users/sveltekit';
 
-// Login
 await createSessionCookie(event, userId, tenantId, { db });
-
-// Logout
 await destroySessionCookie(event, { db });
-
-// Switch tenant context
 await switchSessionTenant(event, newTenantId, { db });`}
-			/>
-
-			<h4>Tenant Policy</h4>
-			<CodeBlock
-				code={`import { TenantService } from '@happyvertical/smrt-users';
-
-// TenantService supports three modes:
-// - flexible: no auto-create (multi-org SaaS)
-// - personal: auto-create on first login, deletable
-// - required: auto-create, must keep at least one
-
-const tenantService = await TenantService.create(db, {
-  mode: 'personal',
-  maxTenants: 5,
-  defaultName: 'My Workspace'
-});
-
-// Ensure user has a tenant
-const { tenant, membership, created } =
-  await tenantService.ensureTenantForUser(user.id, {
-    email: user.email,
-    name: profile.name
-  });`}
 			/>
 		</section>
 
 		<section id="best-practices">
 			<h2>Best Practices</h2>
 
-			<h3>✅ DO</h3>
+			<h3>DO</h3>
 			<ul>
 				<li>Use <code>resource.action</code> format for permission slugs</li>
-				<li>Create minimal system roles, extend with tenant roles as needed</li>
+				<li>Call <code>seedSystemRoles()</code> at app init — it's idempotent</li>
 				<li>Use groups for team-based access instead of many tenant roles</li>
-				<li>Apply GRANT overrides sparingly, document why granted</li>
-				<li>Use DENY overrides for exceptions and security restrictions</li>
-				<li>Always filter queries by tenantId for data isolation</li>
-				<li>Normalize emails to lowercase automatically</li>
-				<li>Set appropriate session TTL based on security requirements</li>
+				<li>Apply GRANT overrides sparingly and document why</li>
+				<li>Use DENY overrides for exceptions and security restrictions (DENY always wins)</li>
+				<li>Always filter queries by <code>tenantId</code> for data isolation</li>
+				<li>Set session TTL based on security requirements — remember it's <strong>seconds</strong></li>
 			</ul>
 
-			<h3>❌ DON'T</h3>
+			<h3>DON'T</h3>
 			<ul>
-				<li>Don't create too many tenant-specific roles (use groups instead)</li>
+				<li>Don't use <code>getGroupIds()</code> — it's cross-tenant; use <code>getGroupIdsForTenant()</code></li>
 				<li>Don't forget to check membership status is ACTIVE</li>
-				<li>Don't rely on user input for tenantId (verify membership)</li>
-				<li>Don't expose permission IDs to client-side code</li>
-				<li>Don't mix uppercase/lowercase in email comparisons</li>
-				<li>Don't allow cross-tenant data access without verification</li>
+				<li>Don't trust user-supplied <code>tenantId</code> without verifying membership</li>
+				<li>Don't mix uppercase/lowercase in email comparisons (User collection auto-lowercases)</li>
 			</ul>
-		</section>
-
-		<section id="troubleshooting">
-			<h2>Troubleshooting</h2>
-
-			<h3>Permission denied for allowed user</h3>
-			<p><strong>Cause:</strong> Membership status is not ACTIVE.</p>
-			<p><strong>Solution:</strong> Check membership status and update if needed.</p>
-
-			<h3>User can't see tenant</h3>
-			<p><strong>Cause:</strong> No membership exists.</p>
-			<p><strong>Solution:</strong> Create membership with appropriate role.</p>
-
-			<h3>Group permissions not working</h3>
-			<p><strong>Cause:</strong> User not in group.</p>
-			<p><strong>Solution:</strong> Verify GroupMember relationship exists.</p>
-
-			<h3>DENY override not working</h3>
-			<p><strong>Cause:</strong> GRANT applied after DENY in code logic.</p>
-			<p>
-				<strong>Solution:</strong> DENY is always applied last in PermissionResolver (should work automatically).
-			</p>
-
-			<h3>Debug Permission Resolution</h3>
-			<CodeBlock
-				code={`// Get full resolution details
-const result = await resolver.resolvePermissions(userId, tenantId);
-
-console.log('Membership:', result.membershipId);
-console.log('Base role:', result.roleId);
-console.log('Groups:', result.groupIds);
-console.log('Permissions:', Array.from(result.permissions));
-console.log('Denied:', result.deniedPermissionIds);`}
-			/>
 		</section>
 
 		<section id="related">
@@ -553,7 +297,11 @@ console.log('Denied:', result.deniedPermissionIds);`}
 			<div class="link-grid">
 				<a href="/modules/smrt-profiles" class="link-card">
 					<strong>smrt-profiles</strong>
-					<span>OIDC authentication integration</span>
+					<span>OIDC/Nostr/API key identity resolution</span>
+				</a>
+				<a href="/modules/smrt-tenancy" class="link-card">
+					<strong>smrt-tenancy</strong>
+					<span>AsyncLocalStorage tenant context + auto-filter interceptors</span>
 				</a>
 				<a href="/modules/smrt-svelte" class="link-card">
 					<strong>smrt-svelte</strong>
@@ -567,9 +315,9 @@ console.log('Denied:', result.deniedPermissionIds);`}
 		<section id="components">
 			<h2>User Management Components</h2>
 			<p>
-				smrt-users integrates with <code>@happyvertical/smrt-svelte</code> to provide a complete set of
-				pre-built UI components for user management, tenant switching, role display, and permission-based
-				conditional rendering.
+				smrt-users integrates with <code>@happyvertical/smrt-svelte</code> to provide a complete set
+				of pre-built UI components for user management, tenant switching, role display, and
+				permission-based conditional rendering.
 			</p>
 
 			<h3>User Components</h3>
@@ -621,7 +369,6 @@ import {
 				<a href="/components/users">View detailed component docs →</a>
 			</p>
 		</section>
-
 	{/snippet}
 </ModuleTabs>
 
