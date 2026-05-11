@@ -13,42 +13,59 @@
 
 <ModulePage
 	name="browser-ai"
-	description="Browser-based AI capabilities including STT, TTS, and LLM -- consolidated into smrt-svelte as of v0.20."
-	badges={['v0.20.44', 'Consolidated', 'See smrt-svelte']}
+	description="Browser-based AI capabilities (STT, TTS, LLM) — consolidated into smrt-svelte since v0.20 and shipped as the bundled @happyvertical/smrt-svelte/browser-ai subpath."
+	badges={['v0.24.12', 'Consolidated since v0.20', 'See smrt-svelte']}
 >
 	<section id="consolidated">
 		<h2>Consolidated into smrt-svelte</h2>
 		<p>
-			As of <strong>v0.20</strong>, the <code>browser-ai</code> package has been consolidated into
-			<a href="/modules/smrt-svelte"><code>@happyvertical/smrt-svelte</code></a>. All browser AI
-			functionality -- speech-to-text (STT), text-to-speech (TTS), LLM inference, capability
-			detection, and model management -- is now available via the <code>@happyvertical/smrt-svelte/browser-ai</code>
-			subpath export.
+			<code>browser-ai</code> is <strong>no longer a standalone package</strong>. As of <strong>v0.20</strong> it
+			was consolidated into <a href="/modules/smrt-svelte"><code>@happyvertical/smrt-svelte</code></a>,
+			and that consolidation remains the shape on the current <strong>v0.24.12</strong> baseline.
+			All browser AI functionality — speech-to-text (STT), text-to-speech (TTS), LLM inference,
+			capability detection, model download progress, and the warm client cache — ships as the
+			bundled <code>@happyvertical/smrt-svelte/browser-ai</code> subpath export.
 		</p>
 		<aside>
-			<p>This consolidation:</p>
+			<p>Why the consolidation stuck:</p>
 			<ul>
 				<li>Eliminates a circular dependency between browser-ai and smrt-svelte</li>
-				<li>Simplifies installation -- one package instead of two</li>
-				<li>Keeps all Svelte components and their AI adapters co-located</li>
-				<li>Reduces bundle configuration complexity</li>
+				<li>Single install: <code>@happyvertical/smrt-svelte</code> brings the adapters along</li>
+				<li>Co-locates Svelte components with the AI adapters they wrap (VoiceInput, CapabilityGate, DownloadProgress)</li>
+				<li>Lets the warm client cache live in the same module graph as the <code>Provider</code> that primes it</li>
 			</ul>
 		</aside>
 	</section>
 
 	<section id="migration">
 		<h2>Migration</h2>
-		<p>Update your imports to use <code>@happyvertical/smrt-svelte</code>:</p>
+		<p>If you are still on a pre-0.20 import, update to <code>@happyvertical/smrt-svelte</code>:</p>
 		<CodeBlock
 			code={`// Before (v0.19)
 import { BrowserAI } from '@happyvertical/browser-ai';
 
-// After (v0.20+)
+// After (v0.20+, still current on v0.24.12)
 import { useSTT, useTTS, useLLM } from '@happyvertical/smrt-svelte';
-import { getCachedSTT, getCachedTTS, getCachedLLM } from '@happyvertical/smrt-svelte/browser-ai';
-import { VoiceInput, CapabilityGate, DownloadProgress } from '@happyvertical/smrt-svelte/browser-ai/svelte';`}
+import {
+  getCachedSTT,
+  getCachedTTS,
+  getCachedLLM,
+  getCacheStats,
+  clearAllCaches,
+} from '@happyvertical/smrt-svelte/browser-ai';
+import {
+  VoiceInput,
+  CapabilityGate,
+  DownloadProgress,
+} from '@happyvertical/smrt-svelte/browser-ai/svelte';`}
 			language="typescript"
 		/>
+		<p>
+			Available adapters today: STT (<code>browser-speech</code>, <code>whisper-cpp</code>,
+			<code>whisper-wasm</code>), TTS (<code>browser-synthesis</code>), LLM (<code>webllm</code>,
+			<code>transformers-llm</code>). See the smrt-svelte page for the full <code>Provider</code>
+			configuration and preload strategies.
+		</p>
 	</section>
 
 	<section id="related">
