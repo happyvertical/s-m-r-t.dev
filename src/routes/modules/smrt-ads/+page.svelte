@@ -5,23 +5,26 @@
 
 <ModulePage
 	name="smrt-ads"
-	description="Ad management system with waterfall priority, zone targeting, weighted A/B testing, and immutable event tracking."
-	badges={['v0.20.44', 'Waterfall', 'A/B Testing', 'IAB Formats']}
+	description="Ad delivery with priority waterfall, weighted A/B testing, and immutable event tracking."
+	badges={['v0.24.12', 'Waterfall', 'A/B Testing', 'IAB Formats', 'Mixed Tenancy']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-ads</strong> provides ad campaign management with waterfall priority delivery, zone-based
-			targeting, weighted variation selection, and immutable event tracking.
+			<strong>smrt-ads</strong> manages ad campaigns with a priority waterfall, zone-based targeting,
+			weighted creative variations for A/B testing, and immutable impression/click/conversion events.
+			Cross-package references all use plain string IDs (no <code>@foreignKey()</code>) to avoid
+			circular dependencies.
 		</p>
 		<aside>
 			<p>Key Features:</p>
 			<ul>
-				<li>Waterfall priority system (1=highest, 2, 3...)</li>
-				<li>Zone targeting with smrt-properties integration</li>
-				<li>Weighted A/B testing for ad variations</li>
-				<li>IAB-standard ad formats</li>
-				<li>Immutable event tracking (impressions, clicks, conversions)</li>
+				<li><strong>Priority waterfall</strong>: lower priority number serves first — Sponsorship (1, FIXED pricing) → Standard (2, CPM) → House (3, fallback)</li>
+				<li><strong>Weighted A/B variations</strong>: <code>weight</code> is a relative integer — <code>weight=2</code> is 2× more likely than <code>weight=1</code>, not a percentage</li>
+				<li><strong>Denormalized counts</strong>: <code>impressions</code>/<code>clicks</code> live on <code>AdVariation</code> and are <em>eventually</em> consistent — refresh asynchronously</li>
+				<li><strong>Immutable event tracking</strong>: <code>AdEvent</code> is create-only (no update/delete in the generated API/MCP); <code>cli: false</code> due to high volume</li>
+				<li><strong>IAB-standard formats</strong>: <code>AdFormat</code> rows describe width/height/type (banner/native/video) — shared catalog, not per-tenant</li>
+				<li><strong>Mixed tenancy</strong>: <code>AdGroup</code>/<code>AdVariation</code>/<code>AdEvent</code> are tenant-scoped (optional); <code>AdFormat</code>/<code>AdDeliveryTier</code> are deliberately global — see Tenancy below</li>
 			</ul>
 		</aside>
 	</section>
@@ -105,7 +108,8 @@ await events.create({
 			<li><strong>House</strong> (priority 3): self-promotional fallback ads</li>
 		</ul>
 		<CodeBlock
-			code={`class AdDeliveryTier extends SmrtObject {
+			code={`// @smrt(...) — NOT @TenantScoped (shared catalog; see Tenancy section)
+class AdDeliveryTier extends SmrtObject {
   name: string
   priority: number          // 1=highest, 2, 3...
   pricingModel: 'fixed' | 'cpm' | 'cpc' | 'cpa'  // PricingModel enum
@@ -114,37 +118,69 @@ await events.create({
 			language="typescript"
 		/>
 
+		<h3>AdFormat (IAB Standard Dimensions)</h3>
+		<p><code>AdFormat</code> rows describe industry-standard IAB dimensions: 728×90 Leaderboard, 300×250 Medium Rectangle, etc. Like <code>AdDeliveryTier</code>, it is a <strong>shared catalog table</strong> and is deliberately not tenant-scoped.</p>
+		<CodeBlock
+			code={`// @smrt(...) — NOT @TenantScoped (IAB industry standard; see Tenancy section)
+class AdFormat extends SmrtObject {
+  name: string              // e.g. 'Leaderboard', 'Medium Rectangle'
+  width: number
+  height: number
+  type: 'banner' | 'native' | 'video'
+}`}
+			language="typescript"
+		/>
+
 		<h3>AdGroup (Campaign)</h3>
 		<CodeBlock
-			code={`class AdGroup extends SmrtObject {
+			code={`// @smrt({...}) + @TenantScoped({ mode: 'optional' })
+class AdGroup extends SmrtObject {
   name: string
-  tierId: string            // FK to AdDeliveryTier
-  contractId: string        // FK to Contract (smrt-commerce, plain string)
+  tierId: string            // within-package ref to AdDeliveryTier
+  contractId: string        // plain string to smrt-commerce Contract
   status: 'draft' | 'active' | 'paused' | 'completed'  // AdGroupStatus
   dailyBudget: number = 0.0  // DECIMAL
   totalBudget: number = 0.0  // DECIMAL
   startDate: Date
   endDate: Date
 
-  // JSON fields with getter/setter helpers
+  // JSON fields with getter/setter helpers (no schema validation on targeting rules)
   setTargeting(rules: Record<string, any>): void
   getTargeting(): Record<string, any>
-  setZoneIds(ids: string[]): void   // FK to Zone[] (smrt-properties)
+  setZoneIds(ids: string[]): void   // plain string IDs → smrt-properties zones
   getZoneIds(): string[]
 }`}
 			language="typescript"
 		/>
 
 		<h3>AdVariation (Creative, STI)</h3>
-		<p>Weight is a relative integer, not a percentage. A variation with <code>weight: 2</code> is twice as likely to be chosen as one with <code>weight: 1</code>.</p>
+		<p>Weight is a relative integer, not a percentage. A variation with <code>weight: 2</code> is twice as likely to be chosen as one with <code>weight: 1</code>. Denormalized counters (<code>impressions</code>, <code>clicks</code>) are eventually consistent — refresh from <code>AdEvent</code> aggregates if you need exact totals.</p>
 		<CodeBlock
-			code={`class AdVariation extends SmrtObject {
+			code={`// @smrt({...}) + @TenantScoped({ mode: 'optional' }), tableStrategy: 'sti'
+class AdVariation extends SmrtObject {
   groupId: string
   name: string
   weight: number = 0        // Relative weight for A/B (2 = 2x more likely than 1)
-  impressions: number = 0   // Denormalized count
-  clicks: number = 0        // Denormalized count
+  impressions: number = 0   // Denormalized count (eventually consistent)
+  clicks: number = 0        // Denormalized count (eventually consistent)
   status: 'draft' | 'active' | 'paused'  // AdVariationStatus
+  assetId?: string          // plain string → smrt-assets
+  verticalSlug?: string     // plain string → smrt-tags
+}`}
+			language="typescript"
+		/>
+
+		<h3>AdEvent (Immutable, STI)</h3>
+		<p>Create-only: the generated REST API and MCP server omit update and delete operations, and <code>cli: false</code> suppresses CLI generation because event volume is high. Track impressions, clicks, and conversions here.</p>
+		<CodeBlock
+			code={`// @smrt({ api: { exclude: ['update', 'delete'] }, mcp: { exclude: ['update', 'delete'] }, cli: false })
+// + @TenantScoped({ mode: 'optional' })
+class AdEvent extends SmrtObject {
+  variationId: string
+  zoneId: string            // plain string → smrt-properties Zone
+  siteId: string            // plain string → smrt-properties Site
+  eventType: 'impression' | 'click' | 'conversion'  // AdEventType
+  // immutable: no update or delete in API/MCP
 }`}
 			language="typescript"
 		/>
@@ -207,25 +243,80 @@ await events.create({
 	</section>
 
 	<section>
+		<h2>Cross-Package References</h2>
+		<p>All cross-package links use plain string IDs (no <code>@foreignKey()</code>) to avoid circular dependencies:</p>
+		<ul>
+			<li><code>contractId</code> → <a href="/modules/smrt-commerce">smrt-commerce</a></li>
+			<li><code>zoneId</code>, <code>siteId</code> → <a href="/modules/smrt-properties">smrt-properties</a></li>
+			<li><code>assetId</code> → <a href="/modules/smrt-assets">smrt-assets</a></li>
+			<li><code>verticalSlug</code> → <a href="/modules/smrt-tags">smrt-tags</a></li>
+		</ul>
+	</section>
+
+	<section>
+		<h2>Tenancy</h2>
+		<p>This package uses a <strong>mixed tenancy policy</strong>: the three transactional models that participate in per-tenant ad serving and event tracking apply <code>@TenantScoped({'{'} mode: 'optional' {'}'})</code>, while two catalog/lookup tables are deliberately global.</p>
+		<table>
+			<thead>
+				<tr>
+					<th>Model</th>
+					<th>Tenancy</th>
+					<th>Rationale</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>AdGroup</code></td>
+					<td><code>@TenantScoped({'{'} mode: 'optional' {'}'})</code></td>
+					<td>Per-tenant campaign with budgets and targeting.</td>
+				</tr>
+				<tr>
+					<td><code>AdVariation</code></td>
+					<td><code>@TenantScoped({'{'} mode: 'optional' {'}'})</code></td>
+					<td>Per-tenant creative variant with weighted selection.</td>
+				</tr>
+				<tr>
+					<td><code>AdEvent</code></td>
+					<td><code>@TenantScoped({'{'} mode: 'optional' {'}'})</code></td>
+					<td>Per-tenant immutable impression/click/conversion log.</td>
+				</tr>
+				<tr>
+					<td><code>AdFormat</code></td>
+					<td><strong>NOT</strong> tenant-scoped</td>
+					<td>IAB standard dimensions are an industry catalog (728×90 Leaderboard, 300×250 Medium Rectangle, …), not a tenant-specific configuration.</td>
+				</tr>
+				<tr>
+					<td><code>AdDeliveryTier</code></td>
+					<td><strong>NOT</strong> tenant-scoped</td>
+					<td>Tier ordering is part of the package's ad-serving contract (Sponsorship → Standard → House). Per-tenant tier definitions would fragment the selection algorithm without a clear use case.</td>
+				</tr>
+			</tbody>
+		</table>
+		<p>Each <code>@smrt(...)</code> block on <code>AdFormat</code> and <code>AdDeliveryTier</code> carries an inline comment pointing back to this rationale. This mirrors the documented exception pattern used in <a href="/modules/smrt-secrets">smrt-secrets</a> for <code>TenantKey</code>. Either model can still be filtered by tenant manually if a deployment needs custom overrides, but the default is global. Cross-link: the canonical rule is in <code>docs/content/standards.md §7</code>.</p>
+	</section>
+
+	<section>
 		<h2>Best Practices</h2>
 		<article>
 			<h3>DOs</h3>
 			<ul>
-				<li>Use lower priority numbers for premium tiers (1=highest)</li>
+				<li>Use lower priority numbers for premium tiers (1 = highest)</li>
 				<li>Set reasonable weights for A/B tests (sum doesn't need to be 100)</li>
-				<li>Track impressions before serving to prevent double-counting</li>
+				<li>Track impressions immutably via <code>AdEvent</code> — never mutate them</li>
 				<li>Use targeting JSON for flexible audience rules</li>
-				<li>Link to smrt-commerce contracts for billing</li>
+				<li>Link to <a href="/modules/smrt-commerce">smrt-commerce</a> contracts for billing</li>
+				<li>Refresh denormalized <code>impressions</code>/<code>clicks</code> from <code>AdEvent</code> aggregates when exactness matters</li>
 			</ul>
 		</article>
 		<article>
 			<h3>DON'Ts</h3>
 			<ul>
-				<li>Don't modify AdEvent records (immutable by design)</li>
-				<li>Don't set weight to 0 (makes variation unselectable)</li>
-				<li>Don't forget to filter by date range and status</li>
-				<li>Don't serve ads without zone eligibility check</li>
-				<li>Don't ignore tier priority ordering</li>
+				<li>Don't modify <code>AdEvent</code> records — immutable by design (no update/delete in API/MCP)</li>
+				<li>Don't set <code>weight</code> to 0 — that makes the variation unselectable</li>
+				<li>Don't expect frequency capping or budget enforcement — external responsibility</li>
+				<li>Don't trust targeting JSON shape — there is no schema validation</li>
+				<li>Don't forget to filter eligibility by date range and status</li>
+				<li>Don't tenant-scope <code>AdFormat</code>/<code>AdDeliveryTier</code> — they are shared catalogs</li>
 			</ul>
 		</article>
 	</section>

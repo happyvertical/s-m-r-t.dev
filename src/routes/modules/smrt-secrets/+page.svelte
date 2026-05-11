@@ -5,25 +5,28 @@
 
 <ModulePage
 	name="smrt-secrets"
-	description="Per-tenant secret management with envelope encryption (AMK to TDEK to secret), key rotation, and audit logging."
-	badges={['v0.20.44', 'Envelope Encryption', 'Key Rotation', 'Audit Trail']}
+	description="Per-tenant secret management with envelope encryption (AMK → TDEK → secret), key rotation, and audit logging."
+	badges={['v0.24.12', 'Envelope Encryption', 'Key Rotation', 'Audit Trail', 'Tenancy Exception']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-secrets</strong> provides per-tenant secret storage using a three-layer envelope
-			encryption chain. An Application Master Key (AMK) from the environment wraps per-tenant Data
-			Encryption Keys (TDEK), which encrypt individual secret values. Every operation is audit-logged.
+			<strong>smrt-secrets</strong> stores per-tenant secrets using a three-layer envelope
+			encryption chain: an Application Master Key (AMK) from the environment wraps per-tenant Data
+			Encryption Keys (TDEK), which in turn encrypt individual secret values. Every operation is
+			audit-logged. The three models in this package deliberately deviate from the framework's
+			default tenancy decorator — see <strong>Known exceptions to monorepo standards</strong> below.
 		</p>
 		<aside>
 			<p>Key Features:</p>
 			<ul>
-				<li>Three-layer encryption: AMK wraps TDEK wraps secret value</li>
-				<li>Per-tenant data encryption keys (auto-created on first secret)</li>
-				<li>Key rotation with separate re-encryption step</li>
-				<li>Audit logging for all operations (create, read, update, delete, rotate)</li>
-				<li>Access counting and expiration tracking</li>
-				<li>No API/MCP exposure (security by design)</li>
+				<li><strong>Envelope encryption</strong>: AMK wraps TDEK wraps secret value</li>
+				<li>Per-tenant TDEKs, auto-created on first secret store</li>
+				<li><strong>Two-step key rotation</strong>: <code>rotateKey()</code> + <strong>separate</strong> <code>reencryptAll()</code> — the rotation does NOT auto-re-encrypt</li>
+				<li>Audit logging for every action (create / read / update / delete / rotate_key / disable / enable)</li>
+				<li>Access counting (<code>retrieve()</code> increments <code>accessCount</code> on every read) and expiration tracking</li>
+				<li><strong>No API/MCP exposure</strong> on <code>Secret</code> and <code>TenantKey</code> (security by design); CLI is list-only</li>
+				<li><strong>Three tenancy exceptions</strong> documented inline on each <code>@smrt(...)</code> block</li>
 			</ul>
 		</aside>
 	</section>
@@ -84,9 +87,14 @@ await withTenant({ tenantId: 'tenant-123' }, async () => {
 
 		<h3>Secret</h3>
 		<CodeBlock
-			code={`class Secret extends SmrtObject {
+			code={`// @smrt({ tenantScoped: true, api: false, mcp: false, cli: { include: ['list'] } })
+// Uses the inline tenantScoped form — NOT the @TenantScoped decorator.
+// SecretService.store() manually sets context = tenantId so the (slug, context)
+// upsert key isolates secret names per tenant. See Known Exceptions below.
+class Secret extends SmrtObject {
   name: string
-  encryptedValue: string      // JSON envelope (encrypted)
+  context?: string            // set to tenantId by SecretService.store()
+  encryptedValue: string      // JSON envelope (encrypted with TDEK)
   category?: string
   description?: string
   status: 'active' | 'disabled' | 'expired'
@@ -94,28 +102,33 @@ await withTenant({ tenantId: 'tenant-123' }, async () => {
   accessCount: number
   lastAccessedAt?: Date
 
-  // No API/MCP exposure (security)
-  // CLI: list-only
+  // No API/MCP exposure (security); CLI list-only
 }`}
 			language="typescript"
 		/>
 
 		<h3>TenantKey</h3>
 		<CodeBlock
-			code={`class TenantKey extends SmrtObject {
+			code={`// @smrt({ api: false, mcp: false, cli: { include: ['list'] } })
+// Deliberately NOT tenant-scoped at all. Carries a tenantId column because each
+// TDEK belongs to a tenant, but key-rotation tooling and super-admin audits
+// must query across tenants. See Known Exceptions below.
+class TenantKey extends SmrtObject {
   tenantId: string
   wrappedKey: string          // TDEK wrapped by AMK
   keyVersion: number
   status: 'active' | 'rotating' | 'retired' | 'compromised'
-
-  // NOT tenant-scoped (tracks keys FOR tenants)
 }`}
 			language="typescript"
 		/>
 
 		<h3>SecretAuditLog</h3>
 		<CodeBlock
-			code={`class SecretAuditLog extends SmrtObject {
+			code={`// @smrt({ tenantScoped: true, api: false, mcp: false, cli: { include: ['list'] } })
+// Uses the inline tenantScoped form rather than the @TenantScoped decorator.
+// Audit reads run in mixed contexts (tenant-scoped reports vs. super-admin
+// compliance review). See Known Exceptions below.
+class SecretAuditLog extends SmrtObject {
   secretName: string
   action: 'create' | 'read' | 'update' | 'delete' | 'rotate_key' | 'disable' | 'enable'
   result: 'success' | 'failure' | 'denied'
@@ -127,6 +140,53 @@ await withTenant({ tenantId: 'tenant-123' }, async () => {
 }`}
 			language="typescript"
 		/>
+	</section>
+
+	<section>
+		<h2>Known exceptions to monorepo standards</h2>
+		<p>
+			Per <code>docs/content/standards.md §7</code>, tenant-aware models should normally apply
+			<code>@TenantScoped({'{'} mode: 'optional' {'}'})</code> from
+			<a href="/modules/smrt-tenancy">@happyvertical/smrt-tenancy</a>. The three models in this
+			package deviate intentionally; each <code>@smrt(...)</code> block carries an inline comment
+			pointing back to this rationale.
+		</p>
+
+		<article>
+			<h3><code>Secret</code> (<code>src/models/Secret.ts</code>) — inline <code>tenantScoped: true</code></h3>
+			<p>
+				Uses the inline <code>tenantScoped: true</code> form on <code>@smrt()</code> instead of the
+				<code>@TenantScoped</code> decorator. <code>SecretService.store()</code> performs manual
+				scoping by populating <code>context = tenantId</code> on each row, so the
+				<code>(slug, context)</code> upsert key from the base <code>SmrtObject</code> is what
+				isolates secret names per tenant. Switching to the decorator without rethinking the upsert
+				key would surface false-positive name collisions across tenants.
+			</p>
+		</article>
+
+		<article>
+			<h3><code>TenantKey</code> (<code>src/models/TenantKey.ts</code>) — NOT tenant-scoped</h3>
+			<p>
+				Deliberately not tenant-scoped at all. The row carries a <code>tenantId</code> column
+				because each TDEK belongs to a tenant, but <strong>key-rotation tooling, AMK rewrap jobs,
+				and super-admin audits must query across tenants</strong>; the tenancy interceptor would
+				silently filter rows those flows rely on. This is the same reasoning that keeps
+				<code>Partner</code> / <code>Commission</code> / <code>Payout</code> in
+				<a href="/modules/smrt-affiliates">smrt-affiliates</a> out of the tenancy interceptor.
+			</p>
+		</article>
+
+		<article>
+			<h3><code>SecretAuditLog</code> (<code>src/models/SecretAuditLog.ts</code>) — inline <code>tenantScoped: true</code></h3>
+			<p>
+				Uses the inline <code>tenantScoped: true</code> form rather than the decorator. Audit reads
+				run in mixed contexts (tenant-scoped reports vs. super-admin compliance review).
+				Cross-tenant audit queries should be wrapped in <code>withSuperAdminBypass()</code> from
+				<a href="/modules/smrt-tenancy">smrt-tenancy</a> at the call site — there are no such
+				cross-tenant call sites in this package today, but consumers building compliance tooling
+				should adopt that pattern explicitly rather than relying on decorator-implicit filtering.
+			</p>
+		</article>
 	</section>
 
 	<section>

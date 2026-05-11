@@ -5,79 +5,72 @@
 
 <ModulePage
 	name="smrt-tenancy"
-	description="Multi-tenancy via AsyncLocalStorage context propagation with automatic query filtering, tenant ID population, and framework adapters (SvelteKit, Express, CLI)."
-	badges={['v0.20.44', 'Multi-Tenancy', 'ESM']}
+	description="Multi-tenancy via AsyncLocalStorage context propagation. Auto-filters every SmrtCollection query by tenant, auto-populates tenantId on save, and ships adapters for SvelteKit, Express, and CLI."
+	badges={['v0.24.12', 'Multi-Tenancy', 'ESM']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			The <code>@happyvertical/smrt-tenancy</code> package provides automatic tenant
-			isolation for SaaS applications built on SMRT-core via AsyncLocalStorage context propagation.
+			<code>@happyvertical/smrt-tenancy</code> provides automatic tenant isolation for SaaS
+			applications built on <code>smrt-core</code>. It uses Node's <code>AsyncLocalStorage</code> to
+			propagate a tenant context through async operations, and a <code>GlobalInterceptors</code>
+			hook (priority 100, runs first) to inject <code>tenantId</code> into queries, auto-populate it
+			on save, and validate isolation on every read/write/delete.
 		</p>
 
 		<h3>Key Features</h3>
 		<ul>
 			<li>
-				<strong>Automatic Query Filtering</strong>: WHERE tenantId = current added automatically
+				<strong>Automatic query filtering</strong>: <code>WHERE tenant_id = '&lt;current&gt;'</code>
+				added to every <code>list()</code> / <code>get()</code>
 			</li>
 			<li>
-				<strong>AsyncLocalStorage Context</strong>: Propagates tenant through async operations
+				<strong>AsyncLocalStorage context</strong>: context flows through async/await without manual
+				plumbing
 			</li>
-			<li><strong>Decorator-Based</strong>: @TenantScoped marks classes for isolation</li>
-			<li><strong>Framework Adapters</strong>: SvelteKit, Express, CLI support</li>
-			<li><strong>Super-Admin Bypass</strong>: Controlled cross-tenant access</li>
-			<li><strong>Raw SQL Policy</strong>: Prevents accidental data leaks</li>
-			<li><strong>Testing Utilities</strong>: Complete test suite helpers</li>
+			<li>
+				<strong>Decorator-based</strong>: <code>@TenantScoped()</code> -- or
+				<code>@smrt({'{'} tenantScoped: ... {'}'})</code> -- marks a class for isolation
+			</li>
+			<li>
+				<strong>Framework adapters</strong>: SvelteKit, Express, CLI
+			</li>
+			<li>
+				<strong>Super-admin bypass</strong>: keep context but disable auto-filtering
+			</li>
+			<li>
+				<strong>Raw SQL policy</strong>: <code>throw</code>/<code>warn</code>/<code>allow</code> to
+				prevent accidental leaks
+			</li>
+			<li>
+				<strong><code>directoryClasses</code> dispatch</strong>: <code>afterSave</code> and
+				<code>afterDelete</code> emit <code>directory.&lt;class&gt;.created|updated|deleted</code>
+				signals through the DispatchBus for configured classes
+			</li>
 		</ul>
 
-		<h3>Architecture</h3>
-		<div class="diagram">
-			<pre>
-Request Flow
-├─ Framework Adapter (SvelteKit/Express/CLI)
-│  └─ Resolve tenant ID from source
-│     └─ enterTenantContext()
-│        └─ AsyncLocalStorage.run(context)
-│           └─ SMRT Operation (list/get/save/delete/query)
-│              └─ TenantInterceptor (priority 100)
-│                 ├─ beforeList: inject tenantId into WHERE
-│                 ├─ beforeGet: convert to {'{'}id, tenantId{'}'}
-│                 ├─ beforeSave: auto-populate + validate
-│                 ├─ beforeDelete: validate ownership
-│                 └─ beforeQuery: enforce raw SQL policy
-			</pre>
-		</div>
-
-		<p>
-			<strong>Critical distinction</strong>: <code>withSystemContext()</code> sets a SYSTEM_CONTEXT_MARKER
-			sentinel, different from "no context" (undefined). The interceptor can distinguish intentional
-			bypass from missing context.
-		</p>
+		<aside>
+			<p>
+				<strong>Critical distinction</strong>: <code>withSystemContext()</code> sets a
+				<code>SYSTEM_CONTEXT_MARKER</code> sentinel -- it is <em>not</em> the same as "no context"
+				(<code>undefined</code>). The interceptor uses this marker to tell intentional bypass apart
+				from missing context.
+			</p>
+		</aside>
 	</section>
 
 	<section id="installation">
 		<h2>Installation</h2>
+		<CodeBlock code={`pnpm add @happyvertical/smrt-tenancy`} language="bash" />
+	</section>
 
-		<CodeBlock code={`npm install @happyvertical/smrt-tenancy`} language="bash" />
+	<section id="quick-start">
+		<h2>Quick Start</h2>
 
-		<h3>Setup (3 Steps)</h3>
-
-		<h4>1. Enable Tenancy Globally</h4>
+		<h3>1. Mark Classes as Tenant-Scoped</h3>
+		<p>Two equivalent patterns; the tenancy package reads both:</p>
 		<CodeBlock
-			code={`import { enableTenancy } from '@happyvertical/smrt-tenancy';
-
-enableTenancy({
-  rawQueryPolicy: 'throw',  // Prevent raw SQL
-  onMissingContext: (className, operation) => {
-    console.error('Missing context: ' + className + ' ' + operation);
-  }
-});`}
-			language="typescript"
-		/>
-
-		<h4>2. Mark Classes as Tenant-Scoped (Two Patterns)</h4>
-		<CodeBlock
-			code={`// Pattern 1: @TenantScoped decorator
+			code={`// Pattern 1: @TenantScoped() decorator (preferred)
 import { smrt, SmrtObject } from '@happyvertical/smrt-core';
 import { TenantScoped, tenantId } from '@happyvertical/smrt-tenancy';
 
@@ -89,7 +82,7 @@ class Document extends SmrtObject {
   title: string = '';
 }
 
-// Pattern 2: Via @smrt() decorator (tenancy package reads this too)
+// Pattern 2: via @smrt() decorator -- tenancy reads this too
 @smrt({ tenantScoped: { mode: 'optional' } })
 class Document extends SmrtObject {
   tenantId: string | null = null;
@@ -98,7 +91,48 @@ class Document extends SmrtObject {
 			language="typescript"
 		/>
 
-		<h4>3. Setup Framework Adapter</h4>
+		<p>
+			<strong>Modes:</strong>
+		</p>
+		<ul>
+			<li>
+				<code>'required'</code> (default) -- throws <code>TenantContextError</code> when there's no
+				active context
+			</li>
+			<li>
+				<code>'optional'</code> -- passes through if no context (used by most domain models so
+				system-level scripts still work)
+			</li>
+		</ul>
+
+		<h3>2. Wrap Operations in Context</h3>
+		<CodeBlock
+			code={`import {
+  withTenant,
+  withSystemContext,
+  withSuperAdminBypass,
+  getTenantId,
+} from '@happyvertical/smrt-tenancy';
+
+// Normal request -- everything inside is auto-scoped
+await withTenant({ tenantId: 'tenant-123' }, async () => {
+  const docs = await documentCollection.list({});
+  // Actual SQL: WHERE tenant_id = 'tenant-123'
+});
+
+// Bypass tenant checks (admin tools, migrations)
+await withSystemContext(async () => {
+  /* all tenant checks disabled */
+});
+
+// Keep context but disable auto-filtering (super-admin reading cross-tenant data)
+await withSuperAdminBypass(async () => {
+  const allLogs = await auditLogCollection.list({});
+});`}
+			language="typescript"
+		/>
+
+		<h3>3. Wire up a Framework Adapter</h3>
 		<CodeBlock
 			code={`// SvelteKit (hooks.server.ts)
 import { createSvelteKitHandle } from '@happyvertical/smrt-tenancy';
@@ -106,19 +140,18 @@ import { createSvelteKitHandle } from '@happyvertical/smrt-tenancy';
 export const handle = createSvelteKitHandle({
   resolveTenantId: async (event) => {
     const host = event.request.headers.get('host');
-    return host?.split('.')[0];  // tenant.example.com
-  }
+    return host?.split('.')[0]; // tenant.example.com
+  },
 });
 
-// Express — uses enterTenantContext() (not withTenant,
-// because middleware returns before handlers run)
+// Express -- uses enterTenantContext() (middleware returns before handlers run)
 import { createExpressMiddleware } from '@happyvertical/smrt-tenancy';
 
 app.use(createExpressMiddleware({
-  resolveTenantId: (req) => req.headers['x-tenant-id'] as string
+  resolveTenantId: (req) => req.headers['x-tenant-id'] as string,
 }));
 
-// CLI — run(), runWithTenant(), runAsSystem(), runAsSuperAdmin()
+// CLI -- exposes run(), runWithTenant(), runAsSystem(), runAsSuperAdmin()
 import { createCliContext } from '@happyvertical/smrt-tenancy';
 
 const cli = createCliContext({ resolveTenantId: () => argv.tenant });
@@ -127,402 +160,180 @@ await cli.runWithTenant('tenant-123', async () => { /* ... */ });`}
 		/>
 	</section>
 
-	<section id="quick-start">
-		<h2>Quick Start</h2>
+	<section id="interceptor-system">
+		<h2>Interceptor System</h2>
+		<p>
+			Tenancy hooks <code>GlobalInterceptors</code> (priority 100, runs first). The interceptor sees
+			every collection / save operation:
+		</p>
+		<table>
+			<thead>
+				<tr>
+					<th>Hook</th>
+					<th>Behavior</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>beforeList</code></td>
+					<td>
+						Injects <code>tenantId</code> into the WHERE clause; validates that any explicit filter
+						matches the context
+					</td>
+				</tr>
+				<tr>
+					<td><code>beforeGet</code></td>
+					<td>Same -- rewrites an ID lookup to <code>{'{ id, tenantId }'}</code></td>
+				</tr>
+				<tr>
+					<td><code>beforeSave</code></td>
+					<td>
+						Auto-populates <code>tenantId</code> if empty and <code>autoPopulate: true</code>;
+						validates if already set
+					</td>
+				</tr>
+				<tr>
+					<td><code>beforeDelete</code></td>
+					<td>Validates that <code>instance.tenantId</code> matches the current context</td>
+				</tr>
+				<tr>
+					<td><code>beforeQuery</code></td>
+					<td>
+						Enforces the raw-SQL policy on tenant-scoped classes
+						(<code>throw</code> / <code>warn</code> / <code>allow</code>)
+					</td>
+				</tr>
+				<tr>
+					<td><code>afterSave</code></td>
+					<td>
+						Emits <code>directory.&lt;class&gt;.created</code> /
+						<code>directory.&lt;class&gt;.updated</code> via <code>dispatchBus</code> for any class
+						in <code>directoryClasses</code>
+					</td>
+				</tr>
+				<tr>
+					<td><code>afterDelete</code></td>
+					<td>
+						Emits <code>directory.&lt;class&gt;.deleted</code> via <code>dispatchBus</code> for
+						<code>directoryClasses</code>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<p>
+			Mismatches throw <code>TenantIsolationError</code>. Missing required context throws
+			<code>TenantContextError</code>.
+		</p>
+	</section>
 
-		<h3>1. Define Tenant-Scoped Model</h3>
+	<section id="context-accessors">
+		<h2>Context Accessors</h2>
 		<CodeBlock
-			code={`@smrt()
-@TenantScoped()
-class Project extends SmrtObject {
-  tenantId = tenantId();
-  name: string = '';
-  owner: string = '';
-}`}
-			language="typescript"
-		/>
+			code={`import {
+  getTenantId, requireTenantId, getCurrentTenant,
+  hasTenantContext, isSystemContext, isSuperAdminBypass,
+} from '@happyvertical/smrt-tenancy';
 
-		<h3>2. Automatic Filtering</h3>
-		<CodeBlock
-			code={`// In route handler (context established by middleware)
-app.get('/api/projects', async (req, res) => {
-  // Query automatically filtered by tenant
-  const projects = await projectCollection.list({
-    where: { status: 'active' }
-  });
-  // Actual SQL: WHERE tenantId = 'current' AND status = 'active'
-
-  res.json(projects);
-});`}
-			language="typescript"
-		/>
-
-		<h3>3. Automatic Population</h3>
-		<CodeBlock
-			code={`// Create new project
-app.post('/api/projects', async (req, res) => {
-  const project = await projectCollection.create({
-    name: req.body.name,
-    // tenantId auto-populated from context
-  });
-
-  res.json(project);
-});`}
-			language="typescript"
-		/>
-
-		<h3>4. Isolation Validation</h3>
-		<CodeBlock
-			code={`// Delete validates tenant ownership
-app.delete('/api/projects/:id', async (req, res) => {
-  const project = await projectCollection.get(req.params.id);
-  // Throws TenantIsolationError if wrong tenant
-  await project.delete();
-
-  res.json({ deleted: true });
-});`}
+const id = getTenantId();           // string | undefined
+const must = requireTenantId();     // throws TenantContextError if undefined
+const ctx = getCurrentTenant();     // TenantContextData | undefined
+const inCtx = hasTenantContext();   // boolean
+const sys = isSystemContext();      // boolean
+const bypass = isSuperAdminBypass(); // boolean`}
 			language="typescript"
 		/>
 	</section>
 
-	<section id="core-concepts">
-		<h2>Core Concepts</h2>
-
-		<h3>1. Tenant Context</h3>
-		<p>AsyncLocalStorage-based context flows through async operations:</p>
-
+	<section id="raw-sql">
+		<h2>Raw SQL Policy</h2>
+		<p>Prevents accidental cross-tenant leaks via hand-written queries:</p>
 		<CodeBlock
-			code={`import {
-  getTenantId, requireTenantId, getCurrentTenant,
-  hasTenantContext, isSystemContext,
-  withTenant, withSystemContext, withSuperAdminBypass
-} from '@happyvertical/smrt-tenancy';
-
-// Context accessors
-const id = getTenantId();           // string | undefined
-const id2 = requireTenantId();      // throws TenantContextError if undefined
-const ctx = getCurrentTenant();     // TenantContextData | undefined
-const inCtx = hasTenantContext();   // boolean
-const isSys = isSystemContext();    // boolean
-
-// Context runners
-await withTenant({ tenantId: 'tenant-123' }, async () => {
-  const projects = await projectCollection.list({});
-});
-
-await withSystemContext(async () => {
-  // Bypasses all tenant checks (admin/migrations)
-});`}
-			language="typescript"
-		/>
-
-		<h3>2. Isolation Modes</h3>
-
-		<h4>Required Mode (default)</h4>
-		<CodeBlock
-			code={`@TenantScoped({ mode: 'required' })
-class SecretData extends SmrtObject {
-  tenantId = tenantId();
-}
-
-// This throws TenantContextError
-await secretDataCollection.list({});  // No context!`}
-			language="typescript"
-		/>
-
-		<h4>Optional Mode</h4>
-		<CodeBlock
-			code={`@TenantScoped({ mode: 'optional' })
-class PublicConfig extends SmrtObject {
-  tenantId = tenantId({ nullable: true });
-}
-
-// Both work
-await configCollection.list({});  // All records
-await withTenant({ tenantId: 't1' }, () =>
-  configCollection.list({})
-);  // Filtered`}
-			language="typescript"
-		/>
-
-		<h3>3. Super-Admin Bypass</h3>
-		<p>Controlled cross-tenant access for privileged operations:</p>
-
-		<CodeBlock
-			code={`@TenantScoped({ allowSuperAdminBypass: true })
-class AuditLog extends SmrtObject {
-  tenantId = tenantId();
-}
-
-// Admin viewing all logs
-await withSuperAdminBypass(async () => {
-  const allLogs = await auditLogCollection.list({});
-  // No tenant filtering
-});`}
-			language="typescript"
-		/>
-
-		<h3>4. Raw SQL Policy</h3>
-		<p>Prevents accidental data leaks via raw queries:</p>
-
-		<CodeBlock
-			code={`enableTenancy({
-  rawQueryPolicy: 'throw'  // Default
-});
+			code={`enableTenancy({ rawQueryPolicy: 'throw' }); // default
 
 // This throws TenantIsolationError
 await projectCollection.query({
   sql: 'SELECT * FROM projects',
-  params: []
+  params: [],
 });
 
-// Explicitly allowed
+// Explicit opt-out for a specific call
 await projectCollection.query({
   sql: 'SELECT * FROM projects WHERE status = ?',
   params: ['active'],
-  allowRawOnTenantScoped: true  // Override
+  allowRawOnTenantScoped: true,
 });`}
 			language="typescript"
 		/>
+	</section>
+
+	<section id="documented-exceptions">
+		<h2>The Documented-Exception Pattern</h2>
+		<p>
+			Per
+			<a href="https://github.com/happyvertical/smrt/blob/main/docs/content/standards.md">
+				<code>docs/content/standards.md §7</code>
+			</a>, tenant-aware models should apply <code>@TenantScoped({'{'} mode: 'optional' {'}'})</code>.
+			Packages that deviate must document why in their own <code>CLAUDE.md</code> under a
+			<strong>"Known exceptions to monorepo standards"</strong> heading.
+		</p>
+		<p>The canonical example lives in <code>packages/secrets/CLAUDE.md</code>:</p>
+		<ul>
+			<li>
+				<code>Secret</code> uses the inline <code>tenantScoped: true</code> form because
+				<code>SecretService.store()</code> performs manual scoping via the
+				<code>(slug, context)</code> upsert key. Switching to <code>@TenantScoped</code> without
+				rethinking the upsert key would surface false-positive name collisions across tenants.
+			</li>
+			<li>
+				<code>TenantKey</code> is deliberately not tenant-scoped at all: key-rotation tooling, AMK
+				rewrap jobs, and super-admin audits must query across tenants.
+			</li>
+		</ul>
+		<p>
+			A second exception lives <em>inside this package</em>:
+			<code>serializeInstance()</code> in <code>src/interceptor.ts</code> calls
+			<code>instance.toJSON()</code> directly. Section 7 of <code>standards.md</code> normally forbids
+			this in favor of <code>transformJSON()</code>, but the interceptor has to serialize arbitrary
+			instances -- workspace stubs and plain-object test doubles whose classes may not extend
+			<code>SmrtObject</code> and therefore have no <code>transformJSON()</code> hook. The call is
+			duck-typed and falls back to manual key iteration when <code>toJSON</code> is absent. See the
+			inline comment at the call site for the full rationale.
+		</p>
 	</section>
 
 	<section id="testing">
 		<h2>Testing</h2>
-
 		<CodeBlock
 			code={`import {
+  setupTestTenancy, resetTenancy,
   createTestTenantContext,
-  setupTestTenancy,
-  assertTenantContextRequired
+  testTenantIsolation,
+  assertTenantContextRequired,
 } from '@happyvertical/smrt-tenancy/testing';
 
 describe('Project isolation', () => {
-  beforeAll(() => {
-    setupTestTenancy({ enableInterceptors: true });
-  });
+  beforeEach(() => { setupTestTenancy({ enableInterceptors: true }); });
+  afterEach(() => { resetTenancy(); });
 
-  it('should isolate projects by tenant', async () => {
-    // Create in tenant A
+  it('isolates projects by tenant', async () => {
     const projectA = await createTestTenantContext(
       { tenantId: 'tenant-a' },
-      async () => {
-        return projectCollection.create({ name: 'Project A' });
-      }
+      async () => projectCollection.create({ name: 'Project A' }),
     );
 
-    // Verify not visible in tenant B
     await createTestTenantContext(
       { tenantId: 'tenant-b' },
       async () => {
         const found = await projectCollection.get(projectA.id);
-        expect(found).toBeNull(); // Isolated!
-      }
+        expect(found).toBeNull(); // isolated!
+      },
     );
   });
 
-  it('should require context', async () => {
-    await assertTenantContextRequired(() =>
-      projectCollection.list({})
-    );
+  it('requires context for required-mode classes', async () => {
+    await assertTenantContextRequired(() => projectCollection.list({}));
   });
 });`}
-			language="typescript"
-		/>
-	</section>
-
-	<section id="integration">
-		<h2>Integration with Other Modules</h2>
-
-		<h3>smrt-users (RBAC)</h3>
-		<CodeBlock
-			code={`const handle = createSvelteKitHandle({
-  resolveTenantId: async (event) => {
-    const auth = await getAuth(event);
-    return auth?.tenantId;
-  },
-
-  resolvePermissions: async (event, tenantId, userId) => {
-    const perms = await getPermissions(userId, tenantId);
-    return new Set(perms);
-  },
-
-  isSuperAdmin: async (event, tenantId, userId) => {
-    const user = await getUser(userId);
-    return user?.roles?.includes('admin') ?? false;
-  }
-});
-
-// Use in business logic
-import { getCurrentTenant } from '@happyvertical/smrt-tenancy';
-
-function requirePermission(permission: string): boolean {
-  const context = getCurrentTenant();
-  return context?.permissions?.has(permission) ?? false;
-}`}
-			language="typescript"
-		/>
-
-		<h3>Message Queues</h3>
-		<CodeBlock
-			code={`// Capture context when queueing
-export async function scheduleJob(data: unknown) {
-  const tenantId = requireTenantId();
-
-  await queue.enqueue({
-    type: 'process_data',
-    data,
-    metadata: { tenantId }  // Capture!
-  });
-}
-
-// Restore context in worker
-async function processJob(job: Job) {
-  await withTenant(
-    { tenantId: job.metadata.tenantId },
-    async () => {
-      await handleJob(job);
-    }
-  );
-}`}
-			language="typescript"
-		/>
-	</section>
-
-	<section id="best-practices">
-		<h2>Best Practices</h2>
-
-		<h3>1. Always Use Auto-Filtering</h3>
-		<CodeBlock
-			code={`// Good
-@TenantScoped()
-class Document extends SmrtObject {
-  tenantId = tenantId();  // Auto-filters
-}
-
-// Risky
-@TenantScoped({ autoFilter: false })
-class Document extends SmrtObject {
-  tenantId = tenantId();  // Manual filtering error-prone
-}`}
-			language="typescript"
-		/>
-
-		<h3>2. Block Raw SQL by Default</h3>
-		<CodeBlock
-			code={`enableTenancy({
-  rawQueryPolicy: 'throw'  // Prevent leaks
-});`}
-			language="typescript"
-		/>
-
-		<h3>3. Validate at Middleware Entry</h3>
-		<CodeBlock
-			code={`createExpressMiddleware({
-  resolveTenantId: async (req) => {
-    const tenantId = req.headers['x-tenant-id'];
-
-    // Verify tenant exists
-    const tenant = await getTenant(tenantId as string);
-    if (!tenant) {
-      throw new Error('Invalid tenant');
-    }
-
-    return tenantId;
-  }
-});`}
-			language="typescript"
-		/>
-
-		<h3>4. Index tenantId Field</h3>
-		<CodeBlock
-			code={`CREATE INDEX idx_documents_tenant_id
-ON documents(tenant_id);
-
-CREATE INDEX idx_documents_tenant_status
-ON documents(tenant_id, status);`}
-			language="sql"
-		/>
-
-		<h3>5. Audit Cross-Tenant Access</h3>
-		<CodeBlock
-			code={`enableTenancy({
-  onIsolationViolation: (className, expected, actual) => {
-    logger.warn('ISOLATION_VIOLATION', {
-      className,
-      expectedTenant: expected,
-      attemptedTenant: actual,
-      timestamp: new Date()
-    });
-  }
-});`}
-			language="typescript"
-		/>
-	</section>
-
-	<section id="troubleshooting">
-		<h2>Troubleshooting</h2>
-
-		<h3>TenantContextError: No context available</h3>
-		<p><strong>Solution:</strong> Ensure middleware is registered before routes</p>
-		<CodeBlock
-			code={`// Verify middleware registered
-app.use(createExpressMiddleware({...}));  // BEFORE routes
-
-// Verify in handler
-console.log(getTenantId());  // Should not be undefined`}
-			language="typescript"
-		/>
-
-		<h3>TenantIsolationError: Cross-tenant access</h3>
-		<p><strong>Solution:</strong> Enable bypass if needed for admins</p>
-		<CodeBlock
-			code={`@TenantScoped({ allowSuperAdminBypass: true })
-class AuditLog extends SmrtObject {
-  tenantId = tenantId();
-}
-
-// Verify bypass is active
-isSuperAdmin: async (event) => {
-  return user?.isAdmin ?? false;
-}`}
-			language="typescript"
-		/>
-
-		<h3>Raw SQL query failed</h3>
-		<p><strong>Solution:</strong> Use list()/get() or explicit bypass</p>
-		<CodeBlock
-			code={`// Instead of raw SQL
-await collection.query({ sql: 'SELECT...' });
-
-// Use collection methods
-await collection.list({ where: {...} });
-
-// Or explicit bypass
-await collection.query({
-  sql: 'SELECT...',
-  allowRawOnTenantScoped: true
-});`}
-			language="typescript"
-		/>
-
-		<h3>Context lost in callbacks (setTimeout, etc.)</h3>
-		<p><strong>Solution:</strong> Use <code>TenantContext.bind(fn)</code> to bind context, or capture tenantId in job metadata</p>
-		<CodeBlock
-			code={`// When queueing
-const job = {
-  type: 'process',
-  metadata: {
-    tenantId: requireTenantId()  // Capture!
-  }
-};
-
-// When processing
-await withTenant(
-  { tenantId: job.metadata.tenantId },
-  async () => {
-    // Context restored
-  }
-);`}
 			language="typescript"
 		/>
 	</section>
@@ -548,37 +359,32 @@ await withTenant(
 				<tr>
 					<td><code>requireTenantId()</code></td>
 					<td><code>string</code></td>
-					<td>Get tenant ID, throw if undefined</td>
+					<td>Get tenant ID; throw if undefined</td>
 				</tr>
 				<tr>
 					<td><code>getCurrentTenant()</code></td>
 					<td><code>TenantContextData | undefined</code></td>
-					<td>Get full context</td>
+					<td>Get the full context</td>
 				</tr>
 				<tr>
 					<td><code>hasTenantContext()</code></td>
 					<td><code>boolean</code></td>
-					<td>Check if in tenant context</td>
+					<td>Check if in a tenant context</td>
 				</tr>
 				<tr>
 					<td><code>isSystemContext()</code></td>
 					<td><code>boolean</code></td>
-					<td>Check if in system context</td>
+					<td>Check for the SYSTEM_CONTEXT_MARKER sentinel</td>
 				</tr>
 				<tr>
 					<td><code>isSuperAdminBypass()</code></td>
 					<td><code>boolean</code></td>
-					<td>Check if super admin bypass is active</td>
+					<td>Check if super-admin bypass is active</td>
 				</tr>
 				<tr>
 					<td><code>withTenant(ctx, fn)</code></td>
 					<td><code>Promise&lt;T&gt;</code></td>
-					<td>Run fn in tenant context</td>
-				</tr>
-				<tr>
-					<td><code>withTenantSync(ctx, fn)</code></td>
-					<td><code>T</code></td>
-					<td>Synchronous variant</td>
+					<td>Run <code>fn</code> in a tenant context</td>
 				</tr>
 				<tr>
 					<td><code>withSuperAdminBypass(fn)</code></td>
@@ -593,7 +399,7 @@ await withTenant(
 				<tr>
 					<td><code>enterTenantContext(ctx)</code></td>
 					<td><code>void</code></td>
-					<td>Enter context without callback (for middleware)</td>
+					<td>Enter context without a callback (for middleware)</td>
 				</tr>
 			</tbody>
 		</table>
@@ -644,98 +450,90 @@ await withTenant(
 
 		<h3>Framework Adapters</h3>
 		<ul>
-			<li><code>createSvelteKitHandle(options)</code> - SvelteKit middleware</li>
-			<li><code>createExpressMiddleware(options)</code> - Express middleware</li>
-			<li><code>createCliContext(options)</code> - CLI context manager</li>
+			<li><code>createSvelteKitHandle(options)</code> -- SvelteKit middleware</li>
+			<li><code>createExpressMiddleware(options)</code> -- Express middleware</li>
+			<li><code>createCliContext(options)</code> -- CLI context manager</li>
 		</ul>
 
 		<h3>Testing Utilities</h3>
 		<ul>
-			<li><code>setupTestTenancy(options?)</code> - Enable tenancy for tests</li>
-			<li><code>resetTenancy()</code> - Clean up tenancy state between tests</li>
-			<li><code>createTestTenantContext(ctx, fn)</code> - Run test code in tenant context</li>
-			<li><code>testTenantIsolation(tenantIds, fn)</code> - Verify isolation between tenants</li>
-			<li><code>assertTenantContextRequired(fn)</code> - Assert operation requires context</li>
-			<li><code>assertTenantIsolationViolation(fn)</code> - Assert operation violates isolation</li>
+			<li><code>setupTestTenancy(options?)</code> -- enable tenancy for tests</li>
+			<li><code>resetTenancy()</code> -- clean up tenancy state between tests</li>
+			<li><code>createTestTenantContext(ctx, fn)</code> -- run test code in a tenant context</li>
+			<li><code>testTenantIsolation(tenantIds, fn)</code> -- verify isolation between tenants</li>
+			<li><code>assertTenantContextRequired(fn)</code> -- assert operation requires context</li>
+			<li><code>assertTenantIsolationViolation(fn)</code> -- assert operation violates isolation</li>
 		</ul>
 	</section>
 
-	<section id="ui-components">
-		<h2>UI Components</h2>
+	<section id="gotchas">
+		<h2>Gotchas</h2>
+		<ul>
+			<li>
+				<strong>Context lost in callbacks</strong>:
+				<code>setTimeout(() =&gt; getTenantId(), 100)</code> returns
+				<code>undefined</code>. Fix: <code>TenantContext.bind(fn)</code>, or capture the tenantId on the
+				outside and re-enter context with <code>withTenant()</code>.
+			</li>
+			<li>
+				<strong>Nested contexts override</strong>: an inner <code>withTenant()</code> overrides the
+				outer one and restores on exit.
+			</li>
+			<li>
+				<strong>Auto-populate only if empty</strong>: if <code>tenantId</code> is already set, the
+				interceptor validates it -- it does <em>not</em> overwrite.
+			</li>
+			<li>
+				<strong>Isolation checked at query time</strong>:
+				<code>list({'{'} where: {'{ tenantId: \'other\' }'} {'}'})</code> throws immediately if the
+				value doesn't match the current context.
+			</li>
+		</ul>
+	</section>
+
+	<section id="used-by">
+		<h2>Used By</h2>
 		<p>
-			The <code>smrt-tenancy</code> module provides the backend framework for multi-tenancy.
-			While it doesn't have dedicated UI components, tenant-related UI components are
-			available through the <a href="/modules/smrt-users">smrt-users</a> module and
-			<a href="/modules/smrt-svelte">smrt-svelte</a> integration.
+			Effectively every <code>@happyvertical/smrt-*</code> domain package consumes
+			<code>smrt-tenancy</code>:
 		</p>
-
-		<h3>Available Components</h3>
-		<div class="link-grid">
-			<a href="/components/tenants/tenant-card" class="link-card">
-				<strong>TenantCard</strong>
-				<span>Tenant info card</span>
-			</a>
-			<a href="/components/tenants/tenant-switcher" class="link-card">
-				<strong>TenantSwitcher</strong>
-				<span>Tenant switcher dropdown</span>
-			</a>
-		</div>
-
-		<h3>Usage Example</h3>
-		<CodeBlock
-			code={`import { TenantCard, TenantSwitcher } from '@happyvertical/smrt-users/components';
-
-<!-- Display tenant information -->
-<TenantCard tenant={currentTenant} />
-
-<!-- Switch between tenants -->
-<TenantSwitcher
-	tenants={availableTenants}
-	currentTenant={currentTenant}
-	on:switch={(e) => switchTenant(e.detail.tenantId)}
-/>`}
-			language="svelte"
-		/>
-
-		<p>
-			<a href="/components/tenants">View tenant components →</a>
-		</p>
-
-		<p class="note">
-			<strong>Note:</strong> These components are part of the smrt-users integration and require
-			the smrt-users module to be installed and configured.
-		</p>
+		<ul>
+			<li>
+				<a href="/modules/smrt-content">smrt-content</a>,
+				<a href="/modules/smrt-commerce">smrt-commerce</a>,
+				<a href="/modules/smrt-assets">smrt-assets</a>,
+				<a href="/modules/smrt-events">smrt-events</a> -- standard
+				<code>@TenantScoped({'{'} mode: 'optional' {'}'})</code> consumers
+			</li>
+			<li>
+				<a href="/modules/smrt-secrets">smrt-secrets</a> -- documented exception (inline
+				<code>tenantScoped: true</code> form)
+			</li>
+			<li>
+				<a href="/modules/smrt-users">smrt-users</a> -- hierarchical tenants, super-admin bypass
+			</li>
+		</ul>
 	</section>
 
 	<section id="related">
 		<h2>Related Modules</h2>
 		<ul>
-			<li><a href="/modules/smrt-core">smrt-core</a> - SmrtObject, interceptors</li>
-			<li><a href="/modules/smrt-users">smrt-users</a> - RBAC integration</li>
+			<li><a href="/modules/smrt-core">smrt-core</a> -- SmrtObject, interceptors</li>
+			<li><a href="/modules/smrt-users">smrt-users</a> -- RBAC and permission integration</li>
 		</ul>
 	</section>
 </ModulePage>
 
 <style>
-	/* All direct children span full grid width */
 	section {
 		grid-column: 1 / -1;
 		min-width: 0;
-	}
-
-	section {
 		margin-bottom: 3rem;
 		color: var(--smrt-color-on-background, #1a1a1a);
 		max-width: 100%;
 		overflow-x: hidden;
 	}
 
-	/* Prevent horizontal page scroll - contain overflow in sections */
-	section {
-		min-width: 0;
-	}
-
-	/* Ensure code blocks can scroll horizontally */
 	:global(pre) {
 		overflow-x: auto;
 		max-width: 100%;
@@ -768,25 +566,16 @@ await withTenant(
 		color: var(--smrt-color-on-surface, #1a1a1a);
 	}
 
-	.diagram {
-		background-color: var(--smrt-color-surface-container, #f5f5f5);
-		padding: 1rem;
-		border-radius: var(--smrt-radius-md, 8px);
-		overflow-x: auto;
-		margin: 1rem 0;
-		max-width: 100%;
+	aside {
+		background: var(--smrt-color-surface-container, #f5f5f5);
+		padding: 16px;
+		border-radius: 8px;
+		margin: 16px 0;
+		border-left: 4px solid var(--smrt-color-primary, #1976d2);
 	}
 
-	.diagram pre {
-		white-space: pre-wrap;
-		word-wrap: break-word;
-	}
-
-	.diagram pre {
+	aside p {
 		margin: 0;
-		font-size: 0.85rem;
-		line-height: 1.4;
-		color: var(--smrt-color-on-surface, #1a1a1a);
 	}
 
 	h2 {
@@ -798,12 +587,6 @@ await withTenant(
 
 	h3 {
 		margin-top: 1.5rem;
-		color: var(--smrt-color-on-background, #1a1a1a);
-	}
-
-	h4 {
-		margin-top: 1rem;
-		font-size: 1rem;
 		color: var(--smrt-color-on-background, #1a1a1a);
 	}
 </style>
