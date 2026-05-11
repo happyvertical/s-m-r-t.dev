@@ -5,22 +5,24 @@
 
 <ModulePage
 	name="smrt-dev-mcp"
-	description="Tier 2 development MCP server for SMRT framework -- code generation and project introspection."
-	badges={['v0.20.44', 'MCP', 'Tier 2 Dev Tool']}
+	description="Tier 2 development MCP server for the SMRT framework — code generation and project introspection, read-only by design."
+	badges={['v0.24.12', 'MCP', 'Tier 2 Dev Tool', 'Read-only']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-dev-mcp</strong> is a <strong>Tier 2 (Development)</strong> MCP server that provides
-			code generation and project introspection tools. It is <strong>read-only</strong> -- it never writes
-			files or executes generated code.
+			<strong>@happyvertical/smrt-dev-mcp</strong> is the <strong>Tier 2 (Development)</strong> MCP
+			server for the SMRT framework. It exposes two tools — <code>generate-smrt-class</code> and
+			<code>introspect-project</code> — for use from Claude Desktop, Claude Code, or any MCP-aware
+			client during day-to-day development. The server is <strong>strictly read-only</strong>: it
+			never writes files, never executes generated code, and never hits a database.
 		</p>
 		<aside>
-			<p><strong>MCP Tier Context:</strong></p>
+			<p><strong>MCP Tier Context.</strong> SMRT splits its MCP surface across three tiers so you can wire each tier into the right environment:</p>
 			<ul>
-				<li><strong>Tier 1 (Runtime)</strong>: auto-generated from <code>@smrt()</code> objects -- live data operations</li>
-				<li><strong>Tier 2 (Development)</strong>: <em>this package</em> -- code generation and project analysis</li>
-				<li><strong>Tier 3 (Docs)</strong>: <code>smrt-docs-mcp</code> -- framework documentation access</li>
+				<li><strong>Tier 1 (Runtime)</strong>: auto-generated from <code>@smrt()</code> classes at build time — live CRUD/list/AI operations against your objects. See <a href="/modules/smrt-core">smrt-core</a>.</li>
+				<li><strong>Tier 2 (Development)</strong>: <em>this package</em> — class generation and project introspection for IDE-side assistants.</li>
+				<li><strong>Tier 3 (Docs)</strong>: <code>smrt-docs-mcp</code> — framework documentation lookup for assistants without local repo access.</li>
 			</ul>
 		</aside>
 	</section>
