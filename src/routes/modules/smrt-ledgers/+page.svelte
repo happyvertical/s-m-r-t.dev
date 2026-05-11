@@ -13,8 +13,8 @@
 
 <ModulePage
 	name="smrt-ledgers"
-	description="Double-entry accounting with chart of accounts, journal lifecycle, and balance enforcement."
-	badges={['v0.20.44', 'Accounting', 'Double-Entry']}
+	description="Double-entry accounting with chart of accounts, journal lifecycle, balance enforcement, and tenant-overridable AI summaries via smrt-prompts."
+	badges={['v0.24.12', 'Accounting', 'Double-Entry', 'Prompt Registry']}
 >
 	<!-- Overview -->
 	<section>
@@ -157,17 +157,18 @@ console.log('Trial balance:', trialBalance);
 			Every transaction must balance: <strong>Total Debits = Total Credits</strong>. The system
 			enforces this rule before posting journals. Balance check uses
 			<code>Math.abs(totalDebits - totalCredits) &lt; BALANCE_EPSILON</code> where
-			<code>BALANCE_EPSILON = 0.001</code> (floating-point rounding tolerance).
+			<code>BALANCE_EPSILON = 0.01</code> (floating-point rounding tolerance).
 		</p>
 		<aside>
 			<p><strong>Key Rules:</strong></p>
 			<ul>
 				<li>Each entry is debit XOR credit (not both, validated on save)</li>
 				<li>All amounts must be non-negative; zero-amount entries are rejected</li>
-				<li>Journal must balance before posting (BALANCE_EPSILON = 0.001)</li>
-				<li>Posted journals are <strong>immutable</strong> -- can only be voided, not edited</li>
-				<li>Entry requires journalId: save Journal first, then add entries</li>
+				<li>Journal must balance before posting (<code>BALANCE_EPSILON = 0.01</code>)</li>
+				<li>Posted journals are <strong>immutable</strong> — can only be voided, not edited</li>
+				<li>Entry requires <code>journalId</code>: save Journal first, then add entries</li>
 				<li>Account types are inherited by children (child cannot differ from parent type)</li>
+				<li>All models use <code>@TenantScoped({'{'} mode: 'optional' {'}'})</code></li>
 			</ul>
 		</aside>
 
@@ -374,11 +375,21 @@ console.log(journal.isVoided()); // true`}
   async post(): void                             // Validates balance first
   async void(reason: string): void
 
-  // Summary
-  async summarize(): string                      // AI-generated summary
+  // Summary — AI-generated via smrt-prompts (see Prompt Registry below)
+  async summarize(): string
 }`}
 			language="typescript"
 		/>
+
+		<aside>
+			<p>
+				<strong>AI summaries route through <a href="/modules/smrt-prompts">smrt-prompts</a>.</strong>
+				<code>Journal.summarize()</code> resolves the <code>smrtLedgers.journal.summarize</code>
+				prompt via the registry, so tenants can override the template, model, temperature, or other
+				params from <code>_smrt_prompt_overrides</code> without code changes. PII-conscious variable
+				selection: only non-identifying journal fields reach the AI provider.
+			</p>
+		</aside>
 
 		<h3>JournalEntry Model</h3>
 		<CodeBlock
@@ -480,6 +491,67 @@ await entries.getAccountLedger(accountId)
 //   entry: JournalEntry,
 //   runningBalance: number
 // }>`}
+			language="typescript"
+		/>
+	</section>
+
+	<!-- Prompt Registry -->
+	<section>
+		<h2>Prompt Registry</h2>
+		<p>
+			<code>Journal.summarize()</code> routes through <a href="/modules/smrt-prompts">smrt-prompts</a>
+			rather than calling <code>do()</code> directly. The prompt is registered at module-load time via
+			<code>definePrompt()</code> in <code>src/prompts.ts</code>, side-effect imported from
+			<code>src/index.ts</code> so consumers see it automatically after importing any export from this
+			package.
+		</p>
+		<table>
+			<thead>
+				<tr>
+					<th>Key</th>
+					<th>Method</th>
+					<th>Variables (PII-conscious)</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>smrtLedgers.journal.summarize</code></td>
+					<td><code>Journal.summarize()</code></td>
+					<td><code>journalNumber</code>, <code>journalDate</code>, <code>journalDescription</code>, <code>journalStatus</code>, <code>journalTotal</code>, <code>entryCount</code>, <code>journalBalanced</code></td>
+				</tr>
+			</tbody>
+		</table>
+		<p>
+			<strong>Intentionally NOT exposed as prompt variables:</strong> <code>tenantId</code>,
+			<code>sourceRef</code> (may reference customer/vendor identifiers), per-entry
+			<code>accountId</code>/<code>id</code>, and the extensible <code>metadata</code> blob. Tenants
+			who need richer context should override the template via <code>PromptOverride</code> and pass
+			their own variables through a custom call site.
+		</p>
+		<CodeBlock
+			code={`import { resolvePrompt } from '@happyvertical/smrt-prompts';
+
+// Default summary
+const summary = await journal.summarize();
+
+// Tenant override: change the template/model from _smrt_prompt_overrides — no code change required.
+//   key = 'smrtLedgers.journal.summarize'
+//   tenantId = current tenant
+
+// Manual call (e.g. for a custom variable set):
+const resolved = await resolvePrompt('smrtLedgers.journal.summarize', {
+  db,
+  tenantId,
+  vars: {
+    journalNumber: journal.number,
+    journalDate: journal.date.toISOString(),
+    journalDescription: journal.description,
+    journalStatus: journal.status,
+    journalTotal: await journal.getTotalDebits(),
+    entryCount: (await journal.getEntries()).length,
+    journalBalanced: await journal.isBalanced(),
+  },
+});`}
 			language="typescript"
 		/>
 	</section>
