@@ -7,39 +7,40 @@
 	<title>smrt-messages - Multi-Channel Messaging | SMRT Framework</title>
 	<meta
 		name="description"
-		content="Unified multi-channel messaging with STI-based channel hierarchies for Email, Slack, and Twitter. Encrypted credential storage via smrt-secrets."
+		content="Multi-channel messaging with STI hierarchies for Email, Slack, Twitter (Tweet) and credential encryption via smrt-secrets."
 	/>
 </svelte:head>
 
 <ModulePage
 	name="smrt-messages"
-	description="Multi-channel messaging with STI hierarchies for Email, Slack, and Twitter. Credential encryption via smrt-secrets."
-	badges={['v0.20.44', 'Email', 'Slack', 'Twitter']}
+	description="Multi-channel messaging with STI hierarchies for Email, Slack, and Twitter. Credential encryption via smrt-secrets and retry-aware send lifecycle."
+	badges={['v0.24.12', 'Email', 'Slack', 'Twitter', 'Encrypted Credentials']}
 >
-	<!-- Overview -->
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-messages</strong> provides unified multi-channel messaging with STI-based channel
-			hierarchies. Messages and accounts each use single-table inheritance, so Email, SlackMessage,
-			and Tweet all share a single <code>messages</code> table, while EmailAccount, SlackAccount, and
-			TwitterAccount share a single <code>accounts</code> table.
+			<strong>smrt-messages</strong> provides unified multi-channel messaging using single-table
+			inheritance on both messages and accounts. <code>Email</code>, <code>Tweet</code>, and
+			<code>SlackMessage</code> all share the <code>messages</code> table, while
+			<code>EmailAccount</code>, <code>SlackAccount</code>, and <code>TwitterAccount</code> share
+			the <code>accounts</code> table. Credentials are stored exclusively via
+			<a href="/modules/smrt-secrets">smrt-secrets</a> envelope encryption.
 		</p>
 		<aside>
 			<p><strong>Key Features:</strong></p>
 			<ul>
-				<li>STI message hierarchy: Email, SlackMessage, Tweet (share <code>messages</code> table)</li>
-				<li>STI account hierarchy: EmailAccount, SlackAccount, TwitterAccount (share <code>accounts</code> table)</li>
-				<li>Send lifecycle: draft → sending → sent/failed with retry budget</li>
+				<li>STI message hierarchy: <code>Email</code>, <code>SlackMessage</code>, <code>Tweet</code> share <code>messages</code></li>
+				<li>STI account hierarchy: <code>EmailAccount</code>, <code>SlackAccount</code>, <code>TwitterAccount</code> share <code>accounts</code></li>
+				<li>Send lifecycle: <code>draft → sending → sent / failed</code> with retry budget</li>
 				<li>Credential encryption via <code>credentialSecretId</code> → smrt-secrets</li>
-				<li>Per-channel senders: EmailSender, SlackSender, TweetSender</li>
-				<li>Email filtering: Whitelist/Blacklist models for address-based filtering</li>
-				<li>Svelte 5 UI components including EmailAccountManager and EmailFilterManager</li>
+				<li>Per-channel senders: <code>EmailSender</code>, <code>SlackSender</code>, <code>TweetSender</code></li>
+				<li>Email filtering via <code>Whitelist</code> / <code>Blacklist</code> models</li>
+				<li>Attachment owner field renamed to <code>messageId</code> (with deprecation wrapper for the old <code>emailId</code>)</li>
+				<li>Svelte 5 UI components including <code>EmailAccountManager</code> and <code>EmailFilterManager</code></li>
 			</ul>
 		</aside>
 	</section>
 
-	<!-- Installation -->
 	<section>
 		<h2>Installation</h2>
 		<CodeBlock
@@ -49,16 +50,16 @@ pnpm add @happyvertical/smrt-messages`}
 			language="bash"
 		/>
 		<p>
-			Depends on <code>@happyvertical/smrt-core</code>, <code>@happyvertical/smrt-secrets</code> (credential encryption),
-			and <code>@happyvertical/email</code> (SMTP/IMAP client).
+			Depends on <code>@happyvertical/smrt-core</code>,
+			<code>@happyvertical/smrt-secrets</code> (credential encryption),
+			and <code>@happyvertical/email</code> (SMTP / IMAP client).
 		</p>
 	</section>
 
-	<!-- Quick Start -->
 	<section>
-		<h2>Quick Start (5 Minutes)</h2>
+		<h2>Quick Start</h2>
 
-		<h3>1. Create an Email Account with Encrypted Credentials</h3>
+		<h3>1. Create an email account with encrypted credentials</h3>
 		<CodeBlock
 			code={`import {
   Email, EmailCollection,
@@ -81,7 +82,7 @@ await account.setCredentials({
 			language="typescript"
 		/>
 
-		<h3>2. Send an Email</h3>
+		<h3>2. Send an email (and retry on failure)</h3>
 		<CodeBlock
 			code={`const emails = new EmailCollection(db);
 const email = await emails.create({
@@ -94,17 +95,16 @@ const email = await emails.create({
 // Send lifecycle: draft -> sending -> sent (or failed)
 const result = await email.send();
 
-// Retry a failed message (respects maxRetries budget)
+// Retry respects maxRetries budget and increments retryCount
 if (!result.success) {
   await email.retrySend();
 }`}
 			language="typescript"
 		/>
 
-		<h3>3. Query Messages Across Channels</h3>
+		<h3>3. Query messages across all channels</h3>
 		<CodeBlock
-			code={`// Query all messages (Email, Slack, Twitter) via base collection
-const messages = new MessageCollection(db);
+			code={`const messages = new MessageCollection(db);
 const recent = await messages.list({
   orderBy: 'createdAt DESC',
   limit: 20,
@@ -113,25 +113,18 @@ const recent = await messages.list({
 		/>
 	</section>
 
-	<!-- Core Concepts -->
 	<section>
-		<h2>Core Concepts</h2>
+		<h2>STI hierarchies</h2>
 
-		<h3>STI Message Hierarchy</h3>
-		<p>All message types share a single <code>messages</code> table via STI (<code>_meta_type</code> discriminator):</p>
-
+		<h3>Messages (share <code>messages</code> table)</h3>
 		<table>
 			<thead>
-				<tr>
-					<th>Type</th>
-					<th>STI Discriminator</th>
-					<th>Key Fields</th>
-				</tr>
+				<tr><th>Type</th><th>STI discriminator</th><th>Key fields</th></tr>
 			</thead>
 			<tbody>
 				<tr>
 					<td><code>Message</code></td>
-					<td>(base class)</td>
+					<td>(base)</td>
 					<td>accountId, threadId, subject, body, fromAddress, toAddresses, sendStatus, retryCount</td>
 				</tr>
 				<tr>
@@ -152,43 +145,45 @@ const recent = await messages.list({
 			</tbody>
 		</table>
 
-		<h3>STI Account Hierarchy</h3>
-		<p>Accounts also use STI, sharing the <code>accounts</code> table:</p>
-
+		<h3>Accounts (share <code>accounts</code> table)</h3>
 		<table>
 			<thead>
-				<tr>
-					<th>Type</th>
-					<th>Key Fields</th>
-				</tr>
+				<tr><th>Type</th><th>STI discriminator</th><th>Notes</th></tr>
 			</thead>
 			<tbody>
 				<tr>
 					<td><code>Account</code></td>
+					<td>(base)</td>
 					<td>providerType, credentialSecretId, isActive, lastSyncAt, settings</td>
 				</tr>
 				<tr>
 					<td><code>EmailAccount</code></td>
-					<td>SMTP/IMAP provider-specific fields + sync methods</td>
+					<td><code>@happyvertical/smrt-messages:EmailAccount</code></td>
+					<td>SMTP / IMAP provider-specific fields + sync methods</td>
 				</tr>
 				<tr>
 					<td><code>SlackAccount</code></td>
+					<td><code>@happyvertical/smrt-messages:SlackAccount</code></td>
 					<td>Slack workspace connection</td>
 				</tr>
 				<tr>
 					<td><code>TwitterAccount</code></td>
+					<td><code>@happyvertical/smrt-messages:TwitterAccount</code></td>
 					<td>Twitter API connection</td>
 				</tr>
 			</tbody>
 		</table>
+	</section>
 
-		<h3>Credential Security</h3>
+	<section>
+		<h2>Credential security</h2>
 		<p>
-			Account credentials are stored via <code>credentialSecretId</code> pointing to
-			smrt-secrets envelope encryption. Never store passwords as plain fields.
+			Account credentials are stored via <code>credentialSecretId</code> pointing into
+			<a href="/modules/smrt-secrets">smrt-secrets</a> envelope encryption (AMK → TDEK → secret).
+			Never store passwords as plain fields.
 		</p>
 		<CodeBlock
-			code={`// Always use setCredentials/getCredentials
+			code={`// Always use setCredentials / getCredentials
 await account.setCredentials({
   host: 'smtp.example.com',
   user: 'support@example.com',
@@ -198,36 +193,59 @@ await account.setCredentials({
 const creds = await account.getCredentials();`}
 			language="typescript"
 		/>
+	</section>
 
-		<h3>Send Lifecycle</h3>
+	<section>
+		<h2>Send lifecycle and senders</h2>
 		<p>
-			<code>message.send()</code> resolves the account, creates a provider-specific sender,
-			and transitions through send statuses:
+			<code>message.send()</code> resolves the account, picks a provider-specific sender, and
+			drives the status transition. Each channel has a dedicated sender implementing
+			<code>MessageSenderInterface</code>:
+		</p>
+		<table>
+			<thead>
+				<tr><th>Sender</th><th>Description</th></tr>
+			</thead>
+			<tbody>
+				<tr><td><code>EmailSender</code></td><td>Send emails via the <code>@happyvertical/email</code> client</td></tr>
+				<tr><td><code>SlackSender</code></td><td>Post Slack messages via API</td></tr>
+				<tr><td><code>TweetSender</code></td><td>Post tweets via the Twitter API</td></tr>
+			</tbody>
+		</table>
+		<p>
+			<code>retryCount</code> is incremented on every retry and capped by <code>maxRetries</code>.
+			A failed send leaves the message in <code>sendStatus = 'failed'</code> for inspection.
+		</p>
+	</section>
+
+	<section>
+		<h2>Attachments</h2>
+		<p>
+			Attachments now own a single <code>messageId</code> FK rather than the old
+			<code>emailId</code>. The deprecated <code>emailId</code> getter / setter is preserved as a
+			compatibility wrapper so legacy callers keep working — but new code should reference
+			<code>messageId</code>.
 		</p>
 		<CodeBlock
-			code={`// Status flow: draft -> sending -> sent (or failed)
-const result = await email.send();
-
-// Each channel has a dedicated sender
-// EmailSender, SlackSender, TweetSender
-// All implement MessageSenderInterface`}
+			code={`const attachment = new Attachment({
+  messageId: email.id,   // not emailId
+  filename: 'report.pdf',
+  mimeType: 'application/pdf',
+  assetId: pdfAsset.id,  // stored via smrt-assets
+});
+await attachment.save();`}
 			language="typescript"
 		/>
 	</section>
 
-	<!-- Email Filtering -->
 	<section>
-		<h2>Email Filtering (Whitelist/Blacklist)</h2>
-		<p>
-			New in v0.20.42: Whitelist and Blacklist models for address-based email filtering.
-		</p>
+		<h2>Email filtering (Whitelist / Blacklist)</h2>
 		<CodeBlock
 			code={`import {
   Whitelist, WhitelistCollection,
   Blacklist, BlacklistCollection,
 } from '@happyvertical/smrt-messages';
 
-// Create whitelist/blacklist entries
 const whitelist = new WhitelistCollection(db);
 await whitelist.create({ address: 'trusted@example.com' });
 
@@ -237,54 +255,20 @@ await blacklist.create({ address: 'spam@example.com' });`}
 		/>
 	</section>
 
-	<!-- Per-Channel Senders -->
-	<section>
-		<h2>Per-Channel Senders</h2>
-		<p>Each channel has a dedicated sender implementing <code>MessageSenderInterface</code>:</p>
-
-		<table>
-			<thead>
-				<tr>
-					<th>Sender</th>
-					<th>Description</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><code>EmailSender</code></td>
-					<td>Send emails via <code>@happyvertical/email</code> client</td>
-				</tr>
-				<tr>
-					<td><code>SlackSender</code></td>
-					<td>Send Slack messages via API</td>
-				</tr>
-				<tr>
-					<td><code>TweetSender</code></td>
-					<td>Post tweets via Twitter API</td>
-				</tr>
-			</tbody>
-		</table>
-	</section>
-
-	<!-- Svelte Components -->
 	<section>
 		<h2>Svelte 5 Components</h2>
-		<p>
-			The package includes UI components for managing email accounts and filters:
-		</p>
 		<ul>
-			<li><strong>EmailAccountManager</strong>: Admin UI for managing email account connections and credentials</li>
-			<li><strong>EmailFilterManager</strong>: Admin UI for managing whitelist/blacklist rules</li>
-			<li><strong>MessageCard</strong>, <strong>MessageList</strong>: Display message summaries</li>
-			<li><strong>ComposeForm</strong>, <strong>ReplyForm</strong>, <strong>ForwardForm</strong>: Message composition</li>
-			<li><strong>ThreadView</strong>, <strong>MessageDetail</strong>: Conversation display</li>
-			<li><strong>FolderNav</strong>, <strong>MessageFilters</strong>: Navigation and filtering</li>
-			<li><strong>AccountCard</strong>, <strong>AccountList</strong>, <strong>AccountAvatar</strong>: Account management</li>
-			<li><strong>AttachmentChip</strong>, <strong>AttachmentUpload</strong>: Attachment handling</li>
-			<li><strong>SendStatusBadge</strong>, <strong>MessageStatusIndicator</strong>, <strong>MessageTypeBadge</strong>: Status display</li>
-			<li><strong>MessageToolbar</strong>, <strong>RecipientInput</strong>: Toolbar and input components</li>
+			<li><strong>EmailAccountManager</strong>: admin UI for managing email account connections and credentials</li>
+			<li><strong>EmailFilterManager</strong>: admin UI for managing whitelist / blacklist rules</li>
+			<li><strong>MessageCard</strong>, <strong>MessageList</strong>: display message summaries</li>
+			<li><strong>ComposeForm</strong>, <strong>ReplyForm</strong>, <strong>ForwardForm</strong>: message composition</li>
+			<li><strong>ThreadView</strong>, <strong>MessageDetail</strong>: conversation display</li>
+			<li><strong>FolderNav</strong>, <strong>MessageFilters</strong>: navigation and filtering</li>
+			<li><strong>AccountCard</strong>, <strong>AccountList</strong>, <strong>AccountAvatar</strong>: account management</li>
+			<li><strong>AttachmentChip</strong>, <strong>AttachmentUpload</strong>: attachment handling</li>
+			<li><strong>SendStatusBadge</strong>, <strong>MessageStatusIndicator</strong>, <strong>MessageTypeBadge</strong>: status display</li>
+			<li><strong>MessageToolbar</strong>, <strong>RecipientInput</strong>: toolbar and input components</li>
 		</ul>
-
 		<CodeBlock
 			code={`import {
   EmailAccountManager,
@@ -296,11 +280,8 @@ await blacklist.create({ address: 'spam@example.com' });`}
 		/>
 	</section>
 
-	<!-- API Reference -->
 	<section>
-		<h2>API Reference</h2>
-
-		<h3>Collections</h3>
+		<h2>Collections</h2>
 		<CodeBlock
 			code={`// Base collections (query across all channels)
 MessageCollection
@@ -320,34 +301,30 @@ BlacklistCollection`}
 		/>
 	</section>
 
-	<!-- Best Practices -->
 	<section>
 		<h2>Best Practices</h2>
-
 		<article>
 			<h3>DOs</h3>
 			<ul>
-				<li>Use <code>setCredentials()</code>/<code>getCredentials()</code> for all account credentials</li>
+				<li>Always use <code>setCredentials()</code> / <code>getCredentials()</code> for account credentials</li>
 				<li>Use JSON address helpers: <code>getToAddresses()</code>, <code>getCcAddresses()</code></li>
-				<li>Handle send failures with retry logic (<code>maxRetries</code> budget)</li>
+				<li>Handle send failures with <code>retrySend()</code> (respects <code>maxRetries</code>)</li>
 				<li>Use <code>MessageCollection</code> to query across all channel types</li>
-				<li>Store attachment references via <code>messageId</code> field</li>
+				<li>Reference attachments via <code>messageId</code></li>
 			</ul>
 		</article>
-
 		<article>
 			<h3>DON'Ts</h3>
 			<ul>
-				<li>Don't store passwords directly -- always use smrt-secrets encryption</li>
-				<li>Don't modify JSON fields directly -- use accessor methods (<code>getX()</code>/<code>setX()</code>)</li>
-				<li>Don't override <code>toJSON()</code> -- use <code>transformJSON()</code></li>
-				<li>Don't use <code>emailId</code> on Attachment -- use <code>messageId</code> (old field is deprecated)</li>
+				<li>Don't store passwords directly — always use smrt-secrets encryption</li>
+				<li>Don't modify JSON fields directly — use accessor methods (<code>getX()</code> / <code>setX()</code>)</li>
+				<li>Don't override <code>toJSON()</code> — use <code>transformJSON()</code></li>
+				<li>Don't use the deprecated <code>emailId</code> on Attachment in new code</li>
 				<li>Don't run concurrent syncs on the same account</li>
 			</ul>
 		</article>
 	</section>
 
-	<!-- Related Modules -->
 	<section>
 		<h2>Related Modules</h2>
 		<nav>
@@ -366,9 +343,7 @@ BlacklistCollection`}
 		</nav>
 	</section>
 
-	<!-- Footer Navigation -->
 	<nav>
 		<a href="/modules">← Back to Modules</a>
-		<a href="/modules/smrt-properties">Next: smrt-properties →</a>
 	</nav>
 </ModulePage>

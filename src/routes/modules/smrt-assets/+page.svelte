@@ -5,56 +5,59 @@
 
 <ModulePage
 	name="smrt-assets"
-	description="Provider-agnostic asset management with versioning, type classification, metadata fields, and polymorphic associations."
-	badges={['v0.20.44', 'Asset Management', 'Provider-Agnostic']}
+	description="Provider-agnostic asset management with versioning, derivatives, an AssetRuntime + serveAsset() public surface, and a Svelte UI registry."
+	badges={['v0.24.12', 'AssetRuntime', 'serveAsset()', 'STI Asset', 'UI Registry']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			The <code>@happyvertical/smrt-assets</code> package provides provider-agnostic asset management
-			with versioning via <code>primaryVersionId</code> chains, hierarchical derivatives via <code>parentId</code>,
-			polymorphic associations via <code>AssetAssociation</code>, and folder organization via STI.
+			<code>@happyvertical/smrt-assets</code> is the canonical asset layer for SMRT apps. It models
+			<strong>Asset</strong> as an STI base with versioning, hierarchical derivatives, lookup tables,
+			a generic <code>AssetAssociation</code> for provenance, and a <code>Folder</code> subclass for
+			organisation. v0.24 promotes two new public surfaces: <code>AssetRuntime</code> for I/O and
+			<code>serveAsset()</code> for HTTP delivery.
 		</p>
 
 		<h3>Key Features</h3>
 		<ul>
-			<li><strong>STI Asset Model</strong>: Asset base with Folder STI subclass for hierarchical organization</li>
-			<li><strong>Versioning</strong>: Sequential via <code>primaryVersionId</code> chain + <code>version</code> number</li>
-			<li><strong>Derivatives</strong>: Parent-child hierarchy via <code>parentId</code> for thumbnails, crops, format conversions</li>
-			<li><strong>Polymorphic Association</strong>: <code>AssetAssociation</code> links assets to any SmrtObject via <code>metaType</code> + <code>metaId</code></li>
-			<li><strong>Metadata Fields</strong>: <code>AssetMetafield</code> with JSON validation rules</li>
-			<li><strong>Tag Integration</strong>: <code>addTag()</code>/<code>removeTag()</code> via raw join table</li>
-			<li><strong>Provider-Agnostic</strong>: <code>AssetStore</code> abstraction for S3, local, GCS, CDN</li>
+			<li><strong>STI Asset</strong>: base with <code>Folder</code> subclass; cross-package STI (Image extends Asset)</li>
+			<li><strong>Versioning</strong>: sequential via <code>primaryVersionId</code> chain + <code>version</code> number</li>
+			<li><strong>Derivatives</strong>: parent/child via <code>parentId</code> for thumbnails, crops, format conversions</li>
+			<li><strong>AssetRuntime</strong>: bundles collection, association collection, and store with helpers for source/derived writes and extraction status</li>
+			<li><strong>serveAsset()</strong>: standard Web <code>Response</code> for SvelteKit, Hono, and any Node 18+ runtime</li>
+			<li><strong>ASSET_ROLES</strong> vocabulary so cross-package tooling agrees on meaning</li>
+			<li><strong>Generic associations</strong>: <code>AssetAssociation</code> for provenance / non-owner links (image derivation, fact proofs)</li>
+			<li><strong>Ownership rule</strong>: base/domain-owned assets live on dedicated joins (<code>content_assets</code>, <code>profile_assets</code>, <code>event_assets</code>, <code>place_assets</code>, <code>product_assets</code>)</li>
+			<li><strong>UI registry</strong>: discoverable Svelte slots via <code>@happyvertical/smrt-assets/ui</code></li>
 		</ul>
 
 		<h3>Architecture</h3>
 		<div class="diagram">
 			<pre>
-┌─────────────────────────────────────────────┐
-│        Asset Management System               │
-├─────────────────────────────────────────────┤
-│  Asset (STI base)                            │
-│  • name, slug, sourceUri, mimeType           │
-│  • versioning: primaryVersionId + version    │
-│  • hierarchy: parentId (derivatives)         │
-│  • ownerProfileId, typeSlug, statusSlug      │
-├─────────────────────────────────────────────┤
-│  Folder (STI subclass, typeSlug='folder')    │
-│  • Hierarchical organization                 │
-├─────────────────────────────────────────────┤
-│  AssetAssociation (polymorphic join)         │
-│  • assetId + metaType + metaId + role        │
-│  • sortOrder for ordering                    │
-├─────────────────────────────────────────────┤
-│  Lookup Tables                               │
-│  • AssetType - classification                │
-│  • AssetStatus - lifecycle                   │
-│  • AssetMetafield - custom metadata defs     │
-├─────────────────────────────────────────────┤
-│  AssetStore                                  │
-│  • Provider-agnostic file I/O               │
-│  • S3, local, GCS, CDN backends              │
-└─────────────────────────────────────────────┘
++---------------------------------------------+
+|             Asset Public Surface            |
++---------------------------------------------+
+|  Models                                      |
+|  - Asset (STI base) + Folder subclass        |
+|  - AssetType / AssetStatus (lookups)         |
+|  - AssetMetafield (validation)               |
+|  - AssetAssociation (generic/provenance)     |
++---------------------------------------------+
+|  AssetRuntime  (createAssetRuntime)          |
+|  - storeSourceAsset                          |
+|  - storeDerivedAsset (parentId + role)       |
+|  - linkDerivation                            |
+|  - setExtractionStatus                       |
++---------------------------------------------+
+|  Serving                                     |
+|  - serveAsset(options) -> Web Response       |
+|  - resolveAssetForServing(...) -> bytes      |
+|  - remoteMode: proxy | redirect | error      |
++---------------------------------------------+
+|  Ownership Joins (in consumer packages)      |
+|  - content_assets, profile_assets, etc.      |
+|  - asset_associations: generic/provenance    |
++---------------------------------------------+
 			</pre>
 		</div>
 	</section>
@@ -62,59 +65,229 @@
 	<section id="installation">
 		<h2>Installation</h2>
 
-		<h3>Using pnpm</h3>
 		<CodeBlock code={`pnpm add @happyvertical/smrt-assets`} language="bash" />
-
-		<h3>Using npm</h3>
 		<CodeBlock code={`npm install @happyvertical/smrt-assets`} language="bash" />
 
-		<h3>Setup</h3>
+		<h3>Imports</h3>
 		<CodeBlock
 			code={`import {
   Asset, AssetCollection,
   AssetAssociation, AssetAssociationCollection,
   AssetType, AssetStatus, AssetMetafield,
   Folder, FolderCollection,
-  AssetStore
-} from '@happyvertical/smrt-assets';
+  AssetStore,
+  createAssetRuntime,
+  serveAsset, resolveAssetForServing, AssetServeError,
+  ASSET_ROLES, ASSET_METADATA_KEYS, ASSET_EXTRACTION_STATUS,
+} from '@happyvertical/smrt-assets';`}
+			language="typescript"
+		/>
+	</section>
 
-const assets = await AssetCollection.create({
-  db: { type: 'sqlite', url: './assets.db' }
+	<section id="runtime-surface">
+		<h2>AssetRuntime — the public runtime surface</h2>
+		<p>
+			Apps and agents should depend on <code>createAssetRuntime</code> instead of hand-wiring an
+			<code>AssetCollection</code> and an <code>AssetStore</code> per-package (#1128). The runtime
+			bundles collection, association collection, and an initialised store, and offers four high-level
+			helpers.
+		</p>
+
+		<CodeBlock
+			code={`import { createAssetRuntime, ASSET_ROLES } from '@happyvertical/smrt-assets';
+
+const runtime = await createAssetRuntime({
+  db: { type: 'sqlite', url: './data.db' },
+  storage: { type: 's3', bucket: 'my-bucket', region: 'us-east-1' },
+});
+
+// 1) Store an upstream document as a source asset
+const sourceDoc = await runtime.storeSourceAsset(
+  'agenda.pdf',
+  pdfBytes,
+  { mimeType: 'application/pdf', role: ASSET_ROLES.source_document },
+);
+
+// 2) Store a derivative -- automatically sets parentId + a provenance link
+const pageImage = await runtime.storeDerivedAsset(
+  sourceDoc,
+  'agenda-page-1.png',
+  pngBytes,
+  { mimeType: 'image/png', role: ASSET_ROLES.document_image },
+);
+
+// 3) Record provenance only (no byte write)
+await runtime.linkDerivation(sourceDoc, pageImage, {
+  role: ASSET_ROLES.derivation_source,
+});
+
+// 4) Write canonical extraction metadata into description JSON
+await runtime.setExtractionStatus(sourceDoc, 'succeeded', {
+  extractedAt: new Date(),
 });`}
 			language="typescript"
 		/>
+
+		<p>
+			<code>setExtractionStatus</code> is non-destructive: if <code>description</code> is free-form
+			prose or non-object JSON, the original value is preserved under the reserved <code>text</code>
+			key. Existing JSON objects are merged into.
+		</p>
+
+		<p>
+			Agents that need asset I/O should accept an <code>AssetRuntimeLike</code> in their options
+			rather than asking callers to pass a store + collection separately.
+		</p>
+	</section>
+
+	<section id="serving-contract">
+		<h2>Serving contract — serveAsset()</h2>
+		<p>
+			<code>serveAsset</code> returns a standard Web <code>Response</code> with consistent status
+			codes for missing assets, tenant mismatches, access denials, remote-origin failures, and store
+			read errors. It works in SvelteKit <code>+server.ts</code>, Hono, and any Node 18+ runtime with
+			a global <code>Response</code>. For older runtimes pass <code>responseCtor</code>.
+		</p>
+
+		<CodeBlock
+			code={`// SvelteKit +server.ts
+import { serveAsset } from '@happyvertical/smrt-assets';
+import type { RequestHandler } from './$types';
+
+export const GET: RequestHandler = async ({ params, locals }) => {
+  const asset = await locals.runtime.collection.get(params.id);
+  return serveAsset({
+    runtime: locals.runtime,
+    asset,
+    tenantId: locals.tenantId,
+    canAccess: (a) => locals.user.canRead(a),
+    disposition: 'inline',
+    remoteMode: 'proxy', // 'redirect' | 'error'
+  });
+};`}
+			language="typescript"
+		/>
+
+		<h3>Status semantics</h3>
+		<table>
+			<thead>
+				<tr><th>Code</th><th>Trigger</th></tr>
+			</thead>
+			<tbody>
+				<tr><td><code>200</code></td><td>Bytes returned; <code>Content-Type</code>, <code>Content-Length</code>, <code>Content-Disposition</code> set</td></tr>
+				<tr><td><code>302</code></td><td><code>remoteMode: 'redirect'</code> and <code>sourceUri</code> is <code>http(s)</code></td></tr>
+				<tr><td><code>403</code></td><td>Tenant mismatch or <code>canAccess()</code> denies</td></tr>
+				<tr><td><code>404</code></td><td>Asset id doesn't resolve</td></tr>
+				<tr><td><code>500</code></td><td>Store read error or unexpected failure (generic body; details logged)</td></tr>
+				<tr><td><code>502</code></td><td><code>remoteMode: 'proxy'</code> and origin fetch failed</td></tr>
+			</tbody>
+		</table>
+
+		<h3>Remote assets</h3>
+		<p>
+			Assets whose <code>sourceUri</code> is <code>http(s)</code> are supported via <code>remoteMode</code>:
+			<code>'proxy'</code> (default) fetches and returns bytes, <code>'redirect'</code> issues a 302 to
+			the origin, and <code>'error'</code> treats the configuration as a mistake. Pass
+			<code>fetchImpl</code> to swap the fetch client.
+		</p>
+
+		<h3>Header sanitisation</h3>
+		<p>
+			<code>Content-Disposition</code> filenames are sanitised (control characters stripped;
+			<code>"</code>, <code>\</code>, <code>/</code> replaced) so untrusted asset names cannot inject
+			headers. The 500 body is a generic <code>'Internal error serving asset'</code>; underlying
+			errors are logged via <code>console.error</code> so operators can debug without leaking
+			paths/bucket names to clients.
+		</p>
+
+		<h3>Bring-your-own response shell</h3>
+		<CodeBlock
+			code={`import { resolveAssetForServing, AssetServeError } from '@happyvertical/smrt-assets';
+
+try {
+  const { asset, data, contentType, filename, size } = await resolveAssetForServing({
+    runtime,
+    asset,
+    tenantId,
+  });
+  // Build the framework's native response yourself.
+} catch (err) {
+  if (err instanceof AssetServeError) {
+    return makeResponseFor(err.status);
+  }
+  throw err;
+}`}
+			language="typescript"
+		/>
+	</section>
+
+	<section id="vocab">
+		<h2>Source / derived vocabulary</h2>
+		<p>
+			Roles, metadata keys, and extraction status values are exported as named constants so
+			cross-package tooling (serving, UI pickers, agents) agrees on meaning. Prefer them over ad-hoc
+			strings.
+		</p>
+
+		<h3>ASSET_ROLES</h3>
+		<table>
+			<thead>
+				<tr><th>Role</th><th>Use</th></tr>
+			</thead>
+			<tbody>
+				<tr><td><code>source_document</code></td><td>Original upstream document (agenda PDF, minutes)</td></tr>
+				<tr><td><code>document_image</code></td><td>Page/extracted image derived from a source document</td></tr>
+				<tr><td><code>thumbnail</code></td><td>Preview rendition of another asset</td></tr>
+				<tr><td><code>proof</code></td><td>Non-canonical evidence asset backing a fact</td></tr>
+				<tr><td><code>derivation_source</code></td><td>"Came from" link on generated media</td></tr>
+				<tr><td><code>attachment</code></td><td>Generic owner-join link</td></tr>
+				<tr><td><code>hero</code></td><td>Primary/featured asset on an owner</td></tr>
+			</tbody>
+		</table>
+
+		<h3>ASSET_METADATA_KEYS</h3>
+		<p>Canonical keys read/written by extractors and serving helpers:</p>
+		<ul>
+			<li><code>extractionStatus</code>, <code>extractionError</code>, <code>extractedAt</code></li>
+			<li><code>sourceUrl</code>, <code>sourceHash</code></li>
+			<li><code>pageNumber</code></li>
+		</ul>
+
+		<h3>ASSET_EXTRACTION_STATUS</h3>
+		<p>Lifecycle values: <code>pending</code>, <code>running</code>, <code>succeeded</code>, <code>failed</code>.</p>
 	</section>
 
 	<section id="quick-start">
 		<h2>Quick Start</h2>
 
-		<h3>1. Create Asset</h3>
+		<h3>1. Create lookup records</h3>
 		<CodeBlock
-			code={`// Create lookup records first
-const imageType = new AssetType({ slug: 'image', name: 'Image' });
+			code={`const imageType = new AssetType({ slug: 'image', name: 'Image' });
 await imageType.save();
 
 const published = new AssetStatus({ slug: 'published', name: 'Published' });
-await published.save();
+await published.save();`}
+			language="typescript"
+		/>
 
-// Create an asset
-const photo = new Asset({
+		<h3>2. Create a source asset</h3>
+		<CodeBlock
+			code={`const photo = new Asset({
   name: 'Product Photo',
   slug: 'product-photo-001',
   sourceUri: 's3://mybucket/products/photo.jpg',
   mimeType: 'image/jpeg',
   typeSlug: 'image',
   statusSlug: 'published',
-  version: 1
+  version: 1,
 });
 await photo.save();`}
 			language="typescript"
 		/>
 
-		<h3>2. Versioning (primaryVersionId chain)</h3>
+		<h3>3. Version 2 — chain via primaryVersionId</h3>
 		<CodeBlock
-			code={`// Create version 2 -- chain via primaryVersionId
-const v2 = new Asset({
+			code={`const v2 = new Asset({
   name: 'Product Photo',
   slug: 'product-photo-002',
   version: 2,
@@ -122,15 +295,15 @@ const v2 = new Asset({
   sourceUri: 's3://mybucket/products/photo-v2.jpg',
   mimeType: 'image/jpeg',
   typeSlug: 'image',
-  statusSlug: 'published'
+  statusSlug: 'published',
 });
 await v2.save();`}
 			language="typescript"
 		/>
 
-		<h3>3. Derivatives via parentId</h3>
+		<h3>4. Derivative via parentId (or runtime helper)</h3>
 		<CodeBlock
-			code={`// Create thumbnail derivative
+			code={`// Manual form
 const thumb = new Asset({
   name: 'Thumbnail',
   slug: 'product-photo-001-thumb',
@@ -138,584 +311,272 @@ const thumb = new Asset({
   sourceUri: 's3://mybucket/products/photo-001-thumb.jpg',
   mimeType: 'image/jpeg',
   typeSlug: 'image',
-  statusSlug: 'published'
+  statusSlug: 'published',
 });
-await thumb.save();`}
+await thumb.save();
+
+// Preferred: runtime helper writes bytes + sets parentId + records provenance
+const thumb2 = await runtime.storeDerivedAsset(photo, 'thumb.jpg', thumbBytes, {
+  mimeType: 'image/jpeg',
+  role: ASSET_ROLES.thumbnail,
+});`}
 			language="typescript"
 		/>
 
-		<h3>3b. Polymorphic Association</h3>
+		<h3>5. Generic association (for provenance / non-owner links)</h3>
 		<CodeBlock
-			code={`// Link asset to any SmrtObject via AssetAssociation
+			code={`// AssetAssociation is for generic/provenance links only.
+// Owner-side noun joins (content_assets, profile_assets, ...) belong in the owning package.
 const assoc = new AssetAssociation({
-  assetId: photo.id,
-  metaType: '@happyvertical/smrt-content:Article',
-  metaId: 'article-123',
-  role: 'hero',
-  sortOrder: 0
+  assetId: derivedImage.id,
+  metaType: '@happyvertical/smrt-assets:Asset',
+  metaId: sourceDoc.id,
+  role: 'derivation_source',
+  sortOrder: 0,
 });
 await assoc.save();`}
 			language="typescript"
 		/>
-
-		<h3>4. Work with Tags</h3>
-		<CodeBlock
-			code={`// Add tags
-await assets.addTag(asset.id, 'featured');
-await assets.addTag(asset.id, 'products');
-
-// Check tag
-const isFeatured = await asset.hasTag('featured');
-
-// Get all tags
-const tags = await asset.getTags();
-
-// Find assets by tag
-const featuredAssets = await assets.getByTag('featured');`}
-			language="typescript"
-		/>
 	</section>
 
-	<section id="core-concepts">
-		<h2>Core Concepts</h2>
+	<section id="ownership">
+		<h2>Ownership rule (and what AssetAssociation is not)</h2>
+		<p>
+			Base/domain-owned asset relationships belong on dedicated noun join tables in the owning
+			package: <code>content_assets</code>, <code>profile_assets</code>, <code>event_assets</code>,
+			<code>place_assets</code>, <code>product_assets</code>. Those tables are typed, indexed, and
+			tenanted by the consumer.
+		</p>
+		<p>
+			<code>AssetAssociation</code> remains for <strong>generic/provenance</strong> links — e.g.
+			image derivation chains, fact proofs, "came-from" relationships — where there is no natural
+			owner table.
+		</p>
+	</section>
 
-		<h3>1. Versioning System</h3>
-		<p>Track sequential evolution of assets via <code>primaryVersionId</code> chain and <code>version</code> number:</p>
+	<section id="versioning">
+		<h2>Versioning and derivatives</h2>
 
+		<h3>Sequential versions</h3>
 		<CodeBlock
-			code={`// Version 1 created
+			code={`// v1 is its own primary version
 const v1 = new Asset({
-  name: 'Photo', sourceUri: 'v1.jpg',
-  mimeType: 'image/jpeg', typeSlug: 'image',
-  statusSlug: 'published', version: 1
+  name: 'Photo', slug: 'photo-v1',
+  sourceUri: 'v1.jpg', mimeType: 'image/jpeg',
+  typeSlug: 'image', statusSlug: 'published', version: 1,
 });
 await v1.save();
-// v1.primaryVersionId = v1.id (self-reference)
 
-// Version 2 -- chain via primaryVersionId
+// v2 chains via primaryVersionId = v1.id
 const v2 = new Asset({
-  ...v1, slug: 'photo-v2', version: 2,
-  primaryVersionId: v1.id,
-  sourceUri: 'v2.jpg'
+  name: 'Photo', slug: 'photo-v2',
+  sourceUri: 'v2.jpg', mimeType: 'image/jpeg',
+  typeSlug: 'image', statusSlug: 'published',
+  version: 2, primaryVersionId: v1.id,
 });
 await v2.save();
 
-// findVersions() to retrieve history
+// findVersions() walks the chain
 const history = await collection.findVersions(v1.id);`}
 			language="typescript"
 		/>
 
-		<h3>2. Parent-Child Relationships (Derivatives)</h3>
-		<p>Parallel processing variants for different purposes:</p>
-
+		<h3>Derivatives (parent/child)</h3>
+		<p>Parallel processing variants — thumbnails, format conversions, crops — keyed by <code>parentId</code>:</p>
 		<CodeBlock
-			code={`// Original asset
-const original = await assets.create({
-  name: 'Original Photo',
-  sourceUri: 's3://bucket/original.jpg'
-});
-
-// Create thumbnail derivative
-const thumbnail = await assets.create({
-  name: 'Original Photo Thumbnail',
-  sourceUri: 's3://bucket/original-thumb.jpg',
-  parentId: original.id
-});
-
-// Get all derivatives
-const derivatives = await original.getChildren();
-
-// Navigate back
+			code={`const derivatives = await original.getChildren();
 const parent = await thumbnail.getParent();`}
 			language="typescript"
 		/>
+	</section>
 
-		<h3>3. Asset Types and Statuses</h3>
-		<table>
-			<thead>
-				<tr>
-					<th>Type</th>
-					<th>Use Case</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><code>image</code></td>
-					<td>Image files (JPEG, PNG, etc.)</td>
-				</tr>
-				<tr>
-					<td><code>video</code></td>
-					<td>Video files (MP4, MOV, etc.)</td>
-				</tr>
-				<tr>
-					<td><code>document</code></td>
-					<td>Document files (PDF, DOCX, etc.)</td>
-				</tr>
-				<tr>
-					<td><code>audio</code></td>
-					<td>Audio files (MP3, WAV, etc.)</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<table>
-			<thead>
-				<tr>
-					<th>Status</th>
-					<th>Meaning</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><code>draft</code></td>
-					<td>Work in progress</td>
-				</tr>
-				<tr>
-					<td><code>published</code></td>
-					<td>Live and available</td>
-				</tr>
-				<tr>
-					<td><code>archived</code></td>
-					<td>No longer active</td>
-				</tr>
-				<tr>
-					<td><code>deleted</code></td>
-					<td>Marked for deletion</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<h3>4. Metadata System</h3>
-		<p>Controlled vocabulary with validation:</p>
-
+	<section id="metadata">
+		<h2>Metadata fields</h2>
+		<p>
+			<code>AssetMetafield</code> declares custom metadata definitions with JSON validation rules so
+			values stay typed and bounded.
+		</p>
 		<CodeBlock
-			code={`// Define metadata field
-const widthField = new AssetMetafield({
+			code={`const widthField = new AssetMetafield({
   slug: 'width',
   name: 'Width',
-  validation: JSON.stringify({
-    type: 'integer',
-    minimum: 0,
-    maximum: 10000
-  })
+  validation: JSON.stringify({ type: 'integer', minimum: 0, maximum: 10000 }),
 });
 
-// Validation examples
+// Example validation shapes
 // { type: 'integer', minimum: 0, maximum: 10000 }
 // { type: 'string', enum: ['portrait', 'landscape', 'square'] }
 // { type: 'string', pattern: '^#[0-9A-Fa-f]{6}$' }`}
 			language="typescript"
 		/>
 
-		<h3>5. Hierarchical Tagging</h3>
-		<CodeBlock
-			code={`// Hierarchical tag structure
-// category/products/shoes
-// category/products/clothing
-// featured/homepage
-// featured/social-media
+		<h3>Canonical extraction metadata</h3>
+		<p>
+			Extractors should write the keys defined by <code>ASSET_METADATA_KEYS</code> through
+			<code>runtime.setExtractionStatus()</code> so serving + UI tooling can rely on consistent names.
+		</p>
+	</section>
 
-await assets.addTag(asset.id, 'category/products/shoes');
+	<section id="ui-registry">
+		<h2>UI Registry</h2>
+		<p>
+			The <code>./ui</code> subpath exports <code>ASSETS_MODULE_META</code> and
+			<code>ASSETS_UI_SLOTS</code> so registry-driven hosts (smrt-chat, dynamic admin shells) can
+			discover the package's Svelte components without a hard import. Side-effect-importing
+			<code>@happyvertical/smrt-assets/svelte</code> registers them with <code>ModuleUIRegistry</code>.
+		</p>
+
+		<CodeBlock
+			code={`import { ASSETS_MODULE_META, ASSETS_UI_SLOTS } from '@happyvertical/smrt-assets/ui';
+import '@happyvertical/smrt-assets/svelte'; // side-effect: ModuleUIRegistry.register(...)
+import { ModuleUIRegistry } from '@happyvertical/smrt-svelte/registry';
+
+const AssetManager = ModuleUIRegistry.get('@happyvertical/smrt-assets', 'asset-manager');`}
+			language="typescript"
+		/>
+
+		<h3>Registered slots</h3>
+		<table>
+			<thead>
+				<tr><th>Slot ID</th><th>Purpose</th></tr>
+			</thead>
+			<tbody>
+				<tr><td><code>asset-manager</code></td><td>Admin shell — full CRUD surface</td></tr>
+				<tr><td><code>asset-grid</code></td><td>List view: card grid</td></tr>
+				<tr><td><code>asset-list</code></td><td>List view: table rows</td></tr>
+				<tr><td><code>asset-detail</code></td><td>Detail/preview view</td></tr>
+				<tr><td><code>asset-toolbar</code></td><td>Action surface above list views</td></tr>
+				<tr><td><code>asset-action-bar</code></td><td>Selection-aware bulk actions</td></tr>
+				<tr><td><code>asset-create-modal</code></td><td>Upload/create form</td></tr>
+			</tbody>
+		</table>
+		<p>Slot IDs are stable contracts — host apps reference them by string.</p>
+	</section>
+
+	<section id="tags">
+		<h2>Tags (raw join)</h2>
+		<p>
+			Tag wiring is implemented via raw <code>db.upsert()</code> on the <code>asset_tags</code> join
+			table — not via an SMRT model. The helpers below cover the day-to-day flow.
+		</p>
+		<CodeBlock
+			code={`await assets.addTag(asset.id, 'category/products/shoes');
 await assets.addTag(asset.id, 'featured/homepage');
 
-// Query by tag
-const products = await assets.getByTag('category/products');
+const isFeatured = await asset.hasTag('featured/homepage');
+const tags = await asset.getTags();
 const featured = await assets.getByTag('featured/homepage');`}
 			language="typescript"
 		/>
 	</section>
 
-	<section id="ai-features">
-		<h2>AI-Powered Features</h2>
+	<section id="integration">
+		<h2>Integration with other modules</h2>
+
+		<h3>smrt-images (cross-package STI)</h3>
 		<p>
-			Assets inherit <code>is()</code> and <code>do()</code> from SmrtObject (smrt-core).
-			Image-specific AI features (alt text generation, categorization) are provided by the
-			<a href="/modules/smrt-images">smrt-images</a> package, which extends Asset via STI.
+			<code>Image</code> in <code>@happyvertical/smrt-images</code> extends Asset and shares the
+			<code>assets</code> table via <code>_meta_type='Image'</code>. Image derivation uses
+			<code>AssetAssociation</code> for provenance (role <code>derivation_source</code>).
 		</p>
 
-		<h3>Content Analysis (via smrt-core)</h3>
-		<CodeBlock
-			code={`// Boolean validation (is)
-const isHighQuality = await asset.is('a high-quality product image');
+		<h3>smrt-content</h3>
+		<p>
+			Content uses the dedicated <code>content_assets</code> noun join — owner-side attachments,
+			heroes, thumbnails — not <code>AssetAssociation</code>. Both ends agree on role names via
+			<code>ASSET_ROLES</code>.
+		</p>
 
-// Generate descriptions (do)
-const description = await asset.do('generate a brief caption');`}
-			language="typescript"
-		/>
-	</section>
+		<h3>smrt-video / smrt-voice</h3>
+		<p>
+			Domain noun joins (<code>character_assets</code>, <code>performer_assets</code>,
+			<code>scene_assets</code>) own their links; video shots inherit <code>content_assets</code>
+			through their Content base.
+		</p>
 
-	<section id="tutorials">
-		<h2>Tutorials</h2>
-
-		<h3>Tutorial 1: E-Commerce Product Images</h3>
-
-		<h4>Step 1: Create Master Image</h4>
-		<CodeBlock
-			code={`const master = await images.create({
-  name: 'Sneaker Model XYZ - White',
-  slug: 'sneaker-xyz-white',
-  sourceUri: 's3://products/sneakers/xyz-white.jpg',
-  mimeType: 'image/jpeg',
-  width: 2560,
-  height: 1920,
-  typeSlug: 'product-image',
-  statusSlug: 'published'
-});`}
-			language="typescript"
-		/>
-
-		<h4>Step 2: Create Responsive Derivatives</h4>
-		<CodeBlock
-			code={`const sizes = [
-  { slug: 'thumb', width: 150, height: 150 },
-  { slug: 'preview', width: 400, height: 300 },
-  { slug: 'full', width: 1000, height: 750 }
-];
-
-for (const size of sizes) {
-  const deriv = new Asset({
-    name: master.name + ' - ' + size.slug,
-    slug: master.slug + '-' + size.slug,
-    sourceUri: 's3://products/sneakers/xyz-' + size.slug + '.jpg',
-    mimeType: 'image/jpeg',
-    width: size.width,
-    height: size.height,
-    parentId: master.id,
-    typeSlug: 'product-image',
-    statusSlug: 'published'
-  });
-  await deriv.save();
-}`}
-			language="typescript"
-		/>
-
-		<h4>Step 3: Tag and Organize</h4>
-		<CodeBlock
-			code={`await assets.addTag(master.id, 'category/products/shoes');
-await assets.addTag(master.id, 'brand/nike');
-await assets.addTag(master.id, 'featured/homepage');`}
-			language="typescript"
-		/>
-
-		<h3>Tutorial 2: AssetStore Pipeline</h3>
-
-		<CodeBlock
-			code={`import { AssetStore } from '@happyvertical/smrt-assets';
-
-// AssetStore provides provider-agnostic file I/O
-const store = new AssetStore({ collection, filesystem });
-
-// Store writes buffer to storage and creates Asset record
-const asset = await store.store({
-  buffer: fileBuffer,
-  mimeType: 'image/png',
-  name: 'screenshot'
-});
-
-// Use Folder STI subclass for organization
-const folder = new Folder({
-  name: 'Product Images',
-  slug: 'product-images'
-});
-await folder.save();`}
-			language="typescript"
-		/>
-	</section>
-
-	<section id="integration">
-		<h2>Integration with Other Modules</h2>
-
-		<h3>smrt-core</h3>
-		<ul>
-			<li>Asset extends <strong>SmrtObject</strong> for persistence</li>
-			<li>STI support (Folder subclass)</li>
-			<li>Auto-generated REST API, CLI, MCP tools</li>
-		</ul>
-
-		<h3>smrt-tags</h3>
-		<CodeBlock
-			code={`// Hierarchical organization
-await assets.addTag(assetId, 'media-type/image/product');
-await assets.addTag(assetId, 'usage/ecommerce');
-await assets.addTag(assetId, 'quality/high-res');
-
-const products = await assets.getByTag('media-type/image/product');`}
-			language="typescript"
-		/>
-
-		<h3>AssetStore (Provider-Agnostic File I/O)</h3>
-		<CodeBlock
-			code={`import { AssetStore } from '@happyvertical/smrt-assets';
-
-// AssetStore writes buffers to storage and creates Asset records
-const store = new AssetStore({ collection, filesystem });
-await store.store({ buffer, mimeType: 'image/png', name: 'screenshot' });
-
-// Storage-agnostic sourceUri formats
-sourceUri: 's3://my-bucket/images/image.jpg'
-sourceUri: 'file:///var/assets/image.jpg'
-sourceUri: 'gs://my-bucket/images/image.jpg'
-sourceUri: 'https://cdn.example.com/images/image.jpg'`}
-			language="typescript"
-		/>
-	</section>
-
-	<section id="best-practices">
-		<h2>Best Practices</h2>
-
-		<h3>1. Asset Naming</h3>
-		<CodeBlock
-			code={`// Good: descriptive, semantic slugs
-'product-photo-nike-shoes-white-001'
-'blog-hero-smrt-framework-2024'
-'screenshot-setup-step-03'
-
-// Bad: generic names
-'image1', 'photo', 'asset-123'`}
-			language="typescript"
-		/>
-
-		<h3>2. Version vs Derivative Strategy</h3>
-		<CodeBlock
-			code={`// Use versions for:
-// - Content/source URI changes
-// - Tracking historical changes
-// - Example: replacing outdated marketing image
-
-// Use derivatives for:
-// - Different sizes (responsive images)
-// - Format conversions (JPEG, WebP, AVIF)
-// - Quality levels (high-res, compressed)
-// - Crops or effects`}
-			language="typescript"
-		/>
-
-		<h3>3. Metadata Best Practices</h3>
-		<CodeBlock
-			code={`// Define fields with validation upfront
-const widthField = await metafields.getOrCreate('width', 'Width', {
-  type: 'integer',
-  minimum: 0,
-  maximum: 10000
-});
-
-// Then use validated metadata
-metadata.width = 1920;  // Validated
-
-// Avoid arbitrary metadata
-metadata.w = 'really big';  // ✗ No validation`}
-			language="typescript"
-		/>
-
-		<h3>4. Query Optimization</h3>
-		<CodeBlock
-			code={`// Good: Filter early in query
-const images = await assets.list({
-  where: {
-    typeSlug: 'image',
-    statusSlug: 'published',
-    ownerProfileId: userId
-  }
-});
-
-// Avoid: Load everything then filter
-const allAssets = await assets.list({});
-const filtered = allAssets.filter(a => a.typeSlug === 'image');`}
-			language="typescript"
-		/>
-	</section>
-
-	<section id="troubleshooting">
-		<h2>Troubleshooting</h2>
-
-		<h3>Image dimensions not saved</h3>
-		<p><strong>Solution:</strong> Use collection.create()</p>
-		<CodeBlock
-			code={`// Good
-const image = await images.create({
-  name: 'test.jpg',
-  width: 1920,
-  mimeType: 'image/jpeg'
-});
-
-// Or ensure required fields
-image.typeSlug = 'image';
-image.statusSlug = 'published';
-await image.save();`}
-			language="typescript"
-		/>
-
-		<h3>Query returns empty results</h3>
-		<p><strong>Solution:</strong> Initialize types and statuses</p>
-		<CodeBlock
-			code={`await types.initializeCommonTypes();
-await statuses.initializeCommonStatuses();
-
-// Then query
-const images = await assets.getByType('image');`}
-			language="typescript"
-		/>
-
-		<h3>Version tracking confusion</h3>
-		<p><strong>Solution:</strong> primaryVersionId always points to first version</p>
-		<CodeBlock
-			code={`const v1 = await assets.create({...});  // primaryVersionId = v1.id
-const v2 = await assets.createNewVersion(v1.id, 'v2.jpg');
-// v2.primaryVersionId = v1.id
-
-// Get all versions
-const history = await assets.listVersions(v1.id);`}
-			language="typescript"
-		/>
+		<h3>smrt-facts</h3>
+		<p>
+			Facts attach evidence via <code>AssetAssociation</code> with role <code>proof</code>.
+		</p>
 	</section>
 
 	<section id="api-reference">
 		<h2>API Reference</h2>
 
-		<h3>Asset Class</h3>
+		<h3>Runtime + serving exports</h3>
 		<table>
 			<thead>
-				<tr>
-					<th>Method</th>
-					<th>Returns</th>
-					<th>Description</th>
-				</tr>
+				<tr><th>Export</th><th>Description</th></tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td><code>getTags()</code></td>
-					<td><code>Promise&lt;Tag[]&gt;</code></td>
-					<td>Get all tags</td>
-				</tr>
-				<tr>
-					<td><code>hasTag(slug)</code></td>
-					<td><code>Promise&lt;boolean&gt;</code></td>
-					<td>Check if has tag</td>
-				</tr>
-				<tr>
-					<td><code>getParent()</code></td>
-					<td><code>Promise&lt;Asset | null&gt;</code></td>
-					<td>Get parent asset</td>
-				</tr>
-				<tr>
-					<td><code>getChildren()</code></td>
-					<td><code>Promise&lt;Asset[]&gt;</code></td>
-					<td>Get derivative assets</td>
-				</tr>
-				<tr>
-					<td><code>is(condition)</code></td>
-					<td><code>Promise&lt;boolean&gt;</code></td>
-					<td>AI validation</td>
-				</tr>
-				<tr>
-					<td><code>do(action)</code></td>
-					<td><code>Promise&lt;string&gt;</code></td>
-					<td>AI action</td>
-				</tr>
+				<tr><td><code>createAssetRuntime(options)</code></td><td>Returns an <code>AssetRuntime</code></td></tr>
+				<tr><td><code>AssetRuntime</code></td><td>Bundles collection, association collection, store</td></tr>
+				<tr><td><code>storeSourceAsset(name, data, opts)</code></td><td>Create a source asset (record + bytes)</td></tr>
+				<tr><td><code>storeDerivedAsset(source, name, data, opts)</code></td><td>Create a derivative with parentId + provenance link</td></tr>
+				<tr><td><code>linkDerivation(source, derivative, opts)</code></td><td>Record provenance without writing bytes</td></tr>
+				<tr><td><code>setExtractionStatus(asset, status, opts?)</code></td><td>Write canonical extraction metadata into <code>description</code> JSON</td></tr>
+				<tr><td><code>serveAsset(options)</code></td><td>Web <code>Response</code> with full status semantics</td></tr>
+				<tr><td><code>resolveAssetForServing(options)</code></td><td>Resolve asset bytes for custom response shells</td></tr>
+				<tr><td><code>AssetServeError</code></td><td>Thrown by resolver on the same failure modes</td></tr>
 			</tbody>
 		</table>
 
-		<h3>Other Models</h3>
+		<h3>Models</h3>
 		<table>
 			<thead>
-				<tr>
-					<th>Export</th>
-					<th>Description</th>
-				</tr>
+				<tr><th>Export</th><th>Description</th></tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td><code>AssetAssociation</code></td>
-					<td>Polymorphic join: assetId + metaType + metaId + role + sortOrder</td>
-				</tr>
-				<tr>
-					<td><code>AssetType</code></td>
-					<td>Lookup table for asset type classification</td>
-				</tr>
-				<tr>
-					<td><code>AssetStatus</code></td>
-					<td>Lookup table for lifecycle status</td>
-				</tr>
-				<tr>
-					<td><code>AssetMetafield</code></td>
-					<td>Custom metadata field definitions with JSON validation rules</td>
-				</tr>
-				<tr>
-					<td><code>Folder</code></td>
-					<td>STI subclass of Asset (typeSlug='folder') for hierarchical organization</td>
-				</tr>
+				<tr><td><code>Asset</code></td><td>STI base — versioning, derivatives, lookup FKs</td></tr>
+				<tr><td><code>Folder</code></td><td>STI subclass for hierarchical organisation</td></tr>
+				<tr><td><code>AssetAssociation</code></td><td>Generic/provenance join: <code>assetId + metaType + metaId + role + sortOrder</code></td></tr>
+				<tr><td><code>AssetType</code> / <code>AssetStatus</code></td><td>Classification + lifecycle lookups</td></tr>
+				<tr><td><code>AssetMetafield</code></td><td>Custom metadata definitions with JSON validation</td></tr>
 			</tbody>
 		</table>
 
-		<h3>Collections</h3>
+		<h3>Vocab exports</h3>
 		<table>
 			<thead>
-				<tr>
-					<th>Export</th>
-					<th>Description</th>
-				</tr>
+				<tr><th>Export</th><th>Description</th></tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td><code>AssetCollection</code></td>
-					<td>CRUD for Asset</td>
-				</tr>
-				<tr>
-					<td><code>AssetAssociationCollection</code></td>
-					<td>CRUD for AssetAssociation</td>
-				</tr>
-				<tr>
-					<td><code>AssetTypeCollection</code></td>
-					<td>CRUD for AssetType</td>
-				</tr>
-				<tr>
-					<td><code>AssetStatusCollection</code></td>
-					<td>CRUD for AssetStatus</td>
-				</tr>
-				<tr>
-					<td><code>AssetMetafieldCollection</code></td>
-					<td>CRUD for AssetMetafield</td>
-				</tr>
-				<tr>
-					<td><code>FolderCollection</code></td>
-					<td>CRUD for Folder</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<h3>Utilities</h3>
-		<table>
-			<thead>
-				<tr>
-					<th>Export</th>
-					<th>Description</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><code>AssetStore</code></td>
-					<td>Provider-agnostic file I/O that writes buffers to storage and creates Asset records</td>
-				</tr>
+				<tr><td><code>ASSET_ROLES</code></td><td>Canonical role names (<code>source_document</code>, <code>document_image</code>, <code>thumbnail</code>, <code>proof</code>, <code>derivation_source</code>, <code>attachment</code>, <code>hero</code>)</td></tr>
+				<tr><td><code>ASSET_METADATA_KEYS</code></td><td>Canonical metadata field names</td></tr>
+				<tr><td><code>ASSET_EXTRACTION_STATUS</code></td><td><code>pending | running | succeeded | failed</code></td></tr>
+				<tr><td><code>ASSETS_MODULE_META</code> / <code>ASSETS_UI_SLOTS</code></td><td>From <code>./ui</code>: registry-driven UI discovery</td></tr>
 			</tbody>
 		</table>
 	</section>
 
 	<section id="related">
 		<h2>Related Modules</h2>
-		<ul>
-			<li><a href="/modules/smrt-core">smrt-core</a> - SmrtObject, STI support</li>
-			<li><a href="/modules/smrt-tags">smrt-tags</a> - Tag integration (addTag/removeTag)</li>
-			<li><a href="/modules/smrt-images">smrt-images</a> - Image ops, AI categorization (extends Asset via STI)</li>
-			<li><a href="/modules/smrt-tenancy">smrt-tenancy</a> - Optional tenant scoping</li>
-		</ul>
+		<nav>
+			<a href="/modules/smrt-core">
+				<h3>smrt-core</h3>
+				<p>SmrtObject, STI support, code generation</p>
+			</a>
+			<a href="/modules/smrt-images">
+				<h3>smrt-images</h3>
+				<p>Image extends Asset via cross-package STI</p>
+			</a>
+			<a href="/modules/smrt-content">
+				<h3>smrt-content</h3>
+				<p>Owner-side <code>content_assets</code> join</p>
+			</a>
+			<a href="/modules/smrt-svelte">
+				<h3>smrt-svelte</h3>
+				<p>ModuleUIRegistry consumes the asset slots</p>
+			</a>
+		</nav>
 	</section>
+
+	<nav>
+		<a href="/modules">Back to Modules</a>
+	</nav>
 </ModulePage>
 
 <style>
-	section {
-		margin-bottom: 3rem;
-	}
-
 	table {
 		width: 100%;
 		border-collapse: collapse;
@@ -734,39 +595,16 @@ const history = await assets.listVersions(v1.id);`}
 		background-color: #f5f5f5;
 	}
 
-	code {
-		background-color: #f5f5f5;
-		padding: 0.2rem 0.4rem;
-		border-radius: 3px;
-		font-size: 0.9em;
-	}
-
 	.diagram {
 		background-color: #f5f5f5;
 		padding: 1rem;
 		border-radius: 4px;
 		overflow-x: auto;
-		margin: 1rem 0;
 	}
 
 	.diagram pre {
 		margin: 0;
 		font-size: 0.85rem;
 		line-height: 1.4;
-	}
-
-	h2 {
-		margin-top: 2rem;
-		padding-top: 1rem;
-		border-top: 1px solid #e5e5e5;
-	}
-
-	h3 {
-		margin-top: 1.5rem;
-	}
-
-	h4 {
-		margin-top: 1rem;
-		font-size: 1rem;
 	}
 </style>
