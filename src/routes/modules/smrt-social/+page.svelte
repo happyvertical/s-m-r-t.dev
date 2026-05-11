@@ -5,25 +5,28 @@
 
 <ModulePage
 	name="smrt-social"
-	description="Social media account management with OAuth, post scheduling, and analytics tracking across YouTube, Threads, X, and Bluesky."
-	badges={['v0.20.44', 'OAuth', 'Post Scheduling', 'Multi-Platform']}
+	description="Social media account management with OAuth and post scheduling across YouTube, Threads, X, and Bluesky."
+	badges={['v0.24.12', 'OAuth', 'Post Scheduling', 'Multi-Platform', 'Optional Tenancy']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
 			<strong>smrt-social</strong> manages social media connections and publishing across multiple
-			platforms. It handles OAuth credential storage, post creation and scheduling, and per-post
-			analytics tracking with PKCE support for secure OAuth flows.
+			platforms. It handles OAuth credential storage (CSRF + PKCE), post creation and scheduling,
+			and per-post analytics tracking. The platform enum is hardcoded — extending it requires code
+			changes.
 		</p>
 		<aside>
 			<p>Key Features:</p>
 			<ul>
-				<li>Multi-platform: YouTube, Threads, X (Twitter), Bluesky</li>
-				<li>OAuth flow with CSRF protection and PKCE support</li>
-				<li>Post scheduling with draft/scheduled/published lifecycle</li>
-				<li>Per-post analytics: views, likes, comments, shares, clicks</li>
-				<li>Readiness gate: checks active + connected + token present + not expired</li>
-				<li>Link behavior configuration: description, reply, or none</li>
+				<li><strong>Multi-platform STI</strong>: YouTube, Threads, X (Twitter), Bluesky — hardcoded enum</li>
+				<li><strong>OAuth flow with CSRF + PKCE</strong>: <code>OAuthState</code> stores state + <code>codeVerifier</code> with a 10-minute TTL</li>
+				<li><strong>Post lifecycle</strong>: <code>draft → scheduled → publishing → published</code> (or <code>failed</code>) — <code>scheduledAt</code> is metadata only; the app must run a job to publish</li>
+				<li><strong>Per-post analytics</strong>: <code>views</code>, <code>likes</code>, <code>comments</code>, <code>shares</code>, <code>clicks</code> — synced manually from platform APIs, not auto-populated</li>
+				<li><strong>Readiness gate</strong> (<code>isReady</code>): active + connected + token present + not expired (5-min buffer)</li>
+				<li><strong>Link behavior</strong>: <code>description</code>, <code>reply</code>, or <code>none</code></li>
+				<li><strong>Optional tenancy</strong>: all models use <code>@TenantScoped({'{'} mode: 'optional' {'}'})</code></li>
+				<li><strong>Tokens plaintext (TODO)</strong>: integrate <a href="/modules/smrt-secrets">smrt-secrets</a> for envelope encryption in production</li>
 			</ul>
 		</aside>
 	</section>
