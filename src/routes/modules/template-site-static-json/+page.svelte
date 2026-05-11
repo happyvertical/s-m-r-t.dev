@@ -5,16 +5,39 @@
 
 <ModulePage
 	name="template-site-static-json"
-	description="Template for static community news sites with JSON-based data storage, weather integration (Caelus), and council meeting scraping (Praeco)."
-	badges={['v0.20.44', 'Template', 'Static Site', 'JSON']}
+	description="Scaffold template for static community news sites with JSON data storage. Includes a local WeatherHeader shim and stubbed Caelus/Praeco workflow scripts on the v0.24.12 baseline."
+	badges={['v0.24.12', 'Template', 'Static Site', 'JSON', 'WeatherHeader shim']}
 >
+	<section id="status">
+		<aside style="background: #fff3cd; border: 2px solid #ffc107; padding: 1.25rem 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+			<h2 style="color: #856404; margin-top: 0; font-size: 1.15rem;">v0.24.12 Baseline Notes — Read Before Generating</h2>
+			<ul style="color: #856404; margin-bottom: 0;">
+				<li>
+					<strong>Local WeatherHeader shim.</strong> <code>smrt-svelte</code> 0.24.x dropped its
+					<code>WeatherHeader</code> component, so the template now ships
+					<code>template/src/lib/components/WeatherHeader.svelte</code> as an inline shim. It renders
+					the Caelus-shaped <code>forecast</code> payload; consumers using a different weather data
+					layer should customise this file in the generated project.
+				</li>
+				<li>
+					<strong>Workflow scripts are stubs.</strong> <code>workflow:caelus</code> and
+					<code>workflow:praeco</code> currently print an &quot;upstream package needs a CLI bin&quot; message
+					and exit with status 1. This is a documented contract until upstream changes land — see the
+					Workflow Scripts section below.
+				</li>
+			</ul>
+		</aside>
+	</section>
+
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			<strong>@happyvertical/smrt-template-site-static-json</strong> generates a SvelteKit static site
-			with JSON file-based data storage. It includes weather forecasts via Caelus (Environment Canada),
-			council meeting scraping and article generation via Praeco, config-driven site identity, and
-			pre-built routes (home, about, contact). Sites build to static HTML for deployment to any CDN.
+			<strong>@happyvertical/smrt-template-site-static-json</strong> generates a SvelteKit static
+			community-news site with JSON file-based data storage. It is the template <code>smrt gnode create</code>
+			expands when you pass <code>--template site-static-json</code>: pre-built routes (home, about,
+			contact), Markdown rendering, config-driven site identity, and integration hooks for weather
+			forecasts (Caelus) and council-meeting article generation (Praeco). The build emits static
+			HTML for any CDN.
 		</p>
 	</section>
 
@@ -37,15 +60,64 @@ pnpm dev                  # Start dev server`}
 	<section id="whats-included">
 		<h2>What the Template Provides</h2>
 		<ul>
-			<li>SvelteKit with <code>adapter-static</code> for static site generation</li>
+			<li>SvelteKit with <code>adapter-static</code> for static-site generation</li>
 			<li>JSON file-based data storage in <code>data/</code></li>
 			<li>Config-driven site identity, navigation, categories, and theming via <code>smrt.config.js</code></li>
-			<li>Weather forecasts via Caelus (Environment Canada)</li>
-			<li>Council meeting scraping and article generation via Praeco</li>
+			<li>Caelus-shaped weather payload rendering (via the local <code>WeatherHeader.svelte</code> shim — see below)</li>
+			<li>Praeco integration scaffolding for council-meeting scraping and article generation (workflow scripts stubbed — see below)</li>
 			<li>Typed site config helper (<code>initSiteConfig()</code> / <code>getSite()</code>)</li>
 			<li>Pre-built routes: home, about, contact</li>
 			<li>Markdown utility for content rendering</li>
 		</ul>
+	</section>
+
+	<section id="weather-header-shim">
+		<h2>WeatherHeader Shim</h2>
+		<p>
+			The template ships <code>template/src/lib/components/WeatherHeader.svelte</code> as a local
+			shim. It used to be imported from <code>@happyvertical/smrt-svelte</code>, but the 0.24.x line
+			of smrt-svelte dropped that component, so the template inlines an equivalent.
+		</p>
+		<p>
+			The shim renders the Caelus-shaped <code>forecast</code> payload (current conditions plus a
+			short outlook). If you wire a different weather provider — or restructure the forecast object —
+			edit this file in your generated project to suit your data layer. The shim has no upstream
+			dependency, so customising it does not break <code>pnpm update</code>.
+		</p>
+	</section>
+
+	<section id="workflow-scripts">
+		<h2>Workflow Scripts (Stubs on v0.24.12)</h2>
+		<p>
+			<code>pnpm run workflow:caelus</code> and <code>pnpm run workflow:praeco</code> are documented
+			contracts but currently ship as stub scripts. They print an
+			&quot;upstream package needs a CLI bin&quot; message and exit with status 1.
+		</p>
+		<p>Two independent reasons today's scaffold cannot run them:</p>
+		<ol>
+			<li>
+				<strong>Upstream packages are library-only.</strong> <code>@happyvertical/caelus</code> and
+				<code>@happyvertical/praeco</code> do not declare a <code>bin</code> field, so
+				<code>npx @happyvertical/caelus</code> / <code>npx @happyvertical/praeco</code> exits with
+				&quot;could not determine executable to run.&quot;
+			</li>
+			<li>
+				<strong>No local workflow shim.</strong> The template does not ship
+				<code>template/src/workflows/caelus.ts</code> or <code>template/src/workflows/praeco.ts</code>
+				files that would import the upstream package and invoke the workflow programmatically. A
+				<code>tsx</code>-based script would work fine once such a shim exists.
+			</li>
+		</ol>
+		<p>
+			Once upstream ships CLI bins, the stubs can be replaced with
+			<code>npx @happyvertical/caelus --config smrt.config.js</code> and
+			<code>npx @happyvertical/praeco --config smrt.config.js</code> (note the scoped names — the
+			unscoped <code>caelus</code> package is a 404 on the public registry). Alternatively, add a
+			<code>template/src/workflows/&lt;name&gt;.ts</code> shim that imports the upstream main export and
+			invokes the workflow, then point the script at <code>tsx src/workflows/&lt;name&gt;.ts</code>.
+			Until either lands, callers who need these workflows should write the shim themselves in
+			their generated project.
+		</p>
 	</section>
 
 	<section id="configuration">
@@ -117,11 +189,11 @@ pnpm dev                  # Start dev server`}
 				</tr>
 				<tr>
 					<td><code>pnpm run workflow:caelus</code></td>
-					<td>Fetch weather data</td>
+					<td><strong>Stub.</strong> Prints &quot;upstream package needs a CLI bin&quot; and exits 1 (see Workflow Scripts).</td>
 				</tr>
 				<tr>
 					<td><code>pnpm run workflow:praeco</code></td>
-					<td>Scrape council meetings</td>
+					<td><strong>Stub.</strong> Prints &quot;upstream package needs a CLI bin&quot; and exits 1 (see Workflow Scripts).</td>
 				</tr>
 				<tr>
 					<td><code>pnpm run validate:json</code></td>
