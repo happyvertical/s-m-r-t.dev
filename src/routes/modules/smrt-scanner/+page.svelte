@@ -5,520 +5,204 @@
 
 <ModulePage
 	name="smrt-scanner"
-	description="AST-based scanner using oxc-parser (Rust) for class/field metadata extraction. Discovers @smrt() classes, resolves inheritance, and generates manifests for code generators."
-	badges={['v0.20.44', 'Core Foundation', 'Rust-powered']}
+	description="AST-based scanner using oxc-parser (Rust, 2-3x faster than tsc) for class/field metadata extraction. Powers manifest generation for code generators, the vitest plugin, and the CLI."
+	badges={['v0.24.12', 'Core Foundation', 'Rust-powered', 'ESM-only']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			The smrt-scanner package uses the Rust-based OXC parser to scan TypeScript
-			source files and extract class, field, method, and decorator metadata without executing them.
-			It discovers <code>@smrt()</code> decorated classes, resolves inheritance hierarchies,
-			and generates manifests consumed by code generators, the vitest plugin, and CLI.
+			<code>@happyvertical/smrt-scanner</code> reads your TypeScript source with the Rust-based
+			<a href="https://oxc.rs/">OXC parser</a> and extracts the metadata that <code>smrt-core</code>'s
+			code generators need: <code>@smrt()</code> config, class hierarchy, field defaults (with the
+			<code>0</code> vs <code>0.0</code> heuristic for INTEGER vs DECIMAL), relationships, and static
+			properties like <code>uiSlots</code> and <code>adminRoutes</code>.
 		</p>
+		<p>It outputs a manifest JSON consumed downstream by code generators, the vitest plugin, and the CLI.</p>
 
-		<h3>Key Features</h3>
-		<ul>
-			<li><strong>2-3x faster</strong> than TypeScript compiler using Rust-based OXC parser</li>
-			<li>
-				<strong>Automatic class discovery</strong> via <code>@smrt()</code> decorator detection
-			</li>
-			<li><strong>Inheritance resolution</strong> with full chain tracking</li>
-			<li><strong>STI support</strong> with automatic field merging from parent classes</li>
-			<li>
-				<strong>Field type inference</strong> from TypeScript annotations and helper functions
-			</li>
-			<li><strong>Cross-package resolution</strong> via external manifests</li>
-			<li><strong>CLI and programmatic API</strong> for flexible integration</li>
-			<li><strong>Manifest generation</strong> compatible with smrt-core</li>
-		</ul>
+		<aside>
+			<p>
+				<strong>ESM-only since PR <a href="https://github.com/happyvertical/smrt/pull/1219">#1219</a></strong>
+				(<code>fix(core): resolve ESM-only scanner package</code>). The scanner ships only ESM
+				exports -- CJS consumers should switch to ESM or wrap behind dynamic <code>import()</code>.
+				The companion change in <code>smrt-core</code> updates
+				<code>import-workspace-module</code> so workspace imports stay ESM-only.
+			</p>
+		</aside>
 	</section>
 
 	<section id="installation">
 		<h2>Installation</h2>
-		<CodeBlock
-			code={`npm install @happyvertical/smrt-scanner
-# or
-pnpm add @happyvertical/smrt-scanner
-# or
-bun add @happyvertical/smrt-scanner`}
-		/>
+		<CodeBlock code={`pnpm add @happyvertical/smrt-scanner`} language="bash" />
+		<p>
+			Usually you don't install this directly -- it's a dependency of
+			<a href="/modules/smrt-vitest">smrt-vitest</a> and <a href="/modules/smrt-cli">smrt-cli</a>.
+		</p>
+	</section>
+
+	<section id="key-exports">
+		<h2>Key Exports</h2>
+		<ul>
+			<li>
+				<code>ManifestBuilder</code> -- scans source files and builds a <code>SmartObjectManifest</code>
+				via <code>.generate()</code>
+			</li>
+			<li>
+				<code>discoverBaseClasses({'{'} cwd {'}'})</code> -- finds SMRT base classes inside
+				<code>node_modules</code> (always pass <code>cwd</code> if you're not running from the project
+				root)
+			</li>
+			<li>
+				<code>SmartObjectDefinition</code>, <code>FieldDefinition</code> -- scanned class metadata
+				types
+			</li>
+		</ul>
+	</section>
+
+	<section id="how-it-works">
+		<h2>How It Works</h2>
+		<ol>
+			<li><code>fast-glob</code> finds <code>.ts</code> files matching include/exclude patterns</li>
+			<li><code>oxc-parser</code> parses each file's AST</li>
+			<li>
+				The scanner extracts: <code>@smrt()</code> config, class hierarchy, field defaults
+				(<code>0</code> vs <code>0.0</code> heuristic), relationships, and static properties
+				(<code>uiSlots</code>, <code>adminRoutes</code>)
+			</li>
+			<li>
+				The output is a manifest JSON consumed by <strong>code generators</strong>, the
+				<strong>vitest plugin</strong>, and the <strong>CLI</strong>
+			</li>
+		</ol>
+
+		<h3>Key Files</h3>
+		<ul>
+			<li><code>src/oxc-scanner.ts</code> -- core AST scanning logic</li>
+			<li><code>src/manifest-builder.ts</code> -- orchestrates scanning → manifest</li>
+			<li><code>src/base-class-discovery.ts</code> -- resolves base classes from node_modules</li>
+		</ul>
 	</section>
 
 	<section id="quick-start">
-		<h2>Quick Start (5 Minutes)</h2>
+		<h2>Quick Start</h2>
 
-		<h3>Programmatic Usage</h3>
+		<h3>Generate a Manifest</h3>
 		<CodeBlock
-			code={`import { OxcScanner, InheritanceResolver, ManifestAdapter } from '@happyvertical/smrt-scanner';
-import { parseFile, parseSource, extractSmrtImports } from '@happyvertical/smrt-scanner';
+			code={`import { ManifestBuilder } from '@happyvertical/smrt-scanner';
 
-// Scan a single file
-const result = parseFile('/path/to/Product.ts');
-// result.classes → RawClassDefinition[]
+const builder = new ManifestBuilder({
+  include: ['src/**/*.ts'],
+  exclude: ['**/*.test.ts', '**/*.spec.ts'],
+  output: '.smrt/manifest.json',
+});
 
-// Full scanner with glob support
-const scanner = new OxcScanner({ include: ['src/**/*.ts'] });
-const results = await scanner.scan();
-
-// Resolve inheritance across files
-const resolver = new InheritanceResolver();
-resolver.addClasses(results.classes);
-const resolved = resolver.resolveAll();
-
-// Convert to SMRT manifest format
-const adapter = new ManifestAdapter();
-const manifest = adapter.toManifest(resolved);`}
+await builder.generate();`}
+			language="typescript"
 		/>
 
-		<h3>CLI Usage</h3>
+		<aside>
+			<p>
+				<strong>cwd-relative:</strong> <code>ManifestBuilder.generate()</code> resolves all paths
+				relative to <code>process.cwd()</code> -- not relative to any <code>projectRoot</code> option.
+				If you call it from a different working directory, wrap with
+				<code>process.chdir(projectRoot)</code> / restore.
+			</p>
+		</aside>
+
+		<h3>Discover Base Classes</h3>
 		<CodeBlock
-			code={`# Scan and output manifest
-smrt-scan src/**/*.ts`}
+			code={`import { discoverBaseClasses } from '@happyvertical/smrt-scanner';
+
+// Always pass cwd when projectRoot != process.cwd()
+const bases = await discoverBaseClasses({ cwd: projectRoot });`}
+			language="typescript"
 		/>
 	</section>
 
-	<section id="architecture">
-		<h2>Architecture</h2>
-
-		<h3>Processing Pipeline</h3>
-		<ol>
-			<li><strong>fast-glob</strong> finds <code>.ts</code> files matching include/exclude patterns</li>
-			<li><strong>oxc-parser</strong> parses each file's AST</li>
-			<li><strong>Extraction</strong>: <code>@smrt()</code> config, class hierarchy, field defaults (0 vs 0.0 heuristic), relationships, static properties</li>
-			<li><strong>Manifest output</strong>: JSON consumed by code generators, vitest plugin, and CLI</li>
-		</ol>
-
-		<h3>Class Discovery</h3>
-		<p>The scanner finds classes in three ways:</p>
-		<ul>
-			<li>Classes with <code>@smrt()</code> decorator</li>
-			<li>Classes extending <code>SmrtObject</code></li>
-			<li>Classes extending <code>SmrtCollection</code> or <code>SmrtClass</code></li>
-		</ul>
-
-		<h3>Field Type Inference</h3>
-		<p>Type inference follows this priority:</p>
+	<section id="field-inference">
+		<h2>Field Type Inference</h2>
+		<p>The scanner infers field types in this priority order:</p>
 		<ol>
 			<li>
 				<strong>Helper functions</strong>: <code>text()</code>, <code>integer()</code>,
 				<code>decimal()</code>, <code>foreignKey()</code>
 			</li>
 			<li>
-				<strong>Field decorators</strong>: <code>@field({'{ type: "..." }'})</code>
+				<strong>Field decorators</strong>: <code>@field({'{'} type: '...' {'}'})</code>
 			</li>
 			<li>
-				<strong>TypeScript annotations</strong> with 0 vs 0.0 heuristic for numbers
+				<strong>TypeScript annotations</strong>, using the
+				<code>0</code> vs <code>0.0</code> heuristic to distinguish INTEGER from DECIMAL
 			</li>
-			<li><strong>Default</strong>: 'text' type</li>
+			<li>Default: <code>text</code></li>
 		</ol>
 
-		<h3>STI (Single Table Inheritance)</h3>
-		<p>
-			Classes with <code>tableStrategy: 'sti'</code> automatically merge fields from their entire inheritance
-			chain. All descendants inherit the STI strategy and share the same table.
-		</p>
-	</section>
-
-	<section id="api-reference">
-		<h2>API Reference</h2>
-
-		<h3>Exports</h3>
-
-		<h4>Classes</h4>
-		<table>
-			<thead>
-				<tr>
-					<th>Export</th>
-					<th>Description</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><code>OxcScanner</code></td>
-					<td>Scans TypeScript files for <code>@smrt()</code> decorated classes</td>
-				</tr>
-				<tr>
-					<td><code>InheritanceResolver</code></td>
-					<td>Resolves class inheritance chains across files</td>
-				</tr>
-				<tr>
-					<td><code>ManifestAdapter</code></td>
-					<td>Converts raw scan results to SMRT manifest format</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<h4>Functions</h4>
-		<table>
-			<thead>
-				<tr>
-					<th>Export</th>
-					<th>Description</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><code>parseFile</code></td>
-					<td>Parse a single TypeScript file and extract metadata</td>
-				</tr>
-				<tr>
-					<td><code>parseSource</code></td>
-					<td>Parse a TypeScript source string</td>
-				</tr>
-				<tr>
-					<td><code>extractSmrtImports</code></td>
-					<td>Extract SMRT-related imports from a file</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<h3>Key Types</h3>
-		<p>The following types are exported from the package:</p>
 		<CodeBlock
-			code={`// Core scan result types
-RawClassDefinition
-RawFieldDefinition
-RawMethodDefinition
-RawDecoratorConfig
-ResolvedClassDefinition
-ScanResults
-FileScanResult
-OxcScannerOptions
-
-// Field type inference
-InferredFieldType
-FieldTypeInference`}
-		/>
-
-		<h3>ManifestAdapter</h3>
-		<CodeBlock
-			code={`import { OxcScanner, InheritanceResolver, ManifestAdapter } from '@happyvertical/smrt-scanner';
-
-// Full pipeline: scan → resolve → manifest
-const scanner = new OxcScanner({ include: ['src/**/*.ts'] });
-const results = await scanner.scan();
-
-const resolver = new InheritanceResolver();
-resolver.addClasses(results.classes);
-const resolved = resolver.resolveAll();
-
-const adapter = new ManifestAdapter();
-const manifest = adapter.toManifest(resolved);`}
-		/>
-	</section>
-
-	<section id="tutorials">
-		<h2>Tutorials</h2>
-
-		<h3>Tutorial 1: Basic Project Scanning</h3>
-
-		<h4>Step 1: Create SMRT Classes</h4>
-		<CodeBlock
-			code={`// src/models/User.ts
-import { smrt, SmrtObject } from '@happyvertical/smrt-core';
-
-@smrt()
-export class User extends SmrtObject {
-  name: string = '';
-  email: string = '';
-  age: number = 0;
+			code={`class Product extends SmrtObject {
+  name: string = '';        // → TEXT
+  quantity: number = 0;     // → INTEGER  (no decimal point)
+  price: number = 0.0;      // → DECIMAL  (has decimal point)
+  active: boolean = true;   // → BOOLEAN
+  tags: string[] = [];      // → JSON
+  createdAt: Date = new Date(); // → DATETIME
 }`}
+			language="typescript"
 		/>
+	</section>
 
-		<h4>Step 2: Run Scanner</h4>
-		<CodeBlock
-			code={`import { OxcScanner } from '@happyvertical/smrt-scanner';
-
-const scanner = new OxcScanner({ cwd: './src' });
-const results = await scanner.scan();
-const resolver = new InheritanceResolver();
-resolver.addClasses(results.classes);
-const resolved = resolver.resolveAll();
-
-const user = resolved.find(c => c.className === 'User');
-console.log(\`User has \${user.fields.length} fields\`);
-user.fields.forEach(f => {
-  console.log(\`  - \${f.name}: \${f.typeAnnotation}\`);
-});`}
-		/>
-
-		<h3>Tutorial 2: STI Hierarchy Management</h3>
-
-		<h4>Step 1: Create STI Base</h4>
-		<CodeBlock
-			code={`// Base class with STI
-@smrt({ tableStrategy: 'sti' })
-export class Vehicle extends SmrtObject {
-  make: string = '';
-  model: string = '';
-  year: number = 0;
-}
-
-// Car inherits STI strategy
-@smrt()
-export class Car extends Vehicle {
-  numDoors: number = 0;
-  trunkSize: number = 0.0;   // 0.0 → DECIMAL
-}
-
-// Truck also inherits STI
-@smrt()
-export class Truck extends Vehicle {
-  bedLength: number = 0.0;
-  towingCapacity: number = 0;
-}`}
-		/>
-
-		<h4>Step 2: Scan and Examine</h4>
-		<CodeBlock
-			code={`const results = await scanner.scan();
-const resolver = new InheritanceResolver();
-resolver.addClasses(results.classes);
-const resolved = resolver.resolveAll();
-
-const car = resolved.find(c => c.className === 'Car');
-console.log('Car inheritance chain:', car.inheritanceChain);
-// ["SmrtObject", "Vehicle", "Car"]
-
-console.log('Car is STI:', car.isSTI);
-// true
-
-console.log('STI base:', car.stiBase);
-// "Vehicle"
-
-console.log('All fields (merged from Vehicle):', car.allFields.length);
-// 5 fields: make, model, year, numDoors, trunkSize`}
-		/>
-
-		<h3>Tutorial 3: Generating Manifests</h3>
-
-		<h4>Step 1: Scan and Resolve</h4>
-		<CodeBlock
-			code={`import { OxcScanner, InheritanceResolver, ManifestAdapter } from '@happyvertical/smrt-scanner';
-import fs from 'fs/promises';
-
-const scanner = new OxcScanner({ include: ['src/**/*.ts'] });
-const results = await scanner.scan();
-
-const resolver = new InheritanceResolver();
-resolver.addClasses(results.classes);
-const resolved = resolver.resolveAll();
-
-const adapter = new ManifestAdapter();
-const manifest = adapter.toManifest(resolved);
-
-await fs.writeFile(
-  'manifest.json',
-  JSON.stringify(manifest, null, 2)
-);`}
-		/>
-
-		<h3>Key Files</h3>
+	<section id="used-by">
+		<h2>Used By</h2>
 		<ul>
-			<li><code>src/oxc-scanner.ts</code> -- core AST scanning logic</li>
-			<li><code>src/manifest-builder.ts</code> -- orchestrates scanning to manifest</li>
-			<li><code>src/base-class-discovery.ts</code> -- resolves base classes from node_modules</li>
-		</ul>
-
-		<p>
-			Internally, <code>ManifestBuilder</code> provides a high-level API that scans source files
-			and builds a <code>SmartObjectManifest</code> in one call. It is used by <code>smrtVitestPlugin()</code>
-			at startup to generate the build-time manifest.
-		</p>
-		/>
-	</section>
-
-	<section id="examples">
-		<h2>Examples</h2>
-
-		<h3>Example 1: Find All STI Hierarchies</h3>
-		<CodeBlock
-			code={`const results = await scanner.scan();
-const resolver = new InheritanceResolver();
-resolver.addClasses(results.classes);
-const resolved = resolver.resolveAll();
-const stiClasses = resolved.filter(c => c.isSTI);
-
-const hierarchies = new Map();
-stiClasses.forEach(cls => {
-  const base = cls.stiBase || cls.className;
-  if (!hierarchies.has(base)) {
-    hierarchies.set(base, []);
-  }
-  hierarchies.get(base).push(cls.className);
-});
-
-hierarchies.forEach((children, base) => {
-  console.log(\`\${base} -> [\${children.join(', ')}]\`);
-});`}
-		/>
-
-		<h3>Example 2: Analyze Field Types</h3>
-		<CodeBlock
-			code={`const results = await scanner.scan();
-const resolver = new InheritanceResolver();
-resolver.addClasses(results.classes);
-const resolved = resolver.resolveAll();
-
-resolved.forEach(cls => {
-  const requiredFields = cls.fields.filter(f => !f.optional);
-  const optionalFields = cls.fields.filter(f => f.optional);
-
-  console.log(\`\${cls.className}:\`);
-  console.log(\`  Required: \${requiredFields.map(f => f.name).join(', ')}\`);
-  console.log(\`  Optional: \${optionalFields.map(f => f.name).join(', ')}\`);
-});`}
-		/>
-
-		<h3>Example 3: Extract API Endpoints</h3>
-		<CodeBlock
-			code={`const results = await scanner.scan();
-const resolver = new InheritanceResolver();
-resolver.addClasses(results.classes);
-const resolved = resolver.resolveAll();
-
-resolved.forEach(cls => {
-  const api = cls.decoratorConfig?.api;
-  if (api?.include) {
-    const basePath = cls.className.toLowerCase();
-    api.include.forEach(endpoint => {
-      console.log(\`GET /api/\${basePath}/\${endpoint}\`);
-    });
-  }
-});`}
-		/>
-	</section>
-
-	<section id="integration">
-		<h2>Integration Patterns</h2>
-
-		<h3>Vite Plugin Integration</h3>
-		<CodeBlock
-			code={`// vite.config.ts
-import { defineConfig } from 'vite';
-import { OxcScanner, ManifestAdapter } from '@happyvertical/smrt-scanner';
-
-export default defineConfig({
-  plugins: [{
-    name: 'smrt-manifest',
-    async buildStart() {
-      const scanner = new OxcScanner({ cwd: './src' });
-      const results = await scanner.scan();
-const resolver = new InheritanceResolver();
-resolver.addClasses(results.classes);
-const resolved = resolver.resolveAll();
-
-      const adapter = new ManifestAdapter();
-      const manifest = adapter.toManifest(resolved);
-
-      await fs.writeFile(
-        'src/generated/manifest.json',
-        JSON.stringify(manifest, null, 2)
-      );
-    }
-  }]
-});`}
-		/>
-
-		<h3>Monorepo Scanning</h3>
-		<CodeBlock
-			code={`// Scan all packages in monorepo
-const packages = ['packages/users', 'packages/commerce', 'packages/assets'];
-const allClasses = [];
-
-for (const pkg of packages) {
-  const scanner = new OxcScanner({ cwd: pkg });
-  const results = await scanner.scan();
-const resolver = new InheritanceResolver();
-resolver.addClasses(results.classes);
-const resolved = resolver.resolveAll();
-  allClasses.push(...resolved);
-}
-
-console.log(\`Total classes across monorepo: \${allClasses.length}\`);`}
-		/>
-	</section>
-
-	<section id="best-practices">
-		<h2>Best Practices</h2>
-
-		<h3>✅ DO</h3>
-		<ul>
-			<li>Always exclude test files: <code>**/*.test.ts</code>, <code>**/*.spec.ts</code></li>
-			<li>Use <code>0.0</code> for decimal fields, <code>0</code> for integers in initializers</li>
 			<li>
-				Use helper functions (<code>text()</code>, <code>integer()</code>) for clearer type
-				inference
+				<a href="/modules/smrt-vitest">smrt-vitest</a> -- <code>smrtVitestPlugin()</code> calls
+				<code>ManifestBuilder</code> at vitest startup
 			</li>
-			<li>Specify <code>tableStrategy: 'sti'</code> on base class before extending</li>
-			<li>Keep inheritance chains reasonably shallow (2-4 levels)</li>
-			<li>Cache external manifests during build process</li>
-			<li>Use <code>scanAndResolve()</code> for most use cases (convenience method)</li>
-		</ul>
-
-		<h3>❌ DON'T</h3>
-		<ul>
-			<li>Don't forget to add <code>@smrt()</code> decorator on SMRT classes</li>
-			<li>Don't mix STI and CTI strategies in same hierarchy</li>
-			<li>Don't scan unnecessary directories (use tight include/exclude patterns)</li>
-			<li>Don't forget to resolve inheritance when working with STI classes</li>
-			<li>Don't rely on external manifests being automatically discovered</li>
+			<li>
+				<a href="/modules/smrt-cli">smrt-cli</a> -- introspection and code-generation commands
+			</li>
+			<li>
+				<a href="/modules/smrt-core">smrt-core</a> -- the vite-plugin loads scanner modules from
+				<code>dist/</code> (see core's "Vite plugin loads scanner from dist first" gotcha, #1139)
+			</li>
 		</ul>
 	</section>
 
-	<section id="troubleshooting">
-		<h2>Troubleshooting</h2>
-
-		<h3>Classes not found</h3>
-		<p><strong>Problem:</strong> Scanner doesn't detect SMRT classes.</p>
-		<p>
-			<strong>Solution:</strong> Ensure classes have <code>@smrt()</code> decorator or extend SMRT base
-			classes. Check include/exclude glob patterns.
-		</p>
-
-		<h3>Inheritance not resolved</h3>
-		<p><strong>Problem:</strong> Parent classes in external packages not found.</p>
-		<p><strong>Solution:</strong> Load external manifest via <code>addExternalManifest()</code>.</p>
-
-		<h3>STI fields not merged</h3>
-		<p><strong>Problem:</strong> <code>allFields</code> doesn't include parent fields.</p>
-		<p>
-			<strong>Solution:</strong> Use <code>scanAndResolve()</code> or call <code>resolve()</code>
-			after
-			<code>scan()</code>.
-		</p>
-
-		<h3>Parse errors</h3>
-		<p><strong>Problem:</strong> Syntax errors in files.</p>
-		<p>
-			<strong>Solution:</strong> Check <code>results.errors</code> array for detailed error messages with
-			file paths and line numbers.
-		</p>
-
-		<h3>Decimal/Integer confusion</h3>
-		<p><strong>Problem:</strong> Wrong numeric types inferred.</p>
-		<p>
-			<strong>Solution:</strong> Use <code>0.0</code> for decimals, <code>0</code> for integers, or
-			use helper functions: <code>decimal()</code>, <code>integer()</code>.
-		</p>
+	<section id="gotchas">
+		<h2>Gotchas</h2>
+		<ul>
+			<li>
+				<strong>CWD-relative</strong>: <code>ManifestBuilder.generate()</code> resolves all paths
+				relative to <code>process.cwd()</code>. Wrap with a <code>process.chdir(projectRoot)</code> /
+				restore if you're not at the project root.
+			</li>
+			<li>
+				<strong>ESM-only (PR #1219)</strong>: the package ships only ESM exports. CJS consumers must
+				switch to ESM or use dynamic <code>import()</code>.
+			</li>
+			<li>
+				<strong>Static property capture</strong>: the scanner captures <code>uiSlots</code> and
+				<code>adminRoutes</code> for agent manifest generation -- if these properties aren't picked
+				up, check they're declared as <code>static</code> with an initializer.
+			</li>
+			<li>
+				<strong>pnpm symlinks resolve to workspace paths</strong>: in a monorepo, pnpm symlinks
+				resolve to actual workspace directories rather than via <code>node_modules</code>, so any
+				<code>filePath.includes('node_modules')</code> filter will miss them.
+			</li>
+		</ul>
 	</section>
 
-	<section id="performance">
-		<h2>Performance</h2>
-		<p>
-			The smrt-scanner is 2-3x faster than the TypeScript compiler thanks to the Rust-based OXC
-			parser. Benchmark your project:
-		</p>
-		<CodeBlock code={`smrt-scan --benchmark`} />
-
-		<h3>Performance Tips</h3>
-		<ul>
-			<li>Use tight include/exclude patterns to minimize files scanned</li>
-			<li>Disable unused options like <code>includePrivateMethods</code></li>
-			<li>Cache scan results when possible</li>
-			<li>Use <code>cwd</code> to scope scanning to specific directories</li>
-		</ul>
+	<section id="next-steps">
+		<h2>Next Steps</h2>
+		<div class="link-grid">
+			<a href="/modules/smrt-vitest" class="link-card">
+				<h3>smrt-vitest →</h3>
+				<p>Required plugin that uses ManifestBuilder</p>
+			</a>
+			<a href="/modules/smrt-core" class="link-card">
+				<h3>smrt-core →</h3>
+				<p>Consumes the manifest to power code generators</p>
+			</a>
+		</div>
 	</section>
 </ModulePage>
 
@@ -546,14 +230,6 @@ console.log(\`Total classes across monorepo: \${allClasses.length}\`);`}
 		margin-bottom: 16px;
 	}
 
-	h4 {
-		font-size: 1.125rem;
-		font-weight: 600;
-		margin-top: 24px;
-		margin-bottom: 12px;
-		font-family: var(--font-mono);
-	}
-
 	p {
 		margin-bottom: 16px;
 		line-height: 1.7;
@@ -579,25 +255,54 @@ console.log(\`Total classes across monorepo: \${allClasses.length}\`);`}
 		font-size: 0.9em;
 	}
 
-	table {
-		width: 100%;
-		border-collapse: collapse;
-		margin: 24px 0;
+	aside {
+		background: var(--smrt-color-surface-container, #f5f5f5);
+		padding: 16px;
+		border-radius: 8px;
+		margin: 16px 0;
+		border-left: 4px solid var(--smrt-color-primary, #1976d2);
 	}
 
-	th,
-	td {
-		text-align: left;
-		padding: 12px;
-		border-bottom: 1px solid #e0e0e0;
+	aside p {
+		margin: 0;
 	}
 
-	th {
+	.link-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 16px;
+		margin-top: 24px;
+	}
+
+	.link-card {
+		padding: 20px;
+		background: #fafafa;
+		text-decoration: none;
+		transition: all 0.2s;
+		border: 1px solid transparent;
+	}
+
+	.link-card:hover {
+		background: var(--smrt-color-surface-container, #f0f0f0);
+		transform: translateY(-2px);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		border-color: var(--smrt-color-primary, #1976d2);
+	}
+
+	.link-card h3 {
+		font-size: 1rem;
 		font-weight: 600;
-		background: #f9f9f9;
+		margin: 0 0 8px 0;
+		color: #1a1a1a;
 	}
 
-	td code {
-		white-space: nowrap;
+	.link-card:hover h3 {
+		color: var(--smrt-color-primary, #1976d2);
+	}
+
+	.link-card p {
+		font-size: 0.85rem;
+		color: var(--smrt-color-on-surface-variant, #666);
+		margin: 0;
 	}
 </style>
