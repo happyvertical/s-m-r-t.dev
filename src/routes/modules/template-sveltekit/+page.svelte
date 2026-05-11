@@ -13,26 +13,31 @@
 
 <ModulePage
 	name="template-sveltekit"
-	description="SvelteKit project template with SMRT framework integration. Scaffolds a full-stack app with auto-generated REST API routes, TypeScript, and SQLite."
-	badges={['v0.20.44', 'Template', 'SvelteKit', 'Full-Stack']}
+	description="Base SvelteKit project template used by smrt init. Scaffolds a full-stack app with the SMRT Vite plugin, auto-generated REST routes, TypeScript, and SQLite."
+	badges={['v0.24.12', 'Template', 'SvelteKit 2.x', 'Svelte 5.18', 'Vite 7.3', 'TS 5.9']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			<strong>@happyvertical/smrt-template-sveltekit</strong> provides the base SvelteKit project
-			template used by <code>smrt gnode create</code>. It scaffolds a full-stack app with the SMRT
-			Vite plugin for automatic REST API route generation, an example <code>@smrt()</code> object,
-			server-side initialization, and SQLite database configuration.
+			<strong>@happyvertical/smrt-template-sveltekit</strong> is the base SvelteKit project template
+			that <code>smrt init</code> scaffolds. The generated project ships with the SMRT Vite plugin
+			for automatic REST route generation, an example <code>@smrt()</code> object, server-side SMRT
+			initialisation, SQLite, and an <code>.env.example</code> to edit before first run.
+		</p>
+		<p>
+			The pinned tooling stack was refreshed in PR #1217 against the v0.24.12 baseline:
+			<code>@happyvertical/smrt-core</code> ^0.24.12, Vite ^7.3.1, TypeScript ^5.9.3, Svelte
+			^5.18.0.
 		</p>
 	</section>
 
 	<section id="whats-included">
 		<h2>What the Template Provides</h2>
 		<ul>
-			<li>SvelteKit 2.x with Svelte 5 and TypeScript</li>
-			<li><code>smrtPlugin()</code> Vite integration for automatic REST API route generation</li>
-			<li>Example <code>@smrt()</code> object (<code>Item.ts</code>) with barrel export</li>
-			<li>Server-side SMRT initialization (<code>src/lib/server/smrt.ts</code>)</li>
+			<li>SvelteKit 2.x with Svelte ^5.18 and TypeScript ^5.9</li>
+			<li><code>smrtPlugin()</code> Vite ^7.3 integration for automatic REST API route generation</li>
+			<li>Example <code>@smrt()</code> object (<code>template/src/lib/objects/Item.ts</code>) with barrel export</li>
+			<li>Server-side SMRT initialisation (<code>template/src/lib/server/</code>)</li>
 			<li><code>smrt.config.ts</code> with SQLite database and optional AI provider</li>
 			<li><code>.env.example</code> with starter environment variables</li>
 		</ul>
@@ -43,11 +48,11 @@
 
 		<h3>With smrt CLI (recommended)</h3>
 		<CodeBlock
-			code={`smrt gnode create my-app --template sveltekit
+			code={`smrt init my-app --template sveltekit
 cd my-app
 pnpm install
 cp .env.example .env    # Edit with your values
-pnpm dev                # Start dev server at http://localhost:5173`}
+pnpm dev                # Dev server at http://localhost:5173`}
 			language="bash"
 		/>
 
@@ -66,10 +71,15 @@ copyTemplate('./my-new-project', {
 	<section id="exports">
 		<h2>Package Exports</h2>
 		<ul>
-			<li><code>getTemplatePath()</code> -- returns absolute path to the <code>template/</code> directory</li>
-			<li><code>copyTemplate(destination, options)</code> -- copies template files with project name substitution in <code>package.json</code></li>
-			<li><code>templateInfo</code> -- metadata object describing the template (SvelteKit 2.x, Svelte 5, REST API, SMRT CLI, SQLite)</li>
+			<li><code>getTemplatePath()</code> — returns the absolute path to the <code>template/</code> directory</li>
+			<li><code>copyTemplate(destination, options)</code> — copies template files with project-name substitution in <code>package.json</code></li>
+			<li><code>templateInfo</code> — metadata object (SvelteKit 2.x, Svelte 5, REST API, SMRT CLI, SQLite)</li>
 		</ul>
+	</section>
+
+	<section id="placeholders-section">
+		<h2>Placeholder Substitution</h2>
+		<p>File copying applies a placeholder substitution pass — the CLI replaces project-name tokens in template files at generation time.</p>
 	</section>
 
 	<section id="env-vars">
