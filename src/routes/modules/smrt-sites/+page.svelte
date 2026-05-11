@@ -6,7 +6,7 @@
 <ModulePage
 	name="smrt-sites"
 	description="Site lifecycle management for multi-tenant networks with agent bindings, provisioning tracking, and portal configuration."
-	badges={['v0.20.44', 'Site Lifecycle', 'Agent Bindings', 'Multi-Tenant']}
+	badges={['v0.24.12', 'Site Lifecycle', 'Agent Bindings', 'Multi-Tenant']}
 >
 	<section>
 		<h2>Overview</h2>
