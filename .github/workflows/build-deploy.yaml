@@ -73,11 +73,18 @@ jobs:
           node-version: '24'
           cache: 'pnpm'
           cache-dependency-path: havesmrt.com/pnpm-lock.yaml
+          # setup-node writes the auth token into the user `.npmrc` at runtime,
+          # so pnpm can resolve `@happyvertical/*` packages from GitHub Packages
+          # without needing a `${TOKEN}` substitution in the project `.npmrc`
+          # (which Renovate's sandbox cannot resolve, leaving lockfile updates
+          # silently broken — see the .npmrc comment).
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@happyvertical'
 
       - name: Install dependencies
         working-directory: havesmrt.com
         env:
-          NPM_TOKEN: ${{ secrets.GH_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: pnpm install --frozen-lockfile
 
       - name: Run tests
