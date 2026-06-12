@@ -43,7 +43,7 @@
     "@happyvertical/smrt-commerce": "^0.24.12",
     "@happyvertical/smrt-content": "^0.24.12",
     "@happyvertical/smrt-docs": "file:../smrt/docs",
-    "@happyvertical/smrt-events": "^0.24.12",
+    "@happyvertical/smrt-events": "^0.29.0",
     "@happyvertical/smrt-jobs": "^0.24.12",
     "@happyvertical/smrt-ledgers": "^0.24.12",
     "@happyvertical/smrt-profiles": "^0.24.12",
