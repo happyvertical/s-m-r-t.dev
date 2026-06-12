@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@happyvertical/smrt-agents": "^0.24.12",
-    "@happyvertical/smrt-commerce": "^0.24.12",
+    "@happyvertical/smrt-commerce": "^0.29.0",
     "@happyvertical/smrt-content": "^0.24.12",
     "@happyvertical/smrt-docs": "file:../smrt/docs",
     "@happyvertical/smrt-events": "^0.24.12",
