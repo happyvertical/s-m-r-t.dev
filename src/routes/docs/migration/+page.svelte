@@ -3,25 +3,26 @@
 </script>
 
 <svelte:head>
-	<title>Migration Guide: 0.19 to 0.20+ | s-m-r-t</title>
+	<title>Migration Guide: 0.19 to 0.29+ | s-m-r-t</title>
 	<meta
 		name="description"
-		content="Migration guide for upgrading from SMRT 0.19 to 0.20+, covering component moves, import changes, CLI updates, and API changes."
+		content="Migration guide for upgrading from SMRT 0.19 to 0.29+, covering component moves, import changes, CLI updates, and API changes."
 	/>
 </svelte:head>
 
 <article class="prose">
-	<h1>Migration Guide: 0.19 to 0.20+</h1>
+	<h1>Migration Guide: 0.19 to 0.29+</h1>
 	<p class="lead">
-		Version 0.20 reorganizes Svelte components into their domain packages and consolidates
-		browser-ai into smrt-svelte. This guide covers all breaking changes through 0.20.44.
+		The 0.20 line reorganized Svelte components into their domain packages and consolidated
+		browser-ai into smrt-svelte. This guide covers all breaking changes through the current release,
+		0.29.34.
 	</p>
 
 	<h2>Component Import Changes</h2>
 	<p>
 		Domain-specific components have moved from <code>@happyvertical/smrt-svelte</code> to their
-		respective package's <code>/svelte</code> subpath. Core UI components (forms, layout, feedback,
-		themes) remain in smrt-svelte.
+		respective package's <code>/svelte</code> subpath. Core UI components (forms, layout, feedback, themes)
+		remain in smrt-svelte.
 	</p>
 
 	<h3>Users</h3>
@@ -113,10 +114,17 @@ import { TimeEntryCard, ApprovalActions } from '@happyvertical/smrt-projects/sve
 		<li>Navigation (Tabs, FilterChips)</li>
 		<li>Display (StatusBadge, CurrencyDisplay, DateDisplay)</li>
 		<li>Themes (ThemeSwitcher, ColorSchemeToggle)</li>
-		<li>AI components (VoiceInput, DownloadProgress, AILoadingOverlay)</li>
 		<li>Hooks (useSTT, useTTS, useLLM, useAuth, useSocket)</li>
 		<li>Provider, permissions, roles, memberships</li>
 	</ul>
+	<p>
+		As of 0.29, the AI Svelte components (<code>VoiceInput</code>, <code>DownloadProgress</code>,
+		<code>AILoadingOverlay</code>, <code>STTTest</code>, <code>CapabilityGate</code>) are no longer
+		exported from the main <code>@happyvertical/smrt-svelte</code> barrel. Import them from the
+		<code>@happyvertical/smrt-svelte/browser-ai/svelte</code> subpath instead.
+		<code>AILoadingOverlay</code> is also rendered internally by <code>Provider</code>, so most apps
+		get its behavior just by wrapping in <code>&lt;Provider&gt;</code>.
+	</p>
 
 	<h2>browser-ai Consolidated</h2>
 	<p>
@@ -159,8 +167,8 @@ import { useSTT, useTTS, useLLM } from '@happyvertical/smrt-svelte';`}
 
 	<h2>MembershipCard / MembershipList API Change</h2>
 	<p>
-		These components now accept separate <code>tenant</code> and <code>role</code> props instead
-		of embedding them in the membership object:
+		These components now accept separate <code>tenant</code> and <code>role</code> props instead of embedding
+		them in the membership object:
 	</p>
 	<CodeBlock
 		code={`// Before
@@ -179,8 +187,8 @@ import { useSTT, useTTS, useLLM } from '@happyvertical/smrt-svelte';`}
 
 	<h2>PermissionCheck API Change</h2>
 	<p>
-		<code>PermissionCheck</code> now requires an explicit <code>userPermissions</code> array
-		and uses a Snippet for fallback content:
+		<code>PermissionCheck</code> now requires an explicit <code>userPermissions</code> array and uses
+		a Snippet for fallback content:
 	</p>
 	<CodeBlock
 		code={`// Before
@@ -205,8 +213,8 @@ import { useSTT, useTTS, useLLM } from '@happyvertical/smrt-svelte';`}
 
 	<h2>CSS Custom Properties</h2>
 	<p>
-		All theme tokens now use the <code>--smrt-color-*</code> prefix following Material Design 3
-		naming. If you were using older token names, update to the new prefix:
+		All theme tokens now use the <code>--smrt-color-*</code> prefix following Material Design 3 naming.
+		If you were using older token names, update to the new prefix:
 	</p>
 	<CodeBlock
 		code={`/* New token format */
@@ -219,12 +227,11 @@ import { useSTT, useTTS, useLLM } from '@happyvertical/smrt-svelte';`}
 		language="css"
 	/>
 
-	<h2>Post-0.20.0 Changes (through 0.20.44)</h2>
+	<h2>Post-0.20.0 Changes (through 0.29.34)</h2>
 
 	<h3>CLI Migration Commands</h3>
 	<p>
-		Migration commands have been updated. The old <code>smrt migrations generate</code> syntax
-		is replaced:
+		Migration commands have been updated. The old <code>smrt migrations generate</code> syntax is replaced:
 	</p>
 	<CodeBlock
 		code={`# Generate migration from schema changes
@@ -243,9 +250,8 @@ smrt db:rollback`}
 
 	<h3>Config Shape</h3>
 	<p>
-		The <code>smrt.config.ts</code> top-level keys have been reorganized.
-		Replace old <code>database</code>/<code>api</code>/<code>cli</code>/<code>mcp</code> keys
-		with the new structure:
+		The <code>smrt.config.ts</code> top-level keys have been reorganized. Replace old
+		<code>database</code>/<code>api</code>/<code>cli</code>/<code>mcp</code> keys with the new structure:
 	</p>
 	<CodeBlock
 		code={`import { defineConfig } from '@happyvertical/smrt-config';

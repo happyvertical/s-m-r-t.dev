@@ -37,6 +37,18 @@
 			description: 'Button type for form submission'
 		},
 		{
+			name: 'fullWidth',
+			type: 'boolean',
+			default: 'false',
+			description: 'Stretches the button to fill its container width'
+		},
+		{
+			name: 'loading',
+			type: 'boolean',
+			default: 'false',
+			description: 'Shows a loading state'
+		},
+		{
 			name: 'onclick',
 			type: '() => void',
 			description: 'Click handler'
@@ -181,11 +193,13 @@ type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 // Button extends HTMLButtonAttributes, supporting all standard button attributes
-interface Props extends Omit<HTMLButtonAttributes, 'class'> {
+interface Props extends Omit<HTMLButtonAttributes, 'class' | 'href'> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   href?: string;  // If provided, renders as <a> instead of <button>
   children?: Snippet;
+  fullWidth?: boolean;
+  loading?: boolean;
 }`}
 		language="typescript"
 	/>

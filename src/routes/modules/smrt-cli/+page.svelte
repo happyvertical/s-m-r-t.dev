@@ -14,7 +14,7 @@
 <ModulePage
 	name="smrt-cli"
 	description="Developer CLI with lazy-loaded commands, manifest discovery, and class introspection. Auto-generates CRUD commands for SMRT objects with cli: true in their @smrt() decorator."
-	badges={['v0.24.12', 'CLI', 'Developer Tools']}
+	badges={['v0.29.34', 'CLI', 'Developer Tools']}
 >
 	<section>
 		<h2>Overview</h2>
@@ -46,23 +46,30 @@ smrt schema <object>         # Show detailed schema for an object`}
 
 		<h3>Database</h3>
 		<CodeBlock
-			code={`smrt db:status               # Pending schema changes + failed-migration classification
-smrt db:migrate              # Apply pending migrations
-smrt db:diff --generate      # Generate migration from schema changes
+			code={`smrt db:status               # Show migration status (applied, pending, drift)
+smrt db:migrate              # Apply pending schema changes
+smrt db:diff                 # Compare manifest schema to database
 smrt db:rollback             # Rollback last migration
 smrt db:history              # Show migration history`}
 			language="bash"
 		/>
+		<p>
+			File-backed migrations are no longer supported, so <code>db:diff</code>'s old
+			<code>--generate</code> / <code>--name</code> flags now report "unsupported" — schema changes
+			are applied directly via <code>db:migrate</code>.
+		</p>
 
 		<h3>Documentation</h3>
 		<CodeBlock
-			code={`smrt docs:claude             # Generate .claude/smrt-framework.md for consumer projects`}
+			code={`smrt docs:agents             # Generate AGENTS.md for consumer projects (canonical)
+smrt docs:claude             # Deprecated alias of docs:agents (Claude-compatible output)`}
 			language="bash"
 		/>
 		<p>
-			<code>docs:claude</code> concatenates the <code>CLAUDE.md</code> files of every installed
+			<code>docs:agents</code> concatenates the <code>AGENTS.md</code> files of every installed
 			<code>@happyvertical/smrt-*</code> package, prefixed with version tables, into a single
-			downstream-ready file. Source: <code>packages/cli/src/commands/docs-claude.ts</code>.
+			downstream-ready file. <code>docs:claude</code> remains as a deprecated compatibility alias.
+			Source: <code>packages/cli/src/commands/docs-claude.ts</code>.
 		</p>
 
 		<h3>Dispatch Management</h3>
@@ -76,18 +83,21 @@ smrt dispatch:cleanup        # Clean up old dispatch records`}
 
 		<h3>Playground & Code Generation</h3>
 		<CodeBlock
-			code={`smrt playground:*            # Launch / control the developer playground
-smrt generate:mcp            # Generate MCP server from registered objects
+			code={`smrt playground:init         # Scaffold a developer playground
+smrt playground:dev          # Run the developer playground
+smrt generate-mcp            # Generate MCP server from registered objects (alias: mcp)
 smrt config:export           # Export agent config for SSG
-smrt init                    # Initialize a new SMRT project
-smrt gnode                   # Scaffold a gnode site`}
+smrt init                    # Initialize a new SMRT project (alias: setup)
+smrt gnode create            # Scaffold a gnode site`}
 			language="bash"
 		/>
 
 		<aside>
 			<p>
-				<strong>Deprecated:</strong> <code>smrt test</code> is removed -- use the
-				<a href="/modules/smrt-vitest">smrt-vitest plugin</a> directly.
+				<strong>Deprecated:</strong> <code>smrt test</code> still exists but is deprecated -- run
+				<code>pnpm exec vitest</code> via the
+				<a href="/modules/smrt-vitest">smrt-vitest plugin</a> instead (the plugin generates the test manifest
+				automatically).
 			</p>
 		</aside>
 	</section>
@@ -95,8 +105,8 @@ smrt gnode                   # Scaffold a gnode site`}
 	<section>
 		<h2>Auto-Generated Object Commands</h2>
 		<p>
-			Every SMRT object registered with <code>cli: true</code> gets a generated CRUD command group,
-			plus custom methods discovered from the manifest:
+			Every SMRT object registered with <code>cli: true</code> gets a generated CRUD command group, plus
+			custom methods discovered from the manifest:
 		</p>
 		<CodeBlock
 			code={`# Pattern: <object>:<operation>
@@ -147,7 +157,9 @@ class Issue extends SmrtObject {
 		<h3>Entry Point Discovery</h3>
 		<ol>
 			<li>Explicit <code>entryPoint</code> in config (highest)</li>
-			<li><code>package.json</code> <code>exports['.'].import</code> or <code>exports['.']</code></li>
+			<li>
+				<code>package.json</code> <code>exports['.'].import</code> or <code>exports['.']</code>
+			</li>
 			<li><code>package.json</code> <code>main</code> field</li>
 			<li>Fallback: <code>./dist/index.js</code></li>
 		</ol>
@@ -157,8 +169,7 @@ class Issue extends SmrtObject {
 		<h2>Architecture</h2>
 		<ul>
 			<li>
-				<strong>Lazy command loading</strong> -- each command is loaded on demand (~100ms first-use
-				overhead)
+				<strong>Lazy command loading</strong> -- each command is loaded on demand (~100ms first-use overhead)
 			</li>
 			<li>
 				<strong>Manifest discovery</strong> -- auto-finds <code>.smrt/manifest.json</code> and scans
@@ -170,8 +181,7 @@ class Issue extends SmrtObject {
 				<code>./dist/index.js</code>
 			</li>
 			<li>
-				<strong>Object method exposure</strong> -- custom methods on SMRT objects auto-become CLI
-				subcommands
+				<strong>Object method exposure</strong> -- custom methods on SMRT objects auto-become CLI subcommands
 			</li>
 		</ul>
 
@@ -185,7 +195,9 @@ class Issue extends SmrtObject {
 				<code>src/loaders/</code> -- class-loader, local-loader, npm-loader, git-loader, template-loader
 			</li>
 			<li><code>src/discovery/manifest-discovery.ts</code> -- manifest auto-discovery</li>
-			<li><code>src/commands/docs-claude.ts</code> -- downstream CLAUDE.md generation (~550 lines)</li>
+			<li>
+				<code>src/commands/docs-claude.ts</code> -- downstream CLAUDE.md generation (~550 lines)
+			</li>
 		</ul>
 	</section>
 
@@ -198,8 +210,8 @@ class Issue extends SmrtObject {
 				with other test runners.
 			</li>
 			<li>
-				<strong>External package load failures are silenced</strong>: one broken package won't prevent
-				others from loading.
+				<strong>External package load failures are silenced</strong>: one broken package won't
+				prevent others from loading.
 			</li>
 			<li>
 				<strong>Schema history nuance</strong>: <code>db:status</code> / <code>db:history</code> should

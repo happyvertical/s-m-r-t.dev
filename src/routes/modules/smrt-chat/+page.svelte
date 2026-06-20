@@ -6,7 +6,7 @@
 <ModulePage
 	name="smrt-chat"
 	description="Chat rooms, threads, and agent sessions with app-controlled tool whitelisting and a unified ChatMessage model for users and agents."
-	badges={['v0.24.12', 'Rooms', 'Threads', 'Agent Sessions']}
+	badges={['v0.29.32', 'Rooms', 'Threads', 'Agent Sessions']}
 >
 	<section>
 		<h2>Overview</h2>
@@ -14,16 +14,28 @@
 			<strong>smrt-chat</strong> provides multi-tenant chat infrastructure with public / private
 			rooms, direct messages, threaded conversations, and AI agent sessions with configurable tool
 			access. <code>ChatMessage</code> is shared by users and agents — there is no separate "agent
-			message" type. Tool whitelisting is intentionally a contract owned by the consuming app:
-			the framework stores the whitelist but does not enforce or scope tool tiers.
+			message" type. The <code>allowedTools</code> whitelist is app-controlled, and the framework enforces
+			it fail-closed when an agent reply emits a tool call (an empty or unparseable whitelist permits
+			no tools).
 		</p>
 		<aside>
 			<p>Key Features:</p>
 			<ul>
-				<li>Room types: <code>public</code>, <code>private</code>, <code>dm</code>, <code>agent</code></li>
-				<li>Threaded conversations (<code>rootMessageId</code>, <code>isResolved</code>, <code>messageCount</code>)</li>
-				<li>Unified <code>ChatMessage</code> with <code>role</code> + <code>messageType</code> + tool-call JSON</li>
-				<li><code>AgentSession</code>: <code>allowedTools</code> whitelist plus <code>expiresAt</code> / <code>maxTokens</code> / <code>maxMessages</code> budget</li>
+				<li>
+					Room types: <code>public</code>, <code>private</code>, <code>dm</code>, <code>agent</code>
+				</li>
+				<li>
+					Threaded conversations (<code>rootMessageId</code>, <code>isResolved</code>,
+					<code>messageCount</code>)
+				</li>
+				<li>
+					Unified <code>ChatMessage</code> with <code>role</code> + <code>messageType</code> + tool-call
+					JSON
+				</li>
+				<li>
+					<code>AgentSession</code>: <code>allowedTools</code> whitelist plus <code>expiresAt</code>
+					/ <code>maxTokens</code> / <code>maxMessages</code> budget
+				</li>
 				<li><code>ChatService</code> facade for rooms, sessions, and message dispatch</li>
 				<li>Tenant scoping required on rooms; optional on agent sessions</li>
 			</ul>
@@ -44,19 +56,21 @@ const chat = await ChatService.create({
   persistence: { type: 'sql', url: 'chat.db' },
 });
 
-// Create a public room (creator added as owner participant)
+// Create a public room. actorProfileId is the authenticated principal
+// the route injects; that actor becomes the owner participant.
 const room = await chat.createRoom({
   tenantId: 'tenant-1',
   name: 'General',
   roomType: 'public',
-  createdByProfileId: 'profile-1',
+  actorProfileId: 'profile-1',
 });
 
-// Send a user message
+// Send a user message. The message is always authored as actorProfileId
+// with role 'user' — the caller cannot supply a senderProfileId or role.
 const message = await chat.sendMessage({
   tenantId: 'tenant-1',
   roomId: room.id,
-  senderProfileId: 'profile-1',
+  actorProfileId: 'profile-1',
   content: 'Hello, world!',
 });
 
@@ -64,6 +78,7 @@ const message = await chat.sendMessage({
 const thread = await chat.startThread({
   tenantId: 'tenant-1',
   roomId: room.id,
+  actorProfileId: 'profile-1',
   rootMessageId: message.id,
   title: 'Follow-up discussion',
 });
@@ -72,14 +87,16 @@ const thread = await chat.startThread({
 await chat.sendMessage({
   tenantId: 'tenant-1',
   roomId: room.id,
-  senderProfileId: 'profile-2',
+  actorProfileId: 'profile-2',
   content: 'Great point!',
   threadId: thread.id,
 });
 
-// Get or create a DM room between two profiles
+// Get or create a DM room between two profiles. The acting caller must be
+// one of the two DM participants.
 const dmRoom = await chat.getOrCreateDM({
   tenantId: 'tenant-1',
+  actorProfileId: 'profile-1',
   profileId1: 'profile-1',
   profileId2: 'profile-2',
 });`}
@@ -108,9 +125,9 @@ const dmRoom = await chat.getOrCreateDM({
 		<h3>ChatMessage — unified for users and agents</h3>
 		<p>
 			A single model carries both human and agent traffic. The <code>role</code> +
-			<code>messageType</code> pair lets clients render and filter without branching on entity
-			type. <code>toolCallData</code> holds JSON for tool calls and results when the message is
-			part of an agent turn.
+			<code>messageType</code> pair lets clients render and filter without branching on entity type.
+			<code>toolCallData</code> holds JSON for tool calls and results when the message is part of an agent
+			turn.
 		</p>
 		<CodeBlock
 			code={`class ChatMessage extends SmrtObject {
@@ -152,27 +169,35 @@ const dmRoom = await chat.getOrCreateDM({
 
 		<h3>AgentSession</h3>
 		<p>
-			The <code>agentId</code> is intentionally a plain string reference, not a foreign key, so
-			chat is decoupled from any specific agent registry. Budgets are flexible: an agent can be
-			limited by wall-clock (<code>expiresAt</code>), token spend (<code>maxTokens</code>), or
-			message count (<code>maxMessages</code>) — singly or in combination.
+			The <code>agentId</code> is intentionally a plain string reference, not a foreign key, so chat
+			is decoupled from any specific agent registry. Budgets are flexible: an agent can be limited
+			by wall-clock (<code>expiresAt</code>), token spend (<code>maxTokens</code>), or message count
+			(<code>maxMessages</code>) — singly or in combination.
 		</p>
 		<CodeBlock
 			code={`class AgentSession extends SmrtObject {
-  agentId: string             // String ref (not FK)
-  roomId: string
-  allowedTools: string        // JSON string array (app-controlled whitelist)
-  sessionContext: string      // JSON for multi-turn memory
-  systemPrompt?: string
-  maxTokens?: number
-  maxMessages?: number
-  expiresAt?: Date
-  status: string
+  agentId: string                       // String ref (not FK)
+  participantProfileId: string          // Profile cross-package ref
+  chatRoomId: string | null             // FK to the linked agent room
+  status: 'active' | 'closed' | 'expired'
+  allowedTools: string                  // JSON array, default '[]' (app-controlled whitelist)
+  sessionContext: string                // JSON, default '{}' (multi-turn memory)
+  systemPrompt: string
+  messageCount: number
+  totalTokensUsed: number
+  maxTokens: number                     // 0 = unlimited
+  maxMessages: number                   // 0 = unlimited
+  lastMessageAt: Date | null
+  expiresAt: Date | null
+  closedAt: Date | null
 
   isActive(): boolean
+  isToolAllowed(toolName: string): boolean
   getAllowedTools(): string[]
-  getSessionContext(): Record<string, any>
-  updateSessionContext(updates: Record<string, any>): void
+  getSessionContext(): Record<string, unknown>
+  setSessionContext(ctx: Record<string, unknown>): void
+  updateSessionContext(updates: Record<string, unknown>): Promise<void>
+  expire(): Promise<void>
 }`}
 			language="typescript"
 		/>
@@ -181,30 +206,37 @@ const dmRoom = await chat.getOrCreateDM({
 	<section>
 		<h2>App-controlled tool whitelisting</h2>
 		<p>
-			<code>allowedTools</code> is a simple JSON array stored on the session. The framework does
-			not enforce, scope, or tier the list — that's the app's job. The deliberate framing is:
-			your app decides what tools agents can access, then validates each tool call before
-			execution. This keeps SMRT agent integrations free of opinion about MCP / tool taxonomies.
+			<code>allowedTools</code> is a simple JSON array your app populates on the session. The
+			framework owns enforcement: agent-authored replies go through the internal
+			<code>sendAgentReply()</code> path (reachable only via the
+			<code>@happyvertical/smrt-chat/internal/agent-runtime</code> subpath by trusted in-process
+			agent-runtime code), which checks each <code>tool</code> / <code>tool_call</code> message
+			against the whitelist fail-closed before emitting it. An empty or unparseable whitelist
+			permits no tools. Your app decides <em>which</em> tools an agent may use; SMRT guarantees an agent
+			cannot emit a tool message outside that list.
 		</p>
 
 		<CodeBlock
-			code={`// Create an agent session (auto-creates an agent-type room with maxParticipants=2)
+			code={`// Create an agent session (auto-creates an agent-type room with maxParticipants=2).
+// actorProfileId becomes the owning session participant — you cannot supply a
+// participantProfileId to open a session on another profile's behalf.
 const { session, room } = await chat.createAgentSession({
   tenantId: 'tenant-1',
   agentId: 'agent-summarizer',
-  participantProfileId: 'profile-1',
+  actorProfileId: 'profile-1',
   allowedTools: ['web-search', 'summarize'],
   systemPrompt: 'You are a research assistant.',
   maxMessages: 100,
 });
 
-// Send a message within the agent session
-await chat.sendAgentMessage({
+// Send a USER message within the agent session. The message is always
+// authored as the session participant — the caller cannot supply a
+// senderProfileId or role (no impersonating the agent from a route).
+await chat.sendAgentUserMessage({
   tenantId: 'tenant-1',
   agentSessionId: session.id,
-  senderProfileId: 'profile-1',
+  actorProfileId: 'profile-1',
   content: 'Summarize the latest news',
-  role: 'user',
 });
 
 // Always gate sends on isActive() -- expiresAt OR token/message limits
@@ -212,11 +244,11 @@ if (session.isActive()) {
   // safe to dispatch
 }
 
-// Tool validation is YOUR responsibility:
-// Check the whitelist before invoking any tool the agent requests.
-const allowed = session.getAllowedTools();
-if (!allowed.includes(requestedTool)) {
-  throw new Error('Tool not in whitelist');
+// Tool whitelisting is enforced by the framework: the internal agent-runtime
+// reply path rejects any tool not in allowedTools, fail-closed. You can also
+// inspect the list directly when configuring the agent.
+if (session.isToolAllowed(requestedTool)) {
+  // the agent runtime is permitted to emit this tool call
 }`}
 			language="typescript"
 		/>
@@ -227,19 +259,34 @@ if (!allowed.includes(requestedTool)) {
 		<article>
 			<h3>DOs</h3>
 			<ul>
-				<li>Use <code>ChatService</code> facade for room creation and messaging — it auto-creates participants and agent rooms</li>
+				<li>
+					Use <code>ChatService</code> facade for room creation and messaging — it auto-creates participants
+					and agent rooms
+				</li>
 				<li>Check <code>session.isActive()</code> before sending agent messages</li>
-				<li>Use <code>getSessionContext()</code> / <code>updateSessionContext()</code> for multi-turn memory</li>
-				<li>Validate tool calls against <code>allowedTools</code> in your app logic</li>
+				<li>
+					Use <code>getSessionContext()</code> / <code>updateSessionContext()</code> for multi-turn memory
+				</li>
+				<li>
+					Populate <code>allowedTools</code> per session — the framework enforces it fail-closed on agent
+					replies
+				</li>
 				<li>Use <code>getOrCreateDM()</code> for direct message rooms (idempotent)</li>
 			</ul>
 		</article>
 		<article>
 			<h3>DON'Ts</h3>
 			<ul>
-				<li>Don't use the <code>context</code> field for session memory — it's reserved for slug scoping. Use <code>sessionContext</code>.</li>
+				<li>
+					Don't use the <code>context</code> field for session memory — it's reserved for slug
+					scoping. Use <code>sessionContext</code>.
+				</li>
 				<li>Don't skip session expiry checks (<code>expiresAt</code> or budget limits)</li>
-				<li>Don't rely on the framework for tool validation (app responsibility)</li>
+				<li>
+					Don't try to author agent (<code>assistant</code>/<code>tool</code>) messages from a route
+					— only the internal agent-runtime path may, via
+					<code>@happyvertical/smrt-chat/internal/agent-runtime</code>
+				</li>
 				<li>Don't forget tenant context — <code>ChatRoom</code> requires tenant scoping</li>
 				<li>Don't create agent rooms manually — use <code>createAgentSession()</code></li>
 			</ul>

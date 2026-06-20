@@ -133,7 +133,11 @@ interface Props {
 	<CodeBlock
 		code={`<script lang="ts">
   import { TenantSwitcher } from '@happyvertical/smrt-tenancy/svelte';
-  import { TenantContext } from '@happyvertical/smrt-tenancy';
+  import { getTenantId } from '@happyvertical/smrt-tenancy';
+  import {
+    MembershipCollection,
+    TenantCollection
+  } from '@happyvertical/smrt-users';
   import type { Membership, Tenant } from '@happyvertical/smrt-users';
 
   let tenants = $state<Map<string, Tenant>>(new Map());
@@ -142,22 +146,23 @@ interface Props {
 
   // Load user's tenants
   onMount(async () => {
-    const membershipCollection = await MembershipsCollection.create({ db });
+    const membershipCollection = await MembershipCollection.create({ db });
     memberships = await membershipCollection.list({
       where: { userId: currentUser.id, status: 'active' }
     });
 
-    const tenantCollection = await TenantsCollection.create({ db });
+    const tenantCollection = await TenantCollection.create({ db });
     for (const m of memberships) {
       const tenant = await tenantCollection.get(m.tenantId);
       if (tenant) tenants.set(tenant.id, tenant);
     }
 
-    currentTenantId = TenantContext.getCurrentTenantId();
+    currentTenantId = getTenantId() ?? '';
   });
 
   async function handleTenantChange(tenantId: string) {
-    await TenantContext.setTenant(tenantId);
+    // Persist the selection (cookie, server call, etc.) then navigate;
+    // the SvelteKit handle re-establishes tenant context per request.
     window.location.href = '/' + tenantId + '/dashboard';
   }
 </script>

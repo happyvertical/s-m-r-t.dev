@@ -102,7 +102,7 @@
 	/>
 
 	<h2>Setting Auth State</h2>
-	<p>Set user and permissions via the Smrt provider or useAppState.</p>
+	<p>Set user and permissions via the Provider or useAppState.</p>
 
 	<CodeBlock
 		code={`<script lang="ts">

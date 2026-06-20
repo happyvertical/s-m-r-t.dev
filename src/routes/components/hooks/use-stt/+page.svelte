@@ -171,19 +171,19 @@
 	<h2>STT Adapters</h2>
 	<p>The hook supports multiple STT backends:</p>
 	<ul>
-		<li><strong>browser</strong> - Browser's native Web Speech API (online, fast)</li>
+		<li><strong>browser-speech</strong> - Browser's native Web Speech API (online, fast)</li>
 		<li><strong>whisper-wasm</strong> - Local Whisper model via WebAssembly (offline capable)</li>
 		<li><strong>whisper-cpp</strong> - Local Whisper via native bindings (highest quality)</li>
 	</ul>
 
 	<CodeBlock
 		code={`// Initialize with specific adapter
-await stt.initialize({ adapter: 'whisper-wasm' });
+await stt.initialize({ type: 'whisper-wasm' });
 
-// Or configure in Smrt provider
-<Smrt stt={{ adapter: 'whisper-wasm' }}>
+// Or configure in the Provider
+<Provider ai={{ stt: { type: 'whisper-wasm' } }}>
   ...
-</Smrt>`}
+</Provider>`}
 		language="typescript"
 	/>
 

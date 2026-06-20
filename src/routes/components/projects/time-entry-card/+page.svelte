@@ -14,7 +14,7 @@
 		language="typescript"
 	/>
 	<h2>Usage</h2>
-	<CodeBlock code={`<TimeEntryCard entry={timeEntry} onedit={handleEdit} />`} language="svelte" />
+	<CodeBlock code={`<TimeEntryCard entry={timeEntry} onclick={handleClick} />`} language="svelte" />
 </article>
 
 <style>

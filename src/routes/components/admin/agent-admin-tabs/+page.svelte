@@ -156,10 +156,12 @@ import type {
 } from '@happyvertical/smrt-svelte';
 
 interface AgentUISlot {
+  id: string;          // Unique slot identifier
   label: string;
   description?: string;
-  icon?: string;       // Emoji or icon
+  icon?: string;       // Icon identifier (e.g., 'settings')
   order?: number;      // Sort order (lower = first)
+  disabled?: boolean;  // Hide/disable slot in admin UI
 }
 
 // AgentUISlots is Record<string, AgentUISlot>`}

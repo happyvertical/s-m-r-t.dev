@@ -6,7 +6,7 @@
 <ModulePage
 	name="smrt-jobs"
 	description="Background job execution with persistent queue, retry strategies, cron scheduling, and a fluent JobBuilder API."
-	badges={['v0.24.12', 'Task Runner', 'Scheduler', 'Fluent API']}
+	badges={['v0.29.34', 'Task Runner', 'Scheduler', 'Fluent API']}
 >
 	<section>
 		<h2>Overview</h2>
@@ -20,12 +20,18 @@
 		<aside>
 			<p>Key Features:</p>
 			<ul>
-				<li><code>withBackgroundJobs()</code> mixin adds <code>.bg()</code> and <code>.background()</code> to any SmrtObject</li>
+				<li>
+					<code>withBackgroundJobs()</code> mixin adds <code>.bg()</code> and
+					<code>.background()</code> to any SmrtObject
+				</li>
 				<li>Fluent JobBuilder: delay, priority, retries, queue, timeout</li>
 				<li>TaskRunner: polling-based execution with concurrency, atomic claims, and heartbeats</li>
 				<li>ScheduleRunner: cron-based recurring job creation (UTC, not timezone-aware)</li>
 				<li>JobHandle for tracking, waiting, cancelling, and retrying</li>
-				<li>Event-driven: <code>job:started</code>, <code>job:completed</code>, <code>job:failed</code>, <code>job:retrying</code></li>
+				<li>
+					Event-driven: <code>job:started</code>, <code>job:completed</code>,
+					<code>job:failed</code>, <code>job:retrying</code>
+				</li>
 			</ul>
 		</aside>
 	</section>
@@ -100,19 +106,20 @@ const result = await handle2.wait({ timeout: 60000, pollInterval: 100 });`}
 			code={`class SmrtJob extends SmrtObject {
   queue: string               // 'default' by default
   objectType: string          // Class name for ObjectRegistry lookup
-  objectId: string
+  objectId: string | null     // null for static methods
   method: string              // Method to call on the object
-  args: string                // JSON arguments
+  args: Record<string, unknown>   // Structured arguments (persisted as JSON)
   runAt: Date
-  priority: number            // Higher = sooner
+  priority: number            // Default 50; higher = sooner
   status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled'
   attempts: number
-  maxAttempts: number
-  timeout: number             // Default 5 minutes (ms)
-  retryStrategy: string
-  workerId?: string
-  workerHeartbeat?: Date
-  resultPointer?: string      // App-defined result storage (just a string)
+  maxAttempts: number         // Default 3
+  timeout: number             // Default 5 minutes (300000ms)
+  timeoutBehavior: 'fail' | 'kill' | 'warn'   // What to do on timeout (default 'fail')
+  retryStrategy: RetryStrategyConfig  // Structured retry config (not a string)
+  workerId: string | null
+  workerHeartbeat: Date | null
+  resultPointer: string | null    // App-defined result storage (just a string)
 }`}
 			language="typescript"
 		/>
@@ -188,7 +195,7 @@ await handle.wait({ timeout: 60000, pollInterval: 100 });`}
 		/>
 		<p>
 			<code>bg()</code> is shorthand for the common case:
-			<code>{'await doc.bg(\'analyze\', args)'}</code> enqueues immediately and returns a
+			<code>{"await doc.bg('analyze', args)"}</code> enqueues immediately and returns a
 			<code>JobHandle</code>.
 		</p>
 	</section>
@@ -210,9 +217,14 @@ await handle.wait({ timeout: 60000, pollInterval: 100 });`}
 			<ul>
 				<li>Don't forget to call <code>.enqueue()</code> on the builder — it's lazy</li>
 				<li>Don't assume timezone support (cron is UTC only)</li>
-				<li>Don't expect a dead letter queue — failed jobs stay in DB with <code>status='failed'</code></li>
+				<li>
+					Don't expect a dead letter queue — failed jobs stay in DB with <code>status='failed'</code
+					>
+				</li>
 				<li>Don't rely on <code>resultPointer</code> without implementing a result backend</li>
-				<li>Don't poll too aggressively with <code>handle.wait()</code> (default 100ms is reasonable)</li>
+				<li>
+					Don't poll too aggressively with <code>handle.wait()</code> (default 100ms is reasonable)
+				</li>
 			</ul>
 		</article>
 	</section>

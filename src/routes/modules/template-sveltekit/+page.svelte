@@ -13,21 +13,24 @@
 
 <ModulePage
 	name="template-sveltekit"
-	description="Base SvelteKit project template used by smrt init. Scaffolds a full-stack app with the SMRT Vite plugin, auto-generated REST routes, TypeScript, and SQLite."
-	badges={['v0.24.12', 'Template', 'SvelteKit 2.x', 'Svelte 5.18', 'Vite 7.3', 'TS 5.9']}
+	description="Base SvelteKit project template used by smrt gnode create. Scaffolds a full-stack app with the SMRT Vite plugin, auto-generated REST routes, TypeScript, and SQLite."
+	badges={['v0.29.34', 'Template', 'SvelteKit 2.x', 'Svelte 5.18', 'Vite 7.3', 'TS 5.9']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
 			<strong>@happyvertical/smrt-template-sveltekit</strong> is the base SvelteKit project template
-			that <code>smrt init</code> scaffolds. The generated project ships with the SMRT Vite plugin
-			for automatic REST route generation, an example <code>@smrt()</code> object, server-side SMRT
-			initialisation, SQLite, and an <code>.env.example</code> to edit before first run.
+			that <code>smrt gnode create &lt;name&gt; --template sveltekit</code> scaffolds. The generated
+			project ships with the SMRT Vite plugin for automatic REST route generation, an example
+			<code>@smrt()</code> object, server-side SMRT initialisation, SQLite, and an
+			<code>.env.example</code> to edit before first run.
 		</p>
 		<p>
-			The pinned tooling stack was refreshed in PR #1217 against the v0.24.12 baseline:
-			<code>@happyvertical/smrt-core</code> ^0.24.12, Vite ^7.3.1, TypeScript ^5.9.3, Svelte
-			^5.18.0.
+			Pinned tooling stack: Vite ^7.3.1, TypeScript ^5.9.3, Svelte ^5.18.0, and
+			<code>@sveltejs/kit</code> ^2.46.0. The package declares
+			<code>@happyvertical/smrt-core</code> ^0.29.1 as a peer dependency; the generated project pins
+			the SMRT runtime packages it depends on (<code>smrt-core</code>, <code>smrt-tenancy</code>,
+			<code>smrt-users</code>).
 		</p>
 	</section>
 
@@ -35,8 +38,13 @@
 		<h2>What the Template Provides</h2>
 		<ul>
 			<li>SvelteKit 2.x with Svelte ^5.18 and TypeScript ^5.9</li>
-			<li><code>smrtPlugin()</code> Vite ^7.3 integration for automatic REST API route generation</li>
-			<li>Example <code>@smrt()</code> object (<code>template/src/lib/objects/Item.ts</code>) with barrel export</li>
+			<li>
+				<code>smrtPlugin()</code> Vite ^7.3 integration for automatic REST API route generation
+			</li>
+			<li>
+				Example <code>@smrt()</code> object (<code>template/src/lib/objects/Item.ts</code>) with
+				barrel export
+			</li>
 			<li>Server-side SMRT initialisation (<code>template/src/lib/server/</code>)</li>
 			<li><code>smrt.config.ts</code> with SQLite database and optional AI provider</li>
 			<li><code>.env.example</code> with starter environment variables</li>
@@ -48,7 +56,7 @@
 
 		<h3>With smrt CLI (recommended)</h3>
 		<CodeBlock
-			code={`smrt init my-app --template sveltekit
+			code={`smrt gnode create my-app --template sveltekit
 cd my-app
 pnpm install
 cp .env.example .env    # Edit with your values
@@ -71,15 +79,27 @@ copyTemplate('./my-new-project', {
 	<section id="exports">
 		<h2>Package Exports</h2>
 		<ul>
-			<li><code>getTemplatePath()</code> — returns the absolute path to the <code>template/</code> directory</li>
-			<li><code>copyTemplate(destination, options)</code> — copies template files with project-name substitution in <code>package.json</code></li>
-			<li><code>templateInfo</code> — metadata object (SvelteKit 2.x, Svelte 5, REST API, SMRT CLI, SQLite)</li>
+			<li>
+				<code>getTemplatePath()</code> — returns the absolute path to the <code>template/</code> directory
+			</li>
+			<li>
+				<code>copyTemplate(destination, options)</code> — copies template files with project-name
+				substitution in <code>package.json</code>
+			</li>
+			<li>
+				<code>templateInfo</code> — metadata object (SvelteKit 2.x, Svelte 5, REST API, SMRT CLI, SQLite)
+			</li>
 		</ul>
 	</section>
 
 	<section id="placeholders-section">
-		<h2>Placeholder Substitution</h2>
-		<p>File copying applies a placeholder substitution pass — the CLI replaces project-name tokens in template files at generation time.</p>
+		<h2>Project Name Substitution</h2>
+		<p>
+			When <code>copyTemplate()</code> runs with a <code>name</code> option, it copies the template
+			files verbatim and then rewrites the <code>name</code> field of the generated
+			<code>package.json</code>. The template files themselves contain no token placeholders — the
+			only substitution is the generated project's package name.
+		</p>
 	</section>
 
 	<section id="env-vars">
@@ -127,27 +147,15 @@ copyTemplate('./my-new-project', {
 		</table>
 	</section>
 
-	<section id="placeholders">
-		<h2>Placeholder Substitution</h2>
-		<p>During <code>smrt gnode create</code>, these placeholders are replaced in template files:</p>
-		<table>
-			<thead>
-				<tr>
-					<th>Placeholder</th>
-					<th>Value</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><code>{'{{PROJECT_NAME}}'}</code></td>
-					<td>Project name from CLI</td>
-				</tr>
-				<tr>
-					<td><code>{'{{PACKAGE_NAME}}'}</code></td>
-					<td>Lowercase, hyphenated package name</td>
-				</tr>
-			</tbody>
-		</table>
+	<section id="multi-tenancy">
+		<h2>Multi-Tenancy (pre-wired)</h2>
+		<p>
+			The generated project wires multi-tenancy out of the box:
+			<code>src/hooks.server.ts</code> registers the tenancy interceptor, loads sessions, and
+			resolves the tenant from a leading subdomain (e.g. <code>acme.demo.local</code> →
+			<code>tenantId='acme'</code>). The resolution strategy is swappable in
+			<code>src/lib/server/tenancy.ts</code>.
+		</p>
 	</section>
 
 	<section id="related">

@@ -6,7 +6,7 @@
 <ModulePage
 	name="smrt-affiliates"
 	description="Partner revenue sharing with multi-type partners, multi-tier commissions, and payout processing — a cross-tenant network by design."
-	badges={['v0.24.12', 'Revenue Share', 'Commissions', 'Payouts', 'Cross-Tenant']}
+	badges={['v0.29.34', 'Revenue Share', 'Commissions', 'Payouts', 'Cross-Tenant']}
 >
 	<section>
 		<h2>Overview</h2>
@@ -19,13 +19,38 @@
 		<aside>
 			<p>Key Features:</p>
 			<ul>
-				<li>Multi-type <strong>Partner</strong>: <code>publisher</code> / <code>salesperson</code> / <code>referrer</code> stored as a JSON array — partners can hold multiple roles</li>
-				<li><strong>4 commission types</strong> per ad event: <code>display</code> (publisher), <code>referral</code> (referrer), <code>sales</code> (salesperson), <code>parent</code> (parent publisher's share)</li>
-				<li><strong>Parent commission share</strong>: salesperson's <code>parentCommissionShare</code> diverts a fraction to the parent publisher</li>
-				<li><strong>Immutable Commission</strong>: no update/delete API; <code>commissionRate</code> is copied at event time, not a live reference to <code>Partner.commissionRate</code></li>
-				<li><strong>Payout lifecycle</strong>: <code>pending → approved → processing → completed</code> (or <code>failed</code>)</li>
-				<li><strong>Integer cents</strong>: all monetary fields are integer cents. Helpers <code>getTotalInDollars()</code>, <code>getAmountInDollars()</code>; <code>Commission.calculateAmount(grossRevenue, rate)</code> uses <code>Math.round()</code></li>
-				<li><strong>NOT tenant-scoped</strong> (intentional) — the affiliate network is a cross-tenant graph; see Tenancy below</li>
+				<li>
+					Multi-type <strong>Partner</strong>: <code>publisher</code> / <code>salesperson</code> /
+					<code>referrer</code> stored as a JSON array — partners can hold multiple roles
+				</li>
+				<li>
+					<strong>4 commission types</strong> per ad event: <code>display</code> (publisher),
+					<code>referral</code>
+					(referrer), <code>sales</code> (salesperson), <code>parent</code> (parent publisher's share)
+				</li>
+				<li>
+					<strong>Parent commission share</strong>: salesperson's <code>parentCommissionShare</code> diverts
+					a fraction to the parent publisher
+				</li>
+				<li>
+					<strong>Immutable Commission</strong>: no update/delete API; <code>commissionRate</code>
+					is copied at event time, not a live reference to <code>Partner.commissionRate</code>
+				</li>
+				<li>
+					<strong>Payout lifecycle</strong>:
+					<code>pending → approved → processing → completed</code>
+					(or <code>failed</code>)
+				</li>
+				<li>
+					<strong>Integer cents</strong>: all monetary fields are integer cents. Helpers
+					<code>getTotalInDollars()</code>, <code>getAmountInDollars()</code>;
+					<code>Commission.calculateAmount(grossRevenue, rate)</code>
+					uses <code>Math.round()</code>
+				</li>
+				<li>
+					<strong>NOT tenant-scoped</strong> (intentional) — the affiliate network is a cross-tenant graph;
+					see Tenancy below
+				</li>
 			</ul>
 		</aside>
 	</section>
@@ -131,11 +156,11 @@ class Partner extends SmrtObject {
 
 		<h3>Commission (Immutable)</h3>
 		<CodeBlock
-			code={`// @smrt({ api: { exclude: ['update', 'delete'] }, ... }) — NOT tenant-scoped (cross-tenant network)
+			code={`// @smrt({ api: { include: ['create', 'list', 'get'] }, ... }) — no update/delete (audit trail); NOT tenant-scoped
 class Commission extends SmrtObject {
   eventId: string            // plain string → smrt-ads AdEvent
   partnerId: string
-  commissionType: 'display' | 'referral' | 'sales' | 'parent'
+  commissionType: 'display' | 'referral' | 'sales' | 'parent' | 'overhead'
   grossRevenue: number       // Integer cents
   commissionRate: number     // copied at event time — NOT a live ref to Partner.commissionRate
   commissionAmount: number   // Integer cents (uses Math.round())
@@ -179,22 +204,33 @@ class Payout extends SmrtObject {
 			<strong>None of the three models in this package are tenant-scoped.</strong> This is
 			deliberate. Per <code>docs/content/standards.md §7</code>, tenant-aware models normally apply
 			<code>@TenantScoped({'{'} mode: 'optional' {'}'})</code> from
-			<a href="/modules/smrt-tenancy">smrt-tenancy</a>; each <code>@smrt(...)</code> block in this
-			package carries an inline comment pointing back to this rationale.
+			<a href="/modules/smrt-tenancy">smrt-tenancy</a>; each <code>@smrt(...)</code> block in this package
+			carries an inline comment pointing back to this rationale.
 		</p>
 		<p>The affiliate network is a cross-tenant graph <em>by design</em>:</p>
 		<ul>
-			<li><strong>Partner</strong> — a single publisher operating sites across different tenants needs a stable identity for revenue aggregation, payout thresholds, and tax reporting. Slicing per tenant would either duplicate the row or hide payouts owed across tenants.</li>
-			<li><strong>Commission</strong> — attributes revenue to a partner across whichever tenant generated the underlying ad event. Cross-tenant attribution is the entire point.</li>
-			<li><strong>Payout</strong> — aggregates commissions for a partner regardless of which tenant the revenue came from. A tenant-scoped query would produce systematically incorrect totals.</li>
+			<li>
+				<strong>Partner</strong> — a single publisher operating sites across different tenants needs a
+				stable identity for revenue aggregation, payout thresholds, and tax reporting. Slicing per tenant
+				would either duplicate the row or hide payouts owed across tenants.
+			</li>
+			<li>
+				<strong>Commission</strong> — attributes revenue to a partner across whichever tenant generated
+				the underlying ad event. Cross-tenant attribution is the entire point.
+			</li>
+			<li>
+				<strong>Payout</strong> — aggregates commissions for a partner regardless of which tenant the
+				revenue came from. A tenant-scoped query would produce systematically incorrect totals.
+			</li>
 		</ul>
 		<p>
 			This is the same reasoning that keeps <code>TenantKey</code> in
-			<a href="/modules/smrt-secrets">smrt-secrets</a> out of the tenancy interceptor: rows that
-			must be queried across tenants to fulfil their purpose should not be silently filtered.
+			<a href="/modules/smrt-secrets">smrt-secrets</a> out of the tenancy interceptor: rows that must
+			be queried across tenants to fulfil their purpose should not be silently filtered.
 		</p>
 		<p>
-			<strong>Need tenant-attributed reporting?</strong> Aggregate by joining <code>Commission</code>
+			<strong>Need tenant-attributed reporting?</strong> Aggregate by joining
+			<code>Commission</code>
 			rows back to <code>eventId</code> (in <a href="/modules/smrt-ads">smrt-ads</a>) and the
 			originating ad's tenant — don't add <code>@TenantScoped</code> here.
 		</p>
@@ -202,7 +238,11 @@ class Payout extends SmrtObject {
 
 	<section>
 		<h2>Currency: Integer Cents</h2>
-		<p>All monetary fields in this package are <strong>integer cents</strong> (unlike <a href="/modules/smrt-commerce">smrt-commerce</a>, which uses decimal fields). Display values must be converted via the provided helpers:</p>
+		<p>
+			All monetary fields in this package are <strong>integer cents</strong> (unlike
+			<a href="/modules/smrt-commerce">smrt-commerce</a>, which uses decimal fields). Display values
+			must be converted via the provided helpers:
+		</p>
 		<CodeBlock
 			code={`// Storage (integer cents)
 const commission = await commissions.create({

@@ -6,15 +6,15 @@
 <ModulePage
 	name="smrt-facts"
 	description="Distributed knowledge base with 3-zone semantic deduplication, evolution chains, provenance tracking, and confidence scoring."
-	badges={['v0.24.12', 'Semantic Dedup', 'Evolution Chains', 'Confidence']}
+	badges={['v0.29.34', 'Semantic Dedup', 'Evolution Chains', 'Confidence']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-facts</strong> provides a distributed knowledge base where facts are atomic
-			units of knowledge with provenance tracking. Facts evolve through parent-child chains,
-			undergo 3-zone semantic reconciliation (0.85 / 0.60 thresholds) to prevent duplicates, and
-			carry confidence scores computed from source credibility, recency, and corroboration.
+			<strong>smrt-facts</strong> provides a distributed knowledge base where facts are atomic units of
+			knowledge with provenance tracking. Facts evolve through parent-child chains, undergo 3-zone semantic
+			reconciliation (0.85 / 0.60 thresholds) to prevent duplicates, and carry confidence scores computed
+			from source credibility, recency, and corroboration.
 		</p>
 		<aside>
 			<p>Key Features:</p>
@@ -25,7 +25,9 @@
 				<li>Polymorphic entity linking via <code>FactSubject</code> (string-based, no FK)</li>
 				<li><code>FactContent</code> junction linking facts to Content</li>
 				<li>Auto-generated embeddings for semantic search (failures are non-fatal)</li>
-				<li>Optional tenancy with <code>findWithGlobals(tenantId)</code> for tenant + global facts</li>
+				<li>
+					Optional tenancy with <code>findWithGlobals(tenantId)</code> for tenant + global facts
+				</li>
 			</ul>
 		</aside>
 
@@ -82,7 +84,7 @@ const result = await facts.reconcile({
 });
 // result.action: 'created' | 'merged' | 'branched'
 
-// Evolution: branch creates a child linked via parentId
+// Evolution: branch creates a successor linked via previousFactId
 const child = await facts.branch(fact.id, {
   textRefined: 'The Eiffel Tower is 330 meters tall including the antenna',
 }, 'correction');
@@ -105,14 +107,18 @@ const briefing = await facts.getEntityBriefing('Place', placeId);`}
 		<CodeBlock
 			code={`class Fact extends SmrtObject {
   textRefined: string         // Cleaned knowledge statement
-  type: string                // assertion / observation / measurement / definition / ...
-  domain?: string
-  status: 'pending' | 'active' | 'disputed' | 'superseded' | 'archived' | 'retracted'
+  textRaw: string             // Original, unprocessed input
+  type: string                // assertion / observation / measurement / definition / relationship / event / opinion / prediction
+  domain: string
+  status: string              // pending / active / disputed / superseded / archived / retracted
   confidence: number          // 0-1, computed from sources
-  parentId?: string           // Evolution chain link
+  sourceCount: number         // number of attached sources
+  previousFactId: string      // @foreignKey('Fact') — evolution chain link (NOT a structural parent)
+  evolutionType: string       // original / correction / refinement / contradiction / extension / merge
 
-  // Auto-generated embeddings:
-  //   fields: ['textRefined'], autoGenerate: true, combinedField: {...}
+  // Auto-generated embeddings (@smrt embeddings config):
+  //   fields: ['textRefined'], provider: 'auto', autoGenerate: true,
+  //   combinedField: { name: 'full_context', template: '{textRefined}\\n\\nType: {type}\\nDomain: {domain}' }
 }`}
 			language="typescript"
 		/>
@@ -133,10 +139,10 @@ const briefing = await facts.getEntityBriefing('Place', placeId);`}
 		<h3>FactSubject (Polymorphic Entity Link)</h3>
 		<CodeBlock
 			code={`class FactSubject extends SmrtObject {
-  factId: string
+  factId: string              // @foreignKey('Fact')
   entityType: string          // e.g. 'Place', 'Person'
   entityId: string            // Plain string ID -- NO FK (cross-package)
-  role?: string
+  role: string                // SubjectRole: subject / object / source / location / participant / related (default 'subject')
 
   // conflictColumns: ['fact_id', 'entity_type', 'entity_id']
 }`}
@@ -146,9 +152,9 @@ const briefing = await facts.getEntityBriefing('Place', placeId);`}
 		<h3>FactContent (Content Junction)</h3>
 		<CodeBlock
 			code={`class FactContent extends SmrtObject {
-  factId: string
-  contentId: string           // FK to smrt-content (plain string, cross-package)
-  relationship: string        // 'cites', 'derived-from', etc.
+  factId: string              // @foreignKey('Fact')
+  contentId: string           // Plain string ID to smrt-content -- NO FK (cross-package)
+  relationship: string        // FactContentRelationship: extracted_from / referenced_in / supports / contradicts / related (default 'extracted_from')
 
   // conflictColumns: ['fact_id', 'content_id', 'relationship']
 }`}
@@ -187,8 +193,8 @@ const result = await facts.reconcile({
 	<section>
 		<h2>Evolution Chains</h2>
 		<p>
-			All evolution traversals use a <code>visited</code> Set for cycle detection — circular chains
-			won't blow the stack.
+			All evolution traversals use a <code>visited</code> Set for cycle detection — circular chains won't
+			blow the stack.
 		</p>
 		<CodeBlock
 			code={`await facts.getEvolutionChain(factId);  // root → current (linear ancestry)
@@ -201,10 +207,23 @@ await facts.getEvolutionTree(rootId);   // BFS all descendants`}
 	<section>
 		<h2>Gotchas</h2>
 		<ul>
-			<li><strong>Embedding failures are non-fatal</strong>: try/catch with silent fail — doesn't block fact creation</li>
-			<li><strong>Metadata auto-stringify</strong>: constructor <code>JSON.stringify</code>s objects; getters return parsed objects</li>
-			<li><strong>AI disambiguation fallback</strong>: if the model fails, the resolver defaults to <code>branch</code> (safer than <code>merge</code>)</li>
-			<li><strong>Optional tenancy</strong> with nullable <code>tenantId</code> — use <code>findWithGlobals(tenantId)</code></li>
+			<li>
+				<strong>Embedding failures are non-fatal</strong>: try/catch with silent fail — doesn't
+				block fact creation
+			</li>
+			<li>
+				<strong>Metadata auto-stringify</strong>: constructor <code>JSON.stringify</code>s objects;
+				getters return parsed objects
+			</li>
+			<li>
+				<strong>AI disambiguation fallback</strong>: if the model fails, the resolver defaults to
+				<code>branch</code>
+				(safer than <code>merge</code>)
+			</li>
+			<li>
+				<strong>Optional tenancy</strong> with nullable <code>tenantId</code> — use
+				<code>findWithGlobals(tenantId)</code>
+			</li>
 		</ul>
 	</section>
 
@@ -224,9 +243,13 @@ await facts.getEvolutionTree(rootId);   // BFS all descendants`}
 			<h3>DON'Ts</h3>
 			<ul>
 				<li>Don't skip reconciliation when ingesting facts — creates duplicates</li>
-				<li>Don't manually set <code>confidence</code> — use <code>recalculateConfidence()</code></li>
+				<li>
+					Don't manually set <code>confidence</code> — use <code>recalculateConfidence()</code>
+				</li>
 				<li>Don't modify metadata fields directly — use the getter/setter helpers</li>
-				<li>Don't try to model circular evolution chains intentionally — traversals will short-circuit</li>
+				<li>
+					Don't try to model circular evolution chains intentionally — traversals will short-circuit
+				</li>
 			</ul>
 		</article>
 	</section>

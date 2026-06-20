@@ -29,7 +29,12 @@
 			default: "'all'",
 			description: "Require 'all' or 'any' of the listed permissions"
 		},
-		{ name: 'children', type: 'Snippet', description: 'Content shown when permission check passes', required: true },
+		{
+			name: 'children',
+			type: 'Snippet',
+			description: 'Content shown when permission check passes',
+			required: true
+		},
 		{ name: 'fallback', type: 'Snippet', description: 'Content shown when permission denied' }
 	];
 </script>
@@ -76,7 +81,7 @@
 
 	<h2>Integration with smrt-users</h2>
 	<CodeBlock
-		code={`import { PermissionCheck } from '@happyvertical/smrt-svelte';\nimport { PermissionsService } from '@happyvertical/smrt-users';\n\n// Check permissions programmatically\nconst canEdit = await PermissionsService.check({\n  userId: currentUser.id,\n  tenantId: currentTenant.id,\n  permission: 'users.edit'\n});\n\nif (canEdit) {\n  // Perform action\n}\n\n// Or use component for UI\n<PermissionCheck permission="users.delete" userPermissions={currentPermissions}>\n  <button onclick={deleteUser}>Delete</button>\n</PermissionCheck>`}
+		code={`import { PermissionCheck } from '@happyvertical/smrt-svelte';\nimport { PermissionResolver } from '@happyvertical/smrt-users';\n\n// Check permissions programmatically\nconst resolver = await PermissionResolver.create({ db });\nconst canEdit = await resolver.hasPermission(\n  currentUser.id,\n  currentTenant.id,\n  'users.edit'\n);\n\nif (canEdit) {\n  // Perform action\n}\n\n// Or use component for UI\n<PermissionCheck permission="users.delete" userPermissions={currentPermissions}>\n  <button onclick={deleteUser}>Delete</button>\n</PermissionCheck>`}
 		language="typescript"
 	/>
 

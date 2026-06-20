@@ -56,8 +56,12 @@
 	</p>
 
 	<h2>Installation</h2>
+	<p>
+		As of v0.29, the AI components are no longer exported from the main package barrel. Import
+		<code>VoiceInput</code> from the <code>/browser-ai/svelte</code> subpath.
+	</p>
 	<CodeBlock
-		code={`import { VoiceInput } from '@happyvertical/smrt-svelte';`}
+		code={`import { VoiceInput } from '@happyvertical/smrt-svelte/browser-ai/svelte';`}
 		language="typescript"
 	/>
 
@@ -66,7 +70,7 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { VoiceInput } from '@happyvertical/smrt-svelte';
+  import { VoiceInput } from '@happyvertical/smrt-svelte/browser-ai/svelte';
 
   let transcription = $state('');
 
@@ -136,7 +140,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { VoiceInput } from '@happyvertical/smrt-svelte';
+		code={`import { VoiceInput } from '@happyvertical/smrt-svelte/browser-ai/svelte';
 
 interface Props {
   onTranscription?: (text: string) => void;
@@ -150,7 +154,7 @@ interface Props {
 
 	<h2>Requirements</h2>
 	<p>
-		Must be used within a <code>&lt;Smrt&gt;</code> provider. The component uses the
+		Must be used within a <code>&lt;Provider&gt;</code>. The component uses the
 		<code>useSTT</code> hook internally.
 	</p>
 </article>

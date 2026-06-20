@@ -5,7 +5,7 @@
 	const props = [
 		{
 			name: 'progress',
-			type: 'DownloadProgress | null',
+			type: 'DownloadProgressInfo | null',
 			required: true,
 			description: 'Progress data from useSTT, useTTS, or useLLM'
 		},
@@ -50,8 +50,14 @@
 	</p>
 
 	<h2>Installation</h2>
+	<p>
+		As of v0.29, the AI components are no longer exported from the main package barrel. Import
+		<code>DownloadProgress</code> from the <code>/browser-ai/svelte</code> subpath. For LLM
+		downloads you can also read progress directly via <code>useLLM().downloadProgress</code> instead of
+		rendering this component.
+	</p>
 	<CodeBlock
-		code={`import { DownloadProgress } from '@happyvertical/smrt-svelte';`}
+		code={`import { DownloadProgress } from '@happyvertical/smrt-svelte/browser-ai/svelte';`}
 		language="typescript"
 	/>
 
@@ -60,7 +66,8 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { useSTT, DownloadProgress } from '@happyvertical/smrt-svelte';
+  import { useSTT } from '@happyvertical/smrt-svelte';
+  import { DownloadProgress } from '@happyvertical/smrt-svelte/browser-ai/svelte';
 
   const stt = useSTT();
 </script>
@@ -108,6 +115,8 @@
 	<ul>
 		<li><strong>idle</strong> - Indeterminate animation</li>
 		<li><strong>downloading</strong> - Shows actual progress</li>
+		<li><strong>extracting</strong> - Post-download extraction in progress</li>
+		<li><strong>complete</strong> - Download finished</li>
 		<li><strong>error</strong> - Displays error message</li>
 	</ul>
 
@@ -116,22 +125,23 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { DownloadProgress } from '@happyvertical/smrt-svelte';
-import type { DownloadProgress as DownloadProgressType } from '@happyvertical/smrt-svelte';
+		code={`import { DownloadProgress } from '@happyvertical/smrt-svelte/browser-ai/svelte';
+import type { DownloadProgressInfo } from '@happyvertical/smrt-svelte/browser-ai';
 
 interface Props {
-  progress: DownloadProgressType | null;
+  progress: DownloadProgressInfo | null;
   label?: string;
   showPercent?: boolean;
   showBytes?: boolean;
 }
 
-interface DownloadProgressType {
-  state: 'idle' | 'downloading' | 'error';
-  percent: number;
+interface DownloadProgressInfo {
+  state: 'idle' | 'downloading' | 'extracting' | 'complete' | 'error';
   bytesLoaded: number;
   bytesTotal: number;
+  percent: number;
   currentFile?: string;
+  estimatedTimeRemaining?: number;
   error?: string;
 }`}
 		language="typescript"

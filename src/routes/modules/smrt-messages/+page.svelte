@@ -14,7 +14,7 @@
 <ModulePage
 	name="smrt-messages"
 	description="Multi-channel messaging with STI hierarchies for Email, Slack, and Twitter. Credential encryption via smrt-secrets and retry-aware send lifecycle."
-	badges={['v0.24.12', 'Email', 'Slack', 'Twitter', 'Encrypted Credentials']}
+	badges={['v0.29.34', 'Email', 'Slack', 'Twitter', 'Encrypted Credentials']}
 >
 	<section>
 		<h2>Overview</h2>
@@ -29,14 +29,30 @@
 		<aside>
 			<p><strong>Key Features:</strong></p>
 			<ul>
-				<li>STI message hierarchy: <code>Email</code>, <code>SlackMessage</code>, <code>Tweet</code> share <code>messages</code></li>
-				<li>STI account hierarchy: <code>EmailAccount</code>, <code>SlackAccount</code>, <code>TwitterAccount</code> share <code>accounts</code></li>
+				<li>
+					STI message hierarchy: <code>Email</code>, <code>SlackMessage</code>, <code>Tweet</code>
+					share <code>messages</code>
+				</li>
+				<li>
+					STI account hierarchy: <code>EmailAccount</code>, <code>SlackAccount</code>,
+					<code>TwitterAccount</code>
+					share <code>accounts</code>
+				</li>
 				<li>Send lifecycle: <code>draft → sending → sent / failed</code> with retry budget</li>
 				<li>Credential encryption via <code>credentialSecretId</code> → smrt-secrets</li>
-				<li>Per-channel senders: <code>EmailSender</code>, <code>SlackSender</code>, <code>TweetSender</code></li>
+				<li>
+					Per-channel senders: <code>EmailSender</code>, <code>SlackSender</code>,
+					<code>TweetSender</code>
+				</li>
 				<li>Email filtering via <code>Whitelist</code> / <code>Blacklist</code> models</li>
-				<li>Attachment owner field renamed to <code>messageId</code> (with deprecation wrapper for the old <code>emailId</code>)</li>
-				<li>Svelte 5 UI components including <code>EmailAccountManager</code> and <code>EmailFilterManager</code></li>
+				<li>
+					Attachment owner field renamed to <code>messageId</code> (with deprecation wrapper for the
+					old <code>emailId</code>)
+				</li>
+				<li>
+					Svelte 5 UI components including <code>EmailAccountManager</code> and
+					<code>EmailFilterManager</code>
+				</li>
 			</ul>
 		</aside>
 	</section>
@@ -51,8 +67,8 @@ pnpm add @happyvertical/smrt-messages`}
 		/>
 		<p>
 			Depends on <code>@happyvertical/smrt-core</code>,
-			<code>@happyvertical/smrt-secrets</code> (credential encryption),
-			and <code>@happyvertical/email</code> (SMTP / IMAP client).
+			<code>@happyvertical/smrt-secrets</code> (credential encryption), and
+			<code>@happyvertical/email</code> (SMTP / IMAP client).
 		</p>
 	</section>
 
@@ -125,12 +141,17 @@ const recent = await messages.list({
 				<tr>
 					<td><code>Message</code></td>
 					<td>(base)</td>
-					<td>accountId, threadId, subject, body, fromAddress, toAddresses, sendStatus, retryCount</td>
+					<td
+						>accountId, threadId, subject, body, fromAddress, toAddresses, sendStatus, retryCount</td
+					>
 				</tr>
 				<tr>
 					<td><code>Email</code></td>
 					<td><code>@happyvertical/smrt-messages:Email</code></td>
-					<td>messageId (RFC 822), inReplyTo, ccAddresses, bccAddresses, htmlBody, textBody, folderId, labels, headers</td>
+					<td
+						>messageId (RFC 822), inReplyTo, ccAddresses, bccAddresses, htmlBody, textBody,
+						folderId, labels, headers</td
+					>
 				</tr>
 				<tr>
 					<td><code>Tweet</code></td>
@@ -179,8 +200,8 @@ const recent = await messages.list({
 		<h2>Credential security</h2>
 		<p>
 			Account credentials are stored via <code>credentialSecretId</code> pointing into
-			<a href="/modules/smrt-secrets">smrt-secrets</a> envelope encryption (AMK → TDEK → secret).
-			Never store passwords as plain fields.
+			<a href="/modules/smrt-secrets">smrt-secrets</a> envelope encryption (AMK → TDEK → secret). Never
+			store passwords as plain fields.
 		</p>
 		<CodeBlock
 			code={`// Always use setCredentials / getCredentials
@@ -198,8 +219,8 @@ const creds = await account.getCredentials();`}
 	<section>
 		<h2>Send lifecycle and senders</h2>
 		<p>
-			<code>message.send()</code> resolves the account, picks a provider-specific sender, and
-			drives the status transition. Each channel has a dedicated sender implementing
+			<code>message.send()</code> resolves the account, picks a provider-specific sender, and drives
+			the status transition. Each channel has a dedicated sender implementing
 			<code>MessageSenderInterface</code>:
 		</p>
 		<table>
@@ -207,14 +228,18 @@ const creds = await account.getCredentials();`}
 				<tr><th>Sender</th><th>Description</th></tr>
 			</thead>
 			<tbody>
-				<tr><td><code>EmailSender</code></td><td>Send emails via the <code>@happyvertical/email</code> client</td></tr>
+				<tr
+					><td><code>EmailSender</code></td><td
+						>Send emails via the <code>@happyvertical/email</code> client</td
+					></tr
+				>
 				<tr><td><code>SlackSender</code></td><td>Post Slack messages via API</td></tr>
 				<tr><td><code>TweetSender</code></td><td>Post tweets via the Twitter API</td></tr>
 			</tbody>
 		</table>
 		<p>
-			<code>retryCount</code> is incremented on every retry and capped by <code>maxRetries</code>.
-			A failed send leaves the message in <code>sendStatus = 'failed'</code> for inspection.
+			<code>retryCount</code> is incremented on every retry and capped by <code>maxRetries</code>. A
+			failed send leaves the message in <code>sendStatus = 'failed'</code> for inspection.
 		</p>
 	</section>
 
@@ -258,16 +283,35 @@ await blacklist.create({ address: 'spam@example.com' });`}
 	<section>
 		<h2>Svelte 5 Components</h2>
 		<ul>
-			<li><strong>EmailAccountManager</strong>: admin UI for managing email account connections and credentials</li>
-			<li><strong>EmailFilterManager</strong>: admin UI for managing whitelist / blacklist rules</li>
+			<li>
+				<strong>EmailAccountManager</strong>: admin UI for managing email account connections and
+				credentials
+			</li>
+			<li>
+				<strong>EmailFilterManager</strong>: admin UI for managing whitelist / blacklist rules
+			</li>
 			<li><strong>MessageCard</strong>, <strong>MessageList</strong>: display message summaries</li>
-			<li><strong>ComposeForm</strong>, <strong>ReplyForm</strong>, <strong>ForwardForm</strong>: message composition</li>
+			<li>
+				<strong>ComposeForm</strong>, <strong>ReplyForm</strong>, <strong>ForwardForm</strong>:
+				message composition
+			</li>
 			<li><strong>ThreadView</strong>, <strong>MessageDetail</strong>: conversation display</li>
 			<li><strong>FolderNav</strong>, <strong>MessageFilters</strong>: navigation and filtering</li>
-			<li><strong>AccountCard</strong>, <strong>AccountList</strong>, <strong>AccountAvatar</strong>: account management</li>
-			<li><strong>AttachmentChip</strong>, <strong>AttachmentUpload</strong>: attachment handling</li>
-			<li><strong>SendStatusBadge</strong>, <strong>MessageStatusIndicator</strong>, <strong>MessageTypeBadge</strong>: status display</li>
-			<li><strong>MessageToolbar</strong>, <strong>RecipientInput</strong>: toolbar and input components</li>
+			<li>
+				<strong>AccountCard</strong>, <strong>AccountList</strong>, <strong>AccountAvatar</strong>:
+				account management
+			</li>
+			<li>
+				<strong>AttachmentChip</strong>, <strong>AttachmentUpload</strong>: attachment handling
+			</li>
+			<li>
+				<strong>SendStatusBadge</strong>, <strong>MessageStatusIndicator</strong>,
+				<strong>MessageTypeBadge</strong>: status display
+			</li>
+			<li>
+				<strong>MessageToolbar</strong>, <strong>RecipientInput</strong>: toolbar and input
+				components
+			</li>
 		</ul>
 		<CodeBlock
 			code={`import {
@@ -306,9 +350,15 @@ BlacklistCollection`}
 		<article>
 			<h3>DOs</h3>
 			<ul>
-				<li>Always use <code>setCredentials()</code> / <code>getCredentials()</code> for account credentials</li>
-				<li>Use JSON address helpers: <code>getToAddresses()</code>, <code>getCcAddresses()</code></li>
-				<li>Handle send failures with <code>retrySend()</code> (respects <code>maxRetries</code>)</li>
+				<li>
+					Always use <code>setCredentials()</code> / <code>getCredentials()</code> for account credentials
+				</li>
+				<li>
+					Use JSON address helpers: <code>getToAddresses()</code>, <code>getCcAddresses()</code>
+				</li>
+				<li>
+					Handle send failures with <code>retrySend()</code> (respects <code>maxRetries</code>)
+				</li>
 				<li>Use <code>MessageCollection</code> to query across all channel types</li>
 				<li>Reference attachments via <code>messageId</code></li>
 			</ul>
@@ -317,7 +367,10 @@ BlacklistCollection`}
 			<h3>DON'Ts</h3>
 			<ul>
 				<li>Don't store passwords directly — always use smrt-secrets encryption</li>
-				<li>Don't modify JSON fields directly — use accessor methods (<code>getX()</code> / <code>setX()</code>)</li>
+				<li>
+					Don't modify JSON fields directly — use accessor methods (<code>getX()</code> /
+					<code>setX()</code>)
+				</li>
 				<li>Don't override <code>toJSON()</code> — use <code>transformJSON()</code></li>
 				<li>Don't use the deprecated <code>emailId</code> on Attachment in new code</li>
 				<li>Don't run concurrent syncs on the same account</li>

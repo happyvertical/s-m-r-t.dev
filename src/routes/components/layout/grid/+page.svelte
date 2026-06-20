@@ -7,15 +7,36 @@
 	const gridProps = [
 		{
 			name: 'columns',
-			type: "number | 'auto'",
+			type: "number | 'auto' | ResponsiveColumns",
 			default: "'auto'",
-			description: 'Number of columns or auto-fill with minmax'
+			description:
+				'Number of columns, auto-fill with minmax, or responsive object ({ sm, md, lg, xl })'
 		},
 		{
 			name: 'gap',
-			type: "'sm' | 'md' | 'lg' | 'xl'",
+			type: 'GapSize | { row?: GapSize; column?: GapSize }',
 			default: "'md'",
-			description: 'Gap between grid items'
+			description: 'Gap between grid items (single size, or separate row/column gaps)'
+		},
+		{
+			name: 'header',
+			type: 'Snippet',
+			description: 'Header snippet rendered above the grid'
+		},
+		{
+			name: 'alignItems',
+			type: "'start' | 'center' | 'end' | 'stretch'",
+			description: 'Vertical alignment of grid items'
+		},
+		{
+			name: 'justifyItems',
+			type: "'start' | 'center' | 'end' | 'stretch'",
+			description: 'Horizontal alignment of grid items'
+		},
+		{
+			name: 'autoFlow',
+			type: "'row' | 'column' | 'row dense' | 'column dense'",
+			description: 'Grid auto-flow direction'
 		}
 	];
 </script>
@@ -173,11 +194,26 @@
 		code={`import { Grid } from '@happyvertical/smrt-svelte';
 
 type GapSize = 'sm' | 'md' | 'lg' | 'xl';
+type GapConfig = GapSize | { row?: GapSize; column?: GapSize };
+type AlignItems = 'start' | 'center' | 'end' | 'stretch';
+type JustifyItems = 'start' | 'center' | 'end' | 'stretch';
+type AutoFlow = 'row' | 'column' | 'row dense' | 'column dense';
 
-interface Props {
-  columns?: number | 'auto';
-  gap?: GapSize;
+interface ResponsiveColumns {
+  sm?: number;
+  md?: number;
+  lg?: number;
+  xl?: number;
+}
+
+interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'class'> {
+  columns?: number | 'auto' | ResponsiveColumns;
+  gap?: GapConfig;
+  header?: Snippet;
   children?: Snippet;
+  alignItems?: AlignItems;
+  justifyItems?: JustifyItems;
+  autoFlow?: AutoFlow;
 }`}
 		language="typescript"
 	/>

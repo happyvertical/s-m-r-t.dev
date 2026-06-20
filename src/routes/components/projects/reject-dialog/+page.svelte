@@ -15,7 +15,7 @@
 	/>
 	<h2>Usage</h2>
 	<CodeBlock
-		code={`<RejectDialog open={showDialog} entryIds={selected} onsubmit={handleReject} />`}
+		code={`<RejectDialog open={showDialog} onconfirm={handleReject} oncancel={close} />`}
 		language="svelte"
 	/>
 </article>

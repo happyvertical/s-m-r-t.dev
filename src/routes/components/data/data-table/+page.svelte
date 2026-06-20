@@ -17,7 +17,7 @@
 		},
 		{
 			name: 'rowKey',
-			type: 'string | ((row: T) => string | number)',
+			type: 'keyof T | ((row: T) => string | number)',
 			default: 'undefined',
 			description: 'Key extractor for row identity'
 		},
@@ -259,7 +259,7 @@
 	<h2>TypeScript</h2>
 	<CodeBlock
 		code={`import { DataTable } from '@happyvertical/smrt-svelte';
-import type { DataTableColumn, SortState } from '@happyvertical/smrt-svelte';
+import type { DataTableColumn, SortState, SortDirection } from '@happyvertical/smrt-svelte';
 
 interface DataTableColumn<T> {
   id: string;

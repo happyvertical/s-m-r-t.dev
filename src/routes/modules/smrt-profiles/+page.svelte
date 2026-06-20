@@ -6,7 +6,7 @@
 <ModulePage
 	name="smrt-profiles"
 	description="Central identity system with multi-auth (Nostr/OIDC/API keys/magic links), bidirectional relationships, controlled metadata, and audit logging."
-	badges={['v0.24.12', 'Identity', 'Auth', 'ESM']}
+	badges={['v0.29.34', 'Identity', 'Auth', 'ESM']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
@@ -74,7 +74,8 @@
 		<h3>Peer Dependencies</h3>
 		<p>
 			Optional integration with <code>@happyvertical/smrt-tenancy</code> for tenant scoping. Nostr
-			support requires <code>@noble/curves</code> and <code>bech32</code> (already declared as deps).
+			support requires <code>@noble/curves</code> and <code>bech32</code> (already declared as
+			deps).
 			<strong>Nostr decryption requires the <code>SERVER_MASTER_SECRET</code> env var.</strong>
 		</p>
 	</section>
@@ -120,16 +121,14 @@ const isEngineer = await person.matches('a senior software engineer with TypeScr
 		<CodeBlock
 			code={`// profile_assets is the canonical join for profile-owned assets.
 // AssetAssociation is reserved for generic / provenance links only.
-await person.addAsset(headshotAssetId, {
-  relationship: 'avatar',
-  sortOrder: 0,
-});
+// addAsset(asset, relationship?, sortOrder?) -- takes an Asset instance.
+await person.addAsset(headshotAsset, 'avatar', 0);
 
-const assets = await person.getAssets({ relationship: 'avatar' });
-await person.removeAsset(headshotAssetId);
+const assets = await person.getAssets('avatar'); // relationship filter (string)
+await person.removeAsset(headshotAsset.id);
 
-// Bulk reads via the collection
-const ownedByMany = await profileCollection.getAssets([person.id, bob.id]);`}
+// Reads via the collection (per profile id)
+const ownedAssets = await profileCollection.getAssets(person.id, 'avatar');`}
 			language="typescript"
 		/>
 
@@ -140,7 +139,7 @@ const ownedByMany = await profileCollection.getAssets([person.id, bob.id]);`}
 const fieldCollection = await ProfileMetafieldCollection.create({ db });
 const phone = await fieldCollection.create({
   name: 'Phone Number',
-  validationSchema: { type: 'string', pattern: '^\\\\+?[0-9]{10,15}$' }
+  validation: { type: 'string', pattern: '^\\\\+?[0-9]{10,15}$' }
 });
 await phone.save();
 
@@ -150,7 +149,7 @@ const metadata = await person.getMetadata();
 
 // Bulk reads/writes
 await profileCollection.batchGetMetadata([person.id, bob.id]);
-await profileCollection.batchUpdateMetadata([{ profileId: person.id, values: { location: 'SF' } }]);`}
+await profileCollection.batchUpdateMetadata([{ profileId: person.id, data: { location: 'SF' } }]);`}
 			language="typescript"
 		/>
 
@@ -176,8 +175,7 @@ const friends = await person.getRelationships({ direction: 'all' });`}
 		<p>
 			<code>Profile.generateBio()</code> is registered with
 			<a href="/modules/smrt-prompts"><code>@happyvertical/smrt-prompts</code></a>
-			so tenants can override the template, model, and params at runtime without forking the
-			package.
+			so tenants can override the template, model, and params at runtime without forking the package.
 		</p>
 		<CodeBlock
 			code={`import { smrtProfilesGenerateBioPrompt } from '@happyvertical/smrt-profiles';
@@ -204,24 +202,23 @@ const friends = await person.getRelationships({ direction: 'all' });`}
 				<tr>
 					<td>NostrIdentity</td>
 					<td>
-						Encrypted keypair (AES-256-GCM). Requires <code>SERVER_MASTER_SECRET</code> env var for
-						decryption. NIP-05 address generation supported.
+						Encrypted keypair (AES-256-GCM). Requires <code>SERVER_MASTER_SECRET</code> env var for decryption.
+						NIP-05 address generation supported.
 					</td>
 				</tr>
 				<tr>
 					<td>OidcIdentity</td>
 					<td>
 						Multiple issuers (Keycloak/Google/GitHub). Lookup by <code>issuer + subject</code> pair.
-						<code>findOrCreate()</code> for first login. Same subject from different issuers =
-						different identities.
+						<code>findOrCreate()</code> for first login. Same subject from different issuers = different
+						identities.
 					</td>
 				</tr>
 				<tr>
 					<td>ApiKey</td>
 					<td>
 						SHA-256 hashed. <strong>Plaintext returned once only</strong> on
-						<code>generate()</code>. <code>keyPrefix</code> for identification. Scope-based with
-						expiry.
+						<code>generate()</code>. <code>keyPrefix</code> for identification. Scope-based with expiry.
 					</td>
 				</tr>
 				<tr>
@@ -242,7 +239,8 @@ const result = await resolveIdentity({
   apiKey: event.request.headers.get('X-API-Key'),
   db: event.locals.db
 });
-// Returns: { profile, source } | null`}
+// Returns ResolveIdentityResult: { profile: Profile | null, source, ... }
+// source: 'api_key' | 'oidc' | 'nostr' | 'actor' | 'none'`}
 			language="typescript"
 		/>
 
@@ -254,16 +252,17 @@ const result = await resolveIdentity({
   ApiKey,
 } from '@happyvertical/smrt-profiles';
 
-// First-time OIDC sign-in
-const { profile, oidcIdentity, created } = await createProfileFromOidc(claims, provider);
+// First-time OIDC sign-in -- (claims, provider, options)
+const { profile, oidcIdentity, created } = await createProfileFromOidc(claims, provider, { db });
 
-// Nostr-authenticated user
-const { profile, nostrIdentity } = await createProfileFromNostr(email, nostrData);
+// Nostr-authenticated user -- (email, nostrData, options)
+const { profile, nostrIdentity } = await createProfileFromNostr(email, nostrData, { db });
 
 // Issue an API key -- plaintext returned ONCE
-const { key, apiKey } = await ApiKey.generate({
-  profileId: profile.id,
-  scope: 'read:profiles',
+// generate(profile, { name, scopes?, expiresAt?, db? })
+const { key, apiKey } = await ApiKey.generate(profile, {
+  name: 'CI deploy key',
+  scopes: ['read:profiles'],
   expiresAt: new Date('2026-12-31'),
 });
 console.log(key);             // store now, never returned again
@@ -276,10 +275,11 @@ console.log(apiKey.keyPrefix); // visible identifier later`}
 		<h2>Audit Logging</h2>
 		<p>
 			<code>AuditLog</code> records actions, resource identifiers, and provenance. The
-			<code>source</code> field tracks the entry point
-			(<code>web</code>/<code>cli</code>/<code>ci</code>/<code>webhook</code>/<code>mcp</code>), and
-			<code>onBehalfOfId</code> captures the human identity behind a CI/automation account
-			(pass-through identity).
+			<code>source</code> field tracks the entry point (<code>web</code>/<code>cli</code>/<code
+				>ci</code
+			>/<code>webhook</code>/<code>mcp</code>), and
+			<code>onBehalfOfId</code> captures the human identity behind a CI/automation account (pass-through
+			identity).
 		</p>
 		<CodeBlock
 			code={`await profile.recordAction({
@@ -293,8 +293,8 @@ console.log(apiKey.keyPrefix); // visible identifier later`}
 			language="typescript"
 		/>
 		<p>
-			<code>AuditLog</code> sets <code>allowSuperAdminBypass: true</code> so platform admins can
-			read across tenants for incident response.
+			<code>AuditLog</code> sets <code>allowSuperAdminBypass: true</code> so platform admins can read
+			across tenants for incident response.
 		</p>
 	</section>
 
@@ -302,26 +302,45 @@ console.log(apiKey.keyPrefix); // visible identifier later`}
 		<h2>Gotchas</h2>
 		<ul>
 			<li>
-				<strong><code>SERVER_MASTER_SECRET</code> required</strong> for Nostr private-key decryption
-				— centralized key management
+				<strong><code>SERVER_MASTER_SECRET</code> required</strong> for Nostr private-key decryption —
+				centralized key management
 			</li>
 			<li>
 				<strong>API key plaintext returned once</strong>: <code>ApiKey.generate()</code> returns it
 				exactly one time; only <code>keyPrefix</code> is visible afterwards
 			</li>
-			<li><strong>OIDC unique per <code>issuer + subject</code></strong>: same subject from different issuers = different identities</li>
-			<li><strong>Email globally unique</strong> across all profiles (DB-level constraint), not per-tenant</li>
-			<li>Use <code>ProfileAsset</code> (<code>profile_assets</code>) for owned assets; reserve <code>AssetAssociation</code> for generic/provenance links</li>
+			<li>
+				<strong>OIDC unique per <code>issuer + subject</code></strong>: same subject from different
+				issuers = different identities
+			</li>
+			<li>
+				<strong>Email globally unique</strong> across all profiles (DB-level constraint), not per-tenant
+			</li>
+			<li>
+				Use <code>ProfileAsset</code> (<code>profile_assets</code>) for owned assets; reserve
+				<code>AssetAssociation</code> for generic/provenance links
+			</li>
 		</ul>
 	</section>
 
 	<section id="best-practices">
 		<h2>Best Practices</h2>
 		<ul>
-			<li>Define <code>ProfileMetafield</code> upfront — adding metadata without a backing field skips validation</li>
-			<li>Namespace metafield slugs with dot notation (<code>contact.phone</code>, <code>social.github</code>)</li>
-			<li>Only link OIDC accounts with <code>email_verified: true</code> — same email across providers is the linking signal</li>
-			<li>Always record sensitive actions via <code>recordAction()</code> — include <code>onBehalfOfId</code> for CI</li>
+			<li>
+				Define <code>ProfileMetafield</code> upfront — adding metadata without a backing field skips validation
+			</li>
+			<li>
+				Namespace metafield slugs with dot notation (<code>contact.phone</code>,
+				<code>social.github</code>)
+			</li>
+			<li>
+				Only link OIDC accounts with <code>email_verified: true</code> — same email across providers is
+				the linking signal
+			</li>
+			<li>
+				Always record sensitive actions via <code>recordAction()</code> — include
+				<code>onBehalfOfId</code> for CI
+			</li>
 			<li>Implement regular API key rotation; use specific scopes rather than <code>*</code></li>
 		</ul>
 	</section>
@@ -329,10 +348,21 @@ console.log(apiKey.keyPrefix); // visible identifier later`}
 	<section id="related">
 		<h2>Related Modules</h2>
 		<ul>
-			<li><a href="/modules/smrt-core">smrt-core</a> — SmrtObject, database persistence, AI integration</li>
-			<li><a href="/modules/smrt-users">smrt-users</a> — multi-tenant RBAC, sessions (consumes <code>profileId</code>)</li>
-			<li><a href="/modules/smrt-prompts">smrt-prompts</a> — overridable prompt for <code>generateBio()</code></li>
-			<li><a href="/modules/smrt-assets">smrt-assets</a> — the asset records joined via <code>profile_assets</code></li>
+			<li>
+				<a href="/modules/smrt-core">smrt-core</a> — SmrtObject, database persistence, AI integration
+			</li>
+			<li>
+				<a href="/modules/smrt-users">smrt-users</a> — multi-tenant RBAC, sessions (consumes
+				<code>profileId</code>)
+			</li>
+			<li>
+				<a href="/modules/smrt-prompts">smrt-prompts</a> — overridable prompt for
+				<code>generateBio()</code>
+			</li>
+			<li>
+				<a href="/modules/smrt-assets">smrt-assets</a> — the asset records joined via
+				<code>profile_assets</code>
+			</li>
 		</ul>
 	</section>
 </ModulePage>

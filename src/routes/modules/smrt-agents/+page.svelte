@@ -6,7 +6,7 @@
 <ModuleTabs
 	name="smrt-agents"
 	description="Build autonomous actors with persistent state, inter-agent communication via DispatchBus, and comprehensive lifecycle management."
-	badges={['v0.24.12', 'Agents', 'DispatchBus']}
+	badges={['v0.29.34', 'Agents', 'DispatchBus']}
 >
 	{#snippet docs()}
 		<section id="overview">
@@ -21,28 +21,46 @@
 			<h3>Key Features</h3>
 			<ul>
 				<li><strong>Persistent State</strong>: Automatic database persistence via SmrtObject</li>
-				<li><strong>Lifecycle Management</strong>: <code>initialize()</code> → <code>validate()</code> → <code>run()</code> → <code>shutdown()</code></li>
+				<li>
+					<strong>Lifecycle Management</strong>: <code>initialize()</code> → <code>validate()</code>
+					→ <code>run()</code> → <code>shutdown()</code>
+				</li>
 				<li>
 					<strong>Inter-Agent Communication</strong>: DispatchBus for async messaging with wildcard
 					patterns
 				</li>
-				<li><strong>Interest-Based Queries</strong>: Declarative object discovery with optional AI <code>qualify()</code> post-filter</li>
 				<li>
-					<strong>Lazy <code>agent_config</code></strong>: <code>$env</code> sentinels + <code>static configResolvers</code> unfreeze env-derived values at task pickup (#1161)
+					<strong>Interest-Based Queries</strong>: Declarative object discovery with optional AI
+					<code>qualify()</code> post-filter
 				</li>
-				<li><strong>Tenant Alignment</strong>: <code>TenantAgent</code> walks the tenant hierarchy with merged manifest + override permissions (#1208)</li>
 				<li>
-					<strong>Status Tracking</strong>: Five states (idle, initializing, running, error, shutdown)
+					<strong>Lazy <code>agent_config</code></strong>: <code>$env</code> sentinels +
+					<code>static configResolvers</code> unfreeze env-derived values at task pickup (#1161)
+				</li>
+				<li>
+					<strong>Tenant Alignment</strong>: <code>TenantAgent</code> walks the tenant hierarchy with
+					merged manifest + override permissions (#1208)
+				</li>
+				<li>
+					<strong>Status Tracking</strong>: Five states (idle, initializing, running, error,
+					shutdown)
 				</li>
 				<li><strong>UI Slots</strong>: Admin panel component declarations for configuration</li>
-				<li><strong>Opt-in Signal Handlers</strong>: <code>manageProcessSignals: true</code> for single-agent processes</li>
-				<li><strong>smrt-prompts Adoption</strong>: AI methods register templates via <code>definePrompt()</code> for runtime overrides</li>
+				<li>
+					<strong>Opt-in Signal Handlers</strong>: <code>manageProcessSignals: true</code> for single-agent
+					processes
+				</li>
+				<li>
+					<strong>smrt-prompts Adoption</strong>: AI methods register templates via
+					<code>definePrompt()</code> for runtime overrides
+				</li>
 			</ul>
 
 			<h3>Tenancy</h3>
 			<p>
 				Agents use <code>@TenantScoped({'{'} mode: 'optional' {'}'})</code>: an agent may be global
-				(no tenant) or bound to a tenant via <code>TenantAgent</code>. The <code>tenant_agents</code>
+				(no tenant) or bound to a tenant via <code>TenantAgent</code>. The
+				<code>tenant_agents</code>
 				junction resolves bindings by walking the tenant hierarchy and merging manifest defaults with
 				per-tenant permission overrides.
 			</p>
@@ -149,8 +167,15 @@ await agent.execute();
 
 			<h3>3. Query Agent State</h3>
 			<CodeBlock
-				code={`// Agents are persisted as SmrtObjects
-const agent = await DataProcessorAgent.findBy({ name: 'data-processor-1' });
+				code={`// Agents are persisted as SmrtObjects -- query via a collection
+import { SmrtCollection } from '@happyvertical/smrt-core';
+
+class DataProcessorAgentCollection extends SmrtCollection<DataProcessorAgent> {
+  static readonly _itemClass = DataProcessorAgent;
+}
+
+const agents = await DataProcessorAgentCollection.create({ db });
+const agent = await agents.findOne({ where: { name: 'data-processor-1' } });
 console.log(agent.status);         // 'idle', 'running', 'error', etc.
 console.log(agent.itemsProcessed); // 150
 console.log(agent.lastRunAt);`}
@@ -177,10 +202,15 @@ shutdown() ◄── (opt-in: manageProcessSignals on SIGTERM/SIGINT)
 
 			<h4>Lifecycle Methods</h4>
 			<ul>
-				<li><strong>initialize()</strong>: setup phase — connect to external services, load dependencies</li>
+				<li>
+					<strong>initialize()</strong>: setup phase — connect to external services, load
+					dependencies
+				</li>
 				<li><strong>validate()</strong>: validate configuration and prerequisites</li>
 				<li><strong>run()</strong>: main execution logic (abstract — must implement)</li>
-				<li><strong>shutdown()</strong>: cleanup — close connections, clear timers, deregister signals</li>
+				<li>
+					<strong>shutdown()</strong>: cleanup — close connections, clear timers, deregister signals
+				</li>
 			</ul>
 
 			<h3>2. Agent Status (5 States)</h3>
@@ -200,8 +230,15 @@ shutdown() ◄── (opt-in: manageProcessSignals on SIGTERM/SIGINT)
 			<h3>3. Configuration Management</h3>
 			<p>Three-layer configuration with priority order:</p>
 			<ol>
-				<li><strong>Database-persisted config</strong> (highest): user-modified via admin panels (<code>AgentConfig</code> rows)</li>
-				<li><strong>File-based config</strong>: <code>getModuleConfig('agent-name', defaults)</code> from <code>smrt.config.ts</code> + env</li>
+				<li>
+					<strong>Database-persisted config</strong> (highest): user-modified via admin panels (<code
+						>AgentConfig</code
+					> rows)
+				</li>
+				<li>
+					<strong>File-based config</strong>: <code>getModuleConfig('agent-name', defaults)</code>
+					from <code>smrt.config.ts</code> + env
+				</li>
 				<li><strong>Agent class defaults</strong>: hardcoded defaults in constructor</li>
 			</ol>
 
@@ -227,8 +264,8 @@ class MyAgent extends Agent {
 			<h4>Lazy <code>agent_config</code> Resolution (#1161)</h4>
 			<p>
 				Persisted <code>agent_config</code> snapshots env-derived values at sync time, so rotated env
-				vars don't reach already-stored schedule rows. Two complementary mechanisms unfreeze them at
-				task pickup:
+				vars don't reach already-stored schedule rows. Two complementary mechanisms unfreeze them at task
+				pickup:
 			</p>
 			<CodeBlock
 				code={`// 1. $env sentinels + a global resolver
@@ -295,9 +332,16 @@ async run() {
 				</thead>
 				<tbody>
 					<tr><td><code>campaign.*</code></td><td>campaign.started, campaign.completed</td></tr>
-					<tr><td><code>agent.*.completed</code></td><td>agent.suasor.completed, agent.fiscus.completed</td></tr>
+					<tr
+						><td><code>agent.*.completed</code></td><td
+							>agent.suasor.completed, agent.fiscus.completed</td
+						></tr
+					>
 					<tr><td><code>*</code></td><td>All single-segment events</td></tr>
-					<tr><td><code>*.*.completed</code></td><td>Multi-level events with 'completed' suffix</td></tr>
+					<tr
+						><td><code>*.*.completed</code></td><td>Multi-level events with 'completed' suffix</td
+						></tr
+					>
 				</tbody>
 			</table>
 
@@ -353,8 +397,12 @@ async run() {
 				on a parent tenant is implicitly enabled on every descendant unless overridden.
 			</p>
 			<ul>
-				<li><strong>Explicit binding</strong>: row exists for tenant (<code>source: 'explicit'</code>)</li>
-				<li><strong>Inherited</strong>: walks up tenant hierarchy (<code>source: 'inherited'</code>)</li>
+				<li>
+					<strong>Explicit binding</strong>: row exists for tenant (<code>source: 'explicit'</code>)
+				</li>
+				<li>
+					<strong>Inherited</strong>: walks up tenant hierarchy (<code>source: 'inherited'</code>)
+				</li>
 				<li><strong>Permissions</strong>: manifest defaults merged with per-tenant overrides</li>
 			</ul>
 			<CodeBlock
@@ -362,21 +410,27 @@ async run() {
 
 const bindings = await TenantAgentCollection.create({ db });
 
-// Explicit binding
+// Explicit binding (rows live in the tenant_agents table)
 await bindings.create({
-  agentId: agent.id,
+  agentClass: 'DataProcessorAgent',  // canonical agent type name
   tenantId: tenant.id,
-  enabled: true,
-  permissionOverrides: {
-    'agents.run': 'GRANT',
-    'agents.schedule': 'DENY',
+  status: 'active',                  // TenantAgentStatus
+  permissions: {                     // Record<string, boolean> override map
+    'agents.run': true,
+    'agents.schedule': false,
   },
 });
 
-// Resolve effective binding (walks ancestors if no explicit row)
-const effective = await bindings.resolveForTenant(agent.id, tenant.id);
-console.log(effective.source);      // 'explicit' | 'inherited'
-console.log(effective.permissions); // merged manifest + override snapshot`}
+// Look up the explicit binding for a tenant + agent class
+const binding = await bindings.findByTenantAndClass(tenant.id, 'DataProcessorAgent');
+
+// Resolve effective availability across the hierarchy (walks ancestors).
+// Returns ResolvedAgentAvailability[] -- each has { source, permissions, ... }.
+const availability = await bindings.resolveForTenant(tenant.id, getAncestorIds);
+for (const entry of availability) {
+  console.log(entry.source);      // 'explicit' | 'inherited'
+  console.log(entry.permissions); // merged manifest + override snapshot
+}`}
 				language="typescript"
 			/>
 		</section>
@@ -408,9 +462,8 @@ await schedules.create({
 			<p>
 				Signal handling is <strong>opt-in</strong>: pass <code>manageProcessSignals: true</code> in
 				agent options for single-agent processes. The base <code>shutdown()</code> deregisters those
-				handlers, so always call <code>super.shutdown()</code> from overrides. Multi-agent processes
-				(e.g. running under TaskRunner) should leave this off and let the runner orchestrate
-				shutdown.
+				handlers, so always call <code>super.shutdown()</code> from overrides. Multi-agent processes (e.g.
+				running under TaskRunner) should leave this off and let the runner orchestrate shutdown.
 			</p>
 			<CodeBlock
 				code={`@smrt()
@@ -432,10 +485,9 @@ class MyAgent extends Agent {
 		<section id="summary-article">
 			<h2>SummaryArticleResult Type</h2>
 			<p>
-				<code>SummaryArticleResult</code> is the canonical return shape for agents that generate
-				article summaries (e.g. Praeco). It pairs the article body with structured image descriptors
-				and surfaces the prompt key used, so callers can re-run with a different template via the
-				prompt registry.
+				<code>SummaryArticleResult</code> is the canonical return shape for agents that generate article
+				summaries (e.g. Praeco). It pairs the article body with structured image descriptors and surfaces
+				the prompt key used, so callers can re-run with a different template via the prompt registry.
 			</p>
 			<CodeBlock
 				code={`import type {
@@ -457,8 +509,7 @@ const result: SummaryArticleResult = await praeco.summarizeArticle({
 			<p>
 				Agent AI methods that talk to an LLM register their templates with
 				<a href="/modules/smrt-prompts"><code>@happyvertical/smrt-prompts</code></a>
-				so tenants can override the template, model, and params at runtime without forking the
-				agent.
+				so tenants can override the template, model, and params at runtime without forking the agent.
 			</p>
 			<table>
 				<thead>
@@ -467,7 +518,10 @@ const result: SummaryArticleResult = await praeco.summarizeArticle({
 				<tbody>
 					<tr>
 						<td><code>smrtAgents.praeco.summary</code></td>
-						<td><code>title</code>, <code>sourceUrl</code>, <code>bodyExcerpt</code>, <code>language</code></td>
+						<td
+							><code>title</code>, <code>sourceUrl</code>, <code>bodyExcerpt</code>,
+							<code>language</code></td
+						>
 					</tr>
 					<tr>
 						<td><code>smrtAgents.interests.qualify</code></td>
@@ -486,11 +540,25 @@ const result: SummaryArticleResult = await praeco.summarizeArticle({
 			<h2>Best Practices</h2>
 			<ol>
 				<li>Always call <code>super</code> from overridden lifecycle methods</li>
-				<li>Persist state regularly with <code>await this.save()</code> — long-running agents lose progress on crash otherwise</li>
-				<li>Use <code>manageProcessSignals</code> only on single-agent entry points; let TaskRunner handle multi-agent shutdown</li>
-				<li>Prefer <code>static configResolvers</code> over <code>$env</code> sentinels when the resolver is class-specific (it's discoverable)</li>
-				<li>For tenant-scoped agents, always check the effective <code>TenantAgent</code> binding before running privileged actions</li>
-				<li>Register prompts via <code>definePrompt()</code> so tenants can override without code changes</li>
+				<li>
+					Persist state regularly with <code>await this.save()</code> — long-running agents lose progress
+					on crash otherwise
+				</li>
+				<li>
+					Use <code>manageProcessSignals</code> only on single-agent entry points; let TaskRunner handle
+					multi-agent shutdown
+				</li>
+				<li>
+					Prefer <code>static configResolvers</code> over <code>$env</code> sentinels when the resolver
+					is class-specific (it's discoverable)
+				</li>
+				<li>
+					For tenant-scoped agents, always check the effective <code>TenantAgent</code> binding before
+					running privileged actions
+				</li>
+				<li>
+					Register prompts via <code>definePrompt()</code> so tenants can override without code changes
+				</li>
 			</ol>
 		</section>
 
@@ -522,8 +590,8 @@ const result: SummaryArticleResult = await praeco.summarizeArticle({
 			<h2>Agent Components</h2>
 			<p>
 				The <code>@happyvertical/smrt-agents</code> package includes Svelte 5 components for building
-				agent management interfaces. These components integrate with the agent backend to provide
-				real-time monitoring and configuration.
+				agent management interfaces. These components integrate with the agent backend to provide real-time
+				monitoring and configuration.
 			</p>
 
 			<h3>Available Components</h3>

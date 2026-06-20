@@ -3,9 +3,12 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-	let basicRange = $state({ start: '', end: '' });
-	let vacationRange = $state({ start: '2025-07-01', end: '2025-07-14' });
-	let flexibleRange = $state({ start: '', end: '' });
+	let basicStart = $state('');
+	let basicEnd = $state('');
+	let vacationStart = $state('2025-07-01');
+	let vacationEnd = $state('2025-07-14');
+	let flexibleStart = $state('');
+	let flexibleEnd = $state('');
 
 	const dateRangeProps = [
 		{
@@ -27,22 +30,40 @@
 			description: 'Description text for voice extraction context'
 		},
 		{
-			name: 'value',
-			type: '{ start: string, end: string }',
-			default: "{ start: '', end: '' }",
-			description: 'Current date range in ISO format (bindable)'
-		},
-		{
-			name: 'min',
+			name: 'startDate',
 			type: 'string',
 			default: 'undefined',
-			description: 'Minimum allowed date (ISO format)'
+			description: 'Current start date in ISO format YYYY-MM-DD (bindable)'
 		},
 		{
-			name: 'max',
+			name: 'endDate',
 			type: 'string',
 			default: 'undefined',
-			description: 'Maximum allowed date (ISO format)'
+			description: 'Current end date in ISO format YYYY-MM-DD (bindable)'
+		},
+		{
+			name: 'startPlaceholder',
+			type: 'string',
+			default: 'undefined',
+			description: 'Placeholder for the start date input'
+		},
+		{
+			name: 'endPlaceholder',
+			type: 'string',
+			default: 'undefined',
+			description: 'Placeholder for the end date input'
+		},
+		{
+			name: 'minDate',
+			type: 'string',
+			default: 'undefined',
+			description: 'Minimum selectable date (ISO format)'
+		},
+		{
+			name: 'maxDate',
+			type: 'string',
+			default: 'undefined',
+			description: 'Maximum selectable date (ISO format)'
 		},
 		{
 			name: 'disabled',
@@ -64,7 +85,7 @@
 		},
 		{
 			name: 'onchange',
-			type: '(value: { start: string, end: string }) => void',
+			type: '(value: DateRangeValue) => void',
 			default: 'undefined',
 			description: 'Callback when either date changes'
 		}
@@ -105,16 +126,23 @@
 
 	<ComponentExample
 		code={`<script lang="ts">
-  let value = $state({ start: '', end: '' });
+  let startDate = $state('');
+  let endDate = $state('');
 </script>
 
 <DateRangeInput
   name="daterange"
   label="Select Date Range"
-  bind:value
+  bind:startDate
+  bind:endDate
 />`}
 	>
-		<DateRangeInput name="daterange" label="Select Date Range" bind:value={basicRange} />
+		<DateRangeInput
+			name="daterange"
+			label="Select Date Range"
+			bind:startDate={basicStart}
+			bind:endDate={basicEnd}
+		/>
 	</ComponentExample>
 
 	<h2>With Default Values</h2>
@@ -124,29 +152,35 @@
 		code={`<DateRangeInput
   name="vacation"
   label="Vacation Period"
-  value={{ start: '2025-07-01', end: '2025-07-14' }}
+  startDate="2025-07-01"
+  endDate="2025-07-14"
 />`}
 	>
-		<DateRangeInput name="vacation" label="Vacation Period" bind:value={vacationRange} />
+		<DateRangeInput
+			name="vacation"
+			label="Vacation Period"
+			bind:startDate={vacationStart}
+			bind:endDate={vacationEnd}
+		/>
 	</ComponentExample>
 
 	<h2>With Constraints</h2>
-	<p>Use <code>min</code> and <code>max</code> to limit the selectable date range.</p>
+	<p>Use <code>minDate</code> and <code>maxDate</code> to limit the selectable date range.</p>
 
 	<ComponentExample
 		code={`<DateRangeInput
   name="booking"
   label="Booking Dates"
-  min="2025-01-01"
-  max="2025-12-31"
+  minDate="2025-01-01"
+  maxDate="2025-12-31"
   description="Select dates within 2025"
 />`}
 	>
 		<DateRangeInput
 			name="booking"
 			label="Booking Dates"
-			min="2025-01-01"
-			max="2025-12-31"
+			minDate="2025-01-01"
+			maxDate="2025-12-31"
 			description="Select dates within 2025"
 		/>
 	</ComponentExample>
@@ -171,14 +205,16 @@
 		code={`<DateRangeInput
   name="confirmed"
   label="Confirmed Period"
-  value={{ start: '2025-03-01', end: '2025-03-15' }}
+  startDate="2025-03-01"
+  endDate="2025-03-15"
   disabled
 />`}
 	>
 		<DateRangeInput
 			name="confirmed"
 			label="Confirmed Period"
-			value={{ start: '2025-03-01', end: '2025-03-15' }}
+			startDate="2025-03-01"
+			endDate="2025-03-15"
 			disabled
 		/>
 	</ComponentExample>
@@ -190,14 +226,16 @@
 		code={`<DateRangeInput
   name="invalid"
   label="Date Range"
-  value={{ start: '2025-03-15', end: '2025-03-01' }}
+  startDate="2025-03-15"
+  endDate="2025-03-01"
   error="End date must be after start date"
 />`}
 	>
 		<DateRangeInput
 			name="invalid"
 			label="Date Range"
-			value={{ start: '2025-03-15', end: '2025-03-01' }}
+			startDate="2025-03-15"
+			endDate="2025-03-01"
 			error="End date must be after start date"
 		/>
 	</ComponentExample>
@@ -227,27 +265,36 @@
 
 	<ComponentExample
 		code={`<script lang="ts">
-  let value = $state({ start: '', end: '' });
+  let startDate = $state('');
+  let endDate = $state('');
 
-  $: duration = value.start && value.end
-    ? Math.ceil((new Date(value.end).getTime() - new Date(value.start).getTime()) / (1000 * 60 * 60 * 24))
-    : null;
+  let duration = $derived(
+    startDate && endDate
+      ? Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24))
+      : null
+  );
 </script>
 
 <DateRangeInput
   name="interactive"
   label="Select Range"
-  bind:value
+  bind:startDate
+  bind:endDate
 />
-<p>Range: {value.start || '(none)'} to {value.end || '(none)'}</p>
+<p>Range: {startDate || '(none)'} to {endDate || '(none)'}</p>
 <p>Duration: {duration ? \`\${duration} days\` : 'N/A'}</p>`}
 	>
-		<DateRangeInput name="interactive" label="Select Range" bind:value={flexibleRange} />
+		<DateRangeInput
+			name="interactive"
+			label="Select Range"
+			bind:startDate={flexibleStart}
+			bind:endDate={flexibleEnd}
+		/>
 		<div style="margin-top: 1rem; color: #666;">
-			<p>Range: {flexibleRange.start || '(none)'} to {flexibleRange.end || '(none)'}</p>
+			<p>Range: {flexibleStart || '(none)'} to {flexibleEnd || '(none)'}</p>
 			<p>
-				Duration: {flexibleRange.start && flexibleRange.end
-					? `${Math.ceil((new Date(flexibleRange.end).getTime() - new Date(flexibleRange.start).getTime()) / (1000 * 60 * 60 * 24))} days`
+				Duration: {flexibleStart && flexibleEnd
+					? `${Math.ceil((new Date(flexibleEnd).getTime() - new Date(flexibleStart).getTime()) / (1000 * 60 * 60 * 24))} days`
 					: 'N/A'}
 			</p>
 		</div>
@@ -259,11 +306,12 @@
 	<h2>TypeScript</h2>
 	<CodeBlock
 		code={`import { DateRangeInput } from '@happyvertical/smrt-svelte';
+import type { DateRangeValue } from '@happyvertical/smrt-svelte';
 
-// DateRange interface
-interface DateRange {
-  start: string; // ISO date format (YYYY-MM-DD)
-  end: string;   // ISO date format (YYYY-MM-DD)
+// Value emitted by onchange
+interface DateRangeValue {
+  startDate: string; // ISO date format (YYYY-MM-DD)
+  endDate: string;   // ISO date format (YYYY-MM-DD)
 }
 
 // Props interface
@@ -271,13 +319,16 @@ interface Props {
   name: string;
   label?: string;
   description?: string;
-  value?: DateRange;
-  min?: string; // ISO date format
-  max?: string; // ISO date format
+  startPlaceholder?: string;
+  endPlaceholder?: string;
+  startDate?: string; // ISO date format, bindable
+  endDate?: string;   // ISO date format, bindable
+  minDate?: string;   // ISO date format
+  maxDate?: string;   // ISO date format
   disabled?: boolean;
   required?: boolean;
   error?: string;
-  onchange?: (value: DateRange) => void;
+  onchange?: (value: DateRangeValue) => void;
 }`}
 		language="typescript"
 	/>
@@ -286,7 +337,7 @@ interface Props {
 	<p>The component automatically validates:</p>
 	<ul>
 		<li>End date must be after or equal to start date</li>
-		<li>Dates must be within <code>min</code>/<code>max</code> bounds if specified</li>
+		<li>Dates must be within <code>minDate</code>/<code>maxDate</code> bounds if specified</li>
 		<li>Both dates required when <code>required</code> is true</li>
 		<li>ISO date format (YYYY-MM-DD)</li>
 	</ul>

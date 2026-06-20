@@ -19,7 +19,7 @@
 			class="block p-6 border rounded hover:border-blue-500 transition"
 		>
 			<h3 class="text-xl font-semibold mb-2">MeetingView</h3>
-			<p class="text-gray-600">Display meeting details with attendees and agenda</p>
+			<p class="text-gray-600">Display meeting details with links to agenda, minutes, and video</p>
 		</a>
 	</div>
 
@@ -30,8 +30,7 @@
 
 <MeetingView
   meeting={meeting}
-  attendees={attendees}
-  showAgenda={true}
+  calendarUrl="https://example.com/calendar.ics"
 />`}
 			language="typescript"
 		/>

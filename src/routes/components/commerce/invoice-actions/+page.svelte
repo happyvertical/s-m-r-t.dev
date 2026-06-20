@@ -15,7 +15,7 @@
 	/>
 	<h2>Usage</h2>
 	<CodeBlock
-		code={`<InvoiceActions invoice={invoice} onsend={send} onprint={print} onpaid={markPaid} />`}
+		code={`<InvoiceActions status={invoice.status} onsend={send} onprint={print} onmarkpaid={markPaid} />`}
 		language="svelte"
 	/>
 </article>

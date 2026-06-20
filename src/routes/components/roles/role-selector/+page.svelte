@@ -11,15 +11,26 @@
 		{ id: 'viewer', name: 'Viewer', description: 'Read-only access' }
 	];
 
+	function handleRoleChange(roleId: string) {
+		selectedRole = roleId;
+	}
+
 	const selectorProps = [
 		{ name: 'roles', type: 'Role[]', description: 'Available roles', required: true },
-		{ name: 'value', type: 'string', description: 'Selected role ID (bindable)', required: true },
 		{
 			name: 'onchange',
 			type: '(roleId: string) => void',
-			description: 'Callback when role changes'
+			description: 'Callback when role changes',
+			required: true
 		},
-		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable selection' }
+		{ name: 'value', type: 'string | null', description: 'Selected role ID (bindable)' },
+		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disable selection' },
+		{ name: 'placeholder', type: 'string', description: 'Placeholder text when no role selected' },
+		{
+			name: 'showDescription',
+			type: 'boolean',
+			description: 'Show each role description in the list'
+		}
 	];
 </script>
 
@@ -54,9 +65,13 @@
   ];
 </script>
 
-<RoleSelector {roles} bind:value={selectedRole} />`}
+<RoleSelector
+  {roles}
+  bind:value={selectedRole}
+  onchange={(roleId) => (selectedRole = roleId)}
+/>`}
 	>
-		<RoleSelector {roles} bind:value={selectedRole} />
+		<RoleSelector {roles} bind:value={selectedRole} onchange={handleRoleChange} />
 		<p style="margin-top: 1rem; color: #666;">Selected: {selectedRole || '(none)'}</p>
 	</ComponentExample>
 
@@ -65,17 +80,15 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`interface Role {
-  id: string;
-  name: string;
-  description?: string;
-}
+		code={`import type { Role } from '@happyvertical/smrt-users';
 
 interface Props {
   roles: Role[];
-  value: string;
-  onchange?: (roleId: string) => void;
+  onchange: (roleId: string) => void;
+  value?: string | null;
   disabled?: boolean;
+  placeholder?: string;
+  showDescription?: boolean;
 }`}
 		language="typescript"
 	/>

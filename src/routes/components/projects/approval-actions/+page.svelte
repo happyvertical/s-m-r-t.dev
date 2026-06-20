@@ -15,7 +15,7 @@
 	/>
 	<h2>Usage</h2>
 	<CodeBlock
-		code={`<ApprovalActions selectedIds={selected} onapprove={approve} onreject={reject} />`}
+		code={`<ApprovalActions status="submitted" onapprove={approve} onreject={reject} />`}
 		language="svelte"
 	/>
 </article>

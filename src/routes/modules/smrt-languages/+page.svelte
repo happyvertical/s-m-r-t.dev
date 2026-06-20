@@ -6,7 +6,7 @@
 <ModulePage
 	name="smrt-languages"
 	description="Language string registry with a 5-layer cascade, locale fallback chains, and AI-driven auto-translation for missing locales with admin review."
-	badges={['v0.24.12', 'i18n Registry', 'AI Auto-Translation', 'Locale Fallback']}
+	badges={['v0.29.34', 'i18n Registry', 'AI Auto-Translation', 'Locale Fallback']}
 >
 	<section>
 		<h2>Overview</h2>
@@ -14,18 +14,23 @@
 			<strong>smrt-languages</strong> is the i18n companion to <code>smrt-prompts</code>. It uses
 			the same 5-layer override cascade but is keyed by <code>(key, locale)</code> instead of just
 			<code>key</code>. When a locale is missing, it walks a fallback chain (<code>fr-CA</code> to
-			<code>fr</code> to default) and asynchronously enqueues an AI translation job so the next
-			request returns the requested locale natively.
+			<code>fr</code> to default) and asynchronously enqueues an AI translation job so the next request
+			returns the requested locale natively.
 		</p>
 		<aside>
 			<p>Key Features:</p>
 			<ul>
-				<li>5-layer cascade: code default to file config to app override to tenant override to runtime override</li>
+				<li>
+					5-layer cascade: code default to file config to app override to tenant override to runtime
+					override
+				</li>
 				<li>Locale fallback chain: <code>fr-CA</code> to <code>fr</code> to default</li>
 				<li>AI auto-translation queue with deterministic dedup IDs</li>
 				<li><code>LanguageOverride.auto_generated</code> flag drives admin review</li>
 				<li>Hash-gated re-translation — never time-based</li>
-				<li>Human edits win permanently (<code>auto_generated: false</code> rows are never overwritten)</li>
+				<li>
+					Human edits win permanently (<code>auto_generated: false</code> rows are never overwritten)
+				</li>
 				<li>Tenant glossary feeds the translation prompt for brand voice consistency</li>
 			</ul>
 		</aside>
@@ -102,7 +107,7 @@ If no row exists for the exact (key, locale, tenantId), fall through to:
 //    fr-CA -> fr -> en (configured default)
 
 // 2. Return the first hit immediately:
-//    { value, source: 'fallback', resolvedLocale }
+//    { text, source: 'fallback', resolvedFromLocale }
 
 // 3. Fire-and-forget enqueueTranslationJob:
 //    - Scoped to current tenant for glossary purposes
@@ -116,27 +121,37 @@ If no row exists for the exact (key, locale, tenantId), fall through to:
 
 	<section>
 		<h2>AI Translation Pipeline</h2>
-		<p>The translation worker honors several invariants to avoid runaway costs and bad overwrites:</p>
+		<p>
+			The translation worker honors several invariants to avoid runaway costs and bad overwrites:
+		</p>
 		<ul>
 			<li>Honors the <code>smrt-languages.auto_translate</code> feature flag (kill switch)</li>
 			<li>Skips locales outside <code>supportedLocales</code> when configured</li>
-			<li>Skips when a <code>LanguageOverride</code> already exists with a matching <code>source_hash</code> (hash-gated, never time-based)</li>
-			<li>Never overwrites rows with <code>auto_generated: false</code> — human edits win permanently</li>
-			<li>Pulls the tenant's existing overrides as a glossary so translations match tenant voice</li>
+			<li>
+				Skips when a <code>LanguageOverride</code> already exists with a matching
+				<code>source_hash</code> (hash-gated, never time-based)
+			</li>
+			<li>
+				Never overwrites rows with <code>auto_generated: false</code> — human edits win permanently
+			</li>
+			<li>
+				Pulls the tenant's existing overrides as a glossary so translations match tenant voice
+			</li>
 		</ul>
 		<CodeBlock
 			code={`// LanguageOverride model fields for the pipeline:
 class LanguageOverride extends SmrtObject {
   key: string
-  locale: string              // BCP-47, normalized (lowercase lang / uppercase region)
-  context: string             // tenantId or '__app__' for unique upsert
-  tenantId?: string | null
+  locale: string                  // BCP-47, normalized (lowercase lang / uppercase region)
+  tenantId: string | null
   template: string
-  auto_generated: boolean     // true if produced by translation worker
-  source_hash?: string        // hash of source template at translation time
-  ai_model?: string           // which model produced the translation
-  reviewed_at?: Date
-  reviewed_by?: string        // userId of reviewer (admin review queue)
+  auto_generated: boolean         // true if produced by translation worker
+  source_hash: string | null      // sha256 of source template at translation time
+  ai_model: string | null         // which model produced the translation
+  reviewed_at: string | null      // ISO timestamp of admin review
+  reviewed_by: string | null      // userId of reviewer (admin review queue)
+  // Note: 'context' is inherited from SmrtObject and set in save() to
+  // (tenantId ?? '__app__'); it backs the (key, locale, context) upsert key.
 }`}
 			language="typescript"
 		/>
@@ -145,10 +160,23 @@ class LanguageOverride extends SmrtObject {
 	<section>
 		<h2>Conventions</h2>
 		<ul>
-			<li>Keys are namespaced by package: <code>users.role.member</code>, <code>commerce.invoice.dueText</code></li>
-			<li>Locales follow BCP-47 (<code>en</code>, <code>fr-CA</code>, <code>pt-BR</code>) and are normalized on persistence</li>
-			<li>The translation prompt itself is registered with <code>smrt-prompts</code> under <code>smrt-languages.translation</code> — ops can tune wording without redeploying</li>
-			<li>The <code>context</code> column carries <code>tenantId</code> or <code>'__app__'</code> so the <code>(key, locale, context)</code> upsert key remains unique even with a nullable <code>tenantId</code></li>
+			<li>
+				Keys are namespaced by package: <code>users.role.member</code>,
+				<code>commerce.invoice.dueText</code>
+			</li>
+			<li>
+				Locales follow BCP-47 (<code>en</code>, <code>fr-CA</code>, <code>pt-BR</code>) and are
+				normalized on persistence
+			</li>
+			<li>
+				The translation prompt itself is registered with <code>smrt-prompts</code> under
+				<code>smrt-languages.translation</code> — ops can tune wording without redeploying
+			</li>
+			<li>
+				The <code>context</code> column carries <code>tenantId</code> or <code>'__app__'</code> so
+				the <code>(key, locale, context)</code> upsert key remains unique even with a nullable
+				<code>tenantId</code>
+			</li>
 		</ul>
 	</section>
 
@@ -157,9 +185,15 @@ class LanguageOverride extends SmrtObject {
 		<article>
 			<h3>DOs</h3>
 			<ul>
-				<li>Register every user-visible string with <code>defineLanguageString</code> at the default locale</li>
-				<li>Use the admin review queue to promote auto-generated translations to reviewed status</li>
-				<li>Manage the kill switch via the <code>smrt-languages.auto_translate</code> feature flag</li>
+				<li>
+					Register every user-visible string with <code>defineLanguageString</code> at the default locale
+				</li>
+				<li>
+					Use the admin review queue to promote auto-generated translations to reviewed status
+				</li>
+				<li>
+					Manage the kill switch via the <code>smrt-languages.auto_translate</code> feature flag
+				</li>
 				<li>Provide a tenant glossary by curating reviewed overrides — the translator uses them</li>
 			</ul>
 		</article>
@@ -167,7 +201,9 @@ class LanguageOverride extends SmrtObject {
 			<h3>DON'Ts</h3>
 			<ul>
 				<li>Don't translate user-supplied content with this package — it's for app strings only</li>
-				<li>Don't set <code>auto_generated: false</code> on auto-produced rows until a human reviews</li>
+				<li>
+					Don't set <code>auto_generated: false</code> on auto-produced rows until a human reviews
+				</li>
 				<li>Don't drop the <code>context</code> column — uniqueness depends on it</li>
 				<li>Don't enqueue translations synchronously — fire-and-forget is the contract</li>
 			</ul>

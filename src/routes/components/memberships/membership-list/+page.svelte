@@ -35,7 +35,17 @@
 			description: 'Change role callback'
 		},
 		{ name: 'onremove', type: '(membership: Membership) => void', description: 'Remove callback' },
-		{ name: 'emptyMessage', type: 'string', default: "'No memberships found'", description: 'Message when list is empty' },
+		{
+			name: 'emptyMessage',
+			type: 'string',
+			default: "'No memberships found'",
+			description: 'Message when list is empty'
+		},
+		{
+			name: 'empty',
+			type: 'Snippet',
+			description: 'Custom empty-state content (overrides emptyMessage)'
+		},
 		{ name: 'loading', type: 'boolean', default: 'false', description: 'Show loading state' }
 	];
 </script>
@@ -81,7 +91,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`interface MembershipWithContext {\n  membership: Membership;\n  tenant: Tenant;\n  role: Role;\n}\n\ninterface Props {\n  memberships: MembershipWithContext[];\n  onchangerole?: (membership: Membership) => void;\n  onremove?: (membership: Membership) => void;\n  emptyMessage?: string;\n  loading?: boolean;\n}`}
+		code={`interface MembershipWithContext {\n  membership: Membership;\n  tenant: Tenant;\n  role: Role;\n}\n\ninterface Props {\n  memberships: MembershipWithContext[];\n  onchangerole?: (membership: Membership) => void;\n  onremove?: (membership: Membership) => void;\n  emptyMessage?: string;\n  empty?: Snippet;\n  loading?: boolean;\n}`}
 		language="typescript"
 	/>
 </article>

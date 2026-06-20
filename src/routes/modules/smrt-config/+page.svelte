@@ -5,8 +5,10 @@
 
 <ModulePage
 	name="smrt-config"
-	description="Configuration management with cosmiconfig, secret sanitization, and SSG-safe export. Loads smrt.config.{js,ts,json} with globalThis caching so every package sees one config instance."
-	badges={['v0.24.12', 'Core Foundation', 'ESM']}
+	description="Configuration management with cosmiconfig, secret sanitization, and SSG-safe export. Loads smrt.config.{(js,
+	ts,
+	json)} with globalThis caching so every package sees one config instance."
+	badges={['v0.29.34', 'Core Foundation', 'ESM']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
@@ -14,17 +16,19 @@
 			<code>@happyvertical/smrt-config</code> is the configuration backbone for the SMRT framework.
 			It uses <a href="https://github.com/cosmiconfig/cosmiconfig">cosmiconfig</a> to load
 			<code>smrt.config.{'{'}js,ts,json{'}'}</code> from the project root, deep-merges runtime
-			overrides on top, and caches the result on <code>globalThis</code> so every package -- and
-			every module instance -- sees the same merged config.
+			overrides on top, and caches the result on <code>globalThis</code> so every package -- and every
+			module instance -- sees the same merged config.
 		</p>
 
 		<h3>How It Works</h3>
 		<ol>
 			<li>
-				<code>loadConfig()</code> uses cosmiconfig to find <code>smrt.config.{'{'}js,ts,json{'}'}</code>
+				<code>loadConfig()</code> uses cosmiconfig to find
+				<code>smrt.config.{'{'}js,ts,json{'}'}</code>
 			</li>
 			<li>
-				Merge priority (highest → lowest): runtime overrides &gt; file config &gt; env vars &gt;
+				Merge priority (highest → lowest): runtime overrides (<code>setConfig()</code>) &gt;
+				<code>packages</code>/<code>modules</code> section &gt; global <code>smrt</code> section &gt;
 				caller defaults
 			</li>
 			<li>
@@ -168,8 +172,8 @@ setConfig({
 		<h3><code>getPackageConfig&lt;T&gt;()</code></h3>
 		<p>
 			This is the canonical pattern that <code>@happyvertical/smrt-*</code> packages use to read their
-			own config section (you'll see it in smrt-prompts, smrt-languages, smrt-features, smrt-core,
-			and many more):
+			own config section (you'll see it in smrt-prompts, smrt-languages, smrt-features, smrt-core, and
+			many more):
 		</p>
 		<CodeBlock
 			code={`import { getPackageConfig } from '@happyvertical/smrt-config';
@@ -206,8 +210,8 @@ export default defineConfig({
 	<section id="ssg-export">
 		<h2>SSG-Safe Export</h2>
 		<p>
-			<code>exportConfig()</code> is designed for static site generation -- it strips secrets by
-			default so you can safely inline config into bundled output:
+			<code>exportConfig()</code> is designed for static site generation -- it strips secrets by default
+			so you can safely inline config into bundled output:
 		</p>
 		<CodeBlock
 			code={`import { exportConfig, sanitizeConfig } from '@happyvertical/smrt-config';
@@ -281,8 +285,8 @@ test('uses test configuration', () => {
 				merge, scalars/arrays replace).
 			</li>
 			<li>
-				<strong>Reference via env vars</strong>: keep secrets in <code>process.env</code> and reference
-				them from <code>smrt.config.js</code>. Don't hardcode secrets in the config file.
+				<strong>Reference via env vars</strong>: keep secrets in <code>process.env</code> and
+				reference them from <code>smrt.config.js</code>. Don't hardcode secrets in the config file.
 			</li>
 		</ul>
 	</section>
@@ -290,7 +294,8 @@ test('uses test configuration', () => {
 	<section id="used-by">
 		<h2>Used By</h2>
 		<p>
-			Every <code>@happyvertical/smrt-*</code> package that needs configuration reads its section via
+			Every <code>@happyvertical/smrt-*</code> package that needs configuration reads its section
+			via
 			<code>getPackageConfig()</code>. Recent consumers include:
 		</p>
 		<ul>

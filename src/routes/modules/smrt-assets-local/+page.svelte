@@ -6,16 +6,15 @@
 <ModulePage
 	name="smrt-assets-local"
 	description="Local Sharp/EXIF processing adapter for the SMRT asset runtime. Deterministic variant generation, EXIF normalization, and local storage — without dragging Sharp into core."
-	badges={['v0.24.12', 'Asset Adapter', 'Sharp + EXIF', 'Local Processing']}
+	badges={['v0.29.32', 'Asset Adapter', 'Sharp + EXIF', 'Local Processing']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
 			<strong>smrt-assets-local</strong> is the lightweight local processing adapter for the SMRT
-			asset runtime. It handles work that does not require a MAM or cloud processor: image
-			metadata extraction, EXIF normalization, auto-orientation, dimensions, and standard image
-			variants. It exists as a separate package so <code>smrt-assets</code> core stays free of
-			Sharp and EXIF dependencies.
+			asset runtime. It handles work that does not require a MAM or cloud processor: image metadata
+			extraction, EXIF normalization, auto-orientation, dimensions, and standard image variants. It
+			exists as a separate package so <code>smrt-assets</code> core stays free of Sharp and EXIF dependencies.
 		</p>
 		<aside>
 			<p>Key Features:</p>
@@ -23,7 +22,10 @@
 				<li>Local image metadata extraction (dimensions, EXIF, GPS)</li>
 				<li>Auto-orientation normalization before reporting dimensions</li>
 				<li>Decimal GPS coordinates preserved at full precision</li>
-				<li>Deterministic variant generation (<code>thumb</code>, <code>card</code>, <code>preview</code>, <code>publish</code>)</li>
+				<li>
+					Deterministic variant generation (<code>thumb</code>, <code>card</code>,
+					<code>preview</code>, <code>publish</code>)
+				</li>
 				<li>Cache-aware reuse of matching derived assets</li>
 				<li>Variant lineage metadata back to the source asset</li>
 				<li>Local storage backend — bytes stay on the host filesystem</li>
@@ -36,8 +38,8 @@
 		<CodeBlock code={`npm install @happyvertical/smrt-assets-local`} language="bash" />
 		<p>
 			Pulls in <code>sharp</code> and EXIF parsing libraries. The core
-			<code>@happyvertical/smrt-assets</code> package stays free of these so apps that don't need
-			local processing can skip the heavy native dependency.
+			<code>@happyvertical/smrt-assets</code> package stays free of these so apps that don't need local
+			processing can skip the heavy native dependency.
 		</p>
 	</section>
 
@@ -45,57 +47,66 @@
 		<h2>Quick Start</h2>
 		<CodeBlock
 			code={`import { createLocalAssetProcessor } from '@happyvertical/smrt-assets-local';
-import { AssetRuntime } from '@happyvertical/smrt-assets';
+import { createAssetRuntime } from '@happyvertical/smrt-assets';
 
-// Register the local adapter with the SMRT asset runtime
-const runtime = new AssetRuntime({ db });
-runtime.registerProcessor(createLocalAssetProcessor({
-  storageRoot: '/var/lib/smrt/assets',
-  // Optional: per-variant size overrides
-  variants: {
-    thumb:   { width: 200,  height: 200,  fit: 'cover' },
-    card:    { width: 600,  height: 400,  fit: 'cover' },
-    preview: { width: 1200, height: 800,  fit: 'inside' },
-    publish: { width: 2400, height: 1600, fit: 'inside' },
-  },
-}));
+// createLocalAssetProcessor() returns an AssetCapabilityProvider.
+// Register it with the asset runtime as a capability provider.
+const runtime = await createAssetRuntime({
+  db,
+  storage: '/var/lib/smrt/assets',  // local filesystem basePath (or @happyvertical/files options)
+  capabilityProviders: [
+    createLocalAssetProcessor({
+      quality: 82,  // WebP quality (default 82)
+      // Optional: per-variant size overrides
+      variants: {
+        thumb:   { width: 200,  height: 200,  fit: 'cover' },
+        card:    { width: 600,  height: 400,  fit: 'cover' },
+        preview: { width: 1200, height: 800,  fit: 'inside' },
+        publish: { width: 2400, height: 1600, fit: 'inside' },
+      },
+    }),
+  ],
+});
 
-// Extract metadata + generate variants for a newly uploaded asset
-await runtime.processAsset(assetId);
+// (Alternatively, register after construction:)
+// runtime.registerCapabilityProvider(createLocalAssetProcessor());
 
-// Ensure a specific variant exists (idempotent)
-const variant = await runtime.ensureVariant(assetId, 'thumb');`}
+// Extract metadata + generate variants for a newly uploaded Asset.
+// processAsset() takes the Asset instance, not its id.
+await runtime.processAsset(asset);
+
+// Ensure a specific variant exists (idempotent). The request is an
+// AssetVariantRequest object keyed by variant name.
+const result = await runtime.ensureVariant(asset, { variant: 'thumb' });`}
 			language="typescript"
 		/>
 	</section>
 
 	<section>
 		<h2>Image Metadata Extraction</h2>
-		<p>The adapter normalizes orientation before reporting dimensions and preserves GPS precision:</p>
+		<p>
+			The adapter normalizes orientation before reporting dimensions and preserves GPS precision:
+		</p>
 		<CodeBlock
-			code={`// Metadata extraction returns SMRT asset metadata conventions:
+			code={`// extractAssetImageMetadataFromBuffer() returns a NormalizedAssetImageMetadata:
 {
-  width: 4032,          // After orientation normalization
-  height: 3024,
-  orientation: 1,       // Already-applied orientation flag
-  format: 'jpeg',
-  exif: {
-    capturedAt: '2024-08-15T14:23:11.000Z',   // Stable ISO format
-    cameraModel: 'iPhone 15 Pro',
-    iso: 100,
-    aperture: 1.78,
-  },
+  width: 4032,          // After orientation normalization (or null)
+  height: 3024,         // (or null)
+  mimeType: 'image/jpeg',                      // (or null)
+  capturedAt: '2024-08-15T14:23:11.000Z',      // Stable ISO format (or null)
   gps: {
-    lat: 40.7484405,    // Decimal, NOT rounded
-    lon: -73.9856644,
-    altitude: 12.3,
-  },
-}`}
+    latitude: 40.7484405,    // Decimal, NOT rounded
+    longitude: -73.9856644,
+  },                          // (or null when no GPS present)
+}
+
+// processAsset() persists this on the asset's metadata sidecar under
+// imageMetadata (with an imageMetadataUpdatedAt timestamp).`}
 			language="json"
 		/>
 		<p>
-			<strong>Note:</strong> GPS coordinates are preserved at full precision because nearby-photo
-			search depends on it.
+			<strong>Note:</strong> GPS coordinates are preserved at full precision because nearby-photo search
+			depends on it.
 		</p>
 	</section>
 
@@ -104,19 +115,23 @@ const variant = await runtime.ensureVariant(assetId, 'thumb');`}
 		<p>Variant generation is deterministic for the same source version and request parameters:</p>
 		<CodeBlock
 			code={`// Standard variant names (shared SMRT vocabulary):
-//   thumb   - small square preview
-//   card    - card-format preview
-//   preview - in-app preview size
-//   publish - distribution-ready output
+//   thumb   - small square preview   (default 160x160 cover)
+//   card    - card-format preview    (default 480x270 cover)
+//   preview - in-app preview size    (default 960x960 inside)
+//   publish - distribution-ready out (default 1200x630 cover)
+// Generated variants are always encoded as WebP.
 
 // Deterministic for the same (source version, variant params):
-const v1 = await runtime.ensureVariant(assetId, 'thumb');
-const v2 = await runtime.ensureVariant(assetId, 'thumb');
-// v1.id === v2.id (cache reuse)
+const v1 = await runtime.ensureVariant(asset, { variant: 'thumb' });
+const v2 = await runtime.ensureVariant(asset, { variant: 'thumb' });
+// v2.source === 'cached' and v2.asset.id === v1.asset.id (cache reuse)
 
-// Variants preserve lineage back to the source asset
-console.log(v1.metadata.sourceAssetId);   // === assetId
-console.log(v1.metadata.sourceVersion);   // version of source at variant time`}
+// Each result is an AssetVariantResult: { asset, variant, source, url, metadata }.
+// Variants preserve lineage back to the source asset under
+// the derived asset's metadata.assetVariant entry:
+const lineage = v1.asset.getMetadata().assetVariant;
+console.log(lineage.sourceAssetId);   // === asset.id
+console.log(lineage.sourceVersion);   // version of source at variant time`}
 			language="typescript"
 		/>
 	</section>
@@ -126,8 +141,7 @@ console.log(v1.metadata.sourceVersion);   // version of source at variant time`}
 		<p>
 			The adapter implements provider capabilities such as <code>processAsset</code> and
 			<code>ensureVariant</code>. It does <em>not</em> own asset identity, tenant policy, or
-			publishing decisions — those belong in <code>@happyvertical/smrt-assets</code> and the host
-			app.
+			publishing decisions — those belong in <code>@happyvertical/smrt-assets</code> and the host app.
 		</p>
 		<p>
 			Generated bytes are local outputs. Callers may still choose to sync them to Ergot later via
@@ -140,8 +154,14 @@ console.log(v1.metadata.sourceVersion);   // version of source at variant time`}
 		<article>
 			<h3>DOs</h3>
 			<ul>
-				<li>Use the shared variant names (<code>thumb</code>, <code>card</code>, <code>preview</code>, <code>publish</code>)</li>
-				<li>Return extraction failures as status + error metadata — let the host decide what to display</li>
+				<li>
+					Use the shared variant names (<code>thumb</code>, <code>card</code>, <code>preview</code>,
+					<code>publish</code>)
+				</li>
+				<li>
+					Return extraction failures as status + error metadata — let the host decide what to
+					display
+				</li>
 				<li>Keep the provider deterministic enough for CI and local development to agree</li>
 				<li>Build tiny fixture images in memory for tests; avoid checked-in binary fixtures</li>
 				<li>Prefer cache reuse when a matching derived asset already exists</li>

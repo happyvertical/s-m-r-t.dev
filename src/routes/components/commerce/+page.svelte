@@ -70,10 +70,15 @@
 } from '@happyvertical/smrt-commerce/svelte';
 
 <!-- Full invoice view -->
-<InvoiceHeader {invoice} />
-<InvoiceLineItems bind:items={invoice.lineItems} />
-<InvoiceTotals {invoice} />
-<InvoiceActions {invoice} onsend={sendInvoice} />`}
+<InvoiceHeader
+  invoiceNumber={invoice.invoiceNumber}
+  status={invoice.status}
+  issueDate={invoice.issueDate}
+  dueDate={invoice.dueDate}
+/>
+<InvoiceLineItems items={invoice.lineItems} editable={true} />
+<InvoiceTotals subtotal={invoice.subtotal} total={invoice.totalAmount} />
+<InvoiceActions status={invoice.status} onsend={sendInvoice} />`}
 			language="typescript"
 		/>
 	</section>

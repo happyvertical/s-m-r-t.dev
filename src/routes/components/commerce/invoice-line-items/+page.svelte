@@ -17,7 +17,7 @@
 	/>
 	<h2>Usage</h2>
 	<CodeBlock
-		code={`<InvoiceLineItems bind:items={invoice.lineItems} editable={true} />`}
+		code={`<InvoiceLineItems items={lineItems} editable={true} onupdate={updateItem} ondelete={deleteItem} onadd={addItem} />`}
 		language="svelte"
 	/>
 </article>

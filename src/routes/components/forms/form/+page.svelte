@@ -164,8 +164,8 @@
 	<CodeBlock
 		code={`import { Form } from '@happyvertical/smrt-svelte';
 
-type STTAdapterType = 'whisper-wasm' | 'browser-speech';
-type LLMModelId = 'none' | 'smollm' | 'llama-3.2-1B-Instruct' | string;
+type STTAdapterType = 'browser-speech' | 'whisper-wasm' | 'whisper-cpp';
+type LLMModelId = 'none' | 'smollm2-360m' | 'smollm2-1.7b' | 'qwen2.5-1.5b' | 'llama-3.2-1b';
 
 interface FormProps {
   children: Snippet;

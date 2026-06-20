@@ -32,6 +32,11 @@ You can also combine **bold and *nested italic* text**.`;
 			type: 'string',
 			description: 'Markdown content to render',
 			required: true
+		},
+		{
+			name: 'class',
+			type: 'string',
+			description: 'Optional CSS class for styling the rendered output'
 		}
 	];
 </script>
@@ -116,6 +121,7 @@ You can also combine **bold and *nested italic* text**.`;
 
 interface Props {
   content: string;
+  class?: string;
 }`}
 		language="typescript"
 	/>

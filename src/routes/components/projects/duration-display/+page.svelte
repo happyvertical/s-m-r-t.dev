@@ -14,7 +14,7 @@
 		language="typescript"
 	/>
 	<h2>Usage</h2>
-	<CodeBlock code={`<DurationDisplay minutes={125} format="hours" />`} language="svelte" />
+	<CodeBlock code={`<DurationDisplay hours={2.5} format="hhmm" />`} language="svelte" />
 </article>
 
 <style>

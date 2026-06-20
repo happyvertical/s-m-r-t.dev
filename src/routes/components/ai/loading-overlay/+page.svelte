@@ -56,8 +56,14 @@
 	</p>
 
 	<h2>Installation</h2>
+	<p>
+		As of v0.29, the AI components are no longer exported from the main package barrel. Import
+		<code>AILoadingOverlay</code> from the <code>/browser-ai/svelte</code> subpath. Note that
+		<code>&lt;Provider&gt;</code> already renders an <code>AILoadingOverlay</code> internally, so
+		most apps get this behavior automatically just by wrapping in <code>&lt;Provider&gt;</code>.
+	</p>
 	<CodeBlock
-		code={`import { AILoadingOverlay } from '@happyvertical/smrt-svelte';`}
+		code={`import { AILoadingOverlay } from '@happyvertical/smrt-svelte/browser-ai/svelte';`}
 		language="typescript"
 	/>
 
@@ -66,13 +72,14 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { Provider as Smrt, AILoadingOverlay } from '@happyvertical/smrt-svelte';
+  import { Provider } from '@happyvertical/smrt-svelte';
+  import { AILoadingOverlay } from '@happyvertical/smrt-svelte/browser-ai/svelte';
 </script>
 
-<Smrt>
+<Provider>
   <AILoadingOverlay />
   <slot />
-</Smrt>`}
+</Provider>`}
 		language="svelte"
 	/>
 
@@ -104,7 +111,7 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { AILoadingOverlay } from '@happyvertical/smrt-svelte';
+  import { AILoadingOverlay } from '@happyvertical/smrt-svelte/browser-ai/svelte';
 
   let showLoading = $state(true);
 </script>
@@ -131,7 +138,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { AILoadingOverlay } from '@happyvertical/smrt-svelte';
+		code={`import { AILoadingOverlay } from '@happyvertical/smrt-svelte/browser-ai/svelte';
 
 interface Props {
   message?: string;
@@ -145,7 +152,7 @@ interface Props {
 
 	<h2>Requirements</h2>
 	<p>
-		Must be used within a <code>&lt;Smrt&gt;</code> provider. Uses app state context to track AI loading
+		Must be used within a <code>&lt;Provider&gt;</code>. Uses app state context to track AI loading
 		progress.
 	</p>
 </article>
