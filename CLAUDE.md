@@ -86,25 +86,25 @@ sibling smrt checkout. CI checks one out automatically; locally, ensure `../smrt
 - **Fix**: Added `allowLocalModels` option to `BaseBrowserAIOptions` (browser-ai) and `STTConfig` (smrt-svelte). Defaults to `false` so models load from HuggingFace Hub CDN.
 - **Status**: Fixed - models now load from remote by default, cached in IndexedDB
 
+### Demo docs refreshed for the v0.29.34 API
+
+- **Context**: After bumping 0.24.12 → 0.29.34, the demo pages still documented the
+  old 0.24 API inside their `code={...}` examples, props tables, and type signatures.
+- **Fix**: Refreshed 96 of 173 demo/doc pages against ground truth (the shipped
+  `smrt-svelte` `.d.ts` and the smrt monorepo source). Notable corrections: browser-AI
+  components (`VoiceInput`, `DownloadProgress`, `AILoadingOverlay`, `STTTest`,
+  `CapabilityGate`) moved to the `/browser-ai/svelte` subpath; package-specific
+  components now import from their own `/svelte` subpaths (e.g. `smrt-commerce/svelte`,
+  `smrt-users/svelte`); component props/types/callbacks corrected (e.g. `RoleBadge`
+  `role: string` → `Role`); `Smrt` wrapper → `Provider`; version badges → 0.29.34.
+- **Status**: Done — `pnpm run check:templates`, `pnpm run build`, and `pnpm test`
+  all pass; spot checks render with no console errors.
+
 ## Current Issues to Fix Upstream
 
 (None at this time)
 
 ## Known Follow-ups
-
-### Documentation drift: demo content still describes the 0.24 API
-
-- **Context**: The dependencies were bumped 0.24.12 → 0.29.34 (`pnpm run update:smrt`).
-  The app is functionally up to date — `pnpm test` and `pnpm run build` pass, every
-  route prerenders, and the live site has no console errors.
-- **What's stale**: Many demo pages document the _old_ 0.24 API inside their
-  `code={...}` example strings, props tables, and type signatures. Examples found:
-  removed exports (`VoiceInput`, `DownloadProgress`), changed `TenantContext` API
-  (`setTenant`/`getCurrentTenantId` no longer exist), and the `RoleBadge` `role` prop
-  tightened from `string` to a `Role` type. These are documentation accuracy issues,
-  not runtime breakage (the site only _renders_ these as docs; it doesn't call them).
-- **Next step**: A "refresh all docs for SMRT v0.29.x" pass (parallel to the earlier
-  v0.24.12 docs refresh) to bring every demo page's examples in line with 0.29.
 
 ### `pnpm check` (svelte-check) is noisy on doc pages
 
@@ -113,5 +113,5 @@ sibling smrt checkout. CI checks one out automatically; locally, ensure `../smrt
   `.svelte` files that embed `<script>` tags _inside_ `code={...}` template-literal
   example strings — it is pre-existing and version-independent (not caused by the
   smrt bump), and is **not** part of the CI gate (CI runs `pnpm test` + `pnpm run build`,
-  not `pnpm check`). Fixing it cleanly would let `pnpm check` surface the real
-  0.29 type drift above.
+  not `pnpm check`). Fixing it cleanly would make `pnpm check` usable as a real
+  type-drift guard for future smrt bumps.
