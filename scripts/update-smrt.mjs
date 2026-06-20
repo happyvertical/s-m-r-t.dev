@@ -50,6 +50,14 @@ const dryRun = flag('--dry-run');
 const noInstall = flag('--no-install') || dryRun;
 const useExact = flag('--exact');
 const pinTo = opt('--to'); // optional single target version for every package
+if (flag('--to') && !pinTo) {
+	console.error('--to requires a version argument, e.g. --to 0.29.34');
+	process.exit(1);
+}
+if (pinTo && !/^\d+\.\d+\.\d+([-+].+)?$/.test(pinTo)) {
+	console.error(`--to expects a semver version (e.g. 0.29.34), got: ${pinTo}`);
+	process.exit(1);
+}
 
 function getToken() {
 	if (process.env.GH_TOKEN) return process.env.GH_TOKEN;
@@ -65,7 +73,7 @@ function getToken() {
 }
 
 async function latestVersion(token, pkg) {
-	const url = `${REGISTRY}/${pkg.replace('/', '%2f')}`;
+	const url = `${REGISTRY}/${pkg.replaceAll('/', '%2f')}`;
 	const res = await fetch(url, {
 		headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }
 	});
@@ -110,13 +118,19 @@ const token = getToken();
 console.log(`\nResolving latest versions for ${targets.length} packages...\n`);
 
 const changes = [];
-await Promise.all(
+const resolved = await Promise.allSettled(
 	targets.map(async (t) => {
 		const version = pinTo ?? (await latestVersion(token, t.name));
 		t.next = specFor(version);
 		t.nextVersion = version;
 	})
 );
+const failures = resolved.filter((r) => r.status === 'rejected');
+if (failures.length > 0) {
+	console.error(`\nFailed to resolve ${failures.length} package(s):`);
+	for (const f of failures) console.error(`  - ${f.reason.message}`);
+	process.exit(1);
+}
 
 for (const t of targets) {
 	const changed = t.current !== t.next;
@@ -125,21 +139,26 @@ for (const t of targets) {
 	console.log(`  ${mark} ${t.name.padEnd(34)} ${t.current.padEnd(12)} ${changed ? t.next : ''}`);
 }
 
-if (changes.length === 0) {
-	console.log('\nAll smrt packages already up to date. Nothing to do.');
-	process.exit(0);
-}
-
 if (dryRun) {
-	console.log(`\n[dry-run] would update ${changes.length} package(s).`);
+	console.log(
+		changes.length > 0
+			? `\n[dry-run] would update ${changes.length} package(s).`
+			: '\n[dry-run] all smrt packages already at the target version.'
+	);
 	process.exit(0);
 }
 
-for (const t of changes) {
-	pkg[t.field][t.name] = t.next;
+if (changes.length > 0) {
+	for (const t of changes) {
+		pkg[t.field][t.name] = t.next;
+	}
+	writeFileSync(pkgPath, JSON.stringify(pkg, null, '\t') + '\n');
+	console.log(`\nUpdated package.json (${changes.length} package(s)).`);
+} else {
+	// package.json already current — still refresh the lockfile, which may be
+	// stale or missing even when the specs match.
+	console.log('\nAll smrt specs already current; refreshing the lockfile to be safe.');
 }
-writeFileSync(pkgPath, JSON.stringify(pkg, null, '\t') + '\n');
-console.log(`\nUpdated package.json (${changes.length} package(s)).`);
 
 if (noInstall) {
 	console.log('Skipping install (--no-install). Run `pnpm install` to refresh the lockfile.');
@@ -150,6 +169,8 @@ if (noInstall) {
 // overriding the (possibly broken) user-level ~/.npmrc for this command only.
 const npmrcDir = mkdtempSync(join(tmpdir(), 'update-smrt-'));
 const npmrcPath = join(npmrcDir, '.npmrc');
+// 0600: the file holds an auth token. mkdtemp gives a 0700 dir; restrict the
+// file too as defense-in-depth.
 writeFileSync(
 	npmrcPath,
 	[
@@ -157,8 +178,18 @@ writeFileSync(
 		`//npm.pkg.github.com/:_authToken=${token}`,
 		'always-auth=true',
 		''
-	].join('\n')
+	].join('\n'),
+	{ mode: 0o600 }
 );
+
+// Ensure the token file is removed even if pnpm install is interrupted (SIGINT/SIGTERM).
+const cleanup = () => rmSync(npmrcDir, { recursive: true, force: true });
+const onSignal = (signal) => {
+	cleanup();
+	process.exit(signal === 'SIGINT' ? 130 : 143);
+};
+process.on('SIGINT', () => onSignal('SIGINT'));
+process.on('SIGTERM', () => onSignal('SIGTERM'));
 
 try {
 	console.log('\nRefreshing lockfile with `pnpm install`...\n');
@@ -167,7 +198,7 @@ try {
 		env: { ...process.env, NPM_CONFIG_USERCONFIG: npmrcPath }
 	});
 } finally {
-	rmSync(npmrcDir, { recursive: true, force: true });
+	cleanup();
 }
 
-console.log('\nDone. Review the diff, run `pnpm check && pnpm build`, then commit.');
+console.log('\nDone. Review the diff, run `pnpm test && pnpm run build`, then commit.');

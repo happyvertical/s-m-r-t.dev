@@ -392,7 +392,7 @@ async run() {
 			<h2>TenantAgent -- Multi-Tenant Bindings</h2>
 			<p>
 				The <code>TenantAgent</code> model provides a junction table (<code>tenant_agents</code>)
-				binding agents to tenants with permission overrides and hierarchy resolution. As of v0.24.x
+				binding agents to tenants with permission overrides and hierarchy resolution. As of v0.29.x
 				(#1208) the inheritance walk is aligned with smrt-users tenant resolution: an agent enabled
 				on a parent tenant is implicitly enabled on every descendant unless overridden.
 			</p>

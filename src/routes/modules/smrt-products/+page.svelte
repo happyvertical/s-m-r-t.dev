@@ -62,9 +62,9 @@
 				</li>
 				<li>Auto-generated REST APIs, MCP tools, and CLI commands via <code>@smrt()</code></li>
 				<li>
-					ProductCollection helpers: <code>findByManufacturer()</code>, <code>findInStock()</code>,
-					<code>getAssets()</code>
-					/ <code>addAsset()</code> / <code>removeAsset()</code>
+					ProductCollection helpers: <code>findByManufacturer()</code>, <code>findInStock()</code>.
+					Asset helpers <code>getAssets()</code> / <code>addAsset()</code> /
+					<code>removeAsset()</code> live on the <code>Product</code> model.
 				</li>
 			</ul>
 		</aside>
@@ -455,7 +455,7 @@ const updated = await client.products.update(productId, {
 <!-- Props:
   - product: ProductData (required)
   - onEdit?: (product: ProductData) => void
-  - onDelete?: (product: ProductData) => void
+  - onDelete?: (id: string) => void
 
   Displays: name, manufacturer, model, category, tags
   Actions: Edit/Delete buttons (if handlers provided)

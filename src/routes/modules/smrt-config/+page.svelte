@@ -5,9 +5,7 @@
 
 <ModulePage
 	name="smrt-config"
-	description="Configuration management with cosmiconfig, secret sanitization, and SSG-safe export. Loads smrt.config.{(js,
-	ts,
-	json)} with globalThis caching so every package sees one config instance."
+	description="Configuration management with cosmiconfig, secret sanitization, and SSG-safe export. Loads smrt.config.{'{'}js,ts,json{'}'} with globalThis caching so every package sees one config instance."
 	badges={['v0.29.34', 'Core Foundation', 'ESM']}
 >
 	<section id="overview">

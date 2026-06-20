@@ -33,6 +33,7 @@ and refresh the lockfile in one command:
 pnpm run update:smrt            # bump all to latest, refresh lockfile
 pnpm run update:smrt -- --dry-run   # preview what would change
 pnpm run update:smrt -- --to 0.29.34  # pin all smrt pkgs to a specific version
+pnpm run update:smrt -- --exact     # write exact versions instead of ^ ranges
 ```
 
 `scripts/update-smrt.mjs` authenticates to the registry via `gh auth token`

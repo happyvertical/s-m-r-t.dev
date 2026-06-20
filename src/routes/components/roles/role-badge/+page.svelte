@@ -13,6 +13,11 @@
 		},
 		{ name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Badge size' }
 	];
+
+	// Demo role objects — RoleBadge renders role.name and color-codes by role.slug.
+	const adminRole = { name: 'Admin', slug: 'admin' };
+	const editorRole = { name: 'Editor', slug: 'editor' };
+	const viewerRole = { name: 'Viewer', slug: 'viewer' };
 </script>
 
 <svelte:head>
@@ -37,23 +42,23 @@
 
 	<h2>Basic Usage</h2>
 	<ComponentExample
-		code={`<RoleBadge role="Admin" />\n<RoleBadge role="Editor" />\n<RoleBadge role="Viewer" />`}
+		code={`<RoleBadge role={adminRole} />\n<RoleBadge role={editorRole} />\n<RoleBadge role={viewerRole} />`}
 	>
 		<div style="display: flex; gap: 8px; flex-wrap: wrap;">
-			<RoleBadge role="Admin" />
-			<RoleBadge role="Editor" />
-			<RoleBadge role="Viewer" />
+			<RoleBadge role={adminRole} />
+			<RoleBadge role={editorRole} />
+			<RoleBadge role={viewerRole} />
 		</div>
 	</ComponentExample>
 
 	<h2>Sizes</h2>
 	<ComponentExample
-		code={`<RoleBadge role="Admin" size="sm" />\n<RoleBadge role="Admin" size="md" />\n<RoleBadge role="Admin" size="lg" />`}
+		code={`<RoleBadge role={adminRole} size="sm" />\n<RoleBadge role={adminRole} size="md" />\n<RoleBadge role={adminRole} size="lg" />`}
 	>
 		<div style="display: flex; gap: 8px; align-items: center;">
-			<RoleBadge role="Admin" size="sm" />
-			<RoleBadge role="Admin" size="md" />
-			<RoleBadge role="Admin" size="lg" />
+			<RoleBadge role={adminRole} size="sm" />
+			<RoleBadge role={adminRole} size="md" />
+			<RoleBadge role={adminRole} size="lg" />
 		</div>
 	</ComponentExample>
 
