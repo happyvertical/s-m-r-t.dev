@@ -2,6 +2,7 @@
 	import { ThemeSwitcher, ColorSchemeToggle } from '@happyvertical/smrt-svelte/themes';
 	import { onMount } from 'svelte';
 	import { openPalette } from '$lib/search';
+	import mark from '$lib/assets/smrt-mark.png';
 
 	// Show the platform-appropriate shortcut hint (⌘K on macOS, Ctrl K elsewhere).
 	let isMac = $state(false);
@@ -13,7 +14,8 @@
 <header>
 	<div class="header-content">
 		<a href="/" class="branding">
-			<span class="logo">s-m-r-t</span>
+			<img src={mark} alt="" class="brand-mark" width="30" height="30" />
+				<span class="logo">s-m-r-t</span>
 		</a>
 		<nav>
 			<a href="/docs">Docs</a>
@@ -83,7 +85,15 @@
 	.branding {
 		display: flex;
 		align-items: center;
+		gap: 9px;
 		text-decoration: none;
+	}
+
+	.brand-mark {
+		width: 30px;
+		height: 30px;
+		display: block;
+		flex-shrink: 0;
 	}
 
 	.logo {
