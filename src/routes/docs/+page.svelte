@@ -1,13 +1,7 @@
-<svelte:head>
-	<title>Documentation | s-m-r-t</title>
-</svelte:head>
+<script lang="ts">
+	import CodeBlock from '$lib/components/CodeBlock.svelte';
 
-<article class="prose">
-	<h1>Documentation</h1>
-
-	<h2>Quick Start</h2>
-	<pre><code
-			>{`npm install @happyvertical/smrt-core
+	const quickStartCode = `npm install @happyvertical/smrt-core
 
 import { SmrtObject, smrt } from '@happyvertical/smrt-core';
 
@@ -19,8 +13,18 @@ class Task extends SmrtObject {
 
 const tasks = await TaskCollection.create({ db: 'tasks.db' });
 const task = await tasks.create({ title: 'Learn SMRT' });
-console.log(task.id); // auto-generated UUID`}</code
-		></pre>
+console.log(task.id); // auto-generated UUID`;
+</script>
+
+<svelte:head>
+	<title>Documentation | s-m-r-t</title>
+</svelte:head>
+
+<article class="prose">
+	<h1>Documentation</h1>
+
+	<h2>Quick Start</h2>
+	<CodeBlock code={quickStartCode} lang="typescript" />
 
 	<h2>Core Concepts</h2>
 	<ul>
@@ -55,17 +59,6 @@ console.log(task.id); // auto-generated UUID`}</code
 		font-weight: 600;
 		margin-top: 48px;
 		margin-bottom: 16px;
-	}
-
-	.prose pre {
-		background: #1a1a1a;
-		color: #f0f0f0;
-		padding: 20px;
-		overflow-x: auto;
-		font-family: var(--font-mono);
-		font-size: 0.85rem;
-		line-height: 1.5;
-		margin: 16px 0 24px;
 	}
 
 	.prose ul {

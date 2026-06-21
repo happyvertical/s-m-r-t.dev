@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Grid from './Grid.svelte';
+	import { SMRT_VERSION_LABEL } from '$lib/version';
 
 	interface Props {
 		name: string;
@@ -9,6 +10,19 @@
 	}
 
 	let { name, description, badges = [], children }: Props = $props();
+
+	// Match version-like badges, e.g. "v0.29.34", "0.29", "v1.2.3-beta".
+	const VERSION_BADGE_RE = /^v?\d+\.\d+/;
+
+	// Single-source the version: drop any version-like entries the page passed in
+	// (each module page currently hard-codes "v0.29.34" as the first badge) and
+	// prepend the canonical label from src/lib/version.ts. Pages keep passing
+	// their existing `badges` arrays unchanged — this just de-dupes/replaces the
+	// version one so the displayed version always comes from the constant.
+	let displayBadges = $derived([
+		SMRT_VERSION_LABEL,
+		...badges.filter((badge) => !VERSION_BADGE_RE.test(badge.trim()))
+	]);
 </script>
 
 <svelte:head>
@@ -27,10 +41,10 @@
 		<h1>@happyvertical/{name}</h1>
 		<p class="lead">{description}</p>
 
-		{#if badges.length > 0}
+		{#if displayBadges.length > 0}
 			<div class="badges">
-				{#each badges as badge}
-					<span class="badge">{badge}</span>
+				{#each displayBadges as badge, i}
+					<span class="badge" class:badge-version={i === 0}>{badge}</span>
 				{/each}
 			</div>
 		{/if}
@@ -102,6 +116,13 @@
 		font-size: 0.85rem;
 		font-weight: 500;
 		color: var(--smrt-color-on-surface-variant, #666);
+	}
+
+	/* Canonical version badge (single-sourced from src/lib/version.ts) */
+	.badge-version {
+		font-family: var(--smrt-font-family-mono, monospace);
+		background: var(--smrt-color-primary-container, #ffe5e7);
+		color: var(--smrt-color-on-primary-container, #9d1c26);
 	}
 
 	.content :global(section) {
