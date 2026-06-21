@@ -28,6 +28,14 @@ console.log(task.id); // auto-generated UUID`;
 
 	<h2>Core Concepts</h2>
 	<ul>
+		<li>
+			<a href="/docs/how-it-works">How It Works</a> — The codegen pipeline: one class becomes a
+			REST API, CLI, MCP tools, and SQL schema
+		</li>
+		<li>
+			<a href="/docs/security">Security</a> — Generated-surface defaults: fail-closed auth,
+			sensitive and read-only fields
+		</li>
 		<li><a href="/docs/objects">Objects</a> — Persistent entities with AI-powered methods</li>
 		<li><a href="/docs/collections">Collections</a> — Query, filter, and manage sets of objects</li>
 		<li><a href="/docs/agents">Agents</a> — Autonomous actors with persistent state</li>

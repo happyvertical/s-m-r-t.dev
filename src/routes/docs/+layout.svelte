@@ -8,6 +8,8 @@
 		{
 			title: 'Documentation',
 			items: [
+				{ label: 'How It Works', href: '/docs/how-it-works' },
+				{ label: 'Security', href: '/docs/security' },
 				{
 					label: 'Objects',
 					href: '/docs/objects',
