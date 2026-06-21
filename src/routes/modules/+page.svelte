@@ -283,7 +283,7 @@
 <SEO
 	title="Modules"
 	description="Explore 42 SMRT modules for building full-stack applications: core framework, agents, commerce, content, domain models, and more. Complete TypeScript documentation."
-	url="https://havesmrt.com/modules"
+	url="https://s-m-r-t.dev/modules"
 	type="website"
 />
 

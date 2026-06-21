@@ -17,8 +17,8 @@
 	let {
 		title,
 		description,
-		url = 'https://havesmrt.com',
-		image = 'https://havesmrt.com/og-image.png',
+		url = 'https://s-m-r-t.dev',
+		image = 'https://s-m-r-t.dev/og-image.png',
 		type = 'website',
 		article
 	}: SEOProps = $props();

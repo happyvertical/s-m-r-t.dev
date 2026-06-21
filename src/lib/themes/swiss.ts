@@ -1,7 +1,7 @@
 /**
  * Swiss Design Theme
  *
- * A custom theme for havesmrt.com based on Swiss/International Typographic Style.
+ * A custom theme for s-m-r-t.dev based on Swiss/International Typographic Style.
  * Clean, grid-based, with strong typography and minimal embellishment.
  */
 

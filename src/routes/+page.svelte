@@ -1,6 +1,6 @@
 <script lang="ts">
 	/**
-	 * havesmrt.com landing page — an ecosystem overview of the SMRT framework.
+	 * s-m-r-t.dev landing page — an ecosystem overview of the SMRT framework.
 	 *
 	 * The site layout (+layout.svelte) already renders the Header and Footer, so
 	 * this page begins at the hero. Everything is themed with --smrt-color-*
