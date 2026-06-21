@@ -49,8 +49,12 @@ jobs:
             echo "ref=main" >> $GITHUB_OUTPUT
           fi
 
+      # actions/checkout stays on v5 (node24, classic http.extraheader auth).
+      # Do NOT bump to v6+: its includeIf.gitdir credential isolation fails to
+      # authenticate on the self-hosted runners' nested workspace paths. The
+      # renovate.json allowedVersions rule enforces this.
       - name: Checkout smrt monorepo
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           repository: happyvertical/smrt
           ref: ${{ steps.smrt-branch.outputs.ref }}
@@ -58,7 +62,7 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
 
       - name: Checkout havesmrt.com
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           path: havesmrt.com
           token: ${{ secrets.GH_TOKEN }}
@@ -113,7 +117,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           token: ${{ secrets.GH_TOKEN }}
 
@@ -145,7 +149,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           token: ${{ secrets.GH_TOKEN }}
 

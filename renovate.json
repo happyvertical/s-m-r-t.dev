@@ -14,6 +14,11 @@
 			"matchUpdateTypes": ["pin", "digest"],
 			"automerge": true,
 			"automergeType": "pr"
+		},
+		{
+			"description": "Pin actions/checkout to v5: v6+ stores git credentials via includeIf.gitdir, which fails to authenticate on our self-hosted runners' nested/symlinked workspace paths. v5 is node24 and uses the classic http.extraheader mechanism that works here.",
+			"matchPackageNames": ["actions/checkout"],
+			"allowedVersions": "<6"
 		}
 	]
 }
