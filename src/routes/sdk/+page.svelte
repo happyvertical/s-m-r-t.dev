@@ -618,8 +618,8 @@ const entries = await fs.list('reports/');`;
 		color: var(--smrt-color-on-surface, #d63384);
 	}
 
-	.section :global(th) code,
-	.section :global(td) code {
+	.section :global(th code),
+	.section :global(td code) {
 		background: color-mix(in srgb, var(--smrt-color-primary, #1976d2) 10%, transparent);
 		color: inherit;
 	}
