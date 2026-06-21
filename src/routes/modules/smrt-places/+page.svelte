@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ModulePage from '$lib/components/ModulePage.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import Callout from '$lib/components/Callout.svelte';
 </script>
 
 <ModulePage
@@ -30,6 +31,10 @@
 					Forward geocoding (address → coordinates) and reverse geocoding (coordinates → address)
 				</li>
 				<li>Haversine proximity search, sorted nearest-first</li>
+				<li>
+					POI discovery via <code>discoverNearby()</code> and track-aware
+					<code>resolveTrackPlaces()</code> (bucketed + throttled for free geo tiers)
+				</li>
 				<li>
 					Type system via <code>PlaceType</code> (country, city, building, zone, room, region, ...)
 				</li>
@@ -214,6 +219,18 @@ await places.addAsset(sfId, photoAsset, 'gallery', 1);`}
 					></tr
 				>
 				<tr
+					><td><code>discoverNearby(lat, lng, radiusMeters, opts?)</code></td><td
+						>Discover + persist POIs via the geo provider's <code>findPoisNear</code>; cached by
+						provider <code>externalId</code></td
+					></tr
+				>
+				<tr
+					><td><code>resolveTrackPlaces(points, opts?)</code></td><td
+						>Bucketed, throttled POI resolution along a GPS track; returns deduped places plus
+						request / cache-hit / bucket counts</td
+					></tr
+				>
+				<tr
 					><td><code>findWithGlobals(tenantId)</code></td><td
 						>Tenant + global (<code>tenantId=null</code>) places</td
 					></tr
@@ -232,6 +249,65 @@ await places.addAsset(sfId, photoAsset, 'gallery', 1);`}
 				>
 			</tbody>
 		</table>
+	</section>
+
+	<section>
+		<h2>POI discovery: discoverNearby &amp; resolveTrackPlaces</h2>
+		<p>
+			Beyond geocoding a known address, <code>PlaceCollection</code> can discover points of interest
+			around a coordinate. <code>discoverNearby(lat, lng, radiusMeters)</code> composes
+			<code>@happyvertical/geo</code>'s <code>findPoisNear</code> with the same
+			<code>ensureFromLocation</code> path that <code>lookupOrCreate</code> uses, persisting each POI
+			as a <code>Place</code>. Caching is effectively automatic: the provider's own place id becomes
+			the Place row's <code>externalId</code>, so calling <code>discoverNearby</code> twice over the
+			same area on the same provider is a no-op after the first run (for providers that return stable
+			ids). It requires a provider that implements <code>findPoisNear</code> (default
+			<code>openstreetmap</code>) and throws clearly otherwise.
+		</p>
+		<CodeBlock
+			code={`// Discover and persist POIs within 250m.
+const pois = await places.discoverNearby(37.7749, -122.4194, 250, {
+  geoProvider: 'openstreetmap', // default; 'google' also supported
+  keyword: 'cafe',
+  limit: 20,
+});`}
+			language="typescript"
+		/>
+
+		<h3>resolveTrackPlaces — POIs along a GPS track</h3>
+		<p>
+			<code>resolveTrackPlaces(points, options)</code> resolves POIs along a path (e.g. a video's
+			per-frame GPS track) without hammering the provider. Consecutive samples are usually within a
+			few meters, so it buckets points by greedy proximity (Haversine) into <code>bucketMeters</code>-wide
+			clusters, calls <code>discoverNearby</code> once per distinct bucket, and throttles requests by
+			<code>throttleMs</code> to stay inside free-tier (Overpass / Nominatim) rate limits. Returned
+			<code>places</code> are deduped across overlapping buckets by Place id.
+		</p>
+		<CodeBlock
+			code={`const result = await places.resolveTrackPlaces(trackPoints, {
+  radiusMeters: 50,   // search radius per bucket (default 50)
+  bucketMeters: 50,   // points within this distance share one request (default 50)
+  throttleMs: 1100,   // delay between provider calls (default 1100ms)
+  geoProvider: 'openstreetmap',
+});
+
+// TrackPlacesResult:
+// {
+//   places: Place[],       // deduped across buckets
+//   requestCount: number,  // provider calls actually made
+//   cacheHitCount: number, // buckets where every POI already existed
+//   bucketCount: number,   // distinct geographic buckets walked
+// }`}
+			language="typescript"
+		/>
+		<Callout variant="note" title="Defaults tuned for free geo tiers">
+			The defaults (50&nbsp;m radius / 50&nbsp;m buckets / 1100&nbsp;ms throttle) keep
+			<code>resolveTrackPlaces</code> within community rate limits on OpenStreetMap's Overpass and
+			Nominatim out of the box. <code>radiusMeters</code> and <code>bucketMeters</code> must be
+			&gt;&nbsp;0 and <code>throttleMs</code> must be a finite non-negative number, or the call throws.
+			A higher <code>cacheHitCount</code> relative to <code>requestCount</code> means most of the track
+			was already discovered on an earlier run.
+		</Callout>
 	</section>
 
 	<section>

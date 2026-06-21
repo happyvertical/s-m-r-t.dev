@@ -2,6 +2,7 @@
 	import ModuleTabs from '$lib/components/ModuleTabs.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
+	import Callout from '$lib/components/Callout.svelte';
 	import { ArticleCard, ArticleList, Markdown } from '@happyvertical/smrt-content/svelte';
 
 	const sampleArticle = {
@@ -109,6 +110,10 @@ console.log(greeting);
 				<li>
 					Dedicated <code>content_assets</code> noun join (replaces ad-hoc
 					<code>AssetAssociation</code>)
+				</li>
+				<li>
+					RSS / Atom feed sync into <code>Mirror</code> rows with an SSRF guard, a 2&nbsp;MB body cap,
+					and conditional (ETag / Last-Modified) fetches
 				</li>
 				<li>Thumbnail strategies: headline-card, static-map, AI-generate</li>
 				<li>Prompt registry integration via <code>@happyvertical/smrt-prompts</code></li>
@@ -444,6 +449,59 @@ function bumpRevision(doc: MetadataAccessor) {
 }`}
 				language="typescript"
 			/>
+		</section>
+
+		<section id="feed-sync">
+			<h2>RSS / Atom feed sync</h2>
+			<p>
+				A <code>ContentFeedSource</code> row tracks an external RSS or Atom feed; calling
+				<code>syncContentFeedSource(source)</code> fetches it and upserts each entry as a
+				<code>Mirror</code> content row (deduped per source by <code>guid</code> / normalized URL).
+				Both feed formats are auto-detected by <code>parseContentFeed</code> — there is no separate
+				RSS vs Atom entry point.
+			</p>
+			<CodeBlock
+				code={`import {
+  ContentFeedSource,
+  syncContentFeedSource,
+} from '@happyvertical/smrt-content';
+
+const source = new ContentFeedSource({
+  name: 'Civic Newswire',
+  feedUrl: 'https://example.org/feed.xml',
+});
+await source.save();
+
+const result = await syncContentFeedSource(source, {
+  maxItems: 50,            // cap entries imported per run
+  maxResponseBytes: 2_000_000,  // default 2 MB body cap
+  fetchTimeoutMs: 10_000,       // default 10 s
+  status: 'published',          // status to give imported Mirror rows
+});
+// { fetched, notModified, imported, updated, skipped }`}
+				language="typescript"
+			/>
+
+			<h3>Conditional fetch</h3>
+			<p>
+				After a successful fetch the source persists the response <code>ETag</code> and
+				<code>Last-Modified</code>. The next sync sends them as <code>If-None-Match</code> /
+				<code>If-Modified-Since</code>; a <code>304 Not Modified</code> short-circuits with
+				<code>notModified: true</code> and imports nothing. Sources in <code>paused</code> or
+				<code>archived</code> status are skipped entirely.
+			</p>
+
+			<Callout variant="security" title="SSRF guard + body cap">
+				Feed fetching is hardened against server-side request forgery. The URL must be absolute
+				<code>http</code>/<code>https</code> with no embedded credentials; the hostname is DNS-resolved
+				and every resolved address is checked against a private/reserved blocklist (loopback,
+				RFC 1918, link-local <code>169.254/16</code>, carrier-grade NAT, IPv6 ULA/link-local, and
+				mapped equivalents). A request that resolves to any private address is rejected. The response
+				body is streamed with a hard <strong>2 MB cap</strong> (default
+				<code>maxResponseBytes</code>) — the reader aborts as soon as the limit is crossed, and an
+				oversized <code>Content-Length</code> is rejected up front. Set
+				<code>allowPrivateNetworkHosts: true</code> only for trusted internal feeds.
+			</Callout>
 		</section>
 
 		<section id="chat-integration">
