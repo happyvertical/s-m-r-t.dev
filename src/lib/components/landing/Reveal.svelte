@@ -11,7 +11,7 @@
 
 	// The single definition. Plain template-literal string -> CodeBlock renders
 	// the braces literally, the build-time template check never sees them.
-	const productClass = `import { smrt, SmrtObject } from '@happyvertical/smrt-core';
+	const productClass = `import { smrt, field, SmrtObject, SmrtCollection } from '@happyvertical/smrt-core';
 
 @smrt({ api: true, cli: true, mcp: true })
 export class Product extends SmrtObject {
@@ -19,11 +19,36 @@ export class Product extends SmrtObject {
   price: number = 0.0;
   quantity: number = 0;
 
+  // Per-field @field() decorators shape the column and its generated API:
+  @field({ sensitive: true })   // never returned by the API; not filterable
+  wholesalePrice: number = 0.0;
+
+  @field({ unique: true })      // unique constraint in the generated schema
+  sku: string = '';
+
+  @field({ readonly: true })    // server-set only; stripped from write bodies
+  externalId: string = '';
+
   // A custom async method is exposed on every surface too.
   async research(query: string) {
     return this.do(\`Research the product and answer: \${query}\`);
   }
-}`;
+}
+
+class ProductCollection extends SmrtCollection<Product> {
+  static readonly _itemClass = Product;
+}
+
+// Work with instances — ORM + AI methods are built in:
+const products = await ProductCollection.create({ db: 'shop.db' });
+const widget = await products.create({ name: 'Smart Widget', price: 29.99 });
+
+const onSale  = await widget.is('a clearance item');  // → boolean
+const blurb   = await widget.do('write a launch tweet');  // → string
+const summary = await widget.describe();  // → string
+const json    = widget.toPublicJSON();  // → object, minus wholesalePrice
+await widget.save();
+`;
 
 	type Panel = {
 		key: string;
@@ -69,12 +94,15 @@ export class Product extends SmrtObject {
 		{
 			key: 'sql',
 			label: 'SQL',
-			hint: 'migrated automatically',
+			hint: 'generated from your fields',
 			lines: [
 				{ text: 'create table products (' },
-				{ text: '  name      TEXT,' },
-				{ text: '  price     DECIMAL,' },
-				{ text: '  quantity  INTEGER' },
+				{ text: '  name             TEXT,' },
+				{ text: '  price            DECIMAL,' },
+				{ text: '  quantity         INTEGER,' },
+				{ text: '  wholesale_price  DECIMAL,' },
+				{ text: '  sku              TEXT,' },
+				{ text: '  external_id      TEXT' },
 				{ text: ')  — id + timestamps auto' }
 			]
 		}

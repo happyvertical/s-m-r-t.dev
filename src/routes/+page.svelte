@@ -42,9 +42,6 @@
 		}
 	];
 
-	const aiNote =
-		'Honest note: today is() and do() act on the instruction you pass them, not yet on the object’s own field data.';
-
 	// Section 7 — Runs anywhere. No lock-in.
 	const runsCards: LandingCard[] = [
 		{
@@ -106,7 +103,7 @@
 </Section>
 
 <Section eyebrow="AI" title="AI is built in" wide>
-	<CardRow cards={aiCards} note={aiNote} />
+	<CardRow cards={aiCards} />
 </Section>
 
 <Section eyebrow="Portability" title="Runs anywhere. No lock-in." tinted wide>
