@@ -4,12 +4,14 @@
 	 * reads the canonical version from $lib/version so it never drifts.
 	 */
 	import { SMRT_VERSION_LABEL } from '$lib/version';
+	import mark from '$lib/assets/smrt-mark.png';
 
 	const STARTER_URL = 'https://github.com/happyvertical/smrt-saas-starter';
 </script>
 
 <section class="hero" aria-labelledby="hero-title">
 	<div class="hero-inner">
+		<img src={mark} alt="" class="hero-mark" width="76" height="76" />
 		<p class="eyebrow">
 			<span class="eyebrow-version">{SMRT_VERSION_LABEL}</span>
 			<span class="eyebrow-sep" aria-hidden="true">·</span>
@@ -82,6 +84,13 @@
 
 	.eyebrow-sep {
 		color: var(--smrt-color-outline, #ccc);
+	}
+
+	.hero-mark {
+		width: 76px;
+		height: 76px;
+		display: block;
+		margin: 0 auto 28px;
 	}
 
 	h1 {
