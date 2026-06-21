@@ -12,6 +12,7 @@
 
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import CommandPalette from '$lib/components/CommandPalette.svelte';
 
 	let { children } = $props();
 </script>
@@ -30,6 +31,7 @@
 			</main>
 			<Footer />
 		</div>
+		<CommandPalette />
 	</ThemeProvider>
 </Provider>
 
