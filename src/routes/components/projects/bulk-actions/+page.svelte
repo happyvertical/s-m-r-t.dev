@@ -15,7 +15,7 @@
 	/>
 	<h2>Usage</h2>
 	<CodeBlock
-		code={`<BulkActions selectedIds={selected} actions={['delete', 'export', 'invoice']} />`}
+		code={`<BulkActions selectedCount={selected.length} ondelete={remove} onexport={exportEntries} />`}
 		language="svelte"
 	/>
 </article>

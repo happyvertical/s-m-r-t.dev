@@ -14,15 +14,15 @@
 <ModulePage
 	name="smrt-projects"
 	description="Provider-agnostic project management -- GitHub-style issues, PRs, projects, and repositories with Living Spec AI synthesis."
-	badges={['v0.20.44', 'Project Management', 'GitHub-style']}
+	badges={['v0.29.34', 'Project Management', 'GitHub-style']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-projects</strong> manages repositories, issues, pull requests, and project boards
-			with sync support for external providers (GitHub primary, GitLab/Bitbucket/Azure types defined).
-			Features AI-powered Living Spec pattern where comments are synthesized into issue bodies, and
-			PullRequest extends Issue via STI.
+			<strong>smrt-projects</strong> manages repositories, issues, pull requests, and project boards with
+			sync support for external providers (GitHub primary, GitLab/Bitbucket/Azure types defined). Features
+			AI-powered Living Spec pattern where comments are synthesized into issue bodies, and PullRequest
+			extends Issue via STI.
 		</p>
 		<aside>
 			<p>Key Features:</p>
@@ -30,8 +30,12 @@
 				<li>6 models: Repository, Issue, PullRequest (STI on Issue), Project, Comment, Label</li>
 				<li>Living Spec: AI-synthesized issue bodies from comments with rollback support</li>
 				<li>Token config reference: stores env var name, not the token itself</li>
-				<li>Sync throttle: operations skip if called within 5 minutes (override with force: true)</li>
-				<li>Provider-agnostic: GitHub primary via @happyvertical/repos and @happyvertical/projects SDK</li>
+				<li>
+					Sync throttle: operations skip if called within 5 minutes (override with force: true)
+				</li>
+				<li>
+					Provider-agnostic: GitHub primary via @happyvertical/repos and @happyvertical/projects SDK
+				</li>
 				<li>Collection methods: discover(), findByRepository(), findOpen(), batchSync()</li>
 			</ul>
 		</aside>
@@ -83,8 +87,7 @@ await issue.save();
 
 // Living Spec: Synthesize comments into body
 const result = await issue.incorporateFeedback({
-  applyUpdate: true,  // Update issue on GitHub
-  model: 'sonnet'
+  apply: true  // Update issue on GitHub (default false = preview only)
 });
 console.log(result.synthesized); // Updated body with comments`}
 			language="typescript"
@@ -101,9 +104,9 @@ console.log(result.synthesized); // Updated body with comments`}
   name: string
   providerType: 'github' | 'gitlab' | 'bitbucket' | 'azure'
   tokenConfigKey: string   // Env var name (not the token!) -- resolved at runtime
-  lastSyncedAt?: Date
+  lastSyncedAt: Date | null
 
-  async sync(options?): Promise<void>
+  async sync(options?): Promise<this>
   async getIssues(filters?): Promise<Issue[]>
   async getPullRequests(filters?): Promise<PullRequest[]>
   async createIssue(data): Promise<Issue>
@@ -114,7 +117,10 @@ console.log(result.synthesized); // Updated body with comments`}
 		/>
 
 		<h3>Issue (Living Spec -- STI Base)</h3>
-		<p>PullRequest extends Issue via single-table inheritance. Both share the same table, discriminated by <code>_meta_type</code>.</p>
+		<p>
+			PullRequest extends Issue via single-table inheritance. Both share the same table,
+			discriminated by <code>_meta_type</code>.
+		</p>
 		<CodeBlock
 			code={`class Issue extends SmrtObject {
   repositoryId: string     // FK
@@ -127,14 +133,14 @@ console.log(result.synthesized); // Updated body with comments`}
   synthesisCount: number   // Incremented on each incorporateFeedback apply
 
   // Living Spec Pattern
-  async incorporateFeedback(options): Promise<IncorporateFeedbackResult>
-  async rollback(): Promise<void>
+  async incorporateFeedback(options?: IncorporateFeedbackOptions): Promise<IncorporateFeedbackResult>
+  async rollback(): Promise<{ success: boolean; message: string }>
 
   // AI-Powered
   async suggestLabels(): Promise<string[]>
 
   // Operations
-  async sync(options?): Promise<void>
+  async sync(options?): Promise<this>
   async close(): Promise<void>
   async addLabels(labels: string[]): Promise<void>
   async addComment(body: string): Promise<Comment>
@@ -150,7 +156,9 @@ class PullRequest extends Issue {
   changedFiles: number
 
   async summarize(): Promise<string>
-  async merge(): Promise<void>
+  async merge(method?: 'merge' | 'squash' | 'rebase'): Promise<void>
+  async isReadyToMerge(): Promise<boolean>
+  async suggestReviewers(): Promise<string[]>
 }`}
 			language="typescript"
 		/>
@@ -161,11 +169,11 @@ class PullRequest extends Issue {
   projectId: string        // Provider-specific ID
   title: string
   providerType: 'github' | 'jira' | 'linear' | 'zenhub'
-  statuses: string[]       // Available columns/statuses
+  statuses: ProjectStatus[]   // Available columns/statuses
   statusFieldId?: string
 
-  async sync(): Promise<void>
-  async addItem(issue | pr): Promise<void>
+  async sync(options?): Promise<this>
+  async addItem(issue | pr): Promise<ProjectItem>
   async moveItem(issue, status): Promise<void>
   async listItems(filters?): Promise<ProjectItem[]>
   async updateItemStatus(itemId, status): Promise<void>
@@ -198,9 +206,9 @@ await issue.save();
 
 // 3. Incorporate feedback using AI
 const result = await issue.incorporateFeedback({
-  applyUpdate: true,       // Update issue on GitHub
-  model: 'sonnet',         // Claude Sonnet
-  synthesisStrategy: 'append'  // or 'replace', 'merge'
+  apply: true,                 // Update issue on GitHub (default false = preview)
+  prompt: 'Synthesize the feedback into the body',  // optional custom prompt
+  since: new Date('2025-01-01')                      // optional: only newer comments
 });
 
 console.log(result.synthesized);
@@ -283,8 +291,8 @@ await issue.rollback();
 	<section>
 		<h2>UI Components</h2>
 		<p>
-			Seven specialized Svelte components for time tracking and project management workflows.
-			Each component is fully typed, accessible, and follows the SMRT design system.
+			Seven specialized Svelte components for time tracking and project management workflows. Each
+			component is fully typed, accessible, and follows the SMRT design system.
 		</p>
 		<div class="link-grid">
 			<a href="/components/projects/time-entry-card" class="link-card">

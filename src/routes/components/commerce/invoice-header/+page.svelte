@@ -15,7 +15,16 @@
 		language="typescript"
 	/>
 	<h2>Usage</h2>
-	<CodeBlock code={`<InvoiceHeader invoice={invoice} company={company} />`} language="svelte" />
+	<CodeBlock
+		code={`<InvoiceHeader
+  invoiceNumber={invoice.invoiceNumber}
+  status={invoice.status}
+  issueDate={invoice.issueDate}
+  dueDate={invoice.dueDate}
+  customerName={invoice.customerName}
+/>`}
+		language="svelte"
+	/>
 </article>
 
 <style>

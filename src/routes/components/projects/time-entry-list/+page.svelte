@@ -7,7 +7,7 @@
 
 <article class="prose">
 	<h1>TimeEntryList</h1>
-	<p class="lead">List of time entries with filtering, sorting, and bulk selection.</p>
+	<p class="lead">List of time entries with optional bulk selection.</p>
 	<h2>Installation</h2>
 	<CodeBlock
 		code={`import { TimeEntryList } from '@happyvertical/smrt-projects/svelte';`}
@@ -15,7 +15,12 @@
 	/>
 	<h2>Usage</h2>
 	<CodeBlock
-		code={`<TimeEntryList entries={entries} bind:selected={selectedIds} />`}
+		code={`<TimeEntryList
+  entries={entries}
+  selectable
+  selectedIds={selectedIds}
+  onselectionchange={(ids) => (selectedIds = ids)}
+/>`}
 		language="svelte"
 	/>
 </article>

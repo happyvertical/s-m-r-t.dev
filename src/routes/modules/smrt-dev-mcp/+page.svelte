@@ -6,23 +6,40 @@
 <ModulePage
 	name="smrt-dev-mcp"
 	description="Tier 2 development MCP server for the SMRT framework — code generation and project introspection, read-only by design."
-	badges={['v0.24.12', 'MCP', 'Tier 2 Dev Tool', 'Read-only']}
+	badges={['v0.29.34', 'MCP', 'Tier 2 Dev Tool', 'Read-only']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
 			<strong>@happyvertical/smrt-dev-mcp</strong> is the <strong>Tier 2 (Development)</strong> MCP
-			server for the SMRT framework. It exposes two tools — <code>generate-smrt-class</code> and
-			<code>introspect-project</code> — for use from Claude Desktop, Claude Code, or any MCP-aware
-			client during day-to-day development. The server is <strong>strictly read-only</strong>: it
-			never writes files, never executes generated code, and never hits a database.
+			server for the SMRT framework. It provides code generation, project introspection,
+			deterministic ecosystem knowledge, and portable review / architecture prompt bundles for use
+			from Claude Desktop, Claude Code, Codex, or any MCP-aware client during day-to-day
+			development. The two most commonly used tools are <code>generate-smrt-class</code> and
+			<code>introspect-project</code> (documented below); see <a href="#all-tools">All Tools</a> for
+			the full set. The server is <strong>read-only</strong>: it never writes files, never executes
+			generated code, and never hits a database — review and architecture tools return deterministic
+			findings plus a model-ready prompt bundle rather than calling a model directly.
 		</p>
 		<aside>
-			<p><strong>MCP Tier Context.</strong> SMRT splits its MCP surface across three tiers so you can wire each tier into the right environment:</p>
+			<p>
+				<strong>MCP Tier Context.</strong> SMRT splits its MCP surface across three tiers so you can wire
+				each tier into the right environment:
+			</p>
 			<ul>
-				<li><strong>Tier 1 (Runtime)</strong>: auto-generated from <code>@smrt()</code> classes at build time — live CRUD/list/AI operations against your objects. See <a href="/modules/smrt-core">smrt-core</a>.</li>
-				<li><strong>Tier 2 (Development)</strong>: <em>this package</em> — class generation and project introspection for IDE-side assistants.</li>
-				<li><strong>Tier 3 (Docs)</strong>: <code>smrt-docs-mcp</code> — framework documentation lookup for assistants without local repo access.</li>
+				<li>
+					<strong>Tier 1 (Runtime)</strong>: auto-generated from <code>@smrt()</code> classes at
+					build time — live CRUD/list/AI operations against your objects. See
+					<a href="/modules/smrt-core">smrt-core</a>.
+				</li>
+				<li>
+					<strong>Tier 2 (Development)</strong>: <em>this package</em> — class generation and project
+					introspection for IDE-side assistants.
+				</li>
+				<li>
+					<strong>Tier 3 (Docs)</strong>: <code>smrt-docs-mcp</code> — framework documentation lookup
+					for assistants without local repo access.
+				</li>
 			</ul>
 		</aside>
 	</section>
@@ -75,13 +92,68 @@
 					<td><code>properties</code></td>
 					<td>array</td>
 					<td>Yes</td>
-					<td>Property definitions (<code>name</code>, <code>type</code>, <code>required?</code>, <code>description?</code>)</td>
+					<td
+						>Property definitions (<code>name</code>, <code>type</code>, <code>required?</code>,
+						<code>nullable?</code>, <code>description?</code>, <code>defaultValue?</code>)</td
+					>
 				</tr>
 				<tr>
 					<td><code>baseClass</code></td>
 					<td>string</td>
 					<td>No</td>
 					<td><code>'SmrtObject'</code> (default) or <code>'SmrtCollection'</code></td>
+				</tr>
+				<tr>
+					<td><code>template</code></td>
+					<td>string</td>
+					<td>No</td>
+					<td
+						><code>basic</code> (default), <code>global-catalog</code>,
+						<code>optional-catalog</code>, <code>tenant-project-object</code>,
+						<code>tenant-event-log-object</code>, or <code>cross-package-reference</code></td
+					>
+				</tr>
+				<tr>
+					<td><code>tableName</code></td>
+					<td>string</td>
+					<td>No</td>
+					<td>Explicit <code>{`@smrt({ tableName })`}</code> value</td>
+				</tr>
+				<tr>
+					<td><code>conflictColumns</code></td>
+					<td>array</td>
+					<td>No</td>
+					<td>Explicit upsert natural-key columns</td>
+				</tr>
+				<tr>
+					<td><code>tenantScoped</code></td>
+					<td>boolean | object</td>
+					<td>No</td>
+					<td
+						>Add <code>@TenantScoped(...)</code>; object form supports <code>mode</code>,
+						<code>field</code>, and bypass/filter options</td
+					>
+				</tr>
+				<tr>
+					<td><code>includeTenantIdField</code></td>
+					<td>boolean</td>
+					<td>No</td>
+					<td>Emit a matching <code>@tenantId()</code> field</td>
+				</tr>
+				<tr>
+					<td><code>relationships</code></td>
+					<td>array</td>
+					<td>No</td>
+					<td
+						>Relationship defs for <code>foreignKey</code>, <code>crossPackageRef</code>,
+						<code>oneToMany</code>, or <code>manyToMany</code></td
+					>
+				</tr>
+				<tr>
+					<td><code>includeCompanionSnippets</code></td>
+					<td>boolean</td>
+					<td>No</td>
+					<td>Append package wiring notes (default: false)</td>
 				</tr>
 				<tr>
 					<td><code>includeApiConfig</code></td>
@@ -103,7 +175,10 @@
 				</tr>
 			</tbody>
 		</table>
-		<p>Supported property types: <code>text</code>, <code>integer</code>, <code>decimal</code>, <code>boolean</code>, <code>datetime</code>, <code>json</code>.</p>
+		<p>
+			Supported property types: <code>text</code>, <code>integer</code>, <code>decimal</code>,
+			<code>boolean</code>, <code>datetime</code>, <code>json</code>.
+		</p>
 
 		<h3><code>introspect-project</code></h3>
 		<p>Scan a project directory for SMRT objects and return a class/field/relationship report.</p>
@@ -124,6 +199,15 @@
 					<td>Project directory (default: cwd)</td>
 				</tr>
 				<tr>
+					<td><code>manifestPath</code></td>
+					<td>string</td>
+					<td>No</td>
+					<td
+						>Explicit manifest artifact path (defaults to <code>.smrt/manifest.json</code>, then
+						<code>dist/manifest.json</code>, then source scanning)</td
+					>
+				</tr>
+				<tr>
 					<td><code>includeFields</code></td>
 					<td>boolean</td>
 					<td>No</td>
@@ -135,17 +219,64 @@
 					<td>No</td>
 					<td>Analyze relationships</td>
 				</tr>
+				<tr>
+					<td><code>includeMethods</code></td>
+					<td>boolean</td>
+					<td>No</td>
+					<td>Include public method details</td>
+				</tr>
 			</tbody>
 		</table>
+	</section>
+
+	<section id="all-tools">
+		<h2>All Tools</h2>
+		<p>
+			Beyond <code>generate-smrt-class</code> and <code>introspect-project</code>, the server also
+			exposes deterministic ecosystem-knowledge and review/architecture tools. These return findings
+			and reusable prompt bundles (they do not call a model directly):
+		</p>
+		<ul>
+			<li><code>review-smrt-project</code> — advisory downstream ecosystem alignment review</li>
+			<li>
+				<code>reflect-knowledge</code> / <code>reflect-domain-knowledge</code> — package, SDK, and relationship
+				coverage from the deterministic knowledge index
+			</li>
+			<li>
+				<code>check-knowledge-freshness</code> / <code>check-domain-knowledge</code> — the same
+				freshness checks as <code>pnpm knowledge:check</code>
+			</li>
+			<li>
+				<code>build-review-context</code> / <code>build-domain-review-context</code> /
+				<code>smrt-review</code> — model-ready review prompt bundles for changed files
+			</li>
+			<li>
+				<code>build-architecture-context</code> / <code>build-domain-architecture-context</code> /
+				<code>smrt-architecture</code> — model-ready architecture prompt bundles
+			</li>
+			<li>
+				<code>list-agent-skills</code> / <code>get-agent-skill</code> — fetch the harness-agnostic
+				SMRT agent skills shipped under <code>agent-skills/</code>
+			</li>
+		</ul>
 	</section>
 
 	<section>
 		<h2>Important Notes</h2>
 		<ul>
-			<li>This is a <strong>Tier 2 dev tool</strong> -- it does NOT provide runtime data operations</li>
-			<li>For runtime MCP (live CRUD on your objects), use Tier 1 auto-generated MCP from <code>@smrt({"{ mcp: true }"})</code></li>
+			<li>
+				This is a <strong>Tier 2 dev tool</strong> -- it does NOT provide runtime data operations
+			</li>
+			<li>
+				For runtime MCP (live CRUD on your objects), use Tier 1 auto-generated MCP from <code
+					>@smrt({'{ mcp: true }'})</code
+				>
+			</li>
 			<li>Read-only: never writes files or executes generated code</li>
-			<li>Field type mapping supports: <code>text</code>, <code>integer</code>, <code>decimal</code>, <code>boolean</code>, <code>datetime</code>, <code>json</code></li>
+			<li>
+				Field type mapping supports: <code>text</code>, <code>integer</code>, <code>decimal</code>,
+				<code>boolean</code>, <code>datetime</code>, <code>json</code>
+			</li>
 		</ul>
 	</section>
 

@@ -22,10 +22,46 @@ pnpm install
 npm run dev
 ```
 
+## Keeping smrt up to date
+
+The smrt framework ships as ~25 packages on GitHub Packages
+(`https://npm.pkg.github.com`), released in lockstep. To pull every
+`@happyvertical/smrt-*` registry dependency up to the latest published version
+and refresh the lockfile in one command:
+
+```bash
+pnpm run update:smrt            # bump all to latest, refresh lockfile
+pnpm run update:smrt -- --dry-run   # preview what would change
+pnpm run update:smrt -- --to 0.29.34  # pin all smrt pkgs to a specific version
+pnpm run update:smrt -- --exact     # write exact versions instead of ^ ranges
+```
+
+`scripts/update-smrt.mjs` authenticates to the registry via `gh auth token`
+(needs the `read:packages` scope), so it works even when `~/.npmrc` is stale.
+It skips `file:`/`link:`/`workspace:` specs (e.g. `@happyvertical/smrt-docs`,
+which is sourced from the sibling smrt checkout).
+
+After running it, verify with the CI gate (`pnpm test && pnpm run build`) and
+commit `package.json` + `pnpm-lock.yaml`.
+
+**Auth note:** Renovate normally keeps these current, but it authenticates with
+a `${GH_PACKAGES_TOKEN}` substitution in the user/CI `.npmrc`. If that token is
+unset or expired the registry returns 401 and updates silently stop landing —
+which is how the project drifted from 0.24.x to 0.29.x. Keep that token fresh
+(via Warden) so Renovate works; use `pnpm run update:smrt` for manual catch-ups.
+
+**Local `file:../smrt/docs` dep:** `@happyvertical/smrt-docs` resolves against a
+sibling smrt checkout. CI checks one out automatically; locally, ensure `../smrt`
+(relative to this repo) points at your smrt clone (a symlink is fine) before
+`pnpm install`.
+
 ## Stack
 
 - SvelteKit
-- @happyvertical/smrt-svelte (linked locally via `file:../smrt/packages/smrt-svelte`)
+- `@happyvertical/smrt-*` packages from GitHub Packages (currently `^0.29.34`;
+  bump with `pnpm run update:smrt` — see "Keeping smrt up to date")
+- `@happyvertical/smrt-docs` is the exception: a `file:../smrt/docs` dep providing
+  the markdown content rendered at `/docs`
 
 ## Resolved Issues
 
@@ -51,6 +87,32 @@ npm run dev
 - **Fix**: Added `allowLocalModels` option to `BaseBrowserAIOptions` (browser-ai) and `STTConfig` (smrt-svelte). Defaults to `false` so models load from HuggingFace Hub CDN.
 - **Status**: Fixed - models now load from remote by default, cached in IndexedDB
 
+### Demo docs refreshed for the v0.29.34 API
+
+- **Context**: After bumping 0.24.12 → 0.29.34, the demo pages still documented the
+  old 0.24 API inside their `code={...}` examples, props tables, and type signatures.
+- **Fix**: Refreshed 96 of 173 demo/doc pages against ground truth (the shipped
+  `smrt-svelte` `.d.ts` and the smrt monorepo source). Notable corrections: browser-AI
+  components (`VoiceInput`, `DownloadProgress`, `AILoadingOverlay`, `STTTest`,
+  `CapabilityGate`) moved to the `/browser-ai/svelte` subpath; package-specific
+  components now import from their own `/svelte` subpaths (e.g. `smrt-commerce/svelte`,
+  `smrt-users/svelte`); component props/types/callbacks corrected (e.g. `RoleBadge`
+  `role: string` → `Role`); `Smrt` wrapper → `Provider`; version badges → 0.29.34.
+- **Status**: Done — `pnpm run check:templates`, `pnpm run build`, and `pnpm test`
+  all pass; spot checks render with no console errors.
+
 ## Current Issues to Fix Upstream
 
 (None at this time)
+
+## Known Follow-ups
+
+### `pnpm check` (svelte-check) is noisy on doc pages
+
+- **Symptom**: svelte-check reports hundreds of `Cannot find name 'script'` /
+  `Expression expected` errors. Root cause is svelte2tsx failing to transform
+  `.svelte` files that embed `<script>` tags _inside_ `code={...}` template-literal
+  example strings — it is pre-existing and version-independent (not caused by the
+  smrt bump), and is **not** part of the CI gate (CI runs `pnpm test` + `pnpm run build`,
+  not `pnpm check`). Fixing it cleanly would make `pnpm check` usable as a real
+  type-drift guard for future smrt bumps.

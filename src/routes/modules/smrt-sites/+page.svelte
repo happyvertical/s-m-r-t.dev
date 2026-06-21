@@ -6,14 +6,14 @@
 <ModulePage
 	name="smrt-sites"
 	description="Site lifecycle management for multi-tenant networks with agent bindings, provisioning tracking, and portal configuration."
-	badges={['v0.24.12', 'Site Lifecycle', 'Agent Bindings', 'Multi-Tenant']}
+	badges={['v0.29.34', 'Site Lifecycle', 'Agent Bindings', 'Multi-Tenant']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-sites</strong> manages deployable websites within a tenant hierarchy. Sites
-			progress through a draft-to-archived lifecycle, track infrastructure provisioning, and bind
-			to agent classes with priority ordering and per-site configuration overrides.
+			<strong>smrt-sites</strong> manages deployable websites within a tenant hierarchy. Sites progress
+			through a draft-to-archived lifecycle, track infrastructure provisioning, and bind to agent classes
+			with priority ordering and per-site configuration overrides.
 		</p>
 		<aside>
 			<p>Key Features:</p>
@@ -62,11 +62,11 @@ await service.activateSite(site.id);
 // Mark infrastructure as provisioned
 await service.markProvisioned(site.id);
 
-// Bind agents with priority ordering (higher = first)
+// Bind agents (upsert): bindAgent(siteId, agentClass, config?)
 await service.bindAgent(site.id, 'Praeco', { schedule: '0 * * * *' });
 await service.bindAgent(site.id, 'Caelus', { maxArticles: 50 });
 
-// Get enabled agents sorted by priority descending
+// Get enabled agents sorted by priority descending (higher = first)
 const agents = await service.getEnabledAgents(site.id);
 
 // Suspend or archive a site
@@ -86,13 +86,16 @@ await service.archiveSite(site.id);`}
   domain: string              // Unique per tenant
   tier: 'free' | 'standard' | 'premium'
   status: 'draft' | 'active' | 'suspended' | 'archived'
-  provisioningStatus: 'pending' | 'provisioning' | 'ready' | 'failed'
-  provisioningTimestamp?: Date
+  provisioningStatus: 'pending' | 'provisioning' | 'ready' | 'failed' | ''
+  provisionedAt: Date | null  // set when provisioning completes
+  provisioningError: string
   portalConfig: string        // JSON (theme, branding, navigation)
-  databaseUrl?: string
+  databaseUrl: string
 
   getPortalConfig(): SitePortalConfig
   setPortalConfig(config: SitePortalConfig): void
+  getMetadata(): Record<string, unknown>
+  setMetadata(data: Record<string, unknown>): void
 
   // @TenantScoped({ mode: 'required' })
 }`}
@@ -104,11 +107,9 @@ await service.archiveSite(site.id);`}
 			code={`class SiteAgentBinding extends SmrtObject {
   siteId: string
   agentClass: string          // Agent class name
-  priority: number            // Higher values execute first
-  enabled: boolean
-  config?: string             // JSON per-site overrides (nullable)
-
-  getConfig(): Record<string, any> | null
+  priority: number            // Higher values execute first (default 0)
+  enabled: boolean            // default true
+  config: Record<string, unknown> | null  // per-site overrides (default null)
 
   // conflictColumns: ['site_id', 'agent_class']
   // @TenantScoped({ mode: 'required' })
@@ -151,7 +152,9 @@ await service.unbindAgent(site.id, 'Praeco');`}
 				<li>Validate name and domain before activating a site</li>
 				<li>Use <code>bindAgent()</code> for upsert behavior on agent bindings</li>
 				<li>Track provisioning status separately from site status</li>
-				<li>Use <code>getPortalConfig()</code>/<code>setPortalConfig()</code> for type-safe access</li>
+				<li>
+					Use <code>getPortalConfig()</code>/<code>setPortalConfig()</code> for type-safe access
+				</li>
 			</ul>
 		</article>
 		<article>

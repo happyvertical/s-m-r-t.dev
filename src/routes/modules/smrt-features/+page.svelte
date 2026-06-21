@@ -5,26 +5,39 @@
 
 <ModulePage
 	name="smrt-features"
-	description="Code-first feature flag registry with 4-layer resolution: user scope, tenant hierarchy, global scope, and the definition default."
-	badges={['v0.24.12', 'Feature Flags', '4-Layer Resolution', 'Tenant Hierarchy']}
+	description="Code-first feature flag registry with layered resolution: tenant hierarchy, global scope, and the definition default."
+	badges={['v0.29.34', 'Feature Flags', 'Boolean Resolution', 'Tenant Hierarchy']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-features</strong> is a code-first feature-flag system. Features are defined in
-			code with default state, then optionally overridden at global, tenant (hierarchically), or
-			user scopes at runtime. A boot-time sync service mirrors code definitions into the database
-			so admin tooling can list and configure them.
+			<strong>smrt-features</strong> is a code-first feature-flag system. Features are declared on
+			<code>@smrt()</code>-decorated classes (their default state lives in code), then optionally
+			overridden at the global or tenant (hierarchical) scope at runtime. A boot-time sync service
+			mirrors the registered definitions into the database so admin tooling can list and configure
+			them. Resolution returns a boolean.
 		</p>
 		<aside>
 			<p>Key Features:</p>
 			<ul>
-				<li>4-layer resolution: user, tenant hierarchy, global, definition default</li>
-				<li><code>_smrt_feature_definitions</code> mirrors code-owned definitions</li>
-				<li><code>_smrt_feature_overrides</code> stores runtime overrides keyed by <code>(featureKey, scopeType, scopeId)</code></li>
-				<li><code>FeatureSyncService</code> reconciles DB with code at boot</li>
+				<li>Layered resolution: tenant hierarchy, then global, then the definition default</li>
+				<li>
+					Override scopes are <code>'global'</code> and <code>'tenant'</code> only (no per-user scope)
+				</li>
+				<li>
+					<code>_smrt_feature_definitions</code> mirrors code-owned definitions (keyed by
+					<code>featureKey</code>)
+				</li>
+				<li>
+					<code>_smrt_feature_overrides</code> stores runtime overrides keyed by
+					<code>(featureKey, scopeType, scopeId)</code>
+				</li>
+				<li><code>FeatureSyncService</code> reconciles DB with the registry at boot</li>
 				<li>Walks tenant hierarchy via optional <code>smrt-users</code> peer</li>
-				<li>Write-time validation against <code>allowedScopes</code> on the definition</li>
+				<li>
+					Override effects are <code>enable</code> / <code>disable</code> / <code>inherit</code>
+					(the <code>FeatureOverrideEffect</code> enum)
+				</li>
 			</ul>
 		</aside>
 	</section>
@@ -42,65 +55,65 @@
 		<h2>Quick Start</h2>
 		<CodeBlock
 			code={`import {
-  FeatureDefinition,
-  FeatureOverride,
   FeatureResolver,
   FeatureSyncService,
-  GLOBAL_FEATURE_SCOPE_ID,
+  FeatureOverrideCollection,
+  FeatureOverrideEffect,
+  createFeatureKey,
 } from '@happyvertical/smrt-features';
 
-// 1. Define feature flags in code (typically in a manifest module)
-const features = [
-  {
-    key: 'commerce.invoice.draft-mode',
-    description: 'Allow saving invoices as drafts before finalization',
-    defaultEffect: 'disabled',
-    allowedScopes: ['global', 'tenant', 'user'],
-  },
-  {
-    key: 'content.editor.ai-suggestions',
-    description: 'Inline AI suggestion bar in the content editor',
-    defaultEffect: 'enabled',
-    allowedScopes: ['global', 'tenant'],
-  },
-];
-
-// 2. Sync definitions to DB at boot
+// 1. Sync definitions to DB at boot.
+// Definitions are read from the SMRT ObjectRegistry (features declared on
+// @smrt()-decorated classes), not from a literal array. With no filter,
+// syncDefinitions() reconciles every registered feature.
 const sync = new FeatureSyncService({ db });
-await sync.syncDefinitions(features);
+const result = await sync.syncDefinitions();
+// result: { total, created, updated, unchanged, deleted, featureKeys }
 
-// 3. Resolve a feature for the current context
+// 2. Resolve a feature for the current context (returns a boolean).
+// Feature keys are "<qualifiedClassName>#<localId>".
 const resolver = new FeatureResolver({ db });
-const effect = await resolver.resolve('commerce.invoice.draft-mode', {
-  userId: 'user-42',
+const featureKey = createFeatureKey('@acme/commerce:Invoice', 'draftMode');
+const enabled = await resolver.isEnabled(featureKey, {
   tenantId: 'tenant-123',
 });
-// effect: 'enabled' | 'disabled' | <custom>
 
-// 4. Write a tenant-level override
-await resolver.setOverride({
-  featureKey: 'commerce.invoice.draft-mode',
-  scopeType: 'tenant',
-  scopeId: 'tenant-123',
-  effect: 'enabled',
-});`}
+// Or resolve directly from a class/instance + localId:
+// await resolver.isEnabledFor(Invoice, 'draftMode', { tenantId });
+
+// 3. Write a tenant-level override via FeatureOverrideCollection.
+const overrides = await FeatureOverrideCollection.create({ db });
+await overrides.setOverride(
+  featureKey,
+  'tenant',
+  'tenant-123',
+  FeatureOverrideEffect.ENABLE,
+);`}
 			language="typescript"
 		/>
 	</section>
 
 	<section>
-		<h2>4-Layer Resolution Chain</h2>
-		<p>Resolution walks from highest priority to lowest, returning the first match:</p>
+		<h2>Resolution Chain</h2>
+		<p>
+			<code>isEnabled()</code> starts from the definition default and applies overrides from least to
+			most specific, returning the resulting boolean:
+		</p>
 		<CodeBlock
-			code={`Priority (high to low)
-  1. User scope        scopeType: 'user',   scopeId: userId
-  2. Tenant scope      scopeType: 'tenant', scopeId: tenantId
-                       (walks parent -> grandparent -> root via smrt-users)
-  3. Global scope      scopeType: 'global', scopeId: GLOBAL_FEATURE_SCOPE_ID
-  4. Definition default (from code-registered FeatureDefinition)
+			code={`Resolution order
+  1. Definition default (defaultEnabled on the code-registered FeatureDefinition)
+  2. Global override   scopeType: 'global', scopeId: GLOBAL_FEATURE_SCOPE_ID ('*')
+  3. Tenant override   scopeType: 'tenant', scopeId: tenantId
+                       (walks root -> ... -> tenantId via smrt-users, applying
+                        each override down the chain)
 
-Tenant-hierarchy walk requires the @happyvertical/smrt-users peer.
-Without it, tenant resolution stops at the immediate tenantId.`}
+Override effects: 'enable' | 'disable' | 'inherit' (FeatureOverrideEffect).
+'inherit' leaves the inherited state unchanged.
+
+There is no per-user scope: scopeType is 'global' or 'tenant' only.
+The tenant-hierarchy walk requires the @happyvertical/smrt-users peer.
+Without it (or without a tenantId), tenant resolution uses the single
+direct tenant override.`}
 			language="text"
 		/>
 	</section>
@@ -111,12 +124,18 @@ Without it, tenant resolution stops at the immediate tenantId.`}
 		<h3>FeatureDefinition</h3>
 		<CodeBlock
 			code={`class FeatureDefinition extends SmrtObject {
-  key: string                  // namespaced, e.g. 'commerce.invoice.draft-mode'
+  featureKey: string           // '<qualifiedClassName>#<localId>'
+  packageName: string          // owning package
+  qualifiedClassName: string   // e.g. '@acme/commerce:Invoice'
+  className: string
+  localId: string              // the feature id within the class
+  defaultEnabled: boolean      // default state when no override matches
+  label: string
   description: string
-  defaultEffect: string        // 'enabled' | 'disabled' | <custom>
-  allowedScopes: string        // JSON array: ['global','tenant','user']
+  metadata: string             // JSON metadata stored as text (get/setMetadata)
+  visibility: string           // default 'public'
 
-  // System table: _smrt_feature_definitions
+  // System table: _smrt_feature_definitions (conflictColumns: ['feature_key'])
   // Owned by code via FeatureSyncService — do not write directly
 }`}
 			language="typescript"
@@ -124,16 +143,21 @@ Without it, tenant resolution stops at the immediate tenantId.`}
 
 		<h3>FeatureOverride</h3>
 		<CodeBlock
-			code={`class FeatureOverride extends SmrtObject {
-  featureKey: string
-  scopeType: 'global' | 'tenant' | 'user'
-  scopeId: string              // userId, tenantId, or GLOBAL_FEATURE_SCOPE_ID
-  effect: string               // must be a known FeatureOverrideEffect
-  reason?: string              // audit trail
+			code={`enum FeatureOverrideEffect {
+  INHERIT = 'inherit',
+  ENABLE = 'enable',
+  DISABLE = 'disable',
+}
 
+class FeatureOverride extends SmrtObject {
+  featureKey: string
+  scopeType: 'global' | 'tenant'         // no 'user' scope
+  scopeId: string                        // tenantId, or GLOBAL_FEATURE_SCOPE_ID ('*')
+  effect: FeatureOverrideEffect          // default INHERIT
+
+  // Helpers: isInherit(), isEnabled(), isDisabled()
   // System table: _smrt_feature_overrides
   // conflictColumns: ['feature_key', 'scope_type', 'scope_id']
-  // Write-time validation: effect must match definition, scope must be allowed
 }`}
 			language="typescript"
 		/>
@@ -142,20 +166,29 @@ Without it, tenant resolution stops at the immediate tenantId.`}
 	<section>
 		<h2>FeatureSyncService</h2>
 		<p>
-			Keeps <code>_smrt_feature_definitions</code> in sync with the code-registered manifest at
-			boot. Call <code>syncDefinitions()</code> with the full expected feature list. Definitions
-			missing from the manifest are flagged (not silently deleted).
+			Keeps <code>_smrt_feature_definitions</code> in sync with the features declared on
+			<code>@smrt()</code>-decorated classes (read from the SMRT <code>ObjectRegistry</code>) at
+			boot. Calling <code>syncDefinitions()</code> with no options reconciles every registered
+			feature; pass <code>classNames</code> or <code>constructors</code> to scope the sync to
+			specific classes. A full (unfiltered) sync prunes stale definitions by default (<code
+				>pruneStale</code
+			>, on for full syncs, off for filtered ones).
 		</p>
 		<CodeBlock
 			code={`const sync = new FeatureSyncService({ db });
 
-await sync.syncDefinitions([
-  { key: 'a.b.c', defaultEffect: 'enabled', allowedScopes: ['global'] },
-  // ...
-]);
-// - Inserts new keys
-// - Updates description / defaultEffect / allowedScopes for existing keys
-// - Marks orphaned definitions (in DB but not in code) for review`}
+// Full reconcile of every registered feature
+const result = await sync.syncDefinitions();
+
+// Or scope to specific classes (pruneStale defaults to false here)
+await sync.syncDefinitions({ classNames: ['Invoice', 'Order'] });
+
+// result: { total, created, updated, unchanged, deleted, featureKeys }
+// - Upserts definitions for registered features (created / updated / unchanged)
+// - On a full sync, deletes definitions whose feature keys are no longer registered
+
+// You can also sync directly from a manifest:
+// await sync.syncManifest(manifest, { pruneStale: true });`}
 			language="typescript"
 		/>
 	</section>
@@ -164,8 +197,12 @@ await sync.syncDefinitions([
 		<h2>Integration with smrt-users</h2>
 		<p>
 			When <code>@happyvertical/smrt-users</code> is present, <code>FeatureResolver</code> walks the
-			tenant hierarchy (parent then grandparent then root) so a feature can be turned on for a
-			parent tenant and inherited by children. Configure with <code>FeatureTenantHierarchyProvider</code>.
+			tenant hierarchy (root down to the target tenant) so a feature can be turned on for a parent
+			tenant and inherited by descendants. The default loader pulls the chain from
+			<code>smrt-users</code> automatically; pass a custom <code>tenantHierarchyLoader</code> via
+			the resolver's second constructor argument (<code>FeatureResolverOptions</code>) to supply
+			your own
+			<code>FeatureTenantHierarchyProvider</code>.
 		</p>
 	</section>
 
@@ -174,19 +211,41 @@ await sync.syncDefinitions([
 		<article>
 			<h3>DOs</h3>
 			<ul>
-				<li>Namespace feature keys by package or domain</li>
-				<li>Always sync the full manifest at boot — partial syncs leave drift</li>
-				<li>Set <code>allowedScopes</code> conservatively (e.g. don't allow user scope for ops-only features)</li>
-				<li>Use <code>reason</code> on overrides for an audit trail</li>
+				<li>
+					Declare features on <code>@smrt()</code>-decorated classes so they register automatically
+				</li>
+				<li>
+					Run a full <code>syncDefinitions()</code> at boot — filtered syncs skip stale-pruning and can
+					leave drift
+				</li>
+				<li>
+					Build feature keys with <code>createFeatureKey(qualifiedClassName, localId)</code> rather than
+					hand-writing them
+				</li>
+				<li>
+					Use <code>FeatureOverrideEffect.INHERIT</code> to clear an override without deleting the row
+				</li>
 			</ul>
 		</article>
 		<article>
 			<h3>DON'Ts</h3>
 			<ul>
-				<li>Don't write <code>FeatureDefinition</code> rows directly — use <code>FeatureSyncService</code></li>
-				<li>Don't assume tenant-hierarchy walking works without the <code>smrt-users</code> peer</li>
-				<li>Don't store sensitive override reasons — they may be visible in admin UI</li>
-				<li>Don't use feature flags as long-term config — promote stable flags to <code>smrt-config</code></li>
+				<li>
+					Don't write <code>FeatureDefinition</code> rows directly — use
+					<code>FeatureSyncService</code>
+				</li>
+				<li>
+					Don't assume tenant-hierarchy walking works without the <code>smrt-users</code> peer
+				</li>
+				<li>
+					Don't expect a per-user scope — overrides are <code>'global'</code> or
+					<code>'tenant'</code> only
+				</li>
+				<li>
+					Don't use feature flags as long-term config — promote stable flags to <code
+						>smrt-config</code
+					>
+				</li>
 			</ul>
 		</article>
 	</section>

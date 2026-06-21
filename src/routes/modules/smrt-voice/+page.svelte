@@ -6,26 +6,38 @@
 <ModulePage
 	name="smrt-voice"
 	description="TTS voice profiles with two creation modes (AI design or audio cloning), VoiceOutput with word-level timings for lip-sync, and audio sample validation."
-	badges={['v0.24.12', 'Voice Design', 'Cloning', 'Lip-Sync Timings']}
+	badges={['v0.29.34', 'Voice Design', 'Cloning', 'Lip-Sync Timings']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-voice</strong> manages voice profiles for AI-powered text-to-speech synthesis.
-			A <code>VoiceProfile</code> is created in one of two mutually exclusive modes — AI design
-			(from a natural language prompt) or cloning (from audio samples) — and generated TTS output
-			carries word-level timings that feed lip-sync into <a href="/modules/smrt-video">smrt-video</a>.
+			<strong>smrt-voice</strong> manages voice profiles for AI-powered text-to-speech synthesis. A
+			<code>VoiceProfile</code>
+			is created in one of two mutually exclusive modes — AI design (from a natural language prompt) or
+			cloning (from audio samples) — and generated TTS output carries word-level timings that feed lip-sync
+			into <a href="/modules/smrt-video">smrt-video</a>.
 		</p>
 		<aside>
 			<p>Key Features:</p>
 			<ul>
-				<li>Two creation modes: AI design (<code>designPrompt</code>) XOR cloning (<code>sampleAssetId</code>)</li>
+				<li>
+					Two creation modes: AI design (<code>designPrompt</code>) XOR cloning (<code
+						>sampleAssetId</code
+					>)
+				</li>
 				<li>Voice samples with quality rating + minimum duration validation</li>
 				<li>Word-level timing output (<code>[{`{ word, start, end }`}]</code>) for lip-sync</li>
 				<li>Speed (0.5–2.0) and pitch (-20 to 20 semitones) controls</li>
-				<li><code>VoiceOutput</code> extends <code>Content</code> — inherits governance / transparency / chat</li>
+				<li>
+					<code>VoiceOutput</code> extends <code>Content</code> — inherits governance / transparency /
+					chat
+				</li>
 				<li>Optional tenancy (<code>tenantId=null</code> for global / default voices)</li>
-				<li>Audio assets stored via <a href="/modules/smrt-assets">smrt-assets</a>; reference by <code>audioAssetId</code> / <code>sampleAssetId</code></li>
+				<li>
+					Audio assets stored via <a href="/modules/smrt-assets">smrt-assets</a>; reference by
+					<code>audioAssetId</code>
+					/ <code>sampleAssetId</code>
+				</li>
 			</ul>
 		</aside>
 	</section>
@@ -114,6 +126,8 @@ output.getWordAtTime(0.7); // { word: 'evening', start: 0.6, end: 1.0 }`}
   defaultPitch: number        // -20 to 20 semitones
   voiceData?: Record<string, any>  // Provider-specific (opaque, no schema)
   status: 'pending' | 'processing' | 'ready' | 'failed'
+  provider: string            // TTS provider, defaults to 'qwen3-tts'
+  errorMessage?: string       // Populated when status === 'failed'
 
   get isCloned(): boolean
   get isDesigned(): boolean
@@ -122,8 +136,8 @@ output.getWordAtTime(0.7); // { word: 'evening', start: 0.6, end: 1.0 }`}
 			language="typescript"
 		/>
 		<p>
-			Default provider is hard-coded to <code>'qwen3-tts'</code> — there is no provider abstraction
-			layer in v0.24.
+			The <code>provider</code> field defaults to <code>'qwen3-tts'</code>. It is a plain string tag
+			recording which TTS provider created the voice — there is no provider abstraction layer.
 		</p>
 
 		<h3>VoiceSample</h3>
@@ -156,7 +170,8 @@ output.getWordAtTime(0.7); // { word: 'evening', start: 0.6, end: 1.0 }`}
 
   get wordCount(): number
   get wordsPerSecond(): number
-  getWordAtTime(seconds: number): WordTiming | undefined
+  get hasWordTimings(): boolean
+  getWordAtTime(seconds: number): WordTiming | null
 }`}
 			language="typescript"
 		/>
@@ -165,8 +180,9 @@ output.getWordAtTime(0.7); // { word: 'evening', start: 0.6, end: 1.0 }`}
 	<section>
 		<h2>Asset integration</h2>
 		<p>
-			Both training samples (<code>sampleAssetId</code>) and generated audio
-			(<code>audioAssetId</code>) reference <code>Asset</code> rows stored via
+			Both training samples (<code>sampleAssetId</code>) and generated audio (<code
+				>audioAssetId</code
+			>) reference <code>Asset</code> rows stored via
 			<a href="/modules/smrt-assets">smrt-assets</a>. Use
 			<code>createAssetRuntime()</code> + <code>storeSourceAsset()</code> /
 			<code>storeDerivedAsset()</code> to write the bytes, and rely on
@@ -179,22 +195,36 @@ output.getWordAtTime(0.7); // { word: 'evening', start: 0.6, end: 1.0 }`}
 		<article>
 			<h3>DOs</h3>
 			<ul>
-				<li>Use <code>designPrompt</code> XOR <code>sampleAssetId</code> (mutually exclusive modes)</li>
-				<li>Check <code>isSuitableForCloning</code> before using samples (3+ sec, not low quality)</li>
+				<li>
+					Use <code>designPrompt</code> XOR <code>sampleAssetId</code> (mutually exclusive modes)
+				</li>
+				<li>
+					Check <code>isSuitableForCloning</code> before using samples (3+ sec, not low quality)
+				</li>
 				<li>Use <code>getWordAtTime()</code> for precise lip-sync alignment in smrt-video</li>
 				<li>Check <code>isReady</code> before using a profile for TTS generation</li>
 				<li>Set <code>tenantId: null</code> for global / default voice profiles</li>
-				<li>Store audio bytes via <code>AssetRuntime.storeSourceAsset()</code> rather than ad-hoc writes</li>
+				<li>
+					Store audio bytes via <code>AssetRuntime.storeSourceAsset()</code> rather than ad-hoc writes
+				</li>
 			</ul>
 		</article>
 		<article>
 			<h3>DON'Ts</h3>
 			<ul>
-				<li>Don't set both <code>designPrompt</code> and <code>sampleAssetId</code> on the same profile</li>
-				<li>Don't expect the framework to generate <code>wordTimings</code> — they come from the TTS provider</li>
-				<li>Don't rely on the 3-second minimum being enforced in the constructor (documented only)</li>
+				<li>
+					Don't set both <code>designPrompt</code> and <code>sampleAssetId</code> on the same profile
+				</li>
+				<li>
+					Don't expect the framework to generate <code>wordTimings</code> — they come from the TTS provider
+				</li>
+				<li>
+					Don't rely on the 3-second minimum being enforced in the constructor (documented only)
+				</li>
 				<li>Don't assume status transitions are enforced (manual status setting is possible)</li>
-				<li>Don't depend on a specific <code>voiceData</code> schema (provider-specific, opaque)</li>
+				<li>
+					Don't depend on a specific <code>voiceData</code> schema (provider-specific, opaque)
+				</li>
 			</ul>
 		</article>
 	</section>

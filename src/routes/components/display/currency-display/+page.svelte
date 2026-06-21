@@ -18,6 +18,12 @@
 			description: 'Currency code'
 		},
 		{
+			name: 'unit',
+			type: "'cents' | 'dollars'",
+			default: "'cents'",
+			description: 'Whether the amount is given in cents or dollars'
+		},
+		{
 			name: 'showSign',
 			type: 'boolean',
 			default: 'false',
@@ -211,8 +217,9 @@
 		code={`import { CurrencyDisplay } from '@happyvertical/smrt-svelte';
 
 interface Props {
-  amount: number;  // In cents
+  amount: number;  // In cents by default (see unit)
   currency?: 'CAD' | 'USD';
+  unit?: 'cents' | 'dollars';
   showSign?: boolean;
   size?: 'sm' | 'md' | 'lg';
   highlightNegative?: boolean;

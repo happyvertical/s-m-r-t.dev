@@ -15,7 +15,7 @@
 	/>
 	<h2>Usage</h2>
 	<CodeBlock
-		code={`<UnbilledItems items={unbilledItems} onselect={createInvoice} />`}
+		code={`<UnbilledItems items={unbilledItems} oncreate={createInvoice} />`}
 		language="svelte"
 	/>
 </article>

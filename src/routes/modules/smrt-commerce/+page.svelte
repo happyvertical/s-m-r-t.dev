@@ -45,44 +45,70 @@
 
 <ModuleTabs
 	name="smrt-commerce"
-	description="E-commerce with Contract STI hierarchy (5 types), invoice lifecycle, payment tracking, fulfillment, and optional ledger integration."
-	badges={['v0.24.12', 'Invoicing', 'Contract STI (5)', 'Optional Tenancy']}
+	description="E-commerce with Contract STI hierarchy (9 types), invoice lifecycle, payment tracking, fulfillment, and optional ledger integration."
+	badges={['v0.29.34', 'Invoicing', 'Contract STI (9)', 'Optional Tenancy']}
 >
 	{#snippet docs()}
-	<section>
-		<h2>Overview</h2>
-		<p>
-			<strong>smrt-commerce</strong> covers customers, vendors, contracts (5 STI types), invoices,
-			payments, and fulfillment tracking. Customer and Vendor link to <a href="/modules/smrt-profiles">smrt-profiles</a>
-			via plain string IDs. Invoice and Payment optionally integrate with
-			<a href="/modules/smrt-ledgers">smrt-ledgers</a> via dynamic import — if ledgers isn't
-			installed, <code>recognizeRevenue()</code> and <code>recordPayment()</code> simply return
-			<code>null</code>.
-		</p>
-		<aside>
-			<p>Key Features:</p>
-			<ul>
-				<li>Customer/Vendor linked to Profile via plain string ID (no cross-package FK). Customer has <code>creditLimit</code>, <code>paymentTerms</code>; Vendor has <code>leadTimeDays</code>, <code>minimumOrder</code></li>
-				<li>Contract STI hierarchy: <strong>Estimate</strong>, <strong>Order</strong>, <strong>Lease</strong>, <strong>Agreement</strong>, <strong>PurchaseOrder</strong> — 5 types sharing one table</li>
-				<li>Invoice lifecycle: <code>draft → sent → viewed → partial → paid</code> (plus <code>overdue</code>, <code>cancelled</code>, <code>written_off</code>)</li>
-				<li>Revenue recognition via <code>recognizeRevenue()</code> — creates balanced AR journal (DR Accounts Receivable, CR Revenue, CR Tax Payable)</li>
-				<li><strong>Invoice controls payment status</strong> — call <code>Invoice.updatePaymentStatus(amountPaid)</code>, not Payment</li>
-				<li>Fulfillment/FulfillmentLineItem for shipment/delivery tracking</li>
-				<li>Optional ledger integration via dynamic import — returns <code>null</code> when smrt-ledgers isn't installed</li>
-				<li><strong>Optional tenancy</strong>: all models use <code>@TenantScoped({'{'} mode: 'optional' {'}'})</code> with nullable <code>tenantId</code></li>
-			</ul>
-		</aside>
-	</section>
+		<section>
+			<h2>Overview</h2>
+			<p>
+				<strong>smrt-commerce</strong> covers customers, vendors, contracts (9 STI types), invoices,
+				payments, and fulfillment tracking. Customer and Vendor link to
+				<a href="/modules/smrt-profiles">smrt-profiles</a>
+				via plain string IDs. Invoice and Payment optionally integrate with
+				<a href="/modules/smrt-ledgers">smrt-ledgers</a> via dynamic import — if ledgers isn't
+				installed, <code>recognizeRevenue()</code> and <code>recordPayment()</code> simply return
+				<code>null</code>.
+			</p>
+			<aside>
+				<p>Key Features:</p>
+				<ul>
+					<li>
+						Customer/Vendor linked to Profile via plain string ID (no cross-package FK). Customer
+						has <code>creditLimit</code>, <code>paymentTerms</code>; Vendor has
+						<code>leadTimeDays</code>, <code>minimumOrderAmount</code>
+					</li>
+					<li>
+						Contract STI hierarchy: <strong>Estimate</strong>, <strong>Order</strong>,
+						<strong>Lease</strong>, <strong>Agreement</strong>, <strong>PurchaseOrder</strong>,
+						<strong>WholesaleOrder</strong>, <strong>ProductionOrder</strong>,
+						<strong>Cart</strong>, <strong>LicenseSale</strong> — 9 types sharing one table
+					</li>
+					<li>
+						Invoice lifecycle: <code>draft → sent → viewed → partial → paid</code> (plus
+						<code>overdue</code>, <code>cancelled</code>, <code>written_off</code>)
+					</li>
+					<li>
+						Revenue recognition via <code>recognizeRevenue()</code> — creates balanced AR journal (DR
+						Accounts Receivable, CR Revenue, CR Tax Payable)
+					</li>
+					<li>
+						<strong>Invoice controls payment status</strong> — call
+						<code>Invoice.updatePaymentStatus(amountPaid)</code>, not Payment
+					</li>
+					<li>Fulfillment/FulfillmentLineItem for shipment/delivery tracking</li>
+					<li>
+						Optional ledger integration via dynamic import — returns <code>null</code> when smrt-ledgers
+						isn't installed
+					</li>
+					<li>
+						<strong>Optional tenancy</strong>: all models use
+						<code>@TenantScoped({'{'} mode: 'optional' {'}'})</code>
+						with nullable <code>tenantId</code>
+					</li>
+				</ul>
+			</aside>
+		</section>
 
-	<section>
-		<h2>Installation</h2>
-		<CodeBlock code={`npm install @happyvertical/smrt-commerce`} language="bash" />
-	</section>
+		<section>
+			<h2>Installation</h2>
+			<CodeBlock code={`npm install @happyvertical/smrt-commerce`} language="bash" />
+		</section>
 
-	<section>
-		<h2>Quick Start</h2>
-		<CodeBlock
-			code={`import {
+		<section>
+			<h2>Quick Start</h2>
+			<CodeBlock
+				code={`import {
   Customer, CustomerCollection,
   Order, ContractCollection,
   Invoice, InvoiceCollection,
@@ -140,17 +166,24 @@ const payment = await payments.create({
   method: PaymentMethod.CREDIT_CARD,
 });
 await payment.save();`}
-			language="typescript"
-		/>
-	</section>
+				language="typescript"
+			/>
+		</section>
 
-	<section>
-		<h2>Core Models</h2>
+		<section>
+			<h2>Core Models</h2>
 
-		<h3>Contract (STI Base — 5 Types)</h3>
-		<p>Contract is an STI base class. Five concrete types share one table: <strong>Estimate</strong>, <strong>Order</strong>, <strong>Lease</strong>, <strong>Agreement</strong>, and <strong>PurchaseOrder</strong>. Create via <code>ContractCollection</code> with a <code>_meta_type</code> discriminator.</p>
-		<CodeBlock
-			code={`// STI types: Estimate, Order, Lease, Agreement, PurchaseOrder
+			<h3>Contract (STI Base — 9 Types)</h3>
+			<p>
+				Contract is an STI base class. Nine concrete types share one table: <strong>Estimate</strong
+				>, <strong>Order</strong>, <strong>Lease</strong>, <strong>Agreement</strong>,
+				<strong>PurchaseOrder</strong>, <strong>WholesaleOrder</strong>,
+				<strong>ProductionOrder</strong>, <strong>Cart</strong>, and <strong>LicenseSale</strong>.
+				Create via <code>ContractCollection</code> with a <code>_meta_type</code> discriminator.
+			</p>
+			<CodeBlock
+				code={`// STI types: Estimate, Order, Lease, Agreement, PurchaseOrder,
+//            WholesaleOrder, ProductionOrder, Cart, LicenseSale
 class Contract extends SmrtObject {
   // Create via ContractCollection with _meta_type
   customerId?: string    // @foreignKey('Customer') — within-package FK
@@ -166,13 +199,20 @@ class Contract extends SmrtObject {
   terms?: string
   // tenantScoped: optional
 }`}
-			language="typescript"
-		/>
+				language="typescript"
+			/>
 
-		<h3>Invoice</h3>
-		<p>Status machine: <code>draft → sent → viewed → partial → paid</code> (also <code>overdue</code>, <code>cancelled</code>, <code>written_off</code>). <strong>No tax-rate field</strong> — tax rates must be calculated externally. <code>recognizeRevenue()</code> creates a balanced AR journal; ledger integration is optional via dynamic import and returns <code>null</code> if smrt-ledgers isn't installed.</p>
-		<CodeBlock
-			code={`class Invoice extends SmrtObject {
+			<h3>Invoice</h3>
+			<p>
+				Status machine: <code>draft → sent → viewed → partial → paid</code> (also
+				<code>overdue</code>, <code>cancelled</code>, <code>written_off</code>).
+				<strong>No tax-rate field</strong>
+				— tax rates must be calculated externally. <code>recognizeRevenue()</code> creates a
+				balanced AR journal; ledger integration is optional via dynamic import and returns
+				<code>null</code> if smrt-ledgers isn't installed.
+			</p>
+			<CodeBlock
+				code={`class Invoice extends SmrtObject {
   invoiceNumber: string
   customerId: string
   contractId?: string
@@ -193,13 +233,17 @@ class Contract extends SmrtObject {
   async recognizeRevenue(options: RecognizeRevenueOptions): Promise<Journal | null>
   // Creates: DR Accounts Receivable, CR Revenue, CR Tax Payable
 }`}
-			language="typescript"
-		/>
+				language="typescript"
+			/>
 
-		<h3>Payment / PaymentAllocation</h3>
-		<p>Payment tracks payments against invoices. PaymentAllocation handles payment-to-invoice allocation. Note: <strong>Invoice controls payment status</strong>, not the Payment model -- use <code>Invoice.updatePaymentStatus()</code>.</p>
-		<CodeBlock
-			code={`class Payment extends SmrtObject {
+			<h3>Payment / PaymentAllocation</h3>
+			<p>
+				Payment tracks payments against invoices. PaymentAllocation handles payment-to-invoice
+				allocation. Note: <strong>Invoice controls payment status</strong>, not the Payment model --
+				use <code>Invoice.updatePaymentStatus()</code>.
+			</p>
+			<CodeBlock
+				code={`class Payment extends SmrtObject {
   contractId: string
   customerId: string
   amount: number           // decimal
@@ -212,16 +256,16 @@ class Contract extends SmrtObject {
   async recordPayment(options: RecordPaymentOptions): Promise<Journal | null>
   // Creates: DR Cash, CR Accounts Receivable
 }`}
-			language="typescript"
-		/>
-	</section>
+				language="typescript"
+			/>
+		</section>
 
-	<section>
-		<h2>Invoice Management</h2>
+		<section>
+			<h2>Invoice Management</h2>
 
-		<h3>Invoice Lifecycle</h3>
-		<CodeBlock
-			code={`// 1. Create draft invoice
+			<h3>Invoice Lifecycle</h3>
+			<CodeBlock
+				code={`// 1. Create draft invoice
 const invoice = await invoices.create({
   customerId: customer.id,
   invoiceNumber: await invoices.generateInvoiceNumber({
@@ -263,18 +307,17 @@ await invoice.save();
 
 // 6. Recognize revenue (accounting)
 const journal = await invoice.recognizeRevenue({
-  ledgerId: ledger.id,
-  receivablesAccountId: arAccount.id,
+  arAccountId: arAccount.id,
   revenueAccountId: revenueAccount.id,
-  taxPayableAccountId: taxAccount.id
+  taxAccountId: taxAccount.id   // optional
 });
 // Creates: Debit AR, Credit Revenue, Credit Tax Payable`}
-			language="typescript"
-		/>
+				language="typescript"
+			/>
 
-		<h3>Payment Allocation</h3>
-		<CodeBlock
-			code={`// Record payment
+			<h3>Payment Allocation</h3>
+			<CodeBlock
+				code={`// Record payment
 const payment = await payments.create({
   contractId: order.id,
   customerId: customer.id,
@@ -322,24 +365,45 @@ await invoice1.save(); // Status becomes PAID
 const total2 = await allocations.getTotalAllocatedToInvoice(invoice2.id);
 invoice2.updatePaymentStatus(total2);
 await invoice2.save(); // Status becomes PARTIAL or PAID`}
-			language="typescript"
-		/>
-	</section>
+				language="typescript"
+			/>
+		</section>
 
 		<section>
 			<h2>Cross-Package References</h2>
-			<p>Within-package relationships use <code>@foreignKey()</code>. Cross-package links are plain string IDs — this avoids circular dependencies (see the framework standards in <code>docs/content/standards.md §7</code>):</p>
+			<p>
+				Within-package relationships use <code>@foreignKey()</code>. Cross-package links are plain
+				string IDs — this avoids circular dependencies (see the framework standards in
+				<code>docs/content/standards.md §7</code>):
+			</p>
 			<ul>
-				<li><code>customerId</code> → <code>@foreignKey('Customer')</code> (within-package hard reference)</li>
-				<li><code>profileId</code> → plain string to <a href="/modules/smrt-profiles">smrt-profiles</a></li>
-				<li><code>arJournalId</code>, <code>revenueJournalId</code> → plain string to <a href="/modules/smrt-ledgers">smrt-ledgers</a></li>
+				<li>
+					<code>customerId</code> → <code>@foreignKey('Customer')</code> (within-package hard reference)
+				</li>
+				<li>
+					<code>profileId</code> → plain string to
+					<a href="/modules/smrt-profiles">smrt-profiles</a>
+				</li>
+				<li>
+					<code>arJournalId</code>, <code>revenueJournalId</code> → plain string to
+					<a href="/modules/smrt-ledgers">smrt-ledgers</a>
+				</li>
 			</ul>
-			<p>To fetch the linked Profile object you must instantiate a <code>ProfileCollection</code> separately and look it up by ID.</p>
+			<p>
+				To fetch the linked Profile object you must instantiate a <code>ProfileCollection</code> separately
+				and look it up by ID.
+			</p>
 		</section>
 
 		<section>
 			<h2>Tenancy</h2>
-			<p>All models in this package apply <code>@TenantScoped({'{'} mode: 'optional' {'}'})</code> from <a href="/modules/smrt-tenancy">smrt-tenancy</a> with a nullable <code>tenantId</code> column. Rows created inside a <code>withTenant()</code> context are filtered automatically; rows created outside a tenant context are visible to all tenants — useful for shared customer catalogs or single-tenant deployments.</p>
+			<p>
+				All models in this package apply <code>@TenantScoped({'{'} mode: 'optional' {'}'})</code>
+				from <a href="/modules/smrt-tenancy">smrt-tenancy</a> with a nullable <code>tenantId</code>
+				column. Rows created inside a <code>withTenant()</code> context are filtered automatically; rows
+				created outside a tenant context are visible to all tenants — useful for shared customer catalogs
+				or single-tenant deployments.
+			</p>
 		</section>
 
 		<section>
@@ -349,11 +413,18 @@ await invoice2.save(); // Status becomes PARTIAL or PAID`}
 					<h3>DOs</h3>
 					<ul>
 						<li>Use <code>generateInvoiceNumber()</code> for race-free numbering</li>
-						<li>Always allocate payments to specific invoices via <code>PaymentAllocation</code></li>
+						<li>
+							Always allocate payments to specific invoices via <code>PaymentAllocation</code>
+						</li>
 						<li>Check <code>getUnallocatedFromPayment()</code> before allocating</li>
-						<li>Call <code>recognizeRevenue()</code> after sending invoices (no-op if ledgers absent)</li>
+						<li>
+							Call <code>recognizeRevenue()</code> after sending invoices (no-op if ledgers absent)
+						</li>
 						<li>Recalculate invoice totals after line-item changes</li>
-						<li>Use <code>Invoice.updatePaymentStatus(totalAllocated)</code> to drive status — never set status manually on Payment</li>
+						<li>
+							Use <code>Invoice.updatePaymentStatus(totalAllocated)</code> to drive status — never set
+							status manually on Payment
+						</li>
 					</ul>
 				</div>
 				<div>
@@ -364,7 +435,10 @@ await invoice2.save(); // Status becomes PARTIAL or PAID`}
 						<li>Don't cancel paid invoices — use <code>writeOff</code> instead</li>
 						<li>Don't skip <code>updatePaymentStatus()</code> after allocation</li>
 						<li>Don't modify line items without recalculating totals</li>
-						<li>Don't store currency as integer cents here — commerce uses <strong>decimal</strong> fields (affiliates uses cents — different convention)</li>
+						<li>
+							Don't store currency as integer cents here — commerce uses <strong>decimal</strong> fields
+							(affiliates uses cents — different convention)
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -375,8 +449,10 @@ await invoice2.save(); // Status becomes PARTIAL or PAID`}
 		<section>
 			<h2>Commerce Components</h2>
 			<p>
-				The <code>@happyvertical/smrt-commerce</code> package includes 6 Svelte 5 components for building
-				complete invoicing and billing interfaces.
+				The <code>@happyvertical/smrt-commerce</code> package includes 6 Svelte 5 components for
+				building complete invoicing and billing interfaces:
+				<code>InvoiceCard</code>, <code>InvoiceHeader</code>, <code>InvoiceLineItems</code>,
+				<code>InvoiceTotals</code>, <code>InvoiceActions</code>, and <code>UnbilledItems</code>.
 			</p>
 
 			<h2>InvoiceCard</h2>

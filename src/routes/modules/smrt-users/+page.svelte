@@ -6,7 +6,7 @@
 <ModuleTabs
 	name="smrt-users"
 	description="Multi-tenant user management with RBAC, hierarchical tenants, session handling, and SvelteKit integration."
-	badges={['v0.24.12', 'Multi-tenant RBAC', '13 Models']}
+	badges={['v0.29.34', 'Multi-tenant RBAC', '13 Models']}
 >
 	{#snippet docs()}
 		<section id="overview">
@@ -23,20 +23,36 @@
 			<h3>Key Features</h3>
 			<ul>
 				<li>
-					<strong>4-level permission cascade</strong> — tenant hierarchy → membership role → group roles → membership overrides
+					<strong>4-level permission cascade</strong> — tenant hierarchy → membership role → group roles
+					→ membership overrides
 				</li>
-				<li><strong>Hierarchical tenants</strong> — STI, materialized <code>hierarchyPath</code>, max depth 10</li>
-				<li><strong>Group-based teams</strong> — flexible team structure within tenants via GroupRole</li>
+				<li>
+					<strong>Hierarchical tenants</strong> — STI, materialized <code>hierarchyPath</code>, max
+					depth 10
+				</li>
+				<li>
+					<strong>Group-based teams</strong> — flexible team structure within tenants via GroupRole
+				</li>
 				<li>
 					<strong>DENY always wins</strong> — <code>MembershipOverride.DENY</code> beats any GRANT;
-					<code>TenantPermissionOverride</code> supports <code>INHERIT</code>/<code>GRANT</code>/<code>DENY</code> at each ancestor level
+					<code>TenantPermissionOverride</code> supports <code>INHERIT</code>/<code>GRANT</code
+					>/<code>DENY</code> at each ancestor level
 				</li>
 				<li>
-					<strong>System & tenant roles</strong> — system roles (owner/admin/member/viewer, <code>tenantId=null</code>) are available to all tenants
+					<strong>System & tenant roles</strong> — system roles (owner/admin/member/viewer,
+					<code>tenantId=null</code>) are available to all tenants
 				</li>
-				<li><strong>Session management</strong> — server-side sessions with secure UUID, TTL in <strong>seconds</strong>, auto-expiry on access</li>
-				<li><strong>SvelteKit integration</strong> — <code>createSessionHandler</code>, cookie helpers, tenant context switching</li>
-				<li><strong>Tenant policies</strong> — flexible, personal, or required tenant modes via TenantService</li>
+				<li>
+					<strong>Session management</strong> — server-side sessions with secure UUID, TTL in
+					<strong>seconds</strong>, auto-expiry on access
+				</li>
+				<li>
+					<strong>SvelteKit integration</strong> — <code>createSessionHandler</code>, cookie
+					helpers, tenant context switching
+				</li>
+				<li>
+					<strong>Tenant policies</strong> — flexible, personal, or required tenant modes via TenantService
+				</li>
 			</ul>
 		</section>
 
@@ -47,17 +63,59 @@
 					<tr><th>Model</th><th>Key Pattern</th></tr>
 				</thead>
 				<tbody>
-					<tr><td>User</td><td>Auth identity. <code>profileId</code> is a plain string (not FK) to smrt-profiles. Email auto-lowercased.</td></tr>
-					<tr><td>Tenant</td><td><strong>STI</strong> + hierarchical parent-child. Materialized <code>hierarchyPath</code> and <code>hierarchyLevel</code>. Max depth 10.</td></tr>
-					<tr><td>Session</td><td>Server-side. Secure UUID. TTL in <strong>seconds</strong>. Status auto-updates to <code>EXPIRED</code> on access.</td></tr>
-					<tr><td>MagicLinkToken</td><td>Single-use email login token. Backed by <code>MagicLinkService</code>.</td></tr>
-					<tr><td>Role</td><td><code>tenantId = null</code> → system role (available to all tenants). <code>isSystem: true</code> blocks deletion.</td></tr>
-					<tr><td>Permission</td><td>Slug format: <code>resource.action</code>. Parsed by PermissionResolver.</td></tr>
-					<tr><td>Membership</td><td>User + Tenant + Role junction. <code>UNIQUE(userId, tenantId)</code>.</td></tr>
+					<tr
+						><td>User</td><td
+							>Auth identity. <code>profileId</code> is a plain string (not FK) to smrt-profiles. Email
+							auto-lowercased.</td
+						></tr
+					>
+					<tr
+						><td>Tenant</td><td
+							><strong>STI</strong> + hierarchical parent-child. Materialized
+							<code>hierarchyPath</code>
+							and <code>hierarchyLevel</code>. Max depth 10.</td
+						></tr
+					>
+					<tr
+						><td>Session</td><td
+							>Server-side. Secure UUID. TTL in <strong>seconds</strong>. Status auto-updates to
+							<code>EXPIRED</code> on access.</td
+						></tr
+					>
+					<tr
+						><td>MagicLinkToken</td><td
+							>Single-use email login token. Backed by <code>MagicLinkService</code>.</td
+						></tr
+					>
+					<tr
+						><td>Role</td><td
+							><code>tenantId = null</code> → system role (available to all tenants).
+							<code>isSystem: true</code> blocks deletion.</td
+						></tr
+					>
+					<tr
+						><td>Permission</td><td
+							>Slug format: <code>resource.action</code>. Parsed by PermissionResolver.</td
+						></tr
+					>
+					<tr
+						><td>Membership</td><td
+							>User + Tenant + Role junction. <code>UNIQUE(userId, tenantId)</code>.</td
+						></tr
+					>
 					<tr><td>Group</td><td>Team within a tenant. Multiple roles via GroupRole.</td></tr>
 					<tr><td>GroupMember, GroupRole, RolePermission</td><td>Join tables.</td></tr>
-					<tr><td>MembershipOverride</td><td>Per-user permission grant/deny. <strong>DENY always wins.</strong></td></tr>
-					<tr><td>TenantPermissionOverride</td><td>Tenant-level cascade overrides. Effect: <code>INHERIT</code> / <code>GRANT</code> / <code>DENY</code>.</td></tr>
+					<tr
+						><td>MembershipOverride</td><td
+							>Per-user permission grant/deny. <strong>DENY always wins.</strong></td
+						></tr
+					>
+					<tr
+						><td>TenantPermissionOverride</td><td
+							>Tenant-level cascade overrides. Effect: <code>INHERIT</code> / <code>GRANT</code> /
+							<code>DENY</code>.</td
+						></tr
+					>
 				</tbody>
 			</table>
 		</section>
@@ -66,9 +124,8 @@
 			<h2>Tenancy</h2>
 			<p>
 				<code>User</code> is intentionally <strong>not</strong> tenant-scoped — emails are globally
-				unique and a single user participates in many tenants via <code>Membership</code>. <code
-					>Tenant</code
-				>, <code>Role</code>, <code>Permission</code>, and the join tables use
+				unique and a single user participates in many tenants via <code>Membership</code>.
+				<code>Tenant</code>, <code>Role</code>, <code>Permission</code>, and the join tables use
 				<code>@TenantScoped({'{'} mode: 'optional' {'}'})</code>: a row with
 				<code>tenantId = null</code> is a system-wide row (e.g. the built-in <code>owner</code>
 				role), while a row with an explicit <code>tenantId</code> belongs to that tenant only.
@@ -87,7 +144,8 @@ npm install @happyvertical/smrt-users`}
 			<h3>Database Requirements</h3>
 			<ul>
 				<li>
-					<strong>SQLite</strong> (development): <code>{'{'} type: 'sqlite', url: 'app.db' {'}'}</code>
+					<strong>SQLite</strong> (development):
+					<code>{'{'} type: 'sqlite', url: 'app.db' {'}'}</code>
 				</li>
 				<li>
 					<strong>PostgreSQL</strong> (production):
@@ -156,16 +214,19 @@ console.log('Can manage users:', hasAccess);`}
 		<section id="permission-resolver">
 			<h2>Permission Resolution -- 4-Level Cascade</h2>
 			<p>
-				<code>PermissionResolver</code> evaluates these levels in order. Each level can add or remove
-				permissions; <strong>DENY always wins</strong> on the membership-override level.
+				<code>PermissionResolver</code> evaluates these levels in order. Each level can add or
+				remove permissions; <strong>DENY always wins</strong> on the membership-override level.
 			</p>
 			<ol>
 				<li>
 					<strong>Tenant hierarchy</strong> — walk ancestors, applying
-					<code>TenantPermissionOverride</code> at each level
-					(<code>INHERIT</code>/<code>GRANT</code>/<code>DENY</code>)
+					<code>TenantPermissionOverride</code> at each level (<code>INHERIT</code>/<code
+						>GRANT</code
+					>/<code>DENY</code>)
 				</li>
-				<li><strong>Membership role</strong> — base permissions from the user's role in the tenant</li>
+				<li>
+					<strong>Membership role</strong> — base permissions from the user's role in the tenant
+				</li>
 				<li>
 					<strong>Group roles</strong> — permissions from all groups the user belongs to
 					<em>in that tenant</em> (union)
@@ -176,8 +237,8 @@ console.log('Can manage users:', hasAccess);`}
 				</li>
 			</ol>
 			<p>
-				<strong>Critical:</strong> use <code>getGroupIdsForTenant(userId, tenantId)</code> — it joins
-				against the <code>groups</code> table to scope by tenant. Never use the cross-tenant
+				<strong>Critical:</strong> use <code>getGroupIdsForTenant(userId, tenantId)</code> — it
+				joins against the <code>groups</code> table to scope by tenant. Never use the cross-tenant
 				<code>getGroupIds()</code> in resolution code.
 			</p>
 
@@ -214,8 +275,8 @@ const hasAny = await resolver.hasAnyPermission(userId, tenantId, [
 					<code>hierarchyLevel</code>, enforcing the max depth of 10
 				</li>
 				<li>
-					<code>moveToParent()</code> updates the tenant <strong>and all descendants'</strong> paths
-					and levels
+					<code>moveToParent()</code> updates the tenant <strong>and all descendants'</strong> paths and
+					levels
 				</li>
 				<li>
 					<code>cascadePermissions</code> (parent pushes down) + <code>inheritPermissions</code>
@@ -280,15 +341,22 @@ await switchSessionTenant(event, newTenantId, { db });`}
 				<li>Apply GRANT overrides sparingly and document why</li>
 				<li>Use DENY overrides for exceptions and security restrictions (DENY always wins)</li>
 				<li>Always filter queries by <code>tenantId</code> for data isolation</li>
-				<li>Set session TTL based on security requirements — remember it's <strong>seconds</strong></li>
+				<li>
+					Set session TTL based on security requirements — remember it's <strong>seconds</strong>
+				</li>
 			</ul>
 
 			<h3>DON'T</h3>
 			<ul>
-				<li>Don't use <code>getGroupIds()</code> — it's cross-tenant; use <code>getGroupIdsForTenant()</code></li>
+				<li>
+					Don't use <code>getGroupIds()</code> — it's cross-tenant; use
+					<code>getGroupIdsForTenant()</code>
+				</li>
 				<li>Don't forget to check membership status is ACTIVE</li>
 				<li>Don't trust user-supplied <code>tenantId</code> without verifying membership</li>
-				<li>Don't mix uppercase/lowercase in email comparisons (User collection auto-lowercases)</li>
+				<li>
+					Don't mix uppercase/lowercase in email comparisons (User collection auto-lowercases)
+				</li>
 			</ul>
 		</section>
 
@@ -315,9 +383,10 @@ await switchSessionTenant(event, newTenantId, { db });`}
 		<section id="components">
 			<h2>User Management Components</h2>
 			<p>
-				smrt-users integrates with <code>@happyvertical/smrt-svelte</code> to provide a complete set
-				of pre-built UI components for user management, tenant switching, role display, and
-				permission-based conditional rendering.
+				smrt-users ships its own pre-built Svelte UI components for user management from the
+				<code>@happyvertical/smrt-users/svelte</code> subpath (built on the generic primitives in
+				<code>@happyvertical/smrt-svelte</code>). They auto-register with the
+				<code>ModuleUIRegistry</code> on import.
 			</p>
 
 			<h3>User Components</h3>
@@ -338,19 +407,21 @@ await switchSessionTenant(event, newTenantId, { db });`}
 					<h3>UserForm</h3>
 					<p>Form for creating and editing users</p>
 				</a>
+				<a href="/components/users/user-menu" class="link-card">
+					<h3>UserMenu</h3>
+					<p>Authenticated account menu for profile, settings, and sign-out actions</p>
+				</a>
+				<a href="/components/users/invite-user-modal" class="link-card">
+					<h3>InviteUserModal</h3>
+					<p>Invitation flow for adding a tenant member with a role assignment</p>
+				</a>
 			</div>
 
-			<h3>Tenant Components</h3>
-			<div class="link-grid">
-				<a href="/components/tenants/tenant-card" class="link-card">
-					<h3>TenantCard</h3>
-					<p>Tenant information card</p>
-				</a>
-				<a href="/components/tenants/tenant-switcher" class="link-card">
-					<h3>TenantSwitcher</h3>
-					<p>Dropdown for switching between tenants</p>
-				</a>
-			</div>
+			<p>
+				These components auto-register with the <code>ModuleUIRegistry</code> on import. As of
+				v0.29, smrt-users ships its own Svelte components from the
+				<code>@happyvertical/smrt-users/svelte</code> subpath (smrt-svelte now ships only generic UI primitives).
+			</p>
 
 			<h2>Installation</h2>
 			<CodeBlock
@@ -360,7 +431,9 @@ import {
   UserCard,
   UserAvatar,
   UserList,
-  TenantSwitcher
+  UserForm,
+  UserMenu,
+  InviteUserModal
 } from '@happyvertical/smrt-users/svelte';`}
 				language="bash"
 			/>

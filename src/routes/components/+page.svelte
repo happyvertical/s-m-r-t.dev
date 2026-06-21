@@ -102,8 +102,8 @@
 	<section class="usage">
 		<h2>Basic Usage</h2>
 		<pre><code
-				>{`// Core UI components
-import { Button, Card, Badge } from '@happyvertical/svelte';
+				>{`// Generic UI components
+import { Button, Card, Badge } from '@happyvertical/smrt-svelte';
 
 // smrt-specific components
 import { TextInput, StatusBadge } from '@happyvertical/smrt-svelte';`}</code

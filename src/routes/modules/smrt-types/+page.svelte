@@ -6,19 +6,18 @@
 <ModulePage
 	name="smrt-types"
 	description="Shared TypeScript types and enums for the SMRT framework. Prevents circular dependencies between packages by centralizing types that more than one package needs. Zero runtime code except for enums."
-	badges={['v0.24.12', 'Core Foundation', 'ESM', 'Zero Runtime']}
+	badges={['v0.29.34', 'Core Foundation', 'ESM', 'Zero Runtime']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
 			<code>@happyvertical/smrt-types</code> is a small, dependency-free package that exists to keep
-			shared types out of <code>smrt-core</code> and break the circular dependencies that would
-			otherwise form between domain packages. If two or more packages need the same type, it lives
-			here.
+			shared types out of <code>smrt-core</code> and break the circular dependencies that would otherwise
+			form between domain packages. If two or more packages need the same type, it lives here.
 		</p>
 		<p>
-			The package ships <strong>zero runtime code except enums</strong> -- everything else is erased
-			by the TypeScript compiler.
+			The package ships <strong>zero runtime code except enums</strong> -- everything else is erased by
+			the TypeScript compiler.
 		</p>
 	</section>
 
@@ -60,8 +59,33 @@
 					<td><code>user.ts</code></td>
 					<td>
 						<code>UserStatus</code>, <code>TenantStatus</code>, <code>MembershipStatus</code>,
-						<code>SessionStatus</code>, <code>OverrideEffect</code> -- lifecycle status
+						<code>SessionStatus</code>, <code>OverrideEffect</code>,
+						<code>TenantPermissionEffect</code> -- lifecycle/permission status
 						<strong>enums</strong> (runtime values)
+					</td>
+				</tr>
+				<tr>
+					<td><code>ai-usage.ts</code></td>
+					<td>
+						<code>AiTokenUsage</code>, <code>AiUsageSnapshot</code>, <code>AiUsageStats</code>,
+						<code>SmrtAiUsageEvent</code>, <code>SmrtAiUsageRecord</code> (and related options types)
+						-- AI token-usage accounting
+					</td>
+				</tr>
+				<tr>
+					<td><code>knowledge.ts</code></td>
+					<td>
+						<code>DomainKnowledgeConfig</code>, <code>DomainKnowledgeManifest</code>,
+						<code>DomainKnowledgeObject</code>, <code>DomainKnowledgeSurface</code> -- domain knowledge
+						surfaces
+					</td>
+				</tr>
+				<tr>
+					<td><code>routes.ts</code></td>
+					<td>
+						<code>SmrtRouteDefinition</code>, <code>SmrtRouteModule</code>,
+						<code>SmrtRouteNavigationItem</code>, <code>SmrtRouteNavigationMeta</code> -- route definition
+						and navigation metadata
 					</td>
 				</tr>
 			</tbody>
@@ -73,8 +97,7 @@
 
 		<h3>Type-only imports (Signal, Module)</h3>
 		<p>
-			For the type-only exports, always use <code>import type</code> so the bundler can drop them
-			completely:
+			For the type-only exports, always use <code>import type</code> so the bundler can drop them completely:
 		</p>
 		<CodeBlock
 			code={`import type {
@@ -104,9 +127,10 @@ import type {
   MembershipStatus,
   SessionStatus,
   OverrideEffect,
+  TenantPermissionEffect,
 } from '@happyvertical/smrt-types';
 
-const status = UserStatus.Active; // OK at runtime`}
+const status = UserStatus.ACTIVE; // OK at runtime`}
 			language="typescript"
 		/>
 	</section>
@@ -114,8 +138,8 @@ const status = UserStatus.Active; // OK at runtime`}
 	<section id="signal-types">
 		<h2>Signal Types</h2>
 		<p>
-			The <code>Signal</code> family models the framework's universal signaling system. Adapters in
-			downstream packages (logging, metrics, pub/sub, tracing) consume these signals.
+			The <code>Signal</code> family models the framework's universal signaling system. Adapters in downstream
+			packages (logging, metrics, pub/sub, tracing) consume these signals.
 		</p>
 		<CodeBlock
 			code={`import type { Signal, SignalType, SignalAdapter } from '@happyvertical/smrt-types';
@@ -152,16 +176,16 @@ class MyAdapter implements SignalAdapter {
 		<h2>Rules</h2>
 		<ul>
 			<li>
-				<strong>Zero runtime code</strong> -- only type definitions and enums live here. No
-				implementations, no classes, no constants beyond enum members.
+				<strong>Zero runtime code</strong> -- only type definitions and enums live here. No implementations,
+				no classes, no constants beyond enum members.
 			</li>
 			<li>
 				<strong>Always <code>import type</code></strong> for non-enum exports. Use a regular
 				<code>import</code> only for enums.
 			</li>
 			<li>
-				<strong>Add shared types here</strong> if two or more packages need the same definition -- don't
-				duplicate them in <code>smrt-core</code>.
+				<strong>Add shared types here</strong> if two or more packages need the same definition --
+				don't duplicate them in <code>smrt-core</code>.
 			</li>
 		</ul>
 	</section>

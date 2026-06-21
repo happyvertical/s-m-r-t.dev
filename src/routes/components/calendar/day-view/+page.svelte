@@ -163,11 +163,11 @@
 		code={`import { DayView } from '@happyvertical/smrt-svelte';
 
 interface DayEventDetail {
-  type: 'game' | 'meeting' | 'event';
+  type: string;
   name: string;
+  slug: string;
   startTime: string;
   venue?: string;
-  slug?: string;
   councilSlug?: string;
 }
 

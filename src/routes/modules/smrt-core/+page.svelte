@@ -6,7 +6,7 @@
 <ModulePage
 	name="smrt-core"
 	description="ORM, code generation, AI integration, and the DispatchBus. Everything else in the SMRT framework builds on this."
-	badges={['v0.24.12', 'Core Foundation', 'ESM']}
+	badges={['v0.29.34', 'Core Foundation', 'ESM']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
@@ -29,11 +29,15 @@
 				<code>@smrt()</code>
 			</li>
 			<li>
-				<strong>DispatchBus</strong> -- inter-agent messaging with persistent subscriptions, wildcards,
-				and lifecycle (<code>pending → processing → completed</code>)
+				<strong>DispatchBus</strong> -- inter-agent messaging with persistent subscriptions,
+				wildcards, and lifecycle (<code>pending → processing → completed</code>)
 			</li>
-			<li><strong>Single Table Inheritance</strong> -- polymorphic object hierarchies in a single table</li>
-			<li><strong>GlobalInterceptors</strong> -- plugin hooks for beforeList/Get/Save/Delete (used by smrt-tenancy)</li>
+			<li>
+				<strong>Single Table Inheritance</strong> -- polymorphic object hierarchies in a single table
+			</li>
+			<li>
+				<strong>GlobalInterceptors</strong> -- plugin hooks for beforeList/Get/Save/Delete (used by smrt-tenancy)
+			</li>
 		</ul>
 	</section>
 
@@ -75,8 +79,8 @@ class ProductCollection extends SmrtCollection<Product> {
 		<h3>2. Initialize Collection</h3>
 		<p>
 			Application tables are <strong>not</strong> created at runtime -- prepare them via the
-			migration tooling (<code>smrt db:migrate</code>) before the first DB op. The collection
-			only verifies the table exists and fails clearly if it doesn't.
+			migration tooling (<code>smrt db:migrate</code>) before the first DB op. The collection only
+			verifies the table exists and fails clearly if it doesn't.
 		</p>
 		<CodeBlock
 			code={`const products = await ProductCollection.create({
@@ -145,7 +149,9 @@ const description = await product.do('Write a short marketing description');`}
 				<tr>
 					<td><code>ObjectRegistry</code></td>
 					<td><code>src/registry.ts</code></td>
-					<td>Global singleton on <code>globalThis</code> -- class metadata, fields, STI chains, manifests</td>
+					<td
+						>Global singleton on <code>globalThis</code> -- class metadata, fields, STI chains, manifests</td
+					>
 				</tr>
 				<tr>
 					<td><code>DispatchBus</code></td>
@@ -247,10 +253,13 @@ const count = await collection.db.pluck\`
 			<li><code>tableName</code> -- override the default table name</li>
 			<li><code>tableStrategy</code> -- <code>'cti'</code> (default) or <code>'sti'</code></li>
 			<li>
-				<code>conflictColumns</code> -- natural-key tuple used by <code>upsert()</code> (required on
-				junction / upsert tables)
+				<code>conflictColumns</code> -- natural-key tuple used by <code>upsert()</code> (required on junction
+				/ upsert tables)
 			</li>
-			<li><code>api</code> / <code>mcp</code> / <code>cli</code> -- generator config (boolean or <code>{'{'} include: [...] {'}'}</code>)</li>
+			<li>
+				<code>api</code> / <code>mcp</code> / <code>cli</code> -- generator config (boolean or
+				<code>{'{'} include: [...] {'}'}</code>)
+			</li>
 			<li><code>ai</code> -- callable methods exposed during <code>do()</code></li>
 			<li><code>hooks</code> -- beforeSave / afterSave / beforeDelete / afterDelete</li>
 			<li><code>embeddings</code> -- auto-generate embeddings on save</li>
@@ -258,8 +267,8 @@ const count = await collection.db.pluck\`
 			<li><code>agent</code> -- mark as agent root for jobs/dispatch</li>
 		</ul>
 		<p>
-			Registration also sets a <code>SMRT_TABLE_NAME</code> static property on the class -- this
-			survives minification, so production bundles still resolve the right table.
+			Registration also sets a <code>SMRT_TABLE_NAME</code> static property on the class -- this survives
+			minification, so production bundles still resolve the right table.
 		</p>
 
 		<CodeBlock
@@ -282,16 +291,17 @@ export class Product extends SmrtObject {
 		<h2>DispatchBus</h2>
 		<p>Persistent inter-agent messaging backed by SQL:</p>
 		<ul>
-			<li><code>emit(signalType, payload, metadata)</code> -- creates a persistent Dispatch record</li>
+			<li>
+				<code>emit(signalType, payload, metadata)</code> -- creates a persistent Dispatch record
+			</li>
 			<li><code>on(pattern, handler)</code> -- in-memory handler, fires immediately</li>
 			<li>
-				<code>subscribe({'{'} signalType, subscriber {'}'})</code> -- persistent subscription that
-				survives restarts
+				<code>subscribe({'{'} signalType, subscriber {'}'})</code> -- persistent subscription that survives
+				restarts
 			</li>
 			<li><code>process(subscriberName, handler)</code> -- process pending dispatches</li>
 			<li>
-				Wildcards: <code>campaign.*</code> matches <code>campaign.completed</code> (single segment
-				only)
+				Wildcards: <code>campaign.*</code> matches <code>campaign.completed</code> (single segment only)
 			</li>
 			<li>Tables: <code>_smrt_dispatch</code>, <code>_smrt_dispatch_subscriptions</code></li>
 			<li>
@@ -300,23 +310,25 @@ export class Product extends SmrtObject {
 		</ul>
 
 		<CodeBlock
-			code={`import { dispatchBus } from '@happyvertical/smrt-core';
+			code={`import { createDispatchBus } from '@happyvertical/smrt-core';
+
+const bus = await createDispatchBus({ db: { type: 'sqlite', url: 'app.db' } });
 
 // Emit a signal
-await dispatchBus.emit('campaign.completed', {
+await bus.emit('campaign.completed', {
   campaignId: 'c-123',
   totalSent: 4200,
-});
+}, { source: 'suasor' });
 
 // Persistent subscription
-await dispatchBus.subscribe({
+await bus.subscribe({
   signalType: 'campaign.*',
   subscriber: 'analytics-worker',
 });
 
-// Drain queue in a worker process
-await dispatchBus.process('analytics-worker', async (dispatch) => {
-  await recordCampaignMetrics(dispatch.payload);
+// Drain queue in a worker process (handler receives payload + metadata)
+await bus.process('analytics-worker', async (payload, metadata) => {
+  await recordCampaignMetrics(payload);
 });`}
 			language="typescript"
 		/>
@@ -351,7 +363,9 @@ if (isHighQuality) {
 		/>
 
 		<h3>AI Tools & Function Calling</h3>
-		<p>Methods listed under <code>ai</code> in <code>@smrt()</code> are exposed as tools during do() calls.</p>
+		<p>
+			Methods listed under <code>ai</code> in <code>@smrt()</code> are exposed as tools during do() calls.
+		</p>
 		<CodeBlock
 			code={`@smrt({ ai: { callable: ['summarize', 'translate'] } })
 class Document extends SmrtObject {
@@ -370,7 +384,9 @@ const result = await document.do(\`
 	<section id="sti">
 		<h2>Single Table Inheritance (STI)</h2>
 		<ul>
-			<li>Base: <code>@smrt({'{'} tableStrategy: 'sti' {'}'})</code> -- children inherit, share one table</li>
+			<li>
+				Base: <code>@smrt({'{'} tableStrategy: 'sti' {'}'})</code> -- children inherit, share one table
+			</li>
 			<li>
 				Discriminator: <code>_meta_type</code> column with <strong>qualified names</strong> like
 				<code>@happyvertical/smrt-content:Article</code>
@@ -380,10 +396,12 @@ const result = await document.do(\`
 				JSONB instead of as columns
 			</li>
 			<li>
-				Polymorphic queries: the collection reads <code>_meta_type</code> and constructs the correct
-				subclass dynamically
+				Polymorphic queries: the collection reads <code>_meta_type</code> and constructs the correct subclass
+				dynamically
 			</li>
-			<li>Validation: <code>save()</code> fails fast if <code>_meta_type</code> is missing or mismatched</li>
+			<li>
+				Validation: <code>save()</code> fails fast if <code>_meta_type</code> is missing or mismatched
+			</li>
 		</ul>
 
 		<CodeBlock
@@ -480,8 +498,8 @@ export default defineConfig({
 			language="typescript"
 		/>
 		<p>
-			Build-time manifest generation happens via the vitest plugin (<a
-				href="/modules/smrt-vitest">smrt-vitest</a
+			Build-time manifest generation happens via the vitest plugin (<a href="/modules/smrt-vitest"
+				>smrt-vitest</a
 			>) at startup.
 		</p>
 	</section>
@@ -529,11 +547,12 @@ const collection = await ProductCollection.create({ db });`}
 				<code>initialize()</code> applies option values (options win).
 			</li>
 			<li>
-				<strong>No runtime schema creation</strong>: application tables must be prepared explicitly via
-				migrations/tooling. The runtime verifies tables exist and fails clearly if they don't.
+				<strong>No runtime schema creation</strong>: application tables must be prepared explicitly
+				via migrations/tooling. The runtime verifies tables exist and fails clearly if they don't.
 			</li>
 			<li>
-				<strong>Retry logic</strong>: <code>db.get()</code> retries 3x at 250ms; <code>db.upsert()</code>
+				<strong>Retry logic</strong>: <code>db.get()</code> retries 3x at 250ms;
+				<code>db.upsert()</code>
 				retries 3x at 500ms. Tune by wrapping or replacing if you need different behavior.
 			</li>
 			<li>
@@ -541,12 +560,12 @@ const collection = await ProductCollection.create({ db });`}
 				<code>Collection.create()</code> -- eliminates async <code>getFields()</code> per query.
 			</li>
 			<li>
-				<strong>Smart cloning</strong>: arrays/objects are shallow-cloned during property init to prevent
-				aliasing (Issue #22).
+				<strong>Smart cloning</strong>: arrays/objects are shallow-cloned during property init to
+				prevent aliasing (Issue #22).
 			</li>
 			<li>
-				<strong>Table verification cache</strong>: <code>isTableVerified(dbUrl, tableName)</code> avoids
-				redundant <code>tableExists()</code> calls across collections.
+				<strong>Table verification cache</strong>: <code>isTableVerified(dbUrl, tableName)</code>
+				avoids redundant <code>tableExists()</code> calls across collections.
 			</li>
 			<li>
 				<strong>Manifest required</strong>: build-time AST scanning produces a manifest. Without the
@@ -554,11 +573,13 @@ const collection = await ProductCollection.create({ db });`}
 			</li>
 			<li>
 				<strong>Vite plugin loads scanner from <code>dist/</code> first</strong>:
-				<code>src/vite-plugin/import-build-aware.ts</code> prefers <code>dist/</code> when it exists;
-				it only falls back to <code>src/</code> on fresh clones. If you edit
-				<code>src/scanner/*.ts</code> or <code>src/schema/generator.ts</code>, you must rebuild
-				(<code>pnpm build</code> or <code>pnpm dev</code> / <code>pnpm build:watch</code>) before
-				consumers will see the change. Sniffing <code>.ts</code> vs <code>.js</code> via
+				<code>src/vite-plugin/import-build-aware.ts</code> prefers <code>dist/</code> when it
+				exists; it only falls back to <code>src/</code> on fresh clones. If you edit
+				<code>src/scanner/*.ts</code> or <code>src/schema/generator.ts</code>, you must rebuild (<code
+					>pnpm build</code
+				>
+				or <code>pnpm dev</code> / <code>pnpm build:watch</code>) before consumers will see the
+				change. Sniffing <code>.ts</code> vs <code>.js</code> via
 				<code>import.meta.url</code> was non-deterministic under tsx and broke 12-13 publishes (#1139).
 			</li>
 		</ul>

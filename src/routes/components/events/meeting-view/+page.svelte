@@ -7,7 +7,7 @@
 
 <article class="prose">
 	<h1>MeetingView</h1>
-	<p class="lead">Meeting details with agenda, attendees, notes, and action items.</p>
+	<p class="lead">Meeting details with links to agenda, minutes, video, and highlights.</p>
 	<h2>Installation</h2>
 	<CodeBlock
 		code={`import { MeetingView } from '@happyvertical/smrt-events/svelte';`}
@@ -15,7 +15,7 @@
 	/>
 	<h2>Usage</h2>
 	<CodeBlock
-		code={`<MeetingView meeting={meeting} attendees={attendees} showAgenda={true} />`}
+		code={`<MeetingView meeting={meeting} calendarUrl="https://example.com/calendar.ics" />`}
 		language="svelte"
 	/>
 </article>

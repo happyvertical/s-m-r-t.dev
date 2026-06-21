@@ -8,13 +8,21 @@
 		id: 'inv_001',
 		invoiceNumber: 'INV-2025-001',
 		customerName: 'Acme Corp',
-		total: 125000,
+		totalAmount: 125000,
 		status: 'sent',
+		issueDate: new Date('2025-01-15'),
 		dueDate: new Date('2025-02-15')
 	} as any;
 
 	const props = [
-		{ name: 'invoice', type: 'Invoice', description: 'Invoice object', required: true },
+		{ name: 'invoice', type: 'InvoiceData', description: 'Invoice data object', required: true },
+		{
+			name: 'currency',
+			type: "'CAD' | 'USD'",
+			default: "'CAD'",
+			description: 'Currency code'
+		},
+		{ name: 'href', type: 'string', description: 'Navigation href' },
 		{ name: 'onclick', type: '() => void', description: 'Click handler' }
 	];
 </script>

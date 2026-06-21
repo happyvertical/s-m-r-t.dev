@@ -21,7 +21,27 @@
 			name: 'baseUrl',
 			type: 'string',
 			default: "'/articles'",
-			description: 'Base URL for pagination links'
+			description: 'Base URL for pagination links (link mode)'
+		},
+		{
+			name: 'onPageChange',
+			type: '(page: number) => void',
+			description: 'When provided, renders buttons instead of links and calls this on page change'
+		},
+		{
+			name: 'showFirstLast',
+			type: 'boolean',
+			description: 'Show first/last page buttons'
+		},
+		{
+			name: 'maxVisible',
+			type: 'number',
+			description: 'Maximum number of visible page numbers'
+		},
+		{
+			name: 'aria-label',
+			type: 'string',
+			description: 'Accessible label for the pagination nav'
 		}
 	];
 </script>
@@ -124,6 +144,10 @@ interface Props {
   currentPage: number;
   totalPages: number;
   baseUrl?: string;
+  onPageChange?: (page: number) => void;
+  showFirstLast?: boolean;
+  maxVisible?: number;
+  'aria-label'?: string;
 }`}
 		language="typescript"
 	/>

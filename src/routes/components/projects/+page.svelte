@@ -75,10 +75,10 @@
 } from '@happyvertical/smrt-projects/svelte';
 
 <!-- Time tracking dashboard -->
-<TimeSummary entries={weekEntries} />
+<TimeSummary totalHours={40} totalAmount={2000} />
 <TimeEntryList {entries} />
 <ApprovalActions
-  selectedIds={selected}
+  status="submitted"
   onapprove={handleApprove}
   onreject={handleReject}
 />`}

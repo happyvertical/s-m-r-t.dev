@@ -6,22 +6,29 @@
 <ModulePage
 	name="smrt-scanner"
 	description="AST-based scanner using oxc-parser (Rust, 2-3x faster than tsc) for class/field metadata extraction. Powers manifest generation for code generators, the vitest plugin, and the CLI."
-	badges={['v0.24.12', 'Core Foundation', 'Rust-powered', 'ESM-only']}
+	badges={['v0.29.34', 'Core Foundation', 'Rust-powered', 'ESM-only']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
 			<code>@happyvertical/smrt-scanner</code> reads your TypeScript source with the Rust-based
-			<a href="https://oxc.rs/">OXC parser</a> and extracts the metadata that <code>smrt-core</code>'s
-			code generators need: <code>@smrt()</code> config, class hierarchy, field defaults (with the
-			<code>0</code> vs <code>0.0</code> heuristic for INTEGER vs DECIMAL), relationships, and static
-			properties like <code>uiSlots</code> and <code>adminRoutes</code>.
+			<a href="https://oxc.rs/">OXC parser</a> and extracts the metadata that
+			<code>smrt-core</code>'s code generators need: <code>@smrt()</code> config, class hierarchy,
+			field defaults (with the
+			<code>0</code> vs <code>0.0</code> heuristic for INTEGER vs DECIMAL), relationships, and
+			static properties like <code>uiSlots</code> and <code>adminRoutes</code>.
 		</p>
-		<p>It outputs a manifest JSON consumed downstream by code generators, the vitest plugin, and the CLI.</p>
+		<p>
+			It outputs a manifest JSON consumed downstream by code generators, the vitest plugin, and the
+			CLI.
+		</p>
 
 		<aside>
 			<p>
-				<strong>ESM-only since PR <a href="https://github.com/happyvertical/smrt/pull/1219">#1219</a></strong>
+				<strong
+					>ESM-only since PR <a href="https://github.com/happyvertical/smrt/pull/1219">#1219</a
+					></strong
+				>
 				(<code>fix(core): resolve ESM-only scanner package</code>). The scanner ships only ESM
 				exports -- CJS consumers should switch to ESM or wrap behind dynamic <code>import()</code>.
 				The companion change in <code>smrt-core</code> updates
@@ -43,19 +50,37 @@
 		<h2>Key Exports</h2>
 		<ul>
 			<li>
-				<code>ManifestBuilder</code> -- scans source files and builds a <code>SmartObjectManifest</code>
-				via <code>.generate()</code>
+				<code>OxcScanner</code> -- scans source files with the OXC parser and returns
+				<code>ScanResults</code> via <code>.scan()</code>
 			</li>
 			<li>
-				<code>discoverBaseClasses({'{'} cwd {'}'})</code> -- finds SMRT base classes inside
-				<code>node_modules</code> (always pass <code>cwd</code> if you're not running from the project
-				root)
+				<code>InheritanceResolver</code> -- resolves class inheritance chains across files (<code
+					>.addClasses()</code
+				>
+				/ <code>.resolveAll()</code>)
 			</li>
 			<li>
-				<code>SmartObjectDefinition</code>, <code>FieldDefinition</code> -- scanned class metadata
-				types
+				<code>ManifestAdapter</code> -- converts resolved scan results into the smrt-core manifest
+				format via <code>.toManifest()</code>
+			</li>
+			<li>
+				<code>parseFile</code>, <code>parseSource</code>, <code>extractSmrtImports</code> -- low-level
+				parsing helpers for a single file or source string
+			</li>
+			<li>
+				<code>RawClassDefinition</code>, <code>RawFieldDefinition</code>,
+				<code>ResolvedClassDefinition</code>, <code>ScanResults</code>,
+				<code>OxcScannerOptions</code> -- scanned class metadata types
 			</li>
 		</ul>
+		<aside>
+			<p>
+				<strong>Manifest generation lives in smrt-core, not here.</strong> The
+				<code>ManifestBuilder</code> / <code>discoverBaseClasses</code> helpers are exported from
+				<code>@happyvertical/smrt-core/manifest</code> (they build on this scanner). The scanner package
+				itself ships only the parsing/resolution/adapter primitives listed above.
+			</p>
+		</aside>
 	</section>
 
 	<section id="how-it-works">
@@ -64,9 +89,11 @@
 			<li><code>fast-glob</code> finds <code>.ts</code> files matching include/exclude patterns</li>
 			<li><code>oxc-parser</code> parses each file's AST</li>
 			<li>
-				The scanner extracts: <code>@smrt()</code> config, class hierarchy, field defaults
-				(<code>0</code> vs <code>0.0</code> heuristic), relationships, and static properties
-				(<code>uiSlots</code>, <code>adminRoutes</code>)
+				The scanner extracts: <code>@smrt()</code> config, class hierarchy, field defaults (<code
+					>0</code
+				>
+				vs <code>0.0</code> heuristic), relationships, and static properties (<code>uiSlots</code>,
+				<code>adminRoutes</code>)
 			</li>
 			<li>
 				The output is a manifest JSON consumed by <strong>code generators</strong>, the
@@ -76,9 +103,19 @@
 
 		<h3>Key Files</h3>
 		<ul>
-			<li><code>src/oxc-scanner.ts</code> -- core AST scanning logic</li>
-			<li><code>src/manifest-builder.ts</code> -- orchestrates scanning → manifest</li>
-			<li><code>src/base-class-discovery.ts</code> -- resolves base classes from node_modules</li>
+			<li>
+				<code>src/oxc-parser.ts</code> -- low-level OXC parsing (<code>parseFile</code>,
+				<code>parseSource</code>)
+			</li>
+			<li><code>src/scanner.ts</code> -- <code>OxcScanner</code>, glob-based scanning logic</li>
+			<li>
+				<code>src/inheritance-resolver.ts</code> -- <code>InheritanceResolver</code>, resolves
+				inheritance chains
+			</li>
+			<li>
+				<code>src/manifest-adapter.ts</code> -- <code>ManifestAdapter</code>, scan results →
+				manifest format
+			</li>
 		</ul>
 	</section>
 
@@ -87,33 +124,54 @@
 
 		<h3>Generate a Manifest</h3>
 		<CodeBlock
-			code={`import { ManifestBuilder } from '@happyvertical/smrt-scanner';
+			code={`import {
+  OxcScanner,
+  InheritanceResolver,
+  ManifestAdapter,
+} from '@happyvertical/smrt-scanner';
 
-const builder = new ManifestBuilder({
+// 1. Scan source files for @smrt() classes
+const scanner = new OxcScanner({
   include: ['src/**/*.ts'],
   exclude: ['**/*.test.ts', '**/*.spec.ts'],
-  output: '.smrt/manifest.json',
 });
+const results = await scanner.scan();
 
-await builder.generate();`}
+// 2. Resolve inheritance chains across files
+const resolver = new InheritanceResolver();
+resolver.addClasses(results.classes);
+const resolved = resolver.resolveAll();
+
+// 3. Convert to the smrt-core manifest format
+const adapter = new ManifestAdapter();
+const manifest = adapter.toManifest(resolved);`}
 			language="typescript"
 		/>
 
 		<aside>
 			<p>
-				<strong>cwd-relative:</strong> <code>ManifestBuilder.generate()</code> resolves all paths
-				relative to <code>process.cwd()</code> -- not relative to any <code>projectRoot</code> option.
-				If you call it from a different working directory, wrap with
-				<code>process.chdir(projectRoot)</code> / restore.
+				<strong>cwd-relative:</strong> <code>OxcScanner</code> resolves include/exclude globs
+				relative to its <code>cwd</code> option, which defaults to <code>process.cwd()</code>. Pass
+				<code>cwd</code> explicitly (or use the <code>scanFromDir(dir, options)</code> helper) when scanning
+				from a different directory.
 			</p>
 		</aside>
 
 		<h3>Discover Base Classes</h3>
+		<p>
+			Base-class discovery lives in <code>@happyvertical/smrt-core/manifest</code>.
+			<code>discoverBaseClasses()</code> returns an array of base class names (e.g.
+			<code>['SmrtObject', 'SmrtCollection', ...]</code>) that you feed into
+			<code>OxcScanner</code>'s <code>baseClasses</code> option so it can resolve classes that extend
+			framework or cross-package bases.
+		</p>
 		<CodeBlock
-			code={`import { discoverBaseClasses } from '@happyvertical/smrt-scanner';
+			code={`import { discoverBaseClasses } from '@happyvertical/smrt-core/manifest';
+import { OxcScanner } from '@happyvertical/smrt-scanner';
 
 // Always pass cwd when projectRoot != process.cwd()
-const bases = await discoverBaseClasses({ cwd: projectRoot });`}
+const baseClasses = await discoverBaseClasses({ cwd: projectRoot });
+const scanner = new OxcScanner({ baseClasses, cwd: projectRoot });`}
 			language="typescript"
 		/>
 	</section>
@@ -153,8 +211,9 @@ const bases = await discoverBaseClasses({ cwd: projectRoot });`}
 		<h2>Used By</h2>
 		<ul>
 			<li>
-				<a href="/modules/smrt-vitest">smrt-vitest</a> -- <code>smrtVitestPlugin()</code> calls
-				<code>ManifestBuilder</code> at vitest startup
+				<a href="/modules/smrt-vitest">smrt-vitest</a> -- <code>smrtVitestPlugin()</code> generates
+				manifests at vitest startup via smrt-core's <code>ManifestBuilder</code>, which scans
+				through this package
 			</li>
 			<li>
 				<a href="/modules/smrt-cli">smrt-cli</a> -- introspection and code-generation commands
@@ -170,9 +229,9 @@ const bases = await discoverBaseClasses({ cwd: projectRoot });`}
 		<h2>Gotchas</h2>
 		<ul>
 			<li>
-				<strong>CWD-relative</strong>: <code>ManifestBuilder.generate()</code> resolves all paths
-				relative to <code>process.cwd()</code>. Wrap with a <code>process.chdir(projectRoot)</code> /
-				restore if you're not at the project root.
+				<strong>CWD-relative</strong>: <code>OxcScanner</code> resolves globs relative to its
+				<code>cwd</code> option (default <code>process.cwd()</code>). Pass <code>cwd</code>
+				explicitly (or use <code>scanFromDir</code>) when you're not at the project root.
 			</li>
 			<li>
 				<strong>ESM-only (PR #1219)</strong>: the package ships only ESM exports. CJS consumers must

@@ -14,7 +14,10 @@
 		language="typescript"
 	/>
 	<h2>Usage</h2>
-	<CodeBlock code={`<InvoiceTotals invoice={invoice} />`} language="svelte" />
+	<CodeBlock
+		code={`<InvoiceTotals subtotal={subtotal} taxRate={5} total={total} amountPaid={amountPaid} />`}
+		language="svelte"
+	/>
 </article>
 
 <style>

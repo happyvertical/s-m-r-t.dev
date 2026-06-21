@@ -118,25 +118,29 @@
 	/>
 
 	<h2>Configuring the Socket</h2>
-	<p>Configure WebSocket connection in the Smrt provider.</p>
+	<p>Configure the WebSocket connection via the Provider's <code>socket</code> prop.</p>
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { Provider as Smrt } from '@happyvertical/smrt-svelte';
+  import { Provider } from '@happyvertical/smrt-svelte';
+
+  let { children } = $props();
 </script>
 
-<Smrt
+<Provider
   socket={{
     url: 'wss://api.example.com/ws',
-    reconnect: true,
-    reconnectInterval: 3000,
-    maxReconnectAttempts: 10,
+    reconnect: {
+      enabled: true,
+      maxAttempts: 10,
+      baseDelay: 1000
+    },
     onMessage: (data) => console.log('Received:', data),
     onError: (event) => console.error('Socket error:', event)
   }}
 >
-  <slot />
-</Smrt>`}
+  {@render children()}
+</Provider>`}
 		language="svelte"
 	/>
 

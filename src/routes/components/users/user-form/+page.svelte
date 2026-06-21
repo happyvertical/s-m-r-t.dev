@@ -188,7 +188,7 @@ interface Props {
   loading?: boolean;
 }
 
-// UserStatus = 'active' | 'pending' | 'suspended' | 'deactivated'`}
+// UserStatus = 'active' | 'inactive' | 'suspended' | 'pending'`}
 		language="typescript"
 	/>
 </article>

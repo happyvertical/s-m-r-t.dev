@@ -5,28 +5,67 @@
 
 <ModulePage
 	name="smrt-social"
-	description="Social media account management with OAuth and post scheduling across YouTube, Threads, X, and Bluesky."
-	badges={['v0.24.12', 'OAuth', 'Post Scheduling', 'Multi-Platform', 'Optional Tenancy']}
+	description="Social media account management with OAuth and post scheduling across YouTube, Threads, X, Bluesky, and Facebook."
+	badges={['v0.29.32', 'OAuth', 'Post Scheduling', 'Multi-Platform', 'Optional Tenancy']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-social</strong> manages social media connections and publishing across multiple
-			platforms. It handles OAuth credential storage (CSRF + PKCE), post creation and scheduling,
-			and per-post analytics tracking. The platform enum is hardcoded — extending it requires code
-			changes.
+			<strong>smrt-social</strong> manages social media connections and publishing across multiple platforms.
+			It handles OAuth credential storage (CSRF + PKCE), post creation and scheduling, and per-post analytics
+			tracking. The platform enum is hardcoded — extending it requires code changes.
 		</p>
 		<aside>
 			<p>Key Features:</p>
 			<ul>
-				<li><strong>Multi-platform STI</strong>: YouTube, Threads, X (Twitter), Bluesky — hardcoded enum</li>
-				<li><strong>OAuth flow with CSRF + PKCE</strong>: <code>OAuthState</code> stores state + <code>codeVerifier</code> with a 10-minute TTL</li>
-				<li><strong>Post lifecycle</strong>: <code>draft → scheduled → publishing → published</code> (or <code>failed</code>) — <code>scheduledAt</code> is metadata only; the app must run a job to publish</li>
-				<li><strong>Per-post analytics</strong>: <code>views</code>, <code>likes</code>, <code>comments</code>, <code>shares</code>, <code>clicks</code> — synced manually from platform APIs, not auto-populated</li>
-				<li><strong>Readiness gate</strong> (<code>isReady</code>): active + connected + token present + not expired (5-min buffer)</li>
-				<li><strong>Link behavior</strong>: <code>description</code>, <code>reply</code>, or <code>none</code></li>
-				<li><strong>Optional tenancy</strong>: all models use <code>@TenantScoped({'{'} mode: 'optional' {'}'})</code></li>
-				<li><strong>Tokens plaintext (TODO)</strong>: integrate <a href="/modules/smrt-secrets">smrt-secrets</a> for envelope encryption in production</li>
+				<li>
+					<strong>Multi-platform STI</strong>: YouTube, Threads, X (Twitter), Bluesky, Facebook —
+					hardcoded enum
+				</li>
+				<li>
+					<strong>OAuth flow with CSRF + PKCE</strong>: <code>OAuthState</code> stores state +
+					<code>codeVerifier</code> with a 10-minute TTL
+				</li>
+				<li>
+					<strong>Post lifecycle</strong>:
+					<code
+						>draft → pending_approval → approved → scheduled → publishing → dry_run/staged →
+						published</code
+					>
+					(or <code>failed</code> / <code>cancelled</code>) — <code>scheduledAt</code> is metadata only;
+					the app must run a job to publish
+				</li>
+				<li>
+					<strong>Per-post analytics</strong>: <code>views</code>, <code>impressions</code>,
+					<code>likes</code>, <code>comments</code>, <code>shares</code>, <code>clicks</code> — synced
+					manually from platform APIs, not auto-populated
+				</li>
+				<li>
+					<strong>Readiness gate</strong> (<code>isReady</code>): active + connected + credentials
+					present + no missing permissions + not expired (5-min buffer) + public-publishing latch
+					satisfied
+				</li>
+				<li>
+					<strong>Publish-mode safety</strong> (<code>publishMode</code>): <code>dry_run</code>,
+					<code>stage_remote</code>, <code>private_or_scheduled</code>, or <code>public</code> —
+					<code>public</code>
+					additionally requires the <code>publicPublishingAllowed</code> latch
+				</li>
+				<li>
+					<strong>Link behavior</strong>: <code>description</code>, <code>inline</code>,
+					<code>attachment</code>, <code>reply</code>, or <code>none</code>
+				</li>
+				<li>
+					<strong>Optional tenancy</strong>: all models use
+					<code>@TenantScoped({'{'} mode: 'optional' {'}'})</code>
+				</li>
+				<li>
+					<strong>First-class secrets</strong>: credentials live in
+					<a href="/modules/smrt-secrets">smrt-secrets</a>
+					via <code>credentialSecretId</code> / <code>setCredentials()</code>; the legacy plaintext
+					<code>accessToken</code>
+					/ <code>refreshToken</code> columns are deprecated
+				</li>
 			</ul>
 		</aside>
 	</section>
@@ -41,18 +80,24 @@
 		<CodeBlock
 			code={`import { SocialAccount, SocialPost, OAuthState } from '@happyvertical/smrt-social';
 
-// Connect a social account
+// Connect a social account. Prefer storing credentials in smrt-secrets
+// via setCredentials() rather than the deprecated plaintext token columns.
 const account = new SocialAccount({
   name: 'Bentley News YouTube',
   platform: 'youtube',
   platformUsername: 'Bentley News',
-  accessToken: 'encrypted-token',
-  refreshToken: 'encrypted-refresh',
   tokenExpiresAt: new Date('2026-06-01'),
   defaultHashtags: ['news', 'local'],
   linkBehavior: 'description',
+  publishMode: 'dry_run',          // safety default; gate 'public' behind publicPublishingAllowed
 });
 await account.save();
+
+// Store the OAuth payload in smrt-secrets (sets credentialSecretId on the account)
+await account.setCredentials({
+  accessToken: '...',
+  refreshToken: '...',
+});
 
 // Check readiness before publishing
 if (account.isReady) {
@@ -89,39 +134,68 @@ await state.save();
 		<CodeBlock
 			code={`class SocialAccount extends SmrtObject {
   name: string
-  platform: 'youtube' | 'threads' | 'x' | 'bluesky'
-  platformUsername?: string
-  accessToken?: string
-  refreshToken?: string
-  tokenExpiresAt?: Date
-  status: 'connected' | 'expired' | 'error'
-  defaultHashtags?: string[]
-  linkBehavior: 'description' | 'reply' | 'none'
+  platform: 'youtube' | 'threads' | 'x' | 'bluesky' | 'facebook'
+  platformUserId: string | null
+  platformUsername: string | null
+  platformUrl: string | null
+  accessToken: string | null        // deprecated: prefer credentialSecretId/setCredentials()
+  refreshToken: string | null       // deprecated
+  credentialSecretId: string | null // smrt-secrets reference for the credential payload
+  accessTokenSecretName: string | null
+  refreshTokenSecretName: string | null
+  tokenExpiresAt: Date | null
+  isActive: boolean
+  status: 'connected' | 'disconnected' | 'expired' | 'missing_permissions' | 'error'
+  defaultHashtags: string[]
+  scopes: string[]
+  linkBehavior: 'description' | 'inline' | 'attachment' | 'reply' | 'none'
+  publishMode: 'dry_run' | 'stage_remote' | 'private_or_scheduled' | 'public'
+  publicPublishingAllowed: boolean  // latch required before publishMode 'public' takes effect
+  errorMessage: string | null
 
-  get isReady(): boolean       // active + connected + token + not expired
-  get isTokenExpired(): boolean // 5-minute buffer before expiry
+  get isReady(): boolean             // active + connected + credentials + no missing perms + not expired + publish latch
+  get isTokenExpired(): boolean      // 5-minute buffer before expiry
+  get hasCredentials(): boolean      // any usable credential reference present
+  get needsAttention(): boolean
+  get effectivePublishMode(): PublishMode  // downgrades 'public' to 'dry_run' until the latch is set
+  async setCredentials(credentials: Record<string, unknown>, options?): Promise<void>
 }`}
 			language="typescript"
 		/>
 		<aside>
-			<p><strong>Security note:</strong> OAuth tokens are stored as plain strings. For production deployments, consider integrating <a href="/modules/smrt-secrets">smrt-secrets</a> for envelope encryption of sensitive credentials.</p>
+			<p>
+				<strong>Security note:</strong> Store credentials in
+				<a href="/modules/smrt-secrets">smrt-secrets</a>
+				via <code>setCredentials()</code> / <code>credentialSecretId</code> rather than the
+				deprecated plaintext <code>accessToken</code> / <code>refreshToken</code> columns.
+				<code>isReady</code> accepts any usable credential reference, so a secrets-backed account is publish-ready
+				without populating the plaintext fields.
+			</p>
 		</aside>
 
 		<h3>SocialPost</h3>
 		<CodeBlock
 			code={`class SocialPost extends SmrtObject {
-  socialAccountId: string
-  title?: string
+  socialAccountId: string | null
+  postType: 'text' | 'link' | 'image' | 'video'
+  title: string | null
   description: string
-  hashtags?: string[]
-  linkUrl?: string
-  scheduledAt?: Date
-  publishedAt?: Date
-  status: 'draft' | 'scheduled' | 'publishing' | 'published' | 'failed'
-  analytics: string            // JSON: views, likes, comments, shares, clicks
+  hashtags: string[]
+  linkUrl: string | null
+  platformPostId: string | null   // id assigned by the platform after publish
+  scheduledAt: Date | null
+  publishedAt: Date | null
+  status: 'draft' | 'pending_approval' | 'approved' | 'scheduled'
+        | 'publishing' | 'dry_run' | 'staged' | 'published'
+        | 'failed' | 'cancelled'
+  errorMessage: string | null
+  analytics: PostAnalytics        // object: views, impressions, likes, comments, shares, clicks, raw, lastUpdated
+  analyticsLastSyncedAt: Date | null
 
-  get isEditable(): boolean    // true when draft or failed
-  get fullText(): string       // description + formatted hashtags
+  get isEditable(): boolean       // true when draft, pending_approval, or failed
+  get isScheduled(): boolean
+  get isPublished(): boolean
+  get fullText(): string          // description + formatted hashtags
 }`}
 			language="typescript"
 		/>
@@ -129,18 +203,19 @@ await state.save();
 		<h3>OAuthState (STI)</h3>
 		<CodeBlock
 			code={`class OAuthState extends SmrtObject {
-  platform: string
+  platform: 'youtube' | 'threads' | 'x' | 'bluesky' | 'facebook'
   state: string                // CSRF token
-  codeVerifier?: string        // PKCE code verifier
+  codeVerifier: string | null  // PKCE code verifier
   redirectUri: string
-  scopes?: string[]
-  // 10-minute TTL
+  scopes: string[]
+  expiresAt: Date              // defaults to now + 10 minutes (10-minute TTL)
 
-  get isValid(): boolean
-  verifyState(callback: string): boolean
+  get isExpired(): boolean
+  get isValid(): boolean       // not expired and state is set
+  verifyState(callbackState: string): boolean
   static generateState(): string
   static generateCodeVerifier(): string
-  static generateCodeChallenge(verifier: string): string  // S256
+  static async generateCodeChallenge(verifier: string): Promise<string>  // S256
 }`}
 			language="typescript"
 		/>
@@ -153,7 +228,10 @@ await state.save();
 			<ul>
 				<li>Check <code>account.isReady</code> before attempting to publish</li>
 				<li>Use <code>OAuthState.generateState()</code> for CSRF protection</li>
-				<li>Use PKCE (<code>generateCodeVerifier</code>/<code>generateCodeChallenge</code>) for OAuth flows</li>
+				<li>
+					Use PKCE (<code>generateCodeVerifier</code>/<code>generateCodeChallenge</code>) for OAuth
+					flows
+				</li>
 				<li>Implement a job runner to trigger publishing at <code>scheduledAt</code> time</li>
 				<li>Clean up expired OAuthState records (10-minute TTL)</li>
 			</ul>
@@ -163,8 +241,16 @@ await state.save();
 			<ul>
 				<li>Don't assume auto-publishing (scheduledAt is metadata only -- app must trigger)</li>
 				<li>Don't expect analytics to auto-populate (must sync from platform APIs)</li>
-				<li>Don't store tokens without encryption (currently plaintext -- integrate smrt-secrets)</li>
-				<li>Don't skip the 5-minute token expiry buffer when checking readiness</li>
+				<li>
+					Don't write OAuth tokens into the deprecated plaintext <code>accessToken</code>/<code
+						>refreshToken</code
+					>
+					columns -- use <code>setCredentials()</code> (smrt-secrets)
+				</li>
+				<li>
+					Don't enable <code>publishMode: 'public'</code> without also setting
+					<code>publicPublishingAllowed</code> (the latch gates real public publishing)
+				</li>
 				<li>Don't extend the platform enum without code changes (hardcoded list)</li>
 			</ul>
 		</article>

@@ -6,7 +6,7 @@
 <ModulePage
 	name="smrt-images"
 	description="Image management with AI categorization, alt-text via smrt-prompts, editor/deriver helpers, and a UI registry — Image extends Asset via cross-package STI."
-	badges={['v0.24.12', 'Cross-Package STI', 'Prompt Registry', 'UI Registry']}
+	badges={['v0.29.34', 'Cross-Package STI', 'Prompt Registry', 'UI Registry']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
@@ -20,15 +20,31 @@
 
 		<h3>Key Features</h3>
 		<ul>
-			<li>Cross-package STI: <code>Image</code> extends <code>Asset</code> (shared table, qualified discriminator)</li>
+			<li>
+				Cross-package STI: <code>Image</code> extends <code>Asset</code> (shared table, qualified discriminator)
+			</li>
 			<li>AI alt-text via <code>generateAltText()</code> through the smrt-prompts registry</li>
-			<li><code>ImageCategorizer</code>: AI vision analysis → tags, description, confidence, subjects</li>
-			<li><code>ImageEditor</code>: resize / crop / convert / thumbnail / AI edits — derivatives linked via <code>parentId</code></li>
-			<li><code>ImageDeriver</code>: AI-generated derivations; records source provenance via <code>AssetAssociation</code></li>
-			<li><code>ImageMetadataExtractor</code>: dimensions, format, EXIF (via <code>@happyvertical/images</code>)</li>
+			<li>
+				<code>ImageCategorizer</code>: AI vision analysis → tags, description, confidence, subjects
+			</li>
+			<li>
+				<code>ImageEditor</code>: resize / crop / convert / thumbnail / AI edits — derivatives
+				linked via <code>parentId</code>
+			</li>
+			<li>
+				<code>ImageDeriver</code>: AI-generated derivations; records source provenance via
+				<code>AssetAssociation</code>
+			</li>
+			<li>
+				<code>ImageMetadataExtractor</code>: dimensions, format, EXIF (via
+				<code>@happyvertical/images</code>)
+			</li>
 			<li><code>ImageSearch</code>: text search with orientation filters</li>
 			<li><code>UpstreamManager</code>: import from external providers with provenance tracking</li>
-			<li>UI registry: <code>assets-gallery</code>, <code>image-editor</code>, <code>image-uploader</code> slots</li>
+			<li>
+				UI registry: <code>assets-gallery</code>, <code>image-editor</code>,
+				<code>image-uploader</code> slots
+			</li>
 		</ul>
 	</section>
 
@@ -75,8 +91,9 @@ await categorizer.autoTag(image, assetCollection);
 // AI alt-text (via smrt-prompts)
 const altText = await image.generateAltText();
 
-// Editing -- each call creates a derivative Image linked via parentId
-const editor = new ImageEditor(runtime, images, { ai });
+// Editing -- each call creates a derivative Image linked via parentId.
+// ImageEditor takes (store, collection, { ai? }); use runtime.store.
+const editor = new ImageEditor(runtime.store, images, { ai });
 const thumb   = await editor.thumbnail(image, 256);
 const resized = await editor.resize(image, 800, 600);
 const webp    = await editor.convert(image, 'webp');
@@ -118,7 +135,8 @@ const variations = await editor.generateVariation(image, 'winter theme', { count
 		<CodeBlock
 			code={`class ImageCollection extends SmrtCollection<Image> {
   getByMinDimensions(width: number, height: number): Promise<Image[]>
-  getByAspectRatio(ratio: number, tolerance?: number): Promise<Image[]>
+  getByMaxDimensions(width: number, height: number): Promise<Image[]>
+  getByAspectRatio(minRatio: number, maxRatio: number): Promise<Image[]>
   getLandscape(): Promise<Image[]>
   getPortrait(): Promise<Image[]>
   getSquare(): Promise<Image[]>
@@ -137,24 +155,30 @@ const categorizer = new ImageCategorizer({ ai });
 const result = await categorizer.categorize(image);
 
 // ImageEditor: resize/crop/convert/thumbnail + AI edits, all create new Image
-// records linked via parentId
-const editor = new ImageEditor(runtime, images, { ai });
+// records linked via parentId. Constructor: (store, collection, { ai? })
+const editor = new ImageEditor(runtime.store, images, { ai });
 
-// ImageDeriver: AI-generated derivations -- records provenance via AssetAssociation
-const deriver = new ImageDeriver(runtime, images, { ai });
-const derived = await deriver.deriveFrom(image, { prompt: 'storybook style' });
+// ImageDeriver: AI-generated derivations -- records provenance via AssetAssociation.
+// Constructor: (store, collection, { ai }); derive() takes source images + a prompt.
+const deriver = new ImageDeriver(runtime.store, images, { ai });
+const derived = await deriver.derive([image], 'storybook style', { count: 1 });
+// To also link sources via AssetAssociation, use deriveWithAssociations():
+// await deriver.deriveWithAssociations([image], 'storybook style', associations);
 
 // ImageMetadataExtractor: dimensions, format, EXIF
 const extractor = new ImageMetadataExtractor();
 const meta = await extractor.extract(imageBuffer);
 
-// ImageSearch: text search with orientation filters
+// ImageSearch: text search with orientation filters.
+// Constructor: (collection); search(query, options) — also findSimilar() / findByPrompt()
 const search = new ImageSearch(images);
-const results = await search.find({ query: 'sunset', orientation: 'landscape' });
+const results = await search.search('sunset', { orientation: 'landscape' });
 
-// UpstreamManager: import from external providers
-const upstream = new UpstreamManager(images, runtime);
-await upstream.importFromSource(sourceAdapter, { provenance: true });`}
+// UpstreamManager: import from external providers.
+// Constructor: (sources[], store, collection)
+const upstream = new UpstreamManager([sourceAdapter], runtime.store, images);
+const found = await upstream.search('mountains', { limit: 20 });
+const imported = await upstream.import(found[0]);`}
 			language="typescript"
 		/>
 	</section>
@@ -175,17 +199,27 @@ await upstream.importFromSource(sourceAdapter, { provenance: true });`}
 		/>
 
 		<h3>PII contract</h3>
-		<p>
-			Only non-PII metadata fields are passed to the AI provider:
-		</p>
+		<p>Only non-PII metadata fields are passed to the AI provider:</p>
 		<table>
 			<thead>
 				<tr><th>Allow-listed</th><th>Excluded</th><th>Reason</th></tr>
 			</thead>
 			<tbody>
-				<tr><td><code>name</code></td><td><code>sourceUri</code></td><td>May embed signed/private bucket paths</td></tr>
-				<tr><td><code>description</code></td><td><code>parentId</code>, <code>tenantId</code></td><td>Internal foreign-key fields</td></tr>
-				<tr><td></td><td><code>metadata</code> (the JSON blob)</td><td>May contain EXIF GPS data or tenant-private configuration</td></tr>
+				<tr
+					><td><code>name</code></td><td><code>sourceUri</code></td><td
+						>May embed signed/private bucket paths</td
+					></tr
+				>
+				<tr
+					><td><code>description</code></td><td><code>parentId</code>, <code>tenantId</code></td><td
+						>Internal foreign-key fields</td
+					></tr
+				>
+				<tr
+					><td></td><td><code>metadata</code> (the JSON blob)</td><td
+						>May contain EXIF GPS data or tenant-private configuration</td
+					></tr
+				>
 			</tbody>
 		</table>
 	</section>
@@ -211,9 +245,21 @@ const Gallery = ModuleUIRegistry.get('@happyvertical/smrt-images', 'assets-galle
 				<tr><th>Slot ID</th><th>Component</th><th>Purpose</th></tr>
 			</thead>
 			<tbody>
-				<tr><td><code>assets-gallery</code></td><td><code>AssetsGallery.svelte</code></td><td>Image gallery list</td></tr>
-				<tr><td><code>image-editor</code></td><td><code>ImageEditor.svelte</code></td><td>Inline editor surface</td></tr>
-				<tr><td><code>image-uploader</code></td><td><code>ImageUploader.svelte</code></td><td>Upload form</td></tr>
+				<tr
+					><td><code>assets-gallery</code></td><td><code>AssetsGallery.svelte</code></td><td
+						>Image gallery list</td
+					></tr
+				>
+				<tr
+					><td><code>image-editor</code></td><td><code>ImageEditor.svelte</code></td><td
+						>Inline editor surface</td
+					></tr
+				>
+				<tr
+					><td><code>image-uploader</code></td><td><code>ImageUploader.svelte</code></td><td
+						>Upload form</td
+					></tr
+				>
 			</tbody>
 		</table>
 	</section>
@@ -225,9 +271,9 @@ const Gallery = ModuleUIRegistry.get('@happyvertical/smrt-images', 'assets-galle
 			<code>store.storeFile()</code> → <code>save()</code>. Each derivative carries
 			<code>parentId</code> pointing at the source. When <code>ImageDeriver</code> records
 			provenance, it writes an <code>AssetAssociation</code> with role
-			<code>ASSET_ROLES.derivation_source</code>. Image derivation intentionally uses
-			<code>AssetAssociation</code> rather than an owner-side join because there is no
-			single canonical owner.
+			<code>ASSET_ROLES.DERIVATION_SOURCE</code>. Image derivation intentionally uses
+			<code>AssetAssociation</code> rather than an owner-side join because there is no single canonical
+			owner.
 		</p>
 	</section>
 
@@ -238,8 +284,14 @@ const Gallery = ModuleUIRegistry.get('@happyvertical/smrt-images', 'assets-galle
 			<ul>
 				<li>Use <code>generateAltText()</code> for accessibility on all images</li>
 				<li>Use <code>autoTag()</code> for consistent AI categorization</li>
-				<li>Create derivatives through <code>ImageEditor</code> / <code>ImageDeriver</code> (maintains parentId + provenance)</li>
-				<li>Use dimension-based queries (<code>getLandscape()</code>, <code>getHighResolution()</code>) for responsive selection</li>
+				<li>
+					Create derivatives through <code>ImageEditor</code> / <code>ImageDeriver</code> (maintains parentId
+					+ provenance)
+				</li>
+				<li>
+					Use dimension-based queries (<code>getLandscape()</code>,
+					<code>getHighResolution()</code>) for responsive selection
+				</li>
 				<li>Share a single <code>AssetRuntime</code> across image, content, and agents</li>
 			</ul>
 		</article>
@@ -249,7 +301,10 @@ const Gallery = ModuleUIRegistry.get('@happyvertical/smrt-images', 'assets-galle
 				<li>Don't bypass the Editor's create flow (skips collection validation)</li>
 				<li>Don't modify the Asset schema without considering cross-package STI</li>
 				<li>Don't assume orientation filtering is indexed — it filters in memory</li>
-				<li>Don't pass raw <code>metadata</code> blobs to AI prompts (may contain EXIF GPS / tenant-private data)</li>
+				<li>
+					Don't pass raw <code>metadata</code> blobs to AI prompts (may contain EXIF GPS / tenant-private
+					data)
+				</li>
 			</ul>
 		</article>
 	</section>

@@ -28,6 +28,12 @@
 			description: 'Modal size variant'
 		},
 		{
+			name: 'placement',
+			type: "'center' | 'end'",
+			default: "'center'",
+			description: 'Center (default) or end for a right-anchored full-height drawer'
+		},
+		{
 			name: 'closeOnBackdrop',
 			type: 'boolean',
 			default: 'true',
@@ -173,6 +179,7 @@ interface Props {
   onClose?: () => void;
   title?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  placement?: 'center' | 'end';
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
   showClose?: boolean;

@@ -33,7 +33,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Determine smrt branch
@@ -49,8 +49,12 @@ jobs:
             echo "ref=main" >> $GITHUB_OUTPUT
           fi
 
+      # actions/checkout stays on v5 (node24, classic http.extraheader auth).
+      # Do NOT bump to v6+: its includeIf.gitdir credential isolation fails to
+      # authenticate on the self-hosted runners' nested workspace paths. The
+      # renovate.json allowedVersions rule enforces this.
       - name: Checkout smrt monorepo
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           repository: happyvertical/smrt
           ref: ${{ steps.smrt-branch.outputs.ref }}
@@ -58,9 +62,10 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
 
       - name: Checkout havesmrt.com
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           path: havesmrt.com
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6
@@ -68,11 +73,13 @@ jobs:
           version: 10
 
       - name: Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: '24'
-          cache: 'pnpm'
-          cache-dependency-path: havesmrt.com/pnpm-lock.yaml
+          # No `cache: pnpm` here: on the self-hosted runners the Actions cache
+          # backend can't resolve the pnpm store path ("Some specified paths were
+          # not resolved"), which fails the step. The runners are persistent, so
+          # the pnpm store survives between runs and an explicit cache isn't needed.
           # setup-node writes the auth token into the user `.npmrc` at runtime,
           # so pnpm can resolve `@happyvertical/*` packages from GitHub Packages
           # without needing a `${TOKEN}` substitution in the project `.npmrc`
@@ -105,12 +112,14 @@ jobs:
   deploy-staging:
     needs: build
     if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'staging')
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     environment: staging
 
     steps:
       - name: Checkout
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+        with:
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: Download build artifacts
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
@@ -135,12 +144,14 @@ jobs:
   deploy-production:
     needs: build
     if: github.event_name == 'workflow_dispatch' && inputs.environment == 'production'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     environment: production
 
     steps:
       - name: Checkout
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+        with:
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: Download build artifacts
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8

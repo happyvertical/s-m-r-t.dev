@@ -6,42 +6,83 @@
 <ModulePage
 	name="smrt-svelte"
 	description="Svelte 5 component library for SMRT: Provider, hooks, browser AI (STT/TTS/LLM with warm cache), dual theme system, permission-aware rendering, and the ModuleUIRegistry for cross-package component discovery."
-	badges={['v0.24.12', 'Svelte 5', 'Runes', 'Browser AI', 'ModuleUIRegistry']}
+	badges={['v0.29.34', 'Svelte 5', 'Runes', 'Browser AI', 'ModuleUIRegistry']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			<strong>@happyvertical/smrt-svelte</strong> is the canonical UI package for the SMRT framework.
-			It provides a root <code>Provider</code> component, seven hooks, 56+ Svelte 5 components organized
-			into subpath exports, bundled browser AI adapters with a warm client cache that survives navigation,
-			a dual theme system, permission actions, and the <code>ModuleUIRegistry</code> — the cross-package
-			registry that other SMRT UI shippers (smrt-content, smrt-images, smrt-assets, smrt-analytics,
-			smrt-chat, smrt-jobs, smrt-agents) plug into at import time.
+			<strong>@happyvertical/smrt-svelte</strong> is the canonical UI package for the SMRT
+			framework. It provides a root <code>Provider</code> component, seven hooks, 56+ Svelte 5
+			components organized into subpath exports, bundled browser AI adapters with a warm client
+			cache that survives navigation, a dual theme system, permission actions, and the
+			<code>ModuleUIRegistry</code> — the cross-package registry that other SMRT UI shippers (smrt-content,
+			smrt-images, smrt-assets, smrt-analytics, smrt-chat, smrt-jobs, smrt-agents) plug into at import
+			time.
 		</p>
 
 		<h3>Key Capabilities</h3>
 		<ul>
-			<li><strong>Provider</strong>: root component for <code>+layout.svelte</code> — initialises auth state, permissions, WebSocket, AI capabilities, and the warm client cache</li>
-			<li><strong>7 Hooks</strong>: <code>useAuth</code>, <code>useSocket</code>, <code>useAppState</code>, <code>useSTT</code>, <code>useTTS</code>, <code>useLLM</code>, <code>useTheme</code></li>
-			<li><strong>Bundled Browser AI</strong>: STT (browser-speech, whisper-cpp, whisper-wasm), TTS (browser-synthesis), LLM (webllm, transformers-llm). All adapters live inside this package now — no separate <code>browser-ai</code> install</li>
-			<li><strong>Preload strategies + warm cache</strong>: <code>none</code>/<code>eager</code>/<code>idle</code>/<code>on-visible</code>, plus a module-level <code>Map</code> that survives SvelteKit navigation and component remounts</li>
-			<li><strong>ModuleUIRegistry</strong>: cross-package Svelte component discovery; consumer packages register slots via side-effect imports of their <code>/svelte</code> subpath</li>
-			<li><strong>Permission system</strong>: <code>PermissionCheck</code> component and <code>use:permission</code> action</li>
-			<li><strong>Dual theme system</strong>: simple <code>ThemeProvider</code> with design tokens, plus full preset system (material/glass/studio) with CSS generation and runtime switching</li>
-			<li><strong>Ripple action</strong>: material-style <code>use:ripple</code> for tactile feedback</li>
+			<li>
+				<strong>Provider</strong>: root component for <code>+layout.svelte</code> — initialises auth state,
+				permissions, WebSocket, AI capabilities, and the warm client cache
+			</li>
+			<li>
+				<strong>7 Hooks</strong>: <code>useAuth</code>, <code>useSocket</code>,
+				<code>useAppState</code>, <code>useSTT</code>, <code>useTTS</code>, <code>useLLM</code>,
+				<code>useTheme</code>
+			</li>
+			<li>
+				<strong>Bundled Browser AI</strong>: STT (browser-speech, whisper-cpp, whisper-wasm), TTS
+				(browser-synthesis), LLM (webllm, transformers-llm). All adapters live inside this package
+				now — no separate <code>browser-ai</code> install
+			</li>
+			<li>
+				<strong>Preload strategies + warm cache</strong>: <code>none</code>/<code>eager</code>/<code
+					>idle</code
+				>/<code>on-visible</code>, plus a module-level <code>Map</code> that survives SvelteKit navigation
+				and component remounts
+			</li>
+			<li>
+				<strong>ModuleUIRegistry</strong>: cross-package Svelte component discovery; consumer
+				packages register slots via side-effect imports of their <code>/svelte</code> subpath
+			</li>
+			<li>
+				<strong>Permission system</strong>: <code>PermissionCheck</code> component and
+				<code>use:permission</code> action
+			</li>
+			<li>
+				<strong>Dual theme system</strong>: simple <code>ThemeProvider</code> with design tokens, plus
+				full preset system (material/glass/studio) with CSS generation and runtime switching
+			</li>
+			<li>
+				<strong>Ripple action</strong>: material-style <code>use:ripple</code> for tactile feedback
+			</li>
 		</ul>
 
-		<aside style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem 1.25rem; border-radius: 4px; margin: 24px 0;">
-			<strong>Breaking change (since v0.20):</strong> <code>AILoadingOverlay</code> was renamed to
-			<code>LoadingOverlay</code>. Replace <code>import &lbrace; AILoadingOverlay &rbrace;</code>
-			with <code>import &lbrace; LoadingOverlay &rbrace;</code>.
+		<aside
+			style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem 1.25rem; border-radius: 4px; margin: 24px 0;"
+		>
+			<strong>Breaking change (v0.29):</strong> the AI Svelte components (<code
+				>AILoadingOverlay</code
+			>, <code>VoiceInput</code>, <code>CapabilityGate</code>, <code>DownloadProgress</code>,
+			<code>STTTest</code>) are no longer exported from the package root. Import them from the
+			<code>@happyvertical/smrt-svelte/browser-ai/svelte</code>
+			subpath instead.
+			<code>AILoadingOverlay</code> is also rendered internally by <code>Provider</code>, so most
+			apps get its behaviour automatically. Note <code>LoadingOverlay</code> is a separate, generic
+			feedback component exported from the root — it is not a rename of
+			<code>AILoadingOverlay</code>.
 		</aside>
 	</section>
 
 	<section id="installation">
 		<h2>Installation</h2>
 		<CodeBlock code={`pnpm add @happyvertical/smrt-svelte`} language="bash" />
-		<p>Peer dependencies (all optional): <code>svelte</code> &gt;=5.18.2, <code>@happyvertical/smrt-agents</code>, <code>@happyvertical/smrt-jobs</code>, <code>@happyvertical/smrt-profiles</code>, <code>@happyvertical/smrt-users</code>.</p>
+		<p>
+			Peer dependencies (all optional): <code>svelte</code> &gt;=5.18.2,
+			<code>@happyvertical/smrt-agents</code>, <code>@happyvertical/smrt-jobs</code>,
+			<code>@happyvertical/smrt-profiles</code>, <code>@happyvertical/smrt-users</code>.
+		</p>
 	</section>
 
 	<section id="quick-start">
@@ -94,11 +135,17 @@
 			<tbody>
 				<tr>
 					<td><code>useAuth()</code></td>
-					<td><code>user</code>, <code>isAuthenticated</code>, <code>permissions</code>, <code>hasPermission()</code></td>
+					<td
+						><code>user</code>, <code>isAuthenticated</code>, <code>permissions</code>,
+						<code>hasPermission()</code></td
+					>
 				</tr>
 				<tr>
 					<td><code>useSocket()</code></td>
-					<td><code>status</code>, <code>isConnected</code>, <code>send()</code>, <code>reconnect()</code>, <code>disconnect()</code></td>
+					<td
+						><code>status</code>, <code>isConnected</code>, <code>send()</code>,
+						<code>reconnect()</code>, <code>disconnect()</code></td
+					>
 				</tr>
 				<tr>
 					<td><code>useAppState()</code></td>
@@ -106,15 +153,24 @@
 				</tr>
 				<tr>
 					<td><code>useSTT()</code></td>
-					<td><code>start()</code>, <code>stop()</code>, <code>isListening</code>, <code>lastResult</code>, <code>interimResult</code></td>
+					<td
+						><code>start()</code>, <code>stop()</code>, <code>isListening</code>,
+						<code>lastResult</code>, <code>interimResult</code></td
+					>
 				</tr>
 				<tr>
 					<td><code>useTTS()</code></td>
-					<td><code>speak()</code>, <code>stop()</code>, <code>isSpeaking</code>, <code>getVoices()</code></td>
+					<td
+						><code>speak()</code>, <code>stop()</code>, <code>isSpeaking</code>,
+						<code>getVoices()</code></td
+					>
 				</tr>
 				<tr>
 					<td><code>useLLM()</code></td>
-					<td><code>chat()</code>, <code>initialize()</code>, <code>unload()</code>, <code>isGenerating</code>, <code>downloadProgress</code></td>
+					<td
+						><code>chat()</code>, <code>initialize()</code>, <code>unload()</code>,
+						<code>isGenerating</code>, <code>downloadProgress</code></td
+					>
 				</tr>
 				<tr>
 					<td><code>useTheme()</code></td>
@@ -152,7 +208,10 @@
 				</tr>
 				<tr>
 					<td><code>@happyvertical/smrt-svelte/forms</code></td>
-					<td>TextInput, Select, MoneyInput, DateTimeInput, Toggle, FileUpload, AddressInput, and more</td>
+					<td
+						>TextInput, Select, MoneyInput, DateTimeInput, Toggle, FileUpload, AddressInput, and
+						more</td
+					>
 				</tr>
 				<tr>
 					<td><code>@happyvertical/smrt-svelte/layout</code></td>
@@ -190,18 +249,19 @@
 		<h2>ModuleUIRegistry</h2>
 		<p>
 			<code>ModuleUIRegistry</code> is the global singleton that lets SMRT UI-shipping packages
-			advertise Svelte components keyed by <em>(moduleName, slotId)</em>. Host applications
-			discover components by name without hard-coding imports; consumer packages register their
-			slots via side-effect imports of their <code>/svelte</code> subpath.
+			advertise Svelte components keyed by <em>(moduleName, slotId)</em>. Host applications discover
+			components by name without hard-coding imports; consumer packages register their slots via
+			side-effect imports of their <code>/svelte</code> subpath.
 		</p>
 
 		<h3>Subpath Contract (PR #1213)</h3>
 		<p>
 			Every UI-shipping package exposes a <code>./svelte</code> conditional export with only
-			<code>types</code> and <code>import</code> keys — <strong>no <code>svelte</code> condition</strong>.
-			Vite's pre-bundler resolves the subpath like any other ESM entry, which avoids the dual
-			package hazards we hit when both <code>svelte</code> and <code>import</code> conditions
-			resolved to different files.
+			<code>types</code> and <code>import</code> keys —
+			<strong>no <code>svelte</code> condition</strong>. Vite's pre-bundler resolves the subpath
+			like any other ESM entry, which avoids the dual package hazards we hit when both
+			<code>svelte</code>
+			and <code>import</code> conditions resolved to different files.
 		</p>
 
 		<CodeBlock
@@ -288,18 +348,39 @@ const InvoiceCard = ModuleUIRegistry.get('@happyvertical/smrt-commerce', 'invoic
 
 		<h3>Packages that register slots</h3>
 		<div class="link-grid">
-			<a href="/modules/smrt-content" class="link-card"><h3>smrt-content</h3><p>Article/Document cards, thumbnails</p></a>
-			<a href="/modules/smrt-images" class="link-card"><h3>smrt-images</h3><p>Image editing + categorization slots</p></a>
-			<a href="/modules/smrt-assets" class="link-card"><h3>smrt-assets</h3><p>Asset list/picker slots</p></a>
-			<a href="/modules/smrt-analytics" class="link-card"><h3>smrt-analytics</h3><p>Report viewers</p></a>
-			<a href="/modules/smrt-chat" class="link-card"><h3>smrt-chat</h3><p>Room + thread slots</p></a>
-			<a href="/modules/smrt-jobs" class="link-card"><h3>smrt-jobs</h3><p>Task/schedule dashboard slots</p></a>
-			<a href="/modules/smrt-agents" class="link-card"><h3>smrt-agents</h3><p>Agent admin slots</p></a>
+			<a href="/modules/smrt-content" class="link-card"
+				><h3>smrt-content</h3>
+				<p>Article/Document cards, thumbnails</p></a
+			>
+			<a href="/modules/smrt-images" class="link-card"
+				><h3>smrt-images</h3>
+				<p>Image editing + categorization slots</p></a
+			>
+			<a href="/modules/smrt-assets" class="link-card"
+				><h3>smrt-assets</h3>
+				<p>Asset list/picker slots</p></a
+			>
+			<a href="/modules/smrt-analytics" class="link-card"
+				><h3>smrt-analytics</h3>
+				<p>Report viewers</p></a
+			>
+			<a href="/modules/smrt-chat" class="link-card"
+				><h3>smrt-chat</h3>
+				<p>Room + thread slots</p></a
+			>
+			<a href="/modules/smrt-jobs" class="link-card"
+				><h3>smrt-jobs</h3>
+				<p>Task/schedule dashboard slots</p></a
+			>
+			<a href="/modules/smrt-agents" class="link-card"
+				><h3>smrt-agents</h3>
+				<p>Agent admin slots</p></a
+			>
 		</div>
 
 		<p>
-			See also <a href="/modules/smrt-playground"><strong>smrt-playground</strong></a>, the discovery
-			host that renders every registered slot for live exploration.
+			See also <a href="/modules/smrt-playground"><strong>smrt-playground</strong></a>, the
+			discovery host that renders every registered slot for live exploration.
 		</p>
 	</section>
 
@@ -326,7 +407,12 @@ const InvoiceCard = ModuleUIRegistry.get('@happyvertical/smrt-commerce', 'invoic
 				<tr><th>Capability</th><th>Adapters</th></tr>
 			</thead>
 			<tbody>
-				<tr><td>STT</td><td><code>browser-speech</code> (Web Speech API), <code>whisper-cpp</code>, <code>whisper-wasm</code></td></tr>
+				<tr
+					><td>STT</td><td
+						><code>browser-speech</code> (Web Speech API), <code>whisper-cpp</code>,
+						<code>whisper-wasm</code></td
+					></tr
+				>
 				<tr><td>TTS</td><td><code>browser-synthesis</code> (SpeechSynthesis API)</td></tr>
 				<tr><td>LLM</td><td><code>webllm</code>, <code>transformers-llm</code></td></tr>
 			</tbody>
@@ -340,14 +426,16 @@ const InvoiceCard = ModuleUIRegistry.get('@happyvertical/smrt-commerce', 'invoic
   getCachedLLM,
   getCacheStats,
   clearAllCaches,
-} from '@happyvertical/smrt-svelte/browser-ai';
+} from '@happyvertical/smrt-svelte';
 
 // Check what's loaded
 const stats = getCacheStats();
-console.log(stats); // { stt: true, tts: false, llm: true }
+console.log(stats);
+// { stt: { count, types }, tts: { count, types }, llm: { count, keys } }
 
-// Get a cached adapter (returns undefined if not loaded)
-const stt = getCachedSTT();`}
+// Get a cached adapter (returns undefined if not loaded);
+// pass the adapter type (LLM also takes an optional modelId)
+const stt = getCachedSTT('whisper-cpp');`}
 			language="typescript"
 		/>
 	</section>
@@ -381,8 +469,15 @@ const stt = getCachedSTT();`}
 		<h2>Theme System</h2>
 		<p>Two layered theme systems for different levels of customisation:</p>
 		<ul>
-			<li><strong><code>src/theme/</code></strong>: simple <code>ThemeProvider</code> with design tokens — drop-in for apps that only need light/dark + a couple of overrides</li>
-			<li><strong><code>src/themes/</code></strong>: full preset system with <code>material</code>, <code>glass</code>, and <code>studio</code> presets, CSS generation at build, and runtime switching via <code>ThemeSwitcher</code></li>
+			<li>
+				<strong><code>src/theme/</code></strong>: simple <code>ThemeProvider</code> with design tokens
+				— drop-in for apps that only need light/dark + a couple of overrides
+			</li>
+			<li>
+				<strong><code>src/themes/</code></strong>: full preset system with <code>material</code>,
+				<code>glass</code>, and <code>studio</code> presets, CSS generation at build, and runtime
+				switching via <code>ThemeSwitcher</code>
+			</li>
 		</ul>
 		<CodeBlock
 			code={`<script>
@@ -401,12 +496,25 @@ const stt = getCachedSTT();`}
 		<h2>Key Files</h2>
 		<ul>
 			<li><code>src/Provider.svelte</code> — root component, state initialisation</li>
-			<li><code>src/state/</code> — <code>SmrtAppStateManager</code> ($state rune), warm client cache</li>
-			<li><code>src/hooks/</code> — <code>useAuth</code>, <code>useSocket</code>, <code>useAppState</code>, <code>useSTT</code>, <code>useTTS</code>, <code>useLLM</code>, <code>useTheme</code></li>
+			<li>
+				<code>src/state/</code> — <code>SmrtAppStateManager</code> ($state rune), warm client cache
+			</li>
+			<li>
+				<code>src/hooks/</code> — <code>useAuth</code>, <code>useSocket</code>,
+				<code>useAppState</code>, <code>useSTT</code>, <code>useTTS</code>, <code>useLLM</code>,
+				<code>useTheme</code>
+			</li>
 			<li><code>src/components/</code> — UI components by category</li>
-			<li><code>src/themes/</code> — <code>ThemeProvider</code>, <code>ThemeSwitcher</code>, CSS presets</li>
-			<li><code>src/browser-ai/</code> — STT/TTS/LLM adapters, capability detection (bundled, not external)</li>
-			<li><code>src/registry/</code> — <code>ModuleUIRegistry</code> for cross-package component discovery</li>
+			<li>
+				<code>src/themes/</code> — <code>ThemeProvider</code>, <code>ThemeSwitcher</code>, CSS
+				presets
+			</li>
+			<li>
+				<code>src/browser-ai/</code> — STT/TTS/LLM adapters, capability detection (bundled, not external)
+			</li>
+			<li>
+				<code>src/registry/</code> — <code>ModuleUIRegistry</code> for cross-package component discovery
+			</li>
 		</ul>
 	</section>
 

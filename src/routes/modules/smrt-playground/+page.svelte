@@ -6,7 +6,7 @@
 <ModulePage
 	name="smrt-playground"
 	description="Shared playground discovery, runtime helpers, and host components for SMRT UI packages. Discovers per-package ./playground modules and renders them under a unified host."
-	badges={['v0.24.12', 'Playground Host', 'UI Discovery', 'Vite Plugin']}
+	badges={['v0.29.34', 'Playground Host', 'UI Discovery', 'Vite Plugin']}
 >
 	<section>
 		<h2>Overview</h2>
@@ -19,10 +19,15 @@
 		<aside>
 			<p>Key Features:</p>
 			<ul>
-				<li>Discovers workspace and <code>node_modules</code> packages that expose a <code>./playground</code> subpath</li>
+				<li>
+					Discovers workspace and <code>node_modules</code> packages that expose a
+					<code>./playground</code> subpath
+				</li>
 				<li>Runtime registry merges discovered modules</li>
 				<li>Generates SvelteKit route templates for app- and package-level hosts</li>
-				<li><code>PlaygroundHost.svelte</code> renders entries with live/mock toggles and fixtures</li>
+				<li>
+					<code>PlaygroundHost.svelte</code> renders entries with live/mock toggles and fixtures
+				</li>
 				<li>Vite plugin wires discovery, virtual modules, and HMR</li>
 				<li><code>smrt playground</code> CLI commands consume this runtime</li>
 			</ul>
@@ -44,31 +49,37 @@
 			code={`// packages/<name>/src/svelte/playground.ts
 import type { SmrtPlaygroundModule } from '@happyvertical/smrt-playground';
 
-export const playground: SmrtPlaygroundModule = {
+const playground: SmrtPlaygroundModule = {
   packageName: '@happyvertical/smrt-<name>',
+  // Optional: displayName, description, moduleMeta
   entries: [
     {
       id: '<name>:component-id',
-      label: 'Human-readable label',
-      load: () => import('./components/MyComponent.svelte'),
+      title: 'Human-readable title',
+      description: 'Optional short description.',
+      loadComponent: () => import('./components/MyComponent.svelte'),
       // Optional:
-      fixtures: { default: { ... }, withData: { ... } },
-      modes: ['live', 'mock'],
+      order: 1,
+      props: { /* default props passed to the component */ },
+      // modes is a map keyed by 'mock' | 'live'
+      modes: { mock: { label: 'Mock' } },
     },
   ],
-};`}
+};
+
+export default playground;`}
 			language="typescript"
 		/>
 		<p>
-			The package's <code>package.json</code> exports map must point <code>./playground</code> at
-			the compiled module:
+			The package's <code>package.json</code> exports map must point <code>./playground</code> at the
+			compiled module:
 		</p>
 		<CodeBlock
 			code={`{
   "exports": {
     "./playground": {
-      "types": "./dist/svelte/playground.d.ts",
-      "import": "./dist/svelte/playground.js"
+      "types": "./dist/playground.d.ts",
+      "import": "./dist/playground.js"
     }
   }
 }`}
@@ -80,16 +91,17 @@ export const playground: SmrtPlaygroundModule = {
 		<h2>Quick Start (Vite Plugin)</h2>
 		<CodeBlock
 			code={`// vite.config.ts in your playground host app
-import { smrtPlaygroundPlugin } from '@happyvertical/smrt-playground/vite';
+import { smrtPlaygroundVitePlugin } from '@happyvertical/smrt-playground/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 
 export default {
   plugins: [
     sveltekit(),
-    smrtPlaygroundPlugin({
-      // Where to look for ./playground exports
-      // Defaults to workspace packages + installed node_modules
-      include: ['@happyvertical/*'],
+    smrtPlaygroundVitePlugin({
+      // All options are optional.
+      // mode: 'auto' (default) | 'workspace' | 'consumer'
+      mode: 'auto',
+      // workspaceRoot, packagesPattern, localPlaygroundPath
     }),
   ],
 };`}
@@ -100,10 +112,10 @@ export default {
 		<CodeBlock
 			code={'<!-- src/routes/+page.svelte -->\n<' +
 				`script lang="ts">
-  import PlaygroundHost from '@happyvertical/smrt-playground/svelte/PlaygroundHost.svelte';
-  import { registry } from 'virtual:smrt-playground';
+  import { PlaygroundHost } from '@happyvertical/smrt-playground/svelte';
+  import { playgroundModules } from 'virtual:smrt-playground/modules';
 </` +
-				'script>\n\n<PlaygroundHost {registry} />'}
+				'script>\n\n<PlaygroundHost modules={playgroundModules} />'}
 			language="svelte"
 		/>
 	</section>
@@ -130,11 +142,25 @@ npx smrt playground list`}
 	<section>
 		<h2>Module Anatomy</h2>
 		<ul>
-			<li><code>discovery.ts</code> — finds package-owned <code>./playground</code> modules across workspace and <code>node_modules</code></li>
-			<li><code>runtime.ts</code> — coerces and merges discovered modules into a unified registry consumed by the host</li>
-			<li><code>templates.ts</code> — generates Svelte route templates for app-level and package-level playground hosts</li>
-			<li><code>svelte/PlaygroundHost.svelte</code> — the host component that renders discovered playground entries</li>
-			<li><code>vite.ts</code> — Vite plugin used by the SvelteKit playground host to wire everything together</li>
+			<li>
+				<code>discovery.ts</code> — finds package-owned <code>./playground</code> modules across
+				workspace and <code>node_modules</code>
+			</li>
+			<li>
+				<code>runtime.ts</code> — coerces and merges discovered modules into a unified registry consumed
+				by the host
+			</li>
+			<li>
+				<code>templates.ts</code> — generates Svelte route templates for app-level and package-level playground
+				hosts
+			</li>
+			<li>
+				<code>svelte/PlaygroundHost.svelte</code> — the host component that renders discovered playground
+				entries
+			</li>
+			<li>
+				<code>vite.ts</code> — Vite plugin used by the SvelteKit playground host to wire everything together
+			</li>
 		</ul>
 	</section>
 
@@ -145,9 +171,17 @@ npx smrt playground list`}
 			monorepo's <code>docs/ui-surfaces.md</code>:
 		</p>
 		<ul>
-			<li><code>./svelte</code> — reusable components (<code>ContentEditor</code>, <code>ArticleCard</code>, etc.)</li>
-			<li><code>./playground</code> — preview metadata for the shared playground host (the standard for SMRT packages with Svelte components)</li>
-			<li><code>./routes</code> — package-owned page/workflow surfaces (not standardized for this release)</li>
+			<li>
+				<code>./svelte</code> — reusable components (<code>ContentEditor</code>,
+				<code>ArticleCard</code>, etc.)
+			</li>
+			<li>
+				<code>./playground</code> — preview metadata for the shared playground host (the standard for
+				SMRT packages with Svelte components)
+			</li>
+			<li>
+				<code>./routes</code> — package-owned page/workflow surfaces (not standardized for this release)
+			</li>
 		</ul>
 		<p>
 			<code>smrt-playground</code> only <em>discovers and renders</em>. Component code and theming
@@ -162,18 +196,35 @@ npx smrt playground list`}
 			<h3>DOs</h3>
 			<ul>
 				<li>Keep playground modules tiny — only metadata + dynamic <code>load()</code></li>
-				<li>Use the <code>id</code> prefix convention <code>{`<package-name>:<component>`}</code> for uniqueness</li>
+				<li>
+					Use the <code>id</code> prefix convention <code>{`<package-name>:<component>`}</code> for uniqueness
+				</li>
 				<li>Provide fixtures for components that require non-trivial input</li>
-				<li>Expose <code>./playground</code> in <code>package.json</code> exports — discovery relies on it</li>
+				<li>
+					Expose <code>./playground</code> in <code>package.json</code> exports — discovery relies on
+					it
+				</li>
 			</ul>
 		</article>
 		<article>
 			<h3>DON'Ts</h3>
 			<ul>
-				<li>Don't ship component source from <code>smrt-playground</code> — it's a host, not a component library</li>
-				<li>Don't import <code>smrt-playground</code> internals from individual packages — only the type surface is public</li>
-				<li>Don't rely on the private <code>host/</code> directory — it's a Playwright e2e harness, not published</li>
-				<li>Don't conflate <code>./playground</code> with <code>./routes</code> — the former is preview metadata, the latter would be reusable app surfaces</li>
+				<li>
+					Don't ship component source from <code>smrt-playground</code> — it's a host, not a component
+					library
+				</li>
+				<li>
+					Don't import <code>smrt-playground</code> internals from individual packages — only the type
+					surface is public
+				</li>
+				<li>
+					Don't rely on the private <code>host/</code> directory — it's a Playwright e2e harness, not
+					published
+				</li>
+				<li>
+					Don't conflate <code>./playground</code> with <code>./routes</code> — the former is preview
+					metadata, the latter would be reusable app surfaces
+				</li>
 			</ul>
 		</article>
 	</section>

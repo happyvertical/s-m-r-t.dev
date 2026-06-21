@@ -14,7 +14,7 @@
 		language="typescript"
 	/>
 	<h2>Usage</h2>
-	<CodeBlock code={`<TimeSummary entries={entries} groupBy="project" />`} language="svelte" />
+	<CodeBlock code={`<TimeSummary totalHours={40} totalAmount={2000} />`} language="svelte" />
 </article>
 
 <style>

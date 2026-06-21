@@ -6,29 +6,56 @@
 <ModulePage
 	name="smrt-assets"
 	description="Provider-agnostic asset management with versioning, derivatives, an AssetRuntime + serveAsset() public surface, and a Svelte UI registry."
-	badges={['v0.24.12', 'AssetRuntime', 'serveAsset()', 'STI Asset', 'UI Registry']}
+	badges={['v0.29.34', 'AssetRuntime', 'serveAsset()', 'STI Asset', 'UI Registry']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
 			<code>@happyvertical/smrt-assets</code> is the canonical asset layer for SMRT apps. It models
-			<strong>Asset</strong> as an STI base with versioning, hierarchical derivatives, lookup tables,
-			a generic <code>AssetAssociation</code> for provenance, and a <code>Folder</code> subclass for
-			organisation. v0.24 promotes two new public surfaces: <code>AssetRuntime</code> for I/O and
+			<strong>Asset</strong> as an STI base with versioning, hierarchical derivatives, lookup
+			tables, a generic <code>AssetAssociation</code> for provenance, and a <code>Folder</code>
+			subclass for organisation. v0.24 promotes two new public surfaces: <code>AssetRuntime</code>
+			for I/O and
 			<code>serveAsset()</code> for HTTP delivery.
 		</p>
 
 		<h3>Key Features</h3>
 		<ul>
-			<li><strong>STI Asset</strong>: base with <code>Folder</code> subclass; cross-package STI (Image extends Asset)</li>
-			<li><strong>Versioning</strong>: sequential via <code>primaryVersionId</code> chain + <code>version</code> number</li>
-			<li><strong>Derivatives</strong>: parent/child via <code>parentId</code> for thumbnails, crops, format conversions</li>
-			<li><strong>AssetRuntime</strong>: bundles collection, association collection, and store with helpers for source/derived writes and extraction status</li>
-			<li><strong>serveAsset()</strong>: standard Web <code>Response</code> for SvelteKit, Hono, and any Node 18+ runtime</li>
+			<li>
+				<strong>STI Asset</strong>: base with <code>Folder</code> subclass; cross-package STI (Image extends
+				Asset)
+			</li>
+			<li>
+				<strong>Versioning</strong>: sequential via <code>primaryVersionId</code> chain +
+				<code>version</code> number
+			</li>
+			<li>
+				<strong>Derivatives</strong>: source/derived via <code>sourceAssetId</code> (renamed from
+				<code>parentId</code>) for thumbnails, crops, format conversions
+			</li>
+			<li>
+				<strong>AssetRuntime</strong>: bundles collection, association collection, and store with
+				helpers for source/derived writes and extraction status
+			</li>
+			<li>
+				<strong>serveAsset()</strong>: standard Web <code>Response</code> for SvelteKit, Hono, and any
+				Node 18+ runtime
+			</li>
 			<li><strong>ASSET_ROLES</strong> vocabulary so cross-package tooling agrees on meaning</li>
-			<li><strong>Generic associations</strong>: <code>AssetAssociation</code> for provenance / non-owner links (image derivation, fact proofs)</li>
-			<li><strong>Ownership rule</strong>: base/domain-owned assets live on dedicated joins (<code>content_assets</code>, <code>profile_assets</code>, <code>event_assets</code>, <code>place_assets</code>, <code>product_assets</code>)</li>
-			<li><strong>UI registry</strong>: discoverable Svelte slots via <code>@happyvertical/smrt-assets/ui</code></li>
+			<li>
+				<strong>Generic associations</strong>: <code>AssetAssociation</code> for provenance / non-owner
+				links (image derivation, fact proofs)
+			</li>
+			<li>
+				<strong>Ownership rule</strong>: base/domain-owned assets live on dedicated joins (<code
+					>content_assets</code
+				>, <code>profile_assets</code>, <code>event_assets</code>, <code>place_assets</code>,
+				<code>product_assets</code>)
+			</li>
+			<li>
+				<strong>UI registry</strong>: discoverable Svelte slots via
+				<code>@happyvertical/smrt-assets/ui</code>
+			</li>
 		</ul>
 
 		<h3>Architecture</h3>
@@ -45,7 +72,7 @@
 +---------------------------------------------+
 |  AssetRuntime  (createAssetRuntime)          |
 |  - storeSourceAsset                          |
-|  - storeDerivedAsset (parentId + role)       |
+|  - storeDerivedAsset (sourceAssetId + role)  |
 |  - linkDerivation                            |
 |  - setExtractionStatus                       |
 +---------------------------------------------+
@@ -88,9 +115,8 @@
 		<h2>AssetRuntime — the public runtime surface</h2>
 		<p>
 			Apps and agents should depend on <code>createAssetRuntime</code> instead of hand-wiring an
-			<code>AssetCollection</code> and an <code>AssetStore</code> per-package (#1128). The runtime
-			bundles collection, association collection, and an initialised store, and offers four high-level
-			helpers.
+			<code>AssetCollection</code> and an <code>AssetStore</code> per-package (#1128). The runtime bundles
+			collection, association collection, and an initialised store, and offers four high-level helpers.
 		</p>
 
 		<CodeBlock
@@ -105,20 +131,20 @@ const runtime = await createAssetRuntime({
 const sourceDoc = await runtime.storeSourceAsset(
   'agenda.pdf',
   pdfBytes,
-  { mimeType: 'application/pdf', role: ASSET_ROLES.source_document },
+  { mimeType: 'application/pdf', typeSlug: 'document' },
 );
 
-// 2) Store a derivative -- automatically sets parentId + a provenance link
+// 2) Store a derivative -- automatically sets sourceAssetId + a provenance link
 const pageImage = await runtime.storeDerivedAsset(
   sourceDoc,
   'agenda-page-1.png',
   pngBytes,
-  { mimeType: 'image/png', role: ASSET_ROLES.document_image },
+  { mimeType: 'image/png', role: ASSET_ROLES.DOCUMENT_IMAGE },
 );
 
 // 3) Record provenance only (no byte write)
 await runtime.linkDerivation(sourceDoc, pageImage, {
-  role: ASSET_ROLES.derivation_source,
+  role: ASSET_ROLES.DERIVATION_SOURCE,
 });
 
 // 4) Write canonical extraction metadata into description JSON
@@ -135,8 +161,8 @@ await runtime.setExtractionStatus(sourceDoc, 'succeeded', {
 		</p>
 
 		<p>
-			Agents that need asset I/O should accept an <code>AssetRuntimeLike</code> in their options
-			rather than asking callers to pass a store + collection separately.
+			Agents that need asset I/O should accept an <code>AssetRuntimeLike</code> in their options rather
+			than asking callers to pass a store + collection separately.
 		</p>
 	</section>
 
@@ -145,8 +171,8 @@ await runtime.setExtractionStatus(sourceDoc, 'succeeded', {
 		<p>
 			<code>serveAsset</code> returns a standard Web <code>Response</code> with consistent status
 			codes for missing assets, tenant mismatches, access denials, remote-origin failures, and store
-			read errors. It works in SvelteKit <code>+server.ts</code>, Hono, and any Node 18+ runtime with
-			a global <code>Response</code>. For older runtimes pass <code>responseCtor</code>.
+			read errors. It works in SvelteKit <code>+server.ts</code>, Hono, and any Node 18+ runtime
+			with a global <code>Response</code>. For older runtimes pass <code>responseCtor</code>.
 		</p>
 
 		<CodeBlock
@@ -162,7 +188,7 @@ export const GET: RequestHandler = async ({ params, locals }) => {
     tenantId: locals.tenantId,
     canAccess: (a) => locals.user.canRead(a),
     disposition: 'inline',
-    remoteMode: 'proxy', // 'redirect' | 'error'
+    remoteMode: 'error', // default; opt into 'proxy' | 'redirect' for remote sourceUri
   });
 };`}
 			language="typescript"
@@ -174,29 +200,48 @@ export const GET: RequestHandler = async ({ params, locals }) => {
 				<tr><th>Code</th><th>Trigger</th></tr>
 			</thead>
 			<tbody>
-				<tr><td><code>200</code></td><td>Bytes returned; <code>Content-Type</code>, <code>Content-Length</code>, <code>Content-Disposition</code> set</td></tr>
-				<tr><td><code>302</code></td><td><code>remoteMode: 'redirect'</code> and <code>sourceUri</code> is <code>http(s)</code></td></tr>
-				<tr><td><code>403</code></td><td>Tenant mismatch or <code>canAccess()</code> denies</td></tr>
+				<tr
+					><td><code>200</code></td><td
+						>Bytes returned; <code>Content-Type</code>, <code>Content-Length</code>,
+						<code>Content-Disposition</code> set</td
+					></tr
+				>
+				<tr
+					><td><code>302</code></td><td
+						><code>remoteMode: 'redirect'</code> and <code>sourceUri</code> is
+						<code>http(s)</code></td
+					></tr
+				>
+				<tr><td><code>403</code></td><td>Tenant mismatch or <code>canAccess()</code> denies</td></tr
+				>
 				<tr><td><code>404</code></td><td>Asset id doesn't resolve</td></tr>
-				<tr><td><code>500</code></td><td>Store read error or unexpected failure (generic body; details logged)</td></tr>
-				<tr><td><code>502</code></td><td><code>remoteMode: 'proxy'</code> and origin fetch failed</td></tr>
+				<tr
+					><td><code>500</code></td><td
+						>Store read error or unexpected failure (generic body; details logged)</td
+					></tr
+				>
+				<tr
+					><td><code>502</code></td><td><code>remoteMode: 'proxy'</code> and origin fetch failed</td
+					></tr
+				>
 			</tbody>
 		</table>
 
 		<h3>Remote assets</h3>
 		<p>
-			Assets whose <code>sourceUri</code> is <code>http(s)</code> are supported via <code>remoteMode</code>:
-			<code>'proxy'</code> (default) fetches and returns bytes, <code>'redirect'</code> issues a 302 to
-			the origin, and <code>'error'</code> treats the configuration as a mistake. Pass
-			<code>fetchImpl</code> to swap the fetch client.
+			Assets whose <code>sourceUri</code> is <code>http(s)</code> are supported via
+			<code>remoteMode</code>:
+			<code>'error'</code> (default) treats a remote URI as an error to avoid SSRF,
+			<code>'proxy'</code> fetches and returns bytes (with SSRF guards), and <code>'redirect'</code>
+			issues a 302 to the origin. Pass <code>fetchImpl</code> to swap the fetch client.
 		</p>
 
 		<h3>Header sanitisation</h3>
 		<p>
 			<code>Content-Disposition</code> filenames are sanitised (control characters stripped;
-			<code>"</code>, <code>\</code>, <code>/</code> replaced) so untrusted asset names cannot inject
-			headers. The 500 body is a generic <code>'Internal error serving asset'</code>; underlying
-			errors are logged via <code>console.error</code> so operators can debug without leaking
+			<code>"</code>, <code>\</code>, <code>/</code> replaced) so untrusted asset names cannot
+			inject headers. The 500 body is a generic <code>'Internal error serving asset'</code>;
+			underlying errors are logged via <code>console.error</code> so operators can debug without leaking
 			paths/bucket names to clients.
 		</p>
 
@@ -235,9 +280,21 @@ try {
 				<tr><th>Role</th><th>Use</th></tr>
 			</thead>
 			<tbody>
-				<tr><td><code>source_document</code></td><td>Original upstream document (agenda PDF, minutes)</td></tr>
-				<tr><td><code>document_image</code></td><td>Page/extracted image derived from a source document</td></tr>
+				<tr
+					><td><code>source_document</code></td><td
+						>Original upstream document (agenda PDF, minutes)</td
+					></tr
+				>
+				<tr
+					><td><code>document_image</code></td><td
+						>Page/extracted image derived from a source document</td
+					></tr
+				>
 				<tr><td><code>thumbnail</code></td><td>Preview rendition of another asset</td></tr>
+				<tr
+					><td><code>asset_variant</code></td><td>Deterministic sized rendition of another asset</td
+					></tr
+				>
 				<tr><td><code>proof</code></td><td>Non-canonical evidence asset backing a fact</td></tr>
 				<tr><td><code>derivation_source</code></td><td>"Came from" link on generated media</td></tr>
 				<tr><td><code>attachment</code></td><td>Generic owner-join link</td></tr>
@@ -254,7 +311,10 @@ try {
 		</ul>
 
 		<h3>ASSET_EXTRACTION_STATUS</h3>
-		<p>Lifecycle values: <code>pending</code>, <code>running</code>, <code>succeeded</code>, <code>failed</code>.</p>
+		<p>
+			Lifecycle values: <code>pending</code>, <code>running</code>, <code>succeeded</code>,
+			<code>failed</code>.
+		</p>
 	</section>
 
 	<section id="quick-start">
@@ -301,13 +361,13 @@ await v2.save();`}
 			language="typescript"
 		/>
 
-		<h3>4. Derivative via parentId (or runtime helper)</h3>
+		<h3>4. Derivative via sourceAssetId (or runtime helper)</h3>
 		<CodeBlock
 			code={`// Manual form
 const thumb = new Asset({
   name: 'Thumbnail',
   slug: 'product-photo-001-thumb',
-  parentId: photo.id,
+  sourceAssetId: photo.id,
   sourceUri: 's3://mybucket/products/photo-001-thumb.jpg',
   mimeType: 'image/jpeg',
   typeSlug: 'image',
@@ -315,10 +375,10 @@ const thumb = new Asset({
 });
 await thumb.save();
 
-// Preferred: runtime helper writes bytes + sets parentId + records provenance
+// Preferred: runtime helper writes bytes + sets sourceAssetId + records provenance
 const thumb2 = await runtime.storeDerivedAsset(photo, 'thumb.jpg', thumbBytes, {
   mimeType: 'image/jpeg',
-  role: ASSET_ROLES.thumbnail,
+  role: ASSET_ROLES.THUMBNAIL,
 });`}
 			language="typescript"
 		/>
@@ -348,9 +408,8 @@ await assoc.save();`}
 			tenanted by the consumer.
 		</p>
 		<p>
-			<code>AssetAssociation</code> remains for <strong>generic/provenance</strong> links — e.g.
-			image derivation chains, fact proofs, "came-from" relationships — where there is no natural
-			owner table.
+			<code>AssetAssociation</code> remains for <strong>generic/provenance</strong> links — e.g. image
+			derivation chains, fact proofs, "came-from" relationships — where there is no natural owner table.
 		</p>
 	</section>
 
@@ -376,16 +435,21 @@ const v2 = new Asset({
 });
 await v2.save();
 
-// findVersions() walks the chain
-const history = await collection.findVersions(v1.id);`}
+// listVersions() walks the chain (by primary version id)
+const history = await collection.listVersions(v1.id);`}
 			language="typescript"
 		/>
 
-		<h3>Derivatives (parent/child)</h3>
-		<p>Parallel processing variants — thumbnails, format conversions, crops — keyed by <code>parentId</code>:</p>
+		<h3>Derivatives (source/derived)</h3>
+		<p>
+			Parallel processing variants — thumbnails, format conversions, crops — keyed by <code
+				>sourceAssetId</code
+			>
+			(renamed from <code>parentId</code>):
+		</p>
 		<CodeBlock
-			code={`const derivatives = await original.getChildren();
-const parent = await thumbnail.getParent();`}
+			code={`const derivatives = await original.getDerivatives(); // was getChildren()
+const source = await thumbnail.getSource();          // was getParent()`}
 			language="typescript"
 		/>
 	</section>
@@ -393,8 +457,8 @@ const parent = await thumbnail.getParent();`}
 	<section id="metadata">
 		<h2>Metadata fields</h2>
 		<p>
-			<code>AssetMetafield</code> declares custom metadata definitions with JSON validation rules so
-			values stay typed and bounded.
+			<code>AssetMetafield</code> declares custom metadata definitions with JSON validation rules so values
+			stay typed and bounded.
 		</p>
 		<CodeBlock
 			code={`const widthField = new AssetMetafield({
@@ -423,7 +487,8 @@ const parent = await thumbnail.getParent();`}
 			The <code>./ui</code> subpath exports <code>ASSETS_MODULE_META</code> and
 			<code>ASSETS_UI_SLOTS</code> so registry-driven hosts (smrt-chat, dynamic admin shells) can
 			discover the package's Svelte components without a hard import. Side-effect-importing
-			<code>@happyvertical/smrt-assets/svelte</code> registers them with <code>ModuleUIRegistry</code>.
+			<code>@happyvertical/smrt-assets/svelte</code> registers them with
+			<code>ModuleUIRegistry</code>.
 		</p>
 
 		<CodeBlock
@@ -456,8 +521,8 @@ const AssetManager = ModuleUIRegistry.get('@happyvertical/smrt-assets', 'asset-m
 	<section id="tags">
 		<h2>Tags (raw join)</h2>
 		<p>
-			Tag wiring is implemented via raw <code>db.upsert()</code> on the <code>asset_tags</code> join
-			table — not via an SMRT model. The helpers below cover the day-to-day flow.
+			Tag wiring is implemented via raw <code>db.upsert()</code> on the <code>asset_tags</code> join table
+			— not via an SMRT model. The helpers below cover the day-to-day flow.
 		</p>
 		<CodeBlock
 			code={`await assets.addTag(asset.id, 'category/products/shoes');
@@ -509,15 +574,50 @@ const featured = await assets.getByTag('featured/homepage');`}
 				<tr><th>Export</th><th>Description</th></tr>
 			</thead>
 			<tbody>
-				<tr><td><code>createAssetRuntime(options)</code></td><td>Returns an <code>AssetRuntime</code></td></tr>
-				<tr><td><code>AssetRuntime</code></td><td>Bundles collection, association collection, store</td></tr>
-				<tr><td><code>storeSourceAsset(name, data, opts)</code></td><td>Create a source asset (record + bytes)</td></tr>
-				<tr><td><code>storeDerivedAsset(source, name, data, opts)</code></td><td>Create a derivative with parentId + provenance link</td></tr>
-				<tr><td><code>linkDerivation(source, derivative, opts)</code></td><td>Record provenance without writing bytes</td></tr>
-				<tr><td><code>setExtractionStatus(asset, status, opts?)</code></td><td>Write canonical extraction metadata into <code>description</code> JSON</td></tr>
-				<tr><td><code>serveAsset(options)</code></td><td>Web <code>Response</code> with full status semantics</td></tr>
-				<tr><td><code>resolveAssetForServing(options)</code></td><td>Resolve asset bytes for custom response shells</td></tr>
-				<tr><td><code>AssetServeError</code></td><td>Thrown by resolver on the same failure modes</td></tr>
+				<tr
+					><td><code>createAssetRuntime(options)</code></td><td
+						>Returns an <code>AssetRuntime</code></td
+					></tr
+				>
+				<tr
+					><td><code>AssetRuntime</code></td><td
+						>Bundles collection, association collection, store</td
+					></tr
+				>
+				<tr
+					><td><code>storeSourceAsset(name, data, opts)</code></td><td
+						>Create a source asset (record + bytes)</td
+					></tr
+				>
+				<tr
+					><td><code>storeDerivedAsset(source, name, data, opts)</code></td><td
+						>Create a derivative with parentId + provenance link</td
+					></tr
+				>
+				<tr
+					><td><code>linkDerivation(source, derivative, opts)</code></td><td
+						>Record provenance without writing bytes</td
+					></tr
+				>
+				<tr
+					><td><code>setExtractionStatus(asset, status, opts?)</code></td><td
+						>Write canonical extraction metadata into <code>description</code> JSON</td
+					></tr
+				>
+				<tr
+					><td><code>serveAsset(options)</code></td><td
+						>Web <code>Response</code> with full status semantics</td
+					></tr
+				>
+				<tr
+					><td><code>resolveAssetForServing(options)</code></td><td
+						>Resolve asset bytes for custom response shells</td
+					></tr
+				>
+				<tr
+					><td><code>AssetServeError</code></td><td>Thrown by resolver on the same failure modes</td
+					></tr
+				>
 			</tbody>
 		</table>
 
@@ -529,9 +629,22 @@ const featured = await assets.getByTag('featured/homepage');`}
 			<tbody>
 				<tr><td><code>Asset</code></td><td>STI base — versioning, derivatives, lookup FKs</td></tr>
 				<tr><td><code>Folder</code></td><td>STI subclass for hierarchical organisation</td></tr>
-				<tr><td><code>AssetAssociation</code></td><td>Generic/provenance join: <code>assetId + metaType + metaId + role + sortOrder</code></td></tr>
-				<tr><td><code>AssetType</code> / <code>AssetStatus</code></td><td>Classification + lifecycle lookups</td></tr>
-				<tr><td><code>AssetMetafield</code></td><td>Custom metadata definitions with JSON validation</td></tr>
+				<tr
+					><td><code>AssetAssociation</code></td><td
+						>Generic/provenance join: <code>assetId + metaType + metaId + role + sortOrder</code
+						></td
+					></tr
+				>
+				<tr
+					><td><code>AssetType</code> / <code>AssetStatus</code></td><td
+						>Classification + lifecycle lookups</td
+					></tr
+				>
+				<tr
+					><td><code>AssetMetafield</code></td><td
+						>Custom metadata definitions with JSON validation</td
+					></tr
+				>
 			</tbody>
 		</table>
 
@@ -541,10 +654,24 @@ const featured = await assets.getByTag('featured/homepage');`}
 				<tr><th>Export</th><th>Description</th></tr>
 			</thead>
 			<tbody>
-				<tr><td><code>ASSET_ROLES</code></td><td>Canonical role names (<code>source_document</code>, <code>document_image</code>, <code>thumbnail</code>, <code>proof</code>, <code>derivation_source</code>, <code>attachment</code>, <code>hero</code>)</td></tr>
+				<tr
+					><td><code>ASSET_ROLES</code></td><td
+						>Canonical role names (<code>source_document</code>, <code>document_image</code>,
+						<code>thumbnail</code>, <code>asset_variant</code>, <code>proof</code>,
+						<code>derivation_source</code>, <code>attachment</code>, <code>hero</code>)</td
+					></tr
+				>
 				<tr><td><code>ASSET_METADATA_KEYS</code></td><td>Canonical metadata field names</td></tr>
-				<tr><td><code>ASSET_EXTRACTION_STATUS</code></td><td><code>pending | running | succeeded | failed</code></td></tr>
-				<tr><td><code>ASSETS_MODULE_META</code> / <code>ASSETS_UI_SLOTS</code></td><td>From <code>./ui</code>: registry-driven UI discovery</td></tr>
+				<tr
+					><td><code>ASSET_EXTRACTION_STATUS</code></td><td
+						><code>pending | running | succeeded | failed</code></td
+					></tr
+				>
+				<tr
+					><td><code>ASSETS_MODULE_META</code> / <code>ASSETS_UI_SLOTS</code></td><td
+						>From <code>./ui</code>: registry-driven UI discovery</td
+					></tr
+				>
 			</tbody>
 		</table>
 	</section>

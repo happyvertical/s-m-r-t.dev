@@ -6,27 +6,43 @@
 <ModulePage
 	name="smrt-video"
 	description="AI video production: Character + Performer + Scene, ComfyUI workflow integration, frame-based durations, and dedicated noun joins for owned assets."
-	badges={['v0.24.12', 'Video Pipeline', 'ComfyUI', 'Frame-Based']}
+	badges={['v0.29.34', 'Video Pipeline', 'ComfyUI', 'Frame-Based']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
-			<strong>smrt-video</strong> models the AI video production pipeline. Characters define
-			virtual personas with voice and branding, Performers carry physical likeness via IP-Adapter
-			FaceID, Scenes provide virtual backgrounds, and the Composition → Sequence → Shot hierarchy
-			organises generated content. ComfyUI workflows are stored as templates with semantic
-			parameter injection.
+			<strong>smrt-video</strong> models the AI video production pipeline. Characters define virtual personas
+			with voice and branding, Performers carry physical likeness via IP-Adapter FaceID, Scenes provide
+			virtual backgrounds, and the Composition → Sequence → Shot hierarchy organises generated content.
+			ComfyUI workflows are stored as templates with semantic parameter injection.
 		</p>
 		<aside>
 			<p>Key Features:</p>
 			<ul>
-				<li>Character personas (renamed from PersonalityProfile): seed image, voice profile, branding kit</li>
-				<li>Performer face consistency via IP-Adapter FaceID (<code>faceEmbedding</code>, weight 0.5–1.0)</li>
+				<li>
+					Character personas (renamed from PersonalityProfile): seed image, voice profile, branding
+					kit
+				</li>
+				<li>
+					Performer face consistency via IP-Adapter FaceID (<code>dna.faceEmbedding</code>,
+					<code>dna.ipAdapterWeight</code> 0.5–1.0)
+				</li>
 				<li>Scene backgrounds: image, video, 360 / 180 panorama with viewpoints</li>
-				<li>Hierarchy: <code>VideoComposition</code> → <code>VideoSequence</code> → <code>VideoShot</code> (all extend Content)</li>
-				<li>ComfyUI workflow templates with <code>nodeMapping</code> + safe <code>injectParameters()</code></li>
-				<li>Frame-based durations everywhere (<code>durationInFrames</code>; seconds = frames / fps)</li>
-				<li>Owned asset normalisation: <code>character_assets</code>, <code>performer_assets</code>, <code>scene_assets</code></li>
+				<li>
+					Hierarchy: <code>VideoComposition</code> → <code>VideoSequence</code> →
+					<code>VideoShot</code> (all extend Content)
+				</li>
+				<li>
+					ComfyUI workflow templates with <code>nodeMapping</code> + safe
+					<code>injectParameters()</code>
+				</li>
+				<li>
+					Frame-based durations everywhere (<code>durationInFrames</code>; seconds = frames / fps)
+				</li>
+				<li>
+					Owned asset normalisation: <code>character_assets</code>, <code>performer_assets</code>,
+					<code>scene_assets</code>
+				</li>
 			</ul>
 		</aside>
 	</section>
@@ -62,7 +78,7 @@ await anchor.save();
 // Performer = physical likeness for IP-Adapter face consistency
 const performer = new Performer({
   name: 'Alex',
-  ipAdapterWeight: 0.85,
+  dna: { gender: 'neutral', ageRange: 'adult', ipAdapterWeight: 0.85 },
 });
 
 // Scene = virtual background
@@ -112,8 +128,8 @@ const injected = workflow.injectParameters({
 
 		<h3>Character (renamed from PersonalityProfile)</h3>
 		<p>
-			Old <code>PersonalityProfile</code> export is preserved for backward compatibility. Scene
-			placement uses scene-specific position / scale configs.
+			Old <code>PersonalityProfile</code> export is preserved for backward compatibility. Scene placement
+			uses scene-specific position / scale configs.
 		</p>
 		<CodeBlock
 			code={`class Character extends SmrtObject {
@@ -130,9 +146,12 @@ const injected = workflow.injectParameters({
 		<CodeBlock
 			code={`class Performer extends SmrtObject {
   name: string
-  faceEmbedding?: number[]    // 512-dim FaceID embedding
-  referenceAssetIds?: string[]// Linked via performer_assets noun join
-  ipAdapterWeight: number     // 0.5 - 1.0 (metadata-only)
+  dna: PerformerDNA           // holds faceEmbedding (512-dim FaceID),
+                              // ipAdapterWeight (0.5-1.0), ageRange, etc.
+  referenceAssetIds: string[] // Linked via performer_assets noun join
+  seedImageAssetId?: string   // Generated seed image asset FK
+  voiceProfileId?: string     // FK to smrt-voice
+  status: 'pending' | 'ready'
 }`}
 			language="typescript"
 		/>
@@ -188,7 +207,7 @@ class VideoComposition extends Content {
 			code={`class VideoWorkflow extends SmrtObject {
   name: string
   workflowType: 'prebake' | 'broadcast' | 'lipsync' | 'postprod' | 'custom'
-  workflowJson: string        // Full ComfyUI API JSON
+  workflowJson: object | null // Full ComfyUI API JSON (object, not string)
   nodeMapping: NodeMapping    // Maps semantic names -> node IDs
   requiredModels?: string[]
 
@@ -203,26 +222,38 @@ class VideoComposition extends Content {
 		<h2>Owned-asset normalisation</h2>
 		<p>
 			Each video noun has its own join table — <code>character_assets</code>,
-			<code>performer_assets</code>, <code>scene_assets</code> — for owner-side asset
-			relationships. <code>VideoShot</code>, <code>VideoSequence</code>, and
+			<code>performer_assets</code>, <code>scene_assets</code> — for owner-side asset relationships.
+			<code>VideoShot</code>, <code>VideoSequence</code>, and
 			<code>VideoComposition</code> inherit the <code>content_assets</code> join from their
 			<code>Content</code> base. Generic provenance / "came from" links still use
 			<code>AssetAssociation</code> with role <code>derivation_source</code>.
 		</p>
 		<p>
-			Run <code>smrt db:migrate</code> before relying on the new noun joins for writes; reads still
-			tolerate the tables being absent during the migration window, and unions legacy STI asset
-			rows for backward compatibility.
+			Run <code>smrt db:migrate</code> before relying on the new noun joins for writes; reads still tolerate
+			the tables being absent during the migration window, and unions legacy STI asset rows for backward
+			compatibility.
 		</p>
 	</section>
 
 	<section>
 		<h2>Design Principles</h2>
 		<ul>
-			<li><strong>Store frames, compute seconds</strong>: every duration is <code>durationInFrames</code>; <code>seconds = frames / fps</code></li>
-			<li><strong>Content inheritance</strong>: Shot, Sequence, Composition all extend <code>Content</code> so they get governance, transparency, and chat for free</li>
-			<li><strong>Hierarchy</strong>: <code>VideoComposition → VideoSequence → VideoShot → VideoShotCharacter</code></li>
-			<li><strong>Owned asset normalisation</strong>: noun joins for Character / Performer / Scene; content_assets via STI parent</li>
+			<li>
+				<strong>Store frames, compute seconds</strong>: every duration is
+				<code>durationInFrames</code>; <code>seconds = frames / fps</code>
+			</li>
+			<li>
+				<strong>Content inheritance</strong>: Shot, Sequence, Composition all extend
+				<code>Content</code> so they get governance, transparency, and chat for free
+			</li>
+			<li>
+				<strong>Hierarchy</strong>:
+				<code>VideoComposition → VideoSequence → VideoShot → VideoShotCharacter</code>
+			</li>
+			<li>
+				<strong>Owned asset normalisation</strong>: noun joins for Character / Performer / Scene;
+				content_assets via STI parent
+			</li>
 		</ul>
 	</section>
 
@@ -233,19 +264,31 @@ class VideoComposition extends Content {
 			<ul>
 				<li>Store durations as frames; compute seconds as <code>durationInFrames / fps</code></li>
 				<li>Use <code>nodeMapping</code> to map semantic names to ComfyUI node IDs</li>
-				<li>Use <code>injectParameters()</code> for safe workflow parameter injection (deep-clones)</li>
+				<li>
+					Use <code>injectParameters()</code> for safe workflow parameter injection (deep-clones)
+				</li>
 				<li>Estimate speech duration at 2.7 words/second (±15%)</li>
-				<li>Link <code>Character.voiceProfileId</code> to <a href="/modules/smrt-voice">smrt-voice</a> profiles</li>
-				<li>Use the new noun joins (<code>character_assets</code>, …) rather than ad-hoc STI rows</li>
+				<li>
+					Link <code>Character.voiceProfileId</code> to <a href="/modules/smrt-voice">smrt-voice</a> profiles
+				</li>
+				<li>
+					Use the new noun joins (<code>character_assets</code>, …) rather than ad-hoc STI rows
+				</li>
 			</ul>
 		</article>
 		<article>
 			<h3>DON'Ts</h3>
 			<ul>
 				<li>Don't store durations as seconds (use <code>durationInFrames</code> everywhere)</li>
-				<li>Don't assume <code>wordTimings</code> is auto-generated (requires an external TTS provider — see <a href="/modules/smrt-voice">smrt-voice</a>)</li>
+				<li>
+					Don't assume <code>wordTimings</code> is auto-generated (requires an external TTS provider
+					— see <a href="/modules/smrt-voice">smrt-voice</a>)
+				</li>
 				<li>Don't mutate workflow JSON directly — go through <code>injectParameters()</code></li>
-				<li>Don't forget <code>trimBeforeFrames</code> / <code>trimAfterFrames</code> in effective frame calculations</li>
+				<li>
+					Don't forget <code>trimBeforeFrames</code> / <code>trimAfterFrames</code> in effective frame
+					calculations
+				</li>
 				<li>Don't upload face embeddings through the framework (weight is metadata-only)</li>
 				<li>Don't rely on the legacy STI asset rows after running <code>smrt db:migrate</code></li>
 			</ul>

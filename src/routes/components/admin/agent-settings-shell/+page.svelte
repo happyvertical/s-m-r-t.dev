@@ -179,10 +179,12 @@ interface AgentData {
 }
 
 interface AgentUISlot {
+  id: string;
   label: string;
   description?: string;
   icon?: string;
   order?: number;
+  disabled?: boolean;
 }
 
 // AgentUISlots is Record<string, AgentUISlot>`}

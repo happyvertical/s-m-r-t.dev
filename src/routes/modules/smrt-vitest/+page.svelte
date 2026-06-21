@@ -6,23 +6,26 @@
 <ModulePage
 	name="smrt-vitest"
 	description="Vitest plugin for SMRT projects -- required for every SMRT test. Auto-generates the build-time manifest, loads cross-package class metadata, and provides transaction-isolated test database utilities."
-	badges={['v0.24.12', 'Testing', 'Vitest', 'Required']}
+	badges={['v0.29.34', 'Testing', 'Vitest', 'Required']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
 		<p>
-			<strong>@happyvertical/smrt-vitest</strong> ships the <code>smrtVitestPlugin()</code> Vite plugin
-			that <strong>every SMRT project must include</strong> in its <code>vitest.config.ts</code>.
-			Without it, tests fail with <code>"No field metadata found"</code> or
+			<strong>@happyvertical/smrt-vitest</strong> ships the <code>smrtVitestPlugin()</code> Vite
+			plugin that <strong>every SMRT project must include</strong> in its
+			<code>vitest.config.ts</code>. Without it, tests fail with
+			<code>"No field metadata found"</code>
+			or
 			<code>"unregistered class"</code> errors.
 		</p>
 		<p>
 			At test startup, the plugin scans <code>src/**/*.ts</code> for <code>@smrt()</code> classes,
-			discovers every <code>@happyvertical/smrt-*</code> dependency in your <code>package.json</code>,
-			loads their manifests via <code>ManifestManager</code>, and registers all classes in
+			discovers every <code>@happyvertical/smrt-*</code> dependency in your
+			<code>package.json</code>, loads their manifests via <code>ManifestManager</code>, and
+			registers all classes in
 			<code>ObjectRegistry</code>. The package also provides transaction-isolated test database
-			utilities with automatic adapter detection (PostgreSQL via <code>DATABASE_URL</code>, otherwise
-			SQLite temp files).
+			utilities with automatic adapter detection (PostgreSQL via <code>DATABASE_URL</code>,
+			otherwise SQLite temp files).
 		</p>
 	</section>
 
@@ -56,8 +59,9 @@ export default defineConfig({
 		</ol>
 		<aside>
 			<p>
-				<strong>Watch-mode caveat:</strong> the manifest is generated <strong>once at startup</strong>.
-				Restart vitest after adding new <code>@smrt()</code> classes or fields.
+				<strong>Watch-mode caveat:</strong> the manifest is generated
+				<strong>once at startup</strong>. Restart vitest after adding new <code>@smrt()</code> classes
+				or fields.
 			</p>
 		</aside>
 	</section>
@@ -65,8 +69,8 @@ export default defineConfig({
 	<section id="test-db">
 		<h2>Test Database Utilities</h2>
 		<p>
-			<strong>Adapter auto-detection:</strong> if <code>DATABASE_URL</code> is set, tests use
-			PostgreSQL; otherwise they use SQLite temp files.
+			<strong>Adapter auto-detection:</strong> if <code>DATABASE_URL</code> is set, tests use PostgreSQL;
+			otherwise they use SQLite temp files.
 		</p>
 
 		<table>
@@ -145,8 +149,8 @@ afterEach(async () => { await cleanup(); });`}
 		<h2>Imperative Setup</h2>
 		<p>
 			For non-Vite setups (e.g., a <code>globalSetup</code> file or a custom bootstrap), use
-			<code>setupSmrtManifests()</code> directly. It loads existing manifests but does not
-			auto-generate them:
+			<code>setupSmrtManifests()</code> directly. It loads existing manifests but does not auto-generate
+			them:
 		</p>
 		<CodeBlock
 			code={`import { setupSmrtManifests } from '@happyvertical/smrt-vitest';
@@ -164,13 +168,13 @@ await setupSmrtManifests({ verbose: true });`}
 				<code>SmrtCollection</code> tests. Don't mock the database -- it's fast enough.
 			</li>
 			<li>
-				<strong>Mock only external API calls</strong> (<code>@happyvertical/ai</code>, HTTP fetches).
-				Never mock <code>Agent</code> instances, <code>SmrtObject</code>, <code>SmrtCollection</code>,
-				or business logic.
+				<strong>Mock only external API calls</strong> (<code>@happyvertical/ai</code>, HTTP
+				fetches). Never mock <code>Agent</code> instances, <code>SmrtObject</code>,
+				<code>SmrtCollection</code>, or business logic.
 			</li>
 			<li>
-				<strong>Use <code>createIsolatedTestDb*</code></strong> for transaction-isolated tests --
-				cleanup rolls the transaction back, so tests are independent.
+				<strong>Use <code>createIsolatedTestDb*</code></strong> for transaction-isolated tests -- cleanup
+				rolls the transaction back, so tests are independent.
 			</li>
 			<li>
 				<strong>Test generators, not generated output</strong>. Assert the produced manifest /
@@ -188,7 +192,8 @@ await setupSmrtManifests({ verbose: true });`}
 		<h2>Singleton Cache Gotcha</h2>
 		<p>
 			Module-level singleton caches (common in SMRT collections) persist across tests and ignore new
-			mocks. The fix is to <code>vi.resetModules()</code> in <code>beforeEach</code> and use a dynamic
+			mocks. The fix is to <code>vi.resetModules()</code> in <code>beforeEach</code> and use a
+			dynamic
 			<code>await import(...)</code> inside each test instead of a top-level import:
 		</p>
 		<CodeBlock

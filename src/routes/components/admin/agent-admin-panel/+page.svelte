@@ -130,21 +130,22 @@
 	<p>Components are registered in the agent's admin package.</p>
 
 	<CodeBlock
-		code={`// praeco-admin/src/registry.ts
+		code={`// praeco-admin/src/register.ts
+// AgentUIRegistry is a shared global singleton, not a class.
+// Agent packages register their panels on it at import time.
 import { AgentUIRegistry } from '@happyvertical/smrt-agents/ui';
 import SourcesPanel from './panels/SourcesPanel.svelte';
 import PromptsPanel from './panels/PromptsPanel.svelte';
 
-export const praecoRegistry = new AgentUIRegistry();
+AgentUIRegistry.register('Praeco', 'sources', SourcesPanel);
+AgentUIRegistry.register('Praeco', 'prompts', PromptsPanel);
 
-praecoRegistry.register('Praeco', 'sources', SourcesPanel);
-praecoRegistry.register('Praeco', 'prompts', PromptsPanel);
+// In your app, importing the package runs its registration.
+// Then use the same singleton (or re-export it as agentUIRegistry).
+import { AgentUIRegistry as agentUIRegistry } from '@happyvertical/smrt-agents/ui';
+import '@happyvertical/praeco-admin'; // registers Praeco panels
 
-// In your app, merge registries
-import { praecoRegistry } from '@happyvertical/praeco-admin';
-import { baseRegistry } from './registry';
-
-export const agentUIRegistry = baseRegistry.merge(praecoRegistry);`}
+export { agentUIRegistry };`}
 		language="typescript"
 	/>
 
@@ -153,12 +154,13 @@ export const agentUIRegistry = baseRegistry.merge(praecoRegistry);`}
 
 	<CodeBlock
 		code={`// AdminPanelBaseProps - all panels receive these
-interface AdminPanelBaseProps {
-  config: unknown;
-  onSave?: (config: unknown) => Promise<void>;
+interface AdminPanelBaseProps<TConfig = unknown> {
+  config: TConfig;
+  onSave: (config: TConfig) => Promise<void>;
   readonly?: boolean;
-  fileConfig?: unknown;
-  dbConfig?: unknown;
+  class?: string;
+  fileConfig?: TConfig;
+  dbConfig?: TConfig;
 }`}
 		language="typescript"
 	/>
@@ -177,10 +179,12 @@ import type {
 
 // Re-exported from @happyvertical/smrt-agents/ui
 interface AgentUISlot {
+  id: string;
   label: string;
   description?: string;
   icon?: string;
   order?: number;
+  disabled?: boolean;
 }
 
 // Your panel components should implement AdminPanelBaseProps`}

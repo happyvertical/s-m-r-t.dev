@@ -4,20 +4,20 @@ This project uses the SMRT framework. Below are the conventions and patterns for
 
 ## Installed SMRT Packages
 
-| Package | Version |
-|---------|---------|
-| @happyvertical/smrt-agents | 0.24.12 |
-| @happyvertical/smrt-commerce | 0.24.12 |
-| @happyvertical/smrt-content | 0.24.12 |
-| @happyvertical/smrt-docs | 0.4.1 |
-| @happyvertical/smrt-events | 0.24.12 |
-| @happyvertical/smrt-jobs | 0.24.12 |
-| @happyvertical/smrt-ledgers | 0.24.12 |
-| @happyvertical/smrt-profiles | 0.24.12 |
-| @happyvertical/smrt-projects | 0.24.12 |
-| @happyvertical/smrt-svelte | 0.24.12 |
-| @happyvertical/smrt-tenancy | 0.24.12 |
-| @happyvertical/smrt-users | 0.24.12 |
+| Package                      | Version |
+| ---------------------------- | ------- |
+| @happyvertical/smrt-agents   | 0.29.34 |
+| @happyvertical/smrt-commerce | 0.29.34 |
+| @happyvertical/smrt-content  | 0.29.34 |
+| @happyvertical/smrt-docs     | 0.4.1   |
+| @happyvertical/smrt-events   | 0.29.34 |
+| @happyvertical/smrt-jobs     | 0.29.34 |
+| @happyvertical/smrt-ledgers  | 0.29.34 |
+| @happyvertical/smrt-profiles | 0.29.34 |
+| @happyvertical/smrt-projects | 0.29.34 |
+| @happyvertical/smrt-svelte   | 0.29.34 |
+| @happyvertical/smrt-tenancy  | 0.29.34 |
+| @happyvertical/smrt-users    | 0.29.34 |
 
 ---
 
@@ -76,6 +76,7 @@ async run() { for (const { type, data } of await this.interesting()) { ... } }
 ## TenantAgent — Multi-Tenant Bindings
 
 Junction table (`tenant_agents`) binding agents to tenants with permission overrides and hierarchy resolution:
+
 - Explicit binding: row exists for tenant (source: 'explicit')
 - Inherited: walks up tenant hierarchy (source: 'inherited')
 - Permissions: manifest defaults merged with per-tenant overrides
@@ -100,9 +101,9 @@ Persisted `agent_config` snapshots env-derived values at sync time, so rotated e
 
    ```ts
    class Praeco extends Agent {
-     static override configResolvers = {
-       assetStorage: () => resolveSharedAssetStorage(),
-     };
+   	static override configResolvers = {
+   		assetStorage: () => resolveSharedAssetStorage()
+   	};
    }
    ```
 
@@ -110,13 +111,13 @@ The TaskRunner calls `resolveLazyConfig()` immediately before constructing the a
 
 ## Key Files
 
-| File | Purpose |
-|------|---------|
-| `src/agent.ts` | Base Agent class — lifecycle, dispatch, interests, config |
-| `src/schedule.ts` | AgentSchedule model — cron, execution tracking |
-| `src/tenant-agent.ts` | TenantAgent — junction table, hierarchical resolution |
-| `src/interests.ts` | Interest filter types and configuration |
-| `src/config.ts` | File + DB config management, UI slots |
+| File                  | Purpose                                                   |
+| --------------------- | --------------------------------------------------------- |
+| `src/agent.ts`        | Base Agent class — lifecycle, dispatch, interests, config |
+| `src/schedule.ts`     | AgentSchedule model — cron, execution tracking            |
+| `src/tenant-agent.ts` | TenantAgent — junction table, hierarchical resolution     |
+| `src/interests.ts`    | Interest filter types and configuration                   |
+| `src/config.ts`       | File + DB config management, UI slots                     |
 
 ---
 
@@ -177,40 +178,40 @@ STI content management with governance workflows, contribution intake, AI review
 
 ## Contents Collection
 
-| Method | Purpose |
-|--------|---------| 
-| `mirror({ url })` | Downloads URL content, extracts text, creates `type: 'mirror'`. Idempotent. |
-| `syncContentDir({ contentDir })` | Batch exports articles as markdown with YAML frontmatter |
-| `generateMissingThumbnails(options)` | Bulk thumbnail generation for content missing `thumbnailAssetId` |
-| `findWithGlobals(tenantId)` | Returns tenant-specific + global (tenantId=null) content |
-| `getOrUpsert({ slug, context })` | Upsert by slug+context combination |
-| `browseFacts()` | Browse fact catalog linked to content |
-| `getGovernanceDefinitionsAction()` | Get all governance policy/profile/assignment definitions |
-| `resolveGovernanceAction({ type, variant })` | Resolve effective governance for a content type |
+| Method                                       | Purpose                                                                     |
+| -------------------------------------------- | --------------------------------------------------------------------------- |
+| `mirror({ url })`                            | Downloads URL content, extracts text, creates `type: 'mirror'`. Idempotent. |
+| `syncContentDir({ contentDir })`             | Batch exports articles as markdown with YAML frontmatter                    |
+| `generateMissingThumbnails(options)`         | Bulk thumbnail generation for content missing `thumbnailAssetId`            |
+| `findWithGlobals(tenantId)`                  | Returns tenant-specific + global (tenantId=null) content                    |
+| `getOrUpsert({ slug, context })`             | Upsert by slug+context combination                                          |
+| `browseFacts()`                              | Browse fact catalog linked to content                                       |
+| `getGovernanceDefinitionsAction()`           | Get all governance policy/profile/assignment definitions                    |
+| `resolveGovernanceAction({ type, variant })` | Resolve effective governance for a content type                             |
 
 ## Content Instance Methods
 
-| Method | Purpose |
-|--------|---------|
-| `resolveGovernance()` | Resolve effective governance config for this content |
-| `runReviewAction(options)` | Run AI review against a policy; returns `ContentReview` |
-| `listReviews()` | List all reviews for this content |
-| `listReviewProfilesAction()` | Get readiness for all profiles |
-| `evaluateReviewProfile(key)` | Evaluate one profile's requirements |
-| `issueCorrectionAction(options)` | Issue a post-publication correction |
-| `listCorrections()` | List corrections for this content |
-| `listVersions()` | List version history |
-| `mutateVersionAction(options)` | Create a version snapshot |
-| `getPublishedTransparencyAction()` | Get frozen transparency from latest publication version |
-| `previewTransparencyAction()` | Preview live transparency state |
-| `addFact(factId, relationship)` | Link a fact (supports/contradicts/referenced_in) |
-| `getFacts(options)` | Get linked facts |
-| `getFactLinks()` | Get fact-content link records |
-| `getFactsState()` / `syncFactsState(options)` | API-level facts get/sync |
-| `addAsset(asset, relationship, sortOrder)` | Add asset association |
-| `setThumbnail(image)` | Convenience: adds asset + updates `thumbnailAssetId` |
-| `addReference(content)` | Link to another content |
-| `getReferences()` | Get content references |
+| Method                                        | Purpose                                                 |
+| --------------------------------------------- | ------------------------------------------------------- |
+| `resolveGovernance()`                         | Resolve effective governance config for this content    |
+| `runReviewAction(options)`                    | Run AI review against a policy; returns `ContentReview` |
+| `listReviews()`                               | List all reviews for this content                       |
+| `listReviewProfilesAction()`                  | Get readiness for all profiles                          |
+| `evaluateReviewProfile(key)`                  | Evaluate one profile's requirements                     |
+| `issueCorrectionAction(options)`              | Issue a post-publication correction                     |
+| `listCorrections()`                           | List corrections for this content                       |
+| `listVersions()`                              | List version history                                    |
+| `mutateVersionAction(options)`                | Create a version snapshot                               |
+| `getPublishedTransparencyAction()`            | Get frozen transparency from latest publication version |
+| `previewTransparencyAction()`                 | Preview live transparency state                         |
+| `addFact(factId, relationship)`               | Link a fact (supports/contradicts/referenced_in)        |
+| `getFacts(options)`                           | Get linked facts                                        |
+| `getFactLinks()`                              | Get fact-content link records                           |
+| `getFactsState()` / `syncFactsState(options)` | API-level facts get/sync                                |
+| `addAsset(asset, relationship, sortOrder)`    | Add asset association                                   |
+| `setThumbnail(image)`                         | Convenience: adds asset + updates `thumbnailAssetId`    |
+| `addReference(content)`                       | Link to another content                                 |
+| `getReferences()`                             | Get content references                                  |
 
 ## Governance Workflow
 
@@ -226,6 +227,7 @@ STI content management with governance workflows, contribution intake, AI review
 ## Thumbnail Generation
 
 Three strategies via ThumbnailGenerator:
+
 - **headline-card**: title on branded background (via `@happyvertical/images`)
 - **static-map**: requires `metadata.latitude`/`longitude` (via `@happyvertical/geo`)
 - **ai-generate**: AI image generation (dynamic import of `@happyvertical/ai`)
@@ -233,12 +235,15 @@ Three strategies via ThumbnailGenerator:
 ## Svelte Components (19 total)
 
 ### Content Management
+
 `ContentList`, `ContentEditor`, `GovernedContentEditor`, `ContentAgentChat`, `ArticleCard`, `ArticleList`, `ImageThumbnail`, `Markdown`
 
 ### Governance
+
 `ContentGovernanceManager`, `ContentGovernancePanel`, `ContentGovernancePolicyEditor`, `ContentGovernanceProfileEditor`, `ContentGovernanceAssignmentEditor`, `ContentTransparencyReport`
 
 ### Contributions
+
 `ContentContributionForm`, `ContentContributionInbox`, `ContentContributionPortal`, `ContentContributionTypeManager`, `ContentContributorManager`
 
 ## Dev Server
@@ -276,9 +281,9 @@ route wiring.
 - **ContentAsset**: dedicated SMRT junction model backing `content_assets` for content-owned asset links
 
 ```typescript
-await content.addAsset(image, 'thumbnail', 0);  // relationship, sortOrder
+await content.addAsset(image, 'thumbnail', 0); // relationship, sortOrder
 await content.getAssets('attachment');
-await content.setThumbnail(image);  // convenience: adds asset + updates thumbnailAssetId
+await content.setThumbnail(image); // convenience: adds asset + updates thumbnailAssetId
 await content.addReference(otherContent);
 await content.getReferences();
 ```
@@ -291,12 +296,12 @@ await content.getReferences();
 import type { AssetAssociable, MetadataAccessor } from '@happyvertical/smrt-content';
 
 async function attachThumbnail(doc: AssetAssociable, asset: Asset) {
-  await doc.addAsset(asset, 'thumbnail', 0); // contract guaranteed
+	await doc.addAsset(asset, 'thumbnail', 0); // contract guaranteed
 }
 
 function bumpRevision(doc: MetadataAccessor) {
-  const meta = doc.getMetadata();
-  doc.updateMetadata({ revision: (meta.revision ?? 0) + 1 });
+	const meta = doc.getMetadata();
+	doc.updateMetadata({ revision: (meta.revision ?? 0) + 1 });
 }
 ```
 
@@ -310,9 +315,9 @@ Content prompts are registered with `@happyvertical/smrt-prompts` so tenants can
 
 ```typescript
 import {
-  smrtContentReviewPrompt,             // key: 'smrtContent.review'
-  smrtContentApplyCorrectionPrompt,    // key: 'smrtContent.applyCorrection'
-  smrtContentThumbnailAIGeneratePrompt, // key: 'smrtContent.thumbnail.aiGenerate'
+	smrtContentReviewPrompt, // key: 'smrtContent.review'
+	smrtContentApplyCorrectionPrompt, // key: 'smrtContent.applyCorrection'
+	smrtContentThumbnailAIGeneratePrompt // key: 'smrtContent.thumbnail.aiGenerate'
 } from '@happyvertical/smrt-content';
 ```
 
@@ -334,7 +339,7 @@ import {
 
 ## @happyvertical/smrt-docs
 
-*No CLAUDE.md found for this package.*
+_No CLAUDE.md found for this package._
 
 ---
 
@@ -398,8 +403,14 @@ Custom cron parser: 5-field (minute hour dom month dow). `*`, ranges, lists, ste
 ## JobBuilder — Fluent API
 
 ```typescript
-const handle = await doc.background('analyze', { detailed: true })
-  .delay('5m').priority('high').retries(5).queue('analysis').timeout(600000).enqueue();
+const handle = await doc
+	.background('analyze', { detailed: true })
+	.delay('5m')
+	.priority('high')
+	.retries(5)
+	.queue('analysis')
+	.timeout(600000)
+	.enqueue();
 
 await handle.wait({ timeout: 60000, pollInterval: 100 }); // polling-based
 ```
@@ -438,8 +449,8 @@ Double-entry accounting with chart of accounts, journal lifecycle, and balance e
 
 Registered at module-load time via `definePrompt()` in `src/prompts.ts`. Side-effect imported from `src/index.ts` so consumers automatically see the prompts after importing any export from this package.
 
-| Key | Method | Variables |
-|-----|--------|-----------|
+| Key                             | Method                | Variables                                                                                                              |
+| ------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `smrtLedgers.journal.summarize` | `Journal.summarize()` | `journalNumber`, `journalDate`, `journalDescription`, `journalStatus`, `journalTotal`, `entryCount`, `journalBalanced` |
 
 PII-conscious variable selection: `tenantId`, `sourceRef` (may reference customer/vendor identifiers), per-entry `accountId`/`id`, and the extensible `metadata` blob are intentionally NOT exposed as prompt variables. Tenants who need richer context should override the template via `PromptOverride` and supply their own variables through a custom call site.
@@ -473,12 +484,12 @@ Central identity system with multi-auth, relationships, controlled metadata, and
 
 ## Auth Methods
 
-| Model | Pattern |
-|-------|---------|
-| NostrIdentity | Encrypted keypair (AES-256-GCM). Requires `SERVER_MASTER_SECRET` env var for decryption. NIP-05 address generation. |
-| OidcIdentity | Multiple issuers (Keycloak/Google/GitHub). Lookup by `issuer + subject` pair. `findOrCreate()` for first login. |
-| ApiKey | SHA-256 hashed. **Plaintext returned once only** on `generate()`. `keyPrefix` for identification. Scope-based with expiry. |
-| MagicLinkToken | One-time token with expiry for passwordless auth. |
+| Model          | Pattern                                                                                                                    |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| NostrIdentity  | Encrypted keypair (AES-256-GCM). Requires `SERVER_MASTER_SECRET` env var for decryption. NIP-05 address generation.        |
+| OidcIdentity   | Multiple issuers (Keycloak/Google/GitHub). Lookup by `issuer + subject` pair. `findOrCreate()` for first login.            |
+| ApiKey         | SHA-256 hashed. **Plaintext returned once only** on `generate()`. `keyPrefix` for identification. Scope-based with expiry. |
+| MagicLinkToken | One-time token with expiry for passwordless auth.                                                                          |
 
 ## Identity Resolution
 
@@ -520,14 +531,14 @@ Provider-agnostic project management — GitHub-style issues, PRs, projects, and
 
 ## Models
 
-| Model | Key Fields | Notes |
-|-------|-----------|-------|
-| **Repository** | `owner`, `name`, `providerType`, `tokenConfigKey` | `sync()`, `getIssues()`, `getPullRequests()` |
-| **Issue** | `repositoryId` (FK), `number`, `title`, `body`, `state`, `labels[]` | `incorporateFeedback()`, `rollback()`, `suggestLabels()` |
-| **PullRequest** | extends Issue + `headRef`, `baseRef`, `merged`, `draft` | STI on Issue table. `summarize()`, `merge()` |
-| **Project** | `projectId`, `title`, `statuses[]`, `statusFieldId` | GitHub Projects V2. `addItem()`, `moveItem()`, `analyzeHealth()` |
-| **Comment** | `issueId` (FK), `body`, `authorLogin` | AI analysis support |
-| **Label** | `repositoryId` (FK), `name`, `color` | |
+| Model           | Key Fields                                                          | Notes                                                            |
+| --------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| **Repository**  | `owner`, `name`, `providerType`, `tokenConfigKey`                   | `sync()`, `getIssues()`, `getPullRequests()`                     |
+| **Issue**       | `repositoryId` (FK), `number`, `title`, `body`, `state`, `labels[]` | `incorporateFeedback()`, `rollback()`, `suggestLabels()`         |
+| **PullRequest** | extends Issue + `headRef`, `baseRef`, `merged`, `draft`             | STI on Issue table. `summarize()`, `merge()`                     |
+| **Project**     | `projectId`, `title`, `statuses[]`, `statusFieldId`                 | GitHub Projects V2. `addItem()`, `moveItem()`, `analyzeHealth()` |
+| **Comment**     | `issueId` (FK), `body`, `authorLogin`                               | AI analysis support                                              |
+| **Label**       | `repositoryId` (FK), `name`, `color`                                |                                                                  |
 
 ## Key Patterns
 
@@ -558,26 +569,29 @@ Wraps app in `+layout.svelte`. Provides auth state, permissions, WebSocket, and 
 
 ```svelte
 <script>
-  let { data, children } = $props();
+	let { data, children } = $props();
 </script>
 
-<Provider user={data.user} permissions={data.permissions}
-  ai={{ preload: 'idle', stt: { type: 'whisper-cpp' } }}>
-  {@render children()}
+<Provider
+	user={data.user}
+	permissions={data.permissions}
+	ai={{ preload: 'idle', stt: { type: 'whisper-cpp' } }}
+>
+	{@render children()}
 </Provider>
 ```
 
 ## Hooks
 
-| Hook | Returns |
-|------|---------|
-| `useAuth()` | `user`, `isAuthenticated`, `permissions`, `hasPermission()` |
-| `useSocket()` | `status`, `isConnected`, `send()`, `reconnect()`, `disconnect()` |
-| `useAppState()` | Full `SmrtAppStateManager` -- mode, AI adapters, capabilities |
-| `useSTT()` | `start()`, `stop()`, `isListening`, `lastResult`, `interimResult` |
-| `useTTS()` | `speak()`, `stop()`, `isSpeaking`, `getVoices()` |
-| `useLLM()` | `chat()`, `initialize()`, `unload()`, `isGenerating`, `downloadProgress` |
-| `useTheme()` | Theme context from `ThemeProvider` |
+| Hook            | Returns                                                                  |
+| --------------- | ------------------------------------------------------------------------ |
+| `useAuth()`     | `user`, `isAuthenticated`, `permissions`, `hasPermission()`              |
+| `useSocket()`   | `status`, `isConnected`, `send()`, `reconnect()`, `disconnect()`         |
+| `useAppState()` | Full `SmrtAppStateManager` -- mode, AI adapters, capabilities            |
+| `useSTT()`      | `start()`, `stop()`, `isListening`, `lastResult`, `interimResult`        |
+| `useTTS()`      | `speak()`, `stop()`, `isSpeaking`, `getVoices()`                         |
+| `useLLM()`      | `chat()`, `initialize()`, `unload()`, `isGenerating`, `downloadProgress` |
+| `useTheme()`    | Theme context from `ThemeProvider`                                       |
 
 ## AI System
 
@@ -588,24 +602,26 @@ Wraps app in `+layout.svelte`. Provides auth state, permissions, WebSocket, and 
 
 ## Components
 
-| Category | Components |
-|----------|------------|
-| AI | `Provider`, `AILoadingOverlay`, `CapabilityGate`, `DownloadProgress`, `STTTest`, `VoiceInput` |
-| Forms | `TextInput`, `Select`, `MoneyInput`, `DateTimeInput`, `Toggle`, `FileUpload`, `AddressInput`, + more |
-| Layout | `Container`, `Grid`, `Header`, `Footer`, `Masthead`, `PageHeader`, `EmptyState`, `SummaryCard` |
-| UI | `Button`, `Card`, `Badge`, `Pagination` |
-| Display | `ConfidenceBadge`, `CurrencyDisplay`, `DateDisplay`, `Icon`, `StatusBadge` |
-| Feedback | `ConfirmDialog`, `LoadingOverlay`, `Modal`, `ProgressBar` |
-| Nav | `FilterChips`, `Tabs` |
-| Permission | `PermissionCheck`, `RoleBadge`, `RoleSelector` |
-| Admin | `AgentAdminPanel`, `AgentAdminTabs`, `AgentSettingsShell` |
-| Other | `Calendar`, `DayView`, `MembershipCard`, `MembershipList`, `ModulePanel`, `DataTable` |
+| Category   | Components                                                                                           |
+| ---------- | ---------------------------------------------------------------------------------------------------- |
+| AI         | `Provider`, `AILoadingOverlay`, `CapabilityGate`, `DownloadProgress`, `STTTest`, `VoiceInput`        |
+| Forms      | `TextInput`, `Select`, `MoneyInput`, `DateTimeInput`, `Toggle`, `FileUpload`, `AddressInput`, + more |
+| Layout     | `Container`, `Grid`, `Header`, `Footer`, `Masthead`, `PageHeader`, `EmptyState`, `SummaryCard`       |
+| UI         | `Button`, `Card`, `Badge`, `Pagination`                                                              |
+| Display    | `ConfidenceBadge`, `CurrencyDisplay`, `DateDisplay`, `Icon`, `StatusBadge`                           |
+| Feedback   | `ConfirmDialog`, `LoadingOverlay`, `Modal`, `ProgressBar`                                            |
+| Nav        | `FilterChips`, `Tabs`                                                                                |
+| Permission | `PermissionCheck`, `RoleBadge`, `RoleSelector`                                                       |
+| Admin      | `AgentAdminPanel`, `AgentAdminTabs`, `AgentSettingsShell`                                            |
+| Other      | `Calendar`, `DayView`, `MembershipCard`, `MembershipList`, `ModulePanel`, `DataTable`                |
 
 ## Permission Action
 
 ```svelte
 <div use:permission={{ slug: 'articles.delete', permissions: userPermissions }}>Delete</div>
-<div use:permission={{ slug: 'articles.delete', permissions: userPermissions, hideOnly: true }}>Delete</div>
+<div use:permission={{ slug: 'articles.delete', permissions: userPermissions, hideOnly: true }}>
+	Delete
+</div>
 ```
 
 ## Themes
@@ -639,12 +655,14 @@ Multi-tenancy via AsyncLocalStorage context propagation with automatic query fil
 import { withTenant, getTenantId, withSystemContext } from '@happyvertical/smrt-tenancy';
 
 await withTenant({ tenantId: 'tenant-123' }, async () => {
-  // All SmrtCollection queries auto-filtered by tenantId
-  // All creates auto-populate tenantId
-  const docs = await collection.list({}); // WHERE tenant_id = 'tenant-123'
+	// All SmrtCollection queries auto-filtered by tenantId
+	// All creates auto-populate tenantId
+	const docs = await collection.list({}); // WHERE tenant_id = 'tenant-123'
 });
 
-await withSystemContext(async () => { /* bypasses all tenant checks */ });
+await withSystemContext(async () => {
+	/* bypasses all tenant checks */
+});
 ```
 
 **Critical distinction**: `withSystemContext()` sets a SYSTEM_CONTEXT_MARKER sentinel — different from "no context" (undefined). Interceptor can distinguish intentional bypass from missing context.
@@ -653,15 +671,15 @@ await withSystemContext(async () => { /* bypasses all tenant checks */ });
 
 Hooks into SmrtCollection via `GlobalInterceptors.register()` (priority 100, runs first):
 
-| Hook | Behavior |
-|------|----------|
-| `beforeList` | Injects `tenantId` into WHERE clause; validates existing filters match context |
-| `beforeGet` | Same — converts ID lookup to `{ id, tenantId }` |
-| `beforeSave` | Auto-populates tenantId if empty + `autoPopulate: true`; validates if already set |
-| `beforeDelete` | Validates instance.tenantId matches context |
-| `beforeQuery` | Enforces raw SQL policy on tenant-scoped classes (`throw`/`warn`/`allow`) |
-| `afterSave` | Emits `directory.<class>.created`/`updated` via `dispatchBus` for configured `directoryClasses` |
-| `afterDelete` | Emits `directory.<class>.deleted` via `dispatchBus` for configured `directoryClasses` |
+| Hook           | Behavior                                                                                        |
+| -------------- | ----------------------------------------------------------------------------------------------- |
+| `beforeList`   | Injects `tenantId` into WHERE clause; validates existing filters match context                  |
+| `beforeGet`    | Same — converts ID lookup to `{ id, tenantId }`                                                 |
+| `beforeSave`   | Auto-populates tenantId if empty + `autoPopulate: true`; validates if already set               |
+| `beforeDelete` | Validates instance.tenantId matches context                                                     |
+| `beforeQuery`  | Enforces raw SQL policy on tenant-scoped classes (`throw`/`warn`/`allow`)                       |
+| `afterSave`    | Emits `directory.<class>.created`/`updated` via `dispatchBus` for configured `directoryClasses` |
+| `afterDelete`  | Emits `directory.<class>.deleted` via `dispatchBus` for configured `directoryClasses`           |
 
 Mismatches throw `TenantIsolationError`. Missing required context throws `TenantContextError`.
 
@@ -670,11 +688,15 @@ Mismatches throw `TenantIsolationError`. Missing required context throws `Tenant
 ```typescript
 // Pattern 1: Tenancy decorator
 @TenantScoped({ mode: 'optional' })
-class Doc extends SmrtObject { @tenantId({ nullable: true }) tenantId: string | null = null; }
+class Doc extends SmrtObject {
+	@tenantId({ nullable: true }) tenantId: string | null = null;
+}
 
 // Pattern 2: Core decorator (tenancy package reads this too)
 @smrt({ tenantScoped: { mode: 'optional' } })
-class Doc extends SmrtObject { tenantId: string | null = null; }
+class Doc extends SmrtObject {
+	tenantId: string | null = null;
+}
 ```
 
 Modes: `'required'` (default — throws without context) or `'optional'` (passes through if no context).
@@ -709,19 +731,19 @@ Multi-tenant user management with RBAC, hierarchical tenants, session handling, 
 
 ## Models (13)
 
-| Model | Key Pattern |
-|-------|-------------|
-| User | Auth identity. `profileId` is plain string (not FK) to smrt-profiles. Email auto-lowercased. |
-| Tenant | **STI** + hierarchical parent-child. `hierarchyPath` (materialized path), `hierarchyLevel`. Max depth 10. |
-| Session | Server-side. Secure UUID. TTL in **seconds** (not ms). Status auto-updates to EXPIRED on access. |
-| MagicLinkToken | Single-use email login token. Backed by `MagicLinkService`. |
-| Role | `tenantId = null` → system role (available to all tenants). `isSystem: true` blocks deletion. |
-| Permission | Slug format: `resource.action`. Parsed by PermissionResolver. |
-| Membership | User + Tenant + Role junction. UNIQUE(userId, tenantId). |
-| Group | Team within a tenant. Multiple roles via GroupRole. |
-| GroupMember, GroupRole, RolePermission | Join tables. |
-| MembershipOverride | Per-user permission grant/deny. **DENY always wins.** |
-| TenantPermissionOverride | Tenant-level cascade overrides. Effect: INHERIT/GRANT/DENY. |
+| Model                                  | Key Pattern                                                                                               |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| User                                   | Auth identity. `profileId` is plain string (not FK) to smrt-profiles. Email auto-lowercased.              |
+| Tenant                                 | **STI** + hierarchical parent-child. `hierarchyPath` (materialized path), `hierarchyLevel`. Max depth 10. |
+| Session                                | Server-side. Secure UUID. TTL in **seconds** (not ms). Status auto-updates to EXPIRED on access.          |
+| MagicLinkToken                         | Single-use email login token. Backed by `MagicLinkService`.                                               |
+| Role                                   | `tenantId = null` → system role (available to all tenants). `isSystem: true` blocks deletion.             |
+| Permission                             | Slug format: `resource.action`. Parsed by PermissionResolver.                                             |
+| Membership                             | User + Tenant + Role junction. UNIQUE(userId, tenantId).                                                  |
+| Group                                  | Team within a tenant. Multiple roles via GroupRole.                                                       |
+| GroupMember, GroupRole, RolePermission | Join tables.                                                                                              |
+| MembershipOverride                     | Per-user permission grant/deny. **DENY always wins.**                                                     |
+| TenantPermissionOverride               | Tenant-level cascade overrides. Effect: INHERIT/GRANT/DENY.                                               |
 
 ## Permission Resolution — 4-Level Cascade
 
@@ -771,9 +793,11 @@ If you discover gotchas, patterns, or information that should be included in the
 **https://github.com/happyvertical/smrt/issues**
 
 Include:
+
 - The package name (e.g., `@happyvertical/smrt-core`)
 - Description of the gotcha or pattern
 - Example code if applicable
 
 ---
-*Generated by `smrt docs:claude` — regenerate after dependency updates*
+
+_Generated by `smrt docs:claude` — regenerate after dependency updates_

@@ -6,7 +6,7 @@
 <ModulePage
 	name="smrt-tenancy"
 	description="Multi-tenancy via AsyncLocalStorage context propagation. Auto-filters every SmrtCollection query by tenant, auto-populates tenantId on save, and ships adapters for SvelteKit, Express, and CLI."
-	badges={['v0.24.12', 'Multi-Tenancy', 'ESM']}
+	badges={['v0.29.34', 'Multi-Tenancy', 'ESM']}
 >
 	<section id="overview">
 		<h2>Overview</h2>
@@ -14,8 +14,8 @@
 			<code>@happyvertical/smrt-tenancy</code> provides automatic tenant isolation for SaaS
 			applications built on <code>smrt-core</code>. It uses Node's <code>AsyncLocalStorage</code> to
 			propagate a tenant context through async operations, and a <code>GlobalInterceptors</code>
-			hook (priority 100, runs first) to inject <code>tenantId</code> into queries, auto-populate it
-			on save, and validate isolation on every read/write/delete.
+			hook (priority 100, runs first) to inject <code>tenantId</code> into queries, auto-populate it on
+			save, and validate isolation on every read/write/delete.
 		</p>
 
 		<h3>Key Features</h3>
@@ -39,8 +39,8 @@
 				<strong>Super-admin bypass</strong>: keep context but disable auto-filtering
 			</li>
 			<li>
-				<strong>Raw SQL policy</strong>: <code>throw</code>/<code>warn</code>/<code>allow</code> to
-				prevent accidental leaks
+				<strong>Raw SQL policy</strong>: <code>throw</code>/<code>warn</code>/<code>allow</code> to prevent
+				accidental leaks
 			</li>
 			<li>
 				<strong><code>directoryClasses</code> dispatch</strong>: <code>afterSave</code> and
@@ -52,9 +52,9 @@
 		<aside>
 			<p>
 				<strong>Critical distinction</strong>: <code>withSystemContext()</code> sets a
-				<code>SYSTEM_CONTEXT_MARKER</code> sentinel -- it is <em>not</em> the same as "no context"
-				(<code>undefined</code>). The interceptor uses this marker to tell intentional bypass apart
-				from missing context.
+				<code>SYSTEM_CONTEXT_MARKER</code> sentinel -- it is <em>not</em> the same as "no context" (<code
+					>undefined</code
+				>). The interceptor uses this marker to tell intentional bypass apart from missing context.
 			</p>
 		</aside>
 	</section>
@@ -96,12 +96,12 @@ class Document extends SmrtObject {
 		</p>
 		<ul>
 			<li>
-				<code>'required'</code> (default) -- throws <code>TenantContextError</code> when there's no
-				active context
+				<code>'required'</code> (default) -- throws <code>TenantContextError</code> when there's no active
+				context
 			</li>
 			<li>
-				<code>'optional'</code> -- passes through if no context (used by most domain models so
-				system-level scripts still work)
+				<code>'optional'</code> -- passes through if no context (used by most domain models so system-level
+				scripts still work)
 			</li>
 		</ul>
 
@@ -163,8 +163,8 @@ await cli.runWithTenant('tenant-123', async () => { /* ... */ });`}
 	<section id="interceptor-system">
 		<h2>Interceptor System</h2>
 		<p>
-			Tenancy hooks <code>GlobalInterceptors</code> (priority 100, runs first). The interceptor sees
-			every collection / save operation:
+			Tenancy hooks <code>GlobalInterceptors</code> (priority 100, runs first). The interceptor sees every
+			collection / save operation:
 		</p>
 		<table>
 			<thead>
@@ -177,8 +177,8 @@ await cli.runWithTenant('tenant-123', async () => { /* ... */ });`}
 				<tr>
 					<td><code>beforeList</code></td>
 					<td>
-						Injects <code>tenantId</code> into the WHERE clause; validates that any explicit filter
-						matches the context
+						Injects <code>tenantId</code> into the WHERE clause; validates that any explicit filter matches
+						the context
 					</td>
 				</tr>
 				<tr>
@@ -199,8 +199,9 @@ await cli.runWithTenant('tenant-123', async () => { /* ... */ });`}
 				<tr>
 					<td><code>beforeQuery</code></td>
 					<td>
-						Enforces the raw-SQL policy on tenant-scoped classes
-						(<code>throw</code> / <code>warn</code> / <code>allow</code>)
+						Enforces the raw-SQL policy on tenant-scoped classes (<code>throw</code> /
+						<code>warn</code>
+						/ <code>allow</code>)
 					</td>
 				</tr>
 				<tr>
@@ -272,8 +273,9 @@ await projectCollection.query({
 			Per
 			<a href="https://github.com/happyvertical/smrt/blob/main/docs/content/standards.md">
 				<code>docs/content/standards.md §7</code>
-			</a>, tenant-aware models should apply <code>@TenantScoped({'{'} mode: 'optional' {'}'})</code>.
-			Packages that deviate must document why in their own <code>CLAUDE.md</code> under a
+			</a>, tenant-aware models should apply
+			<code>@TenantScoped({'{'} mode: 'optional' {'}'})</code>. Packages that deviate must document
+			why in their own <code>CLAUDE.md</code> under a
 			<strong>"Known exceptions to monorepo standards"</strong> heading.
 		</p>
 		<p>The canonical example lives in <code>packages/secrets/CLAUDE.md</code>:</p>
@@ -281,23 +283,24 @@ await projectCollection.query({
 			<li>
 				<code>Secret</code> uses the inline <code>tenantScoped: true</code> form because
 				<code>SecretService.store()</code> performs manual scoping via the
-				<code>(slug, context)</code> upsert key. Switching to <code>@TenantScoped</code> without
-				rethinking the upsert key would surface false-positive name collisions across tenants.
+				<code>(slug, context)</code> upsert key. Switching to <code>@TenantScoped</code> without rethinking
+				the upsert key would surface false-positive name collisions across tenants.
 			</li>
 			<li>
-				<code>TenantKey</code> is deliberately not tenant-scoped at all: key-rotation tooling, AMK
-				rewrap jobs, and super-admin audits must query across tenants.
+				<code>TenantKey</code> is deliberately not tenant-scoped at all: key-rotation tooling, AMK rewrap
+				jobs, and super-admin audits must query across tenants.
 			</li>
 		</ul>
 		<p>
 			A second exception lives <em>inside this package</em>:
 			<code>serializeInstance()</code> in <code>src/interceptor.ts</code> calls
-			<code>instance.toJSON()</code> directly. Section 7 of <code>standards.md</code> normally forbids
-			this in favor of <code>transformJSON()</code>, but the interceptor has to serialize arbitrary
-			instances -- workspace stubs and plain-object test doubles whose classes may not extend
+			<code>instance.toJSON()</code> directly. Section 7 of <code>standards.md</code> normally
+			forbids this in favor of <code>transformJSON()</code>, but the interceptor has to serialize
+			arbitrary instances -- workspace stubs and plain-object test doubles whose classes may not
+			extend
 			<code>SmrtObject</code> and therefore have no <code>transformJSON()</code> hook. The call is
-			duck-typed and falls back to manual key iteration when <code>toJSON</code> is absent. See the
-			inline comment at the call site for the full rationale.
+			duck-typed and falls back to manual key iteration when <code>toJSON</code> is absent. See the inline
+			comment at the call site for the full rationale.
 		</p>
 	</section>
 
@@ -462,7 +465,9 @@ describe('Project isolation', () => {
 			<li><code>createTestTenantContext(ctx, fn)</code> -- run test code in a tenant context</li>
 			<li><code>testTenantIsolation(tenantIds, fn)</code> -- verify isolation between tenants</li>
 			<li><code>assertTenantContextRequired(fn)</code> -- assert operation requires context</li>
-			<li><code>assertTenantIsolationViolation(fn)</code> -- assert operation violates isolation</li>
+			<li>
+				<code>assertTenantIsolationViolation(fn)</code> -- assert operation violates isolation
+			</li>
 		</ul>
 	</section>
 
@@ -472,12 +477,12 @@ describe('Project isolation', () => {
 			<li>
 				<strong>Context lost in callbacks</strong>:
 				<code>setTimeout(() =&gt; getTenantId(), 100)</code> returns
-				<code>undefined</code>. Fix: <code>TenantContext.bind(fn)</code>, or capture the tenantId on the
-				outside and re-enter context with <code>withTenant()</code>.
+				<code>undefined</code>. Fix: <code>TenantContext.bind(fn)</code>, or capture the tenantId on
+				the outside and re-enter context with <code>withTenant()</code>.
 			</li>
 			<li>
-				<strong>Nested contexts override</strong>: an inner <code>withTenant()</code> overrides the
-				outer one and restores on exit.
+				<strong>Nested contexts override</strong>: an inner <code>withTenant()</code> overrides the outer
+				one and restores on exit.
 			</li>
 			<li>
 				<strong>Auto-populate only if empty</strong>: if <code>tenantId</code> is already set, the
@@ -485,8 +490,8 @@ describe('Project isolation', () => {
 			</li>
 			<li>
 				<strong>Isolation checked at query time</strong>:
-				<code>list({'{'} where: {'{ tenantId: \'other\' }'} {'}'})</code> throws immediately if the
-				value doesn't match the current context.
+				<code>list({'{'} where: {"{ tenantId: 'other' }"} {'}'})</code> throws immediately if the value
+				doesn't match the current context.
 			</li>
 		</ul>
 	</section>

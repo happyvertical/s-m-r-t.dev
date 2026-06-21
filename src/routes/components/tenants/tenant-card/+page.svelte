@@ -25,13 +25,8 @@
 		{
 			name: 'tenant',
 			type: 'Tenant',
-			description: 'Tenant object with id, name, and slug',
+			description: 'Tenant object (name, status, description, hierarchy fields)',
 			required: true
-		},
-		{
-			name: 'status',
-			type: 'string',
-			description: 'Status badge (active, trial, suspended, etc.)'
 		},
 		{
 			name: 'memberCount',
@@ -48,6 +43,22 @@
 			type: 'boolean',
 			default: 'false',
 			description: 'Whether the card is selected'
+		},
+		{
+			name: 'actions',
+			type: 'boolean',
+			default: 'false',
+			description: 'Show edit/delete action buttons'
+		},
+		{
+			name: 'onedit',
+			type: '() => void',
+			description: 'Edit action handler (shown when actions is true)'
+		},
+		{
+			name: 'ondelete',
+			type: '() => void',
+			description: 'Delete action handler (shown when actions is true)'
 		}
 	];
 </script>
@@ -89,23 +100,24 @@
 	</ComponentExample>
 
 	<h2>With Status and Member Count</h2>
-	<p>Add status badge and member count for more context.</p>
+	<p>
+		The status badge is read from <code>tenant.status</code>; pass
+		<code>memberCount</code> for additional context.
+	</p>
 
 	<ComponentExample
 		code={`<TenantCard
-  tenant={tenant}
-  status="active"
+  tenant={{ ...tenant, status: 'active' }}
   memberCount={24}
 />
 <TenantCard
-  tenant={tenant}
-  status="trial"
+  tenant={{ ...tenant, status: 'trial' }}
   memberCount={5}
 />`}
 	>
 		<div class="card-stack">
-			<TenantCard tenant={mockTenant3} status="active" memberCount={24} />
-			<TenantCard tenant={mockTenant2} status="trial" memberCount={5} />
+			<TenantCard tenant={mockTenant3} memberCount={24} />
+			<TenantCard tenant={mockTenant2} memberCount={5} />
 		</div>
 	</ComponentExample>
 
@@ -121,7 +133,6 @@
   tenant={tenant}
   onclick={() => selectedTenant = tenant.id}
   selected={selectedTenant === tenant.id}
-  status="active"
   memberCount={24}
 />`}
 	>
@@ -130,21 +141,18 @@
 				tenant={mockTenant}
 				onclick={() => (selectedTenant = mockTenant.id)}
 				selected={selectedTenant === mockTenant.id}
-				status="active"
 				memberCount={15}
 			/>
 			<TenantCard
 				tenant={mockTenant2}
 				onclick={() => (selectedTenant = mockTenant2.id)}
 				selected={selectedTenant === mockTenant2.id}
-				status="trial"
 				memberCount={5}
 			/>
 			<TenantCard
 				tenant={mockTenant3}
 				onclick={() => (selectedTenant = mockTenant3.id)}
 				selected={selectedTenant === mockTenant3.id}
-				status="active"
 				memberCount={24}
 			/>
 		</div>
@@ -152,29 +160,29 @@
 	</ComponentExample>
 
 	<h2>Status Variants</h2>
-	<p>Different status badges automatically style based on tenant state.</p>
+	<p>The status badge styles automatically based on <code>tenant.status</code>.</p>
 
 	<ComponentExample
-		code={`<TenantCard tenant={tenant} status="active" />
-<TenantCard tenant={tenant} status="trial" />
-<TenantCard tenant={tenant} status="suspended" />
-<TenantCard tenant={tenant} status="inactive" />`}
+		code={`<TenantCard tenant={{ ...tenant, status: 'active' }} />
+<TenantCard tenant={{ ...tenant, status: 'trial' }} />
+<TenantCard tenant={{ ...tenant, status: 'suspended' }} />
+<TenantCard tenant={{ ...tenant, status: 'inactive' }} />`}
 	>
 		<div class="card-stack">
 			<TenantCard
-				tenant={{ ...mockTenant, name: 'Active Tenant' }}
-				status="active"
+				tenant={{ ...mockTenant, name: 'Active Tenant', status: 'active' }}
 				memberCount={42}
 			/>
-			<TenantCard tenant={{ ...mockTenant, name: 'Trial Tenant' }} status="trial" memberCount={3} />
 			<TenantCard
-				tenant={{ ...mockTenant, name: 'Suspended Tenant' }}
-				status="suspended"
+				tenant={{ ...mockTenant, name: 'Trial Tenant', status: 'trial' }}
+				memberCount={3}
+			/>
+			<TenantCard
+				tenant={{ ...mockTenant, name: 'Suspended Tenant', status: 'suspended' }}
 				memberCount={18}
 			/>
 			<TenantCard
-				tenant={{ ...mockTenant, name: 'Inactive Tenant' }}
-				status="inactive"
+				tenant={{ ...mockTenant, name: 'Inactive Tenant', status: 'inactive' }}
 				memberCount={0}
 			/>
 		</div>
@@ -185,14 +193,16 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import type { Tenant } from '@happyvertical/smrt-tenancy';
+		code={`import type { Tenant } from '@happyvertical/smrt-users';
 
 interface Props {
   tenant: Tenant;
-  status?: string;
   memberCount?: number;
   onclick?: () => void;
   selected?: boolean;
+  actions?: boolean;
+  onedit?: () => void;
+  ondelete?: () => void;
 }`}
 		language="typescript"
 	/>
@@ -201,10 +211,10 @@ interface Props {
 	<p>TenantCard works seamlessly with the smrt-tenancy module:</p>
 
 	<CodeBlock
-		code={`import { TenantsCollection } from '@happyvertical/smrt-tenancy';
+		code={`import { TenantCollection } from '@happyvertical/smrt-users';
 
 // List all tenants user has access to
-const tenants = await TenantsCollection.create({ db });
+const tenants = await TenantCollection.create({ db });
 const userTenants = await tenants.list({
   where: {
     memberships: {
@@ -214,12 +224,11 @@ const userTenants = await tenants.list({
   }
 });
 
-// Display in cards
+// Display in cards (status badge comes from tenant.status)
 {#each userTenants as tenant}
   <TenantCard
     {tenant}
-    status={tenant.status}
-    memberCount={tenant.memberCount}
+    memberCount={memberCounts[tenant.id]}
     onclick={() => switchTenant(tenant.id)}
   />
 {/each}`}

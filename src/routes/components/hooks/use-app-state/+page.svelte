@@ -5,18 +5,18 @@
 	const returnProps = [
 		{
 			name: 'state',
-			type: 'AppState',
+			type: 'Readonly<SmrtAppState>',
 			description: 'The reactive app state object'
 		},
 		{
 			name: 'setMode',
-			type: "(mode: 'smrt' | 'traditional') => void",
-			description: 'Set the app mode'
+			type: '(mode: AppMode, source?: ModeSource) => void',
+			description: "Set the app mode ('default' | 'smrt')"
 		},
 		{
 			name: 'setUser',
-			type: '(user: User | null) => void',
-			description: 'Set the authenticated user'
+			type: '(user: User | null, permissions?: string[]) => void',
+			description: 'Set the authenticated user (and optionally permissions)'
 		},
 		{
 			name: 'setPermissions',
@@ -86,7 +86,7 @@
 </script>
 
 <p>Current mode: {mode}</p>
-<button onclick={() => app.setMode(isSmrt ? 'traditional' : 'smrt')}>
+<button onclick={() => app.setMode(isSmrt ? 'default' : 'smrt')}>
   Toggle Mode
 </button>`}
 		language="svelte"
@@ -116,15 +116,16 @@ if (permissions.has('articles.create')) {
 	<p>The <code>app.state</code> object contains:</p>
 
 	<CodeBlock
-		code={`interface AppState {
-  // App mode
-  mode: 'smrt' | 'traditional';
+		code={`interface SmrtAppState {
+  // App mode ('default' | 'smrt')
+  mode: AppMode;
 
   // Session info
   session: {
     user: User | null;
     isAuthenticated: boolean;
     permissions: string[];
+    preferences: UserPreferences;
   };
 
   // AI state
@@ -145,15 +146,21 @@ if (permissions.has('articles.create')) {
 
 	<h2>Requirements</h2>
 	<p>
-		Must be called within a <code>&lt;Smrt&gt;</code> provider. Throws an error if called outside the
+		Must be called within a <code>&lt;Provider&gt;</code>. Throws an error if called outside the
 		provider context.
 	</p>
 
 	<CodeBlock
-		code={`// In your root layout
-<Smrt>
-  <slot />  <!-- useAppState works here -->
-</Smrt>`}
+		code={`<script lang="ts">
+  import { Provider } from '@happyvertical/smrt-svelte';
+
+  let { children } = $props();
+</script>
+
+<!-- In your root layout -->
+<Provider>
+  {@render children()}  <!-- useAppState works here -->
+</Provider>`}
 		language="svelte"
 	/>
 </article>

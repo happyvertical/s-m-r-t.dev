@@ -40,12 +40,6 @@
 			description: 'Current phone number value (bindable)'
 		},
 		{
-			name: 'country',
-			type: "'CA' | 'US'",
-			default: "'CA'",
-			description: 'Country code for format validation'
-		},
-		{
 			name: 'disabled',
 			type: 'boolean',
 			default: 'false',
@@ -56,12 +50,6 @@
 			type: 'boolean',
 			default: 'false',
 			description: 'Marks field as required'
-		},
-		{
-			name: 'error',
-			type: 'string',
-			default: 'undefined',
-			description: 'Error message to display'
 		},
 		{
 			name: 'onchange',
@@ -131,22 +119,20 @@
 		<PhoneInput name="contact" label="Contact Phone" bind:value={canadianPhone} />
 	</ComponentExample>
 
-	<h2>US Phone Number</h2>
-	<p>Set <code>country="US"</code> for US-specific formatting.</p>
+	<h2>Custom Placeholder</h2>
+	<p>Use <code>placeholder</code> to suggest an expected number format.</p>
 
 	<ComponentExample
 		code={`<PhoneInput
   name="us-phone"
-  label="US Phone Number"
-  country="US"
+  label="Phone Number"
   placeholder="+1 (555) 555-5555"
   bind:value
 />`}
 	>
 		<PhoneInput
 			name="us-phone"
-			label="US Phone Number"
-			country="US"
+			label="Phone Number"
 			placeholder="+1 (555) 555-5555"
 			bind:value={usPhone}
 		/>
@@ -177,25 +163,6 @@
 />`}
 	>
 		<PhoneInput name="verified" label="Verified Phone" value="+1 (416) 555-0199" disabled />
-	</ComponentExample>
-
-	<h2>With Error</h2>
-	<p>Display validation errors using the <code>error</code> prop.</p>
-
-	<ComponentExample
-		code={`<PhoneInput
-  name="error-phone"
-  label="Phone Number"
-  value="123"
-  error="Please enter a valid phone number"
-/>`}
-	>
-		<PhoneInput
-			name="error-phone"
-			label="Phone Number"
-			value="123"
-			error="Please enter a valid phone number"
-		/>
 	</ComponentExample>
 
 	<h2>With Description</h2>
@@ -266,10 +233,8 @@ interface Props {
   description?: string;
   placeholder?: string;
   value?: string;
-  country?: 'CA' | 'US';
   disabled?: boolean;
   required?: boolean;
-  error?: string;
   onchange?: (value: string) => void;
 }`}
 		language="typescript"

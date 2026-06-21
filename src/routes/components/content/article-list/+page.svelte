@@ -166,7 +166,7 @@ interface Article {
   description: string | null;
   publish_date: string | null;
   author: string | null;
-  tags: string; // JSON array or comma-separated
+  tags: string | string[]; // JSON string, comma-separated, or parsed array
 }
 
 interface Props {

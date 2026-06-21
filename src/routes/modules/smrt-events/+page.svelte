@@ -14,34 +14,47 @@
 <ModulePage
 	name="smrt-events"
 	description="Infinite-nesting event hierarchy with series, participant tracking, recurrence patterns, and a dedicated event-owned asset join."
-	badges={['v0.24.12', 'Events', '1 Component']}
+	badges={['v0.29.34', 'Events', '1 Component']}
 >
 	<section>
 		<h2>Overview</h2>
 		<p>
 			<strong>smrt-events</strong> provides infinite-nesting event hierarchy with series,
-			participant tracking, recurrence patterns, and the new <code>EventAsset</code> join table for
-			event-owned assets. Events can model anything from conferences with sessions to sports games
-			with periods and goals.
+			participant tracking, recurrence patterns, and the new <code>EventAsset</code> join table for event-owned
+			assets. Events can model anything from conferences with sessions to sports games with periods and
+			goals.
 		</p>
 		<aside>
 			<p><strong>Key Features:</strong></p>
 			<ul>
-				<li>Infinite hierarchical events via self-referencing <code>parentEventId</code> (games, quarters, goals)</li>
+				<li>
+					Infinite hierarchical events via self-referencing <code>parentId</code> (UUID, inherited
+					from <code>SmrtHierarchical</code>) — games, quarters, goals
+				</li>
 				<li>Event series with recurrence patterns (daily/weekly/monthly/yearly)</li>
-				<li>Participant tracking with <code>role</code> (home/away/speaker/etc.), <code>placement</code> (numeric), and <code>groupId</code></li>
+				<li>
+					Participant tracking with <code>role</code> (home/away/speaker/etc.),
+					<code>placement</code>
+					(numeric), and <code>groupId</code>
+				</li>
 				<li><code>EventType</code> with JSON schema for custom fields per type</li>
 				<li>Status lifecycle: scheduled, in_progress, completed, cancelled, postponed</li>
-				<li><strong>EventAsset</strong> (new): dedicated owned-asset join in <code>event_assets</code> with <code>relationship</code> and <code>sortOrder</code></li>
-				<li>Integration with smrt-places (venue via <code>placeId</code>) and smrt-profiles (participants via <code>profileId</code>)</li>
+				<li>
+					<strong>EventAsset</strong> (new): dedicated owned-asset join in <code>event_assets</code>
+					with <code>relationship</code> and <code>sortOrder</code>
+				</li>
+				<li>
+					Integration with smrt-places (venue via <code>placeId</code>) and smrt-profiles
+					(participants via <code>profileId</code>)
+				</li>
 			</ul>
 		</aside>
 
 		<h3>Tenancy</h3>
 		<p>
-			All event models use <code>@TenantScoped({'{'} mode: 'optional' {'}'})</code> with a
-			nullable <code>tenantId</code>. Global events (<code>tenantId = null</code>) are visible to
-			every tenant — useful for shared reference calendars (public holidays, market hours).
+			All event models use <code>@TenantScoped({'{'} mode: 'optional' {'}'})</code> with a nullable
+			<code>tenantId</code>. Global events (<code>tenantId = null</code>) are visible to every
+			tenant — useful for shared reference calendars (public holidays, market hours).
 		</p>
 	</section>
 
@@ -104,20 +117,19 @@ await participants.create({
 		<p>
 			<code>event_assets</code> is the canonical join for event-owned assets (recordings, slide
 			decks, photos, agendas). Use the helpers on <code>Event</code> and
-			<code>EventCollection</code>; reserve generic <code>AssetAssociation</code> for
-			cross-cutting / provenance links that don't belong to a single owner.
+			<code>EventCollection</code>; reserve generic <code>AssetAssociation</code> for cross-cutting /
+			provenance links that don't belong to a single owner.
 		</p>
 		<CodeBlock
-			code={`await game.addAsset(recordingAssetId, {
-  relationship: 'recording',
-  sortOrder: 0,
-});
+			code={`// addAsset takes an Asset instance, a relationship string, and an optional sortOrder
+await game.addAsset(recordingAsset, 'recording', 0);
 
-const recordings = await game.getAssets({ relationship: 'recording' });
-await game.removeAsset(recordingAssetId);
+const recordings = await game.getAssets('recording');
+await game.removeAsset(recordingAsset.id);
 
-// Bulk reads
-const byEvent = await events.getAssets([game.id, otherGame.id]);`}
+// Collection-level helpers take the event id explicitly
+await events.addAsset(game.id, recordingAsset, 'recording', 0);
+const byEvent = await events.getAssets(game.id, 'recording');`}
 			language="typescript"
 		/>
 	</section>
@@ -127,33 +139,34 @@ const byEvent = await events.getAssets([game.id, otherGame.id]);`}
 
 		<h3>Event (Hierarchical, STI)</h3>
 		<CodeBlock
-			code={`class Event extends SmrtObject {
+			code={`class Event extends SmrtHierarchical {
   name: string
   seriesId?: string         // FK to EventSeries
-  parentEventId?: string    // Self-referencing hierarchy (no depth limit!)
+  parentId?: string | null  // Self-referencing hierarchy UUID (no depth limit!)
   typeId: string            // FK to EventType
   placeId?: string          // FK to Place (cross-package plain string)
   description?: string
-  startDate?: Date
-  endDate?: Date
+  startDate?: Date | null
+  endDate?: Date | null
   status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled' | 'postponed'
+  round?: number | null     // Sequence/round number in series
   metadata?: string         // JSON string with get/set/update helpers
 
-  // Hierarchy navigation
+  // Hierarchy navigation (inherited from SmrtHierarchical)
   async getParent(): Promise<Event | null>
   async getChildren(): Promise<Event[]>
   async getAncestors(): Promise<Event[]>
   async getDescendants(): Promise<Event[]>
   async getRootEvent(): Promise<Event>
-  async getHierarchy(): Promise<Event[]>
+  async getHierarchy(): Promise<{ ancestors; current; descendants }>
 
   // Participants
   async getParticipants(): Promise<EventParticipant[]>
 
-  // Owned assets via event_assets
-  async getAssets(opts?): Promise<Asset[]>
-  async addAsset(assetId, opts?: { relationship?, sortOrder? }): Promise<void>
-  async removeAsset(assetId): Promise<void>
+  // Owned assets via event_assets (positional args; addAsset takes an Asset instance)
+  async getAssets(relationship?: string): Promise<Asset[]>
+  async addAsset(asset: Asset, relationship?: string, sortOrder?: number): Promise<void>
+  async removeAsset(assetId: string, relationship?: string): Promise<void>
 }`}
 			language="typescript"
 		/>
@@ -201,7 +214,7 @@ class EventParticipant extends SmrtObject {
 			code={`// game → quarters → individual goal events
 const q1 = await events.create({
   name: '1st Quarter',
-  parentEventId: game.id,
+  parentId: game.id,
   startDate: new Date('2026-04-20T19:00:00'),
   endDate: new Date('2026-04-20T19:12:00'),
   typeId: periodTypeId,
@@ -210,7 +223,7 @@ await q1.save();
 
 const goal = await events.create({
   name: 'LeBron 3-pointer',
-  parentEventId: q1.id,
+  parentId: q1.id,
   startDate: new Date('2026-04-20T19:05:23'),
   typeId: scoreTypeId,
   metadata: JSON.stringify({ points: 3, player: 'LeBron James' }),
@@ -226,20 +239,37 @@ const root = await goal.getRootEvent();      // game`}
 	<section>
 		<h2>Gotchas</h2>
 		<ul>
-			<li><strong>No depth limit</strong> on event hierarchy — deep nesting can cause N+1 queries (load with <code>getDescendants()</code> in batch)</li>
-			<li><strong><code>placement</code> is numeric</strong>: used for both team ordering (0=home, 1=away) and rankings — context-dependent</li>
-			<li><strong><code>groupId</code> not enforced at DB level</strong>: for logical grouping only (e.g. team members in a game)</li>
+			<li>
+				<strong>No depth limit</strong> on event hierarchy — deep nesting can cause N+1 queries
+				(load with <code>getDescendants()</code> in batch)
+			</li>
+			<li>
+				<strong><code>placement</code> is numeric</strong>: used for both team ordering (0=home,
+				1=away) and rankings — context-dependent
+			</li>
+			<li>
+				<strong><code>groupId</code> not enforced at DB level</strong>: for logical grouping only
+				(e.g. team members in a game)
+			</li>
 			<li><strong>Optional tenancy</strong> with nullable <code>tenantId</code></li>
-			<li><strong>Metadata stored as JSON string</strong> with get/set/update helpers — graceful parse-error handling</li>
-			<li><strong>Owned asset helpers</strong>: use <code>Event.getAssets()</code> / <code>addAsset()</code> / <code>removeAsset()</code> or the matching <code>EventCollection</code> wrappers instead of generic <code>AssetAssociation</code></li>
+			<li>
+				<strong>Metadata stored as JSON string</strong> with get/set/update helpers — graceful parse-error
+				handling
+			</li>
+			<li>
+				<strong>Owned asset helpers</strong>: use <code>Event.getAssets()</code> /
+				<code>addAsset()</code>
+				/ <code>removeAsset()</code> or the matching <code>EventCollection</code> wrappers instead
+				of generic <code>AssetAssociation</code>
+			</li>
 		</ul>
 	</section>
 
 	<section>
 		<h2>UI Components</h2>
 		<p>
-			The <code>@happyvertical/smrt-events</code> package includes a Svelte 5 component for
-			displaying meeting information.
+			The <code>@happyvertical/smrt-events</code> package includes a Svelte 5 component for displaying
+			meeting information.
 		</p>
 
 		<h3>Available Components</h3>
@@ -278,8 +308,13 @@ const root = await goal.getRootEvent();      // game`}
 			<ul>
 				<li>Use event series for recurring events</li>
 				<li>Initialize default event types with <code>initializeDefaults()</code></li>
-				<li>Use <code>placement</code> for home/away or speaker order — keep the convention consistent</li>
-				<li>Use <code>event_assets</code> (via <code>addAsset()</code>) for recordings, agendas, slide decks</li>
+				<li>
+					Use <code>placement</code> for home/away or speaker order — keep the convention consistent
+				</li>
+				<li>
+					Use <code>event_assets</code> (via <code>addAsset()</code>) for recordings, agendas, slide
+					decks
+				</li>
 				<li>Eager-load descendants in batch instead of recursing one level at a time</li>
 			</ul>
 		</article>

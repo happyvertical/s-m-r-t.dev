@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { MeasurementInput } from '@happyvertical/smrt-svelte';
+	import type { MeasurementUnit } from '@happyvertical/smrt-svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
-	let heightValue = $state<{ value: number | null; unit: string }>({ value: null, unit: 'cm' });
-	let weightValue = $state<{ value: number | null; unit: string }>({ value: 75, unit: 'kg' });
-	let temperatureValue = $state<{ value: number | null; unit: string }>({ value: null, unit: 'C' });
-	let interactiveValue = $state<{ value: number | null; unit: string }>({ value: null, unit: 'm' });
+	let heightValue = $state<number | null>(null);
+	let heightUnit = $state<MeasurementUnit>('cm');
+	let lengthValue = $state<number | null>(2);
+	let lengthUnit = $state<MeasurementUnit>('m');
+	let interactiveValue = $state<number | null>(null);
+	let interactiveUnit = $state<MeasurementUnit>('m');
 
 	const measurementProps = [
 		{
@@ -29,15 +32,27 @@
 		},
 		{
 			name: 'value',
-			type: '{ value: number | null, unit: string }',
-			default: '{ value: null, unit: "" }',
-			description: 'Current measurement with value and unit (bindable)'
+			type: 'number | null',
+			default: 'null',
+			description: 'Current numeric value (bindable)'
+		},
+		{
+			name: 'unit',
+			type: 'MeasurementUnit',
+			default: 'undefined',
+			description: "Currently selected unit, e.g. 'cm' or 'ft' (bindable)"
 		},
 		{
 			name: 'units',
-			type: 'Array<{value: string, label: string}>',
-			description: 'Available units for measurement type',
-			required: true
+			type: 'MeasurementUnit[]',
+			default: 'undefined',
+			description: 'Available units to choose from'
+		},
+		{
+			name: 'placeholder',
+			type: 'string',
+			default: 'undefined',
+			description: 'Placeholder text shown when empty'
 		},
 		{
 			name: 'min',
@@ -52,10 +67,10 @@
 			description: 'Maximum allowed value'
 		},
 		{
-			name: 'decimals',
+			name: 'step',
 			type: 'number',
-			default: '2',
-			description: 'Number of decimal places'
+			default: 'undefined',
+			description: 'Step increment for the numeric value'
 		},
 		{
 			name: 'disabled',
@@ -77,38 +92,15 @@
 		},
 		{
 			name: 'onchange',
-			type: '(value: { value: number | null, unit: string }) => void',
+			type: '(measurement: MeasurementValue | null) => void',
 			default: 'undefined',
 			description: 'Callback when value or unit changes'
 		}
 	];
 
-	const heightUnits = [
-		{ value: 'cm', label: 'Centimeters' },
-		{ value: 'm', label: 'Meters' },
-		{ value: 'in', label: 'Inches' },
-		{ value: 'ft', label: 'Feet' }
-	];
+	const heightUnits: MeasurementUnit[] = ['cm', 'm', 'in', 'ft'];
 
-	const weightUnits = [
-		{ value: 'kg', label: 'Kilograms' },
-		{ value: 'g', label: 'Grams' },
-		{ value: 'lb', label: 'Pounds' },
-		{ value: 'oz', label: 'Ounces' }
-	];
-
-	const temperatureUnits = [
-		{ value: 'C', label: '°C' },
-		{ value: 'F', label: '°F' },
-		{ value: 'K', label: 'Kelvin' }
-	];
-
-	const distanceUnits = [
-		{ value: 'm', label: 'Meters' },
-		{ value: 'km', label: 'Kilometers' },
-		{ value: 'mi', label: 'Miles' },
-		{ value: 'ft', label: 'Feet' }
-	];
+	const distanceUnits: MeasurementUnit[] = ['m', 'cm', 'mm', 'ft', 'in', 'yd'];
 </script>
 
 <svelte:head>
@@ -130,8 +122,9 @@
 
 	<h1>MeasurementInput</h1>
 	<p class="lead">
-		A measurement input component combining a numeric value with a unit selector. Perfect for
-		physical quantities like height, weight, distance, temperature, and more.
+		A measurement input component combining a numeric value with a unit selector. The supported
+		units are length units (<code>ft</code>, <code>in</code>, <code>m</code>, <code>cm</code>,
+		<code>mm</code>, <code>yd</code>), making it ideal for heights, distances, and dimensions.
 	</p>
 
 	<h2>Installation</h2>
@@ -141,18 +134,16 @@
 	/>
 
 	<h2>Basic Usage - Height</h2>
-	<p>Measure height with common units like centimeters, meters, inches, or feet.</p>
+	<p>Measure height with common length units like centimeters, meters, inches, or feet.</p>
 
 	<ComponentExample
 		code={`<script lang="ts">
-  const heightUnits = [
-    { value: 'cm', label: 'Centimeters' },
-    { value: 'm', label: 'Meters' },
-    { value: 'in', label: 'Inches' },
-    { value: 'ft', label: 'Feet' }
-  ];
+  import type { MeasurementUnit } from '@happyvertical/smrt-svelte';
 
-  let value = $state({ value: null, unit: 'cm' });
+  const heightUnits: MeasurementUnit[] = ['cm', 'm', 'in', 'ft'];
+
+  let value = $state<number | null>(null);
+  let unit = $state<MeasurementUnit>('cm');
 </script>
 
 <MeasurementInput
@@ -160,47 +151,62 @@
   label="Height"
   units={heightUnits}
   bind:value
-/>`}
-	>
-		<MeasurementInput name="height" label="Height" units={heightUnits} bind:value={heightValue} />
-	</ComponentExample>
-
-	<h2>Weight Measurement</h2>
-	<p>Weight with default value and common units.</p>
-
-	<ComponentExample
-		code={`<MeasurementInput
-  name="weight"
-  label="Weight"
-  units={weightUnits}
-  value={{ value: 75, unit: 'kg' }}
-/>`}
-	>
-		<MeasurementInput name="weight" label="Weight" units={weightUnits} bind:value={weightValue} />
-	</ComponentExample>
-
-	<h2>Temperature with Precision</h2>
-	<p>Temperature measurement with 1 decimal place precision.</p>
-
-	<ComponentExample
-		code={`<MeasurementInput
-  name="temperature"
-  label="Temperature"
-  units={temperatureUnits}
-  decimals={1}
-  min={-273.15}
-  max={1000}
-  bind:value
+  bind:unit
 />`}
 	>
 		<MeasurementInput
-			name="temperature"
-			label="Temperature"
-			units={temperatureUnits}
-			decimals={1}
-			min={-273.15}
+			name="height"
+			label="Height"
+			units={heightUnits}
+			bind:value={heightValue}
+			bind:unit={heightUnit}
+		/>
+	</ComponentExample>
+
+	<h2>With Default Value</h2>
+	<p>Pre-populate the numeric value and unit.</p>
+
+	<ComponentExample
+		code={`<MeasurementInput
+  name="length"
+  label="Length"
+  units={distanceUnits}
+  value={2}
+  unit="m"
+/>`}
+	>
+		<MeasurementInput
+			name="length"
+			label="Length"
+			units={distanceUnits}
+			bind:value={lengthValue}
+			bind:unit={lengthUnit}
+		/>
+	</ComponentExample>
+
+	<h2>With Step and Range</h2>
+	<p>
+		Use <code>step</code> to control the numeric increment and <code>min</code>/<code>max</code> to constrain
+		the value.
+	</p>
+
+	<ComponentExample
+		code={`<MeasurementInput
+  name="thickness"
+  label="Thickness"
+  units={distanceUnits}
+  step={0.1}
+  min={0}
+  max={1000}
+/>`}
+	>
+		<MeasurementInput
+			name="thickness"
+			label="Thickness"
+			units={distanceUnits}
+			step={0.1}
+			min={0}
 			max={1000}
-			bind:value={temperatureValue}
 		/>
 	</ComponentExample>
 
@@ -224,17 +230,19 @@
 	<ComponentExample
 		code={`<MeasurementInput
   name="recorded"
-  label="Recorded Weight"
-  units={weightUnits}
-  value={{ value: 68.5, unit: 'kg' }}
+  label="Recorded Length"
+  units={distanceUnits}
+  value={68.5}
+  unit="cm"
   disabled
 />`}
 	>
 		<MeasurementInput
 			name="recorded"
-			label="Recorded Weight"
-			units={weightUnits}
-			value={{ value: 68.5, unit: 'kg' }}
+			label="Recorded Length"
+			units={distanceUnits}
+			value={68.5}
+			unit="cm"
 			disabled
 		/>
 	</ComponentExample>
@@ -247,7 +255,8 @@
   name="invalid"
   label="Height"
   units={heightUnits}
-  value={{ value: 500, unit: 'cm' }}
+  value={500}
+  unit="cm"
   error="Height seems unusually high. Please verify."
 />`}
 	>
@@ -255,7 +264,8 @@
 			name="invalid"
 			label="Height"
 			units={heightUnits}
-			value={{ value: 500, unit: 'cm' }}
+			value={500}
+			unit="cm"
 			error="Height seems unusually high. Please verify."
 		/>
 	</ComponentExample>
@@ -265,9 +275,9 @@
 	<ul>
 		<li>"one hundred seventy five centimeters" → {'{'} value: 175, unit: 'cm' {'}'}</li>
 		<li>"five foot ten" → {'{'} value: 5.83, unit: 'ft' {'}'} (converts 5'10" to decimal)</li>
-		<li>"seventy five kilograms" → {'{'} value: 75, unit: 'kg' {'}'}</li>
-		<li>"twenty two point five degrees celsius" → {'{'} value: 22.5, unit: 'C' {'}'}</li>
-		<li>"ten miles" → {'{'} value: 10, unit: 'mi' {'}'}</li>
+		<li>"two point five meters" → {'{'} value: 2.5, unit: 'm' {'}'}</li>
+		<li>"twelve inches" → {'{'} value: 12, unit: 'in' {'}'}</li>
+		<li>"three yards" → {'{'} value: 3, unit: 'yd' {'}'}</li>
 	</ul>
 
 	<CodeBlock
@@ -286,7 +296,10 @@
 
 	<ComponentExample
 		code={`<script lang="ts">
-  let value = $state({ value: null, unit: 'm' });
+  import type { MeasurementUnit } from '@happyvertical/smrt-svelte';
+
+  let value = $state<number | null>(null);
+  let unit = $state<MeasurementUnit>('m');
 </script>
 
 <MeasurementInput
@@ -294,18 +307,20 @@
   label="Distance"
   units={distanceUnits}
   bind:value
+  bind:unit
 />
-<p>Value: {value.value ?? '(empty)'} {value.unit}</p>`}
+<p>Value: {value ?? '(empty)'} {unit}</p>`}
 	>
 		<MeasurementInput
 			name="interactive"
 			label="Distance"
 			units={distanceUnits}
 			bind:value={interactiveValue}
+			bind:unit={interactiveUnit}
 		/>
 		<p style="margin-top: 1rem; color: #666;">
-			Value: {interactiveValue.value ?? '(empty)'}
-			{interactiveValue.unit}
+			Value: {interactiveValue ?? '(empty)'}
+			{interactiveUnit}
 		</p>
 	</ComponentExample>
 
@@ -315,17 +330,15 @@
 	<h2>TypeScript</h2>
 	<CodeBlock
 		code={`import { MeasurementInput } from '@happyvertical/smrt-svelte';
+import type { MeasurementUnit, MeasurementValue } from '@happyvertical/smrt-svelte';
 
-// Measurement value interface
+// Supported units (length only)
+type MeasurementUnit = 'ft' | 'in' | 'm' | 'cm' | 'mm' | 'yd';
+
+// Value emitted by onchange
 interface MeasurementValue {
-  value: number | null;
-  unit: string;
-}
-
-// Unit option interface
-interface Unit {
-  value: string;
-  label: string;
+  value: number;
+  unit: MeasurementUnit;
 }
 
 // Props interface
@@ -333,61 +346,41 @@ interface Props {
   name: string;
   label?: string;
   description?: string;
-  value?: MeasurementValue;
-  units: Unit[];
+  placeholder?: string;
+  value?: number | null;   // bindable
+  unit?: MeasurementUnit;  // bindable
+  units?: MeasurementUnit[];
   min?: number;
   max?: number;
-  decimals?: number;
+  step?: number;
   disabled?: boolean;
   required?: boolean;
   error?: string;
-  onchange?: (value: MeasurementValue) => void;
+  onchange?: (measurement: MeasurementValue | null) => void;
 }`}
 		language="typescript"
 	/>
 
-	<h2>Common Unit Sets</h2>
-	<p>Pre-defined unit arrays for common measurement types:</p>
+	<h2>Supported Units</h2>
+	<p>
+		<code>units</code> is a list of <code>MeasurementUnit</code> values. The component supports length
+		units only; pass any subset you want to offer:
+	</p>
 
 	<CodeBlock
-		code={`// Length/Height
-const heightUnits = [
-  { value: 'cm', label: 'Centimeters' },
-  { value: 'm', label: 'Meters' },
-  { value: 'in', label: 'Inches' },
-  { value: 'ft', label: 'Feet' }
-];
+		code={`import type { MeasurementUnit } from '@happyvertical/smrt-svelte';
 
-// Weight/Mass
-const weightUnits = [
-  { value: 'kg', label: 'Kilograms' },
-  { value: 'g', label: 'Grams' },
-  { value: 'lb', label: 'Pounds' },
-  { value: 'oz', label: 'Ounces' }
-];
+// All supported units:
+// 'ft' | 'in' | 'm' | 'cm' | 'mm' | 'yd'
 
-// Temperature
-const temperatureUnits = [
-  { value: 'C', label: '°C' },
-  { value: 'F', label: '°F' },
-  { value: 'K', label: 'Kelvin' }
-];
+// Metric height
+const heightUnits: MeasurementUnit[] = ['cm', 'm', 'in', 'ft'];
 
-// Distance
-const distanceUnits = [
-  { value: 'm', label: 'Meters' },
-  { value: 'km', label: 'Kilometers' },
-  { value: 'mi', label: 'Miles' },
-  { value: 'ft', label: 'Feet' }
-];
+// Full length set
+const distanceUnits: MeasurementUnit[] = ['m', 'cm', 'mm', 'ft', 'in', 'yd'];
 
-// Volume
-const volumeUnits = [
-  { value: 'ml', label: 'Milliliters' },
-  { value: 'l', label: 'Liters' },
-  { value: 'cup', label: 'Cups' },
-  { value: 'gal', label: 'Gallons' }
-];`}
+// Small dimensions
+const dimensionUnits: MeasurementUnit[] = ['mm', 'cm', 'in'];`}
 		language="typescript"
 	/>
 
