@@ -4,6 +4,6 @@
 	let { children } = $props();
 </script>
 
-<DocsShell sectionId="components">
+<DocsShell sectionId="modules">
 	{@render children()}
 </DocsShell>
