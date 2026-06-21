@@ -230,6 +230,22 @@
 					<td>ModuleUIRegistry — the cross-package component registry</td>
 				</tr>
 				<tr>
+					<td><code>@happyvertical/smrt-svelte/workspace</code></td>
+					<td>WorkspaceShell, RoleShell, NavTree, Breadcrumbs, navTreeFromManifest, ToolsDock + defineToolsDock</td>
+				</tr>
+				<tr>
+					<td><code>@happyvertical/smrt-svelte/workspace/server</code></td>
+					<td>composeDockAvailability — server-side tool gate evaluation</td>
+				</tr>
+				<tr>
+					<td><code>@happyvertical/smrt-svelte/i18n</code></td>
+					<td>Client i18n: useI18n, Trans, defineMessages (languages-free)</td>
+				</tr>
+				<tr>
+					<td><code>@happyvertical/smrt-svelte/i18n/server</code></td>
+					<td>buildI18nSnapshot — Node-only server snapshot builder</td>
+				</tr>
+				<tr>
 					<td><code>@happyvertical/smrt-svelte/browser-ai</code></td>
 					<td>Bundled browser AI client (STT/TTS/LLM adapters, capability detection)</td>
 				</tr>
@@ -384,6 +400,197 @@ const InvoiceCard = ModuleUIRegistry.get('@happyvertical/smrt-commerce', 'invoic
 		</p>
 	</section>
 
+	<section id="workspace">
+		<h2>Workspace Shell Primitives</h2>
+		<p>
+			The <code>@happyvertical/smrt-svelte/workspace</code> subpath ships SvelteKit-agnostic, SSR-safe
+			admin-shell primitives: a layout shell, a multi-role wrapper, nav primitives, and a right-rail
+			tools dock. They carry no domain coupling and consume <code>--smrt-color-*</code> tokens
+			directly — drop them into any Svelte 5 app.
+		</p>
+
+		<h3>WorkspaceShell &amp; RoleShell</h3>
+		<p>
+			<code>WorkspaceShell</code> is a composition of snippet slots (<code>brand</code>,
+			<code>nav</code>, <code>sidebarFooter</code>, <code>topbarActions</code>,
+			<code>inspectorRail</code>, …) that lays out a sidebar + sticky topbar + main content + optional
+			inspector panel. It is responsive (sidebar collapses to an icon rail on tablet, becomes a drawer
+			on mobile) and owns no domain logic. <code>RoleShell</code> is an opinionated thin wrapper over
+			it: pass a list of <code>RoleConfig</code>s and the active role id, and it wires that role's nav
+			<code>sections</code> into the sidebar and breadcrumb trail. An optional <code>color</code> on the
+			role is exposed as a <code>--smrt-role-color</code> custom property for theming. (Missing-role
+			behaviour: throws in dev, degrades to the first/empty role in production.)
+		</p>
+		<CodeBlock
+			code={`<script lang="ts">
+  import { RoleShell } from '@happyvertical/smrt-svelte/workspace';
+  import type { RoleConfig } from '@happyvertical/smrt-svelte/workspace';
+  import { page } from '$app/state';
+
+  const roles: RoleConfig[] = [
+    {
+      id: 'admin',
+      label: 'Admin',
+      color: 'blue',
+      sections: [
+        { label: 'Content', children: [
+          { href: '/api/v1/articles', label: 'Articles' },
+        ] },
+      ],
+    },
+  ];
+</script>
+
+<RoleShell {roles} currentRole="admin" currentPath={page.url.pathname}>
+  {#snippet topbarActions()}<AccountMenu />{/snippet}
+</RoleShell>`}
+			language="svelte"
+		/>
+
+		<h3>navTreeFromManifest — manifest-driven nav</h3>
+		<p>
+			Rather than hand-writing nav config for dozens of <code>@smrt()</code> classes,
+			<code>navTreeFromManifest(manifest, options)</code> is a pure (data-in/data-out) helper that
+			turns a SMRT manifest into the <code>NavSection[]</code> shape <code>NavTree</code> and
+			<code>RoleConfig.sections</code> consume. It filters out collection classes,
+			<code>visibility: 'internal' | 'test'</code> entries, and objects with no REST <code>list</code>
+			route, then groups the rest into sections (alphabetically sorted for deterministic output).
+		</p>
+		<ul>
+			<li>
+				<strong>STI ancestor-walk dedup</strong> — STI subtypes that share an ancestor's
+				<code>collection</code> (and thus the same polymorphic REST URL) are suppressed by walking the
+				<code>extends</code> chain, so you get one nav link per route instead of duplicates.
+			</li>
+			<li>
+				<strong>Decoupled from RBAC</strong> — pass <code>permittedResources</code> (a plain array of
+				qualified class names) to filter per role; resolve the allow-list with your
+				<code>PermissionResolver</code> at the <code>+layout.server.ts</code> level. The helper also
+				expands the allow-list up STI parents so a permitted subtype keeps its shared-route link.
+			</li>
+			<li>
+				<strong>Labels/icons/sections</strong> — <code>@smrt({'{'} ui: {'{'} label, icon {'}'} {'}'})</code>
+				drives the item label/icon; <code>sectionHints</code> maps a qualifier substring to a section
+				title; <code>basePath</code> (default <code>/api/v1</code>) prefixes hrefs.
+			</li>
+		</ul>
+		<CodeBlock
+			code={`import { manifest } from '$lib/manifest';
+import { navTreeFromManifest } from '@happyvertical/smrt-svelte/workspace';
+
+const sections = navTreeFromManifest(manifest, {
+  sectionHints: {
+    '@happyvertical/smrt-content': 'Content',
+    '@happyvertical/smrt-commerce': 'Commerce',
+  },
+  permittedResources: editorAllowList, // optional per-role filter
+});
+// → feed straight into RoleConfig.sections or <NavTree items={sections} />`}
+			language="typescript"
+		/>
+
+		<h3>ToolsDock &amp; defineToolsDock</h3>
+		<p>
+			<code>defineToolsDock(options)</code> creates a reactive right-rail dock registry; the
+			<code>ToolsDock</code> component renders it, and <code>useToolsDock()</code> reads the instance
+			from context. Each <code>ToolDef</code> has an arbitrary string <code>id</code>, a
+			<code>label</code>, an icon (glyph or <code>iconComponent</code>), and a panel
+			<code>component</code> rendered when active. The dock exposes a small reactive API
+			(<code>open()</code>/<code>close()</code>/<code>toggle()</code>, <code>setContext()</code>,
+			<code>refreshAvailability()</code>, typed <code>on()</code>/<code>emit()</code> events) and the
+			context blob (<code>{'{'} type, title, url, data, actions {'}'}</code>) is generically typed so
+			tool components get typed <code>context.data</code> / <code>context.actions</code> without a cast.
+		</p>
+		<p>
+			Tools can declare <code>gates</code> (e.g. <code>'permission:articles.publish'</code>,
+			<code>'feature:video-tools'</code>) evaluated <strong>server-side</strong> via
+			<code>composeDockAvailability</code> from <code>@happyvertical/smrt-svelte/workspace/server</code>.
+			Each gate's prefix selects a caller-supplied evaluator; the framework ships no built-in evaluators
+			and throws on an unknown prefix (loud-fail beats silent-leak).
+		</p>
+		<CodeBlock
+			code={`import { defineToolsDock } from '@happyvertical/smrt-svelte/workspace';
+import ChatPanel from './ChatPanel.svelte';
+import MessageSquare from 'lucide-svelte/icons/message-square';
+
+const dock = defineToolsDock({
+  tools: [
+    {
+      id: 'chat',
+      label: 'Chat',
+      iconComponent: MessageSquare,
+      component: ChatPanel,
+      gates: ['permission:chat.use'], // evaluated server-side
+    },
+  ],
+});
+
+dock.setContext({ type: 'route', data: { siteSlug: 'demo' } });
+dock.open('chat');`}
+			language="typescript"
+		/>
+	</section>
+
+	<section id="i18n">
+		<h2>Internationalization (i18n)</h2>
+		<p>
+			smrt-svelte ships a two-layer i18n system split across two subpaths so the heavy languages
+			resolver never reaches the client bundle. The browser layer
+			(<code>@happyvertical/smrt-svelte/i18n</code>) is languages-free; the server bridge
+			(<code>@happyvertical/smrt-svelte/i18n/server</code>) pulls
+			<a href="/modules/smrt-languages">smrt-languages</a> and is Node-only.
+		</p>
+		<ul>
+			<li>
+				<strong><code>defineMessages()</code></strong> — a package registers its English code-default
+				templates (keys like <code>chat.message_input.placeholder</code>).
+			</li>
+			<li>
+				<strong><code>buildI18nSnapshot({'{'} locale, tenantId?, db?, keys? {'}'})</code></strong> —
+				server-side, resolves a <code>{'{'} locale, messages {'}'}</code> snapshot by walking each key
+				through the code → app/tenant override → locale chain. Variables are <em>not</em> applied
+				server-side; the client interpolates with the same renderer.
+			</li>
+			<li>
+				<strong><code>useI18n()</code></strong> — returns the reactive store with
+				<code>t(key, vars)</code> and a reactive <code>locale</code>. Safe to call outside a
+				<code>Provider</code> (falls back to registered English defaults). <code>&lt;Trans&gt;</code>
+				is the component form.
+			</li>
+		</ul>
+		<CodeBlock
+			code={`// +layout.server.ts -- resolve the snapshot for the request locale
+import { buildI18nSnapshot } from '@happyvertical/smrt-svelte/i18n/server';
+
+export async function load({ locals }) {
+  const i18n = await buildI18nSnapshot({
+    locale: locals.locale ?? 'en',
+    tenantId: locals.tenantId,
+    db: locals.db,          // omit to resolve code defaults only
+  });
+  return { i18n };
+}`}
+			language="typescript"
+		/>
+		<CodeBlock
+			code={`<!-- +layout.svelte -- hand the snapshot to Provider -->
+<script>
+  import { Provider } from '@happyvertical/smrt-svelte';
+  let { data, children } = $props();
+</script>
+
+<Provider i18n={data.i18n}>{@render children()}</Provider>
+
+<!-- any component -->
+<script lang="ts">
+  import { useI18n } from '@happyvertical/smrt-svelte/i18n';
+  const { t } = useI18n();
+</script>
+<input placeholder={t('chat.message_input.placeholder')} />`}
+			language="svelte"
+		/>
+	</section>
+
 	<section id="browser-ai">
 		<h2>Browser AI</h2>
 		<p>
@@ -437,6 +644,45 @@ console.log(stats);
 // pass the adapter type (LLM also takes an optional modelId)
 const stt = getCachedSTT('whisper-cpp');`}
 			language="typescript"
+		/>
+
+		<h3>Streaming chat with useLLM</h3>
+		<p>
+			<code>useLLM()</code> runs an LLM fully on-device. Streaming is surfaced through the
+			<code>onToken</code> callback on <code>chat(text, {'{'} systemPrompt?, onToken? {'}'})</code> —
+			tokens arrive incrementally and the same full string is also returned when generation finishes.
+			The hook exposes reactive <code>isInitializing</code>, <code>isGenerating</code>,
+			<code>downloadProgress</code> (a percent), <code>isReady</code>, <code>currentModel</code>, and
+			<code>error</code>, plus <code>initialize()</code> / <code>unload()</code>.
+		</p>
+		<CodeBlock
+			code={`<script lang="ts">
+  import { useLLM } from '@happyvertical/smrt-svelte';
+
+  const llm = useLLM({ systemPrompt: 'You are a helpful assistant.' });
+
+  let input = $state('');
+  let response = $state('');
+
+  async function send() {
+    response = '';
+    // onToken streams partial output; the resolved value is the full text.
+    await llm.chat(input, {
+      onToken: (token) => { response += token; },
+    });
+  }
+</script>
+
+{#if llm.isInitializing}
+  <p>Loading model… {llm.downloadProgress}%</p>
+{:else}
+  <form onsubmit={send}>
+    <input bind:value={input} />
+    <button disabled={llm.isGenerating}>Send</button>
+  </form>
+  <p>{response}</p>
+{/if}`}
+			language="svelte"
 		/>
 	</section>
 
@@ -515,6 +761,14 @@ const stt = getCachedSTT('whisper-cpp');`}
 			<li>
 				<code>src/registry/</code> — <code>ModuleUIRegistry</code> for cross-package component discovery
 			</li>
+			<li>
+				<code>src/components/workspace/</code> — <code>WorkspaceShell</code>, <code>RoleShell</code>,
+				<code>NavTree</code>, <code>navTreeFromManifest</code>, tools dock
+			</li>
+			<li>
+				<code>src/i18n/</code> — client i18n (<code>useI18n</code>, <code>Trans</code>) +
+				<code>server.ts</code> snapshot builder
+			</li>
 		</ul>
 	</section>
 
@@ -532,6 +786,10 @@ const stt = getCachedSTT('whisper-cpp');`}
 			<a href="/modules/smrt-playground" class="link-card">
 				<h3>smrt-playground</h3>
 				<p>Discovery host for every registered ModuleUIRegistry slot</p>
+			</a>
+			<a href="/modules/smrt-languages" class="link-card">
+				<h3>smrt-languages</h3>
+				<p>Translation resolver behind the i18n server snapshot</p>
 			</a>
 			<a href="/components" class="link-card">
 				<h3>Component Catalog</h3>

@@ -48,7 +48,12 @@
 				<li><strong>UI Slots</strong>: Admin panel component declarations for configuration</li>
 				<li>
 					<strong>Opt-in Signal Handlers</strong>: <code>manageProcessSignals: true</code> for single-agent
-					processes
+					processes (off by default — the host owns lifecycle)
+				</li>
+				<li>
+					<strong>Guarded Background Execution</strong>: when run via smrt-jobs,
+					<code>@backgroundEligible()</code> method allowlists and a per-tenant in-flight job cap bound
+					the dispatch surface
 				</li>
 				<li>
 					<strong>smrt-prompts Adoption</strong>: AI methods register templates via
@@ -478,6 +483,83 @@ class MyAgent extends Agent {
     await super.shutdown(); // Tears down signal handlers
   }
 }`}
+				language="typescript"
+			/>
+		</section>
+
+		<section id="background-execution">
+			<h2>Background Execution &amp; Safety Limits</h2>
+			<p>
+				When an agent runs as a scheduled or queued background job it goes through the
+				<a href="/modules/smrt-jobs">smrt-jobs</a> runtime, which adds two opt-in guards around the
+				method-dispatch surface. Both ship in <code>@happyvertical/smrt-jobs</code> (and are re-exported
+				from its package root); they apply to any <code>SmrtObject</code> method the runner can invoke
+				from a persisted job row, agents included. The agents package dispatches methods through an
+				equivalent path, so the same allowlist marker governs it.
+			</p>
+
+			<h3>backgroundEligible() — method allowlist</h3>
+			<p>
+				The runner only ever invokes methods that already exist on the prototype (no
+				<code>eval</code>, no dynamic import). A class can narrow that to an explicit contract with the
+				<code>@backgroundEligible()</code> decorator — a legacy (<code>experimentalDecorators</code>)
+				method decorator, the mode the SMRT monorepo compiles with. Applying it builds up a static
+				<code>backgroundEligibleMethods</code> set on the class. Once <em>any</em> method is marked, the
+				runner refuses to dispatch a job whose <code>method</code> is not in the set. For non-decorator
+				code, <code>markBackgroundEligible(ctor, ...methods)</code> does the same.
+			</p>
+			<CodeBlock
+				code={`import { backgroundEligible } from '@happyvertical/smrt-jobs';
+import { Agent } from '@happyvertical/smrt-agents';
+import { smrt } from '@happyvertical/smrt-core';
+
+@smrt()
+class ReportAgent extends Agent {
+  protected config = {};
+
+  @backgroundEligible()
+  async regenerate(): Promise<void> {} // reachable from a job
+
+  async deleteEverything(): Promise<void> {} // NOT reachable -- not on the allowlist
+
+  async run(): Promise<void> {}
+}`}
+				language="typescript"
+			/>
+			<p>
+				The runner gates dispatch via <code>isBackgroundEligibleMethod(ctor, method)</code>: it returns
+				<code>true</code> when the class declared no allowlist (the default, back-compatible behaviour)
+				or the method is on the list, and <code>false</code> otherwise.
+			</p>
+
+			<h3>Per-tenant in-flight job cap</h3>
+			<p>
+				So one tenant can't exhaust the shared worker pool (a cross-tenant denial of service), the jobs
+				collection bounds how many non-terminal (pending/running) jobs a single tenant may hold at
+				once. The default is <code>DEFAULT_TENANT_JOB_CAP</code> (<strong>10,000</strong>), enforced in
+				one place — <code>assertWithinTenantCreationCap()</code> — shared by the <code>bg()</code> builder
+				and the ScheduleRunner. Exceeding it throws <code>TenantJobCapExceededError</code>.
+			</p>
+			<ul>
+				<li>The cap applies to the <strong>ambient tenant</strong>; global (no-context) jobs are exempt.</li>
+				<li>Override per enqueue with <code>.tenantJobCap(max)</code>.</li>
+				<li>Pass <code>0</code> (or a negative value) to disable it for trusted internal callers.</li>
+				<li>
+					A separate ceiling, <code>MAX_JOB_RETRIES</code> (25), clamps requested retries so a
+					misconfigured <code>.retries(n)</code> can't pin a worker on a poison job.
+				</li>
+			</ul>
+			<CodeBlock
+				code={`import { bg } from '@happyvertical/smrt-jobs';
+
+// Background-run an agent method with a tighter per-tenant cap.
+await bg(reportAgent)
+  .regenerate()
+  .tenantJobCap(500) // refuse a 501st in-flight job for this tenant
+  .enqueue();
+
+// Trusted internal caller: disable the cap entirely.
+await bg(reportAgent).regenerate().tenantJobCap(0).enqueue();`}
 				language="typescript"
 			/>
 		</section>

@@ -47,7 +47,10 @@ class DataProcessor extends Agent {
 		<li>All properties auto-persist to database via SmrtObject</li>
 		<li>Uses Single Table Inheritance (STI) - all agents share the <code>agents</code> table</li>
 		<li>Must apply <code>@smrt()</code> decorator on subclasses</li>
-		<li>Automatic SIGTERM/SIGINT signal handling for graceful shutdown</li>
+		<li>
+			<strong>Opt-in</strong> SIGTERM/SIGINT signal handling for graceful shutdown — pass
+			<code>manageProcessSignals: true</code> in agent options (off by default)
+		</li>
 	</ul>
 
 	<h2>Agent Lifecycle</h2>
@@ -60,18 +63,26 @@ class DataProcessor extends Agent {
 │        │                            ▼                    │
 │        │                        [error]                  │
 │                                                          │
-│   shutdown() ◄─── SIGTERM/SIGINT                        │
+│   shutdown() ◄─── SIGTERM/SIGINT (only when             │
+│                   manageProcessSignals: true)           │
 └──────────────────────────────────────────────────────────┘`}</code
 		></pre>
 
 	<table>
 		<thead><tr><th>Method</th><th>Purpose</th></tr></thead>
 		<tbody>
-			<tr><td><code>initialize()</code></td><td>Setup signal handlers, prepare resources</td></tr>
+			<tr
+				><td><code>initialize()</code></td><td
+					>Prepare resources; registers signal handlers only when
+					<code>manageProcessSignals: true</code></td
+				></tr
+			>
 			<tr><td><code>validate()</code></td><td>Check configuration and dependencies</td></tr>
 			<tr><td><code>run()</code></td><td>Main agent logic (abstract, must implement)</td></tr>
 			<tr
-				><td><code>shutdown()</code></td><td>Cleanup resources, remove signal handlers</td></tr
+				><td><code>shutdown()</code></td><td
+					>Cleanup resources; deregisters any signal handlers that were registered</td
+				></tr
 			>
 			<tr><td><code>execute()</code></td><td>Orchestrates full lifecycle</td></tr>
 		</tbody>
@@ -103,7 +114,7 @@ class WebScraper extends Agent {
 
   async shutdown(): Promise<void> {
     this.logger.info('Cleaning up');
-    await super.shutdown(); // Cleans up signal handlers
+    await super.shutdown(); // Tears down any opt-in signal handlers
   }
 }
 
@@ -114,14 +125,25 @@ await agent.execute();`}</code
 
 	<h2>Signal Handling (Graceful Shutdown)</h2>
 	<p>
-		Agents automatically register SIGTERM and SIGINT handlers during <code>initialize()</code>.
-		When a signal is received, the agent transitions to <code>shutdown</code> status and calls
-		<code>shutdown()</code> for cleanup. Signal handlers are automatically removed during shutdown.
+		Signal handling is <strong>opt-in</strong>, not automatic. Agents register SIGTERM and SIGINT
+		handlers during <code>initialize()</code> <strong>only when</strong> the agent is constructed
+		with <code>manageProcessSignals: true</code>. When enabled and a signal is received, the agent
+		transitions to <code>shutdown</code> status and calls <code>shutdown()</code> for cleanup; the
+		base <code>shutdown()</code> then deregisters those handlers (so always call
+		<code>super.shutdown()</code> from an override). The first handler to finish calls
+		<code>process.exit()</code>, so enable this on
+		<strong>single-agent entry points only</strong> — when several agents share a process (e.g. under
+		the smrt-jobs runtime) leave it off and let the host own process lifecycle.
 	</p>
 	<pre><code
 			>{`@smrt()
 class LongRunningAgent extends Agent {
   protected config = {};
+
+  constructor(options: AgentOptions = {}) {
+    // Opt in to SIGTERM/SIGINT handling for this single-agent process.
+    super({ ...options, manageProcessSignals: true });
+  }
 
   async run(): Promise<void> {
     while (this.status !== 'shutdown') {
@@ -133,7 +155,7 @@ class LongRunningAgent extends Agent {
   async shutdown(): Promise<void> {
     this.logger.info('Graceful shutdown initiated');
     // Finish current work, flush buffers, etc.
-    await super.shutdown(); // Always call super to clean up signal handlers
+    await super.shutdown(); // Tears down the opt-in signal handlers
   }
 }`}</code
 		></pre>
@@ -179,17 +201,35 @@ class Crawler extends Agent {
 	</p>
 	<ul>
 		<li><strong>Explicit binding:</strong> Row exists for tenant (source: 'explicit')</li>
-		<li><strong>Inherited:</strong> Walks up tenant hierarchy (source: 'inherited')</li>
+		<li><strong>Inherited:</strong> Walks up the tenant hierarchy (source: 'inherited')</li>
 		<li><strong>Permissions:</strong> Manifest defaults merged with per-tenant overrides</li>
 	</ul>
+	<p>
+		Resolving effective availability is <strong>not</strong> a plain <code>list()</code> query — a
+		flat list would miss inherited bindings. Use <code>resolveForTenant(tenantId, getAncestorIds)</code>,
+		which walks the ancestor chain (you supply the ancestor-id resolver, typically from smrt-users
+		tenant resolution) and returns one <code>ResolvedAgentAvailability</code> per available agent,
+		each tagged <code>source: 'explicit' | 'inherited'</code> with the merged permission snapshot. For a
+		single explicit row, <code>findByTenantAndClass(tenantId, agentClass)</code> is the direct lookup.
+	</p>
 	<pre><code
-			>{`import { TenantAgent, TenantAgentCollection } from '@happyvertical/smrt-agents';
+			>{`import { TenantAgentCollection } from '@happyvertical/smrt-agents';
 
-// Check if agent is available for a tenant
 const tenantAgents = await TenantAgentCollection.create({ db: 'app.db' });
-const binding = await tenantAgents.list({
-  where: { agentType: 'Praeco', tenantId: 'tenant-123' }
-});`}</code
+
+// Direct lookup of the explicit binding (no hierarchy walk).
+const binding = await tenantAgents.findByTenantAndClass('tenant-123', 'Praeco');
+
+// Effective availability across the hierarchy. getAncestorIds returns the
+// tenant's ancestors (parent → root); wire it to your tenant resolver.
+const availability = await tenantAgents.resolveForTenant(
+  'tenant-123',
+  getAncestorIds,
+);
+for (const entry of availability) {
+  console.log(entry.source);      // 'explicit' | 'inherited'
+  console.log(entry.permissions); // merged manifest + override snapshot
+}`}</code
 		></pre>
 
 	<h2>AgentSchedule</h2>
@@ -412,19 +452,97 @@ AgentUIRegistry.register('Praeco', 'sources', SourcesPanel);`}</code
 		</tbody>
 	</table>
 
+	<h2>Background Execution &amp; Safety Limits</h2>
+	<p>
+		Agents that run as background jobs go through the <a href="/modules/smrt-jobs">smrt-jobs</a>
+		runtime, which adds two opt-in guards around the dispatch surface. Both live in
+		<code>@happyvertical/smrt-jobs</code> (re-exported from its package root) and apply to any
+		<code>SmrtObject</code> method the runner can invoke from a persisted job row, agents included.
+	</p>
+
+	<h3>backgroundEligible() — method allowlist</h3>
+	<p>
+		The runner only invokes methods that already exist on the prototype (no <code>eval</code>, no
+		dynamic import), but a class can tighten that further. The
+		<code>@backgroundEligible()</code> decorator (a legacy / <code>experimentalDecorators</code>
+		method decorator, which is the mode the SMRT monorepo compiles with) builds up a static
+		<code>backgroundEligibleMethods</code> allowlist on the class. Once <em>any</em> method is marked,
+		the runner refuses to dispatch a job whose <code>method</code> is not on the list — turning the
+		dispatch surface from &ldquo;any prototype method&rdquo; into an explicit contract. In
+		non-decorator code, <code>markBackgroundEligible(ctor, ...methods)</code> does the same thing.
+	</p>
+	<pre><code
+			>{`import { backgroundEligible } from '@happyvertical/smrt-jobs';
+import { Agent } from '@happyvertical/smrt-agents';
+import { smrt } from '@happyvertical/smrt-core';
+
+@smrt()
+class ReportAgent extends Agent {
+  protected config = {};
+
+  @backgroundEligible()
+  async regenerate(): Promise<void> {} // reachable from a job
+
+  async deleteEverything(): Promise<void> {} // NOT reachable — no allowlist entry
+
+  async run(): Promise<void> {}
+}`}</code
+		></pre>
+	<p>
+		Enforcement happens in the runner via <code>isBackgroundEligibleMethod(ctor, method)</code>: it
+		returns <code>true</code> when the class declared no allowlist (the default, back-compatible
+		behaviour) or when the method is on the list, and <code>false</code> otherwise.
+	</p>
+
+	<h3>Per-tenant in-flight job cap</h3>
+	<p>
+		To stop one tenant from exhausting the shared worker pool (a cross-tenant denial of service), the
+		jobs collection bounds how many non-terminal (pending/running) jobs a single tenant may hold at
+		once. The default cap is <code>DEFAULT_TENANT_JOB_CAP</code> (<strong>10,000</strong>) and is
+		enforced in one place — <code>assertWithinTenantCreationCap()</code> — shared by the
+		<code>bg()</code> builder and the ScheduleRunner. Exceeding it throws
+		<code>TenantJobCapExceededError</code>.
+	</p>
+	<ul>
+		<li>
+			The cap applies to the <strong>ambient tenant</strong>; global (no-tenant-context) jobs are
+			exempt.
+		</li>
+		<li>Override per enqueue with <code>.tenantJobCap(max)</code>.</li>
+		<li>
+			Pass <code>0</code> (or a negative value) to disable the cap for trusted internal callers.
+		</li>
+		<li>
+			A separate ceiling, <code>MAX_JOB_RETRIES</code> (25), clamps requested retry counts so a
+			misconfigured <code>.retries(n)</code> can't pin a worker on a poison job forever.
+		</li>
+	</ul>
+	<pre><code
+			>{`import { bg } from '@happyvertical/smrt-jobs';
+
+// Enqueue a background run of an agent method, with a tighter per-tenant cap.
+await bg(reportAgent)
+  .regenerate()
+  .tenantJobCap(500) // refuse a 501st in-flight job for this tenant
+  .enqueue();
+
+// Trusted internal caller: disable the cap entirely.
+await bg(reportAgent).regenerate().tenantJobCap(0).enqueue();`}</code
+		></pre>
+
 	<h2>Best Practices</h2>
 
 	<h3>1. Always Call super Methods</h3>
 	<pre><code
 			>{`async initialize(): Promise<this> {
-  await super.initialize(); // Sets up signal handlers
+  await super.initialize(); // Registers signal handlers IF manageProcessSignals: true
   // Your initialization...
   return this;
 }
 
 async shutdown(): Promise<void> {
   // Your cleanup...
-  await super.shutdown(); // Removes signal handlers
+  await super.shutdown(); // Deregisters any handlers that were registered
 }`}</code
 		></pre>
 
