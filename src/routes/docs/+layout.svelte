@@ -33,24 +33,6 @@
 			]
 		},
 		{
-			title: 'Concepts',
-			items: [
-				{ label: 'Testing', href: '/docs/concepts/testing' },
-				{ label: 'Configuration', href: '/docs/concepts/configuration' },
-				{ label: 'Multi-tenancy', href: '/docs/concepts/multi-tenancy' },
-				{ label: 'Context Memory', href: '/docs/concepts/context-memory' },
-				{ label: 'Semantic Search', href: '/docs/concepts/semantic-search' }
-			]
-		},
-		{
-			title: 'Guides',
-			items: [
-				{ label: 'Multi-tenant lifecycle', href: '/docs/guides/multi-tenant-lifecycle' },
-				{ label: 'Expose app via MCP', href: '/docs/guides/expose-app-via-mcp' },
-				{ label: 'Add semantic search', href: '/docs/guides/add-semantic-search' }
-			]
-		},
-		{
 			title: 'Components',
 			items: [
 				{ label: 'Overview', href: '/components' },
