@@ -42,6 +42,47 @@ console.log(task.id); // auto-generated UUID`;
 		<li><a href="/docs/agents/dispatch">Dispatch</a> — Inter-agent async messaging</li>
 	</ul>
 
+	<h2>Concepts</h2>
+	<ul>
+		<li>
+			<a href="/docs/concepts/testing">Testing</a> — Vitest setup with
+			<code>smrtVitestPlugin()</code> and isolated test databases
+		</li>
+		<li>
+			<a href="/docs/concepts/configuration">Configuration</a> — <code>smrt.config.ts</code>,
+			<code>defineConfig</code>, and runtime config lookups
+		</li>
+		<li>
+			<a href="/docs/concepts/multi-tenancy">Multi-tenancy</a> — Tenant isolation via
+			<code>@TenantScoped</code>, <code>withTenant()</code>, and Postgres RLS
+		</li>
+		<li>
+			<a href="/docs/concepts/context-memory">Context Memory</a> — <code>remember</code>/<code
+				>recall</code
+			> with confidence and hierarchical scopes
+		</li>
+		<li>
+			<a href="/docs/concepts/semantic-search">Semantic Search</a> — Embeddings,
+			<code>semanticSearch()</code>, and <code>findSimilar()</code>
+		</li>
+	</ul>
+
+	<h2>Guides</h2>
+	<ul>
+		<li>
+			<a href="/docs/guides/multi-tenant-lifecycle">Multi-tenant request lifecycle</a> — One
+			<code>hooks.server.ts</code>: session, permissions, tenant context, RLS
+		</li>
+		<li>
+			<a href="/docs/guides/expose-app-via-mcp">Expose your app via MCP</a> — Serve your objects to
+			Claude Desktop with <code>smrt-app-mcp</code>
+		</li>
+		<li>
+			<a href="/docs/guides/add-semantic-search">Add semantic search to a model</a> — From keyword-only
+			to meaning-based search
+		</li>
+	</ul>
+
 	<h2>Migration Guides</h2>
 	<ul>
 		<li>
