@@ -1,3 +1,7 @@
+<script lang="ts">
+	import Callout from '$lib/components/Callout.svelte';
+</script>
+
 <svelte:head>
 	<title>Objects | s-m-r-t</title>
 </svelte:head>
@@ -193,10 +197,21 @@ const meetings = await collection.list({
 		></pre>
 
 	<h2 id="ai-methods">AI-Powered Methods</h2>
-	<p>SmrtObject includes built-in AI methods for evaluation and transformation.</p>
+	<p>
+		SmrtObject includes three built-in AI methods: <code>is()</code> (boolean check),
+		<code>do()</code> (freeform action), and <code>describe()</code> (generate a description). Each
+		resolves an AI client and sends a single prompt built from the string you pass.
+	</p>
+
+	<Callout variant="warning" title="Your prompt is sent, not the object's data">
+		<code>is()</code>, <code>do()</code>, and <code>describe()</code> send only the
+		criteria/instruction string to the model. The object's own field values are
+		<strong>not</strong> serialized into the prompt — there is no automatic object introspection. If
+		the model needs a field value to reason about, put it into the instruction text yourself.
+	</Callout>
 
 	<h3>is()</h3>
-	<p>Evaluate criteria against the object. Returns boolean.</p>
+	<p>Evaluate natural-language criteria. Returns <code>boolean</code>.</p>
 	<pre><code
 			>{`const product = await products.get('widget-123');
 
@@ -209,13 +224,25 @@ const isValid = await product.is(\`
 		></pre>
 
 	<h3>do()</h3>
-	<p>Perform an action based on instructions. Returns string result.</p>
+	<p>Perform an action from open-ended instructions. Returns a <code>string</code>.</p>
 	<pre><code
 			>{`const summary = await product.do(\`
   Write a 50-word marketing description.
   Highlight key features and target audience.
 \`);
 // Returns: "Introducing the premium Widget..."`}</code
+		></pre>
+
+	<h3>describe()</h3>
+	<p>
+		Generate a concise, human-readable description of the object. Returns a <code>string</code>.
+		Accepts optional AI message options (e.g. <code>{'{'} maxTokens: 50 {'}'}</code>).
+	</p>
+	<pre><code
+			>{`const blurb = await product.describe();
+// "A premium steel widget for home improvement..."
+
+const short = await product.describe({ maxTokens: 50 });`}</code
 		></pre>
 
 	<h2 id="migrations">Automatic Migrations</h2>
@@ -450,6 +477,55 @@ const similar = await articles.findSimilar(article, {
   limit: 5,
   excludeSelf: true
 });`}</code
+		></pre>
+
+	<h3>Embedding Lifecycle</h3>
+	<p>
+		Each object exposes instance methods for managing its embedding vectors. When embeddings are
+		configured, <code>save()</code> regenerates stale embeddings automatically in the background
+		(unless <code>embeddings.autoGenerate</code> is <code>false</code>), so you rarely call these by
+		hand — but they are available for explicit control.
+	</p>
+	<table>
+		<thead>
+			<tr><th>Method</th><th>Returns</th><th>Purpose</th></tr>
+		</thead>
+		<tbody>
+			<tr
+				><td><code>generateEmbeddings(options?)</code></td><td><code>Promise&lt;void&gt;</code></td><td
+					>Compute and store vectors for configured fields. Content-hashed to skip unchanged fields;
+					pass <code>{'{'} force: true {'}'}</code> to regenerate or <code
+						>{'{'} fields: ['title'] {'}'}</code
+					> to scope.</td
+				></tr
+			>
+			<tr
+				><td><code>hasStaleEmbeddings()</code></td><td><code>Promise&lt;boolean&gt;</code></td><td
+					>Whether any configured field's content has changed since its embedding was stored.</td
+				></tr
+			>
+			<tr
+				><td><code>getEmbedding(field, model?)</code></td><td
+					><code>Promise&lt;number[] | null&gt;</code></td
+				><td>Fetch the stored embedding vector for a field, or <code>null</code> if none exists.</td
+				></tr
+			>
+		</tbody>
+	</table>
+	<pre><code
+			>{`const article = await articles.get('article-123');
+
+// Regenerate only if content changed
+if (await article.hasStaleEmbeddings()) {
+  await article.generateEmbeddings();
+}
+
+// Force a full rebuild
+await article.generateEmbeddings({ force: true });
+
+// Inspect a stored vector
+const vec = await article.getEmbedding('title');
+if (vec) console.log(\`\${vec.length} dimensions\`);`}</code
 		></pre>
 
 	<h2 id="best-practices">Best Practices</h2>
