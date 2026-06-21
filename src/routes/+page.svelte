@@ -52,7 +52,7 @@
 			body: 'Pick a provider with one config field and keep the same code. Bedrock alone reaches dozens of underlying models.',
 			iconPath:
 				'M12 2a4 4 0 0 0-4 4v1a4 4 0 0 0 0 8v1a4 4 0 0 0 8 0v-1a4 4 0 0 0 0-8V6a4 4 0 0 0-4-4Z',
-			tags: ['OpenAI', 'Anthropic', 'Google', 'AWS Bedrock', 'Hugging Face', 'Claude CLI']
+			tags: ['OpenAI', 'Anthropic', 'Google', 'AWS Bedrock', 'Hugging Face', 'Ollama', 'Claude CLI']
 		},
 		{
 			title: 'getDatabase()',
