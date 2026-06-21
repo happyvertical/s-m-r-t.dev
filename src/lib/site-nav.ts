@@ -57,8 +57,8 @@ export const guidesTrack: NavGroup = {
 	track: true,
 	items: [
 		{ label: 'Multi-tenant SaaS lifecycle', href: '/docs/guides/multi-tenant-lifecycle' },
-		{ label: 'Expose your app via MCP', href: '/docs/guides/expose-via-mcp' },
-		{ label: 'Add semantic search', href: '/docs/guides/semantic-search' }
+		{ label: 'Expose your app via MCP', href: '/docs/guides/expose-app-via-mcp' },
+		{ label: 'Add semantic search', href: '/docs/guides/add-semantic-search' }
 	]
 };
 
@@ -67,8 +67,11 @@ const docsGroups: NavGroup[] = [
 		title: 'Getting Started',
 		items: [
 			{ label: 'Introduction', href: '/docs' },
+			{ label: 'How It Works', href: '/docs/how-it-works' },
 			{ label: 'Getting Started', href: '/docs/getting-started' },
-			{ label: 'Migration', href: '/docs/migration' }
+			{ label: 'The HAVE SDK', href: '/sdk' },
+			{ label: 'Migration', href: '/docs/migration' },
+			{ label: 'Security', href: '/docs/security' }
 		]
 	},
 	conceptsTrack,
@@ -121,6 +124,9 @@ const modulesGroups: NavGroup[] = [
 		items: [
 			{ label: 'smrt-commerce', href: '/modules/smrt-commerce' },
 			{ label: 'smrt-products', href: '/modules/smrt-products' },
+			{ label: 'smrt-subscriptions', href: '/modules/smrt-subscriptions' },
+			{ label: 'smrt-inventory', href: '/modules/smrt-inventory' },
+			{ label: 'smrt-manufacturing', href: '/modules/smrt-manufacturing' },
 			{ label: 'smrt-ads', href: '/modules/smrt-ads' },
 			{ label: 'smrt-affiliates', href: '/modules/smrt-affiliates' },
 			{ label: 'smrt-ledgers', href: '/modules/smrt-ledgers' },
@@ -147,6 +153,7 @@ const modulesGroups: NavGroup[] = [
 			{ label: 'smrt-svelte', href: '/modules/smrt-svelte' },
 			{ label: 'browser-ai', href: '/modules/browser-ai' },
 			{ label: 'smrt-dev-mcp', href: '/modules/smrt-dev-mcp' },
+			{ label: 'smrt-app-mcp', href: '/modules/smrt-app-mcp' },
 			{ label: 'smrt-features', href: '/modules/smrt-features' },
 			{ label: 'smrt-prompts', href: '/modules/smrt-prompts' }
 		]
