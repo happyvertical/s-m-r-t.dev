@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ModulePage from '$lib/components/ModulePage.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import Callout from '$lib/components/Callout.svelte';
 </script>
 
 <ModulePage
@@ -24,6 +25,13 @@
 				<li>Confidence scoring from source count, credibility, recency, and corroboration</li>
 				<li>Polymorphic entity linking via <code>FactSubject</code> (string-based, no FK)</li>
 				<li><code>FactContent</code> junction linking facts to Content</li>
+				<li>
+					<code>FactEvidence</code> provenance spans (quote + locator + verdict) backing each fact
+				</li>
+				<li>
+					AI claim-extraction pipeline: <code>extractCandidatesFromText</code>,
+					<code>extractArticleClaims</code>, and <code>assessClaimSupport</code>
+				</li>
 				<li>Auto-generated embeddings for semantic search (failures are non-fatal)</li>
 				<li>
 					Optional tenancy with <code>findWithGlobals(tenantId)</code> for tenant + global facts
@@ -160,6 +168,97 @@ const briefing = await facts.getEntityBriefing('Place', placeId);`}
 }`}
 			language="typescript"
 		/>
+
+		<h3>FactEvidence (provenance spans)</h3>
+		<p>
+			<code>FactSource</code> is the coarse source summary; <code>FactEvidence</code> records the
+			concrete excerpt/span/artifact that supports (or contradicts) a fact. Each evidence row carries
+			a verdict <code>status</code> and the quote + locator it was drawn from, so a claim's support can
+			be traced back to specific text.
+		</p>
+		<CodeBlock
+			code={`// @TenantScoped({ mode: 'optional' });
+// conflictColumns: ['fact_id', 'evidence_key']
+class FactEvidence extends SmrtObject {
+  factId: string              // @foreignKey('Fact', { required: true })
+  evidenceKey: string         // stable per-fact dedup key (required)
+  status: FactEvidenceStatus  // 'supports' | 'contradicts' | 'unclear' | 'irrelevant' | 'invalid'
+  sourceKind: string          // e.g. 'article' | 'transcript' | 'dataset'
+  sourceId: string            // plain string ref (cross-package)
+  sourceUrl: string
+  sourceTitle: string
+  quote: string               // the supporting excerpt
+  locator: string             // page / timestamp / selector
+  extractionMethod: string    // how the span was obtained
+  confidence: number          // 0-1
+}`}
+			language="typescript"
+		/>
+	</section>
+
+	<section>
+		<h2>Claim extraction pipeline</h2>
+		<p>
+			<code>FactCollection</code> exposes an AI-assisted pipeline for turning unstructured text into
+			reviewable fact candidates and for checking whether a claim is actually supported. These methods
+			call the configured AI client's <code>message()</code> with a fact-extraction prompt (resolved
+			through <a href="/modules/smrt-prompts">smrt-prompts</a>, so tenants can override it) — they are
+			<strong>not</strong> persistent: callers review, reconcile, link, or discard the returned
+			candidates per their own workflow.
+		</p>
+
+		<h3>Two extractors</h3>
+		<p>
+			The two extractors are intentionally separate: <code>extractCandidatesFromText</code> finds
+			evidence-backed facts <em>in</em> a source, while <code>extractArticleClaims</code> finds the
+			material claims an article draft itself needs to justify.
+		</p>
+		<CodeBlock
+			code={`// 1) Extract atomic facts from source material (agenda, minutes, transcript…)
+const candidates = await facts.extractCandidatesFromText(sourceText, {
+  domain: 'civic',
+  sourceType: 'minutes',
+  maxFacts: 12,                 // default 12
+  // allowedTypes: ['assertion', 'measurement', ...]
+});
+
+// 2) Extract the claims an article makes (what the draft must justify)
+const claims = await facts.extractArticleClaims(articleBody, {
+  domain: 'civic',
+  maxFacts: 24,                 // default 24
+});
+
+// FactExtractionCandidate:
+// { statement, type?, sourceExcerpt?, confidence?, metadata? }`}
+			language="typescript"
+		/>
+
+		<h3>Assessing claim support</h3>
+		<p>
+			Given a claim and candidate facts (each optionally carrying <code>FactEvidence</code>),
+			<code>assessClaimSupport</code> classifies whether the claim holds. It returns a status plus the
+			fact/evidence ids that matched and a rationale — the audit trail for a fact-check.
+		</p>
+		<CodeBlock
+			code={`const assessment = await facts.assessClaimSupport(claim, candidateFacts);
+
+// FactClaimSupportAssessment:
+// {
+//   status: 'supported' | 'unsupported' | 'contradicted' | 'needs_review',
+//   matchedFactIds: string[],
+//   matchedEvidenceIds: string[],
+//   rationale: string,
+//   confidence?: number,
+// }`}
+			language="typescript"
+		/>
+		<Callout variant="note" title="Extraction sends the source text, not the fact graph">
+			These helpers send the supplied <code>text</code> (plus your domain/context hints) to the model
+			through a registered prompt and parse the JSON response. They don't introspect the stored fact
+			graph — pass candidate facts explicitly to <code>assessClaimSupport</code> when you want the
+			model to reason over existing knowledge. Extraction calls require an AI client with a
+			<code>message()</code> method and throw otherwise.
+		</Callout>
 	</section>
 
 	<section>
@@ -260,6 +359,10 @@ await facts.getEvolutionTree(rootId);   // BFS all descendants`}
 			<a href="/modules/smrt-content">
 				<h3>smrt-content</h3>
 				<p>Content linked to facts via <code>FactContent</code></p>
+			</a>
+			<a href="/modules/smrt-prompts">
+				<h3>smrt-prompts</h3>
+				<p>Tenant-overridable prompts for claim extraction</p>
 			</a>
 			<a href="/modules/smrt-tags">
 				<h3>smrt-tags</h3>

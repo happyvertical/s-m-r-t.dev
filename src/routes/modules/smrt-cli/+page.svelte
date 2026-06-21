@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ModulePage from '$lib/components/ModulePage.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import Callout from '$lib/components/Callout.svelte';
 </script>
 
 <svelte:head>
@@ -72,6 +73,23 @@ smrt docs:claude             # Deprecated alias of docs:agents (Claude-compatibl
 			Source: <code>packages/cli/src/commands/docs-claude.ts</code>.
 		</p>
 
+		<h3>Agent knowledge</h3>
+		<CodeBlock
+			code={`smrt dev:knowledge-index     # Print the deterministic SMRT + SDK knowledge index
+smrt dev:knowledge-check     # Check deterministic freshness of agent knowledge
+smrt dev:knowledge-diff      # Show what changed since the last knowledge snapshot
+smrt dev:knowledge-review-context        # Emit context for a code review
+smrt dev:knowledge-architecture-context  # Emit architecture context`}
+			language="bash"
+		/>
+		<p>
+			These deterministic knowledge commands feed agentic-development workflows. Each
+			<code>dev:knowledge-*</code> command also registers a shorter <code>knowledge:*</code> alias
+			(<code>knowledge:index</code>, <code>knowledge:check</code>, <code>knowledge:diff</code>,
+			<code>knowledge:review-context</code>, <code>knowledge:architecture-context</code>), so either
+			form resolves to the same handler.
+		</p>
+
 		<h3>Dispatch Management</h3>
 		<CodeBlock
 			code={`smrt dispatch:list           # List dispatch messages
@@ -83,14 +101,22 @@ smrt dispatch:cleanup        # Clean up old dispatch records`}
 
 		<h3>Playground & Code Generation</h3>
 		<CodeBlock
-			code={`smrt playground:init         # Scaffold a developer playground
-smrt playground:dev          # Run the developer playground
+			code={`smrt playground init         # Scaffold a developer playground
+smrt playground dev          # Run the developer playground
+smrt playground list         # List discovered playground modules
 smrt generate-mcp            # Generate MCP server from registered objects (alias: mcp)
 smrt config:export           # Export agent config for SSG
-smrt init                    # Initialize a new SMRT project (alias: setup)
-smrt gnode create            # Scaffold a gnode site`}
+smrt init                    # Initialize a new SMRT project (alias: setup)`}
 			language="bash"
 		/>
+		<Callout variant="note" title="Space and colon command forms are equivalent">
+			Multi-word commands accept both a space and a colon between the namespace and the subcommand.
+			<code>smrt playground init</code> and <code>smrt playground:init</code> resolve to the same
+			handler — the dispatcher rewrites a leading <code>&lt;namespace&gt; &lt;subcommand&gt;</code> pair
+			to the colon form when it matches a known command (built-in namespaces include
+			<code>playground</code>, <code>docs</code>, <code>git</code>, and <code>dispatch</code>). The
+			space form reads more naturally; the colon form is what the command is registered as.
+		</Callout>
 
 		<aside>
 			<p>
@@ -120,6 +146,82 @@ smrt agent:delete <id>                         # Delete agent
 smrt agent:research abc123 --query "AI safety"`}
 			language="bash"
 		/>
+
+		<h3>camelCase methods → kebab-case flags</h3>
+		<p>
+			Custom method names stay as written in the command (<code>incorporateFeedback</code> →
+			<code>agent:incorporateFeedback</code>), but their camelCase parameters are exposed as
+			kebab-case CLI options. The dispatcher converts each <code>--kebab-flag</code> back to the
+			camelCase parameter name when invoking the method, so a method parameter
+			<code>reviewerProfileId</code> is passed as <code>--reviewer-profile-id</code>. Generated
+			column filters follow the same rule (a <code>snake_case</code> column becomes a
+			<code>--kebab-case</code> flag).
+		</p>
+		<CodeBlock
+			code={`// Method signature on the SMRT object:
+//   async incorporateFeedback(args: { reviewerProfileId: string; note?: string })
+
+smrt issue:incorporateFeedback iss-1 \\
+  --reviewer-profile-id editor-1 \\
+  --note "Tightened the lede"`}
+			language="bash"
+		/>
+	</section>
+
+	<section>
+		<h2>CLI ⇄ API coherence check</h2>
+		<p>
+			The CLI invokes object methods <strong>over HTTP</strong>, so any method a class lists in
+			<code>cli.include</code> needs a matching API route — otherwise the command would be
+			unreachable at runtime. A build-time lint (<code>validateCliIncludeAgainstApi</code>, run by the
+			core Vite plugin) walks the manifest and reports every command in <code>cli.include</code> that
+			is not also exposed via the API.
+		</p>
+		<Callout variant="warning" title="cli.include must be reachable via the API">
+			For each violation the build fails with a clear message: add the action to
+			<code>api.include</code>, or remove it from <code>cli.include</code>. If the CLI is deliberately
+			invoked in-process (no HTTP) — as with the <code>Secret</code> / <code>TenantKey</code> models in
+			<a href="/modules/smrt-secrets">smrt-secrets</a>, which expose a CLI but no API — acknowledge it
+			explicitly with <code>cli: {'{'} skipApiCheck: true {'}'}</code> on the <code>@smrt()</code>
+			decorator. The whole check can also be disabled globally via the plugin option
+			<code>validateCliApiCoherence: false</code>.
+		</Callout>
+		<CodeBlock
+			code={`// Throws at build time: 'create' is in cli.include but not in api.include.
+@smrt({
+  api: { include: ['list', 'get'] },
+  cli: { include: ['list', 'get', 'create'] },
+})
+class Widget extends SmrtObject {}
+
+// Fix A — expose it on the API too:
+@smrt({
+  api: { include: ['list', 'get', 'create'] },
+  cli: { include: ['list', 'get', 'create'] },
+})
+class Widget extends SmrtObject {}
+
+// Fix B — in-process CLI, acknowledge no HTTP route:
+@smrt({
+  api: { include: [] },
+  cli: { include: ['list', 'get'], skipApiCheck: true },
+})
+class Widget extends SmrtObject {}`}
+			language="typescript"
+		/>
+	</section>
+
+	<section>
+		<h2>Runtime registration check</h2>
+		<p>
+			Separately from surface coherence, <code>runRuntimeCheck()</code> validates that the build
+			manifest and the runtime registry agree: it discovers every project and dependency manifest,
+			verifies each class's canonical qualified name (<code>package:Class</code>), resolves
+			<code>extends</code> references, and confirms own + inherited fields actually hydrate at runtime.
+			Findings carry codes like <code>qualified-name-mismatch</code>,
+			<code>ambiguous-extends-reference</code>, and <code>runtime-field-hydration</code>; a clean run
+			emits a single <code>runtime-check-passed</code> finding.
+		</p>
 	</section>
 
 	<section>
