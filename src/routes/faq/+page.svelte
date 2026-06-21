@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Grid from '$lib/components/Grid.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import Callout from '$lib/components/Callout.svelte';
 </script>
 
 <svelte:head>
@@ -81,20 +82,39 @@
 		<div class="faq-item">
 			<h3>How do I configure database connections?</h3>
 			<p>
-				Create a <code>smrt.config.ts</code> file with a <code>url</code> connection string:
+				Create a <code>smrt.config.ts</code> with <code>defineConfig()</code>. The top-level keys are
+				<code>smrt</code> (global options), <code>modules</code> (module-scoped config), and
+				<code>packages</code> (package-scoped config). The CLI's database connection lives under
+				<code>packages.cli.database</code> as a <code>{'{'} type, url {'}'}</code> pair
+				(<code>type</code> is <code>'sqlite'</code>, <code>'postgres'</code>, or
+				<code>'duckdb'</code>):
 			</p>
 			<CodeBlock
-				code={`export default {
-  database: {
-    adapter: 'postgres',
-    url: process.env.DATABASE_URL || 'postgresql://user:password@localhost:5432/myapp'
-  }
-};
+				code={`import { defineConfig } from '@happyvertical/smrt-config';
 
-// For SQLite:
-// database: { adapter: 'sqlite', url: 'myapp.db' }`}
+export default defineConfig({
+  smrt: {
+    environment: 'production',
+    embeddings: { provider: 'local' }
+  },
+  packages: {
+    cli: {
+      database: {
+        type: 'postgres',
+        url: process.env.DATABASE_URL || 'postgresql://user:password@localhost:5432/myapp'
+      }
+    }
+  }
+});
+
+// For SQLite: { type: 'sqlite', url: 'myapp.db' }`}
 				language="typescript"
 			/>
+			<Callout variant="note" title="Passing a connection at runtime">
+				At runtime you pass the database to a collection or object directly via the
+				<code>db</code> option — e.g. <code>await TaskCollection.create({'{'} db {'}'})</code>. The
+				config above is what the <code>smrt db:*</code> CLI commands read.
+			</Callout>
 		</div>
 
 		<div class="faq-item">

@@ -1,8 +1,9 @@
 <script lang="ts">
 	import Grid from '$lib/components/Grid.svelte';
+	import Callout from '$lib/components/Callout.svelte';
 
 	const coreClasses = [
-		{ name: 'SmrtObject', description: 'Base class for persistent entities with AI methods (is, do)' },
+		{ name: 'SmrtObject', description: 'Base class for persistent entities with AI methods (is, do, describe)' },
 		{ name: 'SmrtCollection', description: 'Collection manager for querying, CRUD, and batch operations' },
 		{ name: 'ObjectRegistry', description: 'Runtime registry for class/field metadata (globalThis singleton)' },
 		{ name: 'DispatchBus', description: 'Inter-agent asynchronous messaging with persistent subscriptions' },
@@ -21,8 +22,9 @@
 	];
 
 	const aiMethods = [
-		{ name: 'is(criteria)', description: 'Evaluate criteria against object, returns boolean' },
-		{ name: 'do(instructions)', description: 'Perform action based on instructions, returns string' }
+		{ name: 'is(criteria)', description: 'Send criteria string to the model, returns boolean' },
+		{ name: 'do(instructions)', description: 'Send instruction string to the model, returns string' },
+		{ name: 'describe(options?)', description: 'Generate a concise description, returns string' }
 	];
 
 	const objectMethods = [
@@ -32,7 +34,10 @@
 		{ name: 'loadRelated(field)', description: 'Lazy-load a foreignKey relationship (cached)' },
 		{ name: 'loadRelatedMany(field)', description: 'Lazy-load a oneToMany relationship' },
 		{ name: 'getSlug()', description: 'Auto-generate slug from name/title/label/id' },
-		{ name: 'transformJSON(data)', description: 'Override point for custom JSON serialization' }
+		{ name: 'transformJSON(data)', description: 'Override point for custom JSON serialization' },
+		{ name: 'generateEmbeddings(options?)', description: 'Compute embeddings for configured fields (Promise<void>)' },
+		{ name: 'hasStaleEmbeddings()', description: 'Whether stored embeddings are out of date (Promise<boolean>)' },
+		{ name: 'getEmbedding(field, model?)', description: 'Fetch a stored embedding vector (Promise<number[] | null>)' }
 	];
 
 	const collectionMethods = [
@@ -79,7 +84,7 @@
 		{ name: 'smrt db:migrate', description: 'Apply migrations' },
 		{ name: 'smrt db:diff --generate', description: 'Generate migration from changes' },
 		{ name: 'smrt db:rollback', description: 'Rollback migrations' },
-		{ name: 'smrt docs:claude', description: 'Generate .claude/smrt-framework.md' },
+		{ name: 'smrt docs:agents', description: 'Generate AGENTS.md (docs:claude is a deprecated alias)' },
 		{ name: 'smrt generate:mcp', description: 'Generate MCP server' },
 		{ name: 'smrt config:export', description: 'Export agent config for SSG' },
 		{ name: 'smrt dispatch:*', description: 'Dispatch management (list/process/retry/cleanup)' }
@@ -130,6 +135,11 @@
 				</div>
 			{/each}
 		</div>
+		<Callout variant="warning" title="These methods send your prompt, not the object">
+			<code>is()</code>, <code>do()</code>, and <code>describe()</code> pass only your
+			criteria/instruction string to the model. The object's field data is not serialized into the
+			prompt, so include any values you want the model to consider directly in the text you pass.
+		</Callout>
 	</section>
 
 	<section class="section">
