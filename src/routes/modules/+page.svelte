@@ -25,7 +25,7 @@
 		{
 			name: 'smrt-cli',
 			package: '@happyvertical/smrt-cli',
-			description: 'Developer CLI: smrt db:*, smrt docs:claude, introspection, code generation',
+			description: 'Developer CLI: smrt db:*, smrt docs:agents, introspection, code generation',
 			href: '/modules/smrt-cli'
 		},
 		{
@@ -130,7 +130,7 @@
 		{
 			name: 'smrt-commerce',
 			package: '@happyvertical/smrt-commerce',
-			description: 'Customer/Vendor, Contract (5 STI types), Invoice with ledger integration, Fulfillment',
+			description: 'Customer/Vendor, Contract (9 STI types), Invoice with ledger integration, Fulfillment',
 			href: '/modules/smrt-commerce'
 		},
 		{
@@ -154,7 +154,7 @@
 		{
 			name: 'smrt-ledgers',
 			package: '@happyvertical/smrt-ledgers',
-			description: 'Double-entry accounting, balance enforcement (EPSILON=0.01), journal lifecycle',
+			description: 'Double-entry accounting, balance enforcement (EPSILON=0.001), journal lifecycle',
 			href: '/modules/smrt-ledgers'
 		},
 		{
@@ -162,6 +162,24 @@
 			package: '@happyvertical/smrt-analytics',
 			description: 'GA4/Plausible: properties, data streams, server-side events, AI-powered reports',
 			href: '/modules/smrt-analytics'
+		},
+		{
+			name: 'smrt-inventory',
+			package: '@happyvertical/smrt-inventory',
+			description: 'Multi-location stock tracking: Sku, InventoryLocation, StockLevel, StockMovement, stock-mutation service',
+			href: '/modules/smrt-inventory'
+		},
+		{
+			name: 'smrt-manufacturing',
+			package: '@happyvertical/smrt-manufacturing',
+			description: 'Bills of materials, cost rollup, and production-order operations (industry-neutral)',
+			href: '/modules/smrt-manufacturing'
+		},
+		{
+			name: 'smrt-subscriptions',
+			package: '@happyvertical/smrt-subscriptions',
+			description: 'Tenant subscriptions, entitlement resolution, usage thresholds, subscription UI',
+			href: '/modules/smrt-subscriptions'
 		}
 	];
 
@@ -236,6 +254,12 @@
 			href: '/modules/smrt-dev-mcp'
 		},
 		{
+			name: 'smrt-app-mcp',
+			package: '@happyvertical/smrt-app-mcp',
+			description: 'App-runtime MCP scaffolding: createMcpAppServer plus transport adapters (SvelteKit)',
+			href: '/modules/smrt-app-mcp'
+		},
+		{
 			name: 'smrt-gnode',
 			package: '@happyvertical/smrt-gnode',
 			description: 'Federation library — stubs only, not implemented',
@@ -258,8 +282,8 @@
 
 <SEO
 	title="Modules"
-	description="Explore 38 SMRT modules for building full-stack applications: core framework, agents, commerce, content, domain models, and more. Complete TypeScript documentation."
-	url="https://havesmrt.com/modules"
+	description="Explore 42 SMRT modules for building full-stack applications: core framework, agents, commerce, content, domain models, and more. Complete TypeScript documentation."
+	url="https://s-m-r-t.dev/modules"
 	type="website"
 />
 
@@ -308,7 +332,7 @@
 	</section>
 
 	<section class="section">
-		<h2>Business (6 modules)</h2>
+		<h2>Business (9 modules)</h2>
 		<p class="section-desc">Commerce, products, advertising, affiliates, accounting, and analytics.</p>
 		{@render moduleList(business)}
 	</section>
@@ -320,7 +344,7 @@
 	</section>
 
 	<section class="section">
-		<h2>Tooling (5 modules)</h2>
+		<h2>Tooling (6 modules)</h2>
 		<p class="section-desc">UI components, dev tools, federation, and project templates.</p>
 		{@render moduleList(tooling)}
 	</section>

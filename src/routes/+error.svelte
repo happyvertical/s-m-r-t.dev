@@ -7,7 +7,7 @@
 <SEO
 	title="Page Not Found"
 	description="The page you're looking for doesn't exist. Return to the SMRT Framework documentation homepage."
-	url="https://havesmrt.com/404"
+	url="https://s-m-r-t.dev/404"
 	type="website"
 />
 

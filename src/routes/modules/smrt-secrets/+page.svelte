@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ModulePage from '$lib/components/ModulePage.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import Callout from '$lib/components/Callout.svelte';
 </script>
 
 <ModulePage
@@ -33,6 +34,14 @@
 				<li>
 					Access counting (<code>retrieve()</code> increments <code>accessCount</code> on every read)
 					and expiration tracking
+				</li>
+				<li>
+					Context-free <code>storeForTenant()</code> / <code>retrieveForTenant()</code> for jobs
+					running outside an ambient tenant context
+				</li>
+				<li>
+					Non-destructive key-drift <code>diagnose</code> + confirmation-gated
+					<code>repair</code> (never decrypts secret values)
 				</li>
 				<li>
 					<strong>No API/MCP exposure</strong> on <code>Secret</code> and <code>TenantKey</code>
@@ -242,6 +251,74 @@ await service.reencryptAll();
 // TenantKeyCollection.cleanupRetiredKeys()`}
 			language="typescript"
 		/>
+	</section>
+
+	<section>
+		<h2>Context-free tenant access</h2>
+		<p>
+			<code>store()</code> / <code>retrieve()</code> read the ambient tenant from
+			<a href="/modules/smrt-tenancy">smrt-tenancy</a> via <code>requireTenantId()</code>, so they
+			must run inside a <code>withTenant()</code> block. Integrations that have already resolved
+			tenant ownership but run <em>outside</em> the application's tenant context (background jobs,
+			webhooks, cross-tenant tooling) can pass the tenant explicitly with the
+			<code>*ForTenant</code> variants, which simply wrap the call in <code>withTenant()</code> for
+			you.
+		</p>
+		<CodeBlock
+			code={`// No ambient tenant context required — the tenantId is explicit.
+await service.storeForTenant('tenant-123', 'stripe-api-key', 'sk_live_xxx', {
+  category: 'api-keys',
+});
+
+const { value } = await service.retrieveForTenant('tenant-123', 'stripe-api-key');`}
+			language="typescript"
+		/>
+	</section>
+
+	<section>
+		<h2>Key-drift diagnosis &amp; repair</h2>
+		<p>
+			Envelope encryption has a failure mode: a secret value can outlive the tenant encryption key
+			that wraps it, or the configured Application Master Key can stop being able to unwrap a stored
+			key. <code>SecretService</code> exposes a non-destructive diagnosis and an explicit,
+			confirmation-gated repair for exactly this drift — <strong>neither ever decrypts or exposes a
+			secret value</strong>.
+		</p>
+		<CodeBlock
+			code={`// 1) Diagnose (read-only). Pass the tenant explicitly, or use the
+//    current-context variant inside a withTenant() block.
+const report = await service.diagnoseTenantSecretKeyDrift('tenant-123');
+// const report = await service.diagnoseCurrentTenantSecretKeyDrift();
+
+// report.ok === true when no issues. Otherwise report.issues[] each carry a
+// code, severity, message, and a suggested repairAction:
+//   'delete-unrecoverable-secret'
+//   'delete-unusable-tenant-encryption-key'
+//   'store-fresh-secret-value'
+//   'none'
+// report.summary counts active secrets, tenant encryption keys, usable keys, etc.
+
+// 2) Preview the repair without deleting anything.
+const preview = await service.repairTenantSecretKeyDrift('tenant-123', {
+  dryRun: true,
+});
+// preview.wouldDeleteSecrets / preview.wouldDeleteTenantEncryptionKeys
+
+// 3) Execute. Destructive deletes require an explicit confirmation flag.
+const repaired = await service.repairTenantSecretKeyDrift('tenant-123', {
+  confirmDeleteUnrecoverableData: true,
+});
+// repaired.deletedSecrets / repaired.deletedTenantEncryptionKeys / remainingIssues`}
+			language="typescript"
+		/>
+		<Callout variant="security" title="Repair only deletes unrecoverable rows">
+			<code>repairTenantSecretKeyDrift</code> never attempts to recover or surface a secret value — it
+			only removes rows the currently configured AMK can no longer use (and the tenant encryption
+			keys that can't be unwrapped). Because that is destructive, a non-dry-run call that would delete
+			anything <strong>throws unless you pass <code>confirmDeleteUnrecoverableData: true</code></strong>.
+			Always run with <code>dryRun: true</code> first and inspect <code>wouldDeleteSecrets</code> /
+			<code>wouldDeleteTenantEncryptionKeys</code>.
+		</Callout>
 	</section>
 
 	<section>

@@ -1,11 +1,21 @@
 <script lang="ts">
 	import { ThemeSwitcher, ColorSchemeToggle } from '@happyvertical/smrt-svelte/themes';
+	import { onMount } from 'svelte';
+	import { openPalette } from '$lib/search';
+	import mark from '$lib/assets/smrt-mark.png';
+
+	// Show the platform-appropriate shortcut hint (⌘K on macOS, Ctrl K elsewhere).
+	let isMac = $state(false);
+	onMount(() => {
+		isMac = /mac/i.test(navigator.platform) || /mac/i.test(navigator.userAgent);
+	});
 </script>
 
 <header>
 	<div class="header-content">
 		<a href="/" class="branding">
-			<span class="logo">s-m-r-t</span>
+			<img src={mark} alt="" class="brand-mark" width="30" height="30" />
+				<span class="logo">s-m-r-t</span>
 		</a>
 		<nav>
 			<a href="/docs">Docs</a>
@@ -29,6 +39,27 @@
 			</a>
 		</nav>
 		<div class="theme-controls">
+			<button
+				type="button"
+				class="search-trigger"
+				onclick={openPalette}
+				aria-label="Search the site (press {isMac ? 'Command K' : 'Control K'})"
+			>
+				<svg
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					aria-hidden="true"
+				>
+					<circle cx="11" cy="11" r="8"></circle>
+					<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+				</svg>
+				<span class="search-label">Search</span>
+				<kbd class="search-kbd">{isMac ? '⌘' : 'Ctrl'} K</kbd>
+			</button>
 			<ThemeSwitcher variant="select" showIcons={true} label="" />
 			<ColorSchemeToggle variant="switch" showLabels={false} />
 		</div>
@@ -54,7 +85,15 @@
 	.branding {
 		display: flex;
 		align-items: center;
+		gap: 9px;
 		text-decoration: none;
+	}
+
+	.brand-mark {
+		width: 30px;
+		height: 30px;
+		display: block;
+		flex-shrink: 0;
 	}
 
 	.logo {
@@ -97,6 +136,43 @@
 		gap: 16px;
 	}
 
+	.search-trigger {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 6px 10px;
+		border: 1px solid var(--smrt-color-outline, #e5e5e5);
+		border-radius: var(--smrt-shape-small, 6px);
+		background: var(--smrt-color-surface-container-low, #fafafa);
+		color: var(--smrt-color-on-surface-variant, #666);
+		font-family: inherit;
+		font-size: 0.85rem;
+		cursor: pointer;
+		transition:
+			border-color 0.2s,
+			color 0.2s;
+	}
+
+	.search-trigger:hover {
+		border-color: var(--smrt-color-primary, #1976d2);
+		color: var(--smrt-color-on-surface, #1a1a1a);
+	}
+
+	.search-trigger svg {
+		flex-shrink: 0;
+	}
+
+	.search-kbd {
+		font-family: var(--smrt-font-family-mono, monospace);
+		font-size: 0.7rem;
+		padding: 1px 5px;
+		border: 1px solid var(--smrt-color-outline, #d5d5d5);
+		border-radius: var(--smrt-radius-sm, 4px);
+		background: var(--smrt-color-surface, #fff);
+		color: var(--smrt-color-on-surface-variant, #888);
+		line-height: 1.3;
+	}
+
 	/* Style overrides for SMRT components */
 	:global(.smrt-theme-switcher.select) {
 		display: flex;
@@ -128,6 +204,11 @@
 			justify-content: center;
 			padding-top: 16px;
 			border-top: 1px solid var(--smrt-color-outline, #e5e5e5);
+		}
+
+		.search-label,
+		.search-kbd {
+			display: none;
 		}
 	}
 

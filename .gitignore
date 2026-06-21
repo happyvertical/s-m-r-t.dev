@@ -8,6 +8,9 @@ node_modules
 /.svelte-kit
 /build
 
+# Generated at build/prepare time by scripts/build-search-index.mjs (issue #99)
+/static/search-index.json
+
 # OS
 .DS_Store
 Thumbs.db

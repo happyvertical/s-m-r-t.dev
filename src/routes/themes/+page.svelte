@@ -170,7 +170,7 @@ registerTheme(myTheme);`;
 			<div class="theme-card" class:active={theme.state.preset === ('swiss' as ThemePreset)}>
 				<h3>🇨🇭 Swiss</h3>
 				<p>
-					Custom theme for havesmrt.com. Swiss/International Typographic Style with strong grid,
+					Custom theme for s-m-r-t.dev. Swiss/International Typographic Style with strong grid,
 					clean typography, and minimal embellishment.
 				</p>
 				<code>preset="swiss"</code>

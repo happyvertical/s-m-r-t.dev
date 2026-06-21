@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ModulePage from '$lib/components/ModulePage.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import Callout from '$lib/components/Callout.svelte';
 </script>
 
 <svelte:head>
@@ -241,6 +242,52 @@ const creds = await account.getCredentials();`}
 			<code>retryCount</code> is incremented on every retry and capped by <code>maxRetries</code>. A
 			failed send leaves the message in <code>sendStatus = 'failed'</code> for inspection.
 		</p>
+	</section>
+
+	<section>
+		<h2>Inbound email sync (IMAP)</h2>
+		<p>
+			Sending is only half the story. <code>EmailAccount.syncFrom()</code> pulls messages
+			<em>down</em> from the server and persists them as <code>Email</code> rows. It opens an
+			<code>@happyvertical/email</code> client (resolving IMAP credentials from
+			<a href="/modules/smrt-secrets">smrt-secrets</a> when <code>credentialSecretId</code> is set),
+			ensures an <code>EmailFolder</code> exists for each requested folder, fetches messages, and
+			upserts each one — skipping messages already stored unless <code>fullSync</code> is set.
+		</p>
+		<CodeBlock
+			code={`const account = await accounts.get({ id: accountId });
+
+const result = await account.syncFrom({
+  folders: ['INBOX', 'Sent'],   // defaults to ['INBOX']
+  since: new Date('2026-01-01'), // optional server-side date filter
+  before: new Date('2026-06-01'),
+  batchSize: 100,                // messages fetched per folder
+  fullSync: false,               // true re-imports already-stored messages
+  onProgress: (s) => console.log(s.folder, s.processed, '/', s.total),
+});
+
+// SyncResult:
+// {
+//   folders: string[],          // folders actually synced
+//   messagesProcessed: number,
+//   messagesDownloaded: number,
+//   messagesSkipped: number,    // already-stored, fullSync off
+//   errors: Error[],
+//   duration: number,           // ms
+// }`}
+			language="typescript"
+		/>
+		<p>
+			Existing messages are matched by RFC&nbsp;822 <code>messageId</code> per account, so re-running
+			<code>syncFrom()</code> is idempotent: unchanged messages land in
+			<code>messagesSkipped</code> rather than being duplicated. <code>syncAll()</code> runs the same
+			flow across every configured account.
+		</p>
+		<Callout variant="note" title="One sync per account at a time">
+			Don't run concurrent <code>syncFrom()</code> calls against the same account — the folder/message
+			upserts share the account's row identity, and overlapping runs can race on the same
+			<code>messageId</code>. Serialize syncs per account (e.g. a per-account job lock).
+		</Callout>
 	</section>
 
 	<section>

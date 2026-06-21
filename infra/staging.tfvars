@@ -1,3 +1,3 @@
 environment = "staging"
-domain      = "havesmrt.com"
+domain      = "s-m-r-t.dev"
 aws_region  = "us-west-2"

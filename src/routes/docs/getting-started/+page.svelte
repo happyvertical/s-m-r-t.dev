@@ -1,5 +1,6 @@
 <script lang="ts">
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import Callout from '$lib/components/Callout.svelte';
 </script>
 
 <svelte:head>
@@ -25,29 +26,56 @@
 	<section>
 		<h2>Prerequisites</h2>
 		<ul>
-			<li>Node.js 20+</li>
+			<li>Node.js 24+ (the framework's <code>engines</code> require <code>node &gt;=24</code>)</li>
+			<li>pnpm 9+ (npm also works)</li>
 			<li>Basic TypeScript knowledge</li>
-			<li>npm or pnpm</li>
 		</ul>
 	</section>
 
 	<section>
 		<h2>Installation</h2>
 
-		<h3>Install Core Packages</h3>
+		<h3>Option 1: Clone the SaaS starter (recommended)</h3>
+		<p>
+			The fastest way to see the whole framework in one place is the
+			<a href="https://github.com/happyvertical/smrt-saas-starter" target="_blank" rel="noopener"
+				>smrt-saas-starter</a
+			>
+			— a reference SvelteKit app wired up with the SMRT packages, auth, and admin UI. Clone it and run
+			the dev server:
+		</p>
 		<CodeBlock
-			code={`pnpm add @happyvertical/smrt-core @happyvertical/smrt-types @happyvertical/smrt-config`}
+			code={`git clone https://github.com/happyvertical/smrt-saas-starter.git
+cd smrt-saas-starter
+pnpm install
+pnpm dev`}
 			language="bash"
 		/>
 
-		<h3>Add Domain Packages as Needed</h3>
+		<h3>Option 2: Add SMRT to an existing SvelteKit project</h3>
 		<p>
-			Install additional packages for your use case. For example, for agents and background jobs:
+			Run <code>smrt init</code> inside an existing SvelteKit project to scaffold a
+			<code>smrt.config.ts</code> and the wiring SMRT needs:
+		</p>
+		<CodeBlock code={`npx smrt init`} language="bash" />
+
+		<h3>Option 3: Install packages by hand</h3>
+		<p>Start from just the core package, then add what you need:</p>
+		<CodeBlock code={`pnpm add @happyvertical/smrt-core`} language="bash" />
+		<p>
+			Most projects also pull in the shared types and the config loader, plus any domain packages
+			for the problem you're solving (for example agents and background jobs):
 		</p>
 		<CodeBlock
-			code={`pnpm add @happyvertical/smrt-agents @happyvertical/smrt-jobs`}
+			code={`pnpm add @happyvertical/smrt-types @happyvertical/smrt-config
+pnpm add @happyvertical/smrt-agents @happyvertical/smrt-jobs`}
 			language="bash"
 		/>
+
+		<Callout variant="note" title="Browse every package">
+			See <a href="/modules">Modules</a> for the full catalog of <code>@happyvertical/smrt-*</code>
+			packages organized by purpose.
+		</Callout>
 	</section>
 
 	<section>
@@ -249,8 +277,12 @@ class Order extends SmrtObject {
 			language="typescript"
 		/>
 		<h3>AI-Powered Methods</h3>
+		<p>
+			Every <code>SmrtObject</code> exposes three AI methods: <code>is()</code> (boolean check),
+			<code>do()</code> (freeform action), and <code>describe()</code> (generate a description).
+		</p>
 		<CodeBlock
-			code={`// is() — evaluate criteria against the object, returns boolean
+			code={`// is() — evaluate criteria, returns boolean
 const isValid = await product.is(\`
   - Has a non-empty description
   - Price is greater than $10
@@ -261,9 +293,18 @@ const isValid = await product.is(\`
 const summary = await product.do(\`
   Write a 50-word marketing description.
   Highlight key features and target audience.
-\`);`}
+\`);
+
+// describe() — generate a concise description, returns string
+const blurb = await product.describe();`}
 			language="typescript"
 		/>
+		<Callout variant="warning" title="What gets sent to the model">
+			<code>is()</code>, <code>do()</code>, and <code>describe()</code> send only your
+			criteria/instruction string to the model — the object's own field data is
+			<strong>not</strong> serialized and sent. Pass any object values you want the model to reason about
+			directly inside the instruction text.
+		</Callout>
 	</section>
 
 	<section>

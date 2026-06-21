@@ -1,8 +1,8 @@
-# robots.txt for havesmrt.com
+# robots.txt for s-m-r-t.dev
 User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://havesmrt.com/sitemap.xml
+Sitemap: https://s-m-r-t.dev/sitemap.xml
 
 # Allow all content by default

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Grid from './Grid.svelte';
+	import { SMRT_VERSION_LABEL } from '$lib/version';
 </script>
 
 <footer role="contentinfo">
@@ -7,6 +8,7 @@
 		<div class="footer-content">
 			<div class="brand">
 				<span class="name" aria-label="s-m-r-t Framework">s-m-r-t</span>
+				<span class="version">{SMRT_VERSION_LABEL}</span>
 			</div>
 			<nav role="navigation" aria-label="Footer navigation">
 				<a href="/docs">Docs</a>
@@ -49,6 +51,12 @@
 		font-weight: bold;
 		font-size: 1.1rem;
 		color: var(--smrt-color-on-surface, #1a1a1a);
+	}
+
+	.version {
+		font-family: var(--smrt-font-family-mono, monospace);
+		font-size: 0.75rem;
+		color: var(--smrt-color-on-surface-variant, #666);
 	}
 
 	nav {

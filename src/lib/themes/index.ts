@@ -1,5 +1,5 @@
 /**
- * havesmrt.com Themes
+ * s-m-r-t.dev Themes
  *
  * Custom themes for the s-m-r-t documentation site.
  */

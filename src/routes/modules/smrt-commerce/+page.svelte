@@ -2,6 +2,7 @@
 	import ModuleTabs from '$lib/components/ModuleTabs.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
+	import Callout from '$lib/components/Callout.svelte';
 	import {
 		InvoiceCard,
 		InvoiceHeader,
@@ -256,6 +257,161 @@ class Contract extends SmrtObject {
   async recordPayment(options: RecordPaymentOptions): Promise<Journal | null>
   // Creates: DR Cash, CR Accounts Receivable
 }`}
+				language="typescript"
+			/>
+
+			<h3>PaymentIntent (multi-rail quote)</h3>
+			<p>
+				A <code>PaymentIntent</code> is a short-lived (minutes, not days) pre-payment commitment. It
+				locks a USD price for a fixed window and lists one or more <code>PaymentOption</code>s, each
+				describing a different payment rail (USDC-on-Base, BTC, Stripe, …). The first option that
+				receives a payment wins; the others are implicitly retired. It is deliberately distinct from
+				<code>Estimate</code>: no line items, just coordination of the moment-of-payment. The optional
+				<code>x402Capable</code> flag on an option marks rails usable in agent-driven HTTP-402 flows.
+			</p>
+			<CodeBlock
+				code={`// status: awaiting_payment -> paid -> (issued | retired),
+//         with expired / cancelled as alternate terminal exits.
+class PaymentIntent extends SmrtObject {
+  offeringRef: string        // abstract idempotency scope (e.g. a Sku id)
+  licenseeEmail: string
+  paymentOptions: PaymentOption[]   // JSON column; one rail each
+  usdPriceLocked: number     // decimal; canonical USD price
+  priceLockWindowMs: number  // default 15 min
+  priceLockExpiresAt: Date | null
+  status: PaymentIntentStatus
+  paidOptionBackendId: string       // set by the verified paid path
+  paymentId: string                 // plain string ref to the Payment
+
+  // Verified transition: loads the Payment, requires it COMPLETED, and
+  // reconciles rail (backendId) + currency + nativeAmount before marking paid.
+  async verifyAndMarkPaid(args: { backendId: string; paymentId: string }): Promise<void>
+  markIssued(): void   // PAID -> ISSUED once rights/fulfillment are created
+  expire(): void       // AWAITING_PAYMENT -> EXPIRED
+  cancel(reason?: string): void
+  retire(reason?: string): void     // PAID/ISSUED -> RETIRED (refund/chargeback)
+  isOptionRetired(backendId: string): boolean   // flag inbound funds to losing rails
+}
+
+interface PaymentOption {
+  backendId: string    // 'base-usdc' | 'btc' | 'stripe' | ...
+  currency: string     // rail-qualified, e.g. 'USDC-base'
+  payTo: string        // address / account / Stripe intent id
+  nativeAmount: number // decimal, in 'currency'
+  chain?: string
+  memo?: string
+  x402Capable?: boolean
+  expiresAt?: string
+}`}
+				language="typescript"
+			/>
+			<Callout variant="security" title="Forge/repoint guards on the paid path">
+				The generated create/update surface may only set the quote fields; <code>status</code>,
+				<code>paymentId</code> and <code>paidOptionBackendId</code> are excluded so a caller cannot
+				forge a PAID intent through a route. <code>save()</code> re-validates the status transition on
+				every write and, for a PAID/ISSUED row, re-verifies the backing <code>Payment</code> and
+				freezes <code>paymentId</code> / <code>paidOptionBackendId</code> / <code>usdPriceLocked</code>
+				/ <code>paymentOptions</code>. Corrections go through <code>retire()</code> plus a fresh intent
+				— a settled intent is never repointed.
+			</Callout>
+
+			<h3>Payout (read-only by audit)</h3>
+			<p>
+				<code>Payout</code> is the outgoing side of a <code>Payment</code>: funds leaving the
+				operator's wallet for a vendor's payout address. It carries a gross / fee / net triple and a
+				<code>pending → sent → confirmed</code> machine (with <code>failed</code>, resettable to
+				<code>pending</code> via <code>resetFromFailed()</code>).
+			</p>
+			<Callout variant="security" title="No safe generated write on any surface">
+				A Payout has <strong>no generated write on API, MCP, or CLI</strong> — all three surfaces are
+				locked to <code>list</code> / <code>get</code>. The only way to mint one is the verified
+				<code>PayoutCollection.createFromPayment()</code> domain path, which derives the amounts from
+				the source Payment and starts <code>PENDING</code>. <code>save()</code> enforces the
+				<code>gross = fee + net</code> invariant (non-negative), requires a <code>backendTxRef</code>
+				for <code>SENT</code> / <code>CONFIRMED</code>, and caps <code>grossAmount</code> by the source
+				Payment's settled funds (the source Payment must resolve).
+			</Callout>
+			<CodeBlock
+				code={`// Build a PENDING payout from a settled Payment, then advance it explicitly.
+const payouts = await PayoutCollection.create({ db });
+const payout = await payouts.createFromPayment({
+  payment,                 // the source Payment row
+  vendorId: vendor.id,
+  operatorFee: 5.0,        // in the payment's native currency
+});
+await payout.save();       // validates gross/fee/net + caps by source Payment
+
+payout.markSent('0xabc…'); // PENDING -> SENT (backendTxRef required)
+await payout.save();
+payout.markConfirmed();    // SENT -> CONFIRMED (only reachable from SENT)
+await payout.save();`}
+				language="typescript"
+			/>
+
+			<h3>LicenseSale (immutable once issued)</h3>
+			<p>
+				<code>LicenseSale</code> is the licensing STI subtype: one sale of rights for a fee, with a
+				typed rights snapshot (medium, distribution scope, exclusivity, duration, territory,
+				sublicensing, derivatives) plus signed-PDF artefacts (<code>pdfUrl</code>,
+				<code>pdfHash</code>, optional <code>onChainHashRegistryRef</code>).
+			</p>
+			<Callout variant="warning" title="Rights freeze at ACCEPTED">
+				Once a <code>LicenseSale</code> is saved with status <code>ACCEPTED</code>, its rights
+				snapshot is frozen — re-saving with mutated <code>rights*</code> fields throws. The only legal
+				move out of <code>ACCEPTED</code> is <code>revoke()</code> (sets <code>CANCELLED</code>
+				without touching the snapshot). To change terms, issue a <em>new</em> LicenseSale and leave the
+				old row as the historical record.
+			</Callout>
+			<CodeBlock
+				code={`const contracts = new ContractCollection(db);
+const license = await contracts.create({
+  _meta_type: 'LicenseSale',
+  skuId: 'sku-uuid',
+  licenseeEmail: 'buyer@example.com',
+  paymentId: payment.id,
+  rightsMedium: 'web,social',
+  rightsExclusivity: 'non-exclusive',
+  rightsDuration: 'perpetual',
+  rightsTerritory: 'worldwide',
+  status: 'accepted',     // freezes the rights snapshot on save
+});
+await license.save();
+
+license.getRightsSnapshot();  // typed LicenseRightsSnapshot
+license.revoke();             // ACCEPTED -> CANCELLED, snapshot untouched
+await license.save();`}
+				language="typescript"
+			/>
+		</section>
+
+		<section>
+			<h2>Cart → Order at checkout</h2>
+			<p>
+				<code>Cart</code> and <code>Order</code> are both Contract STI subtypes sharing the
+				<code>contracts</code> table, so a cart holds the same line items, totals, and customer
+				reference as a real order. Checkout promotes the row <strong>in place</strong> — the
+				application flips <code>_meta_type</code> from <code>Cart</code> to <code>Order</code> rather
+				than copying data between tables. A <code>Cart</code> starts in <code>draft</code> via the
+				base <code>Contract.status</code> default; the framework does not enforce a cart → order state
+				machine, so application code advances the status at checkout.
+			</p>
+			<CodeBlock
+				code={`const contracts = new ContractCollection(db);
+
+// Shopper's working cart (transient order-in-progress).
+const cart = await contracts.create({
+  _meta_type: 'Cart',
+  customerId: customer.id,
+  currency: 'USD',
+});
+await cart.save();
+
+// …add line items / totals onto the same row…
+
+// Promote in place at checkout: same row, new discriminator + status.
+cart._meta_type = 'Order';
+cart.status = 'pending';
+await cart.save();`}
 				language="typescript"
 			/>
 		</section>

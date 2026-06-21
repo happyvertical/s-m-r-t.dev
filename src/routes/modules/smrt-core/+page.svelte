@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ModulePage from '$lib/components/ModulePage.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import Callout from '$lib/components/Callout.svelte';
 </script>
 
 <ModulePage
@@ -480,12 +481,33 @@ npx smrt products:delete <id>`}
 
 	<section id="vite-plugin">
 		<h2>Vite Plugin</h2>
-		<p>Required to enable <code>@smrt()</code> decorators:</p>
+		<p>
+			<code>smrtPlugin</code> (exported from
+			<code>@happyvertical/smrt-core/vite-plugin</code>) is what makes <code>@smrt()</code> work. At
+			build/dev time it scans your <code>src/</code> files, builds the object
+			<strong>manifest</strong> (class names, fields, methods, decorator config), and exposes it to
+			the runtime through virtual modules and a <code>.smrt/manifest.json</code> file the CLI reads.
+		</p>
+
+		<Callout variant="note" title="The manifest comes from this plugin, not from smrt-vitest">
+			Build-time AST scanning and manifest generation are done by the Vite <code>smrtPlugin</code>
+			in <code>@happyvertical/smrt-core</code>. <a href="/modules/smrt-vitest">smrt-vitest</a>
+			is a separate Vitest plugin that wires the same scan into the <em>test</em> runtime so unit
+			tests see field metadata -- it does not own the manifest. In a normal app it is the Vite
+			plugin (configured in <code>vite.config.ts</code>) that produces the manifest your server
+			and CLI consume.
+		</Callout>
+
 		<CodeBlock
 			code={`// vite.config.ts
 import { defineConfig } from 'vite';
+import { smrtPlugin } from '@happyvertical/smrt-core/vite-plugin';
 
 export default defineConfig({
+  plugins: [
+    smrtPlugin(),
+  ],
+  // Decorators still need esbuild configured:
   esbuild: {
     tsconfigRaw: {
       compilerOptions: {
@@ -497,10 +519,416 @@ export default defineConfig({
 });`}
 			language="typescript"
 		/>
+
+		<Callout variant="warning" title="The scanner is loaded from dist/ first">
+			The plugin prefers a built scanner under <code>dist/</code> and only falls back to
+			<code>src/</code> on a fresh clone. If you edit smrt-core's
+			<code>src/scanner/*</code> or <code>src/schema/generator.ts</code>, rebuild
+			(<code>pnpm build</code> / <code>pnpm build:watch</code>) before consumers pick up the
+			change. Without a manifest you'll see <code>"No field metadata"</code> errors at runtime.
+		</Callout>
+
+		<h3>SvelteKit route generation (<code>svelteKit.enabled</code>)</h3>
 		<p>
-			Build-time manifest generation happens via the vitest plugin (<a href="/modules/smrt-vitest"
-				>smrt-vitest</a
-			>) at startup.
+			Pass <code>svelteKit: {'{'} enabled: true {'}'}</code> and the plugin writes real SvelteKit
+			<code>+server.ts</code> route files for every <code>@smrt({'{'} api: true {'}'})</code> object
+			-- regenerated on every change in dev. This is opt-in; it is <strong>off</strong> by default.
+		</p>
+		<CodeBlock
+			code={`// vite.config.ts
+import { sveltekit } from '@sveltejs/kit/vite';
+import { smrtPlugin } from '@happyvertical/smrt-core/vite-plugin';
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  plugins: [
+    smrtPlugin({
+      svelteKit: {
+        enabled: true,                  // default: false
+        routesDir: 'src/routes/api',    // where +server.ts files are written
+        objectsDir: 'src/lib/objects',  // where your @smrt() classes live
+        configPath: 'src/lib/server',   // dir for the generated config
+        configFileName: 'smrt.ts',      // generated config file name
+        // kebabRoutes: true,           // /discover-from-url vs /discoverFromUrl
+      },
+    }),
+    sveltekit(),
+  ],
+});`}
+			language="typescript"
+		/>
+
+		<h4>What gets generated</h4>
+		<table>
+			<thead>
+				<tr>
+					<th>Path</th>
+					<th>What it is</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>src/routes/api/&lt;collection&gt;/+server.ts</code></td>
+					<td>Collection routes: <code>GET</code> (list), <code>POST</code> (create)</td>
+				</tr>
+				<tr>
+					<td><code>src/routes/api/&lt;collection&gt;/[id]/+server.ts</code></td>
+					<td>Item routes: <code>GET</code> / <code>PUT</code> / <code>DELETE</code></td>
+				</tr>
+				<tr>
+					<td><code>src/lib/server/smrt.ts</code></td>
+					<td>Central config + per-object <code>objectOverrides</code> (not overwritten once it exists)</td>
+				</tr>
+				<tr>
+					<td><code>src/lib/server/smrt-register.ts</code></td>
+					<td>Imports every object so the <code>@smrt()</code> decorators run (regenerated)</td>
+				</tr>
+				<tr>
+					<td><code>.smrt/manifest.json</code></td>
+					<td>Manifest for CLI discovery (<code>smrt db:migrate</code>, <code>db:status</code>)</td>
+				</tr>
+			</tbody>
+		</table>
+		<p>
+			Generated route files are auto-added to <code>.gitignore</code>; the one exception is
+			<code>smrt.ts</code>, which is yours to edit (the generator skips it if it already exists).
+		</p>
+
+		<h4>Generated routes are fail-closed</h4>
+		<p>
+			Every generated handler runs an auth guard before touching the collection. By default a
+			route <strong>requires an authenticated principal</strong> on <code>locals</code> -- it
+			throws <code>401</code> otherwise. You opt specific objects out per the
+			<a href="#security">Security defaults</a> section below. A generated collection handler
+			looks like this:
+		</p>
+		<CodeBlock
+			code={`// src/routes/api/products/+server.ts  (generated, abridged)
+import { error, json } from '@sveltejs/kit';
+
+// Fail-closed: false = every route needs auth; true = public;
+// 'read' = list/get public, writes still guarded.
+const PUBLIC_ACCESS: boolean | 'read' = false;
+
+function requireRouteAuth(locals: unknown, mutating: boolean): void {
+  if (PUBLIC_ACCESS === true) return;
+  if (PUBLIC_ACCESS === 'read' && !mutating) return;
+  if (!hasAuthenticatedPrincipal(locals)) {
+    throw error(401, 'Authentication required');
+  }
+}
+
+export async function GET({ locals }) {
+  requireRouteAuth(locals, false);   // read -> non-mutating
+  // ... list, serialized via toPublicJSON()
+}
+
+export async function POST({ locals, request }) {
+  requireRouteAuth(locals, true);    // write -> mutating
+  const data = applyWritablePolicy(await request.json());
+  // ... create
+}`}
+			language="typescript"
+		/>
+		<Callout variant="security" title="What counts as authenticated (no fail-open)">
+			The guard treats only an <em>object-shaped</em> <code>locals.user</code> /
+			<code>locals.session</code> (or an explicit <code>locals.smrtAuth === true</code> marker) as
+			a principal. It deliberately ignores <code>locals.auth</code>: Auth.js/SvelteKit attach a
+			callable <code>auth()</code> helper to <strong>every</strong> request -- including anonymous
+			ones -- so honoring it would fail open. Wire your auth hook to set <code>locals.user</code>
+			or <code>locals.session</code>.
+		</Callout>
+	</section>
+
+	<section id="security">
+		<h2>Security Defaults</h2>
+		<p>
+			Generated REST / MCP / SvelteKit surfaces ship with secure defaults so a new
+			<code>@smrt({'{'} api: true {'}'})</code> object is not accidentally an open, fully-writable
+			endpoint. Four mechanisms, all grounded in <code>@smrt()</code> /
+			<code>@field()</code> config.
+		</p>
+
+		<h3>1. Fail-closed authorization (<code>api.public</code>)</h3>
+		<p>Omit <code>public</code> and the route is protected. Opt out explicitly when data is public:</p>
+		<CodeBlock
+			code={`@smrt({ api: true })                         // default: every route requires auth
+class Invoice extends SmrtObject {}
+
+@smrt({ api: { public: 'read' } })           // list/get public; writes still need auth
+class BlogPost extends SmrtObject {}
+
+@smrt({ api: { public: true } })             // fully public (use only for genuinely public data)
+class StatusPage extends SmrtObject {}`}
+			language="typescript"
+		/>
+
+		<h3>2. Sensitive fields (<code>@field({'{'} sensitive: true {'}'})</code>)</h3>
+		<p>
+			Sensitive fields are still persisted, but the framework excludes them from
+			<code>toPublicJSON()</code> -- the serializer used by every generated route -- so they never
+			appear in responses, <strong>and</strong> rejects them as <code>where</code>-clause filter
+			keys, closing the <code>?secret[like]=...</code> value-probing oracle.
+		</p>
+
+		<h3>3. Read-only fields (<code>@field({'{'} readonly: true {'}'})</code>)</h3>
+		<p>
+			Read-only fields are stripped from the request body before <code>create</code>/<code>update</code>,
+			so callers cannot mass-assign them. Server-side code can still set them directly.
+		</p>
+
+		<h3>4. Writable allowlist (<code>api.writable</code>)</h3>
+		<p>
+			Generated <code>create</code>/<code>update</code> handlers run the body through a
+			mass-assignment guard. Framework/server-managed fields (<code>id</code>,
+			<code>tenantId</code>, timestamps, <code>_</code>-prefixed) and any
+			<code>readonly</code> field are <strong>always</strong> stripped. Setting
+			<code>writable</code> additionally restricts writes to that allowlist.
+		</p>
+		<CodeBlock
+			code={`import { smrt, SmrtObject, field } from '@happyvertical/smrt-core';
+
+@smrt({
+  api: {
+    public: 'read',                  // reads public, writes require auth
+    writable: ['name', 'price'],     // only these may be set from the request body
+  },
+})
+class Product extends SmrtObject {
+  name: string = '';
+  price: number = 0.0;
+
+  @field({ sensitive: true })
+  supplierCost: number = 0;          // never serialized; not filterable
+
+  @field({ readonly: true })
+  sku: string = '';                  // stripped from create/update bodies
+}`}
+			language="typescript"
+		/>
+		<Callout variant="warning" title="Custom serializers bypass the sensitive-field filter">
+			If you supply <code>api.serializers</code>, your serializer <em>replaces</em>
+			<code>toPublicJSON()</code>. A serializer that returns <code>item.toJSON()</code> (or spreads
+			all fields) will leak <code>sensitive</code> fields that the default path would have stripped.
+			You own that exclusion.
+		</Callout>
+	</section>
+
+	<section id="custom-routes">
+		<h2>Custom-Method Routes (<code>api.routes</code>)</h2>
+		<p>
+			Methods on a <code>@smrt()</code> class beyond the five CRUD actions are also exposed over
+			HTTP. By default a custom route is a <code>POST</code> at the method name. Use
+			<code>api.routes</code> to declare scope (item vs collection), HTTP verb, and path segment.
+		</p>
+		<table>
+			<thead>
+				<tr>
+					<th>Field</th>
+					<th>Effect</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>scope: 'item'</code></td>
+					<td>Generates <code>/&lt;collection&gt;/[id]/&lt;path&gt;</code> (default for instance methods)</td>
+				</tr>
+				<tr>
+					<td><code>scope: 'collection'</code></td>
+					<td>Generates <code>/&lt;collection&gt;/&lt;path&gt;</code> (default for static methods)</td>
+				</tr>
+				<tr>
+					<td><code>method</code></td>
+					<td>HTTP verb (<code>GET</code>/<code>POST</code>/<code>PUT</code>/<code>PATCH</code>/<code>DELETE</code>); default <code>POST</code></td>
+				</tr>
+				<tr>
+					<td><code>path</code></td>
+					<td>URL segment override; defaults to the method name (wins over <code>kebabRoutes</code>)</td>
+				</tr>
+			</tbody>
+		</table>
+		<CodeBlock
+			code={`@smrt({
+  api: {
+    include: ['list', 'get', 'archive', 'browseFacts'],
+    routes: {
+      // POST /articles/[id]/archive
+      archive: { scope: 'item', method: 'POST' },
+      // GET /articles/facts
+      browseFacts: { scope: 'collection', method: 'GET', path: 'facts' },
+    },
+  },
+})
+class Article extends SmrtObject {
+  async archive() { /* instance method -> item scope */ }
+  static async browseFacts() { /* static method -> collection scope */ }
+}`}
+			language="typescript"
+		/>
+		<Callout variant="note" title="Custom routes are guarded and sensitive-safe too">
+			The same fail-closed auth guard runs on custom-method handlers. Their return values are
+			recursively routed through <code>toPublicJSON()</code> -- so a method that returns a
+			<code>SmrtObject</code> (or one nested in an array/object) still has its
+			<code>sensitive</code> fields stripped. A CLI method listed in <code>cli.include</code> must
+			also be reachable via the API (it is invoked over HTTP), or the build fails; opt out with
+			<code>cli: {'{'} skipApiCheck: true {'}'}</code> for genuinely in-process CLIs.
+		</Callout>
+	</section>
+
+	<section id="read-cache">
+		<h2>Read Cache &amp; Write-Invalidation</h2>
+		<p>
+			SSR pages re-query read-heavy, write-rare collections on every request. smrt-core ships an
+			<strong>opt-in</strong> read-through cache that memoizes <code>list()</code>/<code>get()</code>
+			result rows keyed by the final SQL + parameters, for a TTL you set.
+		</p>
+		<p>Enable per call, or per model via the decorator:</p>
+		<CodeBlock
+			code={`// Per call
+const published = await resumes.list({
+  where: { status: 'published' },
+  cache: { ttl: 60_000 },          // memoize for 60s
+});
+
+// Per model (becomes the default for that collection's reads)
+@smrt({ cache: { ttl: 60_000 } })
+class Resume extends SmrtObject {}
+
+// Force a fresh read even when the model opted in
+const fresh = await resumes.list({ where: { status: 'published' }, cache: false });`}
+			language="typescript"
+		/>
+		<p>
+			<strong>Automatic write-invalidation.</strong> Because SMRT owns every mutation path
+			(<code>save()</code>, <code>delete()</code>, <code>getOrUpsert()</code>, junction
+			attach/detach), a successful write invalidates that table's cached entries in-process with no
+			manual step. Even a raw write issued through <code>collection.query()</code> is treated as a
+			mutation and invalidates. Entries are scoped per database identity and per table, so
+			multi-DB processes and STI siblings stay coherent.
+		</p>
+		<Callout variant="warning" title="Per-process by default; bounded by TTL otherwise">
+			Caches are per-process: with multiple replicas, a local write leaves peers stale until TTL
+			unless you opt into <code>crossProcess: true</code> (broadcasts over the adapter's
+			notification channel, e.g. Postgres <code>LISTEN/NOTIFY</code>). Invalidation also fires when
+			a mutation's SQL <em>executes</em>, not when its transaction commits -- so a rollback can
+			leave the cache invalidated for a write that never landed, and a concurrent reader can
+			repopulate from a pre-commit snapshot. Target read-heavy / write-rare data; use
+			<code>cache: false</code> where strict freshness matters. <code>count()</code> is never served
+			from the cache.
+		</Callout>
+	</section>
+
+	<section id="context-memory">
+		<h2>Context Memory</h2>
+		<p>
+			Every <code>SmrtObject</code> can persist named, scoped values to the
+			<code>_smrt_contexts</code> system table via <code>remember()</code> /
+			<code>recall()</code>. It's a lightweight learned-pattern store -- e.g. an agent caching how
+			to parse a given site -- keyed by <code>(owner_class, owner_id, scope, key, version)</code>,
+			with an optional <code>confidence</code> score (0-1, default 1.0).
+		</p>
+		<CodeBlock
+			code={`// Store a learned pattern (upserts on the same scope+key+version)
+await agent.remember({
+  scope: 'parser/example.com',
+  key: normalizedUrl,
+  value: { patterns: ['regex1', 'regex2'] },
+  confidence: 0.9,
+});
+
+// Retrieve it; walk up parent scopes if not found at this level
+const strategy = await agent.recall({
+  scope: 'parser/example.com/article',
+  key: normalizedUrl,
+  includeAncestors: true,    // 'a/b/c' -> 'a/b' -> 'a' -> 'global'
+  minConfidence: 0.6,
+});`}
+			language="typescript"
+		/>
+		<p>
+			Related methods: <code>recallAll(scope)</code> to read every entry in a scope, and
+			<code>forget(...)</code> to delete entries. <code>remember()</code>/<code>recall()</code>
+			require <code>initialize()</code> to have run (they need the system DB).
+		</p>
+	</section>
+
+	<section id="embeddings">
+		<h2>Semantic Search &amp; Embeddings</h2>
+		<p>
+			Declare <code>embeddings</code> in <code>@smrt()</code> and the listed fields get vector
+			embeddings stored in the <code>_smrt_embeddings</code> system table. Embeddings are
+			auto-generated on <code>save()</code> (only when content changes, via a content hash), then
+			you can run cosine-similarity search.
+		</p>
+		<CodeBlock
+			code={`@smrt({
+  embeddings: {
+    fields: ['title', 'body'],
+    provider: 'auto',          // 'local' (@xenova/transformers), 'ai', or 'auto'
+    autoGenerate: true,        // embed on save (default true)
+    regenerateOnChange: true,  // re-embed only when content changes (default true)
+  },
+})
+class Article extends SmrtObject {
+  title: string = '';
+  body: string = '';
+}`}
+			language="typescript"
+		/>
+		<CodeBlock
+			code={`// Semantic search: embeds the query, ranks by cosine similarity
+const results = await articles.semanticSearch('machine learning trends', {
+  limit: 10,
+  minSimilarity: 0.7,   // 0-1 threshold (default 0)
+});
+for (const article of results) {
+  console.log(\`\${article.title} (similarity: \${article._similarity})\`);
+}
+
+// "More like this" from an existing object (or its id)
+const seed = await articles.get(someId);
+const similar = await articles.findSimilar(seed, { limit: 5, excludeSelf: true });`}
+			language="typescript"
+		/>
+		<Callout variant="note" title="Query and stored embeddings use the same model">
+			<code>semanticSearch()</code> resolves the class/project embedding config and embeds the
+			query with the <strong>same</strong> provider/model used for the stored vectors, so scores
+			are comparable. Searching a field that isn't in the <code>embeddings.fields</code> list (or a
+			model with no embedding config at all) throws a clear error rather than returning wrong
+			results.
+		</Callout>
+	</section>
+
+	<section id="cross-package-ref">
+		<h2>Cross-Package References (<code>@crossPackageRef</code>)</h2>
+		<p>
+			<code>@foreignKey()</code> links objects in the <em>same</em> package and emits a real SQL FK
+			constraint. When the target class lives in <strong>another</strong> package,
+			<code>@crossPackageRef()</code> registers the relationship without a DB-level constraint --
+			adding one would require the classes to be visible at schema-generation time and would force
+			a circular package dependency. The column stays a plain <code>TEXT</code> (UUID) id.
+		</p>
+		<CodeBlock
+			code={`import { smrt, SmrtObject, crossPackageRef } from '@happyvertical/smrt-core';
+
+@smrt()
+class Customer extends SmrtObject {
+  // Target named as @package/scope:ClassName
+  @crossPackageRef('@happyvertical/smrt-profiles:Profile')
+  profileId: string = '';
+
+  // Opt into save-time existence validation (catches typos / stale ids)
+  @crossPackageRef('@happyvertical/smrt-profiles:Profile', { validate: true })
+  primaryContactId: string = '';
+}`}
+			language="typescript"
+		/>
+		<p>
+			What you gain over a plain string id: the relationship is registered with the
+			<code>ObjectRegistry</code>, so <code>loadRelated('profileId')</code> and
+			<code>Collection.list({'{'} include: ['profileId'] {'}'})</code> resolve it once the target
+			package's manifest is loaded; and with <code>validate: true</code>, <code>save()</code>
+			confirms the referenced object exists before the row lands.
 		</p>
 	</section>
 
@@ -568,19 +996,19 @@ const collection = await ProductCollection.create({ db });`}
 				avoids redundant <code>tableExists()</code> calls across collections.
 			</li>
 			<li>
-				<strong>Manifest required</strong>: build-time AST scanning produces a manifest. Without the
-				vitest plugin you'll see <code>"No field metadata"</code> errors.
+				<strong>Manifest required</strong>: build-time AST scanning produces the manifest, and it is
+				the Vite <code>smrtPlugin</code> (see <a href="#vite-plugin">Vite Plugin</a>) that generates
+				it for your app -- not <a href="/modules/smrt-vitest">smrt-vitest</a>, which only wires the
+				same scan into the <em>test</em> runtime. Without a manifest you'll see
+				<code>"No field metadata"</code> errors.
 			</li>
 			<li>
-				<strong>Vite plugin loads scanner from <code>dist/</code> first</strong>:
-				<code>src/vite-plugin/import-build-aware.ts</code> prefers <code>dist/</code> when it
-				exists; it only falls back to <code>src/</code> on fresh clones. If you edit
-				<code>src/scanner/*.ts</code> or <code>src/schema/generator.ts</code>, you must rebuild (<code
-					>pnpm build</code
-				>
-				or <code>pnpm dev</code> / <code>pnpm build:watch</code>) before consumers will see the
-				change. Sniffing <code>.ts</code> vs <code>.js</code> via
-				<code>import.meta.url</code> was non-deterministic under tsx and broke 12-13 publishes (#1139).
+				<strong>Vite plugin loads scanner from <code>dist/</code> first</strong>: the plugin prefers
+				<code>dist/</code> and only falls back to <code>src/</code> on fresh clones, so rebuild after
+				editing <code>src/scanner/*</code> or <code>src/schema/generator.ts</code> (see the
+				<a href="#vite-plugin">Vite Plugin</a> note). Sniffing <code>.ts</code> vs <code>.js</code>
+				via <code>import.meta.url</code> was non-deterministic under tsx and broke 12-13 publishes
+				(#1139).
 			</li>
 		</ul>
 	</section>
