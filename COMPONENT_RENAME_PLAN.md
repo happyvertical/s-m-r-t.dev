@@ -149,7 +149,7 @@ interface LoadingOverlayProps {
 3. Update TypeScript types
 4. Update all documentation
 5. Update all affected projects:
-   - havesmrt.com
+   - s-m-r-t.dev
    - nunitus
    - praeco
    - domacraft.com
@@ -172,7 +172,7 @@ interface LoadingOverlayProps {
 - [ ] Test all renamed components
 - [ ] Update CHANGELOG.md for v2.0.0
 
-**In havesmrt.com:**
+**In s-m-r-t.dev:**
 
 - [ ] Update all component imports
 - [ ] Update all component pages/docs

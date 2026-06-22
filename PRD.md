@@ -782,7 +782,7 @@ Voice input, AI integration behavior
 
 ### GitHub
 
-- **Repository**: happyvertical/havesmrt.com
+- **Repository**: happyvertical/s-m-r-t.dev
 - **Monorepo Dependency**: happyvertical/smrt
 - **Actions**: CI/CD pipeline
 
@@ -1031,7 +1031,7 @@ For each component:
 ### File Structure
 
 ```
-havesmrt.com/
+s-m-r-t.dev/
 ├── src/
 │   ├── routes/
 │   │   ├── +layout.svelte

@@ -331,7 +331,7 @@ To activate analytics/Sentry: add credentials to .env (see .env.example)
 ## 📁 File Structure Status
 
 ```
-havesmrt.com/
+s-m-r-t.dev/
 ├── src/
 │   ├── routes/
 │   │   ├── +layout.svelte ✅
