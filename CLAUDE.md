@@ -1,4 +1,4 @@
-# havesmrt.com - SMRT Framework Documentation Site
+# s-m-r-t.dev - SMRT Framework Documentation Site
 
 ## Purpose
 
@@ -11,7 +11,7 @@ This project serves as a **full-featured demo application** for the SMRT framewo
 1. Document the issue in this file under "Current Issues to Fix Upstream"
 2. Implement the proper fix in the upstream package (smrt repo)
 3. Rebuild the upstream package
-4. Continue development in havesmrt.com
+4. Continue development in this repo
 
 This ensures we're building toward a production-ready framework suitable for public consumption. Quick hacks hide real problems.
 
