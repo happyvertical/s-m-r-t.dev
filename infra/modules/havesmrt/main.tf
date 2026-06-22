@@ -282,8 +282,9 @@ resource "aws_acm_certificate" "site" {
 
 # Certificate validation
 resource "aws_acm_certificate_validation" "site" {
-  provider        = aws.us_east_1
-  certificate_arn = aws_acm_certificate.site.arn
+  provider                = aws.us_east_1
+  certificate_arn         = aws_acm_certificate.site.arn
+  validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
   timeouts {
     create = "30m"
   }

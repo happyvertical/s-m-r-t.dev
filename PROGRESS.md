@@ -1,4 +1,4 @@
-# havesmrt.com Implementation Progress
+# s-m-r-t.dev Implementation Progress
 
 **Last Updated**: 2026-01-12
 **Status**: Active Development
@@ -385,7 +385,7 @@ For each of the 28 modules:
 3. Subagent generates tutorial outlines and API documentation
 4. Human reviews and approves
 5. Subagent writes final documentation
-6. Add to havesmrt.com at /modules/[module-name]
+6. Add to s-m-r-t.dev at /modules/[module-name]
 
 ### Development Server
 

@@ -5,7 +5,7 @@
 
 set -e
 
-echo "🔐 Setting up GitHub Actions secrets for havesmrt.com"
+echo "🔐 Setting up GitHub Actions secrets for s-m-r-t.dev"
 echo ""
 
 # Check if gh CLI is installed

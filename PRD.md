@@ -1,4 +1,4 @@
-# Product Requirements Document: havesmrt.com
+# Product Requirements Document: s-m-r-t.dev
 
 **Version**: 1.0
 **Last Updated**: 2026-01-09
@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-havesmrt.com is the official documentation and marketing site for the SMRT framework - a full-stack TypeScript framework that abstracts away implementation details for databases, REST APIs, MCP tools, and CLI commands through simple object definitions.
+s-m-r-t.dev is the official documentation and marketing site for the SMRT framework - a full-stack TypeScript framework that abstracts away implementation details for databases, REST APIs, MCP tools, and CLI commands through simple object definitions.
 
 ## Product Vision
 
@@ -58,8 +58,8 @@ Create a comprehensive, developer-friendly documentation site that:
 ### Infrastructure
 
 - **Environments**:
-  - Staging: `staging.havesmrt.com`
-  - Production: `havesmrt.com`
+  - Staging: `staging.s-m-r-t.dev`
+  - Production: `s-m-r-t.dev`
 - **Storage**: S3 buckets (havesmrt-staging, havesmrt-production)
 - **CDN**: CloudFront with custom SSL certificates
 - **DNS**: Route53
@@ -470,7 +470,7 @@ For each module:
    - API documentation structure
 5. Human reviews and approves
 6. Agent writes final documentation
-7. Documentation added to havesmrt.com
+7. Documentation added to s-m-r-t.dev
 
 ### 4. Core Documentation
 
@@ -670,7 +670,7 @@ jobs:
   build:
     - Checkout smrt monorepo
     - Build smrt packages (pnpm)
-    - Install havesmrt.com dependencies (npm)
+    - Install docs site dependencies (npm)
     - Run tests
     - Build static site
     - Upload artifacts
@@ -770,7 +770,7 @@ Voice input, AI integration behavior
 - **Required Packages**:
   - `@happyvertical/smrt-svelte`: Component library
   - `@happyvertical/smrt-docs`: Documentation content
-- **Build Dependency**: Must build smrt packages before havesmrt.com
+- **Build Dependency**: Must build smrt packages before the docs site
 
 ### AWS Services
 
@@ -825,7 +825,7 @@ To ensure comprehensive and accurate documentation for all 28 SMRT modules, we w
    - Integration pattern documentation
 4. **Human Review**: Review and approve outlines
 5. **Content Generation**: Subagent writes full documentation
-6. **Integration**: Add documentation to havesmrt.com routes
+6. **Integration**: Add documentation to s-m-r-t.dev routes
 7. **Validation**: Test all code examples
 
 **Benefits of Subagent Approach**:
@@ -904,7 +904,7 @@ For each component:
 3. Approve tutorial/example outlines
 4. Subagent generates documentation
 5. Human review and refinement
-6. Add to havesmrt.com
+6. Add to s-m-r-t.dev
 7. Test all code examples
 
 ### Phase 4: Core Documentation
@@ -1151,7 +1151,7 @@ Each component page must follow the same standards as Section 2 (Component Docum
 **Build Tools**:
 
 - pnpm (for smrt monorepo)
-- npm (for havesmrt.com)
+- npm (for the docs site)
 - Vitest (testing)
 - Prettier (formatting)
 - ESLint (linting)

@@ -10,7 +10,7 @@ variable "environment" {
 variable "domain" {
   description = "Base domain for the site"
   type        = string
-  default     = "havesmrt.com"
+  default     = "s-m-r-t.dev"
 }
 
 variable "aws_region" {

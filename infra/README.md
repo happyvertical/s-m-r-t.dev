@@ -1,6 +1,6 @@
-# havesmrt.com Infrastructure
+# s-m-r-t.dev Infrastructure
 
-This directory contains OpenTofu/Terraform configuration for deploying havesmrt.com as a static site to AWS S3 + CloudFront.
+This directory contains OpenTofu/Terraform configuration for deploying s-m-r-t.dev as a static site to AWS S3 + CloudFront.
 
 ## Architecture
 
@@ -13,15 +13,16 @@ This directory contains OpenTofu/Terraform configuration for deploying havesmrt.
 
 ## Environments
 
-- **Staging**: `staging.havesmrt.com`
-- **Production**: `havesmrt.com`
+- **Staging**: `staging.s-m-r-t.dev`
+- **Production**: `s-m-r-t.dev`
 
 ## Prerequisites
 
 1. **AWS CLI** configured with appropriate credentials
 2. **OpenTofu** >= 1.6.0
-3. **Route53 hosted zone** for `havesmrt.com`
-4. **S3 bucket** for state: `happyvertical-terraform-state` (already exists)
+3. **Route53 hosted zone** for `s-m-r-t.dev`
+4. **Route53 hosted zone** for `havesmrt.com` while the legacy-domain redirect is enabled
+5. **S3 bucket** for state: `happyvertical-terraform-state` (already exists)
 
 ## Initial Setup
 
@@ -109,8 +110,10 @@ Required GitHub Secrets:
 
 ### Route53 Records
 
-- `staging.havesmrt.com`: ALIAS to staging CloudFront distribution
-- `havesmrt.com`: ALIAS to production CloudFront distribution
+- `staging.s-m-r-t.dev`: ALIAS to staging CloudFront distribution
+- `s-m-r-t.dev`: ALIAS to production CloudFront distribution
+- `staging.havesmrt.com`: ALIAS to the staging legacy redirect distribution
+- `havesmrt.com`: ALIAS to the production legacy redirect distribution
 
 ## Outputs
 

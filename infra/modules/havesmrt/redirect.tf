@@ -3,8 +3,8 @@
 #
 # A dedicated CloudFront distribution fronts the legacy domain; a viewer-request
 # CloudFront Function returns a 301 to the canonical site (local.site_domain),
-# preserving the path. Mirrors the primary stack's cert / validation / Route53
-# patterns in main.tf.
+# preserving the path and query string. Mirrors the primary stack's cert /
+# validation / Route53 patterns in main.tf.
 #
 # APPLY PREREQUISITES (owner action — see infra/README.md):
 #   - A Route53 public hosted zone must exist for `local.legacy_domain`
@@ -19,18 +19,38 @@ locals {
   legacy_site_domain = var.environment == "production" ? local.legacy_domain : "${var.environment}.${local.legacy_domain}"
 }
 
-# 301 -> canonical site. Path is preserved; querystring is dropped (extend if needed).
+# 301 -> canonical site. Path and query string are preserved.
 resource "aws_cloudfront_function" "redirect" {
   name    = "havesmrt-${var.environment}-legacy-redirect"
   runtime = "cloudfront-js-2.0"
   publish = true
   code    = <<-EOF
+    function buildQueryString(querystring) {
+      var parts = [];
+      for (var key in querystring) {
+        if (querystring.hasOwnProperty(key)) {
+          var value = querystring[key];
+          if (value.multiValue) {
+            for (var i = 0; i < value.multiValue.length; i++) {
+              parts.push(key + '=' + value.multiValue[i].value);
+            }
+          } else if (value.value === '') {
+            parts.push(key);
+          } else {
+            parts.push(key + '=' + value.value);
+          }
+        }
+      }
+      return parts.length ? '?' + parts.join('&') : '';
+    }
+
     function handler(event) {
       var request = event.request;
+      var query = buildQueryString(request.querystring || {});
       return {
         statusCode: 301,
         statusDescription: 'Moved Permanently',
-        headers: { 'location': { value: 'https://${local.site_domain}' + request.uri } }
+        headers: { 'location': { value: 'https://${local.site_domain}' + request.uri + query } }
       };
     }
   EOF
@@ -76,13 +96,12 @@ resource "aws_route53_record" "legacy_cert_validation" {
 }
 
 resource "aws_acm_certificate_validation" "legacy" {
-  provider        = aws.us_east_1
-  certificate_arn = aws_acm_certificate.legacy.arn
+  provider                = aws.us_east_1
+  certificate_arn         = aws_acm_certificate.legacy.arn
+  validation_record_fqdns = [for record in aws_route53_record.legacy_cert_validation : record.fqdn]
   timeouts {
     create = "30m"
   }
-
-  depends_on = [aws_route53_record.legacy_cert_validation]
 }
 
 # Redirect-only distribution for the legacy domain.
