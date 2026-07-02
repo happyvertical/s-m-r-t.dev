@@ -1,15 +1,7 @@
 <script lang="ts">
 	import Grid from '$lib/components/Grid.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
-	import {
-		getThemeContext,
-		ThemeSwitcher,
-		ColorSchemeToggle,
-		type ThemePreset
-	} from '@happyvertical/smrt-svelte/themes';
-	import { swissTheme } from '$lib/themes';
-
-	const theme = getThemeContext();
+	import ColorSchemeToggle from '$lib/components/ColorSchemeToggle.svelte';
 
 	const installCode = `npm install @happyvertical/smrt-svelte`;
 
@@ -90,26 +82,14 @@ registerTheme(myTheme);`;
 	</section>
 
 	<section class="demo">
-		<h2>Live Demo</h2>
-		<p>Try switching themes and color schemes:</p>
+		<h2>Light &amp; dark</h2>
+		<p>Toggle the color scheme — every token below updates live:</p>
 
 		<div class="controls">
 			<div class="control-group">
-				<h3>Theme Preset</h3>
-				<ThemeSwitcher variant="buttons" showIcons={true} />
-			</div>
-			<div class="control-group">
 				<h3>Color Scheme</h3>
-				<ColorSchemeToggle variant="segmented" showLabels={true} />
+				<ColorSchemeToggle />
 			</div>
-		</div>
-
-		<div class="current-theme">
-			<p>
-				<strong>Current:</strong>
-				{theme.state.theme.name} —
-				{theme.state.resolvedScheme} mode
-			</p>
 		</div>
 	</section>
 
@@ -140,7 +120,7 @@ registerTheme(myTheme);`;
 		<h2>Available Themes</h2>
 
 		<div class="theme-cards">
-			<div class="theme-card" class:active={theme.state.preset === 'material'}>
+			<div class="theme-card">
 				<h3>🔷 Material</h3>
 				<p>
 					Modern Google Material Design 3 with refined colors and typography. Features vibrant
@@ -149,7 +129,7 @@ registerTheme(myTheme);`;
 				<code>preset="material"</code>
 			</div>
 
-			<div class="theme-card" class:active={theme.state.preset === 'glass'}>
+			<div class="theme-card">
 				<h3>💎 Glass</h3>
 				<p>
 					Apple-inspired glass morphism with backdrop blur effects. Translucent surfaces, system
@@ -158,7 +138,7 @@ registerTheme(myTheme);`;
 				<code>preset="glass"</code>
 			</div>
 
-			<div class="theme-card" class:active={theme.state.preset === 'studio'}>
+			<div class="theme-card">
 				<h3>◻️ Studio</h3>
 				<p>
 					Google AI Studio flat design with minimal aesthetics. Monochromatic base with vibrant
@@ -167,7 +147,7 @@ registerTheme(myTheme);`;
 				<code>preset="studio"</code>
 			</div>
 
-			<div class="theme-card" class:active={theme.state.preset === ('swiss' as ThemePreset)}>
+			<div class="theme-card">
 				<h3>🇨🇭 Swiss</h3>
 				<p>
 					Custom theme for s-m-r-t.dev. Swiss/International Typographic Style with strong grid,

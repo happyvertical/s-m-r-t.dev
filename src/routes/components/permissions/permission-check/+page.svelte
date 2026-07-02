@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PermissionCheck } from '@happyvertical/smrt-svelte';
+	import { PermissionCheck } from '@happyvertical/smrt-ui';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';

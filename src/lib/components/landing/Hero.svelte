@@ -15,16 +15,15 @@
 		<p class="eyebrow">
 			<span class="eyebrow-version">{SMRT_VERSION_LABEL}</span>
 			<span class="eyebrow-sep" aria-hidden="true">·</span>
-			<span>a batteries-included framework for AI apps</span>
+			<span>SAADL framework</span>
 		</p>
 
-		<h1 id="hero-title">Shape an object once. <span class="wordmark">s-m-r-t</span> does the rest.</h1>
+		<h1 id="hero-title">Built for human users and agent operators.</h1>
 
 		<p class="subhead">
-			Define a model once and it becomes your database schema, REST API, CLI, MCP tools, and
-			typed UI &mdash; reachable by people and agents alike. Auth, tenants, payments, agents,
-			vector search, and roughly ninety UI components are included, with no vendor lock-in. It
-			runs the same from a closet to a cluster.
+			Define your domain once &mdash; a single <code>@smrt()</code> TypeScript class &mdash; and
+			SMRT generates the database schema, REST API, CLI, and MCP server. Swap AI provider or
+			database with one field; auth, multi-tenancy, billing, and durable jobs come included.
 		</p>
 
 		<div class="cta-row">
@@ -35,7 +34,7 @@
 					<polyline points="12 5 19 12 12 19" />
 				</svg>
 			</a>
-			<a class="cta cta-secondary" href="/docs">Explore the docs</a>
+			<a class="cta cta-secondary" href="/docs">Read the docs</a>
 		</div>
 	</div>
 </section>
@@ -114,6 +113,14 @@
 		color: var(--smrt-color-on-surface-variant, #555);
 		max-width: 720px;
 		margin: 0 auto 36px;
+	}
+
+	.subhead code {
+		font-family: var(--smrt-font-family-mono, monospace);
+		font-size: 0.9em;
+		background: color-mix(in srgb, var(--smrt-color-surface-variant, #f0f0f0) 70%, transparent);
+		padding: 1px 6px;
+		border-radius: 4px;
 	}
 
 	.cta-row {

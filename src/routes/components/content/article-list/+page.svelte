@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ArticleList } from '@happyvertical/smrt-content/svelte';
-	import { Grid } from '@happyvertical/smrt-svelte';
+	import { Grid } from '@happyvertical/smrt-ui';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';

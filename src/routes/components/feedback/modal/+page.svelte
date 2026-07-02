@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Modal, Button } from '@happyvertical/smrt-svelte';
+	import { Modal, Button } from '@happyvertical/smrt-ui';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
