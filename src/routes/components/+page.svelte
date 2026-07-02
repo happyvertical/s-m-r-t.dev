@@ -96,7 +96,7 @@
 	<section class="installation">
 		<h2>Installation</h2>
 		<p>All components are available from the smrt-svelte package:</p>
-		<pre><code>npm install @happyvertical/smrt-svelte</code></pre>
+		<pre><code>npm install @happyvertical/smrt-ui @happyvertical/smrt-svelte</code></pre>
 	</section>
 
 	<section class="usage">

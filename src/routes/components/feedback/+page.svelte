@@ -37,7 +37,7 @@
 
 	<section class="install">
 		<h2>Installation</h2>
-		<pre><code>npm install @happyvertical/smrt-svelte</code></pre>
+		<pre><code>npm install @happyvertical/smrt-ui</code></pre>
 		<pre><code
 				>{`import { ProgressBar, ConfirmDialog, Modal } from '@happyvertical/smrt-ui';`}</code
 			></pre>

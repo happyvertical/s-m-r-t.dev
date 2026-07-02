@@ -28,7 +28,7 @@
 	<h3>Users</h3>
 	<CodeBlock
 		code={`// Before
-import { UserCard, UserAvatar, UserList } from '@happyvertical/smrt-users/svelte';
+import { UserCard, UserAvatar, UserList } from '@happyvertical/smrt-svelte';
 
 // After
 import { UserCard, UserAvatar, UserList } from '@happyvertical/smrt-users/svelte';`}
@@ -38,7 +38,7 @@ import { UserCard, UserAvatar, UserList } from '@happyvertical/smrt-users/svelte
 	<h3>Commerce</h3>
 	<CodeBlock
 		code={`// Before
-import { InvoiceCard, InvoiceLineItems } from '@happyvertical/smrt-commerce/svelte';
+import { InvoiceCard, InvoiceLineItems } from '@happyvertical/smrt-svelte';
 
 // After
 import { InvoiceCard, InvoiceLineItems } from '@happyvertical/smrt-commerce/svelte';`}
@@ -48,7 +48,7 @@ import { InvoiceCard, InvoiceLineItems } from '@happyvertical/smrt-commerce/svel
 	<h3>Tenancy</h3>
 	<CodeBlock
 		code={`// Before
-import { TenantSwitcher, TenantCard } from '@happyvertical/smrt-tenancy/svelte';
+import { TenantSwitcher, TenantCard } from '@happyvertical/smrt-svelte';
 
 // After
 import { TenantSwitcher, TenantCard } from '@happyvertical/smrt-tenancy/svelte';`}
@@ -58,7 +58,7 @@ import { TenantSwitcher, TenantCard } from '@happyvertical/smrt-tenancy/svelte';
 	<h3>Jobs</h3>
 	<CodeBlock
 		code={`// Before
-import { JobDashboard, JobList } from '@happyvertical/smrt-jobs/svelte';
+import { JobDashboard, JobList } from '@happyvertical/smrt-svelte';
 
 // After
 import { JobDashboard, JobList } from '@happyvertical/smrt-jobs/svelte';`}
@@ -68,7 +68,7 @@ import { JobDashboard, JobList } from '@happyvertical/smrt-jobs/svelte';`}
 	<h3>Agents</h3>
 	<CodeBlock
 		code={`// Before
-import { AgentDashboard, AgentRunHistory } from '@happyvertical/smrt-agents/svelte';
+import { AgentDashboard, AgentRunHistory } from '@happyvertical/smrt-svelte';
 
 // After
 import { AgentDashboard, AgentRunHistory } from '@happyvertical/smrt-agents/svelte';`}
@@ -78,7 +78,7 @@ import { AgentDashboard, AgentRunHistory } from '@happyvertical/smrt-agents/svel
 	<h3>Content</h3>
 	<CodeBlock
 		code={`// Before
-import { ArticleCard, ArticleList } from '@happyvertical/smrt-content/svelte';
+import { ArticleCard, ArticleList } from '@happyvertical/smrt-svelte';
 
 // After
 import { ArticleCard, ArticleList } from '@happyvertical/smrt-content/svelte';`}
@@ -88,7 +88,7 @@ import { ArticleCard, ArticleList } from '@happyvertical/smrt-content/svelte';`}
 	<h3>Events</h3>
 	<CodeBlock
 		code={`// Before
-import { MeetingView } from '@happyvertical/smrt-events/svelte';
+import { MeetingView } from '@happyvertical/smrt-svelte';
 
 // After
 import { MeetingView } from '@happyvertical/smrt-events/svelte';`}
@@ -98,7 +98,7 @@ import { MeetingView } from '@happyvertical/smrt-events/svelte';`}
 	<h3>Projects</h3>
 	<CodeBlock
 		code={`// Before
-import { TimeEntryCard, ApprovalActions } from '@happyvertical/smrt-projects/svelte';
+import { TimeEntryCard, ApprovalActions } from '@happyvertical/smrt-svelte';
 
 // After
 import { TimeEntryCard, ApprovalActions } from '@happyvertical/smrt-projects/svelte';`}
