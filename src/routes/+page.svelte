@@ -28,11 +28,11 @@
 	// Section 6 — AI is built in.
 	const aiCards: LandingCard[] = [
 		{
-			title: 'Vector & memory',
-			body: 'Generate embeddings and run semantic search as ordinary SQL methods on your collections. Give any object a memory with remember() and recall() it later.',
+			title: 'Vector search',
+			body: 'Generate embeddings and run semantic search as ordinary collection queries — the same models, the same query API, backed by your database.',
 			iconPath:
 				'M9 3a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 1 5 3 3 0 0 0 5 1V3Zm6 0a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-1 5 3 3 0 0 1-5 1V3Z',
-			tags: ['embeddings', 'semantic search', 'remember()', 'recall()']
+			tags: ['embeddings', 'semantic search']
 		},
 		{
 			title: 'Agents & browser AI',
@@ -56,7 +56,7 @@
 			body: 'The same models persist to whichever engine you point them at — from a local file to a managed cluster.',
 			iconPath:
 				'M12 3c4.4 0 8 1.3 8 3s-3.6 3-8 3-8-1.3-8-3 3.6-3 8-3Zm8 6c0 1.7-3.6 3-8 3s-8-1.3-8-3m16 5c0 1.7-3.6 3-8 3s-8-1.3-8-3M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6',
-			tags: ['SQLite', 'Postgres', 'DuckDB']
+			tags: ['SQLite', 'Postgres', 'DuckDB', 'JSON']
 		}
 	];
 
@@ -64,10 +64,10 @@
 </script>
 
 <svelte:head>
-	<title>s-m-r-t — a batteries-included framework for AI apps</title>
+	<title>s-m-r-t — Software as Agentic Domain Logic</title>
 	<meta
 		name="description"
-		content="Define a model once and SMRT generates your database schema, REST API, CLI, MCP tools, and typed UI — reachable by people and agents alike. Auth, tenants, payments, agents, and vector search included, with no vendor lock-in."
+		content="A TypeScript framework for software that people and agents both operate. Define a domain model once; generate its database schema, REST API, CLI, and MCP tools. Swap AI providers and databases with one field."
 	/>
 </svelte:head>
 
@@ -75,41 +75,75 @@
 
 <Reveal />
 
+<div class="saadl-note">
+	<p>
+		<strong>SAADL</strong> — Software as Agentic Domain Logic: software whose domain logic exposes
+		the same operations to human users (UI, HTTP, CLI) and to software agents (callable tools).
+		<span class="wm">s-m-r-t</span> is a SAADL framework.
+	</p>
+</div>
+
 <Section
-	eyebrow="One model, many doors"
-	title="Reach it however you work — or however your agent works"
-	intro="The same Product is one object. People hit it over HTTP or the CLI; agents call it as an MCP tool; your app drops in a component. No glue code in between."
+	eyebrow="One model, every interface"
+	title="One object, reached over HTTP, the CLI, and as MCP tools"
+	intro="A Product is one class. People reach it over HTTP or the CLI; an agent calls it as an MCP tool like product_create. Every surface resolves to the same collection — turn each on with a flag on @smrt(), no adapter code."
 	tinted
 >
 	<ReachIt />
 </Section>
 
 <Section
-	eyebrow="The ecosystem"
-	title="Batteries included — one ecosystem, not forty dependencies"
-	intro="Roughly 49 packages, designed together and released in lockstep. Compose the ones you need; they already know how to work with each other."
+	eyebrow="Batteries included"
+	title="Around forty packages, released in lockstep"
+	intro="Auth with four-level RBAC, multi-tenancy that filters every query, double-entry billing, vector search, background jobs, content, messaging, assets. They share one ORM, one inheritance model, and one dispatch bus."
 	wide
 >
 	<CapabilityGrid />
 </Section>
 
 <Section
-	eyebrow="UI"
-	title="A component library you don’t have to build"
-	intro="smrt-svelte ships a typed, themeable component library — forms, badges, cards, tables, and more — so your generated data has a face from day one."
+	eyebrow="The component library"
+	title="Around eighty components you compose — not a UI you hand-build"
+	intro="Typed, themeable, accessibility-tested Svelte components — forms, tables, badges, cards, modals, navigation, calendar, chat. The framework generates your API and agent tools; you compose the human screens from parts that already match your data."
 	tinted
 >
 	<ComponentGallery />
 </Section>
 
-<Section eyebrow="AI" title="AI is built in" wide>
+<Section eyebrow="AI" title="AI, on the server and in the browser" wide>
 	<CardRow cards={aiCards} />
 </Section>
 
-<Section eyebrow="Portability" title="Runs anywhere. No lock-in." tinted wide>
+<Section eyebrow="No lock-in" title="Swap your AI provider or database with one field" tinted wide>
 	<CardRow cards={runsCards} note={runsNote} />
 </Section>
 
 <Section eyebrow="Start here" title="Get started" wide>
 	<GetStarted />
 </Section>
+
+<style>
+	.saadl-note {
+		max-width: 820px;
+		margin: 0 auto;
+		padding: 28px 24px 8px;
+		text-align: center;
+	}
+
+	.saadl-note p {
+		margin: 0;
+		font-size: 1rem;
+		line-height: 1.65;
+		color: var(--smrt-color-on-surface-variant, #555);
+	}
+
+	.saadl-note strong {
+		color: var(--smrt-color-on-background, #1a1a1a);
+	}
+
+	.saadl-note .wm {
+		font-family: var(--smrt-font-family-mono, monospace);
+		color: var(--smrt-color-primary, #1976d2);
+		white-space: nowrap;
+	}
+</style>
