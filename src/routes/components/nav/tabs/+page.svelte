@@ -62,14 +62,14 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Tabs } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { Tabs } from '@happyvertical/smrt-ui';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>Simple tab navigation with controlled active state.</p>
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { Tabs } from '@happyvertical/smrt-svelte';
+  import { Tabs } from '@happyvertical/smrt-ui';
 
   const tabs = [
     { id: 'overview', label: 'Overview' },
@@ -151,7 +151,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { Tabs } from '@happyvertical/smrt-svelte';
+		code={`import { Tabs } from '@happyvertical/smrt-ui';
 
 interface Tab {
   id: string;

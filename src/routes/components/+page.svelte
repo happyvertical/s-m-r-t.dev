@@ -96,17 +96,18 @@
 	<section class="installation">
 		<h2>Installation</h2>
 		<p>All components are available from the smrt-svelte package:</p>
-		<pre><code>npm install @happyvertical/smrt-svelte</code></pre>
+		<pre><code>npm install @happyvertical/smrt-ui @happyvertical/smrt-svelte</code></pre>
 	</section>
 
 	<section class="usage">
 		<h2>Basic Usage</h2>
 		<pre><code
 				>{`// Generic UI components
-import { Button, Card, Badge } from '@happyvertical/smrt-svelte';
+import { Button, Card, Badge } from '@happyvertical/smrt-ui';
 
 // smrt-specific components
-import { TextInput, StatusBadge } from '@happyvertical/smrt-svelte';`}</code
+import { TextInput } from '@happyvertical/smrt-svelte';
+import { StatusBadge } from '@happyvertical/smrt-ui';`}</code
 			></pre>
 	</section>
 

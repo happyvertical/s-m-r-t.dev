@@ -75,7 +75,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { AgentAdminTabs } from '@happyvertical/smrt-svelte';`}
+		code={`import { AgentAdminTabs } from '@happyvertical/smrt-agents/svelte';`}
 		language="typescript"
 	/>
 
@@ -84,7 +84,7 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { AgentAdminTabs } from '@happyvertical/smrt-svelte';
+  import { AgentAdminTabs } from '@happyvertical/smrt-agents/svelte';
   import { agentUIRegistry } from './registry';
 
   const slots = {
@@ -148,12 +148,8 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { AgentAdminTabs } from '@happyvertical/smrt-svelte';
-import type {
-  AgentUIComponentRegistry,
-  AgentUISlots,
-  AgentUISlot
-} from '@happyvertical/smrt-svelte';
+		code={`import { AgentAdminTabs } from '@happyvertical/smrt-agents/svelte';
+import type { AgentUIComponentRegistry, AgentUISlots, AgentUISlot } from '@happyvertical/smrt-agents/svelte';
 
 interface AgentUISlot {
   id: string;          // Unique slot identifier

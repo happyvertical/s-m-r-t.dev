@@ -363,8 +363,7 @@ const strategy = await documentCollection.recall({
 			>{`@smrt({
   embeddings: {
     fields: ['content', 'title'],
-    dimensions: 1536,
-    provider: 'openai'
+    provider: 'ai' // 'local' | 'ai' | 'auto'; dimensions & model come from smrt.config
   }
 })
 class Article extends SmrtObject {

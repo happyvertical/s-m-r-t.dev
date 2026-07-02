@@ -234,7 +234,7 @@ const imported = await upstream.import(found[0]);`}
 
 		<CodeBlock
 			code={`import '@happyvertical/smrt-images/svelte'; // side-effect: ModuleUIRegistry.register(...)
-import { ModuleUIRegistry } from '@happyvertical/smrt-svelte/registry';
+import { ModuleUIRegistry } from '@happyvertical/smrt-ui';
 
 const Gallery = ModuleUIRegistry.get('@happyvertical/smrt-images', 'assets-gallery');`}
 			language="typescript"

@@ -62,7 +62,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { Masthead } from '@happyvertical/smrt-svelte';`}
+		code={`import { Masthead } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 
@@ -124,7 +124,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { Masthead } from '@happyvertical/smrt-svelte';
+		code={`import { Masthead } from '@happyvertical/smrt-ui';
 
 interface Props {
   date?: string;

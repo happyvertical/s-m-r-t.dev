@@ -6,7 +6,7 @@
 <ModuleTabs
 	name="smrt-users"
 	description="Multi-tenant user management with RBAC, hierarchical tenants, session handling, and SvelteKit integration."
-	badges={['v0.29.34', 'Multi-tenant RBAC', '13 Models']}
+	badges={['v0.29.34', 'Multi-tenant RBAC', '15 Models']}
 >
 	{#snippet docs()}
 		<section id="overview">
@@ -14,12 +14,12 @@
 			<p>
 				The smrt-users package provides a complete multi-tenant user management system with
 				role-based access control (RBAC), hierarchical tenants, group-based permission inheritance,
-				per-user permission overrides, session handling, and SvelteKit integration. It also ships the
-				server-side login flows — <strong>OIDC</strong> (OAuth2 authorization-code + PKCE), magic
-				links, and <strong>terminal device-code</strong> auth — while the stored identity records
-				(OIDC/Nostr/API-key) live in <a href="/modules/smrt-profiles">smrt-profiles</a>. In short:
-				smrt-users handles authentication flows plus authorization and session/cookie plumbing;
-				smrt-profiles stores the resolved identity.
+				per-user permission overrides, session handling, and SvelteKit integration. It also ships
+				the server-side login flows — <strong>OIDC</strong> (OAuth2 authorization-code + PKCE),
+				magic links, and <strong>terminal device-code</strong> auth — while the stored identity
+				records (OIDC/Nostr/API-key) live in <a href="/modules/smrt-profiles">smrt-profiles</a>. In
+				short: smrt-users handles authentication flows plus authorization and session/cookie
+				plumbing; smrt-profiles stores the resolved identity.
 			</p>
 
 			<h3>Key Features</h3>
@@ -59,7 +59,7 @@
 		</section>
 
 		<section id="models">
-			<h2>Models (13)</h2>
+			<h2>Models (15)</h2>
 			<table>
 				<thead>
 					<tr><th>Model</th><th>Key Pattern</th></tr>
@@ -85,8 +85,24 @@
 						></tr
 					>
 					<tr
-						><td>MagicLinkToken</td><td
-							>Single-use email login token. Backed by <code>MagicLinkService</code>.</td
+						><td>UsersMagicLinkToken</td><td
+							>Single-use email login token (aliased as <code>MagicLinkToken</code>). Backed by
+							<code>MagicLinkService</code>.</td
+						></tr
+					>
+					<tr
+						><td>UsersCliAuthRequest</td><td
+							>Device-code request for terminal / CLI login (aliased as <code>CliAuthRequest</code
+							>). Holds the user code, the SHA-256 <code>deviceCodeHash</code>, and the
+							<code>pending</code>/<code>approved</code>/<code>expired</code> status. Backed by
+							<code>TerminalAuthService</code>.</td
+						></tr
+					>
+					<tr
+						><td>AccessRequest</td><td
+							>A prospective user's request for access, captured before they become a
+							<code>User</code>. Lifecycle statuses (requested → approved / declined / graduated /
+							canceled). Backed by <code>AccessRequestService</code>.</td
 						></tr
 					>
 					<tr
@@ -279,9 +295,9 @@ const hasAny = await resolver.hasAnyPermission(userId, tenantId, [
 			<ol>
 				<li>
 					<strong>Manifest</strong> — every <code>@smrt()</code> object that exposes a REST/CLI/MCP
-					operation contributes slugs: <code>{'{'}collection{'}'}.read</code> (when
-					list/get is exposed) plus <code>.create</code> / <code>.update</code> / <code>.delete</code>,
-					and one slug per exposed public custom method. Collection classes are skipped.
+					operation contributes slugs: <code>{'{'}collection{'}'}.read</code> (when list/get is
+					exposed) plus <code>.create</code> / <code>.update</code> / <code>.delete</code>, and one
+					slug per exposed public custom method. Collection classes are skipped.
 				</li>
 				<li>
 					<strong>Config</strong> — extra slugs under
@@ -295,9 +311,9 @@ const hasAny = await resolver.hasAnyPermission(userId, tenantId, [
 			<p>
 				<code>syncPermissionCatalog(options)</code> (also a method on the service) merges all three,
 				creates missing <code>Permission</code> rows, updates changed name/description/category, and
-				returns a <code>PermissionCatalogSyncResult</code> — <code>{'{'} catalog, created, unchanged,
-				updated {'}'}</code>, where the last three are arrays of slugs. It is idempotent; run it at
-				deploy/boot.
+				returns a <code>PermissionCatalogSyncResult</code> —
+				<code>{'{'} catalog, created, unchanged, updated {'}'}</code>, where the last three are
+				arrays of slugs. It is idempotent; run it at deploy/boot.
 			</p>
 			<CodeBlock
 				code={`import { syncPermissionCatalog } from '@happyvertical/smrt-users';
@@ -314,10 +330,10 @@ console.log(result.unchanged); // slugs already in sync
 		<section id="postgres-rls">
 			<h2>Postgres Row-Level Security (RLS)</h2>
 			<p>
-				On Postgres, smrt-users can push tenant isolation and permission checks down into the database
-				as native Row-Level Security policies, so a query can't leak another tenant's rows even if app
-				code forgets a <code>WHERE tenantId = …</code> clause. This is <strong>opt-in</strong> and
-				Postgres-only.
+				On Postgres, smrt-users can push tenant isolation and permission checks down into the
+				database as native Row-Level Security policies, so a query can't leak another tenant's rows
+				even if app code forgets a <code>WHERE tenantId = …</code> clause. This is
+				<strong>opt-in</strong> and Postgres-only.
 			</p>
 
 			<h3>1. Generate &amp; apply policies</h3>
@@ -326,10 +342,11 @@ console.log(result.unchanged); // slugs already in sync
 				<code>generatePostgresPermissionSql()</code> to inspect the SQL first) installs three
 				<code>STABLE</code> helper functions and per-table policies. Policies are generated
 				automatically for objects with <code>@TenantScoped({'{'} mode: 'required' {'}'})</code>
-				(mapping SELECT→<code>{'{'}collection{'}'}.read</code>, INSERT→<code>.create</code>,
-				UPDATE→<code>.update</code>, DELETE→<code>.delete</code>), and for any explicit
-				<code>postgres.bindings</code> you declare. Tables shared by multiple objects, or non-required
-				tenant modes, are skipped and listed in the result's <code>skipped</code> report.
+				(mapping SELECT→<code>{'{'}collection{'}'}.read</code>, INSERT→<code>.create</code>, UPDATE→<code
+					>.update</code
+				>, DELETE→<code>.delete</code>), and for any explicit
+				<code>postgres.bindings</code> you declare. Tables shared by multiple objects, or
+				non-required tenant modes, are skipped and listed in the result's <code>skipped</code> report.
 			</p>
 			<CodeBlock
 				code={`import { applyPostgresPermissionPolicies } from '@happyvertical/smrt-users';
@@ -348,9 +365,9 @@ const { targets, skipped, statements } = await applyPostgresPermissionPolicies({
 				Turn on <code>postgresRls</code> in the session handler. For every request it opens a
 				transaction and sets Postgres session variables (<code>smrt.tenant_id</code>,
 				<code>smrt.permissions</code>, <code>smrt.user_id</code>, …) from the loaded session via
-				<code>set_config(..., true)</code> (transaction-local). The generated policies read those
-				variables, so the database itself enforces the tenant + permission predicate. The transaction
-				commits on success and rolls back on error.
+				<code>set_config(..., true)</code> (transaction-local). The generated policies read those variables,
+				so the database itself enforces the tenant + permission predicate. The transaction commits on
+				success and rolls back on error.
 			</p>
 			<CodeBlock
 				code={`// hooks.server.ts
@@ -382,12 +399,12 @@ export const handle = createSessionHandler({
 				</li>
 				<li>
 					<code>smrt_rls_bypass()</code> short-circuits to <code>true</code> when
-					<code>smrt.system_context</code> or <code>smrt.super_admin_bypass</code> is set — used for
-					system jobs and break-glass admin paths.
+					<code>smrt.system_context</code> or <code>smrt.super_admin_bypass</code> is set — used for system
+					jobs and break-glass admin paths.
 				</li>
 				<li>
-					Tables are set <code>FORCE ROW LEVEL SECURITY</code>, so even the table owner is subject to
-					the policies.
+					Tables are set <code>FORCE ROW LEVEL SECURITY</code>, so even the table owner is subject
+					to the policies.
 				</li>
 			</ul>
 			<aside class="callout callout-note">
@@ -465,20 +482,24 @@ await switchSessionTenant(event, newTenantId, { db });`}
 			<p>
 				<code>OidcLoginService</code> implements standards-compliant OAuth2/OIDC authorization-code
 				login with PKCE. It is provider-generic — it works against any compliant IdP (Kanidm, Dex,
-				Keycloak, Authentik, Google, …) via discovery
-				(<code>/.well-known/openid-configuration</code>), so the optional <code>kind</code> preset is
-				just a documentation label and does not change protocol behaviour. On a successful callback it
-				verifies the ID token and creates/links the SMRT User and the
+				Keycloak, Authentik, Google, …) via discovery (<code>/.well-known/openid-configuration</code
+				>), so the optional <code>kind</code> preset is just a documentation label and does not
+				change protocol behaviour. On a successful callback it verifies the ID token and
+				creates/links the SMRT User and the
 				<a href="/modules/smrt-profiles">Profile</a> identity.
 			</p>
 
 			<h3>Configure providers</h3>
 			<p>
-				Providers live under <code>packages.users.auth.oidc</code> in your SMRT config
-				(<code>defaultProvider</code> + a <code>providers</code> map), or can be passed inline to the
-				handlers. Each <code>OidcProviderConfig</code> needs an <code>issuer</code> and a
-				<code>clientId</code>; confidential clients add a <code>clientSecret</code>. The token-endpoint
-				auth method defaults to <code>client_secret_basic</code> when a secret is present, otherwise
+				Providers live under <code>packages.users.auth.oidc</code> in your SMRT config (<code
+					>defaultProvider</code
+				>
+				+ a <code>providers</code> map), or can be passed inline to the handlers. Each
+				<code>OidcProviderConfig</code>
+				needs an <code>issuer</code> and a
+				<code>clientId</code>; confidential clients add a <code>clientSecret</code>. The
+				token-endpoint auth method defaults to <code>client_secret_basic</code> when a secret is
+				present, otherwise
 				<code>none</code> (public client).
 			</p>
 			<CodeBlock
@@ -510,7 +531,8 @@ export default {
 			<h3>Login + callback handlers</h3>
 			<p>
 				Mount the two ready-made SvelteKit handlers. <code>createOidcLoginHandler</code> begins the
-				flow: it generates a transaction holding <code>state</code>, <code>nonce</code>, and the PKCE
+				flow: it generates a transaction holding <code>state</code>, <code>nonce</code>, and the
+				PKCE
 				<code>code_verifier</code>, stores it in a short-lived, HTTP-only, HMAC-signed cookie, and
 				303-redirects to the provider's authorization URL (with
 				<code>code_challenge_method=S256</code>). <code>createOidcCallbackHandler</code> validates
@@ -538,8 +560,8 @@ export const GET = createOidcCallbackHandler({
 			<p>
 				Need finer control? <code>beginOidcLogin(event, options)</code> and
 				<code>completeOidcLogin(event, options)</code> expose the same steps for custom routes, and
-				<code>OidcLoginService.completeLogin()</code> returns the verified claims, tokens, and the
-				resolved user when you want to drive everything yourself.
+				<code>OidcLoginService.completeLogin()</code> returns the verified claims, tokens, and the resolved
+				user when you want to drive everything yourself.
 			</p>
 
 			<h3>Security properties (verified against source)</h3>
@@ -549,8 +571,7 @@ export const GET = createOidcCallbackHandler({
 					the SHA-256 <code>code_challenge</code> goes on the authorization request.
 				</li>
 				<li>
-					<strong>state</strong> — random per-transaction value compared on callback; a mismatch is
-					rejected.
+					<strong>state</strong> — random per-transaction value compared on callback; a mismatch is rejected.
 				</li>
 				<li>
 					<strong>nonce</strong> — random per-transaction value embedded in the request and checked
@@ -585,8 +606,7 @@ export const GET = createOidcCallbackHandler({
 			<ol>
 				<li>
 					The CLI POSTs to the start handler → gets a short <strong>user code</strong> (shown to the
-					human), a long secret <strong>device code</strong> (kept by the CLI), and a verification
-					URL.
+					human), a long secret <strong>device code</strong> (kept by the CLI), and a verification URL.
 				</li>
 				<li>
 					The user opens the verification URL in a browser, signs in normally, and approves the user
@@ -627,13 +647,14 @@ export const actions = { approve: handlers.approve };`}
 				language="typescript"
 			/>
 			<aside class="callout callout-security">
-				<strong>Brute-force throttle on approval.</strong> User codes carry only 32 bits of entropy, so
-				an authenticated attacker could otherwise guess pending codes and approve someone else's CLI
-				session. <code>approveRequest()</code> rate-limits failed approve attempts per user (default 5
-				within a 5-minute sliding window) and throws <code>TerminalAuthRateLimitError</code> (surface
-				it as HTTP 429 with <code>Retry-After</code>). Device codes are stored only as a SHA-256 hash;
-				pending requests expire (default 10 minutes) while approved sessions keep their own longer TTL
-				(default 30 days).
+				<strong>Brute-force throttle on approval.</strong> User codes carry only 32 bits of entropy,
+				so an authenticated attacker could otherwise guess pending codes and approve someone else's
+				CLI session. <code>approveRequest()</code> rate-limits failed approve attempts per user
+				(default 5 within a 5-minute sliding window) and throws
+				<code>TerminalAuthRateLimitError</code>
+				(surface it as HTTP 429 with <code>Retry-After</code>). Device codes are stored only as a
+				SHA-256 hash; pending requests expire (default 10 minutes) while approved sessions keep
+				their own longer TTL (default 30 days).
 			</aside>
 		</section>
 
@@ -691,8 +712,8 @@ export const actions = { approve: handlers.approve };`}
 			<h2>User Management Components</h2>
 			<p>
 				smrt-users ships its own pre-built Svelte UI components for user management from the
-				<code>@happyvertical/smrt-users/svelte</code> subpath (built on the generic primitives in
-				<code>@happyvertical/smrt-svelte</code>). They auto-register with the
+				<code>@happyvertical/smrt-users/svelte</code> subpath (built on the generic visual
+				primitives in <code>@happyvertical/smrt-ui</code>). They auto-register with the
 				<code>ModuleUIRegistry</code> on import.
 			</p>
 
@@ -725,9 +746,10 @@ export const actions = { approve: handlers.approve };`}
 			</div>
 
 			<p>
-				These components auto-register with the <code>ModuleUIRegistry</code> on import. As of
-				v0.29, smrt-users ships its own Svelte components from the
-				<code>@happyvertical/smrt-users/svelte</code> subpath (smrt-svelte now ships only generic UI primitives).
+				These components auto-register with the <code>ModuleUIRegistry</code> on import. smrt-users
+				ships its own Svelte components from the <code>@happyvertical/smrt-users/svelte</code>
+				subpath; the generic visual primitives, theme system, and <code>ModuleUIRegistry</code> they
+				build on live in <code>@happyvertical/smrt-ui</code> (the 0.37 UI split).
 			</p>
 
 			<h2>Installation</h2>
@@ -848,6 +870,10 @@ import {
 
 	.callout-security {
 		border-left-color: var(--smrt-color-error, #c62828);
-		background: color-mix(in srgb, var(--smrt-color-error, #c62828) 8%, var(--smrt-color-surface, transparent));
+		background: color-mix(
+			in srgb,
+			var(--smrt-color-error, #c62828) 8%,
+			var(--smrt-color-surface, transparent)
+		);
 	}
 </style>

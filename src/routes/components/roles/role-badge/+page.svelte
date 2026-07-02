@@ -36,7 +36,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { RoleBadge } from '@happyvertical/smrt-svelte';`}
+		code={`import { RoleBadge } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 

@@ -71,7 +71,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { CurrencyDisplay } from '@happyvertical/smrt-svelte';`}
+		code={`import { CurrencyDisplay } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 
@@ -214,7 +214,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { CurrencyDisplay } from '@happyvertical/smrt-svelte';
+		code={`import { CurrencyDisplay } from '@happyvertical/smrt-ui';
 
 interface Props {
   amount: number;  // In cents by default (see unit)

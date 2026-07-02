@@ -66,7 +66,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { MembershipList } from '@happyvertical/smrt-svelte';`}
+		code={`import { MembershipList } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 

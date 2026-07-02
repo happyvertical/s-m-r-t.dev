@@ -57,7 +57,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { PermissionCheck } from '@happyvertical/smrt-svelte';`}
+		code={`import { PermissionCheck } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 
@@ -81,7 +81,7 @@
 
 	<h2>Integration with smrt-users</h2>
 	<CodeBlock
-		code={`import { PermissionCheck } from '@happyvertical/smrt-svelte';\nimport { PermissionResolver } from '@happyvertical/smrt-users';\n\n// Check permissions programmatically\nconst resolver = await PermissionResolver.create({ db });\nconst canEdit = await resolver.hasPermission(\n  currentUser.id,\n  currentTenant.id,\n  'users.edit'\n);\n\nif (canEdit) {\n  // Perform action\n}\n\n// Or use component for UI\n<PermissionCheck permission="users.delete" userPermissions={currentPermissions}>\n  <button onclick={deleteUser}>Delete</button>\n</PermissionCheck>`}
+		code={`import { PermissionCheck } from '@happyvertical/smrt-ui';\nimport { PermissionResolver } from '@happyvertical/smrt-users';\n\n// Check permissions programmatically\nconst resolver = await PermissionResolver.create({ db });\nconst canEdit = await resolver.hasPermission(\n  currentUser.id,\n  currentTenant.id,\n  'users.edit'\n);\n\nif (canEdit) {\n  // Perform action\n}\n\n// Or use component for UI\n<PermissionCheck permission="users.delete" userPermissions={currentPermissions}>\n  <button onclick={deleteUser}>Delete</button>\n</PermissionCheck>`}
 		language="typescript"
 	/>
 

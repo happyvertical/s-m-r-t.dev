@@ -64,7 +64,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { DateDisplay } from '@happyvertical/smrt-svelte';`}
+		code={`import { DateDisplay } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 
@@ -188,7 +188,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { DateDisplay } from '@happyvertical/smrt-svelte';
+		code={`import { DateDisplay } from '@happyvertical/smrt-ui';
 
 interface Props {
   date: Date | string | number | null | undefined;
