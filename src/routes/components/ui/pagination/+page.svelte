@@ -67,7 +67,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { Pagination } from '@happyvertical/smrt-svelte';`}
+		code={`import { Pagination } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 
@@ -138,7 +138,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { Pagination } from '@happyvertical/smrt-svelte';
+		code={`import { Pagination } from '@happyvertical/smrt-ui';
 
 interface Props {
   currentPage: number;

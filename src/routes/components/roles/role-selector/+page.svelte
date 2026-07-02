@@ -50,7 +50,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { RoleSelector } from '@happyvertical/smrt-svelte';`}
+		code={`import { RoleSelector } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 

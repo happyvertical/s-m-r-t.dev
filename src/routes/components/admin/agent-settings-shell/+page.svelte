@@ -69,7 +69,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { AgentSettingsShell } from '@happyvertical/smrt-svelte';`}
+		code={`import { AgentSettingsShell } from '@happyvertical/smrt-agents/svelte';`}
 		language="typescript"
 	/>
 
@@ -78,7 +78,7 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { AgentSettingsShell } from '@happyvertical/smrt-svelte';
+  import { AgentSettingsShell } from '@happyvertical/smrt-agents/svelte';
   import { agentUIRegistry } from './registry';
 
   // Serialized agent data from server
@@ -163,12 +163,8 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { AgentSettingsShell } from '@happyvertical/smrt-svelte';
-import type {
-  AgentUIComponentRegistry,
-  AgentUISlots,
-  AgentUISlot
-} from '@happyvertical/smrt-svelte';
+		code={`import { AgentSettingsShell } from '@happyvertical/smrt-agents/svelte';
+import type { AgentUIComponentRegistry, AgentUISlots, AgentUISlot } from '@happyvertical/smrt-agents/svelte';
 
 // Serialized agent data (can't pass instances to client)
 interface AgentData {

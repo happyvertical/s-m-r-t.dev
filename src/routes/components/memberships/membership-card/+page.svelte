@@ -62,7 +62,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { MembershipCard } from '@happyvertical/smrt-svelte';`}
+		code={`import { MembershipCard } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 

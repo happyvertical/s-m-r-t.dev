@@ -63,7 +63,7 @@
 	<section class="install">
 		<h2>Installation</h2>
 		<pre><code>npm install @happyvertical/smrt-svelte</code></pre>
-		<pre><code>{`import { Container, Grid, EmptyState } from '@happyvertical/smrt-svelte';`}</code
+		<pre><code>{`import { Container, Grid, EmptyState } from '@happyvertical/smrt-ui';`}</code
 			></pre>
 	</section>
 

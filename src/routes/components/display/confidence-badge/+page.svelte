@@ -47,7 +47,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { ConfidenceBadge } from '@happyvertical/smrt-svelte';`}
+		code={`import { ConfidenceBadge } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 
@@ -149,7 +149,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { ConfidenceBadge } from '@happyvertical/smrt-svelte';
+		code={`import { ConfidenceBadge } from '@happyvertical/smrt-ui';
 
 interface Props {
   confidence: number;  // 0-100

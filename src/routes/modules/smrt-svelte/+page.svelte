@@ -331,7 +331,7 @@
 		<h3>Consumer Registration (smrt-commerce example)</h3>
 		<CodeBlock
 			code={`// packages/commerce/src/svelte/index.ts
-import { ModuleUIRegistry } from '@happyvertical/smrt-svelte/registry';
+import { ModuleUIRegistry } from '@happyvertical/smrt-ui';
 import { COMMERCE_MODULE_META } from '../ui.js';
 
 import InvoiceCard from './components/InvoiceCard.svelte';
@@ -352,7 +352,7 @@ export { InvoiceCard, InvoiceHeader, InvoiceLineItems };`}
 		<h3>Host Lookup</h3>
 		<CodeBlock
 			code={`// SvelteKit host app
-import { ModuleUIRegistry } from '@happyvertical/smrt-svelte/registry';
+import { ModuleUIRegistry } from '@happyvertical/smrt-ui';
 import '@happyvertical/smrt-commerce/svelte';  // side-effect import registers slots
 import '@happyvertical/smrt-content/svelte';
 import '@happyvertical/smrt-images/svelte';
@@ -583,7 +583,7 @@ export async function load({ locals }) {
 
 <!-- any component -->
 <script lang="ts">
-  import { useI18n } from '@happyvertical/smrt-svelte/i18n';
+  import { useI18n } from '@happyvertical/smrt-ui/i18n';
   const { t } = useI18n();
 </script>
 <input placeholder={t('chat.message_input.placeholder')} />`}
@@ -690,7 +690,7 @@ const stt = getCachedSTT('whisper-cpp');`}
 		<h2>Permission-Aware Rendering</h2>
 		<CodeBlock
 			code={`<script>
-  import { PermissionCheck, permission } from '@happyvertical/smrt-svelte';
+  import { PermissionCheck, permission } from '@happyvertical/smrt-ui';
 </script>
 
 <!-- Component-based -->
@@ -727,7 +727,8 @@ const stt = getCachedSTT('whisper-cpp');`}
 		</ul>
 		<CodeBlock
 			code={`<script>
-  import { ThemeProvider, ThemeSwitcher } from '@happyvertical/smrt-svelte/themes';
+  import { ThemeProvider } from '@happyvertical/smrt-ui';
+import { ThemeSwitcher } from '@happyvertical/smrt-svelte';
 </script>
 
 <ThemeProvider preset="glass" colorScheme="system">

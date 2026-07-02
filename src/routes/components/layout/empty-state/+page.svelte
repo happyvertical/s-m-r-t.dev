@@ -67,7 +67,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { EmptyState } from '@happyvertical/smrt-svelte';`}
+		code={`import { EmptyState } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 
@@ -167,7 +167,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { EmptyState } from '@happyvertical/smrt-svelte';
+		code={`import { EmptyState } from '@happyvertical/smrt-ui';
 
 type IconType = 'document' | 'folder' | 'users' | 'search' | 'inbox';
 

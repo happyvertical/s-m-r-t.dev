@@ -51,7 +51,7 @@
 	const installCode = `npm install @happyvertical/smrt-svelte`;
 
 	const basicCode = `<script lang="ts">
-  import { ProgressBar } from '@happyvertical/smrt-svelte';
+  import { ProgressBar } from '@happyvertical/smrt-ui';
 <\/script>
 
 <ProgressBar value={45} />`;

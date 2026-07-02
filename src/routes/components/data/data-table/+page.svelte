@@ -105,7 +105,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { DataTable } from '@happyvertical/smrt-svelte';`}
+		code={`import { DataTable } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 
@@ -114,7 +114,7 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { DataTable } from '@happyvertical/smrt-svelte';
+  import { DataTable } from '@happyvertical/smrt-ui';
 
   interface User {
     id: string;
@@ -258,8 +258,8 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { DataTable } from '@happyvertical/smrt-svelte';
-import type { DataTableColumn, SortState, SortDirection } from '@happyvertical/smrt-svelte';
+		code={`import { DataTable } from '@happyvertical/smrt-ui';
+import type { DataTableColumn, SortState, SortDirection } from '@happyvertical/smrt-ui';
 
 interface DataTableColumn<T> {
   id: string;

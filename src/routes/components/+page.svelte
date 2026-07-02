@@ -103,10 +103,11 @@
 		<h2>Basic Usage</h2>
 		<pre><code
 				>{`// Generic UI components
-import { Button, Card, Badge } from '@happyvertical/smrt-svelte';
+import { Button, Card, Badge } from '@happyvertical/smrt-ui';
 
 // smrt-specific components
-import { TextInput, StatusBadge } from '@happyvertical/smrt-svelte';`}</code
+import { TextInput } from '@happyvertical/smrt-svelte';
+import { StatusBadge } from '@happyvertical/smrt-ui';`}</code
 			></pre>
 	</section>
 

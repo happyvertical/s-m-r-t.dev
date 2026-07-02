@@ -75,7 +75,7 @@
 	const installCode = `npm install @happyvertical/smrt-svelte`;
 
 	const basicCode = `<script lang="ts">
-  import { ConfirmDialog } from '@happyvertical/smrt-svelte';
+  import { ConfirmDialog } from '@happyvertical/smrt-ui';
 
   let dialogOpen = $state(false);
 <\/script>

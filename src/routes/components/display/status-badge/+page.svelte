@@ -58,7 +58,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { StatusBadge } from '@happyvertical/smrt-svelte';`}
+		code={`import { StatusBadge } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 
@@ -174,7 +174,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { StatusBadge } from '@happyvertical/smrt-svelte';
+		code={`import { StatusBadge } from '@happyvertical/smrt-ui';
 
 type StatusType = 'default' | 'invoice' | 'project' | 'expense' | 'time' | 'compliance' | 'estimate';
 

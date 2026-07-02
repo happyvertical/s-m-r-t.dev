@@ -410,7 +410,7 @@ const hasGrowth = await report.hasPositiveTrends();
 		</p>
 		<CodeBlock
 			code={`import '@happyvertical/smrt-analytics/svelte'; // side-effect: registers slots
-import { ModuleUIRegistry } from '@happyvertical/smrt-svelte/registry';
+import { ModuleUIRegistry } from '@happyvertical/smrt-ui';
 
 const StatCard = ModuleUIRegistry.get(
   '@happyvertical/smrt-analytics',

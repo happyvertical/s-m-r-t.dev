@@ -494,7 +494,7 @@ const source = await thumbnail.getSource();          // was getParent()`}
 		<CodeBlock
 			code={`import { ASSETS_MODULE_META, ASSETS_UI_SLOTS } from '@happyvertical/smrt-assets/ui';
 import '@happyvertical/smrt-assets/svelte'; // side-effect: ModuleUIRegistry.register(...)
-import { ModuleUIRegistry } from '@happyvertical/smrt-svelte/registry';
+import { ModuleUIRegistry } from '@happyvertical/smrt-ui';
 
 const AssetManager = ModuleUIRegistry.get('@happyvertical/smrt-assets', 'asset-manager');`}
 			language="typescript"

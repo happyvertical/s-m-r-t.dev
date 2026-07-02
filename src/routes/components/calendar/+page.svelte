@@ -33,7 +33,7 @@
 	<section class="install">
 		<h2>Installation</h2>
 		<pre><code>npm install @happyvertical/smrt-svelte</code></pre>
-		<pre><code>{`import { Calendar, DayView } from '@happyvertical/smrt-svelte';`}</code></pre>
+		<pre><code>{`import { Calendar, DayView } from '@happyvertical/smrt-ui';`}</code></pre>
 	</section>
 
 	<section class="components">

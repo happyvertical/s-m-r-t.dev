@@ -95,7 +95,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { ConfirmDialog } from '@happyvertical/smrt-svelte';`}
+		code={`import { ConfirmDialog } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 
@@ -171,7 +171,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { ConfirmDialog } from '@happyvertical/smrt-svelte';
+		code={`import { ConfirmDialog } from '@happyvertical/smrt-ui';
 
 interface Props {
   open: boolean;
