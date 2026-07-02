@@ -80,6 +80,7 @@
 		<strong>SAADL</strong> — Software as Agentic Domain Logic: software whose domain logic exposes
 		the same operations to human users (UI, HTTP, CLI) and to software agents (callable tools).
 		<span class="wm">s-m-r-t</span> is a SAADL framework.
+		<a href="/saadl">What is a SAADL?</a>
 	</p>
 </div>
 
