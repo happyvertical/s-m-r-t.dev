@@ -49,7 +49,8 @@ export class Product extends SmrtObject {
 			<strong>SAADL</strong> (pronounced <em>saddle</em>) is <strong>S</strong>oftware
 			<strong>a</strong>s <strong>A</strong>gentic <strong>D</strong>omain
 			<strong>L</strong>ogic: software whose domain logic exposes the same operations to human
-			users — a UI, HTTP, a command line — and to software agents, as callable tools.
+			users — a UI, HTTP, a command line — and to software agents, as callable tools. It
+			complements any harness.
 		</p>
 	</div>
 
