@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Icon } from '@happyvertical/smrt-svelte';
+	import { Icon } from '@happyvertical/smrt-ui';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -67,7 +67,7 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Icon } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { Icon } from '@happyvertical/smrt-ui';`} language="typescript" />
 
 	<h2>Preset Icons</h2>
 	<p>Built-in Material Design icons.</p>
@@ -170,7 +170,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { Icon } from '@happyvertical/smrt-svelte';
+		code={`import { Icon } from '@happyvertical/smrt-ui';
 
 interface Props {
   name?: string;

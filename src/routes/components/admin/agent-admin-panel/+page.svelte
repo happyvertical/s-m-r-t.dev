@@ -81,7 +81,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { AgentAdminPanel } from '@happyvertical/smrt-svelte';`}
+		code={`import { AgentAdminPanel } from '@happyvertical/smrt-agents/svelte';`}
 		language="typescript"
 	/>
 
@@ -90,7 +90,7 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { AgentAdminPanel } from '@happyvertical/smrt-svelte';
+  import { AgentAdminPanel } from '@happyvertical/smrt-agents/svelte';
   import { agentUIRegistry } from './registry';
 
   const slot = { label: 'Sources', icon: '📰' };
@@ -170,12 +170,8 @@ interface AdminPanelBaseProps<TConfig = unknown> {
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { AgentAdminPanel } from '@happyvertical/smrt-svelte';
-import type {
-  AgentUIComponentRegistry,
-  AgentUISlot,
-  AdminPanelBaseProps
-} from '@happyvertical/smrt-svelte';
+		code={`import { AgentAdminPanel } from '@happyvertical/smrt-agents/svelte';
+import type { AgentUIComponentRegistry, AgentUISlot, AdminPanelBaseProps } from '@happyvertical/smrt-agents/svelte';
 
 // Re-exported from @happyvertical/smrt-agents/ui
 interface AgentUISlot {

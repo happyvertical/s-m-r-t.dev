@@ -3,11 +3,10 @@
 	import '$lib/styles/reset.css';
 	import '$lib/styles/variables.css';
 
-	// Import theme system
-	import { ThemeProvider } from '@happyvertical/smrt-svelte/themes';
-	import '@happyvertical/smrt-svelte/themes/styles/all.css';
+	// Vendored SMRT theme tokens (smrt-svelte 0.37 removed its theme system).
+	import '$lib/themes/smrt-theme.css';
 
-	// Import SMRT Provider for form components
+	// SMRT Provider for form-component context.
 	import { Provider } from '@happyvertical/smrt-svelte';
 
 	import Header from '$lib/components/Header.svelte';
@@ -23,16 +22,14 @@
 </svelte:head>
 
 <Provider>
-	<ThemeProvider preset="material" colorScheme="system" persist={true}>
-		<div class="app">
-			<Header />
-			<main>
-				{@render children()}
-			</main>
-			<Footer />
-		</div>
-		<CommandPalette />
-	</ThemeProvider>
+	<div class="app">
+		<Header />
+		<main>
+			{@render children()}
+		</main>
+		<Footer />
+	</div>
+	<CommandPalette />
 </Provider>
 
 <style>

@@ -75,7 +75,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { LoadingOverlay } from '@happyvertical/smrt-svelte';`}
+		code={`import { LoadingOverlay } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 
@@ -84,7 +84,7 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { LoadingOverlay } from '@happyvertical/smrt-svelte';
+  import { LoadingOverlay } from '@happyvertical/smrt-ui';
 
   let loading = $state(false);
 
@@ -105,7 +105,7 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { LoadingOverlay } from '@happyvertical/smrt-svelte';
+  import { LoadingOverlay } from '@happyvertical/smrt-ui';
 
   let progress = $state(0);
   let loading = $state(false);
@@ -133,7 +133,7 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { LoadingOverlay } from '@happyvertical/smrt-svelte';
+  import { LoadingOverlay } from '@happyvertical/smrt-ui';
 
   let items = $state<string[]>([]);
   let loading = $state(false);
@@ -192,7 +192,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { LoadingOverlay } from '@happyvertical/smrt-svelte';
+		code={`import { LoadingOverlay } from '@happyvertical/smrt-ui';
 
 interface LoadingOverlayProps {
   show?: boolean;

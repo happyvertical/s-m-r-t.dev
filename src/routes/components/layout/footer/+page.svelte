@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Footer } from '@happyvertical/smrt-svelte';
+	import { Footer } from '@happyvertical/smrt-ui';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -33,7 +33,7 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Footer } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { Footer } from '@happyvertical/smrt-ui';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>Footer with automatic copyright year.</p>
@@ -64,7 +64,7 @@
 
 	<CodeBlock
 		code={`<script>
-  import { Header, Container, Footer } from '@happyvertical/smrt-svelte';
+  import { Header, Container, Footer } from '@happyvertical/smrt-ui';
 </script>
 
 <div class="app">
@@ -104,7 +104,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { Footer } from '@happyvertical/smrt-svelte';
+		code={`import { Footer } from '@happyvertical/smrt-ui';
 
 interface Props {
   children?: Snippet;

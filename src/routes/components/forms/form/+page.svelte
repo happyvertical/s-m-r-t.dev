@@ -114,7 +114,8 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { Form, TextInput, Button } from '@happyvertical/smrt-svelte';
+  import { Form, TextInput } from '@happyvertical/smrt-svelte';
+import { Button } from '@happyvertical/smrt-ui';
 
   function handleSubmit(data: Record<string, unknown>) {
     console.log('Form data:', data);

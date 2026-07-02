@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Modal, Button } from '@happyvertical/smrt-svelte';
+	import { Modal, Button } from '@happyvertical/smrt-ui';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -94,7 +94,7 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Modal } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { Modal } from '@happyvertical/smrt-ui';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>Simple modal with title and content.</p>
@@ -171,7 +171,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { Modal } from '@happyvertical/smrt-svelte';
+		code={`import { Modal } from '@happyvertical/smrt-ui';
 import type { Snippet } from 'svelte';
 
 interface Props {

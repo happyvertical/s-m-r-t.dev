@@ -457,8 +457,7 @@ const strategy = await document.recall({
 			>{`@smrt({
   embeddings: {
     fields: ['title', 'content'],
-    provider: 'openai',
-    model: 'text-embedding-3-small'
+    provider: 'ai' // 'local' | 'ai' | 'auto'; the model comes from smrt.config (aiModel / localModel)
   }
 })
 class Article extends SmrtObject {

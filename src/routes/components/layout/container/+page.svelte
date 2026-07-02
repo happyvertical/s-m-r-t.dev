@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Container } from '@happyvertical/smrt-svelte';
+	import { Container } from '@happyvertical/smrt-ui';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -35,7 +35,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { Container } from '@happyvertical/smrt-svelte';`}
+		code={`import { Container } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 
@@ -88,7 +88,7 @@
 
 	<CodeBlock
 		code={`<script>
-  import { Container, Header, Footer } from '@happyvertical/smrt-svelte';
+  import { Container, Header, Footer } from '@happyvertical/smrt-ui';
 </script>
 
 <Header />
@@ -109,7 +109,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { Container } from '@happyvertical/smrt-svelte';
+		code={`import { Container } from '@happyvertical/smrt-ui';
 
 type MaxWidth = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 

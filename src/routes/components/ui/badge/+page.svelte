@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Badge } from '@happyvertical/smrt-svelte';
+	import { Badge } from '@happyvertical/smrt-ui';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -40,7 +40,7 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Badge } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { Badge } from '@happyvertical/smrt-ui';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>The default badge style with neutral colors.</p>
@@ -110,7 +110,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { Badge } from '@happyvertical/smrt-svelte';
+		code={`import { Badge } from '@happyvertical/smrt-ui';
 
 type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info';
 type BadgeSize = 'sm' | 'md';

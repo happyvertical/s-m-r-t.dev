@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ProgressBar } from '@happyvertical/smrt-svelte';
+	import { ProgressBar } from '@happyvertical/smrt-ui';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -70,7 +70,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { ProgressBar } from '@happyvertical/smrt-svelte';`}
+		code={`import { ProgressBar } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 
@@ -189,7 +189,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { ProgressBar } from '@happyvertical/smrt-svelte';
+		code={`import { ProgressBar } from '@happyvertical/smrt-ui';
 
 interface Props {
   value: number;

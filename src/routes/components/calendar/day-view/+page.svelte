@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DayView } from '@happyvertical/smrt-svelte';
+	import { DayView } from '@happyvertical/smrt-ui';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -80,7 +80,7 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { DayView } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { DayView } from '@happyvertical/smrt-ui';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>Display events for a specific date.</p>
@@ -160,7 +160,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { DayView } from '@happyvertical/smrt-svelte';
+		code={`import { DayView } from '@happyvertical/smrt-ui';
 
 interface DayEventDetail {
   type: string;

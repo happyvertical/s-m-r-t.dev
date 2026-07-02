@@ -63,7 +63,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { FilterChips } from '@happyvertical/smrt-svelte';`}
+		code={`import { FilterChips } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 
@@ -72,7 +72,7 @@
 
 	<CodeBlock
 		code={`<script lang="ts">
-  import { FilterChips } from '@happyvertical/smrt-svelte';
+  import { FilterChips } from '@happyvertical/smrt-ui';
 
   const options = [
     { value: 'pending', label: 'Pending' },
@@ -142,7 +142,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { FilterChips } from '@happyvertical/smrt-svelte';
+		code={`import { FilterChips } from '@happyvertical/smrt-ui';
 
 interface FilterOption {
   value: string;

@@ -5,10 +5,9 @@
  * Clean, grid-based, with strong typography and minimal embellishment.
  */
 
-import { createTheme } from '@happyvertical/smrt-svelte/themes';
-import type { Theme } from '@happyvertical/smrt-svelte/themes';
-
-export const swissTheme: Theme = createTheme({
+// smrt-svelte 0.37 removed createTheme/Theme; the swiss palette lives here as
+// plain data, consumed by the /themes showcase page and the token CSS.
+export const swissTheme = {
 	id: 'swiss',
 	name: 'Swiss',
 	extend: 'studio', // Start from Studio as base (clean, minimal)
@@ -244,7 +243,7 @@ export const swissTheme: Theme = createTheme({
 
 	// Swiss uses clean geometric fonts
 	fontFamily: '"Inter", "Helvetica Neue", "Arial", system-ui, sans-serif'
-});
+};
 
 // Note: Theme is registered by the consumer (see +layout.svelte)
 

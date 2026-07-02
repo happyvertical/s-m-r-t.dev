@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ThemeSwitcher, ColorSchemeToggle } from '@happyvertical/smrt-svelte/themes';
+	import ColorSchemeToggle from '$lib/components/ColorSchemeToggle.svelte';
 	import { onMount } from 'svelte';
 	import { openPalette } from '$lib/search';
 	import mark from '$lib/assets/smrt-mark.png';
@@ -60,8 +60,7 @@
 				<span class="search-label">Search</span>
 				<kbd class="search-kbd">{isMac ? '⌘' : 'Ctrl'} K</kbd>
 			</button>
-			<ThemeSwitcher variant="select" showIcons={true} label="" />
-			<ColorSchemeToggle variant="switch" showLabels={false} />
+			<ColorSchemeToggle />
 		</div>
 	</div>
 </header>
@@ -171,26 +170,6 @@
 		background: var(--smrt-color-surface, #fff);
 		color: var(--smrt-color-on-surface-variant, #888);
 		line-height: 1.3;
-	}
-
-	/* Style overrides for SMRT components */
-	:global(.smrt-theme-switcher.select) {
-		display: flex;
-		align-items: center;
-	}
-
-	:global(.smrt-theme-switcher__select) {
-		padding: 6px 12px;
-		border: 1px solid var(--smrt-color-outline, #e5e5e5);
-		border-radius: var(--smrt-shape-small, 6px);
-		background: var(--smrt-color-surface, #ffffff);
-		color: var(--smrt-color-on-surface, #1a1a1a);
-		font-size: 0.875rem;
-		cursor: pointer;
-	}
-
-	:global(.smrt-theme-switcher__select:hover) {
-		border-color: var(--smrt-color-primary, #1976d2);
 	}
 
 	@media (max-width: 900px) {

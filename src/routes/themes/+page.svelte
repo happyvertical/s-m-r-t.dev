@@ -1,28 +1,20 @@
 <script lang="ts">
 	import Grid from '$lib/components/Grid.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
-	import {
-		getThemeContext,
-		ThemeSwitcher,
-		ColorSchemeToggle,
-		type ThemePreset
-	} from '@happyvertical/smrt-svelte/themes';
-	import { swissTheme } from '$lib/themes';
+	import ColorSchemeToggle from '$lib/components/ColorSchemeToggle.svelte';
 
-	const theme = getThemeContext();
-
-	const installCode = `npm install @happyvertical/smrt-svelte`;
+	const installCode = `npm install @happyvertical/smrt-ui`;
 
 	const basicUsageCode = `<script>
-  import { ThemeProvider } from '@happyvertical/smrt-svelte/themes';
-  import '@happyvertical/smrt-svelte/themes/styles/all.css';
+  import { ThemeProvider } from '@happyvertical/smrt-ui/themes';
+  import '@happyvertical/smrt-ui/themes/styles/all.css';
 <\/script>
 
-<ThemeProvider preset="material" colorScheme="system">
+<ThemeProvider preset="material" colorScheme="system" persist={true}>
   <YourApp />
 </ThemeProvider>`;
 
-	const customThemeCode = `import { createTheme, registerTheme } from '@happyvertical/smrt-svelte/themes';
+	const customThemeCode = `import { createTheme, registerTheme } from '@happyvertical/smrt-ui/themes';
 
 const myTheme = createTheme({
   id: 'brand',
@@ -41,10 +33,13 @@ const myTheme = createTheme({
   fontFamily: 'Inter, sans-serif',
 });
 
-registerTheme(myTheme);`;
+registerTheme(myTheme);
+
+// Now usable as a preset
+// <ThemeProvider preset="brand" />`;
 
 	const cssOnlyCode = `/* Import base theme */
-@import '@happyvertical/smrt-svelte/themes/styles/material.css';
+@import '@happyvertical/smrt-ui/themes/styles/material.css';
 
 /* Override with custom values */
 [data-theme="custom"] {
@@ -84,32 +79,23 @@ registerTheme(myTheme);`;
 	<section class="hero">
 		<h1>Themes</h1>
 		<p class="lead">
-			A comprehensive theme system with Material, Glass, and Studio presets. All themes include
-			light and dark modes, CSS custom properties, and runtime switching.
+			A comprehensive theme system shipped in <code>@happyvertical/smrt-ui</code> with four
+			built-in presets — Material, Glass, Studio, and SMRT. Every preset includes light and dark
+			modes, exposes its design as CSS custom properties, and supports runtime switching via
+			<code>&lt;ThemeProvider&gt;</code>. Register your own themes with <code>createTheme</code> to
+			add them to the same picker.
 		</p>
 	</section>
 
 	<section class="demo">
-		<h2>Live Demo</h2>
-		<p>Try switching themes and color schemes:</p>
+		<h2>Light &amp; dark</h2>
+		<p>Toggle the color scheme — every token below updates live:</p>
 
 		<div class="controls">
 			<div class="control-group">
-				<h3>Theme Preset</h3>
-				<ThemeSwitcher variant="buttons" showIcons={true} />
-			</div>
-			<div class="control-group">
 				<h3>Color Scheme</h3>
-				<ColorSchemeToggle variant="segmented" showLabels={true} />
+				<ColorSchemeToggle />
 			</div>
-		</div>
-
-		<div class="current-theme">
-			<p>
-				<strong>Current:</strong>
-				{theme.state.theme.name} —
-				{theme.state.resolvedScheme} mode
-			</p>
 		</div>
 	</section>
 
@@ -137,10 +123,11 @@ registerTheme(myTheme);`;
 	</section>
 
 	<section class="themes-list">
-		<h2>Available Themes</h2>
+		<h2>Built-in Themes</h2>
+		<p>Four presets ship in the box (<code>availablePresets</code>):</p>
 
 		<div class="theme-cards">
-			<div class="theme-card" class:active={theme.state.preset === 'material'}>
+			<div class="theme-card">
 				<h3>🔷 Material</h3>
 				<p>
 					Modern Google Material Design 3 with refined colors and typography. Features vibrant
@@ -149,7 +136,7 @@ registerTheme(myTheme);`;
 				<code>preset="material"</code>
 			</div>
 
-			<div class="theme-card" class:active={theme.state.preset === 'glass'}>
+			<div class="theme-card">
 				<h3>💎 Glass</h3>
 				<p>
 					Apple-inspired glass morphism with backdrop blur effects. Translucent surfaces, system
@@ -158,7 +145,7 @@ registerTheme(myTheme);`;
 				<code>preset="glass"</code>
 			</div>
 
-			<div class="theme-card" class:active={theme.state.preset === 'studio'}>
+			<div class="theme-card">
 				<h3>◻️ Studio</h3>
 				<p>
 					Google AI Studio flat design with minimal aesthetics. Monochromatic base with vibrant
@@ -167,15 +154,23 @@ registerTheme(myTheme);`;
 				<code>preset="studio"</code>
 			</div>
 
-			<div class="theme-card" class:active={theme.state.preset === ('swiss' as ThemePreset)}>
-				<h3>🇨🇭 Swiss</h3>
+			<div class="theme-card">
+				<h3>⬛ SMRT</h3>
 				<p>
-					Custom theme for s-m-r-t.dev. Swiss/International Typographic Style with strong grid,
-					clean typography, and minimal embellishment.
+					The framework's signature theme with a distinctive type stack and strong, grid-driven
+					layout. Import <code>themes/styles/fonts.css</code> to pull in its font faces.
 				</p>
-				<code>preset="swiss"</code>
+				<code>preset="smrt"</code>
 			</div>
 		</div>
+
+		<h3>Custom themes</h3>
+		<p>
+			This site ships its own <strong>Swiss</strong> theme — created with
+			<code>createTheme</code> and added via <code>registerTheme</code>, then referenced as
+			<code>preset="swiss"</code>. Any registered theme becomes selectable exactly like a built-in
+			preset.
+		</p>
 	</section>
 
 	<section class="installation">
@@ -201,13 +196,21 @@ registerTheme(myTheme);`;
 	<section class="features">
 		<h2>Features</h2>
 		<ul>
-			<li><strong>3 Built-in Themes:</strong> Material, Glass, and Studio presets</li>
+			<li><strong>4 Built-in Themes:</strong> Material, Glass, Studio, and SMRT presets</li>
 			<li><strong>Light & Dark Modes:</strong> Automatic system detection with manual override</li>
-			<li><strong>Runtime Switching:</strong> Change themes without page reload</li>
+			<li>
+				<strong>Runtime Switching:</strong> Change presets without a page reload via
+				<code>&lt;ThemeProvider&gt;</code> / <code>&lt;ThemeSwitcher&gt;</code>
+			</li>
 			<li><strong>CSS Custom Properties:</strong> 100+ theme tokens exposed as CSS variables</li>
 			<li><strong>Type-Safe:</strong> Full TypeScript support with theme definitions</li>
-			<li><strong>Persistent:</strong> Theme preferences saved to localStorage</li>
-			<li><strong>Custom Themes:</strong> Create and register your own themes</li>
+			<li>
+				<strong>Persistent:</strong> Opt-in <code>persist</code> saves preferences to localStorage
+			</li>
+			<li>
+				<strong>Custom Themes:</strong> Create with <code>createTheme</code> and add via
+				<code>registerTheme</code>
+			</li>
 		</ul>
 	</section>
 

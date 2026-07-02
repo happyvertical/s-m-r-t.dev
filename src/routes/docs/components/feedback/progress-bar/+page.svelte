@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ProgressBar } from '@happyvertical/smrt-svelte';
+	import { ProgressBar } from '@happyvertical/smrt-ui';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -51,7 +51,7 @@
 	const installCode = `npm install @happyvertical/smrt-svelte`;
 
 	const basicCode = `<script lang="ts">
-  import { ProgressBar } from '@happyvertical/smrt-svelte';
+  import { ProgressBar } from '@happyvertical/smrt-ui';
 <\/script>
 
 <ProgressBar value={45} />`;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { RoleBadge } from '@happyvertical/smrt-svelte';
+	import { RoleBadge } from '@happyvertical/smrt-ui';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -36,7 +36,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { RoleBadge } from '@happyvertical/smrt-svelte';`}
+		code={`import { RoleBadge } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 

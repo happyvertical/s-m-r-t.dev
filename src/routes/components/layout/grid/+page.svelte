@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Grid, Card } from '@happyvertical/smrt-svelte';
+	import { Grid, Card } from '@happyvertical/smrt-ui';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -61,7 +61,7 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Grid } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { Grid } from '@happyvertical/smrt-ui';`} language="typescript" />
 
 	<h2>Auto Columns (Default)</h2>
 	<p>By default, columns auto-fill with a minimum width of 300px.</p>
@@ -191,7 +191,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { Grid } from '@happyvertical/smrt-svelte';
+		code={`import { Grid } from '@happyvertical/smrt-ui';
 
 type GapSize = 'sm' | 'md' | 'lg' | 'xl';
 type GapConfig = GapSize | { row?: GapSize; column?: GapSize };

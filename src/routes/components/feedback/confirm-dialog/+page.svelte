@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ConfirmDialog, Button } from '@happyvertical/smrt-svelte';
+	import { ConfirmDialog, Button } from '@happyvertical/smrt-ui';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -95,7 +95,7 @@
 
 	<h2>Installation</h2>
 	<CodeBlock
-		code={`import { ConfirmDialog } from '@happyvertical/smrt-svelte';`}
+		code={`import { ConfirmDialog } from '@happyvertical/smrt-ui';`}
 		language="typescript"
 	/>
 
@@ -171,7 +171,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { ConfirmDialog } from '@happyvertical/smrt-svelte';
+		code={`import { ConfirmDialog } from '@happyvertical/smrt-ui';
 
 interface Props {
   open: boolean;

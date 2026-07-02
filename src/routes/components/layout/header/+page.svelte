@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Header } from '@happyvertical/smrt-svelte';
+	import { Header } from '@happyvertical/smrt-ui';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ComponentExample from '$lib/components/ComponentExample.svelte';
 	import PropsTable from '$lib/components/PropsTable.svelte';
@@ -38,7 +38,7 @@
 	</p>
 
 	<h2>Installation</h2>
-	<CodeBlock code={`import { Header } from '@happyvertical/smrt-svelte';`} language="typescript" />
+	<CodeBlock code={`import { Header } from '@happyvertical/smrt-ui';`} language="typescript" />
 
 	<h2>Basic Usage</h2>
 	<p>Header with logo and navigation links.</p>
@@ -116,7 +116,7 @@
 
 	<h2>TypeScript</h2>
 	<CodeBlock
-		code={`import { Header } from '@happyvertical/smrt-svelte';
+		code={`import { Header } from '@happyvertical/smrt-ui';
 
 interface Props {
   logo?: Snippet;
