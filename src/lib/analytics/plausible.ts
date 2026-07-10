@@ -13,7 +13,7 @@ interface PlausibleOptions {
 	callback?: () => void;
 }
 
-type PlausibleFunction = (eventName: string, options?: PlausibleOptions) => void;
+type PlausibleFunction = (_eventName: string, _options?: PlausibleOptions) => void;
 
 declare global {
 	interface Window {

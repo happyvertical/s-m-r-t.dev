@@ -1,83 +1,73 @@
 <script lang="ts">
-	import Grid from './Grid.svelte';
-	import { SMRT_VERSION_LABEL } from '$lib/version';
+	import brandMark from '$lib/assets/smrt-mark.svg';
 </script>
 
-<footer role="contentinfo">
-	<Grid>
-		<div class="footer-content">
-			<div class="brand">
-				<span class="name" aria-label="s-m-r-t Framework">s-m-r-t</span>
-				<span class="version">{SMRT_VERSION_LABEL}</span>
-			</div>
-			<nav role="navigation" aria-label="Footer navigation">
-				<a href="/docs">Docs</a>
-				<a href="/components">Components</a>
-				<a href="/modules">Modules</a>
-				<a
-					href="https://github.com/happyvertical/smrt"
-					target="_blank"
-					rel="noopener noreferrer"
-					aria-label="s-m-r-t Framework on GitHub (opens in new tab)">GitHub</a
-				>
-			</nav>
-		</div>
-	</Grid>
+<footer>
+	<div class="footer-inner">
+		<p class="brand"><img src={brandMark} alt="" width="28" height="28" /><span>s-m-r-t</span></p>
+		<p>Framework documentation · 0.38.26</p>
+		<nav aria-label="Footer navigation">
+			<a href="/faq">FAQ</a>
+			<a href="https://github.com/happyvertical/smrt" target="_blank" rel="noreferrer">GitHub ↗</a>
+		</nav>
+	</div>
 </footer>
 
 <style>
 	footer {
-		margin-top: auto;
-		padding: 48px 0;
-		border-top: 1px solid var(--smrt-color-outline, #e5e5e5);
-		background: var(--smrt-color-surface, #ffffff);
+		border-top: 1px solid var(--site-line);
+		background: var(--site-surface);
 	}
 
-	.footer-content {
-		grid-column: 1 / -1;
+	.footer-inner {
+		width: min(1060px, calc(100% - 36px));
 		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
+		align-items: center;
+		gap: 24px;
+		margin: 0 auto;
+		padding: 24px 0;
+		color: var(--site-muted);
+		font-size: 0.72rem;
 	}
 
 	.brand {
 		display: flex;
-		flex-direction: column;
-		gap: 4px;
+		align-items: center;
+		gap: 8px;
+		color: var(--site-ink);
+		font-family: var(--site-font-mono);
+		font-weight: 800;
 	}
 
-	.name {
-		font-family: var(--smrt-font-family-mono, monospace);
-		font-weight: bold;
-		font-size: 1.1rem;
-		color: var(--smrt-color-on-surface, #1a1a1a);
+	.brand img {
+		width: 28px;
+		height: 28px;
+		object-fit: contain;
 	}
 
-	.version {
-		font-family: var(--smrt-font-family-mono, monospace);
-		font-size: 0.75rem;
-		color: var(--smrt-color-on-surface-variant, #666);
-	}
-
-	nav {
+	footer nav {
 		display: flex;
-		gap: 24px;
+		gap: 18px;
+		margin-left: auto;
 	}
 
-	nav a {
-		font-size: 0.9rem;
-		color: var(--smrt-color-on-surface-variant, #666);
+	footer a {
+		color: var(--site-muted);
 		text-decoration: none;
 	}
 
-	nav a:hover {
-		color: var(--smrt-color-on-surface, #1a1a1a);
+	footer a:hover {
+		color: var(--site-ink);
 	}
 
-	@media (max-width: 600px) {
-		.footer-content {
+	@media (max-width: 620px) {
+		.footer-inner {
+			align-items: flex-start;
 			flex-direction: column;
-			gap: 24px;
+		}
+
+		footer nav {
+			margin-left: 0;
 		}
 	}
 </style>

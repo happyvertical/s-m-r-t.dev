@@ -70,8 +70,9 @@
 
 <style>
 	.code-block {
-		background: var(--smrt-color-surface-container-highest, #1a1a1a);
-		border-radius: var(--smrt-radius-md, 8px);
+		background: #11150f;
+		border: 1px solid rgb(255 255 255 / 9%);
+		border-radius: var(--site-radius-md, 12px);
 		overflow: hidden;
 		margin: 16px 0 24px;
 	}
@@ -81,8 +82,8 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 8px 16px;
-		background: var(--smrt-color-surface-container-high, #252525);
-		border-bottom: 1px solid var(--smrt-color-outline-variant, #333);
+		background: #191f17;
+		border-bottom: 1px solid rgb(255 255 255 / 9%);
 	}
 
 	.spacer {
@@ -97,9 +98,9 @@
 
 	.filename,
 	.language {
-		font-family: var(--font-mono);
+		font-family: var(--site-font-mono);
 		font-size: 0.75rem;
-		color: var(--smrt-color-on-surface-variant, #888);
+		color: #899081;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}
@@ -109,20 +110,20 @@
 		align-items: center;
 		gap: 6px;
 		background: transparent;
-		border: 1px solid var(--smrt-color-outline, #444);
-		border-radius: var(--smrt-radius-sm, 4px);
+		border: 1px solid rgb(255 255 255 / 14%);
+		border-radius: 999px;
 		padding: 4px 10px;
-		color: var(--smrt-color-on-surface-variant, #888);
-		font-family: var(--font-sans);
+		color: #a5ab9e;
+		font-family: var(--site-font-mono);
 		font-size: 0.75rem;
 		cursor: pointer;
 		transition: all 0.15s ease;
 	}
 
 	.copy-btn:hover {
-		background: var(--smrt-color-surface-container, #333);
-		color: var(--smrt-color-on-surface, #fff);
-		border-color: var(--smrt-color-outline-variant, #555);
+		background: #242b21;
+		color: #fff;
+		border-color: rgb(255 255 255 / 26%);
 	}
 
 	.copy-btn svg {
@@ -136,9 +137,9 @@
 	}
 
 	code {
-		font-family: var(--font-mono);
+		font-family: var(--site-font-mono);
 		font-size: 0.85rem;
 		line-height: 1.5;
-		color: var(--smrt-color-on-surface, #f0f0f0);
+		color: #f2eee4;
 	}
 </style>

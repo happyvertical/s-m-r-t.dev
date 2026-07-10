@@ -23,7 +23,9 @@
 		article
 	}: SEOProps = $props();
 
-	const fullTitle = title === 's-m-r-t Framework' ? title : `${title} | s-m-r-t Framework`;
+	const fullTitle = $derived(
+		title === 's-m-r-t Framework' ? title : `${title} | s-m-r-t Framework`
+	);
 </script>
 
 <svelte:head>
@@ -54,7 +56,7 @@
 			<meta property="article:section" content={article.section} />
 		{/if}
 		{#if article.tags}
-			{#each article.tags as tag}
+			{#each article.tags as tag (tag)}
 				<meta property="article:tag" content={tag} />
 			{/each}
 		{/if}

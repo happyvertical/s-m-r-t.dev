@@ -1,21 +1,47 @@
-/* 
- * Minimal custom variables - rely on SMRT theme system
- * These are fallbacks only, SMRT themes provide the real values
- */
-
 :root {
-	/* Grid system */
 	--grid-columns: 12;
 	--grid-gap: 24px;
 	--container-width: 1200px;
+	--site-header-height: 66px;
+	--site-font-sans: 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	--site-font-mono: 'SFMono-Regular', 'SF Mono', 'Roboto Mono', Consolas, monospace;
+	--site-paper: #f7f6f2;
+	--site-paper-deep: #ecebe5;
+	--site-surface: #fcfbf8;
+	--site-ink: #161a14;
+	--site-muted: #686c63;
+	--site-line: rgb(22 26 20 / 12%);
+	--site-line-strong: rgb(22 26 20 / 24%);
+	--site-grid-line: rgb(22 26 20 / 5%);
+	--site-accent: #f4ad1d;
+	--site-accent-strong: #a96400;
+	--site-accent-soft: #f8e0a9;
+	--site-radius-md: 12px;
+	--site-radius-lg: 20px;
+	--font-sans: var(--site-font-sans);
+	--font-mono: var(--site-font-mono);
 }
 
-/* Focus styles using SMRT primary color */
+html[data-color-scheme='dark'] {
+	--site-paper: #11150f;
+	--site-paper-deep: #191e17;
+	--site-surface: #1c2119;
+	--site-ink: #f0ebdf;
+	--site-muted: #a6aa9f;
+	--site-line: rgb(240 235 223 / 12%);
+	--site-line-strong: rgb(240 235 223 / 22%);
+	--site-grid-line: rgb(240 235 223 / 5%);
+	--site-accent: #f4ad1d;
+	--site-accent-strong: #ffc24c;
+	--site-accent-soft: #3a2b0c;
+}
+
 *:focus-visible {
-	outline: 2px solid var(--smrt-color-primary, #1976d2);
-	outline-offset: 2px;
+	outline: 2px solid var(--site-accent-strong);
+	outline-offset: 3px;
 }
 
-*:focus:not(:focus-visible) {
-	outline: none;
+::selection {
+	background: var(--site-accent);
+	color: #141812;
 }

@@ -1,151 +1,106 @@
 <script lang="ts">
-	/**
-	 * Shared documentation shell (issue #101): a three-column layout with the
-	 * unified left sidebar, the page content, and a right-rail "On this page"
-	 * TOC. Prev/next track navigation is appended below the content.
-	 *
-	 * Used by the docs / modules / components / reference section layouts so all
-	 * four share one consistent, keyboard-accessible navigation chrome.
-	 */
-	import { page } from '$app/stores';
-	import Sidebar from './Sidebar.svelte';
-	import OnThisPage from './OnThisPage.svelte';
-	import PrevNext from './PrevNext.svelte';
-	import type { NavSection } from '$lib/site-nav';
+	import { page } from '$app/state';
+	import { docsNavigation } from '$lib/data/navigation';
 
-	let {
-		sectionId,
-		children
-	}: {
-		sectionId?: NavSection['id'];
-		children: import('svelte').Snippet;
-	} = $props();
+	let { children } = $props();
 
-	let mobileNavOpen = $state(false);
-
-	// Close the mobile sidebar drawer whenever the route changes.
-	$effect(() => {
-		void $page.url.pathname;
-		mobileNavOpen = false;
-	});
+	function isActive(href: string) {
+		if (href === '/') return page.url.pathname === '/';
+		return page.url.pathname === href || page.url.pathname.startsWith(`${href}/`);
+	}
 </script>
 
 <div class="docs-shell">
-	<button
-		type="button"
-		class="mobile-nav-toggle"
-		aria-expanded={mobileNavOpen}
-		onclick={() => (mobileNavOpen = !mobileNavOpen)}
-	>
-		<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-			<line x1="3" y1="6" x2="21" y2="6"></line>
-			<line x1="3" y1="12" x2="21" y2="12"></line>
-			<line x1="3" y1="18" x2="21" y2="18"></line>
-		</svg>
-		Menu
-	</button>
-
-	<aside class="sidebar" class:open={mobileNavOpen}>
-		<Sidebar {sectionId} />
+	<aside class="docs-sidebar">
+		<p class="sidebar-title">Documentation</p>
+		<nav aria-label="Documentation navigation">
+			{#each docsNavigation as group (group.label)}
+				<section>
+					<h2>{group.label}</h2>
+					{#each group.items as item (item.href)}
+						<a href={item.href} class:active={isActive(item.href)}>{item.label}</a>
+					{/each}
+				</section>
+			{/each}
+		</nav>
 	</aside>
 
-	<div class="content">
-		{@render children()}
-		<PrevNext pathname={$page.url.pathname} />
-	</div>
-
-	<aside class="toc-rail">
-		<OnThisPage pathname={$page.url.pathname} containerSelector=".docs-shell .content" />
-	</aside>
+	<div class="docs-content">{@render children()}</div>
 </div>
 
 <style>
 	.docs-shell {
+		width: min(1540px, 100%);
 		display: grid;
-		grid-template-columns: 210px minmax(0, 1fr) 200px;
-		gap: 40px;
-		max-width: 1280px;
+		grid-template-columns: 244px minmax(0, 1fr);
 		margin: 0 auto;
-		padding: 0 var(--grid-gap, 24px);
-		align-items: start;
 	}
 
-	.sidebar {
-		padding: 40px 0;
+	.docs-sidebar {
 		position: sticky;
-		top: 72px;
-		max-height: calc(100vh - 72px);
+		top: var(--site-header-height);
+		height: calc(100svh - var(--site-header-height));
+		padding: 28px 24px 50px 28px;
+		border-right: 1px solid var(--site-line);
 		overflow-y: auto;
-		border-right: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
-		padding-right: 16px;
 	}
 
-	.content {
-		padding: 24px 0;
+	.docs-sidebar nav {
+		display: grid;
+		gap: 26px;
+	}
+
+	.sidebar-title {
+		margin-bottom: 24px;
+		color: var(--site-ink);
+		font-size: 0.82rem;
+		font-weight: 700;
+	}
+
+	.docs-sidebar section {
+		display: grid;
+		gap: 3px;
+	}
+
+	.docs-sidebar h2 {
+		margin-bottom: 5px;
+		color: var(--site-muted);
+		font-size: 0.67rem;
+		font-weight: 700;
+		letter-spacing: 0.035em;
+		text-transform: uppercase;
+	}
+
+	.docs-sidebar a {
+		padding: 5px 8px;
+		border-radius: 5px;
+		color: var(--site-muted);
+		font-size: 0.79rem;
+		line-height: 1.35;
+		text-decoration: none;
+	}
+
+	.docs-sidebar a:hover {
+		background: var(--site-paper-deep);
+		color: var(--site-ink);
+	}
+
+	.docs-sidebar a.active {
+		background: var(--site-accent-soft);
+		color: var(--site-ink);
+		font-weight: 650;
+	}
+
+	.docs-content {
 		min-width: 0;
 	}
 
-	/* Module/reference pages render their own <Grid> (a centered 1200px
-	   container with side padding). Inside this column that padding/centering is
-	   redundant, so let those pages fill the content column edge-to-edge. */
-	.content :global(.grid-container) {
-		max-width: none;
-		padding: 0;
-	}
-
-	.toc-rail {
-		padding: 40px 0;
-		min-width: 0;
-	}
-
-	.mobile-nav-toggle {
-		display: none;
-		align-items: center;
-		gap: 8px;
-		margin: 16px 0 0;
-		padding: 8px 14px;
-		border: 1px solid var(--smrt-color-outline, #e5e5e5);
-		border-radius: var(--smrt-radius-md, 8px);
-		background: var(--smrt-color-surface-container-low, #fafafa);
-		color: var(--smrt-color-on-surface, #1a1a1a);
-		font-family: inherit;
-		font-size: 0.9rem;
-		cursor: pointer;
-	}
-
-	/* No room for the right TOC rail: drop it, keep sidebar + content. */
-	@media (max-width: 1100px) {
+	@media (max-width: 980px) {
 		.docs-shell {
-			grid-template-columns: 220px minmax(0, 1fr);
-			gap: 40px;
+			display: block;
 		}
 
-		.toc-rail {
-			display: none;
-		}
-	}
-
-	/* Narrow: sidebar becomes a collapsible drawer above the content. */
-	@media (max-width: 820px) {
-		.docs-shell {
-			grid-template-columns: 1fr;
-			gap: 0;
-		}
-
-		.mobile-nav-toggle {
-			display: flex;
-		}
-
-		.sidebar {
-			position: static;
-			max-height: none;
-			overflow: visible;
-			border-right: none;
-			border-bottom: 1px solid var(--smrt-color-outline-variant, #e5e5e5);
-			padding: 16px 0;
-		}
-
-		.sidebar:not(.open) {
+		.docs-sidebar {
 			display: none;
 		}
 	}

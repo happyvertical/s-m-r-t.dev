@@ -1,150 +1,369 @@
 <script lang="ts">
-	/**
-	 * s-m-r-t.dev landing page — an ecosystem overview of the SMRT framework.
-	 *
-	 * The site layout (+layout.svelte) already renders the Header and Footer, so
-	 * this page begins at the hero. Everything is themed with --smrt-color-*
-	 * tokens and works in both light and dark color schemes. Subtle motion (the
-	 * staggered fade-in on the four surface panels) is gated behind
-	 * prefers-reduced-motion inside the component.
-	 *
-	 * Honesty notes baked into the copy (verified against the smrt source):
-	 *  - is()/do() send only the instruction to the model, not the object data.
-	 *  - AI providers: OpenAI, Anthropic, Google (Gemini), AWS Bedrock, Hugging
-	 *    Face, and a local Claude CLI — swapped by one config field.
-	 *  - Databases: SQLite, Postgres, DuckDB.
-	 *  - smrt-gnode is not featured (parked).
-	 */
-	import Hero from '$lib/components/landing/Hero.svelte';
-	import Section from '$lib/components/landing/Section.svelte';
-	import Reveal from '$lib/components/landing/Reveal.svelte';
-	import ReachIt from '$lib/components/landing/ReachIt.svelte';
-	import CapabilityGrid from '$lib/components/landing/CapabilityGrid.svelte';
-	import ComponentGallery from '$lib/components/landing/ComponentGallery.svelte';
-	import CardRow from '$lib/components/landing/CardRow.svelte';
-	import type { LandingCard } from '$lib/components/landing/types';
-	import GetStarted from '$lib/components/landing/GetStarted.svelte';
+	import SEO from '$lib/components/SEO.svelte';
+	import { foundationGuides } from '$lib/data/guides';
 
-	// Section 6 — AI is built in.
-	const aiCards: LandingCard[] = [
+	const updates = [
 		{
-			title: 'Vector search',
-			body: 'Generate embeddings and run semantic search as ordinary collection queries — the same models, the same query API, backed by your database.',
-			iconPath:
-				'M9 3a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 1 5 3 3 0 0 0 5 1V3Zm6 0a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-1 5 3 3 0 0 1-5 1V3Z',
-			tags: ['embeddings', 'semantic search']
+			title: 'Agent-assisted forms',
+			body: 'Let chat, voice, tutorials, or tests find and explain controls, then stage changes behind explicit confirmation.',
+			href: '/capabilities/agent-assisted-forms'
 		},
 		{
-			title: 'Agents & browser AI',
-			body: 'Run agents on a durable dispatch bus with scheduled background jobs. In the browser, do speech-to-text, text-to-speech, and LLM inference on-device, with a warm model cache.',
-			iconPath: 'M13 2 3 14h7l-1 8 10-12h-7l1-8Z',
-			tags: ['durable dispatch', 'background jobs', 'in-browser STT/TTS/LLM']
-		}
-	];
-
-	// Section 7 — Runs anywhere. No lock-in.
-	const runsCards: LandingCard[] = [
-		{
-			title: 'getAI()',
-			body: 'Pick a provider with one config field and keep the same code. Bedrock alone reaches dozens of underlying models.',
-			iconPath:
-				'M12 2a4 4 0 0 0-4 4v1a4 4 0 0 0 0 8v1a4 4 0 0 0 8 0v-1a4 4 0 0 0 0-8V6a4 4 0 0 0-4-4Z',
-			tags: ['OpenAI', 'Anthropic', 'Google', 'AWS Bedrock', 'Hugging Face', 'Ollama', 'Claude CLI']
+			title: 'Learning agents',
+			body: 'Agents can recall useful experience, track outcomes, and propose instruction changes behind a human approval step.',
+			href: '/capabilities/learning-agents'
 		},
 		{
-			title: 'getDatabase()',
-			body: 'The same models persist to whichever engine you point them at — from a local file to a managed cluster.',
-			iconPath:
-				'M12 3c4.4 0 8 1.3 8 3s-3.6 3-8 3-8-1.3-8-3 3.6-3 8-3Zm8 6c0 1.7-3.6 3-8 3s-8-1.3-8-3m16 5c0 1.7-3.6 3-8 3s-8-1.3-8-3M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6',
-			tags: ['SQLite', 'Postgres', 'DuckDB', 'JSON']
+			title: 'Mobile foundation',
+			body: 'Shared offline, authentication, networking, and evidence-capture behavior for native Android and iOS apps.',
+			href: '/capabilities/mobile'
+		},
+		{
+			title: 'Hydration and live data',
+			body: 'Start with server-rendered rows, seed the browser collection, then keep it current without a duplicate first fetch.',
+			href: '/capabilities/live-data'
+		},
+		{
+			title: 'WebMCP',
+			body: 'A page can offer selected application tools to a browser agent through the signed-in user session.',
+			href: '/capabilities/webmcp'
+		},
+		{
+			title: 'Reports',
+			body: 'Define durable aggregate models with full and incremental refresh, schedules, watermarks, and tenant scope.',
+			href: '/capabilities/reports'
+		},
+		{
+			title: 'Standard UI foundation',
+			body: 'Build with one accessible component contract for forms, collections, tables, feedback, overlays, layouts, and themes.',
+			href: '/packages/smrt-ui'
 		}
 	];
-
-	const runsNote = 'The open-source stack or the big vendors — your call, same code either way.';
 </script>
 
-<svelte:head>
-	<title>s-m-r-t — Software as Agentic Domain Logic</title>
-	<meta
-		name="description"
-		content="A TypeScript framework for software that people and agents both operate. Define a domain model once; generate its database schema, REST API, CLI, and MCP tools. Swap AI providers and databases with one field."
-	/>
-</svelte:head>
+<SEO
+	title="s-m-r-t documentation"
+	description="Learn s-m-r-t in the order an application is built, then browse packages, components, generated interfaces, and the playground."
+	url="https://s-m-r-t.dev"
+/>
 
-<Hero />
+<article class="docs-home">
+	<header class="page-intro">
+		<p class="eyebrow">s-m-r-t documentation · 0.38.26</p>
+		<h1>Build an application from the model outward.</h1>
+		<p>
+			s-m-r-t starts with TypeScript objects and connects the common application pieces around them:
+			storage, tenants, users, permissions, web pages, APIs, agent tools, and operator commands.
+		</p>
+	</header>
 
-<Reveal />
+	<section class="start-options" aria-labelledby="start-heading">
+		<div class="section-heading">
+			<h2 id="start-heading">Choose where to start</h2>
+			<p>Both paths use the same foundations and package reference.</p>
+		</div>
+		<div class="start-grid">
+			<a href="/starters/ground-up">
+				<span>Ground up</span>
+				<h3>Basic SvelteKit template</h3>
+				<p>Best when you want to see each piece arrive and keep the application small.</p>
+				<strong>Start with one object →</strong>
+			</a>
+			<a href="/starters/saas">
+				<span>Production-shaped</span>
+				<h3>s-m-r-t SaaS starter</h3>
+				<p>
+					Best when users, tenant administration, billing, and deployment should already be in
+					place.
+				</p>
+				<strong>Tour the starter →</strong>
+			</a>
+		</div>
+	</section>
 
-<div class="saadl-note">
-	<p>
-		<strong>SAADL</strong> — Software as Agentic Domain Logic: software whose domain logic exposes
-		the same operations to human users (UI, HTTP, CLI) and to software agents (callable tools).
-		<span class="wm">s-m-r-t</span> is a SAADL framework.
-		<a href="/saadl">What is a SAADL?</a>
-	</p>
-</div>
+	<section class="journey" aria-labelledby="journey-heading">
+		<div class="section-heading">
+			<h2 id="journey-heading">How an application comes together</h2>
+			<p>
+				These guides move from describing the product to deciding ownership, identity, access, and
+				interfaces. Read across them or enter at the part you need.
+			</p>
+		</div>
+		<ol>
+			{#each foundationGuides as guide, index (guide.slug)}
+				<li>
+					<a href={`/foundations/${guide.slug}`}>
+						<span>{String(index + 1).padStart(2, '0')}</span>
+						<div>
+							<h3>{guide.navTitle}</h3>
+							<p>{guide.plainEnglish}</p>
+						</div>
+						<b>→</b>
+					</a>
+				</li>
+			{/each}
+		</ol>
+	</section>
 
-<Section
-	eyebrow="One model, every interface"
-	title="One object, reached over HTTP, the CLI, and as MCP tools"
-	intro="A Product is one class. People reach it over HTTP or the CLI; an agent calls it as an MCP tool like product_create. Every surface resolves to the same collection — turn each on with a flag on @smrt(), no adapter code."
-	tinted
->
-	<ReachIt />
-</Section>
+	<section class="updates" aria-labelledby="updates-heading">
+		<div class="section-heading">
+			<h2 id="updates-heading">Newer parts of the framework</h2>
+			<p>Use these when the basic application path reaches the problem they solve.</p>
+		</div>
+		<div class="update-grid">
+			{#each updates as update (update.href)}
+				<a href={update.href}>
+					<h3>{update.title}</h3>
+					<p>{update.body}</p>
+					<span>Read more →</span>
+				</a>
+			{/each}
+		</div>
+	</section>
 
-<Section
-	eyebrow="Batteries included"
-	title="Around forty packages, released in lockstep"
-	intro="Auth with four-level RBAC, multi-tenancy that filters every query, double-entry billing, vector search, background jobs, content, messaging, assets. They share one ORM, one inheritance model, and one dispatch bus."
-	wide
->
-	<CapabilityGrid />
-</Section>
-
-<Section
-	eyebrow="The component library"
-	title="Around eighty components you compose — not a UI you hand-build"
-	intro="Typed, themeable, accessibility-tested Svelte components — forms, tables, badges, cards, modals, navigation, calendar, chat. The framework generates your API and agent tools; you compose the human screens from parts that already match your data."
-	tinted
->
-	<ComponentGallery />
-</Section>
-
-<Section eyebrow="AI" title="AI, on the server and in the browser" wide>
-	<CardRow cards={aiCards} />
-</Section>
-
-<Section eyebrow="No lock-in" title="Swap your AI provider or database with one field" tinted wide>
-	<CardRow cards={runsCards} note={runsNote} />
-</Section>
-
-<Section eyebrow="Start here" title="Get started" wide>
-	<GetStarted />
-</Section>
+	<aside class="browse-callout">
+		<div>
+			<h2>Looking for a package or component?</h2>
+			<p>
+				The package browser keeps the overview, components, playground, REST, MCP, WebMCP, and CLI
+				notes together.
+			</p>
+		</div>
+		<a href="/packages">Browse all packages →</a>
+	</aside>
+</article>
 
 <style>
-	.saadl-note {
-		max-width: 820px;
+	.docs-home {
+		width: min(980px, calc(100% - 48px));
 		margin: 0 auto;
-		padding: 28px 24px 8px;
-		text-align: center;
+		padding: 58px 0 88px;
 	}
 
-	.saadl-note p {
-		margin: 0;
+	.page-intro {
+		max-width: 760px;
+		padding-bottom: 54px;
+	}
+
+	.eyebrow {
+		color: var(--site-accent-strong);
+		font-family: var(--site-font-mono);
+		font-size: 0.68rem;
+		font-weight: 700;
+		letter-spacing: 0.055em;
+		text-transform: uppercase;
+	}
+
+	h1 {
+		max-width: 720px;
+		margin-top: 14px;
+		font-size: clamp(2.35rem, 5vw, 3.45rem);
+		font-weight: 680;
+		letter-spacing: -0.045em;
+		line-height: 1.06;
+	}
+
+	.page-intro > p:last-child {
+		max-width: 720px;
+		margin-top: 20px;
+		color: var(--site-muted);
 		font-size: 1rem;
-		line-height: 1.65;
-		color: var(--smrt-color-on-surface-variant, #555);
+		line-height: 1.7;
 	}
 
-	.saadl-note strong {
-		color: var(--smrt-color-on-background, #1a1a1a);
+	section {
+		padding: 42px 0 52px;
+		border-top: 1px solid var(--site-line);
 	}
 
-	.saadl-note .wm {
-		font-family: var(--smrt-font-family-mono, monospace);
-		color: var(--smrt-color-primary, #1976d2);
-		white-space: nowrap;
+	.section-heading {
+		display: flex;
+		justify-content: space-between;
+		gap: 28px;
+		align-items: baseline;
+		margin-bottom: 24px;
+	}
+
+	.section-heading h2,
+	.browse-callout h2 {
+		font-size: 1.35rem;
+		letter-spacing: -0.025em;
+	}
+
+	.section-heading p,
+	.browse-callout p {
+		max-width: 480px;
+		color: var(--site-muted);
+		font-size: 0.82rem;
+		line-height: 1.55;
+	}
+
+	.start-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 14px;
+	}
+
+	.start-grid a,
+	.update-grid a {
+		border: 1px solid var(--site-line-strong);
+		border-radius: 9px;
+		background: var(--site-surface);
+		color: var(--site-ink);
+		text-decoration: none;
+	}
+
+	.start-grid a {
+		min-height: 220px;
+		display: flex;
+		flex-direction: column;
+		padding: 24px;
+	}
+
+	.start-grid a:hover,
+	.update-grid a:hover {
+		border-color: var(--site-accent-strong);
+	}
+
+	.start-grid span,
+	.update-grid span {
+		color: var(--site-accent-strong);
+		font-family: var(--site-font-mono);
+		font-size: 0.65rem;
+		font-weight: 700;
+		text-transform: uppercase;
+	}
+
+	.start-grid h3 {
+		margin-top: 20px;
+		font-size: 1.22rem;
+	}
+
+	.start-grid p,
+	.update-grid p {
+		margin-top: 10px;
+		color: var(--site-muted);
+		font-size: 0.82rem;
+		line-height: 1.55;
+	}
+
+	.start-grid strong {
+		margin-top: auto;
+		padding-top: 22px;
+		font-size: 0.78rem;
+	}
+
+	.journey ol {
+		border-top: 1px solid var(--site-line);
+		list-style: none;
+	}
+
+	.journey li {
+		border-bottom: 1px solid var(--site-line);
+	}
+
+	.journey a {
+		display: grid;
+		grid-template-columns: 42px minmax(0, 1fr) 20px;
+		gap: 14px;
+		align-items: start;
+		padding: 15px 8px;
+		color: var(--site-ink);
+		text-decoration: none;
+	}
+
+	.journey a:hover {
+		background: var(--site-surface);
+	}
+
+	.journey a > span {
+		padding-top: 2px;
+		color: var(--site-accent-strong);
+		font-family: var(--site-font-mono);
+		font-size: 0.66rem;
+	}
+
+	.journey h3 {
+		font-size: 0.92rem;
+	}
+
+	.journey p {
+		margin-top: 3px;
+		color: var(--site-muted);
+		font-size: 0.77rem;
+		line-height: 1.5;
+	}
+
+	.journey b {
+		font-weight: 500;
+	}
+
+	.update-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 12px;
+	}
+
+	.update-grid a {
+		min-height: 190px;
+		display: flex;
+		flex-direction: column;
+		padding: 18px;
+	}
+
+	.update-grid h3 {
+		font-size: 0.98rem;
+	}
+
+	.update-grid span {
+		margin-top: auto;
+		padding-top: 18px;
+		font-size: 0.6rem;
+	}
+
+	.browse-callout {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 30px;
+		margin-top: 12px;
+		padding: 26px;
+		border: 1px solid var(--site-line-strong);
+		border-left: 4px solid var(--site-accent);
+		background: var(--site-surface);
+	}
+
+	.browse-callout p {
+		margin-top: 7px;
+	}
+
+	.browse-callout a {
+		flex: 0 0 auto;
+		color: var(--site-ink);
+		font-size: 0.8rem;
+		font-weight: 700;
+	}
+
+	@media (max-width: 760px) {
+		.docs-home {
+			width: min(100% - 28px, 980px);
+			padding-top: 38px;
+		}
+
+		.section-heading,
+		.browse-callout {
+			align-items: flex-start;
+			flex-direction: column;
+		}
+
+		.start-grid,
+		.update-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.start-grid a,
+		.update-grid a {
+			min-height: 0;
+		}
 	}
 </style>

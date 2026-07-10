@@ -1,6 +1,5 @@
 import { render } from '@testing-library/svelte';
 import { describe, it, expect } from 'vitest';
-// @ts-ignore
 import Header from './Header.svelte';
 
 describe('Header Component', () => {

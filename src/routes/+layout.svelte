@@ -2,47 +2,41 @@
 	import favicon from '$lib/assets/favicon-32.png';
 	import '$lib/styles/reset.css';
 	import '$lib/styles/variables.css';
-
-	// Vendored SMRT theme tokens (smrt-svelte 0.37 removed its theme system).
-	import '$lib/themes/smrt-theme.css';
-
-	// SMRT Provider for form-component context.
+	import { ThemeProvider } from '@happyvertical/smrt-ui/themes';
+	import '@happyvertical/smrt-ui/themes/styles/all.css';
 	import { Provider } from '@happyvertical/smrt-svelte';
-
 	import Header from '$lib/components/Header.svelte';
+	import DocsShell from '$lib/components/DocsShell.svelte';
 	import Footer from '$lib/components/Footer.svelte';
-	import CommandPalette from '$lib/components/CommandPalette.svelte';
 
 	let { children } = $props();
 </script>
 
 <svelte:head>
-	<title>s-m-r-t</title>
 	<link rel="icon" href={favicon} />
+	<meta name="theme-color" content="#141812" />
 </svelte:head>
 
 <Provider>
-	<div class="app">
-		<Header />
-		<main>
-			{@render children()}
-		</main>
-		<Footer />
-	</div>
-	<CommandPalette />
+	<ThemeProvider preset="smrt" colorScheme="system" persist={true}>
+		<div class="app">
+			<Header />
+			<main><DocsShell>{@render children()}</DocsShell></main>
+			<Footer />
+		</div>
+	</ThemeProvider>
 </Provider>
 
 <style>
 	.app {
-		min-height: 100vh;
+		min-height: 100svh;
 		display: flex;
 		flex-direction: column;
-		background: var(--smrt-color-background, #fafafa);
-		color: var(--smrt-color-on-background, #1a1a1a);
+		background: var(--site-paper);
+		color: var(--site-ink);
 	}
 
 	main {
 		flex: 1;
-		padding-bottom: 48px;
 	}
 </style>
