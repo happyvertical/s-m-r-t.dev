@@ -39,11 +39,11 @@ export default [
 			'svelte/valid-compile': 'error',
 			// This catches invalid expressions in templates
 			'svelte/no-unused-svelte-ignore': 'error',
-			// Ensure reactive values are properly used
-			'svelte/require-reactive-cleanup': 'error'
+			// This documentation site is always deployed at the domain root.
+			'svelte/no-navigation-without-resolve': 'off'
 		}
 	},
 	{
-		ignores: ['build/', '.svelte-kit/', 'dist/']
+		ignores: ['build/', '.svelte-kit/', 'dist/', '.claude/worktrees/**']
 	}
 ];

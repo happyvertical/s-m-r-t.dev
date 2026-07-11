@@ -1,212 +1,240 @@
 <script lang="ts">
-	import ColorSchemeToggle from '$lib/components/ColorSchemeToggle.svelte';
-	import { onMount } from 'svelte';
-	import { openPalette } from '$lib/search';
-	import mark from '$lib/assets/smrt-mark.png';
+	import { page } from '$app/state';
+	import { ColorSchemeToggle } from '@happyvertical/smrt-ui/themes';
+	import brandMark from '$lib/assets/smrt-mark.svg';
+	import DocsSearch from '$lib/components/DocsSearch.svelte';
 
-	// Show the platform-appropriate shortcut hint (⌘K on macOS, Ctrl K elsewhere).
-	let isMac = $state(false);
-	onMount(() => {
-		isMac = /mac/i.test(navigator.platform) || /mac/i.test(navigator.userAgent);
-	});
+	let menuOpen = $state(false);
+	const nav = [
+		{ label: 'Documentation', href: '/' },
+		{ label: 'Packages', href: '/packages' },
+		{ label: 'Playground', href: '/playground' },
+		{ label: 'Reference', href: '/reference' }
+	];
+
+	function isActive(href: string) {
+		if (href === '/')
+			return (
+				page.url.pathname === '/' ||
+				page.url.pathname.startsWith('/starters') ||
+				page.url.pathname.startsWith('/foundations') ||
+				page.url.pathname.startsWith('/capabilities')
+			);
+		return page.url.pathname === href || page.url.pathname.startsWith(`${href}/`);
+	}
 </script>
 
-<header>
-	<div class="header-content">
-		<a href="/" class="branding">
-			<img src={mark} alt="" class="brand-mark" width="30" height="30" />
-				<span class="logo">s-m-r-t</span>
+<header class="site-header">
+	<div class="header-inner">
+		<a
+			href="/"
+			class="brand"
+			aria-label="s-m-r-t documentation home"
+			onclick={() => (menuOpen = false)}
+		>
+			<img src={brandMark} alt="" width="34" height="34" />
+			<span>s-m-r-t</span>
+			<small>docs</small>
 		</a>
-		<nav>
-			<a href="/docs">Docs</a>
-			<a href="/components">Components</a>
-			<a href="/modules">Modules</a>
-			<a href="/themes">Themes</a>
-			<a href="/reference">Reference</a>
-			<a href="/faq">FAQ</a>
-			<a
-				href="https://github.com/happyvertical/smrt"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="github-link"
-				aria-label="GitHub"
-			>
-				<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-					<path
-						d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
-					/>
-				</svg>
-			</a>
-		</nav>
-		<div class="theme-controls">
-			<button
-				type="button"
-				class="search-trigger"
-				onclick={openPalette}
-				aria-label="Search the site (press {isMac ? 'Command K' : 'Control K'})"
-			>
-				<svg
-					width="16"
-					height="16"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					aria-hidden="true"
-				>
-					<circle cx="11" cy="11" r="8"></circle>
-					<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-				</svg>
-				<span class="search-label">Search</span>
-				<kbd class="search-kbd">{isMac ? '⌘' : 'Ctrl'} K</kbd>
-			</button>
-			<ColorSchemeToggle />
+
+		<div class="desktop-search"><DocsSearch /></div>
+
+		<button
+			class="menu-toggle"
+			type="button"
+			aria-expanded={menuOpen}
+			aria-controls="site-nav"
+			onclick={() => (menuOpen = !menuOpen)}
+		>
+			{menuOpen ? 'Close' : 'Menu'}
+		</button>
+
+		<div class="nav-shell" class:open={menuOpen} id="site-nav">
+			<nav aria-label="Primary navigation">
+				{#each nav as item (item.href)}
+					<a href={item.href} class:active={isActive(item.href)} onclick={() => (menuOpen = false)}
+						>{item.label}</a
+					>
+				{/each}
+			</nav>
+			<div class="actions">
+				<a href="https://github.com/happyvertical/smrt" target="_blank" rel="noreferrer">GitHub</a>
+				<ColorSchemeToggle variant="switch" showLabels={false} ariaLabel="Toggle color scheme" />
+			</div>
 		</div>
 	</div>
 </header>
 
 <style>
-	header {
-		padding: 16px 24px;
-		border-bottom: 1px solid var(--smrt-color-outline, #e5e5e5);
-		background: var(--smrt-color-surface, #ffffff);
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: 200;
+		height: var(--site-header-height);
+		border-bottom: 1px solid var(--site-line);
+		background: color-mix(in srgb, var(--site-paper) 94%, transparent);
+		backdrop-filter: blur(14px);
 	}
 
-	.header-content {
+	.header-inner {
+		width: min(1540px, calc(100% - 32px));
+		height: 100%;
 		display: flex;
-		justify-content: space-between;
 		align-items: center;
 		gap: 24px;
-		max-width: 1200px;
 		margin: 0 auto;
 	}
 
-	.branding {
+	.brand {
+		width: 212px;
+		flex: 0 0 auto;
 		display: flex;
 		align-items: center;
 		gap: 9px;
+		color: var(--site-ink);
 		text-decoration: none;
 	}
 
-	.brand-mark {
-		width: 30px;
-		height: 30px;
-		display: block;
-		flex-shrink: 0;
+	.brand img {
+		width: 34px;
+		height: 34px;
+		object-fit: contain;
 	}
 
-	.logo {
-		font-family: var(--smrt-font-family-mono, monospace);
-		font-weight: bold;
-		font-size: 1.5rem;
-		color: var(--smrt-color-on-surface, #1a1a1a);
-		white-space: nowrap;
+	.brand span {
+		font-family: var(--site-font-mono);
+		font-size: 0.94rem;
+		font-weight: 800;
+		letter-spacing: -0.045em;
+	}
+
+	.brand small {
+		padding-left: 8px;
+		border-left: 1px solid var(--site-line-strong);
+		color: var(--site-muted);
+		font-size: 0.7rem;
+	}
+
+	.desktop-search {
+		margin-right: auto;
+	}
+
+	.nav-shell,
+	nav,
+	.actions {
+		display: flex;
+		align-items: center;
+	}
+
+	.nav-shell {
+		gap: 26px;
 	}
 
 	nav {
-		display: flex;
-		gap: 24px;
-		flex: 1;
-		justify-content: center;
+		gap: 20px;
 	}
 
-	nav a {
+	nav a,
+	.actions > a {
+		color: var(--site-muted);
+		font-size: 0.75rem;
+		font-weight: 600;
 		text-decoration: none;
-		color: var(--smrt-color-on-surface, #1a1a1a);
-		font-weight: 500;
-		font-size: 0.9rem;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		transition: color 0.2s;
 	}
 
-	nav a:hover {
-		color: var(--smrt-color-primary, #1976d2);
+	nav a:hover,
+	nav a.active,
+	.actions > a:hover {
+		color: var(--site-ink);
 	}
 
-	.github-link {
-		display: flex;
-		align-items: center;
+	nav a.active {
+		text-decoration: underline;
+		text-decoration-color: var(--site-accent-strong);
+		text-underline-offset: 6px;
 	}
 
-	.theme-controls {
-		display: flex;
-		align-items: center;
-		gap: 16px;
+	.actions {
+		gap: 13px;
+		padding-left: 18px;
+		border-left: 1px solid var(--site-line);
 	}
 
-	.search-trigger {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		padding: 6px 10px;
-		border: 1px solid var(--smrt-color-outline, #e5e5e5);
-		border-radius: var(--smrt-shape-small, 6px);
-		background: var(--smrt-color-surface-container-low, #fafafa);
-		color: var(--smrt-color-on-surface-variant, #666);
-		font-family: inherit;
-		font-size: 0.85rem;
-		cursor: pointer;
-		transition:
-			border-color 0.2s,
-			color 0.2s;
+	.menu-toggle {
+		display: none;
 	}
 
-	.search-trigger:hover {
-		border-color: var(--smrt-color-primary, #1976d2);
-		color: var(--smrt-color-on-surface, #1a1a1a);
+	:global(.smrt-color-scheme-toggle) {
+		--smrt-color-surface: transparent;
 	}
 
-	.search-trigger svg {
-		flex-shrink: 0;
-	}
-
-	.search-kbd {
-		font-family: var(--smrt-font-family-mono, monospace);
-		font-size: 0.7rem;
-		padding: 1px 5px;
-		border: 1px solid var(--smrt-color-outline, #d5d5d5);
-		border-radius: var(--smrt-radius-sm, 4px);
-		background: var(--smrt-color-surface, #fff);
-		color: var(--smrt-color-on-surface-variant, #888);
-		line-height: 1.3;
-	}
-
-	@media (max-width: 900px) {
-		.header-content {
-			flex-wrap: wrap;
+	@media (max-width: 1120px) {
+		.desktop-search {
+			margin-left: auto;
 		}
 
-		nav {
-			order: 3;
-			width: 100%;
-			justify-content: center;
-			padding-top: 16px;
-			border-top: 1px solid var(--smrt-color-outline, #e5e5e5);
+		.menu-toggle {
+			display: block;
+			padding: 7px;
+			border: 0;
+			background: transparent;
+			color: var(--site-ink);
+			font-size: 0.74rem;
+			font-weight: 650;
+			cursor: pointer;
 		}
 
-		.search-label,
-		.search-kbd {
+		.nav-shell {
+			position: fixed;
+			top: var(--site-header-height);
+			left: 0;
+			right: 0;
+			display: none;
+			align-items: stretch;
+			padding: 16px;
+			border-bottom: 1px solid var(--site-line);
+			background: var(--site-paper);
+			box-shadow: 0 20px 50px rgb(10 12 9 / 12%);
+		}
+
+		.nav-shell.open {
+			display: grid;
+		}
+
+		.nav-shell nav {
+			display: grid;
+			gap: 0;
+		}
+
+		.nav-shell nav a {
+			padding: 10px 4px;
+			border-bottom: 1px solid var(--site-line);
+		}
+
+		.actions {
+			justify-content: space-between;
+			padding: 5px 4px 0;
+			border: 0;
+		}
+	}
+
+	@media (max-width: 560px) {
+		.header-inner {
+			width: calc(100% - 22px);
+			gap: 10px;
+		}
+
+		.brand {
+			width: auto;
+			margin-right: auto;
+		}
+
+		.brand small {
 			display: none;
 		}
-	}
 
-	@media (max-width: 600px) {
-		.header-content {
-			flex-direction: column;
-			gap: 16px;
-		}
-
-		nav {
-			order: 0;
-			flex-wrap: wrap;
-			border-top: none;
-			padding-top: 0;
-		}
-
-		.theme-controls {
-			width: 100%;
-			justify-content: center;
+		.desktop-search {
+			margin: 0;
 		}
 	}
 </style>

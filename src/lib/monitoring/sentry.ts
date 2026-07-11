@@ -21,8 +21,9 @@ interface SentryConfig {
  * Initialize Sentry (call this in hooks.client.ts)
  * @param config - Sentry configuration
  */
-export function initSentry(config: SentryConfig): void {
+export function initSentry(_config: SentryConfig): void {
 	if (typeof window === 'undefined') return;
+	void _config;
 
 	console.log('Sentry initialization placeholder. Install @sentry/sveltekit to enable.');
 
@@ -51,7 +52,7 @@ export function initSentry(config: SentryConfig): void {
  * @param error - The error to capture
  * @param context - Additional context
  */
-export function captureException(error: Error, context?: Record<string, any>): void {
+export function captureException(error: Error, context?: Record<string, unknown>): void {
 	if (typeof window === 'undefined') return;
 
 	console.error('Sentry captureException:', error, context);
@@ -78,7 +79,8 @@ export function captureMessage(
 ): void {
 	if (typeof window === 'undefined') return;
 
-	console[level]('Sentry captureMessage:', message);
+	const consoleLevel = level === 'warning' ? 'warn' : level;
+	console[consoleLevel]('Sentry captureMessage:', message);
 
 	// Uncomment after installing @sentry/sveltekit:
 	/*

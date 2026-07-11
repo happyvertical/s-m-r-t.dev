@@ -1,0 +1,7 @@
+node_modules/
+.svelte-kit/
+build/
+dist/
+.claude/worktrees/
+.claude/smrt-framework.md
+pnpm-lock.yaml
