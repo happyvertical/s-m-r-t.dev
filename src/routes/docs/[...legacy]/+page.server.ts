@@ -8,6 +8,8 @@ const destinations: Record<string, string> = {
 	collections: '/capabilities/collections',
 	agents: '/capabilities/learning-agents',
 	'agents/dispatch': '/packages/smrt-agents',
+	'components/feedback/confirm-dialog': '/packages/smrt-ui',
+	'components/feedback/progress-bar': '/packages/smrt-ui',
 	migration: '/starters/ground-up',
 	security: '/reference/security',
 	'concepts/configuration': '/reference/configuration',

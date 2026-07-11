@@ -53,7 +53,7 @@ type PackageOptions = Partial<
 	>
 >;
 
-const VERSION = '0.38.26';
+const VERSION = '0.39.1';
 
 const smrtUiComponentGroups: PackageComponentGroup[] = [
 	{
