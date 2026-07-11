@@ -12,7 +12,7 @@ export const entries = () => [
 ];
 
 export const load: PageServerLoad = ({ params }) => {
-	if (params.slug === 'browser-ai') redirect(301, '/packages/smrt-svelte?tab=components');
+	if (params.slug === 'browser-ai') redirect(301, '/packages/smrt-svelte');
 	if (params.slug.startsWith('template-')) redirect(301, `/packages/smrt-${params.slug}`);
 	redirect(301, `/packages/${params.slug}`);
 };

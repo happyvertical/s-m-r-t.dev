@@ -2,4 +2,4 @@ import { redirect } from '@sveltejs/kit';
 
 export const prerender = true;
 
-export const load = () => redirect(301, '/packages/smrt-ui?tab=components');
+export const load = () => redirect(301, '/packages/smrt-ui');
