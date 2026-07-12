@@ -44,9 +44,9 @@ jobs:
         run: |
           # Check if the branch exists in the smrt repo, fall back to main
           if gh api "repos/happyvertical/smrt/branches/$BRANCH_NAME" --silent 2>/dev/null; then
-            echo "ref=$BRANCH_NAME" >> $GITHUB_OUTPUT
+            echo "ref=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
           else
-            echo "ref=main" >> $GITHUB_OUTPUT
+            echo "ref=main" >> "$GITHUB_OUTPUT"
           fi
 
       # actions/checkout stays on v5 (node24, classic http.extraheader auth).
@@ -70,7 +70,10 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
         with:
-          version: 10
+          # Both repositories are checked out below the runner workspace. Read
+          # the app manifest explicitly so stale root files on a self-hosted
+          # runner cannot supply a second, conflicting pnpm version.
+          package_json_file: s-m-r-t.dev/package.json
 
       - name: Setup Node.js
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
@@ -142,8 +145,20 @@ jobs:
         run: aws cloudfront create-invalidation --distribution-id E1OSZKW909MZLI --paths "/*"
 
   deploy-production:
-    needs: build
-    if: github.event_name == 'workflow_dispatch' && inputs.environment == 'production'
+    needs:
+      - build
+      - deploy-staging
+    # Main is continuously deployed after staging succeeds. `always()` lets a
+    # manual production dispatch proceed when the staging job is intentionally
+    # skipped, while the explicit result checks still prevent unsafe promotion.
+    if: >-
+      always() &&
+      needs.build.result == 'success' &&
+      ((github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      needs.deploy-staging.result == 'success') ||
+      (github.event_name == 'workflow_dispatch' &&
+      inputs.environment == 'production'))
     runs-on: self-hosted
     environment: production
 
