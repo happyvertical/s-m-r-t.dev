@@ -33,7 +33,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Determine smrt branch
@@ -115,7 +115,7 @@ jobs:
   deploy-staging:
     needs: build
     if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'staging')
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     environment: staging
 
     steps:
@@ -159,7 +159,7 @@ jobs:
       needs.deploy-staging.result == 'success') ||
       (github.event_name == 'workflow_dispatch' &&
       inputs.environment == 'production'))
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     environment: production
 
     steps:
