@@ -1,3 +1,5 @@
+import { SMRT_VERSION } from '$lib/version';
+
 export type PackageCategory =
 	| 'Foundation'
 	| 'Agents & runtime'
@@ -52,8 +54,6 @@ type PackageOptions = Partial<
 		| 'status'
 	>
 >;
-
-const VERSION = '0.39.1';
 
 const smrtUiComponentGroups: PackageComponentGroup[] = [
 	{
@@ -235,7 +235,7 @@ function definePackage(
 		details: options.details ?? [],
 		componentImport: options.componentImport,
 		exampleResource: options.exampleResource,
-		version: VERSION,
+		version: SMRT_VERSION,
 		status: options.status ?? 'stable'
 	};
 }

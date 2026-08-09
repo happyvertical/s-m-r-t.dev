@@ -1,6 +1,7 @@
 <script lang="ts">
 	import SEO from '$lib/components/SEO.svelte';
 	import { foundationGuides } from '$lib/data/guides';
+	import { SMRT_VERSION } from '$lib/version';
 
 	const updates = [
 		{
@@ -49,7 +50,7 @@
 
 <article class="docs-home">
 	<header class="page-intro">
-		<p class="eyebrow">s-m-r-t documentation · 0.38.26</p>
+		<p class="eyebrow">s-m-r-t documentation · {SMRT_VERSION}</p>
 		<h1>Build an application from the model outward.</h1>
 		<p>
 			s-m-r-t starts with TypeScript objects and connects the common application pieces around them:

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import SEO from '$lib/components/SEO.svelte';
 	import { capabilityGuides } from '$lib/data/guides';
+	import { SMRT_VERSION } from '$lib/version';
 </script>
 
 <SEO
@@ -11,7 +12,7 @@
 
 <article class="capability-index">
 	<header>
-		<p>Capabilities · 0.38.26</p>
+		<p>Capabilities · {SMRT_VERSION}</p>
 		<h1>Add the parts your application needs.</h1>
 		<span
 			>The application foundations come first. These guides cover newer or more specialized systems

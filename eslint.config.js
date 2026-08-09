@@ -15,7 +15,11 @@ export default [
 		languageOptions: {
 			globals: {
 				...globals.browser,
-				...globals.node
+				...globals.node,
+				// Injected by the `define` block in vite.config.ts / vitest.config.ts.
+				// Declared here rather than relaxing `no-undef`, which is the guard
+				// that catches undefined variables inside Svelte templates.
+				__SMRT_VERSION__: 'readonly'
 			}
 		},
 		rules: {

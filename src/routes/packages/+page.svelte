@@ -7,6 +7,7 @@
 		type PackageCategory
 	} from '$lib/data/packages';
 	import { getPlaygroundEntries } from '$lib/data/playgrounds';
+	import { SMRT_VERSION } from '$lib/version';
 
 	let query = $state('');
 	let activeCategory = $state<'All' | PackageCategory>('All');
@@ -49,7 +50,7 @@
 				</div>
 				<div>
 					<dt>Release</dt>
-					<dd>0.38.26</dd>
+					<dd>{SMRT_VERSION}</dd>
 				</div>
 			</dl>
 		</div>
