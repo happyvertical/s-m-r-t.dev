@@ -109,7 +109,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 					'Run the app build first so .smrt/smrt-knowledge.json exists.',
 					'Re-run smrt knowledge:check --strict after editing package docs.',
 					'A wrong package set usually means the workspace globs resolved from an unexpected source; coverage reports which one.',
-					'Very large or deeply nested workspaces can exhaust the traversal budget, which fails with a diagnostic instead of returning a partial package set.'
+					'Broad or repeated globstars can exhaust the shared directory-entry budget, which fails with a diagnostic instead of returning a partial package set. The limit counts work performed rather than depth, so a deeply nested workspace is still supported.'
 				]
 			},
 			{
@@ -288,6 +288,9 @@ export const mcpServer = createMcpAppServer({
   smrtOptions: () => ({ db: getDbConfig() }),
   serverInfo: { name: 'my-app', version: '0.1.0' },
   allowedClassNames: adminResources.map((r) => r.className),
+  // Without this, no tool passes the base rule for an unauthenticated caller,
+  // and the tool policy below is never consulted for one.
+  publicToolPatterns: () => ['application_get'],
   toolPolicy: ({ tool, principal }) => {
     if (!principal) return tool.name === 'application_get';
     if (principal.kind === 'human') return principal.roles?.includes('admin') ?? false;
@@ -333,8 +336,9 @@ export const POST = mountMcpRoute(mcpServer);`,
 				intro:
 					'The tool policy is evaluated for every tool eligible under the allow-list and the base public or authenticated rule, on both discovery and a direct call. Returning false hides the tool from discovery and denies a direct call with the non-retryable mcp_tool_access_denied code. A thrown policy error is treated as a denial, so policy failures fail closed.',
 				points: [
-					'The failure envelope carries ok false, code, message, status, and retryable.',
-					'It never includes tool, principal, scope, or policy-error detail.',
+					'On the modern mount the denial arrives as a JSON-RPC protocol error carrying the code and a retryable flag in its data.',
+					'The deprecated REST aliases instead return the older ok, code, message, status, and retryable body.',
+					'Neither shape includes tool, principal, scope, or policy-error detail.',
 					'A tool outside the application allow-list receives the safe not-found behavior.',
 					'Unauthenticated callers see only the tools selected by public tool patterns.'
 				]
@@ -346,7 +350,7 @@ export const POST = mountMcpRoute(mcpServer);`,
 				points: [
 					'resolvePrincipal is the current hook for applications that store the principal elsewhere.',
 					'resolveUser remains as a legacy compatibility alias.',
-					'resolveAuthenticated is a deprecated legacy gate and leaves the route principal unauthenticated.'
+					'resolveAuthenticated is a deprecated legacy boolean gate. Only a false result clears the principal: an older mount that returns true without supplying a principal keeps its calls user-less while discovery still lists the whole allow-list, so migrate it to resolvePrincipal.'
 				]
 			},
 			{

@@ -66,8 +66,8 @@
 		<h1>Choose the surface that matches the job.</h1>
 		<span
 			>s-m-r-t exposes its work to people and to software agents through several surfaces. They are
-			not interchangeable: two of them describe your codebase, and two of them operate your running
-			application. Every claim in this section was verified against the released {TOOLING_PINNED_VERSION}
+			not interchangeable: three of them describe your codebase, and two of them operate your
+			running application. Every claim in this section was verified against the released {TOOLING_PINNED_VERSION}
 			packages.</span
 		>
 	</header>
