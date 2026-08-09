@@ -1,6 +1,7 @@
 import { capabilityGuides, foundationGuides } from '$lib/data/guides';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
+import { toolingGuides } from '$lib/data/tooling';
 
 export interface NavigationItem {
 	label: string;
@@ -71,6 +72,23 @@ export const docsNavigation: NavigationGroup[] = [
 				href: '/playground',
 				description: 'Try the components package by package.'
 			}
+		]
+	},
+	{
+		label: 'Developer tooling',
+		items: [
+			{
+				label: 'Tooling overview',
+				href: '/tooling',
+				description: 'Choose between the CLI, dev MCP, generated MCP, app MCP, and Agent Plugins.',
+				keywords: ['mcp', 'agent', 'cli', 'knowledge', 'plugin']
+			},
+			...toolingGuides.map((guide) => ({
+				label: guide.navTitle ?? guide.title,
+				href: `/tooling/${guide.slug}`,
+				description: guide.plainEnglish,
+				keywords: guide.packages
+			}))
 		]
 	},
 	{

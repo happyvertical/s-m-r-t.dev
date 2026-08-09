@@ -1,6 +1,7 @@
 import { capabilityGuides, foundationGuides } from '$lib/data/guides';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
+import { toolingGuides } from '$lib/data/tooling';
 import type { RequestHandler } from './$types';
 
 export const prerender = true;
@@ -16,6 +17,7 @@ const staticRoutes = [
 	{ path: '/capabilities', priority: '0.9', changefreq: 'weekly' },
 	{ path: '/packages', priority: '0.9', changefreq: 'weekly' },
 	{ path: '/playground', priority: '0.9', changefreq: 'weekly' },
+	{ path: '/tooling', priority: '0.85', changefreq: 'monthly' },
 	{ path: '/reference', priority: '0.8', changefreq: 'monthly' },
 	{ path: '/faq', priority: '0.6', changefreq: 'monthly' }
 ];
@@ -29,6 +31,7 @@ export const GET: RequestHandler = () => {
 		...staticRoutes.map((route) => entry(route.path, route.priority, route.changefreq)),
 		...foundationGuides.map((guide) => entry(`/foundations/${guide.slug}`, '0.8', 'monthly')),
 		...capabilityGuides.map((guide) => entry(`/capabilities/${guide.slug}`, '0.85', 'weekly')),
+		...toolingGuides.map((guide) => entry(`/tooling/${guide.slug}`, '0.8', 'monthly')),
 		...referenceGuides.map((guide) => entry(`/reference/${guide.slug}`, '0.75', 'monthly')),
 		...packages.map((pkg) => entry(`/packages/${pkg.slug}`, '0.75', 'monthly'))
 	];
