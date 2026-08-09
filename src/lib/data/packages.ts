@@ -37,6 +37,13 @@ export interface SmrtPackage {
 	details: PackageDetail[];
 	componentImport?: string;
 	exampleResource?: string;
+	/**
+	 * Replaces the generic fallback copy on the overview note and the four
+	 * generated-interface panels when that copy would be wrong. The default text
+	 * assumes a package without models is infrastructure or tooling, which is not
+	 * true of every one of them.
+	 */
+	surfaceNote?: string;
 	version: string;
 	status?: 'stable' | 'new' | 'foundation' | 'private';
 }
@@ -51,6 +58,7 @@ type PackageOptions = Partial<
 		| 'details'
 		| 'componentImport'
 		| 'exampleResource'
+		| 'surfaceNote'
 		| 'status'
 	>
 >;
@@ -235,6 +243,7 @@ function definePackage(
 		details: options.details ?? [],
 		componentImport: options.componentImport,
 		exampleResource: options.exampleResource,
+		surfaceNote: options.surfaceNote,
 		version: SMRT_VERSION,
 		status: options.status ?? 'stable'
 	};
@@ -757,7 +766,10 @@ export const packages: SmrtPackage[] = [
 		// No exampleResource: as of 0.40 the shim declares no models of its own, so
 		// it generates no REST, MCP, WebMCP, or CLI surface. The models live in
 		// smrt-sales.
-		{}
+		{
+			surfaceNote:
+				'A deprecated compatibility shim that re-exports the smrt-sales commissions module under its legacy names. It declares no models of its own, so it generates no interfaces — those come from @happyvertical/smrt-sales.'
+		}
 	),
 	definePackage(
 		'Business & operations',
