@@ -288,9 +288,14 @@ export const mcpServer = createMcpAppServer({
   smrtOptions: () => ({ db: getDbConfig() }),
   serverInfo: { name: 'my-app', version: '0.1.0' },
   allowedClassNames: adminResources.map((r) => r.className),
-  // Without this, no tool passes the base rule for an unauthenticated caller,
-  // and the tool policy below is never consulted for one.
-  publicToolPatterns: () => ['application_get'],
+  // Empty by default, so nothing is anonymous until an operator opts in.
+  // Until a pattern is listed, no tool passes the base rule for a caller with
+  // no principal, and the unauthenticated branch below is never reached.
+  publicToolPatterns: () =>
+    (process.env.MY_APP_PUBLIC_MCP_TOOLS ?? '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean),
   toolPolicy: ({ tool, principal }) => {
     if (!principal) return tool.name === 'application_get';
     if (principal.kind === 'human') return principal.roles?.includes('admin') ?? false;
@@ -350,7 +355,7 @@ export const POST = mountMcpRoute(mcpServer);`,
 				points: [
 					'resolvePrincipal is the current hook for applications that store the principal elsewhere.',
 					'resolveUser remains as a legacy compatibility alias.',
-					'resolveAuthenticated is a deprecated legacy boolean gate. Only a false result clears the principal: an older mount that returns true without supplying a principal keeps its calls user-less while discovery still lists the whole allow-list, so migrate it to resolvePrincipal.'
+					'resolveAuthenticated is a deprecated legacy boolean gate, consulted only when resolvePrincipal is absent. Only a false result clears the principal: an older mount that returns true keeps its calls user-less while discovery falls back to its old boolean behavior, so migrate it to resolvePrincipal.'
 				]
 			},
 			{
