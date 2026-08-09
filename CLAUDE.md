@@ -1,118 +1,130 @@
-# s-m-r-t.dev - SMRT Framework Documentation Site
+# s-m-r-t.dev — SMRT framework documentation site
 
 ## Purpose
 
-This project serves as a **full-featured demo application** for the SMRT framework and as the primary test bed for `@happyvertical/smrt-svelte`. All framework functionality should be demonstrable here.
+This project is the public documentation site for the SMRT framework and the
+primary test bed for `@happyvertical/smrt-svelte`. Framework functionality
+should be demonstrable here.
 
 ## Golden Rule: Always Fix Upstream
 
-**NEVER implement local workarounds.** When encountering issues with smrt-svelte or browser-ai:
+**NEVER implement local workarounds.** When you hit a problem in an
+`@happyvertical/smrt-*` package:
 
-1. Document the issue in this file under "Current Issues to Fix Upstream"
-2. Implement the proper fix in the upstream package (smrt repo)
-3. Rebuild the upstream package
-4. Continue development in this repo
+1. Document it below under "Current Issues to Fix Upstream"
+2. Fix it properly in the upstream package (the `happyvertical/smrt` repo)
+3. Release and install the fixed version
+4. Continue development here
 
-This ensures we're building toward a production-ready framework suitable for public consumption. Quick hacks hide real problems.
+Quick hacks hide real problems. This site exists to prove the framework is ready
+for public consumption; a local patch defeats the point.
 
-## Development
+## Framework documentation
+
+Every installed `@happyvertical/smrt-*` package ships its own `AGENTS.md` and
+`CLAUDE.md` inside `node_modules`, written against the version you actually have
+installed. Read those instead of any summary — they are the authority on that
+package's API.
+
+The three this site builds against directly:
+
+@./node_modules/@happyvertical/smrt-ui/AGENTS.md
+@./node_modules/@happyvertical/smrt-svelte/AGENTS.md
+@./node_modules/@happyvertical/smrt-playground/AGENTS.md
+
+For any other package, read
+`node_modules/@happyvertical/<package>/AGENTS.md` directly — all 21 dependencies
+ship one. There is nothing to regenerate and nothing to keep in sync.
+
+## First run
 
 ```bash
 pnpm install
-npm run dev
+pnpm dev
 ```
 
-## Keeping smrt up to date
+**`engines.node` is `>=24.18.0` and `.npmrc` sets `engine-strict=true`.** On an
+older Node, `pnpm install` fails outright rather than warning. If the install
+dies on an engine check, switch Node versions — that is the whole problem.
 
-The smrt framework ships as ~25 packages on GitHub Packages
-(`https://npm.pkg.github.com`), released in lockstep. To pull every
-`@happyvertical/smrt-*` registry dependency up to the latest published version
-and refresh the lockfile in one command:
+## Validation
 
 ```bash
-pnpm run update:smrt            # bump all to latest, refresh lockfile
-pnpm run update:smrt -- --dry-run   # preview what would change
-pnpm run update:smrt -- --to 0.29.34  # pin all smrt pkgs to a specific version
-pnpm run update:smrt -- --exact     # write exact versions instead of ^ ranges
+pnpm test          # vitest
+pnpm run build     # check:templates + vite build (prerenders the whole site)
+pnpm run lint      # prettier + eslint + check:templates
+pnpm run check     # svelte-check
 ```
 
-`scripts/update-smrt.mjs` authenticates to the registry via `gh auth token`
-(needs the `read:packages` scope), so it works even when `~/.npmrc` is stale.
-It skips `file:`/`link:`/`workspace:` specs (e.g. `@happyvertical/smrt-docs`,
-which is sourced from the sibling smrt checkout).
+CI runs test, check, and build. `pnpm run check` is clean (0 errors, 0 warnings)
+and is expected to stay that way — it is the type-drift guard for framework
+bumps, so do not let it start reporting noise.
 
-After running it, verify with the CI gate (`pnpm test && pnpm run build`) and
-commit `package.json` + `pnpm-lock.yaml`.
+`check:templates` catches unescaped `{` / `}` inside `<code>` blocks, which
+Svelte would otherwise parse as expressions and fail on at render time. Escape
+them as `{'{'}` / `{'}'}`. `eslint`'s `no-undef` rule is load-bearing for the
+same reason — it catches `{UndefinedVar}` in templates.
 
-**Auth note:** Renovate normally keeps these current, but it authenticates with
-a `${GH_PACKAGES_TOKEN}` substitution in the user/CI `.npmrc`. If that token is
-unset or expired the registry returns 401 and updates silently stop landing —
-which is how the project drifted from 0.24.x to 0.29.x. Keep that token fresh
-(via Warden) so Renovate works; use `pnpm run update:smrt` for manual catch-ups.
+## How the content is authored
 
-**Local `file:../smrt/docs` dep:** `@happyvertical/smrt-docs` resolves against a
-sibling smrt checkout. CI checks one out automatically; locally, ensure `../smrt`
-(relative to this repo) points at your smrt clone (a symlink is fine) before
-`pnpm install`.
+The site is data-driven, not page-per-file. Content lives in `src/lib/data/`:
 
-## Stack
+- `packages.ts` — every `@happyvertical/smrt-*` package entry, rendered by
+  `PackageWorkbench.svelte` at `/packages/[slug]`
+- `guides.ts` — foundation and capability guides, rendered by `GuidePage.svelte`
+- `reference.ts` — reference pages, same renderer
+- `navigation.ts`, `playgrounds.ts` — nav structure and live playground modules
 
-- SvelteKit
-- `@happyvertical/smrt-*` packages from GitHub Packages (currently `^0.29.34`;
-  bump with `pnpm run update:smrt` — see "Keeping smrt up to date")
-- `@happyvertical/smrt-docs` is the exception: a `file:../smrt/docs` dep providing
-  the markdown content rendered at `/docs`
+Adding a package or guide means adding a data entry, not a route. The route's
+`entries()` derives from the data, so the page prerenders automatically. Editing
+a renderer changes every page it serves — check a few before assuming.
 
-## Resolved Issues
+## Legacy redirects are a contract
 
-### Module page navigation failing due to unescaped curly braces in smrt-types
+`src/routes/docs/[...legacy]/`, `src/routes/components/[...legacy]/`, and
+`src/routes/modules/[slug]/` prerender 301 redirects for URLs the site used to
+serve. The site is static, so a path with no prerendered redirect is a hard 404
+in production — **removing an entry silently breaks a live URL.**
 
-- **Location**: `/src/routes/modules/smrt-types/+page.svelte`
-- **Problem**: Clicking smrt-types module link caused 500 error. Server error: "Signal is not defined" at line 322:69.
-- **Root Cause**: The text `{ Signal }` inside a `<code>` block was being interpreted as a Svelte expression (Svelte uses `{expression}` for templating). Since `Signal` was not defined as a variable, it caused a runtime error.
-- **Fix**: Escaped the curly braces using `{'{'} Signal {'}'}` syntax to prevent Svelte from interpreting them as expressions.
-- **Lesson**: Always escape curly braces in Svelte templates when displaying code examples that contain braces.
-- **Prevention**: Added `npm run check:templates` script that scans for unescaped braces in `<code>` blocks. Runs as part of `npm run lint` and `npm run build`.
+`src/lib/server/legacy-routes.test.ts` asserts the exact counts for the docs and
+components maps. If that test fails, you deleted a redirect; restore it rather
+than updating the count.
 
-### `smrt` component name capitalized to `Smrt`
+## Dependency policy
 
-- **Location**: `@happyvertical/smrt-svelte` exports `Smrt` component (was lowercase `smrt`)
-- **Fix**: Renamed export from `smrt` to `Smrt` in smrt-svelte/src/components/ai/index.ts
-- **Status**: Fixed - use `<Smrt>` wrapper component for app state context
+All 21 `@happyvertical/smrt-*` packages are public on npmjs, pinned by the
+project `.npmrc`. No authentication is needed to install them.
 
-### Transformers.js model loading now defaults to remote
+**They are pinned to exact versions, not caret ranges.** `smrt-fields` pins its
+own smrt siblings exactly, so mixing exact and caret ranges lets pnpm install
+duplicate `smrt-core` instances — and therefore duplicate `ObjectRegistry`
+singletons — in one tree. Keep every smrt dependency on the same exact version.
 
-- **Location**: `@happyvertical/browser-ai` and `@happyvertical/smrt-svelte`
-- **Problem**: 404s for `/models/Xenova/whisper-tiny.en/*` - transformers.js tried local first
-- **Fix**: Added `allowLocalModels` option to `BaseBrowserAIOptions` (browser-ai) and `STTConfig` (smrt-svelte). Defaults to `false` so models load from HuggingFace Hub CDN.
-- **Status**: Fixed - models now load from remote by default, cached in IndexedDB
+The packages release in lockstep, so bumping means moving all of them together:
 
-### Demo docs refreshed for the v0.29.34 API
+```bash
+pnpm run update:smrt                  # pin all to latest, refresh lockfile
+pnpm run update:smrt -- --dry-run     # preview, touch nothing
+pnpm run update:smrt -- --to 0.40.61  # pin all to a specific version
+pnpm run update:smrt -- --caret       # opt out of exact pins (don't)
+```
 
-- **Context**: After bumping 0.24.12 → 0.29.34, the demo pages still documented the
-  old 0.24 API inside their `code={...}` examples, props tables, and type signatures.
-- **Fix**: Refreshed 96 of 173 demo/doc pages against ground truth (the shipped
-  `smrt-svelte` `.d.ts` and the smrt monorepo source). Notable corrections: browser-AI
-  components (`VoiceInput`, `DownloadProgress`, `AILoadingOverlay`, `STTTest`,
-  `CapabilityGate`) moved to the `/browser-ai/svelte` subpath; package-specific
-  components now import from their own `/svelte` subpaths (e.g. `smrt-commerce/svelte`,
-  `smrt-users/svelte`); component props/types/callbacks corrected (e.g. `RoleBadge`
-  `role: string` → `Role`); `Smrt` wrapper → `Provider`; version badges → 0.29.34.
-- **Status**: Done — `pnpm run check:templates`, `pnpm run build`, and `pnpm test`
-  all pass; spot checks render with no console errors.
+`scripts/update-smrt.mjs` resolves the registry from npm config for the
+`@happyvertical` scope, so it follows `.npmrc` rather than hardcoding a host.
+After running it, verify with the full gate above and commit `package.json` plus
+`pnpm-lock.yaml`.
+
+Renovate also keeps these current. If it ever goes quiet, check that it is not
+being blocked before assuming the packages stopped releasing.
+
+## The rendered version number
+
+`$lib/version` exports `SMRT_VERSION`, injected at build time from the installed
+framework tree (`scripts/smrt-version.js`, wired through the `define` block in
+`vite.config.ts` and `vitest.config.ts`). **Never write a version number into
+page copy** — import the constant. The site previously carried four different
+hardcoded versions, none of them the one it was built against.
 
 ## Current Issues to Fix Upstream
 
 (None at this time)
-
-## Known Follow-ups
-
-### `pnpm check` (svelte-check) is noisy on doc pages
-
-- **Symptom**: svelte-check reports hundreds of `Cannot find name 'script'` /
-  `Expression expected` errors. Root cause is svelte2tsx failing to transform
-  `.svelte` files that embed `<script>` tags _inside_ `code={...}` template-literal
-  example strings — it is pre-existing and version-independent (not caused by the
-  smrt bump), and is **not** part of the CI gate (CI runs `pnpm test` + `pnpm run build`,
-  not `pnpm check`). Fixing it cleanly would make `pnpm check` usable as a real
-  type-drift guard for future smrt bumps.
