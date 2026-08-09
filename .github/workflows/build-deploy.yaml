@@ -7,11 +7,14 @@ on:
     paths:
       - 'src/**'
       - 'static/**'
+      - 'scripts/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.npmrc'
       - 'svelte.config.js'
       - 'vite.config.ts'
+      - 'vitest.config.ts'
+      - 'tsconfig.json'
       - '.github/workflows/build-deploy.yaml'
   pull_request:
     branches:
@@ -57,14 +60,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
-          # Resolved from `engines.node` in package.json. The project `.npmrc`
-          # sets `engine-strict=true`, so an older Node fails the install
-          # outright — keep this single-sourced rather than pinning a major.
-          node-version-file: s-m-r-t.dev/package.json
-          # No `cache: pnpm` here: on the self-hosted runners the Actions cache
-          # backend can't resolve the pnpm store path ("Some specified paths were
-          # not resolved"), which fails the step. The runners are persistent, so
-          # the pnpm store survives between runs and an explicit cache isn't needed.
+          # Pinned to a major on purpose. `engines.node` is `>=24.18.0` and the
+          # project `.npmrc` sets `engine-strict=true`, so the install enforces
+          # the floor itself; feeding that unbounded range to setup-node via
+          # `node-version-file` would let a deploy build silently change Node
+          # major the day a runner image caches a newer one.
+          node-version: '24'
+          # No `cache: pnpm` here: the Actions cache backend can't resolve the
+          # pnpm store path on the self-hosted runners this workflow used to run
+          # on ("Some specified paths were not resolved"), which fails the step.
           #
           # No `registry-url`/`scope` either: the `@happyvertical/*` packages are
           # public on npmjs and the project `.npmrc` pins that registry, so the

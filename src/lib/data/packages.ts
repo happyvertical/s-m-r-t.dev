@@ -754,12 +754,15 @@ export const packages: SmrtPackage[] = [
 		'Business & operations',
 		'smrt-affiliates',
 		'Partners, tiered commissions, attribution, and payout processing. Now a compatibility shim over the smrt-sales commissions module — new applications should use smrt-sales directly.',
-		{ exampleResource: 'affiliate-partners' }
+		// No exampleResource: as of 0.40 the shim declares no models of its own, so
+		// it generates no REST, MCP, WebMCP, or CLI surface. The models live in
+		// smrt-sales.
+		{}
 	),
 	definePackage(
 		'Business & operations',
 		'smrt-sales',
-		'Agreement execution, CRM, referral intake and attribution, and a provider-neutral commissions core.',
+		'Provider-neutral agreement execution, CRM, referral intake and attribution, and a neutral commissions core.',
 		{
 			status: 'new',
 			highlights: [

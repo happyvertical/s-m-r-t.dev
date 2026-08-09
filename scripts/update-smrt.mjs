@@ -142,6 +142,20 @@ if (failures.length > 0) {
 	process.exit(1);
 }
 
+// Each package's `dist-tags.latest` is resolved independently, so a partial or
+// interrupted lockstep release can hand back a mixed set. Writing that would
+// reintroduce the exact duplicate-smrt-core hazard the exact pins exist to
+// prevent, and nothing downstream fails loudly on it — so refuse here.
+const distinctVersions = [...new Set(targets.map((t) => t.nextVersion))];
+if (distinctVersions.length > 1) {
+	console.error(`\nRefusing to write a mixed version set: ${distinctVersions.sort().join(', ')}`);
+	console.error(
+		'smrt packages release in lockstep. Wait for the release to finish, or force one\n' +
+			'version deliberately with --to <version>.'
+	);
+	process.exit(1);
+}
+
 for (const t of targets) {
 	const changed = t.current !== t.next;
 	if (changed) changes.push(t);
