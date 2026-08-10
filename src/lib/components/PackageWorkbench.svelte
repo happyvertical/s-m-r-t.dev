@@ -3,9 +3,12 @@
 	import Callout from '$lib/components/Callout.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import PlaygroundEmbed from '$lib/components/PlaygroundEmbed.svelte';
+	import PrevNext from '$lib/components/PrevNext.svelte';
 	import SEO from '$lib/components/SEO.svelte';
+	import { toAnchorId } from '$lib/data/anchors';
 	import { packageStatusLabels, type SmrtPackage } from '$lib/data/packages';
 	import { getPlaygroundEntries, playgroundModules } from '$lib/data/playgrounds';
+	import { packageNeighbors } from '$lib/data/track';
 
 	type Tab = 'overview' | 'components' | 'playground' | 'rest' | 'mcp' | 'webmcp' | 'cli';
 
@@ -31,6 +34,7 @@
 		playgroundModules.filter((module) => module.packageName === pkg.name)
 	);
 	const packagePlaygroundEntries = $derived(getPlaygroundEntries(pkg.slug));
+	const neighbors = $derived(packageNeighbors(pkg.slug));
 	const sourceInstallCode =
 		'# Distributed from the s-m-r-t source tree\n# See the package README for Gradle/SPM setup';
 	const sourceDirectory = $derived(
@@ -198,10 +202,22 @@
 					</p>
 				</div>
 				{#if pkg.components.length}
+					{#if pkg.componentGroups.length > 1}
+						<nav class="group-toc" aria-label="On this page">
+							<strong>On this page</strong>
+							<div>
+								{#each pkg.componentGroups as group (group.title)}
+									<a href={`#${toAnchorId(group.title)}`}
+										>{group.title}<span>{group.components.length}</span></a
+									>
+								{/each}
+							</div>
+						</nav>
+					{/if}
 					{#if pkg.componentGroups.length}
 						<div class="component-groups">
 							{#each pkg.componentGroups as group (group.title)}
-								<section>
+								<section id={toAnchorId(group.title)}>
 									<header>
 										<div>
 											<h3>{group.title}</h3>
@@ -448,6 +464,10 @@
 			</div>
 		{/if}
 	</div>
+
+	<div class="package-prev-next">
+		<PrevNext {neighbors} />
+	</div>
 </article>
 
 <style>
@@ -457,6 +477,7 @@
 
 	.package-hero,
 	.package-notice,
+	.package-prev-next,
 	.panel,
 	.tabs {
 		width: min(1180px, calc(100% - 40px));
@@ -771,9 +792,58 @@
 		border-top: 1px solid var(--site-line);
 	}
 
+	.group-toc {
+		margin-bottom: 38px;
+		padding: 16px 18px;
+		border: 1px solid var(--site-line);
+		border-radius: var(--site-radius-md);
+		background: var(--site-surface);
+	}
+
+	.group-toc strong {
+		color: var(--site-muted);
+		font: 700 0.63rem var(--site-font-mono);
+		letter-spacing: 0.07em;
+		text-transform: uppercase;
+	}
+
+	.group-toc div {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 7px;
+		margin-top: 12px;
+	}
+
+	.group-toc a {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 7px;
+		padding: 6px 10px;
+		border: 1px solid var(--site-line-strong);
+		border-radius: 999px;
+		color: var(--site-ink);
+		font-size: 0.74rem;
+		text-decoration: none;
+	}
+
+	.group-toc a:hover {
+		border-color: var(--site-accent-strong);
+		background: var(--site-accent-soft);
+	}
+
+	.group-toc a span {
+		color: var(--site-muted);
+		font-family: var(--site-font-mono);
+		font-size: 0.62rem;
+	}
+
 	.component-groups {
 		display: grid;
 		gap: 42px;
+	}
+
+	.component-groups > section {
+		scroll-margin-top: calc(var(--site-header-height) + 70px);
 	}
 
 	.component-groups > section > header {
