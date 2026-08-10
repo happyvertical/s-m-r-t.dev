@@ -205,6 +205,85 @@ hardcoded versions, none of them the one it was built against.
   to `playgroundEntryTitles`. The dependency stays installed in the meantime so its
   `AGENTS.md` remains readable and the re-add is a one-line change.
 
+### smrt generate-mcp writes TypeScript to a .js path, eats --version, and is misnamed in its own README
+
+- **Upstream**: [happyvertical/smrt#2279](https://github.com/happyvertical/smrt/issues/2279)
+- **Symptom**: three defects in one command. `npx smrt generate-mcp --name my-app`
+  writes `.smrt/mcp-server/index.js` whose contents are TypeScript
+  (`import { type CallToolRequest, … }`, a typed `const STI_TARGETS: Record<…>`), so
+  `node .smrt/mcp-server/index.js` dies on
+  `SyntaxError: Unexpected identifier 'CallToolRequest'` — and the CLI then prints a
+  `"mcp": "node .smrt/mcp-server/index.js"` run script and writes a
+  `claude-config.example.json` pointing at that same unrunnable path.
+  `--version` is swallowed by the global flag parser in `@happyvertical/utils`, so
+  `smrt generate-mcp --version 0.1.0` prints `smrt v0.40.61`, generates nothing, and
+  exits 0 — the command's own `--version` option is unreachable. And the shipped CLI
+  README documents the command as `generate:mcp`, which is not a registered name or
+  alias; it is `generate-mcp`. (The colon form is inconsistent rather than uniformly
+  wrong upstream: `generate-routes` does declare a `generate:routes` alias, while
+  `generate-mcp` and `generate-types` declare no colon alias.)
+- **Cause**: `generateServer` in `packages/core/src/generators/mcp.ts` writes the
+  rendered template with a bare `writeFile`, so nothing transpiles it and nothing
+  reconciles the emitted language with the `.js` extension.
+- **Consequence here**: the `/guides/expose-your-app-over-mcp` task guide in
+  `src/lib/data/task-guides.ts` passes `--output-path .smrt/mcp-server/index.ts`
+  throughout, which Node 24 type stripping runs directly (verified answering a
+  `tools/list` request over stdio). It also carries a reader-facing callout that the
+  default output path does not run, an aside that there is no `generate:mcp`, and a
+  warning off `--version`. That is guidance about a real CLI, not a patch to it, so
+  the Golden Rule is intact — but the guide is carrying the workaround, and it tells
+  readers so rather than quietly routing around the bug.
+- **When it is fixed**: drop the `--output-path` flag from the guide's commands if the
+  default becomes runnable — upstream may instead default the suggested path to `.ts`,
+  which leaves the flag correct — and remove whichever of the three notes the fix
+  retires. All three sit together in the `Generate the local stdio server` step of the
+  MCP task guide in `src/lib/data/task-guides.ts`.
+
+### smrt docs and doc comments name subpaths and options that do not exist
+
+- **Upstream**: [happyvertical/smrt#2280](https://github.com/happyvertical/smrt/issues/2280)
+- **Symptom**: four API claims describe things that do not exist. Two are in doc
+  comments shipped in 0.40.61 — `smrt-app-mcp`'s `createMcpAppServer` comment puts
+  the stdio bridge at `@happyvertical/smrt-app-mcp/bin/smrt-mcp-bridge` (that package
+  exports only `.` and `./sveltekit` and has no `bin` at all; the bridge is
+  `@happyvertical/smrt-app-cli`), and `smrt-app-cli`'s bridge JSDoc sends app authors
+  to `@happyvertical/smrt-app-mcp/cli` for `runMcpStdioBridge`, another subpath that
+  does not exist. Two more are in the framework repo's prose docs, which are **not**
+  published to npm — `docs/content/core.md` documents `embeddings: { fields, model }`
+  when `ClassEmbeddingConfig` has no `model` key, and says `getEmbedding` returns a
+  `Float32Array` when it returns `number[] | null`. Do not go looking for `core.md`
+  under `node_modules`; read it in the `happyvertical/smrt` checkout.
+- **Consequence here**: nothing is worked around. `src/lib/data/reference.ts` was
+  written against the shipped types and already documents `number[] | null`, so the
+  site is right where the upstream docs are wrong. Listed as inoculation: a future
+  editor who reads the framework's prose and "corrects" the site to match would be
+  introducing the error, not fixing one. Note the rule about preferring each package's
+  shipped `AGENTS.md` would not have caught the first two: `smrt-app-mcp` and
+  `smrt-app-cli` are not among this site's 22 smrt dependencies, so neither is in
+  `node_modules` here at all — and `smrt-app-mcp`'s own `AGENTS.md` never mentions the
+  bridge anyway. When one of their paths matters, check the `exports` map and `.d.ts`
+  in the `happyvertical/smrt` checkout or straight from the published tarball.
+- **When it is fixed**: nothing in the site to change — delete this entry once the
+  upstream doc comments and `core.md` are corrected.
+
+### semanticSearch rejects the combinedField name
+
+- **Upstream**: [happyvertical/smrt#2281](https://github.com/happyvertical/smrt/issues/2281)
+- **Symptom**: with a `combinedField: { name: 'content', … }`, `generateEmbeddings()`
+  stores a vector under `content`, but `semanticSearch(query, { field: 'content' })`
+  throws `Field 'content' is not configured for embeddings`. `findSimilar` and
+  `findSimilarToEmbedding` accept the same name.
+- **Cause**: `semanticSearch` is the only one of the three that checks `field` against
+  `embeddingConfig.fields` — and it throws immediately before delegating to
+  `findSimilarToEmbedding`, which does not check. The vector is reachable; only the
+  validated entry point refuses it.
+- **Consequence here**: the semantic-search reference entries in
+  `src/lib/data/reference.ts` document the asymmetry as behaviour — one note on
+  `combinedField`, one on which methods validate `field` — and point readers at the
+  two methods that do accept a combined field.
+- **When it is fixed**: reword those two notes — the combined field becomes reachable
+  from all three methods and stops needing a caveat.
+
 ## Agent lifecycle posture
 
 - `.agents/project.yaml` is present: `hv-agent` claim/heartbeat/release work
