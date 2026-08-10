@@ -16,6 +16,7 @@ import { capabilityGuides, foundationGuides, type Guide } from '$lib/data/guides
 import { docsNavigation, searchItems } from '$lib/data/navigation';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
+import { taskGuides } from '$lib/data/task-guides';
 import { toolingGuides } from '$lib/data/tooling';
 
 export type SearchKind = 'page' | 'section' | 'component';
@@ -47,6 +48,7 @@ const groupByHref = new Map<string, string>(
 const guideTracks: { base: string; label: string; guides: Guide[] }[] = [
 	{ base: '/foundations', label: 'Application foundations', guides: foundationGuides },
 	{ base: '/capabilities', label: 'Capabilities', guides: capabilityGuides },
+	{ base: '/guides', label: 'Task guides', guides: taskGuides },
 	{ base: '/tooling', label: 'Developer tooling', guides: toolingGuides },
 	{ base: '/reference', label: 'Reference', guides: referenceGuides }
 ];

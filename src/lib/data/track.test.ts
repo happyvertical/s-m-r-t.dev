@@ -3,6 +3,7 @@ import { capabilityGuides, foundationGuides } from '$lib/data/guides';
 import { docsNavigation } from '$lib/data/navigation';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
+import { taskGuides } from '$lib/data/task-guides';
 import { toolingGuides } from '$lib/data/tooling';
 import { docsTrack, packageNeighbors, packageTrack, trackNeighbors } from '$lib/data/track';
 
@@ -17,6 +18,7 @@ describe('documentation track', () => {
 		const guidePages = [
 			...foundationGuides.map((guide) => `/foundations/${guide.slug}`),
 			...capabilityGuides.map((guide) => `/capabilities/${guide.slug}`),
+			...taskGuides.map((guide) => `/guides/${guide.slug}`),
 			...toolingGuides.map((guide) => `/tooling/${guide.slug}`),
 			...referenceGuides.map((guide) => `/reference/${guide.slug}`)
 		];
