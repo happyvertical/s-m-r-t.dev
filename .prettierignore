@@ -4,3 +4,8 @@ build/
 dist/
 .claude/worktrees/
 pnpm-lock.yaml
+
+# Machine-owned hv-agent lifecycle manifest: JSON content under a .yaml
+# extension. Prettier's YAML parser rewrites it into a form json.loads rejects,
+# which breaks hv-agent claim/release/audit.
+.agents/
