@@ -1,38 +1,49 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { searchItems } from '$lib/data/navigation';
+	import { searchDocs } from '$lib/data/search';
 
 	let open = $state(false);
 	let query = $state('');
+	let active = $state(0);
 	let input = $state<HTMLInputElement>();
+	let list = $state<HTMLDivElement>();
+	let closeButton = $state<HTMLButtonElement>();
+	let opener: HTMLElement | null = null;
 
-	const results = $derived.by(() => {
-		const normalized = query.trim().toLowerCase();
-		if (!normalized) return searchItems.slice(0, 8);
+	const results = $derived(searchDocs(query));
 
-		return searchItems
-			.filter((item) =>
-				[item.label, item.description ?? '', ...(item.keywords ?? [])]
-					.join(' ')
-					.toLowerCase()
-					.includes(normalized)
-			)
-			.slice(0, 10);
+	$effect(() => {
+		// Reset the highlight whenever the result set changes.
+		void results;
+		active = 0;
 	});
 
 	function show() {
+		// Remember where focus came from: the palette also opens from ⌘K, which can
+		// be pressed from anywhere on the page, not only from the trigger button.
+		opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
 		open = true;
 		setTimeout(() => input?.focus());
 	}
 
-	function hide() {
+	/** `restoreFocus` is false when the palette closes because we are navigating away. */
+	function hide(restoreFocus = true) {
 		open = false;
 		query = '';
+		active = 0;
+		if (restoreFocus) opener?.focus();
+		opener = null;
 	}
 
 	async function choose(href: string) {
-		hide();
+		hide(false);
 		await goto(href);
+	}
+
+	function move(delta: number) {
+		if (!results.length) return;
+		active = (active + delta + results.length) % results.length;
+		list?.querySelectorAll('button')[active]?.scrollIntoView({ block: 'nearest' });
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
@@ -40,8 +51,38 @@
 			event.preventDefault();
 			if (open) hide();
 			else show();
+			return;
 		}
-		if (event.key === 'Escape' && open) hide();
+		if (!open) return;
+
+		if (event.key === 'Tab') {
+			// The dialog is aria-modal, so keep Tab inside it. Results are not tab
+			// stops (aria-activedescendant drives selection), leaving two stops.
+			const stops: HTMLElement[] = [input, closeButton].filter((el) => el !== undefined);
+			const first = stops[0];
+			const last = stops[stops.length - 1];
+			if (!first || !last) return;
+
+			const current = stops.indexOf(document.activeElement as HTMLElement);
+			const next = event.shiftKey ? current - 1 : current + 1;
+			if (current === -1 || next < 0 || next >= stops.length) {
+				event.preventDefault();
+				(event.shiftKey ? last : first).focus();
+			}
+			return;
+		}
+
+		if (event.key === 'Escape') hide();
+		else if (event.key === 'ArrowDown') {
+			event.preventDefault();
+			move(1);
+		} else if (event.key === 'ArrowUp') {
+			event.preventDefault();
+			move(-1);
+		} else if (event.key === 'Enter' && results[active]) {
+			event.preventDefault();
+			choose(results[active].href);
+		}
 	}
 </script>
 
@@ -55,7 +96,7 @@
 </button>
 
 {#if open}
-	<div class="search-backdrop" role="presentation" onclick={hide}></div>
+	<div class="search-backdrop" role="presentation" onclick={() => hide()}></div>
 	<div class="search-dialog" role="dialog" aria-modal="true" aria-label="Search documentation">
 		<div class="search-input">
 			<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
@@ -64,20 +105,41 @@
 			<input
 				bind:this={input}
 				bind:value={query}
-				placeholder="Search pages, packages, or components"
+				placeholder="Search pages, sections, packages, or components"
+				role="combobox"
+				aria-label="Search documentation"
+				aria-expanded={results.length > 0}
+				aria-autocomplete="list"
+				aria-controls={results.length ? 'search-results' : undefined}
+				aria-activedescendant={results.length ? `search-result-${active}` : undefined}
+				autocomplete="off"
 			/>
-			<button type="button" onclick={hide}>Esc</button>
+			<button type="button" bind:this={closeButton} onclick={() => hide()}>Esc</button>
 		</div>
-		<div class="search-results">
+		<!-- `listbox` may only own `option` children, so the empty state lives
+		     outside it and announces itself as a status message instead. -->
+		<div class="search-results" bind:this={list}>
 			{#if results.length}
-				{#each results as result (result.href)}
-					<button type="button" onclick={() => choose(result.href)}>
-						<strong>{result.label}</strong>
-						{#if result.description}<span>{result.description}</span>{/if}
-					</button>
-				{/each}
+				<div id="search-results" role="listbox" aria-label="Search results">
+					{#each results as result, index (`${result.kind}:${result.href}:${result.label}`)}
+						<button
+							type="button"
+							id={`search-result-${index}`}
+							role="option"
+							aria-selected={index === active}
+							class:active={index === active}
+							tabindex="-1"
+							onmouseenter={() => (active = index)}
+							onclick={() => choose(result.href)}
+						>
+							{#if result.breadcrumb}<em>{result.breadcrumb}</em>{/if}
+							<strong>{result.label}</strong>
+							{#if result.description}<span>{result.description}</span>{/if}
+						</button>
+					{/each}
+				</div>
 			{:else}
-				<p>No documentation matches “{query}”.</p>
+				<p role="status">No documentation matches “{query}”.</p>
 			{/if}
 		</div>
 	</div>
@@ -174,7 +236,7 @@
 		overflow: auto;
 	}
 
-	.search-results > button {
+	.search-results button {
 		width: 100%;
 		display: grid;
 		gap: 3px;
@@ -187,13 +249,29 @@
 		cursor: pointer;
 	}
 
-	.search-results > button:hover,
-	.search-results > button:focus-visible {
+	.search-results button.active,
+	.search-results button:hover,
+	.search-results button:focus-visible {
 		background: var(--site-paper-deep);
 	}
 
 	.search-results strong {
 		font-size: 0.86rem;
+	}
+
+	.search-results em {
+		color: var(--site-muted);
+		font: 0.63rem var(--site-font-mono);
+		font-style: normal;
+		letter-spacing: 0.02em;
+	}
+
+	.search-results span {
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		line-clamp: 2;
+		overflow: hidden;
 	}
 
 	.search-results span,

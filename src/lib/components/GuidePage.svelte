@@ -3,6 +3,7 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import GuideDiagram from '$lib/components/GuideDiagram.svelte';
 	import SEO from '$lib/components/SEO.svelte';
+	import { toAnchorId } from '$lib/data/anchors';
 	import type { Guide } from '$lib/data/guides';
 
 	interface Props {
@@ -11,13 +12,6 @@
 		backLabel: string;
 	}
 	let { guide, backHref, backLabel }: Props = $props();
-
-	function sectionId(title: string) {
-		return title
-			.toLowerCase()
-			.replace(/[^a-z0-9]+/g, '-')
-			.replace(/(^-|-$)/g, '');
-	}
 </script>
 
 <SEO
@@ -47,7 +41,7 @@
 
 		<div class="sections">
 			{#each guide.sections as section (section.title)}
-				<section id={sectionId(section.title)}>
+				<section id={toAnchorId(section.title)}>
 					<h2>{section.title}</h2>
 					<p>{section.intro}</p>
 					{#if section.points}
@@ -124,7 +118,7 @@
 	<aside class="page-toc">
 		<strong>On this page</strong>
 		<nav aria-label="On this page">
-			{#each guide.sections as section (section.title)}<a href={`#${sectionId(section.title)}`}
+			{#each guide.sections as section (section.title)}<a href={`#${toAnchorId(section.title)}`}
 					>{section.title}</a
 				>{/each}
 		</nav>

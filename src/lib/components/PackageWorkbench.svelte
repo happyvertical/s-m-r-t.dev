@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import Callout from '$lib/components/Callout.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import PlaygroundEmbed from '$lib/components/PlaygroundEmbed.svelte';
@@ -50,9 +50,12 @@
 			: pkg.slug.replace('smrt-', '')
 	);
 
-	onMount(() => {
+	// `afterNavigate` also fires on first mount, and unlike `onMount` it re-runs
+	// when a link lands on the same package with a different `?tab=` — which is
+	// how a component result from the ⌘K palette opens the Components tab.
+	afterNavigate(() => {
 		const requested = new URL(window.location.href).searchParams.get('tab') as Tab | null;
-		if (requested && tabs.some((tab) => tab.id === requested)) activeTab = requested;
+		activeTab = requested && tabs.some((tab) => tab.id === requested) ? requested : 'overview';
 	});
 
 	function selectTab(tab: Tab) {
