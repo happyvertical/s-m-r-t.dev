@@ -591,6 +591,85 @@ export const referenceGuides: Guide[] = [
 		related: [{ label: 'Collections and list()', href: '/reference/collections' }]
 	},
 	{
+		slug: 'field-naming',
+		navTitle: 'Field naming',
+		eyebrow: 'Reference',
+		title: 'camelCase in TypeScript, snake_case in the database',
+		lede: 'Field names are converted to columns when a statement is built and converted back when a row is hydrated. Knowing which side of that boundary you are on removes most naming surprises.',
+		plainEnglish:
+			'Write the model in camelCase. The database stores snake_case. Everything generated from the model — REST, MCP, CLI — uses the TypeScript spelling, and only hand-written SQL uses column names.',
+		packages: ['smrt-core'],
+		pinnedVersion: REFERENCE_PINNED_VERSION,
+		sources: [
+			{ label: 'utils/naming.ts', href: `${SMRT_TREE}/packages/core/src/utils/naming.ts` },
+			{ label: 'utils.ts', href: `${SMRT_TREE}/packages/core/src/utils.ts` },
+			{ label: 'collection.ts', href: `${SMRT_TREE}/packages/core/src/collection.ts` }
+		],
+		sections: [
+			{
+				title: 'One rule, applied at the database boundary',
+				intro:
+					'Converting to a column inserts an underscore before each capital and lowercases the result. Converting back uppercases the letter after each underscore. The conversion runs where a query is built and where a row is hydrated; nothing else in the stack re-cases keys.',
+				filename: 'Invoice.ts',
+				code: `@smrt({ api: true })\nexport class Invoice extends SmrtObject {\n  customerId = '';  // column: customer_id\n  apiKey = '';      // column: api_key\n  totalCents = 0;   // column: total_cents\n}\n\n// Table name comes from the class: invoices`
+			},
+			{
+				title: 'Where each spelling appears',
+				intro:
+					'There is one place to use column names and one place to use field names, and the split follows whether the framework generated the surface or you wrote the SQL by hand.',
+				points: [
+					'Model properties, where keys, orderBy fields, and select entries: the name declared on the class.',
+					'Database columns, indexes, and constraints: snake_case.',
+					'Generated REST request bodies, responses, and filter query parameters: the declared field name, as in ?status=open&total[gte]=100.',
+					'Generated MCP tool input schemas: the declared field name.',
+					'Generated CLI flags: --declaredFieldName, taken verbatim as a payload key, so a kebab-case spelling will not resolve to a field.',
+					'SQL text passed to collection.query(): column names. The returned rows are hydrated back to field names.'
+				]
+			},
+			{
+				title: 'Table names follow a different rule',
+				intro:
+					'A class name becomes a table name through a separate conversion that only splits where a lowercase letter meets a capital, then pluralizes the last word. Item becomes items, JournalEntry becomes journal_entries, and Currency becomes currencies.',
+				points: [
+					'An all-caps prefix has no lowercase-to-uppercase boundary, so the class APIKey becomes apikeys even though its apiKey field becomes api_key. The two conversions are not the same function.',
+					'Set tableName on @smrt() when the derived name is not the one you want. There is no per-field column-name override — a column name always follows from the field name.'
+				]
+			},
+			{
+				title: 'Edge cases in the conversion',
+				intro:
+					'The conversion is a pair of small regular expressions, not a dictionary, so a few shapes behave in ways that are easy to misremember.',
+				points: [
+					'Consecutive capitals are split individually: pdfURL becomes pdf_u_r_l. The round trip back to pdfURL is exact, but the column is harder to read and to type in hand-written SQL — prefer pdfUrl.',
+					'A field the model declares in snake_case stays that way through hydration: a declared publish_date is returned as publish_date rather than being renamed to publishDate.',
+					'The inherited system fields are literally snake_case in TypeScript too: created_at and updated_at, alongside id, slug, and context. Reading object.created_at and sorting by created_at DESC are both correct.',
+					'Framework fields that start with an underscore keep the prefix through the column mapping, so _metaType addresses the _meta_type column.'
+				],
+				callout: {
+					variant: 'note',
+					title: 'Digits do not split a name',
+					body: 'The conversion only reacts to capitals, so version2 stays version2 rather than becoming version_2, and a column genuinely named version_2 converts back to version_2 rather than version2. Let a capital do the splitting — version2Payload rather than version2 — if you want the underscore.'
+				}
+			},
+			{
+				title: 'Filtering across the conversion',
+				intro:
+					'Query options take field names and are converted for you, which is also where a misspelling is caught.',
+				points: [
+					'where keys are validated against the model fields after conversion, so a typo reports the valid field names rather than failing as a SQL error.',
+					'orderBy is converted as well, so createdAt DESC and created_at DESC both resolve to the same column.',
+					'Fields marked sensitive are rejected as filter keys regardless of which spelling is used.',
+					'list({ select }) takes field names and returns rows keyed by those same names, so a projection never leaks column spellings into page code.'
+				],
+				links: [{ label: 'Collections and list()', href: '/reference/collections' }]
+			}
+		],
+		related: [
+			{ label: 'Collections and list()', href: '/reference/collections' },
+			{ label: 'Relationship loading', href: '/reference/relationships' }
+		]
+	},
+	{
 		slug: 'interfaces',
 		navTitle: 'Generated interfaces',
 		eyebrow: 'Reference',
