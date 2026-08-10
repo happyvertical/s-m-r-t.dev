@@ -69,7 +69,7 @@ export const referenceGuides: Guide[] = [
 			{
 				title: 'Field policy is presentation, not enforcement',
 				intro:
-					'A field hidden by field policy is still writable through the generated API unless the model says otherwise. Sensitive, transient, and read-permission-gated fields are excluded from what a policy can address, and the batch resolve response omits them for every caller.'
+					'A field hidden by field policy is still writable through the generated API unless the model says otherwise. A policy cannot store a default on a sensitive, transient, or read-permission-gated field, and the batch resolve response omits those fields for every caller.'
 			}
 		],
 		related: [
@@ -289,7 +289,7 @@ export const referenceGuides: Guide[] = [
 		title: 'Field policy exports and semantics',
 		lede: 'What @happyvertical/smrt-fields exports, how an object is named, how a default is encoded on the wire, what a write is checked against, and where results are cached.',
 		plainEnglish:
-			'The details you need when you are wiring field policy into an application rather than reading about what it does.',
+			'A policy row names one field of one object at one scope. These are the exact names, formats, and rules that row is checked against.',
 		packages: ['smrt-fields', 'smrt-core', 'smrt-users'],
 		sections: [
 			{
@@ -354,7 +354,7 @@ export const referenceGuides: Guide[] = [
 					'POST <collection>/resolve — resolveBatch, the context-scoped policy read used to bootstrap forms.',
 					'POST <collection>/editor-state — getEditorState, the gear bootstrap.',
 					'POST <collection>/policy-audit — policyAudit, the manage-gated organization roll-up.',
-					'The CLI and MCP surfaces are closed entirely.'
+					'MCP is closed entirely. The generated CLI is writes-only — create, update, and delete — because a CLI command needs an API route behind it and the read routes do not exist; the collection config closes the runtime CLI surface as well.'
 				]
 			},
 			{

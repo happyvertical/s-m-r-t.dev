@@ -568,7 +568,7 @@ dispose();`
 			{
 				title: 'Seed the arrangement next to the model',
 				intro:
-					'@field({ ui }) records presentation hints beside the field they describe. They ride the manifest under the field’s _meta.ui, reach the browser in generated collection definitions, and have no schema, persistence, or security effect. The field description becomes the starting help text, and the class-level ui.description becomes the form-level help.',
+					'@field({ ui }) records presentation hints beside the field they describe. They ride the manifest under the field’s _meta.ui, reach the browser in generated collection definitions, and have no schema, persistence, or security effect. The field description becomes the starting help text. The class-level ui.description round-trips through the manifest as the seed for form-level help, but nothing reads it for you — a host passes it to FormHelp.',
 				points: [
 					'basic seeds the field into the tier shown before the advanced disclosure.',
 					'group, order, and locked carry the grouping key, sort order, and an initial organization lock.',
@@ -594,6 +594,7 @@ dispose();`
 				intro:
 					'There is no “reset” flag. Removing a customization deletes the override row, which means the layer below it applies again — including later changes to that lower layer. Rows are keyed by object reference, field name, scope type, and scope key, so a reset is always precise.',
 				points: [
+					'To return one property to the layer below while keeping the rest of the row, set that column to null. Deleting the row resets every property at that scope.',
 					'App rows carry no tenant or user; tenant rows carry only a tenant; user rows carry only a user.',
 					'A user row follows the person rather than the membership, so a personal preference persists across the tenants they belong to.',
 					'Writes inside a request derive the missing tenant or user from the ambient context and stamp who changed the row.'
@@ -604,7 +605,7 @@ dispose();`
 			{
 				title: 'A tenant chain contributes from the root down',
 				intro:
-					'When tenants form a hierarchy, the chain is walked root to leaf so a parent organization can set a default that its branches inherit and a branch can still override it. A node that breaks permission inheritance discards every earlier contribution in the chain, so only the run of tenants after the last break participates — in the merged result and in the explained layers alike.',
+					'When tenants form a hierarchy, the chain is walked root to leaf so a parent organization can set a default that its branches inherit and a branch can still override it. A node that breaks permission inheritance discards every contribution above it, so only the run of tenants beginning at the last break participates — in the merged result and in the explained layers alike.',
 				points: [
 					'The default hierarchy loader reads the tenant tree from smrt-users.',
 					'When no hierarchy is available the resolver falls back to a flat, single-tenant chain.',
@@ -634,10 +635,10 @@ dispose();`
 			{
 				title: 'Policy is presentation, not permission',
 				intro:
-					'A field policy changes how a field is presented and pre-filled. It is not a security boundary and cannot be used as one. Sensitive fields, transient fields, and fields behind a read permission are excluded from what a policy can address, and the batch resolve endpoint omits them from its response for every caller.',
+					'A field policy changes how a field is presented and pre-filled. It is not a security boundary and cannot be used as one. Two separate rails keep it in its lane: stored defaults are refused on the fields that carry risk, and the batch resolve endpoint omits those fields from its response for every caller.',
 				points: [
-					'Defaults are refused outright on transient, sensitive, and read-permission-gated fields.',
-					'System fields, relationship pseudo-fields, and single-table-inheritance meta storage fields are not policy-addressable, so a row targeting them would never apply.',
+					'Defaults are refused outright on transient, sensitive, and read-permission-gated fields. A policy may still set their visibility, label, help, or order — it just cannot put a value in them.',
+					'System fields, relationship pseudo-fields, and single-table-inheritance meta storage fields are the only ones entirely outside what a policy row can address, so a row targeting them would never apply.',
 					'Reference-field defaults must be UUID strings unless the field declares a text id type, because those columns are native UUIDs on PostgreSQL and DuckDB.'
 				]
 			}
@@ -645,7 +646,7 @@ dispose();`
 		related: [
 			{ label: 'Build a policy-aware form', href: '/capabilities/policy-aware-forms' },
 			{ label: 'Operate field policies', href: '/capabilities/field-policy-operations' },
-			{ label: 'Field policy reference', href: '/reference/field-policies' },
+			{ label: 'Field policy API', href: '/reference/field-policies' },
 			{ label: 'Security defaults', href: '/reference/security' }
 		]
 	},
@@ -665,35 +666,36 @@ dispose();`
 					'FieldPolicyProvider owns the basic/advanced mode and publishes the resolved policy. PolicyField wraps any input and contributes the label, the help hint, the required marker, visibility for the current mode, and default pre-fill on new records only. Outside a provider PolicyField renders its children verbatim, so adoption never has to be all at once.',
 				points: [
 					'ModeSwitch toggles between basic and advanced; AdvancedFields is the disclosure the advanced tier lives in.',
-					'FormHelp shows the object-level description together with the resolved per-field help.',
+					'FormHelp collects the resolved per-field help into one panel. Pass the object-level description to its objectDescription prop; the package does not read it from the manifest for you.',
 					'Set isNewRecord={false} on an edit form so a resolved default never overwrites a loaded value.'
 				],
 				filename: 'ArticleForm.svelte',
 				code: `<script lang="ts">\n  import {\n    AdvancedFields,\n    FieldPolicyProvider,\n    ModeSwitch,\n    PolicyField\n  } from '@happyvertical/smrt-fields/svelte';\n  import { Input, Textarea } from '@happyvertical/smrt-ui/forms';\n\n  let { policy, record, isNew = true } = $props();\n</script>\n\n<FieldPolicyProvider {policy} mode="basic">\n  <ModeSwitch />\n\n  <PolicyField name="title" isNewRecord={isNew}>\n    <Input id="title" bind:value={record.title} />\n  </PolicyField>\n\n  <AdvancedFields>\n    <PolicyField name="summary" isNewRecord={isNew}>\n      <Textarea id="summary" bind:value={record.summary} />\n    </PolicyField>\n  </AdvancedFields>\n</FieldPolicyProvider>`
 			},
 			{
-				title: 'Or render the whole object',
+				title: 'Render a whole object from its manifest',
 				intro:
-					'ObjectForm takes the generated browser field definitions and a resolved policy for the same object and renders their safe intersection in policy order. It is provider-free: the host decides where both inputs come from, which keeps server rendering and client fetching equally straightforward.',
+					'ObjectForm renders the fields that appear in both the generated browser definitions and the resolved policy, ordered by policy. Sensitive, transient, and read-permission-gated fields appear in neither, so they cannot reach the form. It is provider-free: the host decides where both inputs come from, which keeps server rendering and client fetching equally straightforward.',
 				points: [
 					'Pass generated browser definitions, never raw server registry fields.',
 					'The actions snippet renders inside the native form ObjectForm owns, so a plain submit button keeps native submission along with the form’s own validation.',
 					'To reuse a mounted create form for another new record, replace the bound record with an empty object or change createSessionKey.'
 				],
 				filename: 'ArticleWorkbench.svelte',
-				code: `<script lang="ts">\n  import { ObjectForm } from '@happyvertical/smrt-fields/svelte';\n\n  let { definition, policy } = $props();\n  let record = $state({});\n</script>\n\n<ObjectForm\n  objectRef="@happyvertical/smrt-content:Article"\n  fields={definition.fields}\n  {policy}\n  bind:value={record}\n  isNewRecord\n  showModeSwitch\n  onsubmit={save}\n>\n  {#snippet actions()}\n    <button type="submit">Save</button>\n  {/snippet}\n</ObjectForm>`
+				code: `<script lang="ts">\n  import { ObjectForm } from '@happyvertical/smrt-fields/svelte';\n\n  let { definition, policy } = $props();\n  let record = $state({});\n\n  async function save(event: SubmitEvent) {\n    event.preventDefault();\n    await articles.create(record);\n  }\n</script>\n\n<ObjectForm\n  objectRef="@happyvertical/smrt-content:Article"\n  fields={definition.fields}\n  {policy}\n  bind:value={record}\n  isNewRecord\n  showModeSwitch\n  onsubmit={save}\n>\n  {#snippet actions()}\n    <button type="submit">Save</button>\n  {/snippet}\n</ObjectForm>`
 			},
 			{
 				title: 'Register the generated collections once',
 				intro:
 					'An application can register every generated collection definition in one place and put the batch resolve client behind ObjectFormSourceProvider. Forms beneath it need only their canonical object reference. The registry validates both the generated definition and the untyped custom-action response, and fails closed with an accessible error state rather than rendering a partial form.',
 				points: [
+					'The registry takes a policy client: anything with resolveBatch({ objectRefs }), normally the generated FieldPolicy collection client.',
 					'Generated custom-action clients are typed as any; the registry is where that boundary is checked.',
 					'assertObjectFormCollectionDefinition validates a definition before it enters the registry.',
 					'The canonical reference is @package/name:ClassName, for example @happyvertical/smrt-content:Article.'
 				],
 				filename: 'src/lib/object-form-source.ts',
-				code: `import {\n  assertObjectFormCollectionDefinition,\n  ObjectFormSourceRegistry\n} from '@happyvertical/smrt-fields/svelte';\nimport { fieldPolicyClient } from '$lib/field-policy-client';\n\nexport const objectFormSource = new ObjectFormSourceRegistry(fieldPolicyClient);\n\nfor (const definition of Object.values(collectionDefinitions)) {\n  assertObjectFormCollectionDefinition(definition);\n  objectFormSource.register(definition);\n}\n\n// <ObjectFormSourceProvider source={objectFormSource}>\n//   <ObjectForm objectRef="@happyvertical/smrt-content:Article" bind:value={record} />\n// </ObjectFormSourceProvider>`
+				code: `import { collectionDefinitions } from '@happyvertical/smrt-virt-web';\nimport {\n  assertObjectFormCollectionDefinition,\n  ObjectFormSourceRegistry\n} from '@happyvertical/smrt-fields/svelte';\nimport { fieldPolicies } from '$lib/generated-clients';\n\n// fieldPolicies only has to satisfy { resolveBatch({ objectRefs }) }.\nexport const objectFormSource = new ObjectFormSourceRegistry(fieldPolicies);\n\nfor (const definition of Object.values(collectionDefinitions)) {\n  assertObjectFormCollectionDefinition(definition);\n  objectFormSource.register(definition);\n}\n\n// <ObjectFormSourceProvider source={objectFormSource}>\n//   <ObjectForm objectRef="@happyvertical/smrt-content:Article" bind:value={record} />\n// </ObjectFormSourceProvider>`
 			},
 			{
 				title: 'Open the generated routes the form needs',
@@ -702,7 +704,8 @@ dispose();`
 				points: [
 					'Keep delete out of the include list when the interface never deletes.',
 					'writable narrows which fields a generated write will accept, independently of what the form displays.',
-					'Field policy never widens this. A field hidden by policy is still writable by the API unless the model says otherwise.'
+					'Field policy never widens this. A field hidden by policy is still writable by the API unless the model says otherwise.',
+					'The example below is the SaaS starter’s own settings object; the operations guide walks the rest of its integration.'
 				],
 				filename: 'packages/app-objects/src/models/StarterAppSetting.ts',
 				code: `@smrt({\n  tableName: 'starter_app_settings',\n  conflictColumns: ['key'],\n  api: {\n    include: ['list', 'get', 'create', 'update'],\n    principalContext: true,\n    writable: ['key', 'value', 'metadata']\n  },\n  mcp: false,\n  cli: false\n})\nexport class StarterAppSetting extends SmrtObject {\n  // ...\n}`
@@ -723,7 +726,7 @@ dispose();`
 		related: [
 			{ label: 'How resolution works', href: '/capabilities/field-policies' },
 			{ label: 'Operate field policies', href: '/capabilities/field-policy-operations' },
-			{ label: 'Field policy reference', href: '/reference/field-policies' },
+			{ label: 'Field policy API', href: '/reference/field-policies' },
 			{ label: 'smrt-fields package', href: '/packages/smrt-fields' }
 		]
 	},
@@ -734,7 +737,7 @@ dispose();`
 		title: 'Run field policies in production',
 		lede: 'Two permissions divide organization rules from personal preferences. A gear edits the form in front of you, a control panel shows the whole organization, and identity always comes from the request rather than the request body.',
 		plainEnglish:
-			'Administrators set the arrangement everyone starts from. Everyone else can adjust their own view unless a field is locked. Nobody can edit another person’s preferences by asking nicely.',
+			'Administrators set the arrangement everyone starts from. Everyone else can adjust their own view unless a field is locked. A personal preference belongs to the person who set it: the server takes the identity from the request, never from the request body.',
 		packages: ['smrt-fields', 'smrt-users', 'smrt-svelte'],
 		sections: [
 			{
@@ -752,7 +755,7 @@ dispose();`
 			{
 				title: 'A missing identity denies rather than skips',
 				intro:
-					'Both the write guard and the read guard treat an absent identity component as a denial. A context that carries permissions but no user id — API-key authentication, a service principal, a background job, a bare tenant context — may not touch the user tier at all. Treating that as “skip the check” instead of “deny” was a real ownership bypass, because user rows carry no tenant by design.',
+					'Both the write guard and the read guard treat an absent identity component as a denial. A context that carries permissions but no user id — API-key authentication, a service principal, a background job, a bare tenant context — may not touch the user tier at all. Because user rows carry no tenant by design, a skipped check would let one principal write another principal’s row, so an absent identity denies rather than passes through.',
 				points: [
 					'The batch resolve action takes identity exclusively from the ambient context; the request body cannot select another tenant or user.',
 					'Saving or deleting an existing row is also authorized against the row’s persisted scope, looked up by primary key and by natural key.',
@@ -762,20 +765,30 @@ dispose();`
 			{
 				title: 'The gear edits the form in front of you',
 				intro:
-					'FieldPolicyGearProvider makes the context-derived editor state available to any policy-aware form without choosing a transport. It takes an adapter around four calls — load, create, update, delete — and that adapter must not accept tenant or user identifiers, because the server derives them. Place the affordance with FieldPolicyGearButton, or set showPolicyGear on ObjectForm.',
+					'FieldPolicyGearProvider makes the context-derived editor state available to any policy-aware form without choosing a transport. It takes a FieldPolicyEditorAdapter — load, create, update, delete — and that adapter must not accept tenant or user identifiers, because the server derives them. The provider also needs the same generated field definitions the form renders.',
 				points: [
+					'Normally the adapter wraps the generated FieldPolicy collection client’s getEditorState, create, update, and delete calls. An application that routes policy writes through its own endpoints can supply those instead; the contract is transport-neutral.',
+					'Place the affordance with FieldPolicyGearButton, or set showPolicyGear on ObjectForm.',
 					'The editor separates an Organization tab from a Personal tab; organizationScope selects app or tenant for hosts that administer the whole application.',
 					'The gear posts an already-JSON-encoded default, which is the same wire contract the generated write routes use.',
 					'registerFieldPolicyFocusTool registers the panel into an AdminShell dock without making the package depend on smrt-svelte.'
 				],
-				filename: 'src/lib/field-policy-client.ts',
-				code: `import type { FieldPolicyControlPanelAdapter } from '@happyvertical/smrt-fields/svelte';\n\n// No tenant or user identifier appears anywhere in this contract.\nexport const fieldPolicyAdapter: FieldPolicyControlPanelAdapter = {\n  load: ({ objectRef }) => post('/api/field-policies/editor-state', { objectRef }),\n  create: (input) => post('/api/field-policies', input),\n  update: ({ id, ...input }) => put(\`/api/field-policies/\${id}\`, input),\n  delete: ({ id }) => del(\`/api/field-policies/\${id}\`),\n  loadAudit: (input) => post('/api/field-policies/policy-audit', input ?? {})\n};`
+				filename: 'src/lib/field-policy-gear.ts',
+				code: `import type { FieldPolicyEditorAdapter } from '@happyvertical/smrt-fields/svelte';\nimport { fieldPolicies } from '$lib/generated-clients';\n\n// No tenant or user identifier appears anywhere in this contract.\nexport const fieldPolicyAdapter: FieldPolicyEditorAdapter = {\n  load: ({ objectRef }) => fieldPolicies.getEditorState({ objectRef }),\n  create: (input) => fieldPolicies.create(input),\n  update: ({ id, ...input }) => fieldPolicies.update(id, input),\n  delete: ({ id }) => fieldPolicies.delete(id)\n};`
+			},
+			{
+				title: 'Mount the gear around the form',
+				intro:
+					'The provider wraps whatever renders the form. Inside it, ObjectForm can show the gear itself, or a hand-written form can place FieldPolicyGearButton wherever it belongs.',
+				filename: 'ArticleWorkbench.svelte',
+				code: `<script lang="ts">\n  import {\n    FieldPolicyGearProvider,\n    ObjectForm\n  } from '@happyvertical/smrt-fields/svelte';\n  import { fieldPolicyAdapter } from '$lib/field-policy-gear';\n\n  let { definition, policy } = $props();\n  let record = $state({});\n\n  const objectRef = '@happyvertical/smrt-content:Article';\n</script>\n\n<FieldPolicyGearProvider\n  {objectRef}\n  fields={definition.fields}\n  adapter={fieldPolicyAdapter}\n>\n  <ObjectForm\n    {objectRef}\n    fields={definition.fields}\n    {policy}\n    bind:value={record}\n    showPolicyGear\n  />\n</FieldPolicyGearProvider>`
 			},
 			{
 				title: 'The control panel is the organization view',
 				intro:
 					'buildFieldPolicySettingsCatalog is a server-side, URL-driven catalog builder, and FieldPolicyControlPanel renders it with a catalog component the host injects. The panel displays code, app, and organization values by replaying the explained resolver layers rather than recalculating precedence, and it asks for an explicit confirmation before a reset or a drift prune.',
 				points: [
+					'The panel takes the same adapter as the gear plus a loadAudit call, typed FieldPolicyControlPanelAdapter.',
 					'policyAudit is the only routed organization roll-up. It requires fields.policy.manage, returns the caller tenant’s editable rows and read-only app summaries, and represents other users strictly as per-field counts.',
 					'Route permission is the host’s responsibility: check it in the server load before building the catalog.',
 					'fieldPolicyControlPanelNavItem returns a permission-filtered navigation entry for the shell to place.'
@@ -796,20 +809,18 @@ dispose();`
 			{
 				title: 'Usage learning is merged upstream, not yet released',
 				intro:
-					'The optional usage-learning loop turns recent aggregated form usage into administrator-reviewed suggestions. It merged into the framework repository after the 0.40.61 cut and is present in no published release of @happyvertical/smrt-fields, so nothing described here is available to install today. It is documented so teams can plan; treat the details as subject to change until a release ships them.',
+					'The optional usage-learning loop turns recent aggregated form usage into administrator-reviewed suggestions. It merged into the framework repository after the 0.40.61 cut and is present in no published release of @happyvertical/smrt-fields, so nothing described here is available to install today. The behaviour below is what the framework’s main branch implements now; treat the specifics as subject to change until a release ships them.',
 				points: [
-					'Capture is per-host opt-in and success-gated: a browser form reports only after its persistence handler acknowledges success, and a form that supplies no reporter never captures anything.',
-					'Raw values are sent only for low-cardinality boolean and reference fields. Text, numbers, dates, and JSON are count-only, sensitive and read-permission-gated fields stay count-only, and the server validates every entry against the live registry and drops unknown fields.',
-					'Capture requires both an ambient tenant and an authenticated user, so anonymous and public forms never contribute.',
-					'Suggestions are read and decided under fields.policy.manage and are never auto-applied; accepting one writes an ordinary tenant policy through the normal validation rails.',
-					'Retention and rate limits are bounded: counters are kept 90 days and capped at 100,000 rows, accepted suggestions are pruned after 180 days, a dismissal starts a 30-day cooldown, and at most one contribution per tenant, user, object, field, and UTC day is counted.',
-					'The maintenance and suggestion schedules install dormant. Enabling them is a deployment decision rather than an automatic side effect.'
+					'Capture is per-host opt-in and success-gated: a browser form reports only after its persistence handler acknowledges success, it requires both an ambient tenant and an authenticated user, and a form that supplies no reporter never captures anything.',
+					'Values are minimized. Raw values travel only for low-cardinality boolean and reference fields; text, numbers, dates, JSON, and anything sensitive or read-permission-gated stay count-only, and the server drops fields the live registry does not recognize.',
+					'Suggestions are read and decided under fields.policy.manage and are never applied automatically. Accepting one writes an ordinary tenant policy through the normal validation rails.',
+					'Retention and rate limits are bounded: counters kept 90 days and capped at 100,000 rows, accepted suggestions pruned after 180 days, a 30-day cooldown after a dismissal, and at most one contribution per tenant, user, object, field, and UTC day. The maintenance schedules install dormant.'
 				]
 			},
 			{
 				title: 'The SaaS starter shows the whole path',
 				intro:
-					'The public smrt-saas-starter adopted the rail end to end at s-m-r-t 0.40.61: static ui hints on its settings object, a policy-aware ObjectForm with the gear, a permission-checked control panel route, and a shell navigation entry. It is a useful reference because it also shows the ordinary friction — its objects were closed to the generated API, so the one object the browser manages had to open a narrow include list before a form could round-trip.',
+					'The public smrt-saas-starter adopted the rail end to end at s-m-r-t 0.40.61: static ui hints on its settings object, a policy-aware ObjectForm with the gear, a permission-checked control panel route, and a shell navigation entry. It also shows the ordinary friction — its objects were closed to the generated API, so the one object the browser manages had to open a narrow include list before a form could round-trip.',
 				points: [
 					'packages/app-objects/src/models/StarterAppSetting.ts carries the @field({ ui }) seed and the narrowed api include list; its sibling StarterInvitation stays api: false.',
 					'apps/web/src/lib/field-policy-client.ts holds the adapter, which posts to hand-written /api/field-policies routes rather than wrapping the generated client — the adapter contract is transport-neutral, so both shapes are valid.',
@@ -821,10 +832,10 @@ dispose();`
 			{
 				title: 'Adoption checklist',
 				intro:
-					'Adopting field policy is additive. Each step below is useful on its own, and a project can stop after any of them.',
+					'Adopting field policy is additive, and there is nothing to migrate: PolicyField outside a provider renders its children verbatim, so the forms you already have keep working until you wrap them. Each step below is useful on its own, and a project can stop after any of them.',
 				points: [
 					'1. Add @happyvertical/smrt-fields at the same exact version as the rest of your s-m-r-t packages. It pins smrt-core, smrt-tenancy, smrt-ui, and smrt-users to that version, and mixing versions installs a second copy of the object registry.',
-					'2. Register the package with your runtime package list so its table migrates through the normal schema path.',
+					'2. Migrate. The build merges consumed package manifests, so the package’s _smrt_field_policies table joins the schema your application already migrates — there is no separate setup step.',
 					'3. Seed presentation in code: add ui hints to the fields that deserve them, and remember the cold-start rule once you mark the first field.',
 					'4. Grant fields.policy.manage to administrator roles and fields.policy.personalize to everyone who should be able to adjust their own forms.',
 					'5. Resolve a policy in a server load and pass it to a form. PolicyField on a few fields is a complete first step.',
@@ -837,7 +848,7 @@ dispose();`
 		related: [
 			{ label: 'How resolution works', href: '/capabilities/field-policies' },
 			{ label: 'Build a policy-aware form', href: '/capabilities/policy-aware-forms' },
-			{ label: 'Field policy reference', href: '/reference/field-policies' },
+			{ label: 'Field policy API', href: '/reference/field-policies' },
 			{ label: 'Memberships and permissions', href: '/foundations/memberships-and-permissions' },
 			{ label: 'Security defaults', href: '/reference/security' },
 			{

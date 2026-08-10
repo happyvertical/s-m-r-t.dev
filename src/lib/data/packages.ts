@@ -441,11 +441,11 @@ export const packages: SmrtPackage[] = [
 					title: 'API and semantics',
 					body: 'Exported functions and types, the canonical object reference format, the default-value wire contract, write validation, and caching.',
 					href: '/reference/field-policies',
-					linkLabel: 'Open the reference'
+					linkLabel: 'Field policy API'
 				}
 			],
 			surfaceNote:
-				'Policy rows are not a browsable resource. FieldPolicy generates create, update, and delete routes plus three collection actions (resolve, editor-state, policy-audit); generated list and get are deliberately closed because this model is not tenant-scoped and reading it freely would enumerate every tenant and user row. Its CLI and MCP surfaces are closed for the same reason.',
+				'Policy rows are not a browsable resource. FieldPolicy generates create, update, and delete routes plus three collection actions (resolve, editor-state, policy-audit); generated list and get are deliberately closed because this model is not tenant-scoped and reading it freely would enumerate every tenant and user row. The generated CLI mirrors that shape and is writes-only; MCP is closed entirely.',
 			playgroundNote:
 				'This package does export a ./playground module, with a policy-driven form and a generated ObjectForm. It is not registered on this site yet: its Policy-Driven Form preview throws on mount because the preview renders FormHelp outside its FieldPolicyProvider. Tracked upstream as happyvertical/smrt#2272; the module goes back in once a release carries the fix.'
 		}
