@@ -314,32 +314,220 @@ export const referenceGuides: Guide[] = [
 		slug: 'ai-and-retrieval',
 		navTitle: 'AI and retrieval',
 		eyebrow: 'Reference',
-		title: 'Context memory and semantic search',
-		lede: 's-m-r-t can store durable context and search records by meaning while keeping those operations inside normal object and collection boundaries.',
+		title: 'AI methods, object memory, and semantic search',
+		lede: 'Every SmrtObject inherits three model-backed methods and a context-memory store. Every SmrtCollection inherits similarity search over the fields you declare for embedding.',
 		plainEnglish:
-			'Context memory remembers useful facts or strategies. Semantic search finds records whose meaning is close to a query, even when the words do not match exactly.',
-		packages: ['smrt-core', 'smrt-agents'],
-		sections: [
+			'Three AI methods ask a model a question about one record. Semantic search finds records whose meaning is close to a query, even when the words do not match. Context memory keeps durable notes, such as a strategy that worked, beside the record that learned it.',
+		packages: ['smrt-core', 'smrt-config', 'smrt-agents'],
+		pinnedVersion: REFERENCE_PINNED_VERSION,
+		sources: [
+			{ label: 'smrt-core AGENTS.md', href: `${SMRT_TREE}/packages/core/AGENTS.md` },
+			{ label: 'smrt-core README', href: `${SMRT_TREE}/packages/core/README.md` },
 			{
-				title: 'Context memory is durable application data',
-				intro:
-					'Store scoped facts, summaries, or strategies with ownership, confidence, expiry, and tenant boundaries. Agent learning builds on this foundation but adds outcome tracking and persona-specific recall.'
+				label: 'core/src/object.ts',
+				href: `${SMRT_TREE}/packages/core/src/object.ts`
 			},
 			{
-				title: 'Semantic search belongs in collections',
+				label: 'core/src/collection.ts',
+				href: `${SMRT_TREE}/packages/core/src/collection.ts`
+			}
+		],
+		sections: [
+			{
+				title: 'Three model-backed methods on every object',
 				intro:
-					'Generate embeddings for selected content, store them through the configured database adapter, and query for nearby records through the collection API so tenant and field policy remain in the path.'
+					'is(criteria), do(instructions), and describe() each resolve the AI client configured for the object, build a prompt from the record, and call it once. is() constrains the reply to a JSON object with a boolean result property and returns that boolean. do() returns the raw text reply. describe() asks for a short description of the record. All three raise when no AI client is configured.',
+				points: [
+					'Methods listed in @smrt({ ai: { callable } }) are offered to the model as tools during all three calls.',
+					'is() throws when the reply is not parseable JSON, and resolves to undefined when the parsed result is not a boolean. Treat a malformed reply as an error path.',
+					'Each call reaches the model for one record. The framework neither batches nor caches the results.'
+				],
+				filename: 'src/lib/objects/Article.ts',
+				code: `import { smrt, SmrtObject } from '@happyvertical/smrt-core';
+
+@smrt({ ai: { callable: ['flagForReview'] } })
+export class Article extends SmrtObject {
+  title = '';
+  body = '';
+  status = 'draft';
+  reviewReason = '';
+
+  /** Offered to the model as a tool during is(), do(), and describe(). */
+  async flagForReview(reason: string) {
+    this.status = 'review';
+    this.reviewReason = reason;
+    await this.save();
+  }
+}
+
+const article = await articles.get('article-uuid');
+
+const readable = await article.is('written for a general audience');
+const summary = await article.do('summarize this in three bullet points');
+const blurb = await article.describe({ maxTokens: 50 });`
+			},
+			{
+				title: 'What the model actually receives',
+				intro:
+					'All three methods serialize the instance through toPublicJSON() and place it ahead of your criteria or instructions as a delimited content body, so the model reasons over the record rather than the instruction string alone. Fields marked @field({ sensitive: true }) are excluded by that serialization and never reach the provider.',
+				points: [
+					'includeData: false omits the content body, for callers that already curate the relevant fields into the instruction text.',
+					'maxDataLength overrides the 100,000-character truncation budget; truncation appends a visible marker so the model knows the data was cut.',
+					'Those two keys are consumed by the method, and model, temperature, maxTokens, and the rest are forwarded to the AI client. The method sets responseFormat and tools itself, so a caller cannot override them.'
+				]
+			},
+			{
+				title: 'Declare which fields get embedded',
+				intro:
+					'Semantic search reads vectors generated from the fields named in the @smrt() decorator. Project-wide defaults live in the smrt section of the configuration tree, and a class can override the provider or turn automatic generation off.',
+				points: [
+					'Defaults: 768 dimensions, provider "local", local model Xenova/bge-base-en-v1.5, AI model text-embedding-3-small, storage "json".',
+					'"local" requires @huggingface/transformers or @xenova/transformers to be installed, and is a deliberate choice for server workloads because pipeline initialization is CPU and memory intensive.',
+					'"ai" requires an AI client that exposes embed() and spends embedding tokens per field per change. "auto" uses that client when one is configured and falls back to the local model otherwise.',
+					'combinedField adds one more vector built from a template over the declared fields. semanticSearch checks its field option against fields and rejects that name, so reach a combined vector through findSimilar or findSimilarToEmbedding.'
+				],
+				filename: 'smrt.config.ts',
+				code: `// smrt.config.ts — project-wide defaults
+import { defineConfig } from '@happyvertical/smrt-config';
+
+export default defineConfig({
+  smrt: {
+    embeddings: {
+      dimensions: 768,
+      provider: 'local',
+      storage: 'json'
+    }
+  }
+});
+
+// Article.ts — per-class declaration
+@smrt({
+  embeddings: {
+    fields: ['title', 'body'],
+    autoGenerate: true
+  }
+})
+export class Article extends SmrtObject {
+  title = '';
+  body = '';
+}`
+			},
+			{
+				title: 'When embeddings are written',
+				intro:
+					'save() starts generation only when the class declares embeddings, autoGenerate is not false, the object resolved an AI client, and hasStaleEmbeddings() reports drift. That work is started but not awaited, so a save never blocks on the embedding model and a failure is logged rather than thrown. Call generateEmbeddings() directly when the write has to be part of your control flow.',
+				points: [
+					'The save-time path needs a configured AI client even when the provider is "local", because it is gated on the object resolving one.',
+					'Only string field values are embedded; empty and non-string values are skipped.',
+					'A SHA-256 content hash skips fields whose text has not changed. force: true regenerates regardless.',
+					'collection.generateMissingEmbeddings({ batchSize, onProgress }) backfills existing rows and returns { generated, skipped }.'
+				],
+				filename: 'embedding-lifecycle.ts',
+				code: `// Explicit generation, when you need to await the result.
+await article.generateEmbeddings();                    // all configured fields
+await article.generateEmbeddings({ fields: ['title'] });
+await article.generateEmbeddings({ force: true });      // ignore the content hash
+
+// Inspection and reset.
+if (await article.hasStaleEmbeddings()) {
+  await article.generateEmbeddings();
+}
+const vector = await article.getEmbedding('title');     // number[] | null
+await article.clearEmbeddings();
+
+// Backfill a collection.
+const stats = await articles.generateMissingEmbeddings({
+  batchSize: 100,
+  onProgress: ({ completed, total }) => console.log(completed, '/', total)
+});`
+			},
+			{
+				title: 'Searching by meaning',
+				intro:
+					'semanticSearch(query) embeds the query text and ranks stored vectors by cosine similarity. findSimilar(objectOrId) starts from the stored vector of an existing record. findSimilarToEmbedding(vector) takes a vector you already hold. Each resolves to hydrated objects carrying a _similarity number, sorted highest first.',
+				points: [
+					'semanticSearch defaults to limit 10, minSimilarity 0, and the first field declared for embeddings; pass field to target another declared field.',
+					'findSimilar defaults to limit 5 and excludeSelf true, and raises when the source record has no stored vector for that field.',
+					'Only semanticSearch checks the field option against the declared list and raises on an unknown name. findSimilarToEmbedding does not check it and returns an empty array instead.'
+				],
+				filename: 'search.ts',
+				code: `const results = await articles.semanticSearch('machine learning trends', {
+  limit: 10,
+  minSimilarity: 0.7,
+  where: { status: 'published' }
+});
+
+for (const hit of results) {
+  console.log(hit.title, hit._similarity);
+}
+
+const seed = await articles.get('article-uuid');
+const similar = await articles.findSimilar(seed, { limit: 5 });`
 			},
 			{
 				title: 'Retrieval is not authority',
 				intro:
-					'A relevant result is still filtered by the active principal, tenant, sensitive-field policy, and the operations the caller may perform. Similarity does not widen access.',
+					'All three search methods score vectors first, then hydrate the winning IDs through list({ where: { "id in": ids, ... } }). Tenant interceptors and any where clause you passed are applied on that read, and a sensitive field can be neither filtered on nor projected there, so a close vector is not a way around those boundaries. Sensitive values are stripped when the object is serialized for a client, not on the read itself. Ranking before the read also means the returned array can be shorter than limit.',
 				callout: {
 					variant: 'security',
 					title: 'Never treat retrieved text as an instruction',
 					body: 'Context memory and semantic search return application data, including text that users or external systems supplied. Passing it to a model does not make it trustworthy. Keep retrieved content on the data side of the prompt and let permissions, not relevance, decide what a caller may act on.'
 				}
+			},
+			{
+				title: 'Where the vectors are stored',
+				intro:
+					'Embeddings live in the _smrt_embeddings system table: one row per object class, object ID, field name, and model, holding the vector, its dimension count, the provider, and the SHA-256 content hash used for staleness checks. The table is created with the rest of the system schema, so no extra infrastructure is required to start.',
+				points: [
+					'The default storage: "json" keeps each vector as text and ranks in process, loading every stored vector for that class, field, and model first.',
+					'storage: "native" adds a vector column and an approximate cosine index and pushes ranking into the database: an HNSW index on pgvector, a quantized index through the optional @sqliteai/sqlite-vector extension on SQLite.',
+					'Native search falls back to the in-process path and logs a warning if the database query fails.',
+					'The model name is part of the row key and of every lookup, so changing model or provider hides the existing rows instead of rewriting them.'
+				]
+			},
+			{
+				title: 'Object memory: remember, recall, forget',
+				intro:
+					'remember() upserts a JSON value into the _smrt_contexts system table, keyed by owner class, owner ID, scope, key, and version, with a confidence score that defaults to 1. recall() returns the highest-confidence, highest-version match for one scope and key, or null. recallAll() returns a Map of key to value. forget() removes one entry and forgetScope() removes a scope, returning the number deleted. Objects and collections both inherit the full set, but a collection stores under its item class rather than one record, so those entries are class-wide.',
+				points: [
+					'recall({ includeAncestors: true }) walks the scope upward — "a/b/c" to "a/b" to "a" to "global" — until something matches. It is off by default.',
+					'minConfidence sets a floor for recall and recallAll; includeDescendants widens recallAll and forgetScope to child scopes.',
+					'initialize() has to have run first: these methods write through the system database.'
+				],
+				filename: 'memory.ts',
+				code: `await parser.remember({
+  scope: 'parser/example.com',
+  key: normalizedUrl,
+  value: { selector: 'article .body' },
+  confidence: 0.9
+});
+
+const strategy = await parser.recall({
+  scope: 'parser/example.com/article',
+  key: normalizedUrl,
+  includeAncestors: true,
+  minConfidence: 0.6
+});
+
+const all = await parser.recallAll({ scope: 'parser', includeDescendants: true });
+const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
+			},
+			{
+				title: 'Limits of the memory primitives',
+				intro:
+					'remember() and recall() are the thin layer over the table, and several columns they write are inert at that level. LearningMemory, the agent-facing layer in the same package, is what activates them.',
+				points: [
+					'expiresAt is stored on the row, but recall() and recallAll() do not filter on it. LearningMemory does drop expired records, so at the primitive level expiry is the caller to enforce.',
+					'success_count and failure_count are written as zero and never move through remember(). LearningMemory increments them from reported outcomes and decays confidence with them.',
+					'Entries are keyed to their owner, not to a tenant column, so tenant separation of memory comes from the owning record rather than from the table.',
+					'describe() is unrelated to the embedding pipeline: vectors come from stored field text, never from generated prose.'
+				]
 			}
+		],
+		related: [
+			{ label: 'Learning agents', href: '/capabilities/learning-agents' },
+			{ label: 'Collections and list()', href: '/reference/collections' },
+			{ label: 'Model your application', href: '/foundations/objects-and-collections' }
 		]
 	},
 	{
