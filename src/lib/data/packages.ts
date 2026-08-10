@@ -1,3 +1,4 @@
+import type { GuideCallout } from '$lib/data/callouts';
 import { SMRT_VERSION } from '$lib/version';
 
 export type PackageCategory =
@@ -52,8 +53,24 @@ export interface SmrtPackage {
 	 */
 	playgroundNote?: string;
 	version: string;
-	status?: 'stable' | 'new' | 'foundation' | 'private';
+	status?: PackageStatus;
+	/** Admonition shown above the tabs, for packages that need a caveat up front. */
+	notice?: GuideCallout;
 }
+
+/**
+ * `stub` means the package is published and importable but its exports are not
+ * implemented yet. It is deliberately distinct from `new`: a reader must not
+ * mistake "recently added" for "ready to build on".
+ */
+export type PackageStatus = 'stable' | 'new' | 'foundation' | 'private' | 'stub';
+
+export const packageStatusLabels: Record<Exclude<PackageStatus, 'stable'>, string> = {
+	new: 'New',
+	foundation: 'Foundation',
+	private: 'Source distribution',
+	stub: 'Not implemented'
+};
 
 type PackageOptions = Partial<
 	Pick<
@@ -68,6 +85,7 @@ type PackageOptions = Partial<
 		| 'surfaceNote'
 		| 'playgroundNote'
 		| 'status'
+		| 'notice'
 	>
 >;
 
@@ -254,7 +272,8 @@ function definePackage(
 		surfaceNote: options.surfaceNote,
 		playgroundNote: options.playgroundNote,
 		version: SMRT_VERSION,
-		status: options.status ?? 'stable'
+		status: options.status ?? 'stable',
+		notice: options.notice
 	};
 }
 
@@ -1027,8 +1046,37 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Domain models',
 		'smrt-gnode',
-		'Federation building blocks for local, interoperable knowledge bases.',
-		{ kind: 'runtime' }
+		'Federation scaffolding for gnode knowledge bases: published types and class shells, with none of the discovery or exchange behavior implemented yet.',
+		{
+			kind: 'runtime',
+			status: 'stub',
+			notice: {
+				variant: 'warning',
+				title: 'Stubs only — do not build on this yet',
+				body: 'Every method is a placeholder. discoverPeers() and exchangePeers() on Federation return empty arrays, PeerExchangeProtocol.exchange() returns an empty array, and WebFingerProtocol.discover() returns null. The package registers no s-m-r-t models, and the stub source imports nothing — though installing it still pulls the smrt-core and SDK dependencies it declares. It is published so the intended shape is visible, not because it works.'
+			},
+			highlights: [
+				'Ships today: the GnodePeer, FederationConfig, and WebFingerResponse types',
+				'Ships today: Federation, WebFingerProtocol, and PeerExchangeProtocol class shells whose methods return an empty array or null',
+				'Planned: WebFinger discovery at /.well-known/gnode, peer exchange at /api/federation/peers, and ActivityPub-inspired cross-gnode queries'
+			],
+			details: [
+				{
+					title: 'What you can rely on now',
+					body: 'The exported type definitions are stable enough to design against: a peer is a url, name, discoveredAt, and optional lastSeen, and federation configuration covers enabled, discoverability, peers, autodiscovery, and peerExchange. Nothing behind those types performs network work.'
+				},
+				{
+					title: 'What is still to be built',
+					body: 'Peer discovery over WebFinger, the peer-exchange endpoint, and cross-gnode querying are all unimplemented. Until they land, an application that needs federation has to implement the transport itself rather than importing it from here.'
+				},
+				{
+					title: 'Check upstream before you plan around it',
+					body: 'The source is the current truth. The README carries the same stubs-only warning, but parts of it lag the code: it reports no dependencies while the package declares smrt-core and several SDK adapters. Read the source before assuming any of the planned behavior has arrived.',
+					href: 'https://github.com/happyvertical/smrt/tree/main/packages/gnode',
+					linkLabel: 'Open the package source'
+				}
+			]
+		}
 	),
 
 	definePackage(

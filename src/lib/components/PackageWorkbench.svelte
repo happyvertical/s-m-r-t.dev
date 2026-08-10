@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import Callout from '$lib/components/Callout.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import PlaygroundEmbed from '$lib/components/PlaygroundEmbed.svelte';
 	import SEO from '$lib/components/SEO.svelte';
-	import type { SmrtPackage } from '$lib/data/packages';
+	import { packageStatusLabels, type SmrtPackage } from '$lib/data/packages';
 	import { getPlaygroundEntries, playgroundModules } from '$lib/data/playgrounds';
 
 	type Tab = 'overview' | 'components' | 'playground' | 'rest' | 'mcp' | 'webmcp' | 'cli';
@@ -74,6 +75,7 @@
 				<span>v{pkg.version}</span>
 				{#if pkg.status === 'new'}<span class="new">New</span>{/if}
 				{#if pkg.status === 'private'}<span>Source distribution</span>{/if}
+				{#if pkg.status === 'stub'}<span class="stub">{packageStatusLabels.stub}</span>{/if}
 			</div>
 			<h1>{pkg.name}</h1>
 			<p>{pkg.summary}</p>
@@ -88,6 +90,12 @@
 			<b>↗</b>
 		</a>
 	</header>
+
+	{#if pkg.notice}
+		<div class="package-notice">
+			<Callout variant={pkg.notice.variant} title={pkg.notice.title} body={pkg.notice.body} />
+		</div>
+	{/if}
 
 	<div class="tabs-wrap">
 		<div class="tabs" role="tablist" aria-label={`${pkg.name} documentation`}>
@@ -445,6 +453,7 @@
 	}
 
 	.package-hero,
+	.package-notice,
 	.panel,
 	.tabs {
 		width: min(1180px, calc(100% - 40px));
@@ -486,6 +495,17 @@
 	.package-meta span.new {
 		border-color: var(--site-accent-strong);
 		background: var(--site-accent-soft);
+	}
+
+	.package-meta span.stub {
+		border-color: var(--site-warn);
+		background: var(--site-warn-soft);
+		color: var(--site-warn);
+		font-weight: 700;
+	}
+
+	.package-notice {
+		margin-bottom: 26px;
 	}
 
 	h1 {
