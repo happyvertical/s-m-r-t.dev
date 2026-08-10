@@ -24,280 +24,161 @@
 
 # s-m-r-t.dev — SMRT framework documentation site
 
-## Purpose
-
-This project is the public documentation site for the SMRT framework and the
-primary test bed for `@happyvertical/smrt-svelte`. Framework functionality
-should be demonstrable here.
+The public documentation site for the SMRT framework, and the primary test bed for
+`@happyvertical/smrt-svelte`. Framework functionality should be demonstrable here.
 
 ## Golden Rule: Always Fix Upstream
 
 **NEVER implement local workarounds.** When you hit a problem in an
-`@happyvertical/smrt-*` package:
-
-1. Document it below under "Current Issues to Fix Upstream"
-2. Fix it properly in the upstream package (the `happyvertical/smrt` repo)
-3. Release and install the fixed version
-4. Continue development here
+`@happyvertical/smrt-*` package: fix it in the `happyvertical/smrt` repo, release,
+install the fixed version, and continue here. Where a defect blocks the site until
+that release ships, record the exception as "Active upstream defects" describes.
 
 Quick hacks hide real problems. This site exists to prove the framework is ready
 for public consumption; a local patch defeats the point.
 
 ## Framework documentation
 
-Every installed `@happyvertical/smrt-*` package ships its own `AGENTS.md` and
-`CLAUDE.md` inside `node_modules`, written against the version you actually have
-installed. Read those instead of any summary — they are the authority on that
-package's API.
-
-The three this site builds against directly:
+All 22 installed `@happyvertical/smrt-*` packages ship an `AGENTS.md` inside
+`node_modules`, written against the version you actually have. Read
+`node_modules/@happyvertical/<package>/AGENTS.md` instead of any summary — it is the
+authority on that package's API, and nothing needs keeping in sync. The three this
+site builds against directly:
 
 @./node_modules/@happyvertical/smrt-ui/AGENTS.md
 @./node_modules/@happyvertical/smrt-svelte/AGENTS.md
 @./node_modules/@happyvertical/smrt-playground/AGENTS.md
 
-For any other package, read
-`node_modules/@happyvertical/<package>/AGENTS.md` directly — all 22 dependencies
-ship one. There is nothing to regenerate and nothing to keep in sync.
-
 ## First run
 
-```bash
-pnpm install
-pnpm dev
-```
+`pnpm install && pnpm dev`.
 
 **`engines.node` is `>=24.18.0` and `.npmrc` sets `engine-strict=true`.** On an
-older Node, `pnpm install` fails outright rather than warning. If the install
-dies on an engine check, switch Node versions — that is the whole problem.
+older Node, `pnpm install` fails outright rather than warning. If the install dies
+on an engine check, switch Node versions — that is the whole problem.
 
 ## Validation
 
 ```bash
 pnpm test          # vitest
-pnpm run build     # check:templates + vite build (prerenders the whole site)
+pnpm run build     # check:templates + vite build (prerenders everything)
 pnpm run lint      # prettier + eslint + check:templates
 pnpm run check     # svelte-check
 ```
 
 CI runs test, check, and build on every pull request. `pnpm run check` is clean
-(0 errors, 0 warnings) and is expected to stay that way — it is the type-drift
-guard for framework bumps, so do not let it start reporting noise.
+(0 errors, 0 warnings) and must stay that way — it is the type-drift guard for
+framework bumps. `lint` is **not** among them: `.github/workflows/lint.yaml` runs
+it on pushes to `main`, never on a pull request, so running it yourself before
+shipping is the only thing that keeps `main` green.
 
-`lint` is not among them. `.github/workflows/lint.yaml` runs it on pushes to
-`main` instead, never on a pull request, so running it yourself before shipping
-is still the only thing that keeps `main` green.
-
-`check:templates` catches unescaped `{` / `}` inside `<code>` blocks, which
-Svelte would otherwise parse as expressions and fail on at render time. Escape
-them as `{'{'}` / `{'}'}`. `eslint`'s `no-undef` rule is load-bearing for the
-same reason — it catches `{UndefinedVar}` in templates.
+`check:templates` catches unescaped `{` / `}` inside `<code>` blocks, which Svelte
+would otherwise parse as expressions and fail on at render time. Escape them as
+`{'{'}` / `{'}'}`. `eslint`'s `no-undef` rule is load-bearing for the same reason —
+it catches `{UndefinedVar}` in templates.
 
 ## How the content is authored
 
 The site is data-driven, not page-per-file. Content lives in `src/lib/data/`:
 
-- `packages.ts` — every `@happyvertical/smrt-*` package entry, rendered by
-  `PackageWorkbench.svelte` at `/packages/[slug]`
-- `guides.ts` — foundation and capability guides, rendered by `GuidePage.svelte`
-- `reference.ts` — reference pages, same renderer
-- `tooling.ts` — developer tooling pages, same renderer
-- `task-guides.ts` — the runnable end-to-end guides at `/guides`, same renderer
+- `packages.ts` — package entries, rendered by `PackageWorkbench.svelte` at
+  `/packages/[slug]`
+- `guides.ts` (foundation and capability guides), `reference.ts`, `tooling.ts`, and
+  `task-guides.ts` (the runnable guides at `/guides`) — all rendered by
+  `GuidePage.svelte`
 - `navigation.ts`, `playgrounds.ts` — nav structure and live playground modules
 
-Adding a package or guide means adding a data entry, not a route. The route's
-`entries()` derives from the data, so the page prerenders automatically. Editing
-a renderer changes every page it serves — check a few before assuming.
+Adding a package or guide means adding a data entry, not a route: the route's
+`entries()` derives from the data, so the page prerenders automatically. Editing a
+renderer changes every page it serves — check a few before assuming.
 
 ### Registering a new `Guide[]` route family
 
-A new guide collection is more than a data file. Four registrations are all
-hand-maintained, and **none of them is auto-discovered**, so forgetting one is
-silent:
+A new collection is more than a data file. Four registrations are hand-maintained
+and **none is auto-discovered**, so forgetting one is silent:
 
-- `navigation.ts` — the sidebar, the ⌘K page entries, and the prev/next track
-  all derive from this one.
-- the `guideTracks` list in `search.ts` — without it the palette finds the
-  pages but none of their section headings.
+- `navigation.ts` — the sidebar, ⌘K page entries, and prev/next track all derive
+  from this one.
+- the `guideTracks` list in `search.ts` — without it the palette finds the pages
+  but none of their section headings.
 - `sitemap.xml/+server.ts`.
-- the hand-written family lists in `search.test.ts` and `track.test.ts` — these
-  are the coverage assertions themselves, not a guard that catches an omission
-  elsewhere. A family missing from them passes trivially.
+- the hand-written family lists in `search.test.ts` and `track.test.ts` — these are
+  the coverage assertions themselves, not a guard against an omission elsewhere. A
+  family missing from them passes trivially.
 
 ### Nothing regenerates that content, so it goes stale silently
 
-`pnpm run audit:data` hashes the `AGENTS.md` shipped inside every installed
-`@happyvertical/smrt-*` package, compares it to `scripts/smrt-docs-baseline.json`,
-and names the data files that mention each package whose docs were rewritten.
-A lockstep version bump that leaves `AGENTS.md` alone is not drift — there would
-be nothing new to read. After re-reading the entries it points at, run
-`pnpm run audit:data -- --update` and commit the refreshed baseline.
-
-`.github/workflows/data-freshness.yaml` runs it weekly and keeps one tracking
-issue in sync. It is **not** a gate — it never runs on a pull request and cannot
-block a merge, because a hash comparison is not qualified to reject prose. It
-only tells you where to look.
-
-`smrt dev:knowledge-check` is the tool that should do this; it indexes an smrt
-workspace and exhausts the Node heap when pointed at this consumer app
-(happyvertical/smrt#2275). Delete the script when that lands.
+`pnpm run audit:data` hashes each installed package's `AGENTS.md` against
+`scripts/smrt-docs-baseline.json` and names the data files mentioning any package
+whose docs were rewritten. A lockstep bump that leaves `AGENTS.md` alone is not
+drift. After re-reading the entries it points at, run
+`pnpm run audit:data -- --update` and commit the baseline.
+`.github/workflows/data-freshness.yaml` runs it weekly against one tracking issue;
+it is **not** a gate — never on a pull request, cannot block a merge, because a
+hash comparison is not qualified to reject prose.
+(`smrt dev:knowledge-check` should do this job; it exhausts the Node heap here —
+happyvertical/smrt#2275. Delete the script when that lands.)
 
 ## Legacy redirects are a contract
 
 `src/routes/docs/[...legacy]/`, `src/routes/components/[...legacy]/`, and
-`src/routes/modules/[slug]/` prerender 301 redirects for URLs the site used to
-serve. The site is static, so a path with no prerendered redirect is a hard 404
-in production — **removing an entry silently breaks a live URL.**
-
-`src/lib/server/legacy-routes.test.ts` asserts the exact counts for the docs and
-components maps. If that test fails, you deleted a redirect; restore it rather
-than updating the count.
+`src/routes/modules/[slug]/` prerender 301 redirects for URLs the site used to serve.
+The site is static, so a path with no prerendered redirect is a hard 404 in
+production — **removing an entry silently breaks a live URL.**
+`src/lib/server/legacy-routes.test.ts` asserts the exact docs and components counts;
+if it fails, restore the redirect rather than updating the count.
 
 ## Dependency policy
 
-All 22 `@happyvertical/smrt-*` packages are public on npmjs, pinned by the
-project `.npmrc`. No authentication is needed to install them.
+All 22 `@happyvertical/smrt-*` packages are public on npmjs, pinned by the project
+`.npmrc`. No authentication is needed.
 
-**They are pinned to exact versions, not caret ranges.** `smrt-fields` pins its
-own smrt siblings exactly, so mixing exact and caret ranges lets pnpm install
-duplicate `smrt-core` instances — and therefore duplicate `ObjectRegistry`
-singletons — in one tree. Keep every smrt dependency on the same exact version.
+**They are pinned to exact versions, not caret ranges.** `smrt-fields` pins its own
+smrt siblings exactly, so mixing exact and caret ranges lets pnpm install duplicate
+`smrt-core` instances — and therefore duplicate `ObjectRegistry` singletons — in one
+tree. Keep every smrt dependency on the same exact version.
 
-The packages release in lockstep, so bumping means moving all of them together:
-
-```bash
-pnpm run update:smrt                  # pin all to latest, refresh lockfile
-pnpm run update:smrt -- --dry-run     # preview, touch nothing
-pnpm run update:smrt -- --to 0.40.61  # pin all to a specific version
-pnpm run update:smrt -- --caret       # opt out of exact pins (don't)
-```
-
-`scripts/update-smrt.mjs` resolves the registry from npm config for the
-`@happyvertical` scope, so it follows `.npmrc` rather than hardcoding a host.
-After running it, verify with the full gate above and commit `package.json` plus
-`pnpm-lock.yaml`.
-
-Renovate also keeps these current. If it ever goes quiet, check that it is not
-being blocked before assuming the packages stopped releasing.
+They release in lockstep, so bumping moves all of them together. `pnpm run
+update:smrt` pins every one to latest and refreshes the lockfile; `-- --dry-run`
+previews, `-- --to <version>` pins a version, `-- --caret` opts out (don't). It reads
+the registry from npm config for the `@happyvertical` scope, so it follows `.npmrc`
+rather than hardcoding a host. After running it, verify with the full gate above and
+commit `package.json` plus `pnpm-lock.yaml`. Renovate also keeps these current; if it
+goes quiet, check it is not blocked before assuming the packages stopped releasing.
 
 ## The rendered version number
 
 `$lib/version` exports `SMRT_VERSION`, injected at build time from the installed
 framework tree (`scripts/smrt-version.js`, wired through the `define` block in
-`vite.config.ts` and `vitest.config.ts`). **Never write a version number into
-page copy** — import the constant. The site previously carried four different
-hardcoded versions, none of them the one it was built against.
+`vite.config.ts` and `vitest.config.ts`). **Never write a version number into page
+copy** — import the constant. The site once carried four different hardcoded ones,
+none matching the version it was built against.
 
-## Current Issues to Fix Upstream
+## Active upstream defects
 
-### smrt-fields playground preview throws on mount
+Per-defect prose does **not** live here: `check-pr` caps this file at 12288 bytes
+and this section grows with every defect. Record one in the **upstream issue**
+(symptom and cause) and a **comment at the code site** (what looks wrong here and
+why it is deliberate), plus a **repo issue** where a fix makes something here due.
+Then one line below.
 
-- **Upstream**: [happyvertical/smrt#2272](https://github.com/happyvertical/smrt/issues/2272)
-- **Symptom**: the `Policy-Driven Form` entry of `@happyvertical/smrt-fields/playground`
-  never renders. It stays on `Loading Policy-Driven Form…` and logs
-  `FieldPolicy context not found. Wrap your form in <FieldPolicyProvider>`.
-- **Cause**: `FieldPolicyFormPreview.svelte` renders `<FormHelp>` in its `<header>`,
-  outside the `<FieldPolicyProvider>` below it. `FormHelp` reads the context with the
-  throwing `getFieldPolicyContext()`, unlike `PolicyField`, which degrades gracefully.
-  Present in the released 0.40.61 and still on the framework's `main`.
-- **Consequence here**: `src/lib/data/playgrounds.ts` deliberately does **not** register
-  `@happyvertical/smrt-fields/playground`. The sibling `Generated ObjectForm` entry
-  mounts correctly, but registering the module registers both entries, and filtering
-  one out in this repo would be exactly the local workaround the Golden Rule forbids.
-- **When it is fixed**: bump the framework, add the `fields` import and array entry back
-  to `playgrounds.ts`, and add `'smrt-fields': ['Policy-Driven Form', 'Generated ObjectForm']`
-  to `playgroundEntryTitles`. The dependency stays installed in the meantime so its
-  `AGENTS.md` remains readable and the re-add is a one-line change.
-
-### smrt generate-mcp writes TypeScript to a .js path, eats --version, and is misnamed in its own README
-
-- **Upstream**: [happyvertical/smrt#2279](https://github.com/happyvertical/smrt/issues/2279)
-- **Symptom**: three defects in one command. `npx smrt generate-mcp --name my-app`
-  writes `.smrt/mcp-server/index.js` whose contents are TypeScript
-  (`import { type CallToolRequest, … }`, a typed `const STI_TARGETS: Record<…>`), so
-  `node .smrt/mcp-server/index.js` dies on
-  `SyntaxError: Unexpected identifier 'CallToolRequest'` — and the CLI then prints a
-  `"mcp": "node .smrt/mcp-server/index.js"` run script and writes a
-  `claude-config.example.json` pointing at that same unrunnable path.
-  `--version` is swallowed by the global flag parser in `@happyvertical/utils`, so
-  `smrt generate-mcp --version 0.1.0` prints `smrt v0.40.61`, generates nothing, and
-  exits 0 — the command's own `--version` option is unreachable. And the shipped CLI
-  README documents the command as `generate:mcp`, which is not a registered name or
-  alias; it is `generate-mcp`. (The colon form is inconsistent rather than uniformly
-  wrong upstream: `generate-routes` does declare a `generate:routes` alias, while
-  `generate-mcp` and `generate-types` declare no colon alias.)
-- **Cause**: `generateServer` in `packages/core/src/generators/mcp.ts` writes the
-  rendered template with a bare `writeFile`, so nothing transpiles it and nothing
-  reconciles the emitted language with the `.js` extension.
-- **Consequence here**: the `/guides/expose-your-app-over-mcp` task guide in
-  `src/lib/data/task-guides.ts` passes `--output-path .smrt/mcp-server/index.ts`
-  throughout, which Node 24 type stripping runs directly (verified answering a
-  `tools/list` request over stdio). It also carries a reader-facing callout that the
-  default output path does not run, an aside that there is no `generate:mcp`, and a
-  warning off `--version`. That is guidance about a real CLI, not a patch to it, so
-  the Golden Rule is intact — but the guide is carrying the workaround, and it tells
-  readers so rather than quietly routing around the bug.
-- **When it is fixed**: drop the `--output-path` flag from the guide's commands if the
-  default becomes runnable — upstream may instead default the suggested path to `.ts`,
-  which leaves the flag correct — and remove whichever of the three notes the fix
-  retires. All three sit together in the `Generate the local stdio server` step of the
-  MCP task guide in `src/lib/data/task-guides.ts`.
-
-### smrt docs and doc comments name subpaths and options that do not exist
-
-- **Upstream**: [happyvertical/smrt#2280](https://github.com/happyvertical/smrt/issues/2280)
-- **Symptom**: four API claims describe things that do not exist. Two are in doc
-  comments shipped in 0.40.61 — `smrt-app-mcp`'s `createMcpAppServer` comment puts
-  the stdio bridge at `@happyvertical/smrt-app-mcp/bin/smrt-mcp-bridge` (that package
-  exports only `.` and `./sveltekit` and has no `bin` at all; the bridge is
-  `@happyvertical/smrt-app-cli`), and `smrt-app-cli`'s bridge JSDoc sends app authors
-  to `@happyvertical/smrt-app-mcp/cli` for `runMcpStdioBridge`, another subpath that
-  does not exist. Two more are in the framework repo's prose docs, which are **not**
-  published to npm — `docs/content/core.md` documents `embeddings: { fields, model }`
-  when `ClassEmbeddingConfig` has no `model` key, and says `getEmbedding` returns a
-  `Float32Array` when it returns `number[] | null`. Do not go looking for `core.md`
-  under `node_modules`; read it in the `happyvertical/smrt` checkout.
-- **Consequence here**: nothing is worked around. `src/lib/data/reference.ts` was
-  written against the shipped types and already documents `number[] | null`, so the
-  site is right where the upstream docs are wrong. Listed as inoculation: a future
-  editor who reads the framework's prose and "corrects" the site to match would be
-  introducing the error, not fixing one. Note the rule about preferring each package's
-  shipped `AGENTS.md` would not have caught the first two: `smrt-app-mcp` and
-  `smrt-app-cli` are not among this site's 22 smrt dependencies, so neither is in
-  `node_modules` here at all — and `smrt-app-mcp`'s own `AGENTS.md` never mentions the
-  bridge anyway. When one of their paths matters, check the `exports` map and `.d.ts`
-  in the `happyvertical/smrt` checkout or straight from the published tarball.
-- **When it is fixed**: nothing in the site to change — delete this entry once the
-  upstream doc comments and `core.md` are corrected.
-
-### semanticSearch rejects the combinedField name
-
-- **Upstream**: [happyvertical/smrt#2281](https://github.com/happyvertical/smrt/issues/2281)
-- **Symptom**: with a `combinedField: { name: 'content', … }`, `generateEmbeddings()`
-  stores a vector under `content`, but `semanticSearch(query, { field: 'content' })`
-  throws `Field 'content' is not configured for embeddings`. `findSimilar` and
-  `findSimilarToEmbedding` accept the same name.
-- **Cause**: `semanticSearch` is the only one of the three that checks `field` against
-  `embeddingConfig.fields` — and it throws immediately before delegating to
-  `findSimilarToEmbedding`, which does not check. The vector is reachable; only the
-  validated entry point refuses it.
-- **Consequence here**: the semantic-search reference entries in
-  `src/lib/data/reference.ts` document the asymmetry as behaviour — one note on
-  `combinedField`, one on which methods validate `field` — and point readers at the
-  two methods that do accept a combined field.
-- **When it is fixed**: reword those two notes — the combined field becomes reachable
-  from all three methods and stops needing a caveat.
+- `smrt-fields/playground` unregistered in `playgrounds.ts` —
+  happyvertical/smrt#2272, re-add in #156.
+- The MCP task guide pins `--output-path …/index.ts` and warns off `--version` and
+  `generate:mcp` — happyvertical/smrt#2279, cleanup in #161.
+- `reference.ts` documents `semanticSearch` rejecting a `combinedField` name —
+  happyvertical/smrt#2281, rewording in #162.
 
 ## Agent lifecycle posture
 
 - `.agents/project.yaml` is present: `hv-agent` claim/heartbeat/release work
   against this checkout directly — no scratch-directory manifest needed.
 - This public repo intentionally has **no** lifecycle CI workflow
-  (`.github/workflows/agent-policy.yml`) and no `github.required_status_checks`
-  in the manifest. The only CI on a pull request is the `build` job in
-  `.github/workflows/build-deploy.yaml`; `data-freshness.yaml` and `lint.yaml`
-  are advisory and never run on one. Adding required checks would change merge
-  behaviour for human contributors and needs explicit confirmation first.
-  Until that cutover, `hv-agent audit` reporting the missing lifecycle workflow
-  is expected; do not hand-write `agent-policy.yml` — a confirmed cutover
-  regenerates it via `hv-agent migrate-repo`.
+  (`.github/workflows/agent-policy.yml`) and no `github.required_status_checks` in
+  the manifest. The only CI on a pull request is the `build` job in
+  `build-deploy.yaml`; `data-freshness.yaml` and `lint.yaml` are advisory and never
+  run on one. Required checks would change merge behaviour for human contributors
+  and need explicit confirmation first. Until that cutover, `hv-agent audit` and
+  `check-pr` reporting the missing workflow is expected — and is the **only** error
+  either should report, so treat a second as real. Do not hand-write it; a confirmed
+  cutover regenerates it via `hv-agent migrate-repo`.
