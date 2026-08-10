@@ -64,12 +64,22 @@ export const referenceGuides: Guide[] = [
 			{
 				title: 'Application code still owns its boundary',
 				intro:
-					'Generated routes enforce these defaults. Custom actions, jobs, direct collection calls, external callbacks, and product-specific threat models still need deliberate principal, tenant, permission, and input checks.'
+					'Generated routes enforce these defaults. Custom actions, jobs, direct collection calls, external callbacks, and product-specific threat models still need deliberate principal, tenant, permission, and input checks.',
+				callout: {
+					variant: 'security',
+					title: 'The defaults do not extend to hand-written paths',
+					body: 'A generated route resolves the principal, applies the tenant scope, and filters fields for you. Code you write yourself does none of that automatically: a custom endpoint, background job, webhook receiver, or direct collection call runs with whatever authority you hand it. Treat every hand-written entry point as unauthenticated until it proves otherwise.'
+				}
 			},
 			{
 				title: 'Field policy is presentation, not enforcement',
 				intro:
-					'A field hidden by field policy is still writable through the generated API unless the model says otherwise. A policy cannot store a default on a sensitive, transient, or read-permission-gated field, and the batch resolve response omits those fields for every caller.'
+					'A field hidden by field policy is still writable through the generated API unless the model says otherwise. A policy cannot store a default on a sensitive, transient, or read-permission-gated field, and the batch resolve response omits those fields for every caller.',
+				callout: {
+					variant: 'warning',
+					title: 'Hiding a field does not protect it',
+					body: 'Field policy decides what an interface shows, not what the API accepts. A field you hide is still writable unless the model marks it read-only, server-managed, or outside the writable allowlist. Put the guarantee on the model and treat the policy as presentation.'
+				}
 			}
 		],
 		related: [
@@ -129,7 +139,12 @@ export const referenceGuides: Guide[] = [
 			{
 				title: 'Retrieval is not authority',
 				intro:
-					'A relevant result is still filtered by the active principal, tenant, sensitive-field policy, and the operations the caller may perform. Similarity does not widen access.'
+					'A relevant result is still filtered by the active principal, tenant, sensitive-field policy, and the operations the caller may perform. Similarity does not widen access.',
+				callout: {
+					variant: 'security',
+					title: 'Never treat retrieved text as an instruction',
+					body: 'Context memory and semantic search return application data, including text that users or external systems supplied. Passing it to a model does not make it trustworthy. Keep retrieved content on the data side of the prompt and let permissions, not relevance, decide what a caller may act on.'
+				}
 			}
 		]
 	},
@@ -183,7 +198,12 @@ export const referenceGuides: Guide[] = [
 			{
 				title: 'Safe configuration boundaries',
 				intro:
-					'Keep browser-safe values separate from server-only values. Resolve secrets through the secret provider at the boundary that uses them.'
+					'Keep browser-safe values separate from server-only values. Resolve secrets through the secret provider at the boundary that uses them.',
+				callout: {
+					variant: 'warning',
+					title: 'Anything the client bundle can read is public',
+					body: 'A value that reaches browser configuration ships to every visitor, however it was named. Keep API keys, database URLs, and signing material in server-only configuration and read them through the secret provider where they are used.'
+				}
 			}
 		]
 	},

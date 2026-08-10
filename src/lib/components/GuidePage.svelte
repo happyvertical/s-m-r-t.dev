@@ -1,8 +1,12 @@
 <script lang="ts">
+	import Callout from '$lib/components/Callout.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import GuideDiagram from '$lib/components/GuideDiagram.svelte';
+	import PrevNext from '$lib/components/PrevNext.svelte';
 	import SEO from '$lib/components/SEO.svelte';
+	import { toAnchorId } from '$lib/data/anchors';
 	import type { Guide } from '$lib/data/guides';
+	import { trackNeighbors } from '$lib/data/track';
 
 	interface Props {
 		guide: Guide;
@@ -11,12 +15,7 @@
 	}
 	let { guide, backHref, backLabel }: Props = $props();
 
-	function sectionId(title: string) {
-		return title
-			.toLowerCase()
-			.replace(/[^a-z0-9]+/g, '-')
-			.replace(/(^-|-$)/g, '');
-	}
+	const neighbors = $derived(trackNeighbors(`${backHref}/${guide.slug}`));
 </script>
 
 <SEO
@@ -46,7 +45,7 @@
 
 		<div class="sections">
 			{#each guide.sections as section (section.title)}
-				<section id={sectionId(section.title)}>
+				<section id={toAnchorId(section.title)}>
 					<h2>{section.title}</h2>
 					<p>{section.intro}</p>
 					{#if section.points}
@@ -56,6 +55,13 @@
 					{/if}
 					{#if section.code}
 						<CodeBlock code={section.code} filename={section.filename} lang={section.lang} />
+					{/if}
+					{#if section.callout}
+						<Callout
+							variant={section.callout.variant}
+							title={section.callout.title}
+							body={section.callout.body}
+						/>
 					{/if}
 					{#if section.links}
 						<div class="section-links">
@@ -111,12 +117,14 @@
 				</div>
 			</footer>
 		{/if}
+
+		<PrevNext {neighbors} />
 	</div>
 
 	<aside class="page-toc">
 		<strong>On this page</strong>
 		<nav aria-label="On this page">
-			{#each guide.sections as section (section.title)}<a href={`#${sectionId(section.title)}`}
+			{#each guide.sections as section (section.title)}<a href={`#${toAnchorId(section.title)}`}
 					>{section.title}</a
 				>{/each}
 		</nav>

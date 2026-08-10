@@ -2,6 +2,7 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import {
 		packageCategories,
+		packageStatusLabels,
 		packages,
 		packagesInCategory,
 		type PackageCategory
@@ -97,6 +98,7 @@
 								<div class="package-name">
 									<code>{pkg.name}</code><span>v{pkg.version}</span>{#if pkg.status === 'new'}<em
 											>New</em
+										>{:else if pkg.status === 'stub'}<em class="stub">{packageStatusLabels.stub}</em
 										>{/if}
 								</div>
 								<p>{pkg.summary}</p>
@@ -345,6 +347,12 @@
 		color: var(--site-accent-strong);
 		font-style: normal;
 		font-weight: 750;
+	}
+
+	.package-name em.stub {
+		background: var(--site-warn-soft);
+		box-shadow: inset 0 0 0 1px var(--site-warn);
+		color: var(--site-warn);
 	}
 
 	.package-list a > p {

@@ -1,10 +1,14 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
+	import Callout from '$lib/components/Callout.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import PlaygroundEmbed from '$lib/components/PlaygroundEmbed.svelte';
+	import PrevNext from '$lib/components/PrevNext.svelte';
 	import SEO from '$lib/components/SEO.svelte';
-	import type { SmrtPackage } from '$lib/data/packages';
+	import { toAnchorId } from '$lib/data/anchors';
+	import { packageStatusLabels, type SmrtPackage } from '$lib/data/packages';
 	import { getPlaygroundEntries, playgroundModules } from '$lib/data/playgrounds';
+	import { packageNeighbors } from '$lib/data/track';
 
 	type Tab = 'overview' | 'components' | 'playground' | 'rest' | 'mcp' | 'webmcp' | 'cli';
 
@@ -30,6 +34,7 @@
 		playgroundModules.filter((module) => module.packageName === pkg.name)
 	);
 	const packagePlaygroundEntries = $derived(getPlaygroundEntries(pkg.slug));
+	const neighbors = $derived(packageNeighbors(pkg.slug));
 	const sourceInstallCode =
 		'# Distributed from the s-m-r-t source tree\n# See the package README for Gradle/SPM setup';
 	const sourceDirectory = $derived(
@@ -49,9 +54,12 @@
 			: pkg.slug.replace('smrt-', '')
 	);
 
-	onMount(() => {
+	// `afterNavigate` also fires on first mount, and unlike `onMount` it re-runs
+	// when a link lands on the same package with a different `?tab=` — which is
+	// how a component result from the ⌘K palette opens the Components tab.
+	afterNavigate(() => {
 		const requested = new URL(window.location.href).searchParams.get('tab') as Tab | null;
-		if (requested && tabs.some((tab) => tab.id === requested)) activeTab = requested;
+		activeTab = requested && tabs.some((tab) => tab.id === requested) ? requested : 'overview';
 	});
 
 	function selectTab(tab: Tab) {
@@ -74,6 +82,7 @@
 				<span>v{pkg.version}</span>
 				{#if pkg.status === 'new'}<span class="new">New</span>{/if}
 				{#if pkg.status === 'private'}<span>Source distribution</span>{/if}
+				{#if pkg.status === 'stub'}<span class="stub">{packageStatusLabels.stub}</span>{/if}
 			</div>
 			<h1>{pkg.name}</h1>
 			<p>{pkg.summary}</p>
@@ -88,6 +97,12 @@
 			<b>↗</b>
 		</a>
 	</header>
+
+	{#if pkg.notice}
+		<div class="package-notice">
+			<Callout variant={pkg.notice.variant} title={pkg.notice.title} body={pkg.notice.body} />
+		</div>
+	{/if}
 
 	<div class="tabs-wrap">
 		<div class="tabs" role="tablist" aria-label={`${pkg.name} documentation`}>
@@ -187,10 +202,22 @@
 					</p>
 				</div>
 				{#if pkg.components.length}
+					{#if pkg.componentGroups.length > 1}
+						<nav class="group-toc" aria-label="On this page">
+							<strong>On this page</strong>
+							<div>
+								{#each pkg.componentGroups as group (group.title)}
+									<a href={`#${toAnchorId(group.title)}`}
+										>{group.title}<span>{group.components.length}</span></a
+									>
+								{/each}
+							</div>
+						</nav>
+					{/if}
 					{#if pkg.componentGroups.length}
 						<div class="component-groups">
 							{#each pkg.componentGroups as group (group.title)}
-								<section>
+								<section id={toAnchorId(group.title)}>
 									<header>
 										<div>
 											<h3>{group.title}</h3>
@@ -437,6 +464,10 @@
 			</div>
 		{/if}
 	</div>
+
+	<div class="package-prev-next">
+		<PrevNext {neighbors} />
+	</div>
 </article>
 
 <style>
@@ -445,6 +476,8 @@
 	}
 
 	.package-hero,
+	.package-notice,
+	.package-prev-next,
 	.panel,
 	.tabs {
 		width: min(1180px, calc(100% - 40px));
@@ -486,6 +519,17 @@
 	.package-meta span.new {
 		border-color: var(--site-accent-strong);
 		background: var(--site-accent-soft);
+	}
+
+	.package-meta span.stub {
+		border-color: var(--site-warn);
+		background: var(--site-warn-soft);
+		color: var(--site-warn);
+		font-weight: 700;
+	}
+
+	.package-notice {
+		margin-bottom: 26px;
 	}
 
 	h1 {
@@ -664,6 +708,10 @@
 	}
 
 	.install-panel {
+		/* Grid items default to min-width: auto, so a long package name in the
+		   install snippet widened the whole page instead of scrolling inside its
+		   own code block. */
+		min-width: 0;
 		align-self: start;
 		padding: 24px;
 		border: 1px solid var(--site-line-strong);
@@ -748,9 +796,58 @@
 		border-top: 1px solid var(--site-line);
 	}
 
+	.group-toc {
+		margin-bottom: 38px;
+		padding: 16px 18px;
+		border: 1px solid var(--site-line);
+		border-radius: var(--site-radius-md);
+		background: var(--site-surface);
+	}
+
+	.group-toc strong {
+		color: var(--site-muted);
+		font: 700 0.63rem var(--site-font-mono);
+		letter-spacing: 0.07em;
+		text-transform: uppercase;
+	}
+
+	.group-toc div {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 7px;
+		margin-top: 12px;
+	}
+
+	.group-toc a {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 7px;
+		padding: 6px 10px;
+		border: 1px solid var(--site-line-strong);
+		border-radius: 999px;
+		color: var(--site-ink);
+		font-size: 0.74rem;
+		text-decoration: none;
+	}
+
+	.group-toc a:hover {
+		border-color: var(--site-accent-strong);
+		background: var(--site-accent-soft);
+	}
+
+	.group-toc a span {
+		color: var(--site-muted);
+		font-family: var(--site-font-mono);
+		font-size: 0.62rem;
+	}
+
 	.component-groups {
 		display: grid;
 		gap: 42px;
+	}
+
+	.component-groups > section {
+		scroll-margin-top: calc(var(--site-header-height) + 70px);
 	}
 
 	.component-groups > section > header {
