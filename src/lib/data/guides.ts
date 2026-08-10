@@ -172,7 +172,7 @@ export const foundationGuides: Guide[] = [
 			{
 				title: 'Derive common permissions from the model',
 				intro:
-					'Public model operations contribute permission names. Sync the catalogue after migration, then seed or assign roles with the permissions your app needs.',
+					'Public model operations contribute permission names. Sync the catalog after migration, then seed or assign roles with the permissions your app needs.',
 				points: [
 					'items.read covers list and get.',
 					'items.create, items.update, and items.delete stay separate.',
@@ -184,15 +184,26 @@ export const foundationGuides: Guide[] = [
 			{
 				title: 'Enforce the same decision at every entry point',
 				intro:
-					'Generated routes are authentication-gated and tenant-scoped. Custom SvelteKit actions, jobs, and in-process writes must also check the principal permission snapshot. Postgres applications can add row-level security as another enforcement layer.'
+					'Generated routes are authentication-gated and tenant-scoped. Custom SvelteKit actions, jobs, and in-process writes must also check the principal permission snapshot. assertOperationPermission derives the same names the catalog holds and refuses an operation whose name is not in it.',
+				filename: 'src/routes/articles/+page.server.ts',
+				code: `import { assertOperationPermission } from '@happyvertical/smrt-users';\n\n// Throws OperationPermissionError (status: 403) unless the caller holds\n// articles.publish in the tenant that owns this article, or is running in\n// system or super-admin context. Map error.status to a response yourself.\nawait assertOperationPermission({\n  ...getSmrtConfig('Permission'),\n  collection: 'articles',\n  action: 'publish',\n  userId: locals.user.id,\n  tenantId: article.tenantId\n});`
+			},
+			{
+				title: 'Postgres can check the same names on every row',
+				intro:
+					'A Postgres application can generate row-level security policies that check the same names. The request context publishes the resolved permissions onto the database session, and each policy requires both a tenant match and the permission before a row is read or written — unless the session is marked system context or super-admin bypass. Generating and applying the policies is a deliberate step, and SQLite applications keep the catalog and the guard but gain no data-layer check.',
+				links: [{ label: 'Authorization model', href: '/reference/authorization' }]
 			},
 			{
 				title: 'Some packages contribute their own permissions',
 				intro:
-					'A framework package can add named permissions to the same catalogue. Field policy contributes two: fields.policy.manage for organization-wide administration and fields.policy.personalize for a principal maintaining only their own preferences.'
+					'A framework package can add named permissions to the same catalog. Field policy contributes two: fields.policy.manage for organization-wide administration and fields.policy.personalize for a principal maintaining only their own preferences.'
 			}
 		],
-		related: [{ label: 'Field policy operations', href: '/capabilities/field-policy-operations' }]
+		related: [
+			{ label: 'Authorization model', href: '/reference/authorization' },
+			{ label: 'Field policy operations', href: '/capabilities/field-policy-operations' }
+		]
 	},
 	{
 		slug: 'pages-and-data',

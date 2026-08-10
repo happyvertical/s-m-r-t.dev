@@ -1,5 +1,15 @@
 import type { Guide } from '$lib/data/guides';
 
+/**
+ * Released s-m-r-t version the pinned reference pages were verified against. It
+ * is a deliberate audit anchor rather than the built version: when it moves,
+ * re-read the canonical sources listed on each page and re-run the checks
+ * behind them.
+ */
+const REFERENCE_PINNED_VERSION = '0.40.61';
+
+const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${REFERENCE_PINNED_VERSION}`;
+
 export const referenceGuides: Guide[] = [
 	{
 		slug: 'saadl',
@@ -72,6 +82,11 @@ export const referenceGuides: Guide[] = [
 				}
 			},
 			{
+				title: 'Authentication is not authorization',
+				intro:
+					'These defaults answer whether a caller is known. Whether that caller may perform this operation on this tenant is a separate decision, made against the permission catalog by an application guard and, on Postgres, optionally by row-level security policies you generate and apply yourself.'
+			},
+			{
 				title: 'Field policy is presentation, not enforcement',
 				intro:
 					'A field hidden by field policy is still writable through the generated API unless the model says otherwise. A policy cannot store a default on a sensitive, transient, or read-permission-gated field, and the batch resolve response omits those fields for every caller.',
@@ -83,8 +98,187 @@ export const referenceGuides: Guide[] = [
 			}
 		],
 		related: [
+			{ label: 'Authorization model', href: '/reference/authorization' },
 			{ label: 'Field policies', href: '/capabilities/field-policies' },
 			{ label: 'Field policy API', href: '/reference/field-policies' }
+		]
+	},
+	{
+		slug: 'authorization',
+		navTitle: 'Authorization model',
+		eyebrow: 'Reference',
+		title: 'The permission catalog, the guard, and row-level security',
+		lede: 'Every public model operation contributes a named permission. An application guard checks that catalog before it acts, and on Postgres your tenant-scoped models can generate row-level security policies that check the same names on each row.',
+		plainEnglish:
+			'Your models produce a list of permission names. Application code checks that list before it acts, and Postgres can check it again on every row it returns or writes.',
+		packages: ['smrt-users', 'smrt-core', 'smrt-tenancy'],
+		pinnedVersion: REFERENCE_PINNED_VERSION,
+		sources: [
+			{ label: 'smrt-users README', href: `${SMRT_TREE}/packages/users/README.md` },
+			{ label: 'smrt-users AGENTS.md', href: `${SMRT_TREE}/packages/users/AGENTS.md` },
+			{
+				label: 'PostgresPermissionPolicies.ts',
+				href: `${SMRT_TREE}/packages/users/src/services/PostgresPermissionPolicies.ts`
+			},
+			{
+				label: 'SessionPermissionContext.ts',
+				href: `${SMRT_TREE}/packages/users/src/services/SessionPermissionContext.ts`
+			},
+			{
+				label: 'Postgres row security policies',
+				href: 'https://www.postgresql.org/docs/current/ddl-rowsecurity.html'
+			}
+		],
+		sections: [
+			{
+				title: 'Three parts, derived from one list',
+				intro:
+					'The catalog is the list of permission names the application recognizes. The guard is a function application code calls before it acts. Row-level security is a set of Postgres policies generated from the same list. Each part is optional, and each answers a different question.',
+				points: [
+					'The catalog names operations. It grants nothing on its own: syncing it creates Permission rows and never assigns them to a role.',
+					'The guard decides. It resolves the principal permissions for a tenant and refuses an operation whose slug is missing from the catalog.',
+					'Row-level security re-checks. Policies sit on the table, so a query that never called the guard is still evaluated against the session tenant and permission list. They are generated from your tenant-scoped models rather than read out of the catalog, and they use the same slug scheme.',
+					'Roles connect the two ends. A permission reaches a person through a membership role, a group role, a tenant-level override, or a per-user override — never from the catalog alone.'
+				]
+			},
+			{
+				title: 'The catalog is derived from the manifest',
+				intro:
+					'Every operation exposed through the generated API, CLI, or MCP surface contributes a slug of the form collection.action, including custom methods. Methods that are not exposed on any surface are not added. syncPermissionCatalog writes the discovered set into the Permission table.',
+				points: [
+					'list and get both normalize to collection.read; create, update, and delete stay separate.',
+					'A surface you do not configure counts as enabled. A CRUD slug is left out only when every surface — api, cli, and mcp — excludes or disables that action.',
+					'A custom action such as publish becomes articles.publish, as long as some surface exposes it.',
+					'A field that declares a readPermission contributes that slug as well.',
+					'Sync is additive: it creates missing rows and updates name, description, and category by slug.',
+					'Sync does not grant anything to a role and does not delete stale permissions.'
+				],
+				filename: 'src/lib/server/permissions.ts',
+				code: `import { SmrtObject, smrt } from '@happyvertical/smrt-core';\nimport { syncPermissionCatalog } from '@happyvertical/smrt-users';\nimport { getSmrtConfig } from '$lib/server/smrt';\n\n@smrt({\n  api: { include: ['list', 'get', 'create', 'update'] },\n  collection: 'articles',\n  mcp: { include: ['publish'] },\n  tenantScoped: { mode: 'required' }\n})\nclass Article extends SmrtObject {\n  tenantId = '';\n  title = '';\n  async publish() { return true; }\n}\n\n// articles.read, articles.create, articles.update, articles.publish\n// — and articles.delete, because no cli config was declared and an\n// unconfigured surface counts as enabled.\nconst result = await syncPermissionCatalog(getSmrtConfig('Permission'));\nresult.created; // slugs written on this run`
+			},
+			{
+				title: 'Packages and configuration add to the same list',
+				intro:
+					'A catalog entry can come from three sources: the manifest, the users block of smrt.config.ts, and a runtime registration. Runtime registration is how a framework package contributes its own capabilities, and the merged catalog records which source an entry came from.',
+				points: [
+					'registerPermissionDefinitions returns an unregister function, so a definition can be scoped to a bootstrap or a test.',
+					'Field policy uses the runtime path, not the manifest: importing @happyvertical/smrt-fields calls ensureFieldPolicyPermissionsRegistered, which adds fields.policy.manage and fields.policy.personalize with source runtime.',
+					'Those two entries declare no Postgres bindings, and FieldPolicy is deliberately not tenant-scoped, so its table is skipped by policy generation and both permissions are enforced by the guard alone.',
+					'Custom entries in smrt.config.ts may declare explicit Postgres bindings; conflicting metadata for one slug throws rather than silently winning.'
+				],
+				filename: 'src/lib/server/register-permissions.ts',
+				code: `import { registerPermissionDefinitions } from '@happyvertical/smrt-users';\n\nconst unregister = registerPermissionDefinitions([\n  {\n    slug: 'invoices.export',\n    category: 'billing',\n    name: 'Export Invoices',\n    description: 'Allows exporting invoices'\n  }\n]);\n\n// The slug is now in catalog.permissions with source 'runtime'\n// and is eligible for syncPermissionCatalog() and the guard.\n// Call unregister() to remove it again.`,
+				links: [{ label: 'Field policy operations', href: '/capabilities/field-policy-operations' }]
+			},
+			{
+				title: 'The guard is for the code you write yourself',
+				intro:
+					'assertOperationPermission derives the same slug the catalog uses, requires that slug to exist, and then resolves the principal permissions in the ordinary order: membership role, group role, tenant override, then user override. Call it in form actions, custom endpoints, jobs, and CLI scripts — anywhere a generated route is not doing the work.',
+				points: [
+					'It throws OperationPermissionError, which carries status: 403, unless the decision is allowed or you passed onDeny: "return". Mapping that to an HTTP response is the application’s job outside the ready-made handlers.',
+					'A slug that is not in the catalog is refused with reason unknown_permission, so a typo denies rather than passes.',
+					'A call missing either a resolvable user or a resolvable tenant is refused with reason missing_principal.',
+					'checkOperationPermission, hasOperationPermission, and onDeny: "return" give a decision or a boolean instead of an exception.',
+					'For resource-anchored authorization pass the resource tenant id, and omit membership so the resolver looks it up; a membership from a different tenant is refused by design.',
+					'Both bypasses default to allowed and system context is checked first, so an operation that must require an explicit grant needs allowSuperAdminBypass: false and allowSystemContextBypass: false.',
+					'Neither bypass comes from a user record. They are set by the code that wrapped the call — withSystemContext, withSuperAdminBypass, or the matching context options — so passing superAdminBypass: true to the session handler publishes it on every request.'
+				],
+				filename: 'src/routes/articles/+page.server.ts',
+				code: `import { assertOperationPermission } from '@happyvertical/smrt-users';\nimport { getSmrtConfig } from '$lib/server/smrt';\n\nexport const actions = {\n  publish: async ({ locals, params }) => {\n    const article = await loadArticle(params.id);\n\n    // Throws OperationPermissionError (status 403) when denied.\n    await assertOperationPermission({\n      ...getSmrtConfig('Permission'),\n      collection: 'articles',\n      action: 'publish',\n      userId: locals.user.id,\n      // The resource tenant, not the session tenant.\n      tenantId: article.tenantId\n    });\n\n    await article.publish();\n  }\n};`
+			},
+			{
+				title: 'One context publishes the principal to the database session',
+				intro:
+					'withSessionPermissionContext loads the session, resolves its permissions, opens a transaction, and writes the principal onto that transaction with set_config. Generated SvelteKit routes pick that transaction up through the generated getCollection helper, and getRequestScopedDatabase hands it to code you write. The policies then apply to every query on that connection, whichever entry point issued it.',
+				points: [
+					'Six transaction-local settings are published: smrt.tenant_id, smrt.user_id, smrt.session_id, smrt.permissions, smrt.super_admin_bypass, and smrt.system_context.',
+					'smrt.permissions is the resolved slug list as a JSON array; the policies read it as jsonb.',
+					'One request is one transaction. It is opened before the route runs and committed after, an unhandled error rolls back everything the request wrote, and work that outlives the handler runs after the commit and outside the policies.',
+					'The wrapper needs a database adapter that supports beginTransaction. It throws on the first request that enters the context, not at boot, and inside the session handler that throw is caught.',
+					'Pass postgresRls to createSessionHandler explicitly. The handler reads its own option, not the config flag, for the two behaviors below.',
+					'With the handler option set, an anonymous request still enters the context and runs with an empty permission list rather than outside the policies, and a failure to establish the context returns a bare 500. That catch wraps the whole request, so an error thrown later in the route becomes the same 500. With only permissions.postgres.enabled in smrt.config.ts, anonymous requests skip the context and a context failure is logged and the request served.',
+					'getCollection only reaches for the request transaction when neither the call site nor objectOverrides supplies a db. An object pinned to its own connection runs outside the published variables, where the policies match nothing.',
+					'skipPaths is checked first, so a skipped route never enters the context. On a policy-covered table it will therefore read no rows at all.'
+				],
+				filename: 'src/hooks.server.ts',
+				code: `import { createSessionHandler } from '@happyvertical/smrt-users/sveltekit';\n\nexport const handle = createSessionHandler({\n  db: { type: 'postgres', url: process.env.DATABASE_URL! },\n  ttl: 604800,\n  enterTenantContext: true,\n  postgresRls: true\n});\n\n// event.locals now carries { user, membership, permissions, tenantId, sessionId }\n// and the request runs inside a transaction whose session variables the\n// generated policies read.`,
+				callout: {
+					variant: 'security',
+					title: 'The config flag alone does not harden the handler',
+					body: 'The session handler reads its own postgresRls option when it decides whether to enter the context for an anonymous request and whether a context failure becomes a 500. Setting only permissions.postgres.enabled in smrt.config.ts still opens the transaction for a request that carries a session cookie, but anonymous requests skip the context and a context failure is logged and the request served anyway. Pass postgresRls: true to createSessionHandler as well.'
+				}
+			},
+			{
+				title: 'What the generated policies check',
+				intro:
+					'generatePostgresPermissionSql emits three helper functions and, for each covered table, ENABLE and FORCE ROW LEVEL SECURITY plus a drop-and-create policy pair for every action that has at least one permission bound to it. Apart from the bypass, a policy requires both the tenant match and the permission, so neither one alone opens a row. Because current_setting is read with the missing_ok flag, a connection that never entered the context resolves to no tenant and an empty permission list, and matches nothing.',
+				lang: 'sql',
+				filename: 'generated-policies.sql',
+				code: `CREATE OR REPLACE FUNCTION smrt_has_permission(required_permission text)\nRETURNS boolean\nLANGUAGE sql\nSTABLE\nAS $$\n  SELECT smrt_rls_bypass()\n      OR jsonb_exists(COALESCE(NULLIF(current_setting('smrt.permissions', true), ''), '[]')::jsonb, required_permission)\n$$;\n\nALTER TABLE "public"."articles" ENABLE ROW LEVEL SECURITY;\nALTER TABLE "public"."articles" FORCE ROW LEVEL SECURITY;\n\nDROP POLICY IF EXISTS "smrt_articles_select_44e06f89" ON "public"."articles";\n\nCREATE POLICY "smrt_articles_select_44e06f89" ON "public"."articles"\n  FOR SELECT USING (\n    smrt_rls_bypass()\n    OR (("tenant_id"::text = smrt_current_tenant_id())\n        AND (smrt_has_permission('articles.read')))\n  );`,
+				points: [
+					'smrt_rls_bypass reads smrt.system_context and smrt.super_admin_bypass, mirroring the two bypasses the guard honors.',
+					'smrt_current_tenant_id reads smrt.tenant_id and returns null when it is unset or empty.',
+					'FORCE ROW LEVEL SECURITY is applied as well as ENABLE, so the table owner is also subject to the policies.',
+					'Postgres still exempts superusers and any role holding BYPASSRLS. Connect the application as an ordinary role, or the policies are inert.',
+					'SELECT and DELETE use USING; INSERT uses WITH CHECK; UPDATE uses both with the same condition.'
+				]
+			},
+			{
+				title: 'Enable row-level security in order',
+				intro:
+					'Installing the policies and publishing the principal are two separate switches, and neither enforces anything alone. applyPostgresPermissionPolicies installs the policies; permissions.postgres.enabled or a postgresRls option makes requests publish the session variables those policies read. Generation reads the in-process object registry rather than the database, so the script has to import the module that registers your models first.',
+				points: [
+					'Import your model registration before generating. A script that loads only smrt-users produces zero targets and zero skips, applies the three helper functions, and exits cleanly without covering anything.',
+					'Seed the grants between syncing and applying. Sync creates permission rows and assigns none, so policies applied before any role holds the new slugs take every covered table to zero rows. The default matrix gives owner and admin every catalog permission.',
+					'Preview and read result.skipped. A table is skipped when the object is not tenant-scoped, when tenantScoped.mode is not "required", when no schema table name is available, or when several objects share one table.',
+					'applyPostgresPermissionPolicies refuses a connection it does not detect as Postgres. It is not transactional: statements run one at a time, so a failure part way through leaves partial state — fix the cause and re-run.',
+					'Re-running is safe for tables still in the target set, because each policy is dropped and recreated. A table that leaves the set keeps its old policies and its forced RLS; drop those by hand.',
+					'The automatic action mapping is fixed at SELECT/INSERT/UPDATE/DELETE to read/create/update/delete. A custom permission takes part only through an explicit Postgres binding — and a binding also forces RLS on that table, so bind every action you need or the unbound ones become deny-only.',
+					"Verify rather than assume: select tablename, policyname from pg_policies where policyname like 'smrt_%', and confirm the application role is neither a superuser nor a BYPASSRLS role."
+				],
+				filename: 'scripts/apply-rls.ts',
+				code: `import {\n  applyPostgresPermissionPolicies,\n  generatePostgresPermissionSql,\n  RoleCollection,\n  syncPermissionCatalog\n} from '@happyvertical/smrt-users';\n\n// Registers your models in the object registry. Without this the\n// generator sees no tables and applies nothing.\nimport '$lib/server/smrt-register';\n\nconst db = { db: { type: 'postgres' as const, url: process.env.DATABASE_URL! } };\n\nawait syncPermissionCatalog(db);\n\nconst roles = await RoleCollection.create(db);\nawait roles.seedSystemRoles({ seedPermissions: true });\n\nconst preview = generatePostgresPermissionSql(db);\nconsole.log(preview.targets); // tables that will be covered\nconsole.log(preview.skipped); // and why the rest were not\n\nawait applyPostgresPermissionPolicies(db);`,
+				callout: {
+					variant: 'warning',
+					title: 'A clean run is not proof of coverage',
+					body: 'Generation reads the in-process object registry, not the database. A script that never imports your model registration finds no tables, applies only the three helper functions, and exits successfully — leaving nothing enforced. Check preview.targets before trusting the run, then confirm in the database with pg_policies.'
+				}
+			},
+			{
+				title: 'Where the two layers see different things',
+				intro:
+					'The guard and the policies read the same permission list but scope it differently. Which layer answers a given request determines what is actually enforced.',
+				points: [
+					'Row filtering follows the session tenant. A root-tenant session acting on a child tenant row is authorized by the guard when you pass the resource tenant id, not by row-level security. On a covered table the operation is therefore permitted but the row stays invisible: the session has to switch to the child tenant, which rotates the session id.',
+					'A session whose tenant is the child tenant does get inherited authority in the policies, because the permission list is resolved before it is published.',
+					'A skipped table has no policies at all. For those tables the guard is the only check, so treat result.skipped as a list of places application code has to carry.',
+					'The bypass helpers are shared, so an operation that must resist a super-admin needs allowSuperAdminBypass: false in the guard and an explicit design decision at the data layer as well.'
+				]
+			},
+			{
+				title: 'Applications that do not run Postgres',
+				intro:
+					'Row-level security is a Postgres feature and there is no SQLite equivalent here. On SQLite the catalog and the guard work unchanged, permissions still resolve, and the context still carries the principal — but nothing is enforced at the data layer, so the guard is the whole boundary.',
+				points: [
+					'applyPostgresPermissionPolicies throws on a non-Postgres connection.',
+					'Setting postgresRls on a connection that is not Postgres runs the request without the transaction and without the session variables instead of failing, so the flag alone is not evidence that policies are in force.',
+					'Pass the published set as permissionSet so a guard check authorizes against the same snapshot the policies would have read, rather than re-resolving mid-request.',
+					'A development database on SQLite and a production database on Postgres therefore differ in enforcement, not only in performance. Cover permission behavior with tests that exercise the guard directly.'
+				],
+				filename: 'src/lib/server/tool-guard.ts',
+				code: `import {\n  assertOperationPermission,\n  getCurrentSessionPermissionContext\n} from '@happyvertical/smrt-users';\n\nexport async function guardToolCall(action: string) {\n  const context = getCurrentSessionPermissionContext();\n\n  await assertOperationPermission({\n    collection: 'articles',\n    action,\n    userId: context?.userId,\n    tenantId: context?.tenantId,\n    // Authorize against the set this context published rather than\n    // re-resolving, so SQLite and Postgres agree on the answer.\n    permissionSet: context?.permissionSet\n  });\n}`,
+				callout: {
+					variant: 'security',
+					title: 'postgresRls degrades silently off Postgres',
+					body: 'When the connection is not detected as Postgres the option is ignored: no transaction opens, no session variables are published, and no error is raised. The request simply runs with the guard as its only check. Do not read the flag as evidence that anything is enforced at the data layer.'
+				}
+			}
+		],
+		related: [
+			{ label: 'Grant access', href: '/foundations/memberships-and-permissions' },
+			{ label: 'Security defaults', href: '/reference/security' },
+			{ label: 'Field policy operations', href: '/capabilities/field-policy-operations' },
+			{ label: 'smrt-users package', href: '/packages/smrt-users' }
 		]
 	},
 	{
