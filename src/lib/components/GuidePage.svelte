@@ -73,6 +73,22 @@
 			{/each}
 		</div>
 
+		{#if guide.related?.length}
+			<footer class="related">
+				<strong>Related pages</strong>
+				<div>
+					{#each guide.related as link (link.href)}
+						<a
+							href={link.href}
+							rel={link.external ? 'noreferrer' : undefined}
+							target={link.external ? '_blank' : undefined}
+							>{link.label}{link.external ? ' ↗' : ''}</a
+						>
+					{/each}
+				</div>
+			</footer>
+		{/if}
+
 		{#if guide.packages.length}
 			<footer>
 				<strong>Packages used in this guide</strong>

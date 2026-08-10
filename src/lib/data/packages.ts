@@ -44,6 +44,13 @@ export interface SmrtPackage {
 	 * true of every one of them.
 	 */
 	surfaceNote?: string;
+	/**
+	 * Replaces the "no playground module yet" copy for a package that does ship
+	 * one the site cannot currently render. Saying nothing would be the same as
+	 * claiming the package has no previews, which is not true of every package
+	 * missing from `playgroundModules`.
+	 */
+	playgroundNote?: string;
 	version: string;
 	status?: 'stable' | 'new' | 'foundation' | 'private';
 }
@@ -59,6 +66,7 @@ type PackageOptions = Partial<
 		| 'componentImport'
 		| 'exampleResource'
 		| 'surfaceNote'
+		| 'playgroundNote'
 		| 'status'
 	>
 >;
@@ -244,6 +252,7 @@ function definePackage(
 		componentImport: options.componentImport,
 		exampleResource: options.exampleResource,
 		surfaceNote: options.surfaceNote,
+		playgroundNote: options.playgroundNote,
 		version: SMRT_VERSION,
 		status: options.status ?? 'stable'
 	};
@@ -349,6 +358,97 @@ export const packages: SmrtPackage[] = [
 		'smrt-features',
 		'Code-first feature definitions with tenant-aware overrides and deterministic evaluation.',
 		{ exampleResource: 'features' }
+	),
+	definePackage(
+		'Foundation',
+		'smrt-fields',
+		'Layered field policy: per-field defaults, visibility tiers, labels, help, ordering, and organization locks resolved over the code seed at app, tenant, and user scope.',
+		{
+			status: 'new',
+			highlights: [
+				'Code seed, app, tenant, and user layers resolved into one policy per object',
+				'Provider-free generated forms that render only the safe intersection of fields and policy',
+				'A form gear and an organization control panel behind two dedicated permissions'
+			],
+			components: [
+				'FieldPolicyProvider',
+				'PolicyField',
+				'ModeSwitch',
+				'AdvancedFields',
+				'FormHelp',
+				'ObjectForm',
+				'ObjectFormSourceProvider',
+				'FieldPolicyGearProvider',
+				'FieldPolicyGearButton',
+				'FieldPolicyEditor',
+				'FieldPolicyControlPanel'
+			],
+			componentImport: '@happyvertical/smrt-fields/svelte',
+			componentGroups: [
+				{
+					title: 'Policy-aware form primitives',
+					description:
+						'Wrap the inputs a hand-written form already has. Outside a provider PolicyField renders its children verbatim, so a form can adopt policy one field at a time.',
+					importPath: '@happyvertical/smrt-fields/svelte',
+					components: [
+						'FieldPolicyProvider',
+						'PolicyField',
+						'ModeSwitch',
+						'AdvancedFields',
+						'FormHelp'
+					]
+				},
+				{
+					title: 'Generated object forms',
+					description:
+						'Build a create or edit form from generated browser field definitions and a resolved policy, or register every generated collection once and let forms ask for their object reference.',
+					importPath: '@happyvertical/smrt-fields/svelte',
+					components: ['ObjectForm', 'ObjectFormSourceProvider']
+				},
+				{
+					title: 'Policy administration',
+					description:
+						'The per-form gear for organization and personal overrides, and the tenant-wide control panel that replays the resolved layers.',
+					importPath: '@happyvertical/smrt-fields/svelte',
+					components: [
+						'FieldPolicyGearProvider',
+						'FieldPolicyGearButton',
+						'FieldPolicyEditor',
+						'FieldPolicyControlPanel'
+					]
+				}
+			],
+			details: [
+				{
+					title: 'How resolution works',
+					body: 'Four layers merge low to high: the code seed from @field({ ui }), app rows, the tenant chain, then the signed-in user. A column left empty inherits from the layer below and resetting a customization deletes the row.',
+					href: '/capabilities/field-policies',
+					linkLabel: 'Read the field policy guide'
+				},
+				{
+					title: 'Building forms',
+					body: 'PolicyField adopts an existing form incrementally; ObjectForm renders the safe intersection of the generated field definitions and the resolved policy.',
+					href: '/capabilities/policy-aware-forms',
+					linkLabel: 'Build a policy-aware form'
+				},
+				{
+					title: 'Running it in production',
+					body: 'The form gear, the organization control panel, the two permissions, and the difference between a personal preference and an organization rule.',
+					href: '/capabilities/field-policy-operations',
+					linkLabel: 'Operate field policies'
+				},
+				{
+					title: 'API and semantics',
+					body: 'Exported functions and types, the canonical object reference format, the default-value wire contract, write validation, and caching.',
+					href: '/reference/field-policies',
+					linkLabel: 'Open the reference'
+				}
+			],
+			surfaceNote:
+				'Policy rows are not a browsable resource. FieldPolicy generates create, update, and delete routes plus three collection actions (resolve, editor-state, policy-audit); generated list and get are deliberately closed because this model is not tenant-scoped and reading it freely would enumerate every tenant and user row. Its CLI and MCP surfaces are closed for the same reason.',
+			playgroundNote:
+				'This package does export a ./playground module, with a policy-driven form and a generated ObjectForm. It is not registered on this site yet: its Policy-Driven Form preview throws on mount because the preview renders FormHelp outside its FieldPolicyProvider. Tracked upstream as happyvertical/smrt#2272; the module goes back in once a release carries the fix.'
+		}
 	),
 
 	definePackage(

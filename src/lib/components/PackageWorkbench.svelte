@@ -238,13 +238,16 @@
 						<h2>
 							{packagePlaygroundEntries.length
 								? 'Try the working views'
-								: 'No playground module yet'}
+								: pkg.playgroundNote
+									? 'Not rendered here yet'
+									: 'No playground module yet'}
 						</h2>
 					</div>
 					<p>
 						{packagePlaygroundEntries.length
 							? 'These previews are owned by the package and use its public components. Mock mode is intended for safe browsing; live mode appears only where the package supports it.'
-							: 'This package does not currently export a ./playground module. Its component names and import path remain available in the Components tab.'}
+							: (pkg.playgroundNote ??
+								'This package does not currently export a ./playground module. Its component names and import path remain available in the Components tab.')}
 					</p>
 				</div>
 				{#if packagePlaygroundModules.length}

@@ -65,7 +65,16 @@ export const referenceGuides: Guide[] = [
 				title: 'Application code still owns its boundary',
 				intro:
 					'Generated routes enforce these defaults. Custom actions, jobs, direct collection calls, external callbacks, and product-specific threat models still need deliberate principal, tenant, permission, and input checks.'
+			},
+			{
+				title: 'Field policy is presentation, not enforcement',
+				intro:
+					'A field hidden by field policy is still writable through the generated API unless the model says otherwise. Sensitive, transient, and read-permission-gated fields are excluded from what a policy can address, and the batch resolve response omits them for every caller.'
 			}
+		],
+		related: [
+			{ label: 'Field policies', href: '/capabilities/field-policies' },
+			{ label: 'Field policy API', href: '/reference/field-policies' }
 		]
 	},
 	{
@@ -271,6 +280,109 @@ export const referenceGuides: Guide[] = [
 				intro:
 					'Application CLIs turn manifest resources into predictable commands and can add model-specific operations. The framework CLI also owns migration, scanning, generation, and introspection workflows.'
 			}
+		]
+	},
+	{
+		slug: 'field-policies',
+		navTitle: 'Field policy API',
+		eyebrow: 'Reference',
+		title: 'Field policy exports and semantics',
+		lede: 'What @happyvertical/smrt-fields exports, how an object is named, how a default is encoded on the wire, what a write is checked against, and where results are cached.',
+		plainEnglish:
+			'The details you need when you are wiring field policy into an application rather than reading about what it does.',
+		packages: ['smrt-fields', 'smrt-core', 'smrt-users'],
+		sections: [
+			{
+				title: 'Entry points',
+				intro:
+					'The package root holds the model, the collection, the resolver, and the helpers. The /svelte subpath holds the eleven components and the browser-side helpers. /manifest exposes the generated manifest and /playground the shared playground module.',
+				points: [
+					'Models and collection: FieldPolicy, FieldPolicyCollection.',
+					'Resolution: resolveFieldPolicy, resolveFieldPolicyExplained, resolveSurvivingTenantChainIds.',
+					'Cache control: clearFieldPolicyCache, invalidateFieldPolicyCache, getFieldPolicyCacheTtlMs.',
+					'Permissions: MANAGE_FIELD_POLICY_PERMISSION, PERSONALIZE_FIELD_POLICY_PERMISSION, FIELD_POLICY_PERMISSION_DEFINITIONS, ensureFieldPolicyPermissionsRegistered.',
+					'Field helpers: isPolicyAddressableField, isRequiredField, isSensitiveField, isTransientField, getCodeDefault, buildCodeSeedDelta, buildCodeSeedVisibility, sanitizeFieldUIHints, assertDefaultValueMatchesFieldType.',
+					'Control panel: buildFieldPolicySettingsCatalog, parseFieldPolicyCatalogQuery, fieldPolicyCatalogItemId.'
+				],
+				filename: 'src/lib/field-policy.ts',
+				code: `import {\n  FieldPolicy,\n  FieldPolicyCollection,\n  MANAGE_FIELD_POLICY_PERMISSION,\n  resolveFieldPolicy,\n  resolveFieldPolicyExplained\n} from '@happyvertical/smrt-fields';\n\nimport {\n  createFieldInputRegistry,\n  FieldPolicyControlPanel,\n  FieldPolicyGearProvider,\n  ObjectForm,\n  policyToVisibleColumnIds\n} from '@happyvertical/smrt-fields/svelte';`
+			},
+			{
+				title: 'Components in the /svelte subpath',
+				intro:
+					'Eleven components ship in the /svelte subpath, each with a matching Props type. They are layout-neutral: they contribute behavior and leave markup decisions to the application.',
+				points: [
+					'Form primitives: FieldPolicyProvider, PolicyField, ModeSwitch, AdvancedFields, FormHelp.',
+					'Generated forms: ObjectForm, ObjectFormSourceProvider.',
+					'Administration: FieldPolicyGearProvider, FieldPolicyGearButton, FieldPolicyEditor, FieldPolicyControlPanel.'
+				]
+			},
+			{
+				title: 'Naming an object',
+				intro:
+					'Every policy row and every resolve call names its object with the canonical qualified class name: the package name, a colon, then the class name. It is the same identifier the manifest uses, so it survives renames of tables and routes.',
+				filename: 'object-refs.ts',
+				code: `'@happyvertical/smrt-content:Article'\n'@happyvertical/smrt-commerce:Invoice'\n'@acme/app-objects:StarterAppSetting'`
+			},
+			{
+				title: 'Two channels for a default value',
+				intro:
+					'defaultValue is the encoded channel: already JSON, exactly as the column stores it. defaultValueRaw is the plain channel: any value, always serialized. They are mutually exclusive and passing both throws, because one option cannot distinguish the string TBD from the encoded JSON string that contains it.',
+				points: [
+					'Generated write routes hand the request body straight to the constructor, so the wire contract has to stay encoded.',
+					'setDefaultValue is the method-level plain channel.',
+					'The sort column is displayOrder; the resolved output exposes it as order.'
+				],
+				filename: 'default-values.ts',
+				code: `// Encoded channel — what a generated route or the gear posts\nnew FieldPolicy({ defaultValue: JSON.stringify('Net 30') });\n\n// Plain channel — what application code usually wants\nnew FieldPolicy({ defaultValueRaw: 'Net 30' });\n\n// Passing both throws; { defaultValue: 'Net 30' } is a parse error\n// whose message names defaultValueRaw.`
+			},
+			{
+				title: 'What a write is validated against',
+				intro:
+					'Writes validate against the live object registry rather than a checked-in manifest file. An unknown object or field is rejected, a default is type-checked against the field type, and defaults are refused on transient, sensitive, and read-permission-gated fields.',
+				points: [
+					'System fields, relationship pseudo-fields, and single-table-inheritance meta storage fields are not policy-addressable.',
+					'Required fields may only leave the basic tier when a usable default resolves, checked at write time and re-checked at resolution.',
+					'locked may be written on app and tenant rows only.'
+				]
+			},
+			{
+				title: 'Generated surface',
+				intro:
+					'FieldPolicy generates create, update, and delete routes. Generated list and get are deliberately closed: the model is not tenant-scoped, so a browsable read would enumerate every tenant and user row. Reads happen through three collection actions or through the server-side resolver.',
+				points: [
+					'POST <collection>/resolve — resolveBatch, the context-scoped policy read used to bootstrap forms.',
+					'POST <collection>/editor-state — getEditorState, the gear bootstrap.',
+					'POST <collection>/policy-audit — policyAudit, the manage-gated organization roll-up.',
+					'The CLI and MCP surfaces are closed entirely.'
+				]
+			},
+			{
+				title: 'Caching and invalidation',
+				intro:
+					'Resolved results are cached for a short TTL per database namespace, object reference, tenant, user, and hierarchy loader. The loader is part of the key because an injected loader yields a different ancestor chain and therefore different defaults and locks.',
+				points: [
+					'Saving or deleting a row invalidates every entry for that object, because a parent-tenant row affects each descendant.',
+					'Policy rows do not ride the client change feed, so a browser learns about a change on its next resolve.',
+					'Write-time validation resolves projected state outside the shared cache so a hypothetical result can never poison a real read.'
+				]
+			},
+			{
+				title: 'Version prerequisite',
+				intro:
+					'@happyvertical/smrt-fields first appeared in the 0.40.5x line and is not part of 0.39.x. It pins smrt-core, smrt-tenancy, smrt-ui, and smrt-users to its own exact version, so install it at the same version as the rest of your s-m-r-t packages; a mismatch installs a second object registry and policy resolution stops recognizing your objects.',
+				points: [
+					'smrt-users is a required runtime dependency, not an optional one: the permission catalog and operation guard back every write and gear action.',
+					'The usage-learning loop is not in any published release yet.'
+				]
+			}
+		],
+		related: [
+			{ label: 'How resolution works', href: '/capabilities/field-policies' },
+			{ label: 'Build a policy-aware form', href: '/capabilities/policy-aware-forms' },
+			{ label: 'Operate field policies', href: '/capabilities/field-policy-operations' },
+			{ label: 'smrt-fields package', href: '/packages/smrt-fields' },
+			{ label: 'Security defaults', href: '/reference/security' }
 		]
 	},
 	{
