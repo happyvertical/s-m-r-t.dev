@@ -51,6 +51,7 @@
 		"@happyvertical/smrt-commerce": "0.40.61",
 		"@happyvertical/smrt-content": "0.40.61",
 		"@happyvertical/smrt-events": "0.40.61",
+		"@happyvertical/smrt-fields": "0.40.61",
 		"@happyvertical/smrt-images": "0.40.61",
 		"@happyvertical/smrt-jobs": "0.40.61",
 		"@happyvertical/smrt-ledgers": "0.40.61",

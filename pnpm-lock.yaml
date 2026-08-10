@@ -29,6 +29,9 @@ importers:
       '@happyvertical/smrt-events':
         specifier: 0.40.61
         version: 0.40.61(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.56.4(@typescript-eslint/types@8.54.0))(typescript@5.9.3)(ws@8.21.0)(zod@4.3.6)
+      '@happyvertical/smrt-fields':
+        specifier: 0.40.61
+        version: 0.40.61(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.56.4(@typescript-eslint/types@8.54.0))(typescript@5.9.3)(ws@8.21.0)(zod@4.3.6)
       '@happyvertical/smrt-images':
         specifier: 0.40.61
         version: 0.40.61(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.1.1)(@xenova/transformers@2.17.2)(svelte@5.56.4(@typescript-eslint/types@8.54.0))(typescript@5.9.3)(ws@8.21.0)(zod@4.3.6)
@@ -1146,6 +1149,14 @@ packages:
 
   '@happyvertical/smrt-features@0.40.61':
     resolution: {integrity: sha512-ZoAZejwGsSQxQ+XDmJjUmizjhXo6oX/aYPew255LJbKdkdb+QCY+8ochegVXppl0ohd80mCmzWw4GBxlkCiUXw==}
+
+  '@happyvertical/smrt-fields@0.40.61':
+    resolution: {integrity: sha512-jAVCf4DNiid4NgCF+doAOoOq7RdRGh/CK0k2ioSKnh0wQ6xqPNw1y/taCP4509kth16UzYU7575NsbveBON9ug==}
+    peerDependencies:
+      svelte: ^5.56.4
+    peerDependenciesMeta:
+      svelte:
+        optional: true
 
   '@happyvertical/smrt-images@0.40.61':
     resolution: {integrity: sha512-kcC6XoPrqewAuWCf0WJj6OKkM6smxqlkscC8/qUCdwlSQ81AnMGQI6UEFgsK8kKlu33graN7Pv2CkgN7iXjanA==}
@@ -8394,6 +8405,31 @@ snapshots:
       - encoding
       - pg-native
       - supports-color
+      - utf-8-validate
+      - ws
+      - zod
+
+  '@happyvertical/smrt-fields@0.40.61(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.56.4(@typescript-eslint/types@8.54.0))(typescript@5.9.3)(ws@8.21.0)(zod@4.3.6)':
+    dependencies:
+      '@happyvertical/smrt-core': 0.40.61(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.0)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.40.61(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.56.4(@typescript-eslint/types@8.54.0))(ws@8.21.0)(zod@4.3.6)
+      '@happyvertical/smrt-ui': 0.40.61(svelte@5.56.4(@typescript-eslint/types@8.54.0))
+      '@happyvertical/smrt-users': 0.40.61(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.56.4(@typescript-eslint/types@8.54.0))(typescript@5.9.3)(ws@8.21.0)(zod@4.3.6)
+      '@happyvertical/sql': 0.85.5
+    optionalDependencies:
+      svelte: 5.56.4(@typescript-eslint/types@8.54.0)
+    transitivePeerDependencies:
+      - '@huggingface/transformers'
+      - '@modelcontextprotocol/sdk'
+      - '@russellthehippo/honker-node'
+      - '@sentry/node'
+      - '@sqliteai/sqlite-vector'
+      - '@xenova/transformers'
+      - bufferutil
+      - encoding
+      - pg-native
+      - supports-color
+      - typescript
       - utf-8-validate
       - ws
       - zod

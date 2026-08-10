@@ -33,7 +33,7 @@ The three this site builds against directly:
 @./node_modules/@happyvertical/smrt-playground/AGENTS.md
 
 For any other package, read
-`node_modules/@happyvertical/<package>/AGENTS.md` directly — all 21 dependencies
+`node_modules/@happyvertical/<package>/AGENTS.md` directly — all 22 dependencies
 ship one. There is nothing to regenerate and nothing to keep in sync.
 
 ## First run
@@ -92,7 +92,7 @@ than updating the count.
 
 ## Dependency policy
 
-All 21 `@happyvertical/smrt-*` packages are public on npmjs, pinned by the
+All 22 `@happyvertical/smrt-*` packages are public on npmjs, pinned by the
 project `.npmrc`. No authentication is needed to install them.
 
 **They are pinned to exact versions, not caret ranges.** `smrt-fields` pins its
@@ -127,4 +127,21 @@ hardcoded versions, none of them the one it was built against.
 
 ## Current Issues to Fix Upstream
 
-(None at this time)
+### smrt-fields playground preview throws on mount
+
+- **Upstream**: [happyvertical/smrt#2272](https://github.com/happyvertical/smrt/issues/2272)
+- **Symptom**: the `Policy-Driven Form` entry of `@happyvertical/smrt-fields/playground`
+  never renders. It stays on `Loading Policy-Driven Form…` and logs
+  `FieldPolicy context not found. Wrap your form in <FieldPolicyProvider>`.
+- **Cause**: `FieldPolicyFormPreview.svelte` renders `<FormHelp>` in its `<header>`,
+  outside the `<FieldPolicyProvider>` below it. `FormHelp` reads the context with the
+  throwing `getFieldPolicyContext()`, unlike `PolicyField`, which degrades gracefully.
+  Present in the released 0.40.61 and still on the framework's `main`.
+- **Consequence here**: `src/lib/data/playgrounds.ts` deliberately does **not** register
+  `@happyvertical/smrt-fields/playground`. The sibling `Generated ObjectForm` entry
+  mounts correctly, but registering the module registers both entries, and filtering
+  one out in this repo would be exactly the local workaround the Golden Rule forbids.
+- **When it is fixed**: bump the framework, add the `fields` import and array entry back
+  to `playgrounds.ts`, and add `'smrt-fields': ['Policy-Driven Form', 'Generated ObjectForm']`
+  to `playgroundEntryTitles`. The dependency stays installed in the meantime so its
+  `AGENTS.md` remains readable and the re-add is a one-line change.

@@ -14,6 +14,15 @@ import projects from '@happyvertical/smrt-projects/playground';
 import tenancy from '@happyvertical/smrt-tenancy/playground';
 import users from '@happyvertical/smrt-users/playground';
 
+/**
+ * `@happyvertical/smrt-fields/playground` is deliberately absent.
+ *
+ * Its `Policy-Driven Form` entry throws on mount — the preview renders
+ * `<FormHelp>` outside its `<FieldPolicyProvider>` — so registering the module
+ * would put a permanently broken preview on the site. Tracked upstream in
+ * happyvertical/smrt#2272 and in this repo's CLAUDE.md; re-add the import and
+ * the array entry once a release carries the fix.
+ */
 export const playgroundModules: SmrtPlaygroundModule[] = [
 	ui,
 	agents,

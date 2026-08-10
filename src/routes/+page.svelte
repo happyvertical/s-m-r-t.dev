@@ -35,6 +35,11 @@
 			href: '/capabilities/reports'
 		},
 		{
+			title: 'Field policies',
+			body: 'Defaults, visibility, labels, and help resolve over the code seed at app, tenant, and user scope, without editing the form.',
+			href: '/capabilities/field-policies'
+		},
+		{
 			title: 'Standard UI foundation',
 			body: 'Build with one accessible component contract for forms, collections, tables, feedback, overlays, layouts, and themes.',
 			href: '/packages/smrt-ui'
