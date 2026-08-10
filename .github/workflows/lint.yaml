@@ -27,13 +27,13 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: lint-${{ github.ref }}
-  # Not cancel-in-progress. Back-to-back merges would cancel the offending
-  # commit's run and land the red — and the failure notification — on whichever
-  # commit happened to be next, which is exactly the attribution this workflow
-  # exists to provide.
-  cancel-in-progress: false
+# No `concurrency` group, unlike the freshness audit. That one is a scheduled
+# singleton that edits one shared tracking issue, so serialising it is the
+# point. Here every push needs its own run: a group holds at most one pending
+# run, and queueing a third push cancels the pending second one even with
+# `cancel-in-progress: false`, which would silently skip a commit and land its
+# regression on a later one — the exact misattribution this workflow exists to
+# prevent.
 
 jobs:
   lint:
