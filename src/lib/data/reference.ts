@@ -443,6 +443,11 @@ export const referenceGuides: Guide[] = [
 			'Use a normal list when you need real objects and their methods. Use select when a page or report only needs a few plain fields.',
 		packages: ['smrt-core', 'smrt-tenancy'],
 		visual: 'collections',
+		pinnedVersion: REFERENCE_PINNED_VERSION,
+		sources: [
+			{ label: 'collection.ts', href: `${SMRT_TREE}/packages/core/src/collection.ts` },
+			{ label: 'smrt-core AGENTS.md', href: `${SMRT_TREE}/packages/core/AGENTS.md` }
+		],
 		sections: [
 			{
 				title: 'Hydrated objects',
@@ -457,10 +462,256 @@ export const referenceGuides: Guide[] = [
 				filename: 'list-items.ts'
 			},
 			{
+				title: 'A filter key carries its operator',
+				intro:
+					'Each where key is a field name, optionally followed by a space and an operator. Equality is the default. Field names are the ones declared on the model; the collection converts them to database columns before the statement is built, and validates them against the model so a typo reports the valid names instead of a SQL error.',
+				filename: 'list-invoices.ts',
+				code: `const overdue = await invoices.list({\n  where: {\n    status: 'open',                 // status = ?\n    'total >=': 100,                // total >= ?\n    'currency in': ['CAD', 'USD'],  // currency IN (?, ?)\n    'reference like': 'INV-2026-%', // reference LIKE ?\n    voidedAt: null                  // voided_at IS NULL\n  },\n  orderBy: 'created_at DESC',\n  limit: 50\n});`
+			},
+			{
+				title: 'The operator set',
+				intro:
+					'Nine operators reach SQL: =, >, <, >=, <=, !=, in, not in, and like. A null value turns = into IS NULL and != into IS NOT NULL. An array value with no explicit operator is read as in.',
+				points: [
+					'in and not in require a non-empty array. An empty one is rejected rather than compiled into invalid SQL; listByIds([]) returns an empty list instead.',
+					'like requires a string value, and you supply the % wildcards yourself.',
+					'Fields marked @field({ sensitive: true }) are rejected as filter keys, so a where clause cannot be used to read a secret value back one character at a time.',
+					'Generated REST routes expose the same filters as field[op] query parameters — gt, gte, lt, lte, ne, in, and like, with in taking a comma-separated list. not in has no query-parameter spelling.'
+				],
+				callout: {
+					variant: 'warning',
+					title: 'contains passes validation and then fails',
+					body: 'The collection accepts contains in its operator whitelist, but the query builder underneath has no such operator, so the key is read as a field name and rejected as an invalid SQL identifier. The failure arrives at query time rather than at the call, which makes it easy to mistake for a data problem. Use like instead.'
+				}
+			},
+			{
+				title: 'What a where clause cannot express',
+				intro:
+					'Conditions in one where object are joined with AND. There is no OR, no negated group, no nested condition, no subquery, and no join. orderBy accepts a field name and a direction, not an expression.',
+				points: [
+					'The underlying query builder can emit OR from a two-dimensional condition array, but the collection validates where as a flat object of identifier keys and rejects that shape.',
+					'Keys must be identifiers, optionally with dot-separated JSON-path segments. Expression text in a key is rejected, which is what keeps request-supplied filter names from reaching the SQL field position.',
+					'A dot-notation key such as metadata.userId passes validation but is not rewritten into a JSON extraction, so it reaches SQL as a qualified column reference. Confirm the behavior on your adapter before relying on it.'
+				]
+			},
+			{
+				title: 'collection.query() is the escape hatch',
+				intro:
+					'query(sql, params) runs SQL you wrote and hydrates the rows into the same objects list() returns, including STI subclass resolution. Use it for OR, NOT EXISTS, joins, CTEs, and aggregates, and keep list() for everything it can already express.',
+				filename: 'unbilled-orders.ts',
+				code: `const unbilled = await orders.query(\n  \`SELECT o.* FROM orders o\n   WHERE o.status = ?\n     AND NOT EXISTS (\n       SELECT 1 FROM invoices i WHERE i.order_id = o.id\n     )\n   ORDER BY o.created_at DESC\n   LIMIT ?\`,\n  ['fulfilled', 100]\n);`,
+				points: [
+					'Names inside the SQL string are database columns. Returned rows are converted back to the model field names during hydration.',
+					'Bind values as parameters; the placeholder style follows your database adapter. The collection does not parse the statement, so anything interpolated into the text is your own injection risk.',
+					'Tenant scope is not added for you. A beforeQuery interceptor guards tenant-scoped models, and allowRawOnTenantScoped opts out of it deliberately — then the tenant predicate is yours to write.',
+					'query() is documented for reads. It will run a write, and a statement that looks like a mutation invalidates this table in the read cache, but model hooks and save-time interceptors do not run.'
+				]
+			},
+			{
+				title: 'Reading many records at once',
+				intro:
+					'listByIds(ids) issues a single IN query and returns hydrated objects. An empty array returns an empty list without touching the database, which is the graceful path an empty in filter refuses to take.',
+				filename: 'batch-read.ts',
+				code: `const items = await products.listByIds(ids);\nconst byId = new Map(items.map((item) => [item.id, item]));\n\n// Long id lists need splitting; listByIds does not do it for you.\nconst all = [];\nfor (let i = 0; i < ids.length; i += 900) {\n  all.push(...(await products.listByIds(ids.slice(i, i + 900))));\n}`,
+				points: [
+					'Result order is not guaranteed. Index the result by id when the caller needs its own ordering back.',
+					'listByIds does not chunk. Databases cap the number of bound parameters in one statement, and the relationship batch loaders inside the framework split their own IN lists at 900 values for that reason — use a similar size for long id lists.',
+					'count() runs the same where conversion as list() and is never served from the read cache, so a cached page and a fresh count can briefly disagree inside the TTL window.'
+				]
+			},
+			{
+				title: 'Writes happen one statement at a time',
+				intro:
+					'create() and save() persist a single object per call; there is no bulk create on the collection. A loop of saves is a loop of round trips, and on a durable single-connection database each one commits on its own. Wrapping the loop in a transaction turns that into one commit.',
+				filename: 'bulk-import.ts',
+				code: `const db = await getDatabase({ type: 'sqlite', url: 'app.db' });\nif (!db.transaction) throw new Error('This adapter does not support transactions.');\n\nawait db.transaction(async (tx) => {\n  const products = await ProductCollection.create({ db: tx });\n  for (const row of rows) {\n    await products.create(row);\n  }\n});`,
+				points: [
+					'A collection accepts an already-initialized database instance as its db option, which is how a batch of collection writes joins one transaction instead of opening its own.',
+					'transaction() is an optional member of the adapter interface, so narrow it before calling; a bare call does not type-check under strict TypeScript.',
+					'The callback result is the transaction result, and a thrown error rolls the whole batch back rather than leaving it half-applied.',
+					'Nesting transaction() is adapter-specific: SQLite and PostgreSQL re-enter under a savepoint, while DuckDB and the JSON adapter throw. Pass the handle down instead of nesting.',
+					'On single-connection adapters, a concurrent transaction waits its turn and rejects after transactionQueueTimeout — 30 seconds by default. Keep the batch bounded rather than holding one transaction open for a whole import.'
+				]
+			},
+			{
+				title: 'When raw SQL is the right batch tool',
+				intro:
+					'A set-based UPDATE or DELETE does in one statement what a read-modify-write loop does in several round trips per row. collection.query() runs it under the same caveats as any raw statement: model hooks, save-time interceptors, and embedding regeneration do not run.',
+				points: [
+					'Keep the loop when per-object hooks, embeddings, auditing, or change-feed entries have to run for each record.',
+					'Reach for one statement when the change is purely columnar and none of that per-object work applies.',
+					'Measure on your own adapter before choosing. The gap between the two depends on durability settings, latency to the database, and how much work each hook does.'
+				],
+				callout: {
+					variant: 'note',
+					title: 'No benchmark is published here on purpose',
+					body: 'Transaction wrapping is a large win on a durable file-backed database and close to no change on an in-memory one, because what it removes is a commit per row rather than work. Any single figure would be true of one adapter and one machine, so measure the shape you actually deploy.'
+				}
+			},
+			{
 				title: 'Tenant and cache behavior',
 				intro:
 					'Tenant interceptors run for list, get, count, and related reads. Read caching is opt-in; writes invalidate affected entries, while count always checks the database.'
 			}
+		],
+		related: [
+			{ label: 'Relationship loading', href: '/reference/relationships' },
+			{ label: 'Field naming', href: '/reference/field-naming' }
+		]
+	},
+	{
+		slug: 'relationships',
+		navTitle: 'Relationship loading',
+		eyebrow: 'Reference',
+		title: 'Loading related objects without N+1 queries',
+		lede: 'Declared relationships load lazily one object at a time, or in batches for a whole page. Both paths fill the same per-object cache.',
+		plainEnglish:
+			'Reading a list and then reading the parent of each row inside a loop issues one query per row. Ask for the relationship when you list, and the collection fetches them together.',
+		packages: ['smrt-core', 'smrt-tenancy'],
+		pinnedVersion: REFERENCE_PINNED_VERSION,
+		sources: [
+			{ label: 'object.ts', href: `${SMRT_TREE}/packages/core/src/object.ts` },
+			{ label: 'collection.ts', href: `${SMRT_TREE}/packages/core/src/collection.ts` }
+		],
+		sections: [
+			{
+				title: 'Where the extra queries come from',
+				intro:
+					'Listing 100 orders and then resolving the customer for each order inside the loop is 101 queries: one for the page and one per row. The count scales with the page size, so a small fixture hides it.',
+				filename: 'n-plus-one.ts',
+				code: `// One query for the page.\nconst page = await orders.list({ where: { status: 'open' }, limit: 100 });\n\n// One more for every row.\nfor (const order of page) {\n  const customer = await order.loadRelated('customerId');\n}`
+			},
+			{
+				title: 'include batches the relationship rather than joining',
+				intro:
+					'list({ include }) hydrates the page first, then queries each named relationship in bulk and primes the cache on each object with the result. 100 orders and their customer become 2 queries rather than 101 — but there is no JOIN and no single-statement fetch, so read it as N+1 collapsing to 1+K.',
+				filename: 'eager-load.ts',
+				code: `const page = await orders.list({\n  where: { status: 'open' },\n  include: ['customerId', 'lines'],\n  limit: 100\n});\n\nfor (const order of page) {\n  // Served from the primed cache; no further queries.\n  const customer = await order.getRelated('customerId');\n}`,
+				points: [
+					'A @foreignKey, @crossPackageRef, or @oneToMany relationship costs one query. A @manyToMany costs two: it scans the junction table, then hydrates the targets.',
+					'Foreign-key values are de-duplicated before the batch query, so repeated parents cost one row, not one per child.',
+					'IN lists are chunked at 900 values, so a very wide page issues a few queries per relationship instead of one oversized statement.',
+					'include is available on list() and findAll(). get() has no include option — call a loader on the object it returns.',
+					'include cannot be combined with select. A projection returns plain rows with nothing to attach a relationship to, and asking for both throws.'
+				],
+				callout: {
+					variant: 'note',
+					title: 'Fewer queries, not one query',
+					body: 'include is a batch loader, not a JOIN. The page is fetched, then each named relationship costs one more query — two for a manyToMany. That is the difference between a request that scales with page size and one that does not, but a page asking for several relationships still issues several queries.'
+				}
+			},
+			{
+				title: 'Three loaders, one cache',
+				intro:
+					'The loaders live on the object, take a relationship field name, and store what they resolve on that instance. A second call for the same field returns the cached value without querying.',
+				points: [
+					'loadRelated(fieldName) resolves one @foreignKey or @crossPackageRef and returns the object, or null when the key is empty.',
+					'loadRelatedMany(fieldName) resolves a @oneToMany through the inverse foreign key on the target, or a @manyToMany through its junction table, and returns an array.',
+					'getRelated(fieldName) reads the relationship metadata and dispatches to whichever of the two applies. Use it when the call site does not need to know which kind the field is.',
+					'The cache is per instance. A freshly listed object starts empty unless include primed it, so re-listing does not carry loaded relationships forward.'
+				]
+			},
+			{
+				title: 'Loading stops at the tenant boundary',
+				intro:
+					'When a tenant-scoped object resolves a relationship into a different, non-null tenant, the loaders throw rather than returning the row. The check is a no-op for global objects and same-tenant reads, so it only fires on a genuine crossing.',
+				points: [
+					'Pass { allowCrossTenant: true } for deliberate cross-tenant work such as admin tooling or migrations.',
+					'A cache primed by include is re-checked on a later guarded call, so eager loading cannot be used to slip a cross-tenant object past the guard.'
+				]
+			},
+			{
+				title: 'Where relationship declarations go wrong',
+				intro:
+					'Most relationship-loading surprises come from the declaration rather than the call site.',
+				points: [
+					'A @oneToMany needs an inverse @foreignKey on the target. When the target declares more than one, name it — @oneToMany(Target, { foreignKey: "ownerId" }) — and a stale name throws instead of quietly returning empty arrays.',
+					'A @manyToMany needs its junction table named in through; a missing one throws.',
+					'include takes relationship field names, not target class or table names.',
+					'Loading inside a component that renders per row puts the loop back. Prime the relationship where the query is issued, then read it during render.'
+				],
+				links: [{ label: 'Collections and list()', href: '/reference/collections' }]
+			}
+		],
+		related: [{ label: 'Collections and list()', href: '/reference/collections' }]
+	},
+	{
+		slug: 'field-naming',
+		navTitle: 'Field naming',
+		eyebrow: 'Reference',
+		title: 'camelCase in TypeScript, snake_case in the database',
+		lede: 'Field names are converted to columns when a statement is built and converted back when a row is hydrated. Knowing which side of that boundary you are on removes most naming surprises.',
+		plainEnglish:
+			'Write the model in camelCase. The database stores snake_case. Everything generated from the model — REST, MCP, CLI — uses the TypeScript spelling, and only hand-written SQL uses column names.',
+		packages: ['smrt-core'],
+		pinnedVersion: REFERENCE_PINNED_VERSION,
+		sources: [
+			{ label: 'utils/naming.ts', href: `${SMRT_TREE}/packages/core/src/utils/naming.ts` },
+			{ label: 'utils.ts', href: `${SMRT_TREE}/packages/core/src/utils.ts` },
+			{ label: 'collection.ts', href: `${SMRT_TREE}/packages/core/src/collection.ts` }
+		],
+		sections: [
+			{
+				title: 'One rule, applied at the database boundary',
+				intro:
+					'Converting to a column inserts an underscore before each capital and lowercases the result. Converting back uppercases the letter after each underscore. The conversion runs where a query is built and where a row is hydrated; nothing else in the stack re-cases keys.',
+				filename: 'Invoice.ts',
+				code: `@smrt({ api: true })\nexport class Invoice extends SmrtObject {\n  customerId = '';  // column: customer_id\n  apiKey = '';      // column: api_key\n  totalCents = 0;   // column: total_cents\n}\n\n// Table name comes from the class: invoices`
+			},
+			{
+				title: 'Where each spelling appears',
+				intro:
+					'There is one place to use column names and one place to use field names, and the split follows whether the framework generated the surface or you wrote the SQL by hand.',
+				points: [
+					'Model properties, where keys, orderBy fields, and select entries: the name declared on the class.',
+					'Database columns, indexes, and constraints: snake_case.',
+					'Generated REST request bodies, responses, and filter query parameters: the declared field name, as in ?status=open&total[gte]=100.',
+					'Generated MCP tool input schemas: the declared field name.',
+					'Generated CLI flags: --declaredFieldName, taken verbatim as a payload key, so a kebab-case spelling will not resolve to a field.',
+					'SQL text passed to collection.query(): column names. The returned rows are hydrated back to field names.'
+				]
+			},
+			{
+				title: 'Table names follow a different rule',
+				intro:
+					'A class name becomes a table name through a separate conversion that only splits where a lowercase letter meets a capital, then pluralizes the last word. Item becomes items, JournalEntry becomes journal_entries, and Currency becomes currencies.',
+				points: [
+					'An all-caps prefix has no lowercase-to-uppercase boundary, so the class APIKey becomes apikeys even though its apiKey field becomes api_key. The two conversions are not the same function.',
+					'Set tableName on @smrt() when the derived name is not the one you want. There is no per-field column-name override — a column name always follows from the field name.'
+				]
+			},
+			{
+				title: 'Edge cases in the conversion',
+				intro:
+					'The conversion is a pair of small regular expressions, not a dictionary, so a few shapes behave in ways that are easy to misremember.',
+				points: [
+					'Consecutive capitals are split individually: pdfURL becomes pdf_u_r_l. The round trip back to pdfURL is exact, but the column is harder to read and to type in hand-written SQL — prefer pdfUrl.',
+					'A field the model declares in snake_case stays that way through hydration: a declared publish_date is returned as publish_date rather than being renamed to publishDate.',
+					'The inherited system fields are literally snake_case in TypeScript too: created_at and updated_at, alongside id, slug, and context. Reading object.created_at and sorting by created_at DESC are both correct.',
+					'Framework fields that start with an underscore keep the prefix through the column mapping, so _metaType addresses the _meta_type column.'
+				],
+				callout: {
+					variant: 'note',
+					title: 'Digits do not split a name',
+					body: 'The conversion only reacts to capitals, so version2 stays version2 rather than becoming version_2, and a column genuinely named version_2 converts back to version_2 rather than version2. Let a capital do the splitting — version2Payload rather than version2 — if you want the underscore.'
+				}
+			},
+			{
+				title: 'Filtering across the conversion',
+				intro:
+					'Query options take field names and are converted for you, which is also where a misspelling is caught.',
+				points: [
+					'where keys are validated against the model fields after conversion, so a typo reports the valid field names rather than failing as a SQL error.',
+					'orderBy is converted as well, so createdAt DESC and created_at DESC both resolve to the same column.',
+					'Fields marked sensitive are rejected as filter keys regardless of which spelling is used.',
+					'list({ select }) takes field names and returns rows keyed by those same names, so a projection never leaks column spellings into page code.'
+				],
+				links: [{ label: 'Collections and list()', href: '/reference/collections' }]
+			}
+		],
+		related: [
+			{ label: 'Collections and list()', href: '/reference/collections' },
+			{ label: 'Relationship loading', href: '/reference/relationships' }
 		]
 	},
 	{
