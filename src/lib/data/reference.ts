@@ -508,10 +508,55 @@ export const referenceGuides: Guide[] = [
 				]
 			},
 			{
+				title: 'Reading many records at once',
+				intro:
+					'listByIds(ids) issues a single IN query and returns hydrated objects. An empty array returns an empty list without touching the database, which is the graceful path an empty in filter refuses to take.',
+				filename: 'batch-read.ts',
+				code: `const items = await products.listByIds(ids);\nconst byId = new Map(items.map((item) => [item.id, item]));\n\n// Long id lists need splitting; listByIds does not do it for you.\nconst all = [];\nfor (let i = 0; i < ids.length; i += 900) {\n  all.push(...(await products.listByIds(ids.slice(i, i + 900))));\n}`,
+				points: [
+					'Result order is not guaranteed. Index the result by id when the caller needs its own ordering back.',
+					'listByIds does not chunk. Databases cap the number of bound parameters in one statement, and the relationship batch loaders inside the framework split their own IN lists at 900 values for that reason — use a similar size for long id lists.',
+					'count() runs the same where conversion as list() and is never served from the read cache, so a cached page and a fresh count can briefly disagree inside the TTL window.'
+				]
+			},
+			{
+				title: 'Writes happen one statement at a time',
+				intro:
+					'create() and save() persist a single object per call; there is no bulk create on the collection. A loop of saves is a loop of round trips, and on a durable single-connection database each one commits on its own. Wrapping the loop in a transaction turns that into one commit.',
+				filename: 'bulk-import.ts',
+				code: `const db = await getDatabase({ type: 'sqlite', url: 'app.db' });\nif (!db.transaction) throw new Error('This adapter does not support transactions.');\n\nawait db.transaction(async (tx) => {\n  const products = await ProductCollection.create({ db: tx });\n  for (const row of rows) {\n    await products.create(row);\n  }\n});`,
+				points: [
+					'A collection accepts an already-initialized database instance as its db option, which is how a batch of collection writes joins one transaction instead of opening its own.',
+					'transaction() is an optional member of the adapter interface, so narrow it before calling; a bare call does not type-check under strict TypeScript.',
+					'The callback result is the transaction result, and a thrown error rolls the whole batch back rather than leaving it half-applied.',
+					'Nesting transaction() is adapter-specific: SQLite and PostgreSQL re-enter under a savepoint, while DuckDB and the JSON adapter throw. Pass the handle down instead of nesting.',
+					'On single-connection adapters, a concurrent transaction waits its turn and rejects after transactionQueueTimeout — 30 seconds by default. Keep the batch bounded rather than holding one transaction open for a whole import.'
+				]
+			},
+			{
+				title: 'When raw SQL is the right batch tool',
+				intro:
+					'A set-based UPDATE or DELETE does in one statement what a read-modify-write loop does in several round trips per row. collection.query() runs it under the same caveats as any raw statement: model hooks, save-time interceptors, and embedding regeneration do not run.',
+				points: [
+					'Keep the loop when per-object hooks, embeddings, auditing, or change-feed entries have to run for each record.',
+					'Reach for one statement when the change is purely columnar and none of that per-object work applies.',
+					'Measure on your own adapter before choosing. The gap between the two depends on durability settings, latency to the database, and how much work each hook does.'
+				],
+				callout: {
+					variant: 'note',
+					title: 'No benchmark is published here on purpose',
+					body: 'Transaction wrapping is a large win on a durable file-backed database and close to no change on an in-memory one, because what it removes is a commit per row rather than work. Any single figure would be true of one adapter and one machine, so measure the shape you actually deploy.'
+				}
+			},
+			{
 				title: 'Tenant and cache behavior',
 				intro:
 					'Tenant interceptors run for list, get, count, and related reads. Read caching is opt-in; writes invalidate affected entries, while count always checks the database.'
 			}
+		],
+		related: [
+			{ label: 'Relationship loading', href: '/reference/relationships' },
+			{ label: 'Field naming', href: '/reference/field-naming' }
 		]
 	},
 	{
