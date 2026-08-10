@@ -103,6 +103,24 @@ Adding a package or guide means adding a data entry, not a route. The route's
 `entries()` derives from the data, so the page prerenders automatically. Editing
 a renderer changes every page it serves — check a few before assuming.
 
+### Nothing regenerates that content, so it goes stale silently
+
+`pnpm run audit:data` hashes the `AGENTS.md` shipped inside every installed
+`@happyvertical/smrt-*` package, compares it to `scripts/smrt-docs-baseline.json`,
+and names the data files that mention each package whose docs were rewritten.
+A lockstep version bump that leaves `AGENTS.md` alone is not drift — there would
+be nothing new to read. After re-reading the entries it points at, run
+`pnpm run audit:data -- --update` and commit the refreshed baseline.
+
+`.github/workflows/data-freshness.yaml` runs it weekly and keeps one tracking
+issue in sync. It is **not** a gate — it never runs on a pull request and cannot
+block a merge, because a hash comparison is not qualified to reject prose. It
+only tells you where to look.
+
+`smrt dev:knowledge-check` is the tool that should do this; it indexes an smrt
+workspace and exhausts the Node heap when pointed at this consumer app
+(happyvertical/smrt#2275). Delete the script when that lands.
+
 ## Legacy redirects are a contract
 
 `src/routes/docs/[...legacy]/`, `src/routes/components/[...legacy]/`, and

@@ -11,7 +11,10 @@ export default defineConfig(({ mode }) => ({
 		conditions: mode === 'test' ? ['browser'] : []
 	},
 	test: {
-		include: ['src/**/*.{test,spec}.{js,ts}'],
+		// `scripts/` is covered too: the data-freshness audit lives there and its
+		// baseline is only trustworthy if something asserts it still matches the
+		// installed tree.
+		include: ['src/**/*.{test,spec}.{js,ts}', 'scripts/**/*.{test,spec}.{js,mjs,ts}'],
 		environment: 'jsdom'
 	}
 }));
