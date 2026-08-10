@@ -1,6 +1,7 @@
 import { capabilityGuides, foundationGuides } from '$lib/data/guides';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
+import { taskGuides } from '$lib/data/task-guides';
 import { toolingGuides } from '$lib/data/tooling';
 
 export interface NavigationItem {
@@ -58,6 +59,23 @@ export const docsNavigation: NavigationGroup[] = [
 			description: guide.plainEnglish,
 			keywords: guide.packages
 		}))
+	},
+	{
+		label: 'Task guides',
+		items: [
+			{
+				label: 'Guides overview',
+				href: '/guides',
+				description: 'Runnable end-to-end walkthroughs for one job at a time.',
+				keywords: ['tutorial', 'how-to', 'guide', 'runnable', 'end-to-end']
+			},
+			...taskGuides.map((guide) => ({
+				label: guide.navTitle ?? guide.title,
+				href: `/guides/${guide.slug}`,
+				description: guide.plainEnglish,
+				keywords: guide.packages
+			}))
+		]
 	},
 	{
 		label: 'Packages and tools',

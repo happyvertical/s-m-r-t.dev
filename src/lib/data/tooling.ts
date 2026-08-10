@@ -384,9 +384,8 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 					'The generated stdio server is the other Tier 1 surface. It obtains credentials from its environment and has no per-request authorization principal, so it must not be exposed remotely. To reach a deployed application from a local stdio client, use the bridge that @happyvertical/smrt-app-cli publishes as the smrt-mcp-bridge binary, which authenticates through the first-party terminal device flow and sends stored tokens only to the server they were saved with.',
 				links: [
 					{
-						label: 'Tutorial: expose an app via MCP (#98)',
-						href: 'https://github.com/happyvertical/s-m-r-t.dev/issues/98',
-						external: true
+						label: 'Task guide: expose your app over MCP',
+						href: '/guides/expose-your-app-over-mcp'
 					},
 					{ label: 'Reference: generated interfaces', href: '/reference/interfaces' },
 					{ label: 'Capability: WebMCP in the browser', href: '/capabilities/webmcp' }

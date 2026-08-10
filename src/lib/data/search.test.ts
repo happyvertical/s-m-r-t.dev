@@ -3,6 +3,7 @@ import { toAnchorId } from '$lib/data/anchors';
 import { capabilityGuides, foundationGuides, type Guide } from '$lib/data/guides';
 import { searchDocs, searchEntries } from '$lib/data/search';
 import { referenceGuides } from '$lib/data/reference';
+import { taskGuides } from '$lib/data/task-guides';
 import { toolingGuides } from '$lib/data/tooling';
 
 /**
@@ -14,6 +15,7 @@ import { toolingGuides } from '$lib/data/tooling';
 const tracks: { base: string; guides: Guide[] }[] = [
 	{ base: '/foundations', guides: foundationGuides },
 	{ base: '/capabilities', guides: capabilityGuides },
+	{ base: '/guides', guides: taskGuides },
 	{ base: '/tooling', guides: toolingGuides },
 	{ base: '/reference', guides: referenceGuides }
 ];

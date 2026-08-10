@@ -97,11 +97,28 @@ The site is data-driven, not page-per-file. Content lives in `src/lib/data/`:
   `PackageWorkbench.svelte` at `/packages/[slug]`
 - `guides.ts` — foundation and capability guides, rendered by `GuidePage.svelte`
 - `reference.ts` — reference pages, same renderer
+- `tooling.ts` — developer tooling pages, same renderer
+- `task-guides.ts` — the runnable end-to-end guides at `/guides`, same renderer
 - `navigation.ts`, `playgrounds.ts` — nav structure and live playground modules
 
 Adding a package or guide means adding a data entry, not a route. The route's
 `entries()` derives from the data, so the page prerenders automatically. Editing
 a renderer changes every page it serves — check a few before assuming.
+
+### Registering a new `Guide[]` route family
+
+A new guide collection is more than a data file. Four registrations are all
+hand-maintained, and **none of them is auto-discovered**, so forgetting one is
+silent:
+
+- `navigation.ts` — the sidebar, the ⌘K page entries, and the prev/next track
+  all derive from this one.
+- the `guideTracks` list in `search.ts` — without it the palette finds the
+  pages but none of their section headings.
+- `sitemap.xml/+server.ts`.
+- the hand-written family lists in `search.test.ts` and `track.test.ts` — these
+  are the coverage assertions themselves, not a guard that catches an omission
+  elsewhere. A family missing from them passes trivially.
 
 ### Nothing regenerates that content, so it goes stale silently
 

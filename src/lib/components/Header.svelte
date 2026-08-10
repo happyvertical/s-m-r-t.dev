@@ -7,6 +7,7 @@
 	let menuOpen = $state(false);
 	const nav = [
 		{ label: 'Documentation', href: '/' },
+		{ label: 'Guides', href: '/guides' },
 		{ label: 'Packages', href: '/packages' },
 		{ label: 'Playground', href: '/playground' },
 		{ label: 'Tooling', href: '/tooling' },
