@@ -251,6 +251,230 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 	}
 ];
 
+const usersComponentGroups: PackageComponentGroup[] = [
+	{
+		title: 'Account and directory UI',
+		description: 'Render people, invite them, and give a signed-in person their own menu.',
+		importPath: '@happyvertical/smrt-users/svelte',
+		components: ['UserAvatar', 'UserCard', 'UserList', 'UserForm', 'UserMenu', 'InviteUserModal']
+	},
+	{
+		title: 'Sessions and OIDC routes',
+		description:
+			'Mount sign-in, callback, and session handling as SvelteKit routes instead of writing the protocol by hand.',
+		importPath: '@happyvertical/smrt-users/sveltekit',
+		components: [
+			'createSessionHandler',
+			'createSessionCookie',
+			'destroySessionCookie',
+			'switchSessionTenant',
+			'createOidcLoginHandler',
+			'createOidcCallbackHandler',
+			'beginOidcLogin',
+			'completeOidcLogin'
+		]
+	},
+	{
+		title: 'Terminal device-code routes',
+		description:
+			'Let a command-line tool start a login, have a person approve it in the browser, and exchange it for a bearer session.',
+		importPath: '@happyvertical/smrt-users/sveltekit',
+		components: [
+			'createTerminalAuthStartHandler',
+			'createTerminalAuthTokenHandler',
+			'createBearerSessionDeleteHandler',
+			'mountTerminalLoginPage',
+			'loadBearerSessionContext',
+			'parseBearerToken'
+		]
+	},
+	{
+		title: 'Identity services',
+		description: 'The transport-neutral services the route handlers are built from.',
+		importPath: '@happyvertical/smrt-users',
+		components: [
+			'SessionService',
+			'OidcLoginService',
+			'TerminalAuthService',
+			'TenantService',
+			'AccessRequestService',
+			'MagicLinkService',
+			'MobileAuthService'
+		]
+	},
+	{
+		title: 'Permissions and row-level security',
+		description:
+			'Build the permission catalog, resolve what a principal may do, and generate Postgres policies.',
+		importPath: '@happyvertical/smrt-users',
+		components: [
+			'syncPermissionCatalog',
+			'registerPermissionDefinitions',
+			'PermissionResolver',
+			'checkOperationPermission',
+			'assertOperationPermission',
+			'generatePostgresPermissionSql',
+			'applyPostgresPermissionPolicies',
+			'withSessionPermissionContext'
+		]
+	},
+	{
+		title: 'Discovery contract',
+		description: 'Emit and validate the pinnable artifact a CLI or MCP consumer discovers.',
+		importPath: '@happyvertical/smrt-users/app-contract',
+		components: [
+			'createDiscoveryConformanceArtifact',
+			'validateDiscoveryConformanceArtifact',
+			'canonicalizeDiscoveryArtifact',
+			'deriveCommandRequirements'
+		]
+	}
+];
+
+const smrtSvelteComponentGroups: PackageComponentGroup[] = [
+	{
+		title: 'Application context',
+		description:
+			'Wrap the app once, then read session, permissions, mode, theme, and socket state from anywhere inside it.',
+		importPath: '@happyvertical/smrt-svelte',
+		components: [
+			'Provider',
+			'ModulePanel',
+			'useAppState',
+			'usePermissions',
+			'useAuth',
+			'useMode',
+			'useTheme',
+			'useSocket'
+		]
+	},
+	{
+		title: 'Rich form inputs',
+		description:
+			'Provider-backed inputs for the values applications actually collect, beyond the foundation controls.',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		components: [
+			'Form',
+			'TextInput',
+			'TextareaInput',
+			'NumberInput',
+			'MoneyInput',
+			'MeasurementInput',
+			'DateTimeInput',
+			'DateRangeInput',
+			'SelectInput',
+			'CheckboxInput',
+			'SearchInput',
+			'PhoneInput',
+			'AddressInput',
+			'FileUpload',
+			'FormMicButton'
+		]
+	},
+	{
+		title: 'Application shell',
+		description: 'The four-edge AdminShell family and its panels, activity surfaces, and hotkeys.',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		components: [
+			'AdminShell',
+			'TenantNav',
+			'ActivityList',
+			'ActivityItem',
+			'ActivityBadge',
+			'ActivityToasts',
+			'AppScopePanel',
+			'SystemScopePanel',
+			'SystemStatusChips',
+			'ShellSettingsPanel',
+			'ShortcutsOverlay',
+			'ShellCorner',
+			'ShellDockTool',
+			'HotkeyInput',
+			'WorkspaceAccountMenu'
+		]
+	},
+	{
+		title: 'Shell state and manifest navigation',
+		description:
+			'Drive panel state, keyboard shortcuts, and persisted settings, and build tenant navigation from the manifest.',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		components: [
+			'createShellState',
+			'ShellState',
+			'useAdminShell',
+			'resolveShellConfig',
+			'DEFAULT_SHELL_KEYMAP',
+			'LocalStorageShellSettingsAdapter',
+			'tenantNavFromManifest',
+			'pluralizeClassName'
+		]
+	},
+	{
+		title: 'Focus tools dock',
+		description:
+			'The first-generation dock, kept on its own opt-in subpath while applications migrate to AdminShell focus tools.',
+		importPath: '@happyvertical/smrt-svelte/workspace/legacy',
+		components: ['ToolsDock', 'defineToolsDock', 'useToolsDock', 'tryUseToolsDock']
+	},
+	{
+		title: 'Browser AI components',
+		description: 'Speech input, capability gating, and honest model download feedback.',
+		importPath: '@happyvertical/smrt-svelte/browser-ai/svelte',
+		components: ['VoiceInput', 'AILoadingOverlay', 'DownloadProgress', 'CapabilityGate', 'STTTest']
+	},
+	{
+		title: 'Browser AI hooks and warm cache',
+		description:
+			'Call a local model from a component, and keep an initialized adapter across navigation.',
+		importPath: '@happyvertical/smrt-svelte',
+		components: [
+			'useLLM',
+			'useSTT',
+			'useTTS',
+			'getCachedLLM',
+			'setCachedLLM',
+			'clearAllCaches',
+			'getCacheStats'
+		]
+	},
+	{
+		title: 'Browser AI adapters',
+		description: 'Framework-neutral capability detection and the adapters behind the hooks.',
+		importPath: '@happyvertical/smrt-svelte/browser-ai',
+		components: [
+			'detectCapabilities',
+			'canEnableSmrtMode',
+			'getBestLLMBackend',
+			'getBestSTTBackend',
+			'WebLLMAdapter',
+			'BrowserSpeechSTTAdapter',
+			'WhisperWasmSTTAdapter',
+			'BrowserSynthesisTTSAdapter',
+			'RECOMMENDED_MODELS'
+		]
+	},
+	{
+		title: 'Live collections and feeds',
+		description:
+			'Svelte 5 bindings over the browser data runtime, plus an activity feed and an update-available signal.',
+		importPath: '@happyvertical/smrt-svelte/web',
+		components: ['liveCollection', 'activityFeed', 'useUpdateAvailable']
+	},
+	{
+		title: 'Server-side helpers',
+		description:
+			'Build a translated message snapshot on the server so the first render is already in the right language.',
+		importPath: '@happyvertical/smrt-svelte/i18n/server',
+		components: ['buildI18nSnapshot']
+	},
+	{
+		title: 'Settings catalog',
+		description: 'A searchable, paginated settings index with a detail pane.',
+		importPath: '@happyvertical/smrt-svelte/settings',
+		components: ['SettingsCatalog', 'paginateSettingsCatalog']
+	}
+];
+
 function definePackage(
 	category: PackageCategory,
 	slug: string,
@@ -334,9 +558,49 @@ export const packages: SmrtPackage[] = [
 			highlights: [
 				'Manifest-derived operation permissions',
 				'Opt-in role inheritance through tenant trees',
+				'OIDC login and terminal device-code auth on one session model',
 				'Reusable mobile auth/session handlers and access-request graduation'
 			],
-			components: ['UserAvatar', 'UserCard', 'UserForm', 'UserList', 'UserMenu', 'InviteUserModal'],
+			componentGroups: usersComponentGroups,
+			components: usersComponentGroups.flatMap((group) => group.components),
+			details: [
+				{
+					title: 'OIDC login against your identity provider',
+					body: 'Declare providers under packages.users.auth.oidc and mount createOidcLoginHandler and createOidcCallbackHandler from the /sveltekit subpath. Each login mints an independent state, nonce, and PKCE verifier; the challenge method is always S256. The callback checks state, the RFC 9207 authorization-response issuer, the provider error, the JWKS-signed ID token, and the nonce before it will read claims, and falls back to the UserInfo endpoint when the ID token omits email.',
+					href: '/foundations/users-and-profiles',
+					linkLabel: 'See the sign-in flows'
+				},
+				{
+					title: 'First identity binding fails closed',
+					body: 'When a new issuer and subject resolve to a canonical global Person that already has an owning User, provisioning stops with OidcProvisioningError code profile_owned before it creates a new User, OIDC identity, or session. An application that runs its own invitation or approval workflow can supply the authorizeProfileOwner hook to authorize that first binding. Returning undefined keeps the fail-closed default and null rejects the login.',
+					href: '/foundations/users-and-profiles',
+					linkLabel: 'See the sign-in flows'
+				},
+				{
+					title: 'Terminal device-code sign-in',
+					body: 'TerminalAuthService runs the device-code flow for command-line tools: createRequest returns a device code the CLI keeps, a short user code the person types, and a verification URL. The device code is stored only as a hash, approval is idempotent, and exchangeDeviceCode answers pending, expired, or approved with a bearer token that resolves to the same session context as a browser cookie. Because user codes are short, failed approvals are rate limited per user and the handler surfaces that as 429.',
+					href: '/foundations/users-and-profiles',
+					linkLabel: 'See the sign-in flows'
+				},
+				{
+					title: 'Sync the permission catalog after migration',
+					body: 'syncPermissionCatalog merges three sources — permissions derived from the manifest, custom entries declared in smrt.config.ts, and definitions added at runtime — and reconciles them into Permission rows. It reports created, updated, and unchanged slugs, is safe to run on every deploy, and is additive: it never deletes a stale permission, grants a role, or emits row-level-security SQL.',
+					href: '/reference/authorization',
+					linkLabel: 'Authorization model'
+				},
+				{
+					title: 'Row-level security is generated, not hand-written',
+					body: 'generatePostgresPermissionSql inspects tenant-scoped models whose scope is required and returns the statements for them; applyPostgresPermissionPolicies executes those statements. Each table gets row-level security enabled and forced, plus one policy per action guarded by the shared smrt_rls_bypass, smrt_current_tenant_id, and smrt_has_permission functions. Models it cannot target safely are reported as skipped with a reason rather than silently omitted.',
+					href: '/reference/authorization',
+					linkLabel: 'Authorization model'
+				},
+				{
+					title: 'A pinnable discovery contract',
+					body: 'The /app-contract subpath carries the versioned discovery artifact that a CLI or MCP consumer can validate and pin. createDiscoveryConformanceArtifact emits deterministically ordered JSON with a SHA-256 integrity digest, and validateDiscoveryConformanceArtifact checks structure, ordering, and that digest in one call.',
+					href: '/foundations/interfaces',
+					linkLabel: 'Generated interfaces'
+				}
+			],
 			componentImport: '@happyvertical/smrt-users/svelte',
 			exampleResource: 'users'
 		}
@@ -479,6 +743,7 @@ export const packages: SmrtPackage[] = [
 			highlights: [
 				'Recall-before and capture-after learning loops',
 				'Multi-instance agents backed by durable personas',
+				'Agent availability inherited down the tenant tree',
 				'Principal-bounded worker orchestration with a maximum delegation depth'
 			],
 			components: [
@@ -488,7 +753,37 @@ export const packages: SmrtPackage[] = [
 				'AgentRunHistory',
 				'AgentAdminPanel',
 				'AgentAdminTabs',
-				'AgentSettingsShell'
+				'AgentSettingsShell',
+				'AgentSettingsForm',
+				'ScheduleStatusBadge'
+			],
+			details: [
+				{
+					title: 'The host owns the process, not the agent',
+					body: 'Signal handling is opt-in. Construct an agent with manageProcessSignals set to true and it installs SIGTERM and SIGINT handlers that shut down and exit; omit it — the default — and nothing is registered, which is what a server or job runner wants. Do not enable it for several agents in one process unless the host coordinates shutdown itself, because the first handler to finish exits the process.'
+				},
+				{
+					title: 'Resolve tenant agents, do not list them',
+					body: 'TenantAgent rows are explicit bindings between a tenant and an agent class. To answer what a tenant can actually run, call resolveForTenant on TenantAgentCollection with the tenant id and a function that returns its ancestor ids: it merges manifest permission defaults under explicit overrides, walks the tenant tree for inherited agents, and marks each result explicit or inherited with the tenant it came from. A plain list returns only the explicit rows, with no inheritance, no merged permissions, and no provenance.',
+					href: '/foundations/tenants',
+					linkLabel: 'How tenants nest'
+				},
+				{
+					title: 'Delegation cannot widen authority',
+					body: 'A worker invocation carries a delegation envelope with the acting user, tenant, allowed tools, correlation id, and depth. Depth is capped at three, and a requested principal that broadens the parent user, tenant, or on-behalf-of subject is rejected. Tool access is fail-closed: an execution whose allowed-tool list is missing or empty permits no tools at all.',
+					href: '/capabilities/learning-agents',
+					linkLabel: 'Learning and delegation'
+				},
+				{
+					title: 'Scheduling is declared here and run elsewhere',
+					body: 'AgentSchedule records the cron expression, next and last run, concurrency ceiling, timeout, target method, and success and failure counts. The runner that fires those schedules lives in smrt-jobs, so an application chooses its own execution host rather than inheriting a background worker with the agent model.',
+					href: '/packages/smrt-jobs',
+					linkLabel: 'smrt-jobs'
+				},
+				{
+					title: 'Two Svelte entry points',
+					body: 'The svelte subpath registers the schedule components with the shared module UI registry when it is imported. When a page only renders the admin shells, import from svelte/admin instead: it exposes the same admin components with no registration side effect.'
+				}
 			],
 			componentImport: '@happyvertical/smrt-agents/svelte',
 			exampleResource: 'agents'
@@ -515,6 +810,11 @@ export const packages: SmrtPackage[] = [
 		'smrt-jobs',
 		'Persistent background work, schedules, retries, runners, queue controls, and operational visibility.',
 		{
+			highlights: [
+				'An opt-in allowlist for the methods a job row may call',
+				'A per-tenant ceiling on in-flight jobs',
+				'Retry counts clamped rather than trusted'
+			],
 			components: [
 				'JobDashboard',
 				'JobList',
@@ -522,6 +822,16 @@ export const packages: SmrtPackage[] = [
 				'JobStats',
 				'JobStatusBadge',
 				'JobActions'
+			],
+			details: [
+				{
+					title: 'Say which methods a job may call',
+					body: 'A persisted job row names an object type and a method, so the runner needs to know which methods are reachable. Mark a method with the backgroundEligible decorator, or call markBackgroundEligible for non-decorator code, and the class gains an allowlist. The rule is deliberately restrictive rather than enabling: a class that marks nothing keeps the default behavior, but once any method is marked the runner refuses every method outside the list.'
+				},
+				{
+					title: 'One tenant cannot drain the queue',
+					body: 'Enqueueing checks how many non-terminal jobs a tenant already holds and refuses to add another past the cap, which defaults to ten thousand and can be set per call or through the job builder. Setting it to zero disables the check, and jobs with no tenant are never counted against it. Requested retry counts are clamped to the supported maximum instead of being rejected, so a misconfigured caller cannot pin a worker on a poison job.'
+				}
 			],
 			componentImport: '@happyvertical/smrt-jobs/svelte',
 			exampleResource: 'jobs'
@@ -651,17 +961,39 @@ export const packages: SmrtPackage[] = [
 			status: 'new',
 			highlights: [
 				'Four-edge AdminShell with tenant navigation and activity feeds',
-				'SvelteKit server-to-client collection hydration',
-				'Live-query bindings and browser AI adapters'
+				'Tenant navigation built from the manifest, not hand-written',
+				'SvelteKit server-to-client collection and message hydration',
+				'Live-query bindings and browser AI adapters with a warm cache'
 			],
-			components: [
-				'Provider',
-				'TextInput',
-				'MoneyInput',
-				'ModulePanel',
-				'AdminShell',
-				'TenantNav',
-				'VoiceInput'
+			componentGroups: smrtSvelteComponentGroups,
+			components: smrtSvelteComponentGroups.flatMap((group) => group.components),
+			details: [
+				{
+					title: 'Navigation the manifest already describes',
+					body: 'tenantNavFromManifest turns a manifest into ordered nav sections. It drops collections, internal and test classes, and anything without a REST list route, then drops single-table-inheritance subtypes that share a parent collection, because the polymorphic endpoint at that shared URL already covers them. Pass permittedResources and it filters to what a role may see, walking up the inheritance chain so a permitted subtype does not lose the base link it actually routes through. Output is sorted, so manifest churn never reshuffles the sidebar.',
+					href: '/capabilities/application-shell',
+					linkLabel: 'How the shell is composed'
+				},
+				{
+					title: 'AdminShell replaced the first-generation shells',
+					body: 'The public workspace surface is the four-edge AdminShell contract. The earlier WorkspaceShell and RoleShell primitives remain in the package as migration references only and are not exported from any subpath, so new work should compose AdminShell panels and focus tools. The focus-tool dock from that generation stays reachable on the workspace/legacy subpath while applications move across.',
+					href: '/capabilities/application-shell',
+					linkLabel: 'How the shell is composed'
+				},
+				{
+					title: 'Browser AI preloads on a strategy you choose',
+					body: 'Provider accepts a preload strategy of none, eager, idle, or on-visible; idle is the default and schedules work in an idle callback. eager starts immediately, none defers every adapter to first use, and on-visible is a manual mode: the package schedules nothing and the application decides when to trigger the preload. Adapters warm sequentially, one failure is recorded rather than aborting the rest, and an initialized adapter is kept in a module-level cache so navigation does not re-download a model.'
+				},
+				{
+					title: 'Calling a local model from a component',
+					body: 'useLLM runs inside the Provider and exposes initialize, chat, and unload alongside reactive isReady, isGenerating, currentModel, error, and downloadProgress values. Streaming is delivered through an onToken callback while chat still resolves to the finished string. Unmounting deliberately does not unload the model, because the download is the expensive part.'
+				},
+				{
+					title: 'One language snapshot per render',
+					body: 'buildI18nSnapshot resolves message templates for a locale on the server, including tenant overrides, and Provider accepts the result. Variables are interpolated in the browser, and a missing key falls back to the registered English default and then to the key itself, so a partly translated app still renders. The matching useI18n store and Trans component live in the UI foundation.',
+					href: '/packages/smrt-ui',
+					linkLabel: 'smrt-ui'
+				}
 			],
 			componentImport: '@happyvertical/smrt-svelte'
 		}

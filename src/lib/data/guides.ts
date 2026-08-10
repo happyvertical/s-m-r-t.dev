@@ -158,6 +158,45 @@ export const foundationGuides: Guide[] = [
 					'Profiles can represent people, organizations, bots, or public identities. They can exist before an account is created and can participate in typed, directional relationships.'
 			},
 			{
+				title: 'Sign in through an identity provider',
+				intro:
+					'Declare one or more OIDC providers in configuration, then mount a login route and a callback route. The handlers own the protocol: each login gets its own state, nonce, and PKCE verifier, and the callback verifies state, the authorization-response issuer, the signed ID token, and the nonce before it reads a single claim.',
+				points: [
+					'The PKCE challenge method is always S256.',
+					'An ID token with no email claim falls back to the provider UserInfo endpoint.',
+					'On success the handler links an OIDC identity, resolves the user, and sets the normal session cookie.',
+					'A failed login without a configured redirect returns a plain 401 rather than describing the account.'
+				],
+				filename: 'src/routes/auth/[provider]/callback/+server.ts',
+				code: `import { createOidcCallbackHandler } from '@happyvertical/smrt-users/sveltekit';\n\nexport const GET = createOidcCallbackHandler({\n  db: { type: 'postgres', url: process.env.DATABASE_URL! },\n  successRedirect: '/dashboard'\n});`
+			},
+			{
+				title: 'The first identity binding is a decision you make',
+				intro:
+					'When a new provider identity resolves to a person record that already has an owning user, sign-in stops before it creates a new account, identity link, or session. That is deliberate: matching email addresses is not proof that the same human is behind both. An application that runs its own invitation or approval workflow can authorize that first binding explicitly.',
+				points: [
+					'Return undefined to keep the fail-closed default, or null to reject the login outright.',
+					'The framework reloads both records by id inside the same transaction rather than trusting what you returned.',
+					'The provider must report the email as verified, and an identity that is already bound can never be rebound.',
+					'A race can run the hook twice, so it has to be safe to repeat.'
+				],
+				filename: 'src/routes/auth/[provider]/callback/+server.ts',
+				code: `import { ProfileCollection } from '@happyvertical/smrt-profiles';\nimport { createOidcCallbackHandler } from '@happyvertical/smrt-users/sveltekit';\n\nexport const GET = createOidcCallbackHandler({\n  db,\n  authorizeProfileOwner: async ({ claims, db, users }) => {\n    const approval = await findApprovedInvite({ db, email: claims.email });\n    if (!approval) return undefined; // keep the secure default\n\n    const profiles = await ProfileCollection.create({ db });\n    const profile = await profiles.get({ id: approval.profileId });\n    const user = await users.get({ id: approval.userId });\n    if (!profile || !user) return null; // reject a stale approval\n\n    return { profile, user };\n  },\n  successRedirect: '/dashboard'\n});`
+			},
+			{
+				title: 'Sign in from a terminal',
+				intro:
+					'Command-line tools use the device-code flow. The CLI starts a request and receives a secret device code, a short code the person reads aloud or types, and a verification URL. The person approves it in an already signed-in browser, and the CLI polls until it can exchange its device code for a bearer token.',
+				points: [
+					'The device code is stored only as a hash; the short user code is what a human handles.',
+					'The bearer token resolves to the same session context as a browser cookie, so permissions and tenant scope match.',
+					'Approving is idempotent, and a request expires if nobody approves it in time.',
+					'Because user codes are short, repeated failed approvals are rate limited per user.'
+				],
+				filename: 'src/routes/api/cli/auth/token/+server.ts',
+				code: `import { createTerminalAuthTokenHandler } from '@happyvertical/smrt-users/sveltekit';\n\n// The CLI polls this until it answers approved, then stores the token.\nexport const POST = createTerminalAuthTokenHandler({ db });`
+			},
+			{
 				title: 'Let the starter wire the common flow',
 				intro:
 					'Both starter paths include current session handling. The SaaS starter adds the finished onboarding, account, and tenant-management surfaces; the ground-up template keeps them visible as small examples you can change.'
@@ -365,6 +404,21 @@ export const capabilityGuides: Guide[] = [
 				title: 'Agents can delegate without widening authority',
 				intro:
 					'The invoke-agent tool carries an immutable principal through worker calls, intersects RBAC with agent and persona tool ceilings, limits delegation depth to three, and surfaces correlated completion events back to the conversation.'
+			},
+			{
+				title: 'Which agents a tenant may run',
+				intro:
+					'Availability is a binding between a tenant and an agent class, and it inherits down the tenant tree. Resolving it merges the manifest permission defaults underneath any explicit override, walks the ancestors for agents the tenant did not enable itself, and tells you whether each result was set here or inherited and from where. Reading the binding rows directly answers a narrower question and skips all of that.',
+				points: [
+					'Enable, disable, or clear an override per tenant and agent class.',
+					'An override that is cleared falls back to inheritance rather than to off.',
+					'Stored agent configuration is treated as sensitive and is sanitized before it reaches a browser.'
+				]
+			},
+			{
+				title: 'The host decides when an agent stops',
+				intro:
+					'An agent does not take over the process. Signal handling is opt-in per instance, so a server or job runner keeps ownership of shutdown by default, and a single-agent script can ask for it explicitly. Schedules are declared alongside the agent but executed by the background job runner, which keeps the choice of execution host in the application rather than in the agent model.'
 			}
 		],
 		related: [
@@ -543,12 +597,25 @@ dispose();`
 			{
 				title: 'Navigation comes from the manifest',
 				intro:
-					'tenantNavFromManifest groups resources by package and filters them by permitted resources. Build it in +layout.server.ts and the first render arrives with the correct navigation—no client fetch required.'
+					'tenantNavFromManifest groups resources by package and filters them by permitted resources. Build it in +layout.server.ts and the first render arrives with the correct navigation—no client fetch required.',
+				points: [
+					'Collections, internal and test classes, and anything without a REST list route are dropped.',
+					'A subtype that shares its parent collection is dropped, because the shared endpoint is already polymorphic.',
+					'permittedResources filters by role, expanding through inheritance so a permitted subtype keeps the link it routes through.',
+					'Sections and items are sorted, so reordering the manifest never reshuffles the sidebar.'
+				],
+				filename: 'src/routes/+layout.server.ts',
+				code: `import { tenantNavFromManifest } from '@happyvertical/smrt-svelte/workspace';\nimport { manifest } from '$lib/manifest';\n\nexport const load = async ({ locals }) => ({\n  nav: tenantNavFromManifest(manifest, {\n    permittedResources: locals.permittedResources,\n    sectionHints: { '@happyvertical/smrt-content': 'Content' },\n    basePath: ''\n  })\n});`
 			},
 			{
 				title: 'Activities accept any transport',
 				intro:
 					'Jobs, polling, SSE, WebSockets, and application events all adapt into one activity registry. The shell itself stays transport-agnostic and SSR-safe.'
+			},
+			{
+				title: 'AdminShell is the surface to build on',
+				intro:
+					'Earlier releases shipped a sidebar-and-inspector WorkspaceShell and a role-driven RoleShell. The four-edge AdminShell replaced both, and those primitives are no longer exported. Focus tools now live on the shell itself; the previous dock stays available on a separate legacy subpath so an existing application can migrate one screen at a time rather than all at once.'
 			}
 		]
 	},
