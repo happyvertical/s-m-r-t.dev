@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Callout from '$lib/components/Callout.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import GuideDiagram from '$lib/components/GuideDiagram.svelte';
 	import SEO from '$lib/components/SEO.svelte';
@@ -56,6 +57,13 @@
 					{/if}
 					{#if section.code}
 						<CodeBlock code={section.code} filename={section.filename} lang={section.lang} />
+					{/if}
+					{#if section.callout}
+						<Callout
+							variant={section.callout.variant}
+							title={section.callout.title}
+							body={section.callout.body}
+						/>
 					{/if}
 					{#if section.links}
 						<div class="section-links">

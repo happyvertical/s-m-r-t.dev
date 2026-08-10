@@ -1,3 +1,5 @@
+import type { GuideCallout } from '$lib/data/callouts';
+
 export interface GuideLink {
 	label: string;
 	href: string;
@@ -14,6 +16,8 @@ export interface GuideSection {
 	/** Language label shown on the code block. Defaults to TypeScript. */
 	lang?: string;
 	links?: GuideLink[];
+	/** Optional admonition rendered after the section body. */
+	callout?: GuideCallout;
 }
 
 export interface Guide {
