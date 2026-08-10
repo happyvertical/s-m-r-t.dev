@@ -515,6 +515,82 @@ export const referenceGuides: Guide[] = [
 		]
 	},
 	{
+		slug: 'relationships',
+		navTitle: 'Relationship loading',
+		eyebrow: 'Reference',
+		title: 'Loading related objects without N+1 queries',
+		lede: 'Declared relationships load lazily one object at a time, or in batches for a whole page. Both paths fill the same per-object cache.',
+		plainEnglish:
+			'Reading a list and then reading the parent of each row inside a loop issues one query per row. Ask for the relationship when you list, and the collection fetches them together.',
+		packages: ['smrt-core', 'smrt-tenancy'],
+		pinnedVersion: REFERENCE_PINNED_VERSION,
+		sources: [
+			{ label: 'object.ts', href: `${SMRT_TREE}/packages/core/src/object.ts` },
+			{ label: 'collection.ts', href: `${SMRT_TREE}/packages/core/src/collection.ts` }
+		],
+		sections: [
+			{
+				title: 'Where the extra queries come from',
+				intro:
+					'Listing 100 orders and then resolving the customer for each order inside the loop is 101 queries: one for the page and one per row. The count scales with the page size, so a small fixture hides it.',
+				filename: 'n-plus-one.ts',
+				code: `// One query for the page.\nconst page = await orders.list({ where: { status: 'open' }, limit: 100 });\n\n// One more for every row.\nfor (const order of page) {\n  const customer = await order.loadRelated('customerId');\n}`
+			},
+			{
+				title: 'include batches the relationship rather than joining',
+				intro:
+					'list({ include }) hydrates the page first, then queries each named relationship in bulk and primes the cache on each object with the result. 100 orders and their customer become 2 queries rather than 101 — but there is no JOIN and no single-statement fetch, so read it as N+1 collapsing to 1+K.',
+				filename: 'eager-load.ts',
+				code: `const page = await orders.list({\n  where: { status: 'open' },\n  include: ['customerId', 'lines'],\n  limit: 100\n});\n\nfor (const order of page) {\n  // Served from the primed cache; no further queries.\n  const customer = await order.getRelated('customerId');\n}`,
+				points: [
+					'A @foreignKey, @crossPackageRef, or @oneToMany relationship costs one query. A @manyToMany costs two: it scans the junction table, then hydrates the targets.',
+					'Foreign-key values are de-duplicated before the batch query, so repeated parents cost one row, not one per child.',
+					'IN lists are chunked at 900 values, so a very wide page issues a few queries per relationship instead of one oversized statement.',
+					'include is available on list() and findAll(). get() has no include option — call a loader on the object it returns.',
+					'include cannot be combined with select. A projection returns plain rows with nothing to attach a relationship to, and asking for both throws.'
+				],
+				callout: {
+					variant: 'note',
+					title: 'Fewer queries, not one query',
+					body: 'include is a batch loader, not a JOIN. The page is fetched, then each named relationship costs one more query — two for a manyToMany. That is the difference between a request that scales with page size and one that does not, but a page asking for several relationships still issues several queries.'
+				}
+			},
+			{
+				title: 'Three loaders, one cache',
+				intro:
+					'The loaders live on the object, take a relationship field name, and store what they resolve on that instance. A second call for the same field returns the cached value without querying.',
+				points: [
+					'loadRelated(fieldName) resolves one @foreignKey or @crossPackageRef and returns the object, or null when the key is empty.',
+					'loadRelatedMany(fieldName) resolves a @oneToMany through the inverse foreign key on the target, or a @manyToMany through its junction table, and returns an array.',
+					'getRelated(fieldName) reads the relationship metadata and dispatches to whichever of the two applies. Use it when the call site does not need to know which kind the field is.',
+					'The cache is per instance. A freshly listed object starts empty unless include primed it, so re-listing does not carry loaded relationships forward.'
+				]
+			},
+			{
+				title: 'Loading stops at the tenant boundary',
+				intro:
+					'When a tenant-scoped object resolves a relationship into a different, non-null tenant, the loaders throw rather than returning the row. The check is a no-op for global objects and same-tenant reads, so it only fires on a genuine crossing.',
+				points: [
+					'Pass { allowCrossTenant: true } for deliberate cross-tenant work such as admin tooling or migrations.',
+					'A cache primed by include is re-checked on a later guarded call, so eager loading cannot be used to slip a cross-tenant object past the guard.'
+				]
+			},
+			{
+				title: 'Where relationship declarations go wrong',
+				intro:
+					'Most relationship-loading surprises come from the declaration rather than the call site.',
+				points: [
+					'A @oneToMany needs an inverse @foreignKey on the target. When the target declares more than one, name it — @oneToMany(Target, { foreignKey: "ownerId" }) — and a stale name throws instead of quietly returning empty arrays.',
+					'A @manyToMany needs its junction table named in through; a missing one throws.',
+					'include takes relationship field names, not target class or table names.',
+					'Loading inside a component that renders per row puts the loop back. Prime the relationship where the query is issued, then read it during render.'
+				],
+				links: [{ label: 'Collections and list()', href: '/reference/collections' }]
+			}
+		],
+		related: [{ label: 'Collections and list()', href: '/reference/collections' }]
+	},
+	{
 		slug: 'interfaces',
 		navTitle: 'Generated interfaces',
 		eyebrow: 'Reference',
