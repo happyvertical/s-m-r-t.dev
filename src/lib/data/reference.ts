@@ -377,6 +377,12 @@ const blurb = await article.describe({ maxTokens: 50 });`
 				]
 			},
 			{
+				// The combinedField note below, and the field-validation note in the
+				// retrieval entry further down, describe shipped behaviour that reads
+				// like a bug because it is one: semanticSearch is the only one of the
+				// three retrieval methods that validates `field`, so it rejects the
+				// combined vector the other two accept. Upstream happyvertical/smrt#2281;
+				// both notes get reworded when a release carries the fix (#162).
 				title: 'Declare which fields get embedded',
 				intro:
 					'Semantic search reads vectors generated from the fields named in the @smrt() decorator. Project-wide defaults live in the smrt section of the configuration tree, and a class can override the provider or turn automatic generation off.',
@@ -423,6 +429,11 @@ export class Article extends SmrtObject {
 					'collection.generateMissingEmbeddings({ batchSize, onProgress }) backfills existing rows and returns { generated, skipped }.'
 				],
 				filename: 'embedding-lifecycle.ts',
+				// `number[] | null` below is correct and deliberate. The framework's own
+				// docs/content/core.md says getEmbedding returns a Float32Array, and
+				// documents an embeddings `model` key that ClassEmbeddingConfig does not
+				// have; this page was written against the shipped types instead. Upstream
+				// happyvertical/smrt#2280 — do not "correct" this to match those docs.
 				code: `// Explicit generation, when you need to await the result.
 await article.generateEmbeddings();                    // all configured fields
 await article.generateEmbeddings({ fields: ['title'] });

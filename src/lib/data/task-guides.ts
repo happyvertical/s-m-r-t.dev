@@ -362,6 +362,12 @@ export class Article extends SmrtObject {
 				links: [{ label: 'Reference: generated interfaces', href: '/reference/interfaces' }]
 			},
 			{
+				// The .ts output path, the 'no generate:mcp' comment, and the --version
+				// warning below are all guidance about real CLI defects, not patches to
+				// them: generate-mcp writes TypeScript to a .js path, the global flag
+				// parser swallows --version, and the shipped CLI README names a command
+				// that is not registered. Upstream happyvertical/smrt#2279; this step gets
+				// cleaned up when a release carries the fix (#161).
 				title: 'Generate the local stdio server',
 				intro:
 					'The generated stdio server is the Tier 1 surface for an agent running on the same machine as the application. It reads its database credentials from the environment and has no per-request principal, which is exactly why it stays local.',
