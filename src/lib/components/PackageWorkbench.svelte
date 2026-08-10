@@ -708,6 +708,10 @@
 	}
 
 	.install-panel {
+		/* Grid items default to min-width: auto, so a long package name in the
+		   install snippet widened the whole page instead of scrolling inside its
+		   own code block. */
+		min-width: 0;
 		align-self: start;
 		padding: 24px;
 		border: 1px solid var(--site-line-strong);
