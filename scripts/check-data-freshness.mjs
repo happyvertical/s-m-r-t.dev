@@ -127,13 +127,17 @@ export function collectInstalled(root) {
 }
 
 /**
- * A package name written as a complete string literal — `'smrt-users'` as a
- * `definePackage` slug or a `packages: [...]` entry, `'@happyvertical/smrt-ui'`
- * inside a code example. Anchoring on the quotes is what keeps prose out:
- * `smrt-knowledge.json` and `no-smrt-objects-in-sources` occur inside longer
- * strings and are not package references.
+ * A package name at the start of a string literal — `'smrt-users'` as a
+ * `definePackage` slug or a `packages: [...]` entry, and the code-example forms
+ * `'@happyvertical/smrt-ui'`, `'@happyvertical/smrt-ui/forms'`, and
+ * `'@happyvertical/smrt-content:Article'`.
+ *
+ * The opening quote is what keeps prose out. `smrt-knowledge.json` and
+ * `no-smrt-objects-in-sources` sit mid-sentence inside longer strings in
+ * tooling.ts, so neither can match. The trailing lookahead then rejects a slug
+ * that is merely a prefix of a longer word.
  */
-const PACKAGE_LITERAL = /(['"`])(?:@happyvertical\/)?(smrt-[a-z0-9]+(?:-[a-z0-9]+)*)\1/g;
+const PACKAGE_LITERAL = /(?:['"`])(?:@happyvertical\/)?(smrt-[a-z0-9]+(?:-[a-z0-9]+)*)(?=['"`/:])/g;
 
 /**
  * Which data files name each package.
@@ -152,7 +156,7 @@ export function collectReferences(dataDir) {
 	for (const file of readdirSync(dataDir).sort()) {
 		if (!file.endsWith('.ts') || file.endsWith('.test.ts')) continue;
 		const source = readFileSync(join(dataDir, file), 'utf8');
-		for (const [, , slug] of source.matchAll(PACKAGE_LITERAL)) {
+		for (const [, slug] of source.matchAll(PACKAGE_LITERAL)) {
 			if (!references.has(slug)) references.set(slug, new Set());
 			references.get(slug).add(file);
 		}
@@ -163,6 +167,13 @@ export function collectReferences(dataDir) {
 
 /**
  * Compare a baseline against the installed tree.
+ *
+ * Only a rewritten `AGENTS.md` counts as drift. The smrt packages release in
+ * lockstep every few days and most releases do not touch a package's documented
+ * surface, so treating a version bump as stale content would flag all 35 of them
+ * every time and the report would be ignored within a month. Version moves are
+ * still returned, for context next to a real change and for the summary line —
+ * they just do not raise the alarm on their own.
  *
  * @param {Record<string, { version: string, agentsMd: string | null }>} baseline
  * @param {Record<string, { version: string, agentsMd: string | null }>} current
@@ -195,7 +206,14 @@ export function diffPackages(baseline, current) {
 		if (!current[name]) removed.push({ name, version: before.version });
 	}
 
-	return { added, removed, changed, drifted: added.length + removed.length + changed.length > 0 };
+	const documented = changed.filter((entry) => entry.docChanged);
+	return {
+		added,
+		removed,
+		changed,
+		documented,
+		drifted: added.length + removed.length + documented.length > 0
+	};
 }
 
 /** Packages the data files describe that are not installed here at all. */
@@ -231,24 +249,23 @@ export function formatReport(diff, references, current) {
 
 	if (!diff.drifted) {
 		lines.push(
-			`Every installed \`${SCOPE}/${PREFIX}*\` package matches the baseline, so nothing in`,
-			'`src/lib/data/` is known to be stale.',
+			`No installed \`${SCOPE}/${PREFIX}*\` package has rewritten its \`${DOC_FILE}\` since the`,
+			'baseline, so nothing in `src/lib/data/` is known to be stale.',
 			''
 		);
 	}
 
-	if (diff.changed.length > 0) {
-		lines.push('### Packages that changed since the data files were verified', '');
-		lines.push('| Package | Version | `AGENTS.md` | Data files to re-read |');
-		lines.push('| --- | --- | --- | --- |');
-		for (const entry of diff.changed) {
+	if (diff.documented.length > 0) {
+		lines.push('### Packages whose documentation changed', '');
+		lines.push('| Package | Version | Data files to re-read |');
+		lines.push('| --- | --- | --- |');
+		for (const entry of diff.documented) {
 			const version = entry.versionChanged
 				? `${safeVersion(entry.from)} → ${safeVersion(entry.to)}`
-				: safeVersion(entry.to);
-			const doc = entry.docChanged ? 'rewritten' : 'unchanged';
+				: `${safeVersion(entry.to)} (unchanged)`;
 			const files = dataFilesFor(references, entry.name);
 			const where = files.length > 0 ? asCode(files) : '_none_';
-			lines.push(`| \`${entry.name}\` | ${version} | ${doc} | ${where} |`);
+			lines.push(`| \`${entry.name}\` | ${version} | ${where} |`);
 		}
 		lines.push('');
 	}
@@ -274,11 +291,19 @@ export function formatReport(diff, references, current) {
 	}
 
 	const unresolved = undocumentableSlugs(references, current);
+	const versionOnly = diff.changed.length - diff.documented.length;
 	lines.push('### Coverage', '');
 	lines.push(
 		`${Object.keys(current).length} \`${SCOPE}/${PREFIX}*\` packages are installed and were` +
 			' checked.'
 	);
+	if (versionOnly > 0) {
+		lines.push(
+			'',
+			`${versionOnly} of them moved version without touching \`${DOC_FILE}\`. That is the normal` +
+				' lockstep release and is not reported as drift — there is nothing new to read.'
+		);
+	}
 	if (unresolved.length > 0) {
 		lines.push(
 			'',
@@ -356,8 +381,8 @@ function main(argv) {
 	}
 	process.stderr.write(
 		diff.drifted
-			? `Data freshness: ${diff.changed.length} changed, ${diff.added.length} added, ` +
-					`${diff.removed.length} removed.\n`
+			? `Data freshness: ${diff.documented.length} documentation change(s), ` +
+					`${diff.added.length} added, ${diff.removed.length} removed.\n`
 			: 'Data freshness: no drift.\n'
 	);
 	return diff.drifted ? 1 : 0;

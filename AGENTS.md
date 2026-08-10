@@ -107,8 +107,9 @@ a renderer changes every page it serves — check a few before assuming.
 
 `pnpm run audit:data` hashes the `AGENTS.md` shipped inside every installed
 `@happyvertical/smrt-*` package, compares it to `scripts/smrt-docs-baseline.json`,
-and names the data files that mention each changed package. After re-reading
-those entries against the packages' own docs, run
+and names the data files that mention each package whose docs were rewritten.
+A lockstep version bump that leaves `AGENTS.md` alone is not drift — there would
+be nothing new to read. After re-reading the entries it points at, run
 `pnpm run audit:data -- --update` and commit the refreshed baseline.
 
 `.github/workflows/data-freshness.yaml` runs it weekly and keeps one tracking

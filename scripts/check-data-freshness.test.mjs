@@ -17,11 +17,21 @@ const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 const baseline = JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
 
 describe('committed baseline', () => {
-	it('matches the installed tree', () => {
-		// If this fails the framework moved without the data files being
-		// re-verified. That is the drift the scheduled audit reports; fix it by
-		// re-reading the changed packages and running `pnpm run audit:data -- --update`.
-		expect(diffPackages(baseline.packages, collectInstalled(ROOT)).drifted).toBe(false);
+	// Deliberately NOT asserted here: that the baseline still matches the
+	// installed tree. `pnpm test` is the pull-request gate, so asserting it would
+	// make a Renovate bump fail CI until someone refreshed the baseline — turning
+	// an advisory audit into the merge blocker it is designed not to be. Drift is
+	// the scheduled workflow's job to report. What is asserted is that the walk
+	// still works and the file is still shaped like a baseline.
+	it('reads the real installed tree', () => {
+		const installed = collectInstalled(ROOT);
+
+		expect(Object.keys(installed).length).toBeGreaterThan(20);
+		for (const [name, entry] of Object.entries(installed)) {
+			expect(name).toMatch(/^@happyvertical\/smrt-/);
+			expect(entry.version).toMatch(/^\d+\.\d+\.\d+/);
+			expect(entry.agentsMd).toMatch(/^[0-9a-f]{64}$/);
+		}
 	});
 
 	it('records a version and an AGENTS.md hash for every package', () => {
@@ -47,6 +57,7 @@ describe('diffPackages', () => {
 			added: [],
 			removed: [],
 			changed: [],
+			documented: [],
 			drifted: false
 		});
 	});
@@ -58,7 +69,6 @@ describe('diffPackages', () => {
 			'@happyvertical/smrt-old': { version: '1.0.0', agentsMd: 'ccc' }
 		});
 
-		expect(diff.drifted).toBe(true);
 		expect(diff.changed).toEqual([
 			{
 				name: '@happyvertical/smrt-core',
@@ -75,6 +85,21 @@ describe('diffPackages', () => {
 				docChanged: true
 			}
 		]);
+		expect(diff.documented.map((entry) => entry.name)).toEqual(['@happyvertical/smrt-ui']);
+		expect(diff.drifted).toBe(true);
+	});
+
+	it('does not call a lockstep version bump drift', () => {
+		// Every smrt package moves together every few days. If that raised the
+		// alarm the report would be noise within a month.
+		const bumped = Object.fromEntries(
+			Object.entries(before).map(([name, entry]) => [name, { ...entry, version: '1.1.0' }])
+		);
+		const diff = diffPackages(before, bumped);
+
+		expect(diff.changed).toHaveLength(3);
+		expect(diff.documented).toEqual([]);
+		expect(diff.drifted).toBe(false);
 	});
 
 	it('reports packages that appeared and disappeared', () => {
@@ -94,6 +119,15 @@ describe('collectReferences', () => {
 
 	it('finds the data files that name a package', () => {
 		expect(references.get('smrt-core')).toContain('packages.ts');
+	});
+
+	it('finds packages named inside code examples, not just as bare slugs', () => {
+		// guides.ts and reference.ts reach smrt-content only as
+		// `'@happyvertical/smrt-content:Article'`; those pages still need
+		// re-reading when that package's docs change.
+		expect(references.get('smrt-content')).toEqual(
+			expect.arrayContaining(['guides.ts', 'reference.ts'])
+		);
 	});
 
 	it('ignores package-like text inside prose', () => {
@@ -131,7 +165,19 @@ describe('formatReport', () => {
 	it('says so plainly when nothing changed', () => {
 		const diff = diffPackages(current, current);
 
-		expect(formatReport(diff, references, current)).toContain('matches the baseline');
+		expect(formatReport(diff, references, current)).toContain('is known to be stale');
+	});
+
+	it('notes a version-only move without listing files to re-read', () => {
+		const diff = diffPackages(
+			{ '@happyvertical/smrt-ui': { version: '1.0.0', agentsMd: 'zzz' } },
+			current
+		);
+		const report = formatReport(diff, references, current);
+
+		expect(diff.drifted).toBe(false);
+		expect(report).toContain('moved version without touching');
+		expect(report).not.toContain('Data files to re-read');
 	});
 
 	it('refuses to print a version that would forge table rows', () => {
