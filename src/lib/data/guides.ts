@@ -575,7 +575,7 @@ dispose();`
 					'Cold-start rule: an object with no basic markers renders every field basic; once any field is marked, unmarked fields start advanced.'
 				],
 				filename: 'src/lib/objects/Invoice.ts',
-				code: `import { field, smrt, SmrtObject } from '@happyvertical/smrt-core';\n\n@smrt({\n  api: { include: ['list', 'get', 'create', 'update'] },\n  ui: { label: 'Invoices', description: 'Bills you send to a customer.' }\n})\nexport class Invoice extends SmrtObject {\n  @field({\n    required: true,\n    description: 'Who the invoice is addressed to.',\n    ui: { basic: true, order: 1 }\n  })\n  customerName = '';\n\n  @field({\n    description: 'Payment terms printed on the invoice.',\n    ui: { basic: true, order: 2 }\n  })\n  terms = 'Net 30';\n\n  @field({\n    type: 'json',\n    description: 'Structured line-item metadata.',\n    ui: { group: 'Accounting', order: 10 }\n  })\n  metadata = '{}';\n}`
+				code: `import { field, smrt, SmrtObject } from '@happyvertical/smrt-core';\n\n@smrt({\n  api: { include: ['list', 'get', 'create', 'update'] },\n  ui: { label: 'Invoices', description: 'Bills you send to a customer.' }\n})\nexport class Invoice extends SmrtObject {\n  @field({\n    required: true,\n    description: 'Who the invoice is addressed to.',\n    ui: { basic: true, order: 1 }\n  })\n  customerName = '';\n\n  @field({\n    description: 'Payment terms printed on the invoice.',\n    ui: { basic: true, order: 2 }\n  })\n  terms = 'Net 30';\n\n  @field({\n    description: 'Internal note for the accounts team.',\n    ui: { group: 'Accounting', order: 10 }\n  })\n  internalNote = '';\n}`
 			},
 			{
 				title: 'Four layers merge into one answer',
