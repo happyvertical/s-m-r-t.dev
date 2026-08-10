@@ -22,9 +22,7 @@ const errors = [];
 
 // Files that are allowed to have unescaped braces (component files that render props)
 const ALLOWED_FILES = [
-	'CodeBlock.svelte', // Renders {code} prop
-	'Icon.svelte', // Renders {icon} prop
-	'icon/+page.svelte' // Icon demo page renders {icon}
+	'CodeBlock.svelte' // Renders {code} prop
 ];
 
 async function checkFiles() {

@@ -117,6 +117,8 @@
 									<li><span>{String(index + 1).padStart(2, '0')}</span>{highlight}</li>
 								{/each}
 							</ol>
+						{:else if pkg.surfaceNote}
+							<p class="overview-note">{pkg.surfaceNote}</p>
 						{:else}
 							<p class="overview-note">
 								This package is one focused part of the s-m-r-t stack. Its decorated models
@@ -289,10 +291,14 @@
 				{:else}
 					<div class="empty-surface">
 						<span>REST</span>
-						<p>
-							This package supports the runtime or build pipeline; it does not define a
-							representative CRUD resource of its own.
-						</p>
+						{#if pkg.surfaceNote}
+							<p>{pkg.surfaceNote}</p>
+						{:else}
+							<p>
+								This package supports the runtime or build pipeline; it does not define a
+								representative CRUD resource of its own.
+							</p>
+						{/if}
 					</div>
 				{/if}
 			</div>
@@ -326,10 +332,14 @@
 				{:else}
 					<div class="empty-surface">
 						<span>MCP</span>
-						<p>
-							This package is itself infrastructure, UI, or tooling. Its capabilities are consumed
-							by generated app MCP servers rather than exposed as a model resource.
-						</p>
+						{#if pkg.surfaceNote}
+							<p>{pkg.surfaceNote}</p>
+						{:else}
+							<p>
+								This package is itself infrastructure, UI, or tooling. Its capabilities are consumed
+								by generated app MCP servers rather than exposed as a model resource.
+							</p>
+						{/if}
 					</div>
 				{/if}
 			</div>
@@ -367,10 +377,15 @@
 				{:else}
 					<div class="empty-surface">
 						<span>WebMCP</span>
-						<p>
-							This package does not define a representative browser tool itself. Its models can
-							still participate when an application exposes them through generated web collections.
-						</p>
+						{#if pkg.surfaceNote}
+							<p>{pkg.surfaceNote}</p>
+						{:else}
+							<p>
+								This package does not define a representative browser tool itself. Its models can
+								still participate when an application exposes them through generated web
+								collections.
+							</p>
+						{/if}
 					</div>
 				{/if}
 			</div>
@@ -406,10 +421,14 @@
 				{:else}
 					<div class="empty-surface">
 						<span>CLI</span>
-						<p>
-							Use this package through its documented build or runtime entry points. It does not
-							contribute a representative generated resource command.
-						</p>
+						{#if pkg.surfaceNote}
+							<p>{pkg.surfaceNote}</p>
+						{:else}
+							<p>
+								Use this package through its documented build or runtime entry points. It does not
+								contribute a representative generated resource command.
+							</p>
+						{/if}
 					</div>
 				{/if}
 			</div>

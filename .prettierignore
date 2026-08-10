@@ -3,5 +3,4 @@ node_modules/
 build/
 dist/
 .claude/worktrees/
-.claude/smrt-framework.md
 pnpm-lock.yaml

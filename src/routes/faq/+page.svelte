@@ -45,7 +45,7 @@
 			]
 		},
 		{
-			title: 'New in 0.38',
+			title: 'Newer capabilities',
 			items: [
 				{
 					q: 'What does it mean that agents learn?',

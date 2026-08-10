@@ -1,3 +1,5 @@
+import { SMRT_VERSION } from '$lib/version';
+
 export type PackageCategory =
 	| 'Foundation'
 	| 'Agents & runtime'
@@ -35,6 +37,13 @@ export interface SmrtPackage {
 	details: PackageDetail[];
 	componentImport?: string;
 	exampleResource?: string;
+	/**
+	 * Replaces the generic fallback copy on the overview note and the four
+	 * generated-interface panels when that copy would be wrong. The default text
+	 * assumes a package without models is infrastructure or tooling, which is not
+	 * true of every one of them.
+	 */
+	surfaceNote?: string;
 	version: string;
 	status?: 'stable' | 'new' | 'foundation' | 'private';
 }
@@ -49,11 +58,10 @@ type PackageOptions = Partial<
 		| 'details'
 		| 'componentImport'
 		| 'exampleResource'
+		| 'surfaceNote'
 		| 'status'
 	>
 >;
-
-const VERSION = '0.39.1';
 
 const smrtUiComponentGroups: PackageComponentGroup[] = [
 	{
@@ -235,7 +243,8 @@ function definePackage(
 		details: options.details ?? [],
 		componentImport: options.componentImport,
 		exampleResource: options.exampleResource,
-		version: VERSION,
+		surfaceNote: options.surfaceNote,
+		version: SMRT_VERSION,
 		status: options.status ?? 'stable'
 	};
 }
@@ -730,9 +739,68 @@ export const packages: SmrtPackage[] = [
 	),
 	definePackage(
 		'Business & operations',
+		'smrt-marketing',
+		'Cross-channel campaigns, immutable performance snapshots, and computed budget pacing.',
+		{
+			status: 'new',
+			highlights: [
+				'Campaigns and channels share one budget and one reporting shape',
+				'Ingested metric snapshots are deduplicated and never edited in place',
+				'Pacing is computed from the evidence rather than stored'
+			],
+			components: [
+				'MarketingDashboard',
+				'CampaignList',
+				'CampaignDetail',
+				'ChannelMix',
+				'BudgetPacing'
+			],
+			componentImport: '@happyvertical/smrt-marketing/svelte',
+			exampleResource: 'campaigns'
+		}
+	),
+	definePackage(
+		'Business & operations',
 		'smrt-affiliates',
-		'Partners, tiered commissions, attribution, and payout processing.',
-		{ exampleResource: 'affiliate-partners' }
+		'Partners, tiered commissions, attribution, and payout processing. Now a compatibility shim over the smrt-sales commissions module — new applications should use smrt-sales directly.',
+		// No exampleResource: as of 0.40 the shim declares no models of its own, so
+		// it generates no REST, MCP, WebMCP, or CLI surface. The models live in
+		// smrt-sales.
+		{
+			surfaceNote:
+				'A deprecated compatibility shim that re-exports the smrt-sales commissions module under its legacy names. It declares no models of its own, so it generates no interfaces — those come from @happyvertical/smrt-sales.'
+		}
+	),
+	definePackage(
+		'Business & operations',
+		'smrt-sales',
+		'Provider-neutral agreement execution, CRM, referral intake and attribution, and a neutral commissions core.',
+		{
+			status: 'new',
+			highlights: [
+				'Subpath modules — agreements, crm, referrals, commissions — keep consumers scoped',
+				'Referral attribution records its exceptions and conflicts instead of guessing',
+				'Commission plans, earning events, and payouts stay separate from client invoices'
+			],
+			components: [
+				'SalesDashboard',
+				'LeadList',
+				'LeadDetail',
+				'OpportunityBoard',
+				'OpportunityDetail',
+				'ReferralLinkManager',
+				'ReferralStatusList',
+				'ReferrerEarningsSummary',
+				'PayoutHistoryList',
+				'ExecutedAgreementsList',
+				'CommissionBreakdown',
+				'CommissionExpenseSummary',
+				'AttributionConflictQueue',
+				'PayoutBatchReview'
+			],
+			componentImport: '@happyvertical/smrt-sales/svelte',
+			exampleResource: 'leads'
+		}
 	),
 	definePackage(
 		'Business & operations',
@@ -749,6 +817,28 @@ export const packages: SmrtPackage[] = [
 			],
 			componentImport: '@happyvertical/smrt-projects/svelte',
 			exampleResource: 'projects'
+		}
+	),
+	definePackage(
+		'Business & operations',
+		'smrt-support',
+		'Channel-neutral support cases with lifecycle, routing, service targets, escalation, and auditable service time.',
+		{
+			status: 'new',
+			highlights: [
+				'Chat and email land in one tenant-scoped case, idempotent on replay',
+				'Writes go through service facades so lifecycle and audit evidence cannot be bypassed',
+				'Delivery work stays in smrt-projects; a work link connects the two'
+			],
+			components: [
+				'CaseQueue',
+				'CaseDetail',
+				'TargetList',
+				'RoutingRationale',
+				'TimeEntryApprovalQueue'
+			],
+			componentImport: '@happyvertical/smrt-support/svelte',
+			exampleResource: 'support-cases'
 		}
 	),
 
