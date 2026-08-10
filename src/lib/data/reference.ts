@@ -443,6 +443,11 @@ export const referenceGuides: Guide[] = [
 			'Use a normal list when you need real objects and their methods. Use select when a page or report only needs a few plain fields.',
 		packages: ['smrt-core', 'smrt-tenancy'],
 		visual: 'collections',
+		pinnedVersion: REFERENCE_PINNED_VERSION,
+		sources: [
+			{ label: 'collection.ts', href: `${SMRT_TREE}/packages/core/src/collection.ts` },
+			{ label: 'smrt-core AGENTS.md', href: `${SMRT_TREE}/packages/core/AGENTS.md` }
+		],
 		sections: [
 			{
 				title: 'Hydrated objects',
@@ -455,6 +460,52 @@ export const referenceGuides: Guide[] = [
 					'list({ select }) validates logical field names and returns precisely typed plain rows. Projection and relationship inclusion are intentionally separate modes.',
 				code: `const rows = await items.list({\n  select: ['id', 'title', 'status'] as const,\n  where: { status: 'open' },\n  orderBy: 'created_at DESC',\n  limit: 50\n});`,
 				filename: 'list-items.ts'
+			},
+			{
+				title: 'A filter key carries its operator',
+				intro:
+					'Each where key is a field name, optionally followed by a space and an operator. Equality is the default. Field names are the ones declared on the model; the collection converts them to database columns before the statement is built, and validates them against the model so a typo reports the valid names instead of a SQL error.',
+				filename: 'list-invoices.ts',
+				code: `const overdue = await invoices.list({\n  where: {\n    status: 'open',                 // status = ?\n    'total >=': 100,                // total >= ?\n    'currency in': ['CAD', 'USD'],  // currency IN (?, ?)\n    'reference like': 'INV-2026-%', // reference LIKE ?\n    voidedAt: null                  // voided_at IS NULL\n  },\n  orderBy: 'created_at DESC',\n  limit: 50\n});`
+			},
+			{
+				title: 'The operator set',
+				intro:
+					'Nine operators reach SQL: =, >, <, >=, <=, !=, in, not in, and like. A null value turns = into IS NULL and != into IS NOT NULL. An array value with no explicit operator is read as in.',
+				points: [
+					'in and not in require a non-empty array. An empty one is rejected rather than compiled into invalid SQL; listByIds([]) returns an empty list instead.',
+					'like requires a string value, and you supply the % wildcards yourself.',
+					'Fields marked @field({ sensitive: true }) are rejected as filter keys, so a where clause cannot be used to read a secret value back one character at a time.',
+					'Generated REST routes expose the same filters as field[op] query parameters — gt, gte, lt, lte, ne, in, and like, with in taking a comma-separated list. not in has no query-parameter spelling.'
+				],
+				callout: {
+					variant: 'warning',
+					title: 'contains passes validation and then fails',
+					body: 'The collection accepts contains in its operator whitelist, but the query builder underneath has no such operator, so the key is read as a field name and rejected as an invalid SQL identifier. The failure arrives at query time rather than at the call, which makes it easy to mistake for a data problem. Use like instead.'
+				}
+			},
+			{
+				title: 'What a where clause cannot express',
+				intro:
+					'Conditions in one where object are joined with AND. There is no OR, no negated group, no nested condition, no subquery, and no join. orderBy accepts a field name and a direction, not an expression.',
+				points: [
+					'The underlying query builder can emit OR from a two-dimensional condition array, but the collection validates where as a flat object of identifier keys and rejects that shape.',
+					'Keys must be identifiers, optionally with dot-separated JSON-path segments. Expression text in a key is rejected, which is what keeps request-supplied filter names from reaching the SQL field position.',
+					'A dot-notation key such as metadata.userId passes validation but is not rewritten into a JSON extraction, so it reaches SQL as a qualified column reference. Confirm the behavior on your adapter before relying on it.'
+				]
+			},
+			{
+				title: 'collection.query() is the escape hatch',
+				intro:
+					'query(sql, params) runs SQL you wrote and hydrates the rows into the same objects list() returns, including STI subclass resolution. Use it for OR, NOT EXISTS, joins, CTEs, and aggregates, and keep list() for everything it can already express.',
+				filename: 'unbilled-orders.ts',
+				code: `const unbilled = await orders.query(\n  \`SELECT o.* FROM orders o\n   WHERE o.status = ?\n     AND NOT EXISTS (\n       SELECT 1 FROM invoices i WHERE i.order_id = o.id\n     )\n   ORDER BY o.created_at DESC\n   LIMIT ?\`,\n  ['fulfilled', 100]\n);`,
+				points: [
+					'Names inside the SQL string are database columns. Returned rows are converted back to the model field names during hydration.',
+					'Bind values as parameters; the placeholder style follows your database adapter. The collection does not parse the statement, so anything interpolated into the text is your own injection risk.',
+					'Tenant scope is not added for you. A beforeQuery interceptor guards tenant-scoped models, and allowRawOnTenantScoped opts out of it deliberately — then the tenant predicate is yours to write.',
+					'query() is documented for reads. It will run a write, and a statement that looks like a mutation invalidates this table in the read cache, but model hooks and save-time interceptors do not run.'
+				]
 			},
 			{
 				title: 'Tenant and cache behavior',
