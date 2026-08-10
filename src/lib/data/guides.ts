@@ -88,6 +88,12 @@ export const foundationGuides: Guide[] = [
 					'Use include for named relationships when you need full objects without N+1 queries.'
 				]
 			}
+		],
+		related: [
+			{
+				label: 'AI methods, object memory, and semantic search',
+				href: '/reference/ai-and-retrieval'
+			}
 		]
 	},
 	{
@@ -359,6 +365,12 @@ export const capabilityGuides: Guide[] = [
 				title: 'Agents can delegate without widening authority',
 				intro:
 					'The invoke-agent tool carries an immutable principal through worker calls, intersects RBAC with agent and persona tool ceilings, limits delegation depth to three, and surfaces correlated completion events back to the conversation.'
+			}
+		],
+		related: [
+			{
+				label: 'The remember() and recall() primitives underneath',
+				href: '/reference/ai-and-retrieval'
 			}
 		]
 	},
