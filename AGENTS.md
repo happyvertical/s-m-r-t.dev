@@ -80,9 +80,13 @@ pnpm run lint      # prettier + eslint + check:templates
 pnpm run check     # svelte-check
 ```
 
-CI runs test, check, and build. `pnpm run check` is clean (0 errors, 0 warnings)
-and is expected to stay that way — it is the type-drift guard for framework
-bumps, so do not let it start reporting noise.
+CI runs test, check, and build on every pull request. `pnpm run check` is clean
+(0 errors, 0 warnings) and is expected to stay that way — it is the type-drift
+guard for framework bumps, so do not let it start reporting noise.
+
+`lint` is not among them. `.github/workflows/lint.yaml` runs it on pushes to
+`main` instead, never on a pull request, so running it yourself before shipping
+is still the only thing that keeps `main` green.
 
 `check:templates` catches unescaped `{` / `}` inside `<code>` blocks, which
 Svelte would otherwise parse as expressions and fail on at render time. Escape
@@ -211,9 +215,10 @@ hardcoded versions, none of them the one it was built against.
   against this checkout directly — no scratch-directory manifest needed.
 - This public repo intentionally has **no** lifecycle CI workflow
   (`.github/workflows/agent-policy.yml`) and no `github.required_status_checks`
-  in the manifest. The only CI is the `build` job in
-  `.github/workflows/build-deploy.yaml`; adding required checks would change
-  merge behaviour for human contributors and needs explicit confirmation first.
+  in the manifest. The only CI on a pull request is the `build` job in
+  `.github/workflows/build-deploy.yaml`; `data-freshness.yaml` and `lint.yaml`
+  are advisory and never run on one. Adding required checks would change merge
+  behaviour for human contributors and needs explicit confirmation first.
   Until that cutover, `hv-agent audit` reporting the missing lifecycle workflow
   is expected; do not hand-write `agent-policy.yml` — a confirmed cutover
   regenerates it via `hv-agent migrate-repo`.
