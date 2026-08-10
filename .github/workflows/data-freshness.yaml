@@ -1,0 +1,125 @@
+name: Data freshness audit
+
+# Reports when `src/lib/data/*.ts` has fallen behind the `@happyvertical/smrt-*`
+# packages it describes.
+#
+# Deliberately NOT a gate. It never runs on a pull request, is never a required
+# check, and cannot block a merge — the site's content is hand-written prose and
+# a hash comparison is not qualified to reject it. Its only output is one
+# tracking issue that maintainers can work through, which closes itself once the
+# baseline is refreshed.
+on:
+  schedule:
+    # Mondays, 08:17 UTC. Off the hour so it is not queued behind every other
+    # repository's hourly cron.
+    - cron: '17 8 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: data-freshness
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    # Named so that it reads as advisory in the branch-protection check picker,
+    # which offers any check seen in the last week. Selecting this one would
+    # hang every pull request forever: it only ever runs on a schedule, so it
+    # would never report a status on a PR head.
+    name: data-freshness (advisory, never a gate)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # actions/checkout stays on v5 to match build-deploy.yaml, which the
+      # renovate.json allowedVersions rule enforces. Nothing here touches git
+      # after checkout, so the token does not need to stay in .git/config.
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          # Pinned to a major, like build-deploy.yaml: `engines.node` plus
+          # `engine-strict=true` enforce the real floor at install time.
+          node-version: '24'
+
+      # The audit reads the packages' shipped AGENTS.md files out of the
+      # installed tree, so it needs a real install. `--frozen-lockfile` keeps the
+      # comparison honest: it reports drift the repository has already taken on,
+      # not drift a fresh resolution would invent. Renovate is what moves the
+      # lockfile forward; this reports what that cost the docs. No credentials
+      # are needed — every `@happyvertical/*` package is public on npmjs.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit src/lib/data against the installed packages
+        id: audit
+        run: |
+          set +e
+          node scripts/check-data-freshness.mjs > freshness-report.md
+          status=$?
+          set -e
+          cat freshness-report.md
+          if [ "$status" -gt 1 ]; then
+            echo "::error::The data freshness audit could not run."
+            exit 1
+          fi
+          if [ "$status" -eq 1 ]; then
+            echo 'drift=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'drift=false' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update the tracking issue
+        if: steps.audit.outputs.drift == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITLE: 'Data freshness: src/lib/data is behind the installed smrt packages'
+        run: |
+          gh label create docs-freshness \
+            --color 0e8a16 \
+            --description 'Site content may no longer match the installed smrt packages' \
+            >/dev/null 2>&1 || true
+
+          cat > issue-body.md <<'PREAMBLE'
+          The scheduled audit found `@happyvertical/smrt-*` packages whose shipped
+          `AGENTS.md` no longer matches what `src/lib/data/*.ts` was written against.
+          Nothing is broken — the prose may simply have stopped being true.
+
+          PREAMBLE
+
+          cat freshness-report.md >> issue-body.md
+
+          cat >> issue-body.md <<FOOTER
+
+          ---
+
+          Reproduce locally with \`pnpm run audit:data\`. Updated by [run ${GITHUB_RUN_ID}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}); this issue closes itself once the baseline is refreshed.
+          FOOTER
+
+          number="$(gh issue list --state open --label docs-freshness --json number --jq '.[0].number // empty' 2>/dev/null || true)"
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --title "$TITLE" --body-file issue-body.md
+          else
+            gh issue create --title "$TITLE" --label docs-freshness --body-file issue-body.md
+          fi
+
+      - name: Close the tracking issue once the baseline is current
+        if: steps.audit.outputs.drift == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          number="$(gh issue list --state open --label docs-freshness --json number --jq '.[0].number // empty' 2>/dev/null || true)"
+          if [ -n "$number" ]; then
+            gh issue close "$number" \
+              --comment 'The committed baseline matches the installed packages again, so this audit has nothing left to report.'
+          fi

@@ -15,6 +15,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"check:templates": "node scripts/check-svelte-templates.js",
+		"audit:data": "node scripts/check-data-freshness.mjs",
 		"update:smrt": "node scripts/update-smrt.mjs",
 		"lint": "prettier --check . && eslint . && pnpm run check:templates",
 		"format": "prettier --write .",
