@@ -32,6 +32,9 @@
 			<p class="eyebrow">{guide.eyebrow}</p>
 			<h1>{guide.title}</h1>
 			<p class="lede">{guide.lede}</p>
+			{#if guide.pinnedVersion}
+				<p class="pinned">Verified against s-m-r-t {guide.pinnedVersion}</p>
+			{/if}
 		</header>
 
 		<aside class="plain-english">
@@ -51,7 +54,21 @@
 							{#each section.points as point (point)}<li>{point}</li>{/each}
 						</ul>
 					{/if}
-					{#if section.code}<CodeBlock code={section.code} filename={section.filename} />{/if}
+					{#if section.code}
+						<CodeBlock code={section.code} filename={section.filename} lang={section.lang} />
+					{/if}
+					{#if section.links}
+						<div class="section-links">
+							{#each section.links as link (link.href)}
+								<a
+									href={link.href}
+									rel={link.external ? 'noreferrer' : undefined}
+									target={link.external ? '_blank' : undefined}
+									>{link.label}{link.external ? ' ↗' : ' →'}</a
+								>
+							{/each}
+						</div>
+					{/if}
 				</section>
 			{/each}
 		</div>
@@ -61,6 +78,19 @@
 				<strong>Packages used in this guide</strong>
 				<div>
 					{#each guide.packages as pkg (pkg)}<a href={`/packages/${pkg}`}>@happyvertical/{pkg}</a
+						>{/each}
+				</div>
+			</footer>
+		{/if}
+
+		{#if guide.sources?.length}
+			<footer>
+				<strong>Canonical sources</strong>
+				<div>
+					{#each guide.sources as source (source.href)}<a
+							href={source.href}
+							rel="noreferrer"
+							target="_blank">{source.label}</a
 						>{/each}
 				</div>
 			</footer>
@@ -118,6 +148,29 @@
 		color: var(--site-muted);
 		font-size: 0.98rem;
 		line-height: 1.68;
+	}
+	.pinned {
+		margin-top: 14px;
+		color: var(--site-muted);
+		font: 0.66rem var(--site-font-mono);
+		letter-spacing: 0.03em;
+	}
+	.section-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 7px;
+		margin-top: 17px;
+	}
+	.section-links a {
+		padding: 5px 9px;
+		border: 1px solid var(--site-line-strong);
+		border-radius: 5px;
+		color: var(--site-ink);
+		font-size: 0.72rem;
+		text-decoration: none;
+	}
+	.section-links a:hover {
+		border-color: var(--site-accent-strong);
 	}
 	.plain-english {
 		display: grid;

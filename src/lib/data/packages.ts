@@ -430,13 +430,55 @@ export const packages: SmrtPackage[] = [
 		'Agents & runtime',
 		'smrt-app-mcp',
 		'App-runtime MCP server scaffolding and transport adapters for exposing a s-m-r-t application over HTTP.',
-		{ kind: 'runtime' }
+		{
+			kind: 'runtime',
+			highlights: [
+				'One stateless Streamable HTTP mount, with a fresh protocol server per request',
+				'Principal-aware per-tool policy evaluated on discovery and on the call',
+				'Tool-list cache metadata that stays private unless a public catalog is verified'
+			],
+			details: [
+				{
+					title: 'Mount the application surface',
+					body: 'createMcpAppServer wraps generated core tools with an application allow-list, public tool patterns, a per-principal tool policy, and workflow assertions. mountMcpRoute serves server/discover, tools/list, and tools/call from the sveltekit subpath; the REST-shaped mountMcpToolsRoute and mountMcpCallRoute aliases are deprecated for one release.',
+					href: '/tooling/app-mcp',
+					linkLabel: 'Generated and application MCP'
+				},
+				{
+					title: 'Authorization is terminated in front of it',
+					body: 'The package trusts the principal supplied by the application adapter. It does not implement an OAuth authorization server and does not validate bearer tokens itself, so a public deployment validates the token at the gateway and populates the request principal, tenant, and permissions only after that succeeds.',
+					href: '/tooling/compatibility',
+					linkLabel: 'Compatibility and operations'
+				}
+			]
+		}
 	),
 	definePackage(
 		'Agents & runtime',
 		'smrt-dev-mcp',
 		'Development-time knowledge, review, architecture, introspection, and code-generation tools for AI coding agents.',
-		{ kind: 'tooling' }
+		{
+			kind: 'tooling',
+			highlights: [
+				'Fifteen read-only tools over a workspace, with no access to application data',
+				'A declared ok, coverage, diagnostics, and data result envelope on every tool',
+				'Ships as a self-contained Agent Plugin with one bundled review skill'
+			],
+			details: [
+				{
+					title: 'The Tier 2 development plane',
+					body: 'The server reads source, manifests, and authored documentation from a workspace on disk. It never writes files, never executes generated code, and calls no model provider: review and architecture tools return deterministic findings plus a reusable prompt bundle.',
+					href: '/tooling/dev-mcp',
+					linkLabel: 'smrt-dev-mcp'
+				},
+				{
+					title: 'Coverage instead of a silent empty answer',
+					body: 'Package discovery reads the workspace globs and records where each package objects came from. Discovering nothing is an error-grade diagnostic naming the roots and artifact paths checked, so an unreadable project is never reported as a project with no model.',
+					href: '/tooling/knowledge',
+					linkLabel: 'Knowledge tooling'
+				}
+			]
+		}
 	),
 
 	definePackage(

@@ -9,6 +9,7 @@
 		{ label: 'Documentation', href: '/' },
 		{ label: 'Packages', href: '/packages' },
 		{ label: 'Playground', href: '/playground' },
+		{ label: 'Tooling', href: '/tooling' },
 		{ label: 'Reference', href: '/reference' }
 	];
 

@@ -1,9 +1,19 @@
+export interface GuideLink {
+	label: string;
+	href: string;
+	/** Set for links that leave the documentation site. */
+	external?: boolean;
+}
+
 export interface GuideSection {
 	title: string;
 	intro: string;
 	points?: string[];
 	code?: string;
 	filename?: string;
+	/** Language label shown on the code block. Defaults to TypeScript. */
+	lang?: string;
+	links?: GuideLink[];
 }
 
 export interface Guide {
@@ -14,6 +24,10 @@ export interface Guide {
 	lede: string;
 	plainEnglish: string;
 	packages: string[];
+	/** Released framework version every claim on the page was checked against. */
+	pinnedVersion?: string;
+	/** Canonical upstream documents an audit should re-read when this page ages. */
+	sources?: GuideLink[];
 	visual?:
 		| 'app-model'
 		| 'identity'
