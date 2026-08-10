@@ -367,7 +367,7 @@ export const packages: SmrtPackage[] = [
 			status: 'new',
 			highlights: [
 				'Code seed, app, tenant, and user layers resolved into one policy per object',
-				'Provider-free generated forms that render only the safe intersection of fields and policy',
+				'Generated forms that render only the fields present in both the manifest definition and the resolved policy',
 				'A form gear and an organization control panel behind two dedicated permissions'
 			],
 			components: [
@@ -427,7 +427,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Building forms',
-					body: 'PolicyField adopts an existing form incrementally; ObjectForm renders the safe intersection of the generated field definitions and the resolved policy.',
+					body: 'PolicyField adopts an existing form incrementally; ObjectForm renders the fields present in both the generated definitions and the resolved policy.',
 					href: '/capabilities/policy-aware-forms',
 					linkLabel: 'Build a policy-aware form'
 				},

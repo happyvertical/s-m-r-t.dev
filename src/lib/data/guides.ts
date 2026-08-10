@@ -600,12 +600,12 @@ dispose();`
 					'Writes inside a request derive the missing tenant or user from the ambient context and stamp who changed the row.'
 				],
 				filename: 'src/lib/server/set-house-default.ts',
-				code: `import { FieldPolicyCollection } from '@happyvertical/smrt-fields';\n\nconst policies = await FieldPolicyCollection.create({ db });\n\n// The organization sets a house default and moves the field back a step\nawait policies.create({\n  objectRef: '@happyvertical/smrt-content:Article',\n  fieldName: 'summary',\n  scopeType: 'tenant',\n  tenantId,\n  visibility: 'advanced',\n  defaultValueRaw: 'TBD'\n});\n\n// Undoing it is an ordinary delete, not a null-out\nconst row = await policies.get({ id: rowId });\nawait row?.delete();`
+				code: `import { FieldPolicyCollection } from '@happyvertical/smrt-fields';\n\nconst policies = await FieldPolicyCollection.create({ db });\n\n// The organization sets a house default and moves the field back a step\nawait policies.create({\n  objectRef: '@happyvertical/smrt-content:Article',\n  fieldName: 'summary',\n  scopeType: 'tenant',\n  tenantId,\n  visibility: 'advanced',\n  defaultValueRaw: 'TBD'\n});\n\n// Undoing the whole customization is an ordinary delete\nconst row = await policies.get({ id: rowId });\nawait row?.delete();`
 			},
 			{
 				title: 'A tenant chain contributes from the root down',
 				intro:
-					'When tenants form a hierarchy, the chain is walked root to leaf so a parent organization can set a default that its branches inherit and a branch can still override it. A node that breaks permission inheritance discards every contribution above it, so only the run of tenants beginning at the last break participates — in the merged result and in the explained layers alike.',
+					'When tenants form a hierarchy, the chain is walked root to leaf so a parent organization can set a default that its branches inherit and a branch can still override it. A node that breaks permission inheritance discards every earlier contribution in the chain, so only the run of tenants beginning at the last break participates — in the merged result and in the explained layers alike.',
 				points: [
 					'The default hierarchy loader reads the tenant tree from smrt-users.',
 					'When no hierarchy is available the resolver falls back to a flat, single-tenant chain.',
@@ -675,14 +675,14 @@ dispose();`
 			{
 				title: 'Render a whole object from its manifest',
 				intro:
-					'ObjectForm renders the fields that appear in both the generated browser definitions and the resolved policy, ordered by policy. Sensitive, transient, and read-permission-gated fields appear in neither, so they cannot reach the form. It is provider-free: the host decides where both inputs come from, which keeps server rendering and client fetching equally straightforward.',
+					'ObjectForm renders the fields that appear in both the generated browser definitions and the resolved policy, ordered by policy. Sensitive and transient fields are never emitted into the generated definitions, so they cannot reach the form. Read-permission-gated fields are a different case: the batch resolve endpoint omits them, but a policy resolved server-side with resolveFieldPolicy still carries them — the overlap is not a permission filter, so keep enforcing read permission where you always did. ObjectForm itself is provider-free: the host decides where both inputs come from, which keeps server rendering and client fetching equally straightforward.',
 				points: [
 					'Pass generated browser definitions, never raw server registry fields.',
 					'The actions snippet renders inside the native form ObjectForm owns, so a plain submit button keeps native submission along with the form’s own validation.',
 					'To reuse a mounted create form for another new record, replace the bound record with an empty object or change createSessionKey.'
 				],
 				filename: 'ArticleWorkbench.svelte',
-				code: `<script lang="ts">\n  import { ObjectForm } from '@happyvertical/smrt-fields/svelte';\n\n  let { definition, policy } = $props();\n  let record = $state({});\n\n  async function save(event: SubmitEvent) {\n    event.preventDefault();\n    await articles.create(record);\n  }\n</script>\n\n<ObjectForm\n  objectRef="@happyvertical/smrt-content:Article"\n  fields={definition.fields}\n  {policy}\n  bind:value={record}\n  isNewRecord\n  showModeSwitch\n  onsubmit={save}\n>\n  {#snippet actions()}\n    <button type="submit">Save</button>\n  {/snippet}\n</ObjectForm>`
+				code: `<script lang="ts">\n  import { ObjectForm } from '@happyvertical/smrt-fields/svelte';\n  import { articles } from '$lib/generated-clients';\n\n  let { definition, policy } = $props();\n  let record = $state({});\n\n  async function save(event: SubmitEvent) {\n    event.preventDefault();\n    await articles.create(record);\n  }\n</script>\n\n<ObjectForm\n  objectRef="@happyvertical/smrt-content:Article"\n  fields={definition.fields}\n  {policy}\n  bind:value={record}\n  isNewRecord\n  showModeSwitch\n  onsubmit={save}\n>\n  {#snippet actions()}\n    <button type="submit">Save</button>\n  {/snippet}\n</ObjectForm>`
 			},
 			{
 				title: 'Register the generated collections once',
@@ -832,10 +832,10 @@ dispose();`
 			{
 				title: 'Adoption checklist',
 				intro:
-					'Adopting field policy is additive, and there is nothing to migrate: PolicyField outside a provider renders its children verbatim, so the forms you already have keep working until you wrap them. Each step below is useful on its own, and a project can stop after any of them.',
+					'Adopting field policy is additive, and there is nothing to rewrite: PolicyField outside a provider renders its children verbatim, so the forms you already have keep working until you wrap them. Each step below is useful on its own, and a project can stop after any of them.',
 				points: [
 					'1. Add @happyvertical/smrt-fields at the same exact version as the rest of your s-m-r-t packages. It pins smrt-core, smrt-tenancy, smrt-ui, and smrt-users to that version, and mixing versions installs a second copy of the object registry.',
-					'2. Migrate. The build merges consumed package manifests, so the package’s _smrt_field_policies table joins the schema your application already migrates — there is no separate setup step.',
+					'2. Add it to the package list your build and your runtime already share — the packages array you pass to smrtConsumer in vite.config.ts, and the same list your application imports at startup. The consumer plugin then merges the package manifest and _smrt_field_policies migrates with the rest of your schema. Installing the dependency alone does not create the table.',
 					'3. Seed presentation in code: add ui hints to the fields that deserve them, and remember the cold-start rule once you mark the first field.',
 					'4. Grant fields.policy.manage to administrator roles and fields.policy.personalize to everyone who should be able to adjust their own forms.',
 					'5. Resolve a policy in a server load and pass it to a form. PolicyField on a few fields is a complete first step.',
