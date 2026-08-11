@@ -760,7 +760,8 @@ dispose();`
 					'FieldPolicyProvider owns the basic/advanced mode and publishes the resolved policy. PolicyField wraps any input and contributes the label, the help hint, the required marker, visibility for the current mode, and default pre-fill on new records only. Outside a provider PolicyField renders its children verbatim, so adoption never has to be all at once.',
 				points: [
 					'ModeSwitch toggles between basic and advanced; AdvancedFields is the disclosure the advanced tier lives in.',
-					'FormHelp collects the resolved per-field help into one panel. Pass the object-level description to its objectDescription prop; the package does not read it from the manifest for you.',
+					'ModeSwitch, AdvancedFields, and FormHelp require a provider and fail visibly when one is missing; only PolicyField supports provider-free incremental adoption.',
+					'Use exactly one FieldPolicyProvider per form. FormHelp must stay under that same provider so it follows the form mode; pass the object-level description to its objectDescription prop.',
 					'Set isNewRecord={false} on an edit form so a resolved default never overwrites a loaded value.'
 				],
 				filename: 'ArticleForm.svelte',
@@ -769,10 +770,10 @@ dispose();`
 			{
 				title: 'Render a whole object from its manifest',
 				intro:
-					'ObjectForm renders the fields that appear in both the generated browser definitions and the resolved policy, ordered by policy. Sensitive and transient fields are never emitted into the generated definitions, so they cannot reach the form. Read-permission-gated fields are a different case: the batch resolve endpoint omits them, but a policy resolved server-side with resolveFieldPolicy still carries them — the overlap is not a permission filter, so keep enforcing read permission where you always did. ObjectForm itself is provider-free: the host decides where both inputs come from, which keeps server rendering and client fetching equally straightforward.',
+					'ObjectForm renders the fields that appear in both the generated browser definitions and the resolved policy, ordered by policy. Sensitive and transient fields are never emitted into the generated definitions, so they cannot reach the form. Read-permission-gated fields are a different case: the batch resolve endpoint omits them, but a policy resolved server-side with resolveFieldPolicy still carries them — the overlap is not a permission filter, so keep enforcing read permission where you always did. The host decides where both inputs come from, while ObjectForm creates the one FieldPolicyProvider that its fields and actions share.',
 				points: [
 					'Pass generated browser definitions, never raw server registry fields.',
-					'The actions snippet renders inside the native form ObjectForm owns, so a plain submit button keeps native submission along with the form’s own validation.',
+					'Do not wrap ObjectForm in another FieldPolicyProvider. The actions snippet renders inside its provider and native form, so it is the supported seam for FormHelp and a plain submit button keeps native submission along with the form’s own validation.',
 					'To reuse a mounted create form for another new record, replace the bound record with an empty object or change createSessionKey.'
 				],
 				filename: 'ArticleWorkbench.svelte',

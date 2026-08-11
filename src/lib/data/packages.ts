@@ -533,7 +533,20 @@ export const packages: SmrtPackage[] = [
 		'Foundation',
 		'smrt-scanner',
 		'Fast OXC-based source scanning that turns decorated classes into the s-m-r-t manifest.',
-		{ kind: 'tooling' }
+		{
+			kind: 'tooling',
+			highlights: [
+				'Shared bounded source discovery for scanner and manifest preflight',
+				'Mandatory dependency and hidden-directory pruning',
+				'Symlink traversal disabled unless explicitly enabled'
+			],
+			details: [
+				{
+					title: 'Discovery stays inside the source tree',
+					body: 'discoverSourceFiles applies one bounded policy to OxcScanner and the core manifest preflight. It always excludes node_modules and hidden paths, interprets patterns relative to cwd, and does not follow symbolic links by default. A project whose real source files live behind a symlink can opt in explicitly through the scanner or manifest builder.'
+				}
+			]
+		}
 	),
 	definePackage(
 		'Foundation',
