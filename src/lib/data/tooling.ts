@@ -6,7 +6,8 @@ import type { Guide } from '$lib/data/guides';
  */
 export const TOOLING_PINNED_VERSION = '0.40.61';
 
-const SMRT_TREE = 'https://github.com/happyvertical/smrt/blob/v0.40.61';
+/** Canonical upstream tree for the release above. */
+const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${TOOLING_PINNED_VERSION}`;
 
 export const toolingGuides: Guide[] = [
 	{
