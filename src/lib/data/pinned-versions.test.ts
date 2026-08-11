@@ -7,9 +7,13 @@
  * are the `*_PINNED_VERSION` constants, which pin a release a person actually
  * ran the pages against and are documented at each declaration.
  *
- * So: every version literal in `src/lib/data` is either that one shared pin or
- * a version of something that is not the framework. A fifth wrong number
- * cannot get in without either agreeing with the pin or being declared below.
+ * So: every version literal under `src/` is either that one shared pin or a
+ * version of something that is not the framework. A fifth wrong number cannot
+ * get in without either agreeing with the pin or being declared below.
+ *
+ * The sweep is not limited to `src/lib/data`. Most copy is data, but landing
+ * pages and section indexes are hand-written `.svelte`, and a version typed
+ * into one of those is as visible — and goes as stale — as any other.
  */
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -38,15 +42,24 @@ const PINNED_DECLARATION = /const\s+(\w*PINNED_VERSION)\s*=\s*'([^']+)'/g;
 
 // The literals have to be read as source: the point is what someone typed into
 // page copy, which is indistinguishable from the pin once the module evaluates.
-const dataDir = resolve(process.cwd(), 'src/lib/data');
+const root = resolve(process.cwd(), 'src');
 
-const sources = readdirSync(dataDir)
-	.filter((file) => file.endsWith('.ts') && !file.endsWith('.test.ts'))
-	.map((file) => ({ file, text: readFileSync(join(dataDir, file), 'utf8') }));
+function pageSources(dir: string): { file: string; text: string }[] {
+	return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+		const path = join(dir, entry.name);
+		if (entry.isDirectory()) return pageSources(path);
+		if (!/\.(ts|svelte)$/.test(entry.name) || /\.(test|spec)\.ts$/.test(entry.name)) return [];
+		return [{ file: path.slice(root.length + 1), text: readFileSync(path, 'utf8') }];
+	});
+}
+
+const sources = pageSources(root);
 
 describe('version numbers in page copy', () => {
-	it('reads the data modules, so nothing below passes vacuously', () => {
-		expect(sources.length).toBeGreaterThan(5);
+	it('reads the page sources, so nothing below passes vacuously', () => {
+		// Both extensions, or widening the sweep to `.svelte` silently undoes itself.
+		expect(sources.filter(({ file }) => file.endsWith('.ts')).length).toBeGreaterThan(5);
+		expect(sources.filter(({ file }) => file.endsWith('.svelte')).length).toBeGreaterThan(20);
 	});
 
 	it('recognises a version wherever prose puts one', () => {

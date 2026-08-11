@@ -112,8 +112,9 @@ stopped releasing.
 ## The rendered version number
 
 **Never write a version number into page copy** — import `SMRT_VERSION` from
-`$lib/version`. `pinned-versions.test.ts` enforces that across `src/lib/data`,
-documents the deliberate exceptions, and records why the rule exists.
+`$lib/version`. `pinned-versions.test.ts` enforces that across every `.ts` and
+`.svelte` under `src/`, documents the deliberate exceptions, and records why the
+rule exists.
 
 ## Active upstream defects
 
