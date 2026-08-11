@@ -6,7 +6,7 @@
 	const updates = [
 		{
 			title: 'Agent-legible applications',
-			body: 'Give agents bounded, semantic descriptions of the model, active environment, visible controls, and permitted operations.',
+			body: 'Give agents bounded descriptions of the model, visible controls, and permitted operations, with active-environment context when a runtime bridge is exposed.',
 			href: '/capabilities/agent-legible-applications'
 		},
 		{

@@ -1,4 +1,5 @@
 import type { GuideCallout } from '$lib/data/callouts';
+import { SMRT_VERSION } from '$lib/version';
 
 export interface GuideLink {
 	label: string;
@@ -323,9 +324,9 @@ export const capabilityGuides: Guide[] = [
 		navTitle: 'Agent-legible applications',
 		eyebrow: 'Framework approach',
 		title: 'Build an application agents can understand',
-		lede: 's-m-r-t describes the application at several layers so an agent can inspect declared domain logic, observe the active runtime environment, understand visible controls, and discover permitted operations without reverse-engineering each surface.',
+		lede: 's-m-r-t describes the application at several layers so an agent can inspect declared domain logic, understand visible controls, discover permitted operations, and—when a runtime bridge is exposed—observe the active environment without reverse-engineering each surface.',
 		plainEnglish:
-			'Instead of guessing from files or rendered pixels, an agent receives bounded descriptions of the model, the active environment, the interface, and the actions it may call.',
+			'Instead of guessing from files or rendered pixels, an agent receives bounded descriptions of the model, interface, and callable actions, with an active-environment view when the runtime bridge is available.',
 		packages: ['smrt-core', 'smrt-dev-mcp', 'smrt-ui', 'smrt-app-mcp'],
 		visual: 'agent-legibility',
 		sections: [
@@ -335,7 +336,7 @@ export const capabilityGuides: Guide[] = [
 					'Each registry answers a different question. Together they give people and agents a consistent map from what the product means to what this particular environment can do.',
 				points: [
 					'The domain manifest describes objects, fields, relationships, policies, and declared interfaces.',
-					'The runtime-environment registry describes which modules and capabilities are actually available in the active process.',
+					'When exposed, the runtime-environment registry describes which modules and capabilities are actually available in the active process.',
 					'The control registry describes the visible form controls, their meaning, constraints, sensitivity, and state.',
 					'MCP and WebMCP schemas describe the operations an agent may request at the current boundary.'
 				]
@@ -352,7 +353,7 @@ export const capabilityGuides: Guide[] = [
 				callout: {
 					variant: 'version-added',
 					title: 'Runtime bridge availability',
-					body: 'The current tooling reference is pinned to the released 0.40.61 development MCP, which reads workspace artifacts only. Treat runtime-environment awareness as available only when the installed development MCP version explicitly exposes this integration.'
+					body: `The current tooling reference is pinned to the released ${SMRT_VERSION} development MCP, which reads workspace artifacts only. Treat runtime-environment awareness as available only when the installed development MCP version explicitly exposes this integration.`
 				},
 				links: [{ label: 'Development MCP and its runtime boundary', href: '/tooling/dev-mcp' }]
 			},

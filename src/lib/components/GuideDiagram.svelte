@@ -57,7 +57,7 @@
 			core: 'Agent understanding',
 			caption:
 				'Explicit registries describe the application from source through the active interface.',
-			nodes: ['Domain manifest', 'Runtime environment', 'Form controls', 'MCP tools']
+			nodes: ['Domain manifest', 'Optional runtime bridge', 'Form controls', 'MCP tools']
 		},
 		reports: {
 			core: 'Report model',
