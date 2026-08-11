@@ -385,12 +385,6 @@ const blurb = await article.describe({ maxTokens: 50 });`
 				]
 			},
 			{
-				// The combinedField note below, and the field-validation note in the
-				// retrieval entry further down, describe shipped behaviour that reads
-				// like a bug because it is one: semanticSearch is the only one of the
-				// three retrieval methods that validates `field`, so it rejects the
-				// combined vector the other two accept. Upstream happyvertical/smrt#2281;
-				// both notes get reworded when a release carries the fix (#162).
 				title: 'Declare which fields get embedded',
 				intro:
 					'Semantic search reads vectors generated from the fields named in the @smrt() decorator. Project-wide defaults live in the smrt section of the configuration tree, and a class can override the provider or turn automatic generation off.',
@@ -398,7 +392,7 @@ const blurb = await article.describe({ maxTokens: 50 });`
 					'Defaults: 768 dimensions, provider "local", local model Xenova/bge-base-en-v1.5, AI model text-embedding-3-small, storage "json".',
 					'"local" requires @huggingface/transformers or @xenova/transformers to be installed, and is a deliberate choice for server workloads because pipeline initialization is CPU and memory intensive.',
 					'"ai" requires an AI client that exposes embed() and spends embedding tokens per field per change. "auto" uses that client when one is configured and falls back to the local model otherwise.',
-					'combinedField adds one more vector built from a template over the declared fields. semanticSearch checks its field option against fields and rejects that name, so reach a combined vector through findSimilar or findSimilarToEmbedding.'
+					'combinedField adds one more vector built from a template over the declared fields. Its name is searchable through semanticSearch, findSimilar, and findSimilarToEmbedding just like an individually embedded field.'
 				],
 				filename: 'smrt.config.ts',
 				code: `// smrt.config.ts — project-wide defaults
@@ -465,9 +459,9 @@ const stats = await articles.generateMissingEmbeddings({
 				intro:
 					'semanticSearch(query) embeds the query text and ranks stored vectors by cosine similarity. findSimilar(objectOrId) starts from the stored vector of an existing record. findSimilarToEmbedding(vector) takes a vector you already hold. Each resolves to hydrated objects carrying a _similarity number, sorted highest first.',
 				points: [
-					'semanticSearch defaults to limit 10, minSimilarity 0, and the first field declared for embeddings; pass field to target another declared field.',
+					'semanticSearch defaults to limit 10, minSimilarity 0, and the first field declared for embeddings; pass field to target another declared field or combinedField name.',
 					'findSimilar defaults to limit 5 and excludeSelf true, and raises when the source record has no stored vector for that field.',
-					'Only semanticSearch checks the field option against the declared list and raises on an unknown name. findSimilarToEmbedding does not check it and returns an empty array instead.'
+					'semanticSearch validates the field against the individually embedded fields plus combinedField and lists every available name when it rejects an unknown one. findSimilarToEmbedding does not perform that declaration check and returns an empty array when no vectors exist under the requested name.'
 				],
 				filename: 'search.ts',
 				code: `const results = await articles.semanticSearch('machine learning trends', {
