@@ -24,12 +24,7 @@
  * script when that lands. Until then, this is the deterministic subset that
  * works today.
  *
- * Usage:
- *   node scripts/check-data-freshness.mjs             # report drift (exit 1 if any)
- *   node scripts/check-data-freshness.mjs --update    # rewrite the baseline
- *   node scripts/check-data-freshness.mjs --quiet     # summary only, no report body
- *
- * Exit codes: 0 = no drift, 1 = drift found, 2 = the check could not run.
+ * Run with `--help` for flags and exit codes; `USAGE` below is the one copy.
  */
 
 import { createHash } from 'node:crypto';
@@ -339,7 +334,28 @@ function serializeBaseline(packages) {
 	)}\n`;
 }
 
+const USAGE = `check-data-freshness — report when src/lib/data/*.ts has fallen behind the
+@happyvertical/smrt-* packages it describes.
+
+  pnpm run audit:data                 report drift (exit 1 if any)
+  pnpm run audit:data -- --update     rewrite scripts/smrt-docs-baseline.json
+  pnpm run audit:data -- --quiet      summary only, no report body
+
+It records the version and an AGENTS.md hash per installed smrt package and
+compares them to a committed baseline, then names the data files mentioning any
+package whose docs were rewritten upstream. A lockstep bump that leaves
+AGENTS.md alone is not drift. Re-read the entries it points at, then rerun with
+--update and commit the baseline.
+
+It deliberately does not judge the prose — a hash comparison cannot. Exit
+codes: 0 = no drift, 1 = drift found, 2 = the check could not run.`;
+
 function main(argv) {
+	if (argv.includes('--help') || argv.includes('-h')) {
+		process.stdout.write(`${USAGE}\n`);
+		return 0;
+	}
+
 	const update = argv.includes('--update');
 	const quiet = argv.includes('--quiet');
 

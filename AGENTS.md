@@ -41,36 +41,22 @@ for public consumption; a local patch defeats the point.
 
 All 22 installed `@happyvertical/smrt-*` packages ship an `AGENTS.md` inside
 `node_modules`, written against the version you actually have. Read
-`node_modules/@happyvertical/<package>/AGENTS.md` instead of any summary — it is the
-authority on that package's API, and nothing needs keeping in sync. The three this
-site builds against directly:
+`node_modules/@happyvertical/<package>/AGENTS.md` before working on a package —
+it is the authority on that package's API, and no summary here could stay true.
+The site builds directly against `smrt-ui`, `smrt-svelte`, `smrt-playground`.
 
-@./node_modules/@happyvertical/smrt-ui/AGENTS.md
-@./node_modules/@happyvertical/smrt-svelte/AGENTS.md
-@./node_modules/@happyvertical/smrt-playground/AGENTS.md
-
-## First run
-
-`pnpm install && pnpm dev`.
+## Setup and validation
 
 **`engines.node` is `>=24.18.0` and `.npmrc` sets `engine-strict=true`.** On an
-older Node, `pnpm install` fails outright rather than warning. If the install dies
-on an engine check, switch Node versions — that is the whole problem.
+older Node, `pnpm install` fails outright rather than warning. If the install
+dies on an engine check, switch Node versions — that is the whole problem.
 
-## Validation
-
-```bash
-pnpm test          # vitest
-pnpm run build     # check:templates + vite build (prerenders everything)
-pnpm run lint      # prettier + eslint + check:templates
-pnpm run check     # svelte-check
-```
-
-CI runs test, check, and build on every pull request. `pnpm run check` is clean
-(0 errors, 0 warnings) and must stay that way — it is the type-drift guard for
-framework bumps. `lint` is **not** among them: `.github/workflows/lint.yaml` runs
-it on pushes to `main`, never on a pull request, so running it yourself before
-shipping is the only thing that keeps `main` green.
+`package.json` names the commands. What it cannot tell you: the only CI on a
+pull request is the `build` job in `build-deploy.yaml`, which runs `test`,
+`check`, and `build` but **not `lint`** — `lint.yaml` runs that on pushes to
+`main`, so running `lint` yourself before shipping is the only thing that keeps
+`main` green. `pnpm run check` is at 0 errors, 0 warnings and must stay there;
+it is the type-drift guard for framework bumps.
 
 `check:templates` catches unescaped `{` / `}` inside `<code>` blocks, which Svelte
 would otherwise parse as expressions and fail on at render time. Escape them as
@@ -79,45 +65,25 @@ it catches `{UndefinedVar}` in templates.
 
 ## How the content is authored
 
-The site is data-driven, not page-per-file. Content lives in `src/lib/data/`:
+The site is data-driven, not page-per-file: the guide, reference, and package
+pages are entries in `src/lib/data/`, served by two renderers —
+`GuidePage.svelte` for the `Guide[]` modules, `PackageWorkbench.svelte` for
+`packages.ts`. Adding one of those means adding a data entry, not a route; the
+route's `entries()` prerenders it automatically. Editing a renderer changes
+every page it serves, so check a few before assuming. Landing pages and section
+indexes are ordinary hand-written `+page.svelte` files.
 
-- `packages.ts` — package entries, rendered by `PackageWorkbench.svelte` at
-  `/packages/[slug]`
-- `guides.ts` (foundation and capability guides), `reference.ts`, `tooling.ts`, and
-  `task-guides.ts` (the runnable guides at `/guides`) — all rendered by
-  `GuidePage.svelte`
-- `navigation.ts`, `playgrounds.ts` — nav structure and live playground modules
-
-Adding a package or guide means adding a data entry, not a route: the route's
-`entries()` derives from the data, so the page prerenders automatically. Editing a
-renderer changes every page it serves — check a few before assuming.
-
-### Registering a new `Guide[]` route family
-
-A new collection is more than a data file. Four registrations are hand-maintained
-and **none is auto-discovered**, so forgetting one is silent:
-
-- `navigation.ts` — the sidebar, ⌘K page entries, and prev/next track all derive
-  from this one.
-- the `guideTracks` list in `search.ts` — without it the palette finds the pages
-  but none of their section headings.
-- `sitemap.xml/+server.ts`.
-- the hand-written family lists in `search.test.ts` and `track.test.ts` — these are
-  the coverage assertions themselves, not a guard against an omission elsewhere. A
-  family missing from them passes trivially.
+A new `Guide[]` route family is the exception — it needs a `[slug]` route of its
+own plus registering by hand in `navigation.ts`, `search.ts`, and the sitemap.
+Add the family and let `registration.test.ts` name what you missed; it discovers
+the families, so it knows about yours before you have told it anything.
 
 ### Nothing regenerates that content, so it goes stale silently
 
-`pnpm run audit:data` hashes each installed package's `AGENTS.md` against
-`scripts/smrt-docs-baseline.json` and names the data files mentioning any package
-whose docs were rewritten. A lockstep bump that leaves `AGENTS.md` alone is not
-drift. After re-reading the entries it points at, run
-`pnpm run audit:data -- --update` and commit the baseline.
-`.github/workflows/data-freshness.yaml` runs it weekly against one tracking issue;
-it is **not** a gate — never on a pull request, cannot block a merge, because a
-hash comparison is not qualified to reject prose.
-(`smrt dev:knowledge-check` should do this job; it exhausts the Node heap here —
-happyvertical/smrt#2275. Delete the script when that lands.)
+`pnpm run audit:data -- --help` explains the drift check and how to refresh its
+baseline. `.github/workflows/data-freshness.yaml` runs it weekly against one
+tracking issue; it is **not** a gate — never on a pull request, cannot block a
+merge, because a hash comparison is not qualified to reject prose.
 
 ## Legacy redirects are a contract
 
@@ -125,34 +91,30 @@ happyvertical/smrt#2275. Delete the script when that lands.)
 `src/routes/modules/[slug]/` prerender 301 redirects for URLs the site used to serve.
 The site is static, so a path with no prerendered redirect is a hard 404 in
 production — **removing an entry silently breaks a live URL.**
-`src/lib/server/legacy-routes.test.ts` asserts the exact docs and components counts;
-if it fails, restore the redirect rather than updating the count.
+Nothing on the site links to these paths, so a dropped entry produces no build
+warning at all — `legacy-routes.test.ts` is the only signal. It holds the counts
+and says what to do when one drops.
 
 ## Dependency policy
 
-All 22 `@happyvertical/smrt-*` packages are public on npmjs, pinned by the project
-`.npmrc`. No authentication is needed.
+All 22 `@happyvertical/smrt-*` packages are public on npmjs and released in
+lockstep; the project `.npmrc` pins that registry, so installs need no auth.
 
 **They are pinned to exact versions, not caret ranges.** `smrt-fields` pins its own
 smrt siblings exactly, so mixing exact and caret ranges lets pnpm install duplicate
 `smrt-core` instances — and therefore duplicate `ObjectRegistry` singletons — in one
 tree. Keep every smrt dependency on the same exact version.
 
-They release in lockstep, so bumping moves all of them together. `pnpm run
-update:smrt` pins every one to latest and refreshes the lockfile; `-- --dry-run`
-previews, `-- --to <version>` pins a version, `-- --caret` opts out (don't). It reads
-the registry from npm config for the `@happyvertical` scope, so it follows `.npmrc`
-rather than hardcoding a host. After running it, verify with the full gate above and
-commit `package.json` plus `pnpm-lock.yaml`. Renovate also keeps these current; if it
-goes quiet, check it is not blocked before assuming the packages stopped releasing.
+`pnpm run update:smrt -- --help` covers bumping them. Renovate keeps them current
+too; if it goes quiet, check it is not blocked before assuming the packages
+stopped releasing.
 
 ## The rendered version number
 
-`$lib/version` exports `SMRT_VERSION`, injected at build time from the installed
-framework tree (`scripts/smrt-version.js`, wired through the `define` block in
-`vite.config.ts` and `vitest.config.ts`). **Never write a version number into page
-copy** — import the constant. The site once carried four different hardcoded ones,
-none matching the version it was built against.
+**Never write a version number into page copy** — import `SMRT_VERSION` from
+`$lib/version`. `pinned-versions.test.ts` enforces that across every `.ts` and
+`.svelte` under `src/`, documents the deliberate exceptions, and records why the
+rule exists.
 
 ## Active upstream defects
 
@@ -168,17 +130,19 @@ Then one line below.
   `generate:mcp` — happyvertical/smrt#2279, cleanup in #161.
 - `reference.ts` documents `semanticSearch` rejecting a `combinedField` name —
   happyvertical/smrt#2281, rewording in #162.
+- `scripts/check-data-freshness.mjs` stands in for `smrt dev:knowledge-check`,
+  which exhausts the Node heap here — happyvertical/smrt#2275, delete it in #158.
 
 ## Agent lifecycle posture
 
 - `.agents/project.yaml` is present: `hv-agent` claim/heartbeat/release work
   against this checkout directly — no scratch-directory manifest needed.
 - This public repo intentionally has **no** lifecycle CI workflow
-  (`.github/workflows/agent-policy.yml`) and no `github.required_status_checks` in
-  the manifest. The only CI on a pull request is the `build` job in
-  `build-deploy.yaml`; `data-freshness.yaml` and `lint.yaml` are advisory and never
-  run on one. Required checks would change merge behaviour for human contributors
-  and need explicit confirmation first. Until that cutover, `hv-agent audit` and
-  `check-pr` reporting the missing workflow is expected — and is the **only** error
-  either should report, so treat a second as real. Do not hand-write it; a confirmed
-  cutover regenerates it via `hv-agent migrate-repo`.
+  (`.github/workflows/agent-policy.yml`) and no `github.required_status_checks`.
+  Required checks would change merge behaviour for human contributors and need
+  explicit confirmation first. So `hv-agent audit` and `check-pr` reporting that
+  workflow missing is expected, and is the **only** error either should report —
+  treat a second as real. Do not hand-write it; a confirmed cutover regenerates
+  it via `hv-agent migrate-repo`.
+- No workflow is required on a pull request; see "Setup and validation" for what
+  runs where.

@@ -1,50 +1,20 @@
 import { describe, it, expect } from 'vitest';
-import { toAnchorId } from '$lib/data/anchors';
-import { capabilityGuides, foundationGuides, type Guide } from '$lib/data/guides';
+import { guidePages } from '$lib/data/guide-families';
 import { searchDocs, searchEntries } from '$lib/data/search';
-import { referenceGuides } from '$lib/data/reference';
-import { taskGuides } from '$lib/data/task-guides';
-import { toolingGuides } from '$lib/data/tooling';
-
-/**
- * Every `Guide[]` route family on the site. A new one added to `$lib/data`
- * must be listed both here and in `search.ts`, or its headings are missing
- * from the palette while its pages still appear — which is exactly the silent
- * gap these tests exist to catch.
- */
-const tracks: { base: string; guides: Guide[] }[] = [
-	{ base: '/foundations', guides: foundationGuides },
-	{ base: '/capabilities', guides: capabilityGuides },
-	{ base: '/guides', guides: taskGuides },
-	{ base: '/tooling', guides: toolingGuides },
-	{ base: '/reference', guides: referenceGuides }
-];
 
 describe('search index', () => {
 	it('indexes section headings, not just page titles', () => {
 		const sections = searchEntries.filter((entry) => entry.kind === 'section');
-		const guideSectionCount = tracks
-			.flatMap((track) => track.guides)
-			.reduce((total, guide) => total + guide.sections.length, 0);
+		// Families are discovered, not listed, so a new one is counted here the
+		// moment it exists. `registration.test.ts` checks each one individually.
+		const guideSectionCount = guidePages.reduce(
+			(total, { guide }) => total + guide.sections.length,
+			0
+		);
 
 		expect(guideSectionCount).toBeGreaterThan(0);
 		expect(sections.length).toBeGreaterThanOrEqual(guideSectionCount);
 		expect(searchEntries.length).toBeGreaterThan(200);
-	});
-
-	it('deep-links every guide section to an anchor the page actually renders', () => {
-		for (const { base, guides } of tracks) {
-			for (const guide of guides) {
-				for (const section of guide.sections) {
-					// GuidePage renders `id={toAnchorId(section.title)}` from the same helper.
-					const href = `${base}/${guide.slug}#${toAnchorId(section.title)}`;
-					expect(
-						searchEntries.some((entry) => entry.href === href),
-						`missing search entry for ${href}`
-					).toBe(true);
-				}
-			}
-		}
 	});
 
 	it('has no duplicate entries', () => {
