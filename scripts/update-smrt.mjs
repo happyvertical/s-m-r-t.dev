@@ -45,7 +45,7 @@ smrt dependency on the same exact version.
 
 The registry comes from npm config for the @happyvertical scope, so this
 follows the project .npmrc rather than hardcoding a host. Deps on a file:,
-link:, or workspace: spec are skipped.
+link:, or workspace: spec are skipped during updates; --check rejects them.
 
 After a bump, verify with pnpm run lint && pnpm test && pnpm run check &&
 pnpm run build, then commit package.json plus pnpm-lock.yaml.`;
@@ -137,6 +137,10 @@ for (const field of ['dependencies', 'devDependencies']) {
 	for (const [name, spec] of Object.entries(deps)) {
 		if (!name.startsWith(SCOPE_PREFIX)) continue;
 		if (LOCAL_SPEC.test(spec)) {
+			if (checkOnly) {
+				targets.push({ name, field, current: spec });
+				continue;
+			}
 			console.log(`  skip   ${name} (${spec}) — local spec`);
 			continue;
 		}

@@ -43,6 +43,18 @@ describe('update-smrt --check', () => {
 		).toThrow(/SMRT dependencies must use exact versions/);
 	});
 
+	it.each(['file:../smrt-core', 'link:../smrt-core', 'workspace:*'])(
+		'rejects the local spec %s',
+		(spec) => {
+			expect(() =>
+				check({
+					'@happyvertical/smrt-core': spec,
+					'@happyvertical/smrt-svelte': '0.40.63'
+				})
+			).toThrow(/SMRT dependencies must use exact versions/);
+		}
+	);
+
 	it('rejects mixed exact versions', () => {
 		expect(() =>
 			check({
