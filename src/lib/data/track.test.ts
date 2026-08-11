@@ -1,10 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { capabilityGuides, foundationGuides } from '$lib/data/guides';
+import { describePage, guideHref, guidePages } from '$lib/data/guide-families';
 import { docsNavigation } from '$lib/data/navigation';
 import { packages } from '$lib/data/packages';
-import { referenceGuides } from '$lib/data/reference';
-import { taskGuides } from '$lib/data/task-guides';
-import { toolingGuides } from '$lib/data/tooling';
 import { docsTrack, packageNeighbors, packageTrack, trackNeighbors } from '$lib/data/track';
 
 describe('documentation track', () => {
@@ -15,16 +12,17 @@ describe('documentation track', () => {
 	});
 
 	it('covers every guide page rendered by GuidePage', () => {
-		const guidePages = [
-			...foundationGuides.map((guide) => `/foundations/${guide.slug}`),
-			...capabilityGuides.map((guide) => `/capabilities/${guide.slug}`),
-			...taskGuides.map((guide) => `/guides/${guide.slug}`),
-			...toolingGuides.map((guide) => `/tooling/${guide.slug}`),
-			...referenceGuides.map((guide) => `/reference/${guide.slug}`)
-		];
+		// Families are discovered rather than listed, so a new one is on trial
+		// here from the moment it exists rather than once someone remembers it.
+		expect(guidePages.length).toBeGreaterThan(20);
 
-		for (const href of guidePages) {
-			expect(trackNeighbors(href), `${href} is not on the track`).not.toBeNull();
+		for (const page of guidePages) {
+			const href = guideHref(page);
+			expect(
+				href !== undefined && trackNeighbors(href) !== null,
+				`${describePage(page)} is not on the track — the track flattens docsNavigation, ` +
+					'so a page missing here is a page missing from navigation.ts.'
+			).toBe(true);
 		}
 	});
 
@@ -48,7 +46,7 @@ describe('documentation track', () => {
 	});
 
 	it('tolerates a trailing slash or query string', () => {
-		const href = `/reference/${referenceGuides[0].slug}`;
+		const href = docsTrack[1].href;
 		expect(trackNeighbors(`${href}/`)?.next).toEqual(trackNeighbors(href)?.next);
 		expect(trackNeighbors(`${href}?x=1`)?.next).toEqual(trackNeighbors(href)?.next);
 	});
