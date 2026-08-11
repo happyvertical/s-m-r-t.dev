@@ -1,5 +1,5 @@
 import type { GuideCallout } from '$lib/data/callouts';
-import { SMRT_VERSION } from '$lib/version';
+import { TOOLING_PINNED_VERSION } from '$lib/data/tooling';
 
 export interface GuideLink {
 	label: string;
@@ -353,7 +353,7 @@ export const capabilityGuides: Guide[] = [
 				callout: {
 					variant: 'version-added',
 					title: 'Runtime bridge availability',
-					body: `The current tooling reference is pinned to the released ${SMRT_VERSION} development MCP, which reads workspace artifacts only. Treat runtime-environment awareness as available only when the installed development MCP version explicitly exposes this integration.`
+					body: `The current tooling reference is pinned to the released ${TOOLING_PINNED_VERSION} development MCP, which reads workspace and installed-package artifacts only. Treat runtime-environment awareness as available only when the installed development MCP explicitly exposes a runtime integration.`
 				},
 				links: [{ label: 'Development MCP and its runtime boundary', href: '/tooling/dev-mcp' }]
 			},
@@ -991,9 +991,9 @@ dispose();`
 				]
 			},
 			{
-				title: 'Usage learning is merged upstream, not yet released',
+				title: 'Usage learning turns aggregate patterns into reviewable suggestions',
 				intro:
-					'The optional usage-learning loop turns recent aggregated form usage into administrator-reviewed suggestions. It merged into the framework repository after the 0.40.61 cut and is present in no published release of @happyvertical/smrt-fields, so nothing described here is available to install today. The behaviour below is what the framework’s main branch implements now; treat the specifics as subject to change until a release ships them.',
+					'The optional usage-learning loop turns recent aggregated form usage into administrator-reviewed suggestions. It is opt-in at the host boundary, never applies a suggestion automatically, and installs its maintenance and suggestion schedules dormant until an operator enables them.',
 				points: [
 					'Capture is per-host opt-in and success-gated: a browser form reports only after its persistence handler acknowledges success, it requires both an ambient tenant and an authenticated user, and a form that supplies no reporter never captures anything.',
 					'Values are minimized. Raw values travel only for low-cardinality boolean and reference fields; text, numbers, dates, JSON, and anything sensitive or read-permission-gated stay count-only, and the server drops fields the live registry does not recognize.',
@@ -1004,7 +1004,7 @@ dispose();`
 			{
 				title: 'The SaaS starter shows the whole path',
 				intro:
-					'The public smrt-saas-starter adopted the rail end to end at s-m-r-t 0.40.61: static ui hints on its settings object, a policy-aware ObjectForm with the gear, a permission-checked control panel route, and a shell navigation entry. It also shows the ordinary friction — its objects were closed to the generated API, so the one object the browser manages had to open a narrow include list before a form could round-trip.',
+					'The public smrt-saas-starter adopted the rail end to end: static ui hints on its settings object, a policy-aware ObjectForm with the gear, a permission-checked control panel route, and a shell navigation entry. It also shows the ordinary friction — its objects were closed to the generated API, so the one object the browser manages had to open a narrow include list before a form could round-trip.',
 				points: [
 					'packages/app-objects/src/models/StarterAppSetting.ts carries the @field({ ui }) seed and the narrowed api include list; its sibling StarterInvitation stays api: false.',
 					'apps/web/src/lib/field-policy-client.ts holds the adapter, which posts to hand-written /api/field-policies routes rather than wrapping the generated client — the adapter contract is transport-neutral, so both shapes are valid.',

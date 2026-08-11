@@ -6,7 +6,7 @@
 		{
 			tier: 'Tier 2',
 			name: 'Development and knowledge',
-			body: 'Reads a workspace on disk: source, manifests, and authored documentation. It never touches application data, principals, or tenants. The framework CLI and the development MCP server both live here.'
+			body: 'Reads a workspace on disk plus the contracts shipped by installed SMRT and SDK packages. It never touches application data, principals, or tenants. The framework CLI and the development MCP server both live here.'
 		},
 		{
 			tier: 'Tier 1',
@@ -27,7 +27,7 @@
 			surface: 'smrt-dev-mcp',
 			plane: 'Tier 2',
 			runs: 'Local stdio, launched by your client',
-			when: 'A coding agent needs the same workspace knowledge, plus class generation, introspection, and review or architecture context.',
+			when: 'A coding agent needs workspace and installed-package knowledge, plus class generation, introspection, and review or architecture context.',
 			href: '/tooling/dev-mcp'
 		},
 		{

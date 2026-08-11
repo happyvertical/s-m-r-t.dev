@@ -126,12 +126,8 @@ Then one line below.
 
 - `smrt-fields/playground` unregistered in `playgrounds.ts` —
   happyvertical/smrt#2272, re-add in #156.
-- The MCP task guide pins `--output-path …/index.ts` and warns off `--version` and
-  `generate:mcp` — happyvertical/smrt#2279, cleanup in #161.
-- `reference.ts` documents `semanticSearch` rejecting a `combinedField` name —
-  happyvertical/smrt#2281, rewording in #162.
-- `scripts/check-data-freshness.mjs` stands in for `smrt dev:knowledge-check`,
-  which exhausts the Node heap here — happyvertical/smrt#2275, delete it in #158.
+- `scripts/check-data-freshness.mjs` still fronts the data baseline even though the
+  released CLI now supports installed-package discovery — replace it in #158.
 
 ## Agent lifecycle posture
 

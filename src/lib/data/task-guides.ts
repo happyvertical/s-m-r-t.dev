@@ -10,7 +10,7 @@ import type { Guide } from '$lib/data/guides';
  * the disagreement between the pin and the rendered version is the signal to
  * re-run the guides and move it.
  */
-export const TASK_GUIDES_PINNED_VERSION = '0.40.61';
+export const TASK_GUIDES_PINNED_VERSION = '0.40.63';
 
 /** Canonical upstream tree for the release above. */
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${TASK_GUIDES_PINNED_VERSION}`;
@@ -366,7 +366,7 @@ export class Article extends SmrtObject {
 				intro:
 					'The generated stdio server is the Tier 1 surface for an agent running on the same machine as the application. It reads its database credentials from the environment and has no per-request principal, which is exactly why it stays local.',
 				callout: {
-					variant: 'tip',
+					variant: 'note',
 					title: 'Choose the output language by extension',
 					body: 'The default .js target is transpiled to runnable ESM JavaScript. Ask for a .ts or .mts path when you want to keep the annotated TypeScript for tsx or Node type stripping; CommonJS .cjs and .cts targets are rejected.'
 				},
@@ -486,7 +486,7 @@ export const POST = mountMcpRoute(mcpServer);
 // });`,
 				points: [
 					'A fresh protocol server is built per request, so no session id, sticky routing, or held stream is involved.',
-					'The mount serves server/discover, tools/list, and tools/call, and reports only the tools capability.',
+					'The mount serves server/discover, tools/list, and tools/call. It always reports tools and adds the optional tasks extension only when an allowed object enables a task action.',
 					'Tool discovery is sorted by name, so the catalogue is deterministic.',
 					'Exporting it as GET returns 405 with code -32000.'
 				]

@@ -4,7 +4,7 @@ import type { Guide } from '$lib/data/guides';
  * Released s-m-r-t version every claim in this section was verified against.
  * When this moves, re-read the canonical sources listed on each page.
  */
-export const TOOLING_PINNED_VERSION = '0.40.61';
+export const TOOLING_PINNED_VERSION = '0.40.63';
 
 /** Canonical upstream tree for the release above. */
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${TOOLING_PINNED_VERSION}`;
@@ -54,7 +54,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 			{
 				title: 'Options differ per command',
 				intro:
-					'--scope and --package are shared by all five commands. --scope defaults to project and accepts project, local, package, or sdk. The remaining options belong to specific commands, so a flag copied between them will not always apply.',
+					'--scope and --package are shared by all five commands. --scope defaults to project and accepts project, local, package, sdk, or installed. The remaining options belong to specific commands, so a flag copied between them will not always apply.',
 				points: [
 					'--changed and --strict belong to dev:knowledge-check only.',
 					'--base belongs to dev:knowledge-diff only and defaults to HEAD.',
@@ -74,9 +74,23 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 				]
 			},
 			{
+				title: 'Consumer apps can inspect what they installed',
+				intro:
+					'A consumer application may author no framework package of its own, so workspace discovery alone cannot describe the SMRT surface it runs. schemaVersion 3 adds installedPackages: an enumerated, deduplicated view of installed @happyvertical/smrt-* and known SDK packages, available directly through --scope installed.',
+				points: [
+					'Each installed package records its version, isInstalledDependency, and agentDocSha256 for the shipped AGENTS.md.',
+					'The documentation hash is the drift signal; a version change alone does not imply that the agent contract changed.',
+					'Installed dependencies are indexed but skipped by the freshness gate, because a consumer cannot repair documentation inside a published package.',
+					'Authored-package coverage remains separate, so installed objects cannot hide a broken workspace scan.'
+				],
+				filename: 'installed-knowledge.sh',
+				lang: 'bash',
+				code: `smrt dev:knowledge-index --scope installed --format json`
+			},
+			{
 				title: 'Coverage and diagnostics instead of a silent empty answer',
 				intro:
-					'The index carries a coverage block and a diagnostics block at schemaVersion 2. Coverage names the workspace globs, where they were read from, the package directories found, and which packages have or lack objects with a reason and a remedy. Discovering zero objects is an error-grade diagnostic that names the roots and artifact paths checked, so an unreadable project is never reported as a project with no model.',
+					'Coverage and diagnostics were added in schemaVersion 2. Coverage names the workspace globs, where they were read from, the package directories found, and which authored packages have or lack objects with a reason and a remedy. Discovering zero authored objects is an error-grade diagnostic that names the roots and artifact paths checked, so an unreadable project is never reported as a project with no model.',
 				points: [
 					'Coverage and diagnostics are computed before scope filtering, because they describe discovery itself.',
 					'Diagnostics propagate into the architecture, review, and reflection results.',
@@ -126,7 +140,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 		navTitle: 'smrt-dev-mcp',
 		eyebrow: 'Developer tooling',
 		title: 'The development MCP server',
-		lede: '@happyvertical/smrt-dev-mcp gives a coding agent the same deterministic workspace knowledge the CLI produces, plus class generation, project introspection, and portable review and architecture bundles.',
+		lede: '@happyvertical/smrt-dev-mcp gives a coding agent the same deterministic workspace and installed-package knowledge the CLI produces, plus class generation, project introspection, and portable review and architecture bundles.',
 		plainEnglish:
 			'This server helps an agent understand and change your codebase. It never touches your running application, its data, or your users.',
 		packages: ['smrt-dev-mcp', 'smrt-scanner', 'smrt-core'],
@@ -150,6 +164,26 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 					{
 						label: 'The broader pattern: agent-legible applications',
 						href: '/capabilities/agent-legible-applications'
+					}
+				]
+			},
+			{
+				title: 'Runtime awareness is a separate, optional bridge',
+				intro:
+					'The released development server does not connect to a running application or inspect its live ObjectRegistry. A future or application-provided connection can expose bounded runtime capability metadata beside the declared workspace view, but callers must discover that bridge rather than assume it exists.',
+				points: [
+					'Without a runtime bridge, the server remains fully useful and deterministic from source, manifests, generated knowledge, and installed package contracts.',
+					'A runtime bridge should label observed facts separately from declared facts and expose capability metadata rather than application records or credentials.',
+					'Live data operations remain on the Tier 1 application MCP surface and still resolve through principals, tenants, and policy.'
+				],
+				links: [
+					{
+						label: 'Upstream: optional read-only runtime diagnostics',
+						href: 'https://github.com/happyvertical/smrt/issues/1824'
+					},
+					{
+						label: 'Upstream: live runtime development plane',
+						href: 'https://github.com/happyvertical/smrt/issues/1831'
 					}
 				]
 			},
@@ -322,13 +356,36 @@ export const mcpServer = createMcpAppServer({
 			{
 				title: 'Mount it as one route',
 				intro:
-					'mountMcpRoute is the modern, fetch-style Streamable HTTP endpoint. It serves server/discover, tools/list, and tools/call, and reports only the tools capability. Tool discovery is deterministically ordered by name.',
+					'mountMcpRoute is the modern, fetch-style Streamable HTTP endpoint. It serves server/discover, tools/list, and tools/call. The tools capability is always present; the optional tasks extension is advertised only when an allowed object enables a task action. Tool discovery is deterministically ordered by name.',
 				filename: 'src/routes/api/mcp/+server.ts',
 				code: `import { mountMcpRoute } from '@happyvertical/smrt-app-mcp/sveltekit';
 import { mcpServer } from '$lib/server/mcp';
 
 export const POST = mountMcpRoute(mcpServer);`,
 				links: [{ label: 'Package reference', href: '/packages/smrt-app-mcp' }]
+			},
+			{
+				title: 'Opt long-running actions into durable tasks',
+				intro:
+					'Long-running item actions can opt into the experimental io.modelcontextprotocol/tasks extension. Tasks are disabled by default: list each task action in the object’s MCP config, and keep the jobs runner’s dispatch allowlist aligned when the class uses backgroundEligible markers.',
+				filename: 'Report.ts',
+				code: `import { backgroundEligible } from '@happyvertical/smrt-jobs';
+
+@smrt({
+  mcp: { include: ['generateReport'], tasks: ['generateReport'] }
+})
+class Report extends SmrtObject {
+  @backgroundEligible()
+  async generateReport() {
+    return buildReport(this.id);
+  }
+}`,
+				points: [
+					'Task-aware clients use tasks/get, tasks/update, and tasks/cancel to observe or control the durable job.',
+					'An application deployment must run a TaskRunner for the mcp-tasks queue; generated stdio servers start that worker automatically.',
+					'Task lifecycle calls require a stable authenticated principal id, plus tenantId for tenant-scoped objects.',
+					'backgroundEligible is restrictive once the first method is marked, so mark every method the TaskRunner may dispatch.'
+				]
 			},
 			{
 				title: 'Stateless by construction',
@@ -507,7 +564,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 				intro:
 					'Both MCP packages depend on @modelcontextprotocol/server at exactly 2.0.0, with no range. The 2026-07-28 revision itself is owned and enforced by that SDK rather than declared as a framework constant, which is why the pin is exact: the protocol envelope, header validation, and error codes come from one known version.',
 				points: [
-					'The application HTTP mount serves the 2026-07-28 envelope and reports only the tools capability.',
+					'The application HTTP mount serves the 2026-07-28 envelope, always reports tools, and advertises the optional tasks extension only when configured.',
 					'Client-side pins in the framework test suites request the same revision explicitly.',
 					'The scoped client and node packages are pinned to 2.0.0 as well.'
 				]
@@ -536,11 +593,12 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 				links: [{ label: 'The current mount', href: '/tooling/app-mcp' }]
 			},
 			{
-				title: 'Not part of this release',
+				title: 'Optional capabilities stay explicit',
 				intro:
-					'Durable MCP tasks backed by the jobs runtime, and field-policy usage learning, landed after the 0.40.61 release cut and are not present in the version this section documents. Treat them as unreleased until a published version contains them, and do not configure a client against them.',
+					'Durable MCP tasks are available as an experimental, opt-in extension. Their capability is absent unless an allowed object declares at least one task action, so an ordinary tools-only client sees the same surface as before.',
 				points: [
-					'No task lifecycle, ownership, or resumption behavior is available in 0.40.61.',
+					'Task lifecycle state lives in the jobs runtime rather than an MCP transport session.',
+					'Application deployments must run the mcp-tasks worker and provide a stable principal identity for lifecycle operations.',
 					'The development plugin declares no streamable HTTP transport in this release.'
 				]
 			},

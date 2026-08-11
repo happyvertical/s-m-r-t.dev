@@ -6,7 +6,7 @@ import type { Guide } from '$lib/data/guides';
  * re-read the canonical sources listed on each page and re-run the checks
  * behind them.
  */
-const REFERENCE_PINNED_VERSION = '0.40.61';
+const REFERENCE_PINNED_VERSION = '0.40.63';
 
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${REFERENCE_PINNED_VERSION}`;
 
@@ -531,7 +531,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 					'remember() and recall() are the thin layer over the table, and several columns they write are inert at that level. LearningMemory, the agent-facing layer in the same package, is what activates them.',
 				points: [
 					'expiresAt is stored on the row, but recall() and recallAll() do not filter on it. LearningMemory does drop expired records, so at the primitive level expiry is the caller to enforce.',
-					'success_count and failure_count are written as zero and never move through remember(). LearningMemory increments them from reported outcomes and decays confidence with them.',
+					'SmrtObject.remember() leaves success_count and failure_count untouched when it updates an entry; SmrtCollection.remember() resets both to zero. Neither recall path changes them. LearningMemory maintains the counters from reported outcomes and decays confidence with them.',
 					'Entries are keyed to their owner, not to a tenant column, so tenant separation of memory comes from the owning record rather than from the table.',
 					'describe() is unrelated to the embedding pipeline: vectors come from stored field text, never from generated prose.'
 				]
