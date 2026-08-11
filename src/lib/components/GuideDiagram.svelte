@@ -53,6 +53,12 @@
 				'An adapter can guide the user or stage a change; confirmed application stays explicit.',
 			nodes: ['Describe', 'Highlight', 'Validate', 'Stage', 'Confirm']
 		},
+		'agent-legibility': {
+			core: 'Agent understanding',
+			caption:
+				'Explicit registries describe the application from source through the active interface.',
+			nodes: ['Domain manifest', 'Optional runtime bridge', 'Form controls', 'MCP tools']
+		},
 		reports: {
 			core: 'Report model',
 			caption: 'Aggregate questions become stored models with an observable refresh lifecycle.',

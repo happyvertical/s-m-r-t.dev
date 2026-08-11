@@ -1,4 +1,5 @@
 import type { GuideCallout } from '$lib/data/callouts';
+import { TOOLING_PINNED_VERSION } from '$lib/data/tooling';
 
 export interface GuideLink {
 	label: string;
@@ -42,6 +43,7 @@ export interface Guide {
 		| 'live'
 		| 'webmcp'
 		| 'agent-controls'
+		| 'agent-legibility'
 		| 'reports'
 		| 'shell'
 		| 'collections';
@@ -318,6 +320,89 @@ export const foundationGuides: Guide[] = [
 
 export const capabilityGuides: Guide[] = [
 	{
+		slug: 'agent-legible-applications',
+		navTitle: 'Agent-legible applications',
+		eyebrow: 'Framework approach',
+		title: 'Build an application agents can understand',
+		lede: 's-m-r-t describes the application at several layers so an agent can inspect declared domain logic, understand visible controls, discover permitted operations, and—when a runtime bridge is exposed—observe the active environment without reverse-engineering each surface.',
+		plainEnglish:
+			'Instead of guessing from files or rendered pixels, an agent receives bounded descriptions of the model, interface, and callable actions, with an active-environment view when the runtime bridge is available.',
+		packages: ['smrt-core', 'smrt-dev-mcp', 'smrt-ui', 'smrt-app-mcp'],
+		visual: 'agent-legibility',
+		sections: [
+			{
+				title: 'One application, four semantic views',
+				intro:
+					'Each registry answers a different question. Together they give people and agents a consistent map from what the product means to what this particular environment can do.',
+				points: [
+					'The domain manifest describes objects, fields, relationships, policies, and declared interfaces.',
+					'When exposed, the runtime-environment registry describes which modules and capabilities are actually available in the active process.',
+					'The control registry describes the visible form controls, their meaning, constraints, sensitivity, and state.',
+					'MCP and WebMCP schemas describe the operations an agent may request at the current boundary.'
+				]
+			},
+			{
+				title: 'Compare what is declared with what is running',
+				intro:
+					'The runtime-environment registry is designed as a bounded bridge for development tooling. When a development MCP connection exposes that registry, a coding agent can combine deterministic workspace knowledge with what is loaded and available here instead of assuming a build artifact and its active process agree.',
+				points: [
+					'Missing or stale registrations become diagnosable facts instead of mysterious runtime failures.',
+					'Environment-specific modules and adapters can be discovered without hard-coding one deployment shape.',
+					'The registry exposes capability metadata, not application records, credentials, principals, or tenant data.'
+				],
+				callout: {
+					variant: 'version-added',
+					title: 'Runtime bridge availability',
+					body: `The current tooling reference is pinned to the released ${TOOLING_PINNED_VERSION} development MCP, which reads workspace and installed-package artifacts only. Treat runtime-environment awareness as available only when the installed development MCP explicitly exposes a runtime integration.`
+				},
+				links: [{ label: 'Development MCP and its runtime boundary', href: '/tooling/dev-mcp' }]
+			},
+			{
+				title: 'Use the same pattern in the visible interface',
+				intro:
+					'Agent-assisted forms make controls legible in the same way. A stable form and control identity replaces DOM position or visible wording, while descriptions, options, validation, and sensitivity travel with the control.',
+				points: [
+					'Chat, voice, tutorials, and tests can share one control description.',
+					'Highlight, explain, and validate commands can help without changing a value.',
+					'Staged changes keep the proposed value separate until a confirmed apply command.'
+				],
+				links: [
+					{
+						label: 'Try the agent-assisted form pattern',
+						href: '/capabilities/agent-assisted-forms'
+					}
+				]
+			},
+			{
+				title: 'Awareness is not authority',
+				intro:
+					'Describing an environment or control does not grant permission to operate it. Development metadata remains separate from live data operations, and runtime calls still resolve through the application principal, tenant scope, field policy, and explicit confirmation rules.',
+				points: [
+					'The development MCP understands code and, when connected, bounded capability metadata; Tier 1 application MCP performs permitted data operations.',
+					'Secret values stay out of control descriptions and generated outputs.',
+					'An application can expose a narrow tool set even when its model supports more operations internally.'
+				]
+			},
+			{
+				title: 'Why explicit registries beat reverse-engineering',
+				intro:
+					'A semantic contract is stable across layout changes, deployment shapes, and agent providers. The same metadata also improves documentation, accessibility, validation, testing, and generated interfaces, so making the application legible does not create a separate agent-only implementation.',
+				points: [
+					'Less duplicated integration code and fewer human/agent interface drift bugs.',
+					'More reliable automation than filesystem, DOM, or screenshot guessing.',
+					'One inspectable boundary for builders, operators, tests, chat, and voice experiences.',
+					'Security hardening flows through the shared model and registries instead of being recreated per adapter.'
+				]
+			}
+		],
+		related: [
+			{ label: 'Software as Agentic Domain Logic', href: '/reference/saadl' },
+			{ label: 'Agent-assisted forms', href: '/capabilities/agent-assisted-forms' },
+			{ label: 'The development MCP server', href: '/tooling/dev-mcp' },
+			{ label: 'WebMCP', href: '/capabilities/webmcp' }
+		]
+	},
+	{
 		slug: 'agent-assisted-forms',
 		navTitle: 'Agent-assisted forms',
 		eyebrow: 'New UI capability',
@@ -370,6 +455,11 @@ export const capabilityGuides: Guide[] = [
 				intro:
 					'The standardized controls, registry, safety policy, s-m-r-t Svelte form bridge, and interactive playground example are included. A product still chooses and wires the chat or voice adapter that exposes these commands; smrt-chat does not silently control every form just because both packages are installed.'
 			}
+		],
+		related: [
+			{ label: 'Agent-legible applications', href: '/capabilities/agent-legible-applications' },
+			{ label: 'Component playground', href: '/playground' },
+			{ label: 'WebMCP', href: '/capabilities/webmcp' }
 		]
 	},
 	{
@@ -902,9 +992,9 @@ dispose();`
 				]
 			},
 			{
-				title: 'Usage learning is merged upstream, not yet released',
+				title: 'Usage learning turns aggregate patterns into reviewable suggestions',
 				intro:
-					'The optional usage-learning loop turns recent aggregated form usage into administrator-reviewed suggestions. It merged into the framework repository after the 0.40.61 cut and is present in no published release of @happyvertical/smrt-fields, so nothing described here is available to install today. The behaviour below is what the framework’s main branch implements now; treat the specifics as subject to change until a release ships them.',
+					'The optional usage-learning loop turns recent aggregated form usage into administrator-reviewed suggestions. It is opt-in at the host boundary, never applies a suggestion automatically, and installs its maintenance and suggestion schedules dormant until an operator enables them.',
 				points: [
 					'Capture is per-host opt-in and success-gated: a browser form reports only after its persistence handler acknowledges success, it requires both an ambient tenant and an authenticated user, and a form that supplies no reporter never captures anything.',
 					'Values are minimized. Raw values travel only for low-cardinality boolean and reference fields; text, numbers, dates, JSON, and anything sensitive or read-permission-gated stay count-only, and the server drops fields the live registry does not recognize.',
@@ -915,7 +1005,7 @@ dispose();`
 			{
 				title: 'The SaaS starter shows the whole path',
 				intro:
-					'The public smrt-saas-starter adopted the rail end to end at s-m-r-t 0.40.61: static ui hints on its settings object, a policy-aware ObjectForm with the gear, a permission-checked control panel route, and a shell navigation entry. It also shows the ordinary friction — its objects were closed to the generated API, so the one object the browser manages had to open a narrow include list before a form could round-trip.',
+					'The public smrt-saas-starter adopted the rail end to end: static ui hints on its settings object, a policy-aware ObjectForm with the gear, a permission-checked control panel route, and a shell navigation entry. It also shows the ordinary friction — its objects were closed to the generated API, so the one object the browser manages had to open a narrow include list before a form could round-trip.',
 				points: [
 					'packages/app-objects/src/models/StarterAppSetting.ts carries the @field({ ui }) seed and the narrowed api include list; its sibling StarterInvitation stays api: false.',
 					'apps/web/src/lib/field-policy-client.ts holds the adapter, which posts to hand-written /api/field-policies routes rather than wrapping the generated client — the adapter contract is transport-neutral, so both shapes are valid.',
