@@ -5,6 +5,11 @@
 
 	const updates = [
 		{
+			title: 'Agent-legible applications',
+			body: 'Give agents bounded, semantic descriptions of the model, active environment, visible controls, and permitted operations.',
+			href: '/capabilities/agent-legible-applications'
+		},
+		{
 			title: 'Agent-assisted forms',
 			body: 'Let chat, voice, tutorials, or tests find and explain controls, then stage changes behind explicit confirmation.',
 			href: '/capabilities/agent-assisted-forms'

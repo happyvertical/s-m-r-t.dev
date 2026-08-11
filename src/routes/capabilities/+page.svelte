@@ -6,7 +6,7 @@
 
 <SEO
 	title="s-m-r-t capabilities"
-	description="Learn about s-m-r-t agent-assisted forms, learning agents, native mobile, hydration and live data, WebMCP, reports, AdminShell, collection improvements, and field policies."
+	description="Learn how s-m-r-t makes applications agent-legible through manifests, runtime registries, semantic controls, generated tools, and permission-aware capabilities."
 	url="https://s-m-r-t.dev/capabilities"
 />
 

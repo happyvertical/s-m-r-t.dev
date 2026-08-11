@@ -146,7 +146,11 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 					'Its review and architecture tools are model-agnostic and call no model provider.'
 				],
 				links: [
-					{ label: 'The runtime plane: generated and application MCP', href: '/tooling/app-mcp' }
+					{ label: 'The runtime plane: generated and application MCP', href: '/tooling/app-mcp' },
+					{
+						label: 'The broader pattern: agent-legible applications',
+						href: '/capabilities/agent-legible-applications'
+					}
 				]
 			},
 			{
@@ -255,6 +259,11 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 					'Besides tools, the server exposes the composed project knowledge and package-scoped knowledge as resources, and publishes review and architecture prompts. It also ships one harness-agnostic agent skill, smrt-code-review, which get-agent-skill returns as Markdown with YAML frontmatter that skill-unaware harnesses can ignore.',
 				links: [{ label: 'How the skill is packaged', href: '/tooling/agent-plugin' }]
 			}
+		],
+		related: [
+			{ label: 'Agent-legible applications', href: '/capabilities/agent-legible-applications' },
+			{ label: 'Knowledge tooling', href: '/tooling/knowledge' },
+			{ label: 'Generated and app MCP', href: '/tooling/app-mcp' }
 		]
 	},
 	{

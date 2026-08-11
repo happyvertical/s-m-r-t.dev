@@ -42,6 +42,14 @@ export const referenceGuides: Guide[] = [
 				intro:
 					'One model reduces duplicated code and review, keeps the codebase map current, makes infrastructure replaceable, and lets hardening flow from shared framework packages into each application.'
 			}
+		],
+		related: [
+			{
+				label: 'Agent-legible applications',
+				href: '/capabilities/agent-legible-applications'
+			},
+			{ label: 'Connect APIs, tools, and agents', href: '/foundations/interfaces' },
+			{ label: 'The development MCP server', href: '/tooling/dev-mcp' }
 		]
 	},
 	{
