@@ -91,8 +91,10 @@
 	</section>
 
 	<footer>
-		<a href="https://github.com/happyvertical/smrt-saas-starter" target="_blank" rel="noreferrer"
-			>Open the SaaS starter on GitHub ↗</a
+		<a href="https://demo.s-m-r-t.dev" target="_blank" rel="noreferrer">Open the live demo ↗</a><a
+			href="https://github.com/happyvertical/smrt-saas-starter"
+			target="_blank"
+			rel="noreferrer">Open the SaaS starter on GitHub ↗</a
 		><a href="/starters/ground-up">Compare the basic template →</a>
 	</footer>
 </article>

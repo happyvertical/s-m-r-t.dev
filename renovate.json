@@ -1,6 +1,8 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": ["local>happyvertical/renovate-config"],
+	"extends": ["local>happyvertical/renovate-config:application"],
+	"prConcurrentLimit": 2,
+	"branchConcurrentLimit": 2,
 	"packageRules": [
 		{
 			"description": "Automerge minor and patch updates on green PRs",
@@ -12,6 +14,22 @@
 			"description": "Automerge GitHub Actions digest/pin updates on green PRs",
 			"matchManagers": ["github-actions"],
 			"matchUpdateTypes": ["pin", "digest"],
+			"automerge": true,
+			"automergeType": "pr"
+		},
+		{
+			"description": "Advance the exact-pinned SMRT framework as one validated consumer update",
+			"matchPackageNames": ["@happyvertical/smrt-*"],
+			"groupName": "SMRT framework",
+			"groupSlug": "smrt-framework",
+			"rangeStrategy": "pin",
+			"minimumReleaseAge": "1 day",
+			"schedule": ["at any time"]
+		},
+		{
+			"description": "Automerge green SMRT minor and patch consumer updates",
+			"matchPackageNames": ["@happyvertical/smrt-*"],
+			"matchUpdateTypes": ["minor", "patch"],
 			"automerge": true,
 			"automergeType": "pr"
 		},

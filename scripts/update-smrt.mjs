@@ -31,6 +31,7 @@ const LOCAL_SPEC = /^(file:|link:|workspace:)/;
 const USAGE = `update-smrt — pin every @happyvertical/smrt-* dependency and refresh the lockfile.
 
   pnpm run update:smrt                     pin all to latest, refresh the lockfile
+  pnpm run update:smrt -- --check          verify exact, lockstep package specs
   pnpm run update:smrt -- --dry-run        show what would change, touch nothing
   pnpm run update:smrt -- --to <version>   pin every smrt package to one version
   pnpm run update:smrt -- --caret          write ^x.y.z ranges instead of exact pins
@@ -44,7 +45,7 @@ smrt dependency on the same exact version.
 
 The registry comes from npm config for the @happyvertical scope, so this
 follows the project .npmrc rather than hardcoding a host. Deps on a file:,
-link:, or workspace: spec are skipped.
+link:, or workspace: spec are skipped during updates; --check rejects them.
 
 After a bump, verify with pnpm run lint && pnpm test && pnpm run check &&
 pnpm run build, then commit package.json plus pnpm-lock.yaml.`;
@@ -62,6 +63,7 @@ if (flag('--help') || flag('-h')) {
 }
 
 const dryRun = flag('--dry-run');
+const checkOnly = flag('--check');
 const noInstall = flag('--no-install') || dryRun;
 // Exact pins are the policy; `--caret` is the opt-out.
 const useExact = !flag('--caret');
@@ -76,6 +78,13 @@ if (pinTo && !/^\d+\.\d+\.\d+([-+].+)?$/.test(pinTo)) {
 }
 if (flag('--exact') && flag('--caret')) {
 	console.error('--exact and --caret are mutually exclusive.');
+	process.exit(1);
+}
+if (
+	checkOnly &&
+	(dryRun || flag('--caret') || flag('--exact') || flag('--to') || flag('--no-install'))
+) {
+	console.error('--check cannot be combined with update flags.');
 	process.exit(1);
 }
 
@@ -128,6 +137,10 @@ for (const field of ['dependencies', 'devDependencies']) {
 	for (const [name, spec] of Object.entries(deps)) {
 		if (!name.startsWith(SCOPE_PREFIX)) continue;
 		if (LOCAL_SPEC.test(spec)) {
+			if (checkOnly) {
+				targets.push({ name, field, current: spec });
+				continue;
+			}
 			console.log(`  skip   ${name} (${spec}) — local spec`);
 			continue;
 		}
@@ -137,6 +150,26 @@ for (const field of ['dependencies', 'devDependencies']) {
 
 if (targets.length === 0) {
 	console.log('No registry-sourced @happyvertical/smrt-* dependencies found.');
+	process.exit(0);
+}
+
+if (checkOnly) {
+	const invalid = targets.filter((target) => !/^\d+\.\d+\.\d+(?:[-+].+)?$/.test(target.current));
+	if (invalid.length > 0) {
+		console.error('SMRT dependencies must use exact versions:');
+		for (const target of invalid) console.error(`  - ${target.name}: ${target.current}`);
+		process.exit(1);
+	}
+
+	const versions = [...new Set(targets.map((target) => target.current))];
+	if (versions.length !== 1) {
+		console.error(`SMRT dependencies must move in lockstep; found: ${versions.join(', ')}`);
+		process.exit(1);
+	}
+
+	console.log(
+		`SMRT dependency contract is coherent at ${versions[0]} (${targets.length} packages).`
+	);
 	process.exit(0);
 }
 
