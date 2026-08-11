@@ -676,14 +676,10 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				points: [
 					'in and not in require a non-empty array. An empty one is rejected rather than compiled into invalid SQL; listByIds([]) returns an empty list instead.',
 					'like requires a string value, and you supply the % wildcards yourself.',
+					'contains and dot-notation JSON paths such as metadata.userId are rejected at the API boundary because the SQL query builder cannot execute them. Use like for text matching.',
 					'Fields marked @field({ sensitive: true }) are rejected as filter keys, so a where clause cannot be used to read a secret value back one character at a time.',
 					'Generated REST routes expose the same filters as field[op] query parameters — gt, gte, lt, lte, ne, in, and like, with in taking a comma-separated list. not in has no query-parameter spelling.'
-				],
-				callout: {
-					variant: 'warning',
-					title: 'contains passes validation and then fails',
-					body: 'The collection accepts contains in its operator whitelist, but the query builder underneath has no such operator, so the key is read as a field name and rejected as an invalid SQL identifier. The failure arrives at query time rather than at the call, which makes it easy to mistake for a data problem. Use like instead.'
-				}
+				]
 			},
 			{
 				title: 'What a where clause cannot express',
@@ -691,8 +687,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 					'Conditions in one where object are joined with AND. There is no OR, no negated group, no nested condition, no subquery, and no join. orderBy accepts a field name and a direction, not an expression.',
 				points: [
 					'The underlying query builder can emit OR from a two-dimensional condition array, but the collection validates where as a flat object of identifier keys and rejects that shape.',
-					'Keys must be identifiers, optionally with dot-separated JSON-path segments. Expression text in a key is rejected, which is what keeps request-supplied filter names from reaching the SQL field position.',
-					'A dot-notation key such as metadata.userId passes validation but is not rewritten into a JSON extraction, so it reaches SQL as a qualified column reference. Confirm the behavior on your adapter before relying on it.'
+					'Keys must be identifiers followed only by an optional supported operator. Expression text and dot-separated JSON paths are rejected, which keeps request-supplied filter names from reaching the SQL field position.'
 				]
 			},
 			{
