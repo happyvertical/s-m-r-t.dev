@@ -362,34 +362,28 @@ export class Article extends SmrtObject {
 				links: [{ label: 'Reference: generated interfaces', href: '/reference/interfaces' }]
 			},
 			{
-				// The .ts output path, the 'no generate:mcp' comment, and the --version
-				// warning below are all guidance about real CLI defects, not patches to
-				// them: generate-mcp writes TypeScript to a .js path, the global flag
-				// parser swallows --version, and the shipped CLI README names a command
-				// that is not registered. Upstream happyvertical/smrt#2279; this step gets
-				// cleaned up when a release carries the fix (#161).
 				title: 'Generate the local stdio server',
 				intro:
 					'The generated stdio server is the Tier 1 surface for an agent running on the same machine as the application. It reads its database credentials from the environment and has no per-request principal, which is exactly why it stays local.',
 				callout: {
-					variant: 'warning',
-					title: 'The default output path does not run',
-					body: 'The generator emits TypeScript, but its default path ends in .js, and the CLI then suggests running it with node. That combination fails with "SyntaxError: Unexpected identifier \'CallToolRequest\'". Generate to a .ts path instead, and run it on a runtime that strips types.'
+					variant: 'tip',
+					title: 'Choose the output language by extension',
+					body: 'The default .js target is transpiled to runnable ESM JavaScript. Ask for a .ts or .mts path when you want to keep the annotated TypeScript for tsx or Node type stripping; CommonJS .cjs and .cts targets are rejected.'
 				},
 				filename: 'generate.sh',
 				lang: 'bash',
-				code: `# Note the hyphen: generate-mcp. There is no generate:mcp command.
-# Note also .ts — the generated file is TypeScript, and the default
-# .js path cannot be executed by node.
-npx smrt generate-mcp --name my-app --output-path .smrt/mcp-server/index.ts
+				code: `# Generation commands are hyphenated; generate-mcp also answers to
+# generate-mcp-server and mcp. The default output is runnable JavaScript.
+npx smrt generate-mcp --name my-app --version 0.1.0
 
 # Three files, each reported by absolute path:
-# ✅ Generated MCP server: .../.smrt/mcp-server/index.ts
+# ✅ Generated MCP server: .../.smrt/mcp-server/index.js
 # ✅ Generated Claude config example: .../.smrt/mcp-server/claude-config.example.json
 # ✅ Generated MCP documentation: .../.smrt/mcp-server/MCP-README.md`,
 				points: [
-					'Do not pass --version: the CLI consumes it as its own flag and prints its version instead of generating.',
+					'--version after the subcommand sets the generated server version; a global --version before the subcommand still prints the CLI version.',
 					'The server reads DATABASE_TYPE, DATABASE_URL, and SMRT_MCP_PERMISSIONS. When the build contains tenant-scoped classes it also reads SMRT_MCP_TENANT_ID and SMRT_MCP_ALLOW_CROSS_TENANT.',
+					'The generated server imports its runtime dependencies from the consuming project, so strict package-manager layouts require them to be declared there.',
 					'Its trust boundary is the process that launched it. Never expose it remotely.'
 				]
 			},
@@ -402,13 +396,13 @@ npx smrt generate-mcp --name my-app --output-path .smrt/mcp-server/index.ts
 				code: `echo '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{"_meta":{
   "io.modelcontextprotocol/protocolVersion":"2026-07-28",
   "io.modelcontextprotocol/clientCapabilities":{}}}}' \\
-  | node .smrt/mcp-server/index.ts
+  | node .smrt/mcp-server/index.js
 
 # {"result":{"tools":[{"name":"article_create",...},
 #                     {"name":"article_get",...}],
 #   "resultType":"complete","cacheScope":"private"},"jsonrpc":"2.0","id":1}`,
 				points: [
-					'Node runs the .ts file directly through type stripping on the supported runtime; tsx works too.',
+					'The default .js output runs directly with Node. A .ts target needs a type-stripping runtime or tsx.',
 					'Anything written to stdout that is not JSON-RPC corrupts the channel, so keep diagnostics on stderr.',
 					'An empty tool list means the scan found no classes, not that MCP is off.'
 				]
@@ -424,7 +418,7 @@ npx smrt generate-mcp --name my-app --output-path .smrt/mcp-server/index.ts
     "my-app": {
       "type": "stdio",
       "command": "node",
-      "args": ["/absolute/path/to/.smrt/mcp-server/index.ts"],
+      "args": ["/absolute/path/to/.smrt/mcp-server/index.js"],
       "env": {
         "DATABASE_TYPE": "sqlite",
         "DATABASE_URL": "file:./data/app.db"
@@ -433,8 +427,8 @@ npx smrt generate-mcp --name my-app --output-path .smrt/mcp-server/index.ts
   }
 }`,
 				points: [
-					'The generated claude-config.example.json mirrors whatever --output-path you passed, so it is only wrong if you took the default.',
-					'Claude Code can take the same thing as: claude mcp add my-app -- node /absolute/path/.smrt/mcp-server/index.ts'
+					'The generated claude-config.example.json mirrors the resolved output path, including a custom --output-path when you provide one.',
+					'Claude Code can take the same thing as: claude mcp add my-app -- node /absolute/path/.smrt/mcp-server/index.js'
 				]
 			},
 			{
