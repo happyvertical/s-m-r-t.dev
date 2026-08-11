@@ -16,16 +16,7 @@
  * project `.npmrc` points at public npmjs. No authentication is required; the
  * packages are public. Pass nothing and it does the right thing.
  *
- * Usage:
- *   node scripts/update-smrt.mjs            # pin all to latest, refresh lockfile
- *   node scripts/update-smrt.mjs --dry-run  # show what would change, touch nothing
- *   node scripts/update-smrt.mjs --to 0.40.61   # pin all smrt pkgs to one version
- *   node scripts/update-smrt.mjs --caret    # write `^x.y.z` ranges instead of exact pins
- *   node scripts/update-smrt.mjs --exact    # explicit form of the default
- *   node scripts/update-smrt.mjs --no-install   # update package.json only
- *
- * Skipped automatically: any smrt dep using a `file:`, `link:`, or `workspace:`
- * spec, since those are sourced from a local checkout rather than a registry.
+ * Run with `--help` for flags; `USAGE` below is the one copy.
  */
 
 import { execFileSync } from 'node:child_process';
@@ -37,12 +28,38 @@ const SCOPE_PREFIX = `${SCOPE}/smrt-`;
 const DEFAULT_REGISTRY = 'https://registry.npmjs.org';
 const LOCAL_SPEC = /^(file:|link:|workspace:)/;
 
+const USAGE = `update-smrt — pin every @happyvertical/smrt-* dependency and refresh the lockfile.
+
+  pnpm run update:smrt                     pin all to latest, refresh the lockfile
+  pnpm run update:smrt -- --dry-run        show what would change, touch nothing
+  pnpm run update:smrt -- --to <version>   pin every smrt package to one version
+  pnpm run update:smrt -- --caret          write ^x.y.z ranges instead of exact pins
+  pnpm run update:smrt -- --exact          explicit form of the default
+  pnpm run update:smrt -- --no-install     update package.json only
+
+Exact pins are the policy, not a preference: smrt-fields pins its own smrt
+siblings exactly, so mixing exact and caret ranges lets pnpm install two
+smrt-core copies — and two ObjectRegistry singletons — in one tree. Keep every
+smrt dependency on the same exact version.
+
+The registry comes from npm config for the @happyvertical scope, so this
+follows the project .npmrc rather than hardcoding a host. Deps on a file:,
+link:, or workspace: spec are skipped.
+
+After a bump, verify with pnpm run lint && pnpm test && pnpm run check &&
+pnpm run build, then commit package.json plus pnpm-lock.yaml.`;
+
 const args = process.argv.slice(2);
 const flag = (name) => args.includes(name);
 const opt = (name) => {
 	const i = args.indexOf(name);
 	return i !== -1 ? args[i + 1] : undefined;
 };
+
+if (flag('--help') || flag('-h')) {
+	console.log(USAGE);
+	process.exit(0);
+}
 
 const dryRun = flag('--dry-run');
 const noInstall = flag('--no-install') || dryRun;
