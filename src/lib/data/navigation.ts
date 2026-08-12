@@ -26,6 +26,7 @@ export const docsNavigation: NavigationGroup[] = [
 				description:
 					'Build applications that humans and agents can understand and operate through one governed model.',
 				keywords: [
+					'smrt',
 					'agent-native',
 					'agent-legible',
 					'governed',

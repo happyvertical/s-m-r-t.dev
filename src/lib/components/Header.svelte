@@ -15,13 +15,7 @@
 	];
 
 	function isActive(href: string) {
-		if (href === '/')
-			return (
-				page.url.pathname === '/' ||
-				page.url.pathname.startsWith('/starters') ||
-				page.url.pathname.startsWith('/foundations') ||
-				page.url.pathname.startsWith('/capabilities')
-			);
+		if (href === '/') return page.url.pathname === '/';
 		return page.url.pathname === href || page.url.pathname.startsWith(`${href}/`);
 	}
 </script>

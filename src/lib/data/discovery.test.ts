@@ -19,6 +19,11 @@ describe('Why s-m-r-t discovery surfaces', () => {
 			href: '/',
 			kind: 'page'
 		});
+		expect(searchDocs('why smrt')[0]).toMatchObject({
+			label: 'Why s-m-r-t?',
+			href: '/',
+			kind: 'page'
+		});
 
 		const sitemapXml = await (await sitemap({} as never)).text();
 		expect(sitemapXml).toContain('<loc>https://s-m-r-t.dev</loc>');
