@@ -21,9 +21,18 @@ export const docsNavigation: NavigationGroup[] = [
 		label: 'Getting started',
 		items: [
 			{
-				label: 'Overview',
+				label: 'Why s-m-r-t?',
 				href: '/',
-				description: 'Understand the framework and choose where to begin.'
+				description:
+					'Build applications that humans and agents can understand and operate through one governed model.',
+				keywords: [
+					'agent-native',
+					'agent-legible',
+					'governed',
+					'awareness is not authority',
+					'Software as Agentic Domain Logic',
+					'SAADL'
+				]
 			},
 			{
 				label: 'Choose a starting point',

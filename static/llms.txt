@@ -1,0 +1,25 @@
+# s-m-r-t
+
+> s-m-r-t gives an application an explicit, governed model of what it means, what it can do, what it shows, and what an agent may operate. That one model can project into human interfaces, APIs, CLI, MCP, and WebMCP without maintaining a separate bot surface. Awareness is not authority: discovery never grants permission.
+
+## Canonical technical documentation
+
+- https://s-m-r-t.dev/ — Why s-m-r-t and the framework overview
+- https://s-m-r-t.dev/reference/saadl — Software as Agentic Domain Logic and human/agent parity
+- https://s-m-r-t.dev/capabilities/agent-legible-applications — manifests, control descriptions, MCP/WebMCP schemas, and bounded runtime awareness
+- https://s-m-r-t.dev/capabilities/agent-assisted-forms — stable control identities, validation, staged changes, and confirmation
+- https://s-m-r-t.dev/capabilities/webmcp — selected browser tools using the signed-in page session
+- https://s-m-r-t.dev/tooling/app-mcp — generated and application MCP for permitted runtime data operations
+- https://s-m-r-t.dev/tooling/dev-mcp — read-only development MCP for workspace and installed-package knowledge
+- https://s-m-r-t.dev/reference/security — authentication, tenant scope, writable-field policy, and authorization boundaries
+- https://s-m-r-t.dev/playground — component and package demonstrations
+
+## Released boundaries
+
+This site documents the installed s-m-r-t release. The released framework supports a shared domain model and manifest; generated REST, CLI, MCP, and selected WebMCP surfaces; agent-assisted form controls with explain, validate, staged-change, and confirmed-apply flows; and application MCP allow-lists and policy checks. These are explicit surfaces, not a grant to expose every model method or field.
+
+Generated runtime operations still resolve through the application’s principal, tenant scope, field policy, writable-field rules, permissions, and any required confirmation. Development MCP is a separate, read-only workspace plane; it does not access a running application, application data, principals, tenants, or credentials.
+
+## Runtime-environment registry boundary: conditional and unreleased by default
+
+The released development MCP does not connect to a running application or inspect its live ObjectRegistry. A future or application-provided runtime bridge may expose bounded capability metadata when it is explicitly installed, exposed, and discovered; do not assume a runtime-environment registry exists. Such a bridge must distinguish observed facts from declared facts and must not expose application records, credentials, principals, or tenant data. Live data operations remain on the generated and application MCP runtime plane and remain policy-controlled.
