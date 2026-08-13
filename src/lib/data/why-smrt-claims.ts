@@ -69,7 +69,7 @@ export const whySmrtClaims: WhySmrtClaim[] = [
 			'Native mobile uses shared Kotlin Multiplatform logic with Compose and SwiftUI adapters.',
 		canonical: { label: 'Mobile', href: '/capabilities/mobile' },
 		source: {
-			label: 'Mobile source contract (private; publishing deferred)',
+			label: 'Mobile source contract (source-only; package publishing deferred)',
 			href: `${SMRT_TREE}/packages/smrt-mobile/AGENTS.md`
 		}
 	},

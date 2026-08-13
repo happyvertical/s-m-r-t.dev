@@ -24,7 +24,7 @@ export const docsNavigation: NavigationGroup[] = [
 				label: 'Why s-m-r-t?',
 				href: '/',
 				description:
-					'Build applications that humans and agents can understand and operate through one governed model.',
+					'One set of TypeScript models generates storage, forms, APIs, commands, permissions, and AI-agent tools.',
 				keywords: [
 					'smrt',
 					'agent-native',

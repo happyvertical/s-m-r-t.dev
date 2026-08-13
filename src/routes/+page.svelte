@@ -1,7 +1,77 @@
 <script lang="ts">
+	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { foundationGuides } from '$lib/data/guides';
 	import { whySmrtClaims } from '$lib/data/why-smrt-claims';
+
+	const articleModel = `import { smrt, SmrtObject } from '@happyvertical/smrt-core';
+
+@smrt({
+  api: { include: ['list', 'get', 'create', 'update'] },
+  mcp: { include: ['publish'] },
+  cli: false
+})
+export class Article extends SmrtObject {
+  title = '';
+  body = '';
+  featured = false;
+
+  async publish() {
+    return true;
+  }
+}`;
+
+	const projections = [
+		{
+			label: 'Storage',
+			body: 'A database table and a typed collection for saving and querying articles.',
+			href: '/reference/collections'
+		},
+		{
+			label: 'REST API',
+			body: 'Endpoints and clients for application code, limited to the actions declared on the model.',
+			href: '/reference/interfaces'
+		},
+		{
+			label: 'Forms',
+			body: 'Form controls that share the model’s fields, validation, and field-level rules.',
+			href: '/capabilities/policy-aware-forms'
+		},
+		{
+			label: 'CLI',
+			body: 'The same operations as commands for operators and scripts, when a model enables them — this one declares them off.',
+			href: '/reference/interfaces'
+		},
+		{
+			label: 'Agent tools',
+			body: 'publish() becomes a structured tool an AI assistant can call — through the same checks.',
+			href: '/tooling/app-mcp'
+		},
+		{
+			label: 'Permissions',
+			body: 'Named permissions such as articles.read and articles.publish, enforced on every surface.',
+			href: '/reference/authorization'
+		}
+	];
+
+	const powers = [
+		{
+			title: 'Change it once. It changes everywhere.',
+			body: 'Add a field to a model and the database, forms, API, and agent tools pick it up together. There is no second schema, route file, or tool description to update — the interfaces cannot drift, because they are not written separately.'
+		},
+		{
+			title: 'Agents without a second integration.',
+			body: 'Most applications add AI through a separate integration that re-describes the product to the model and goes stale as the product changes. Here, agents call the same operations people use, so a capability you choose to expose is available to them the day it exists — an include entry, not a new integration.'
+		},
+		{
+			title: 'You decide what agents can do.',
+			body: 'Agent access is declared per action, and the permissions that limit people limit agents; a change an agent proposes can wait for a person’s approval. With a chat adapter wired to your product, asking an assistant to move a publication date stages the change for review, and asking it to read a secret field is refused — awareness is not authority.'
+		},
+		{
+			title: 'Less code to write and maintain.',
+			body: 'The repetitive route, schema, command, and tool wiring is generated from the models. What is left to write, test, and review is the part that is actually your product.'
+		}
+	];
 
 	const updates = [
 		{
@@ -23,25 +93,185 @@
 </script>
 
 <SEO
-	title="Why s-m-r-t? Governed applications for people and agents"
-	description="Build TypeScript and SvelteKit applications that people and software agents can understand and operate through the same governed domain logic."
+	title="Why s-m-r-t? Applications built from domain models"
+	description="s-m-r-t is a TypeScript framework that generates storage, forms, APIs, CLI commands, permissions, and AI-agent tools from one set of domain models, so every interface shares the same definition and the same limits."
 	url="https://s-m-r-t.dev"
 />
 
 <article class="why-smrt">
 	<header class="hero">
 		<p class="eyebrow">Why s-m-r-t?</p>
-		<h1>Build applications humans and agents can understand and operate together.</h1>
+		<h1>Build an application from the model outward.</h1>
 		<p class="hero-copy">
-			Define the domain once, then project it into forms, REST, CLI, MCP, WebMCP, and the
-			permissions that govern each surface. The same discipline removes duplicated schemas, routes,
-			validation, and permissions before an agent is ever added.
+			You write TypeScript models of the records your product manages — an article, an order, a
+			customer. s-m-r-t generates what surrounds them: storage, forms, REST APIs, CLI commands,
+			permissions, and AI-agent tools, all working from the same definition with the same limits.
+			Change a model and every surface updates with it. Give an agent access and it gets the
+			operations you chose, nothing more.
 		</p>
-		<a class="hero-link" href="#storyboard">See one governed interaction ↓</a>
+		<a class="hero-link" href="#pattern">See the pattern ↓</a>
 	</header>
 
+	<section class="pattern" id="pattern" aria-labelledby="pattern-heading">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">The pattern</p>
+				<h2 id="pattern-heading">What one model generates.</h2>
+			</div>
+			<p>
+				A model is a few lines of TypeScript naming the fields and actions of one business record.
+				The framework derives the rest.
+			</p>
+		</div>
+		<div class="pattern-grid">
+			<CodeBlock code={articleModel} filename="src/lib/objects/Article.ts" />
+			<ul class="projection-list">
+				{#each projections as projection (projection.label)}
+					<li>
+						<a href={projection.href}
+							><strong>{projection.label}</strong><span>{projection.body}</span><b
+								aria-hidden="true">→</b
+							></a
+						>
+					</li>
+				{/each}
+			</ul>
+		</div>
+		<p class="pattern-copy">
+			People and software agents reaching the same permitted operations through one model is the
+			core idea — we call it <a href="/reference/saadl">Software as Agentic Domain Logic (SAADL)</a
+			>. There is no separate, reduced “bot API” to build or keep honest.
+		</p>
+	</section>
+
+	<section class="powers" aria-labelledby="powers-heading">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">The result</p>
+				<h2 id="powers-heading">What that enables.</h2>
+			</div>
+		</div>
+		<div class="power-grid">
+			{#each powers as power (power.title)}
+				<div class="power">
+					<h3>{power.title}</h3>
+					<p>{power.body}</p>
+				</div>
+			{/each}
+		</div>
+	</section>
+
+	<section class="machinery" aria-labelledby="machinery-heading">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Ground-up agent support</p>
+				<h2 id="machinery-heading">
+					Built for agents that operate the product — and agents that build it.
+				</h2>
+			</div>
+			<p>
+				Framework parts, not integrations — released except the one row labeled otherwise.
+				Generating every interface from the model is what lets these exist once, here, instead of as
+				per-app custom builds.
+			</p>
+		</div>
+		<div class="machinery-grid">
+			<div>
+				<h3>Operating the product</h3>
+				<ul>
+					<li>
+						<strong>Semantic control discovery</strong><span
+							>Every form control publishes a stable identity and description an agent can look up —
+							no guessing from the page structure, labels, or pixels.</span
+						>
+					</li>
+					<li>
+						<strong>Explain, highlight, validate</strong><span
+							>An agent can point at a field, say what it means and allows, and run the form’s own
+							checks without changing anything.</span
+						>
+					</li>
+					<li>
+						<strong>Staged changes and confirmation</strong><span
+							>An agent’s edit is a proposal held apart from the live value; applying it is a
+							separate, confirmed step.</span
+						>
+					</li>
+					<li>
+						<strong>Secret and read-only protection</strong><span
+							>Secret values cannot be read or written through the control registry, and read-only
+							controls reject changes — by contract, not convention.</span
+						>
+					</li>
+					<li>
+						<strong>Adapter wiring</strong><span
+							>Chat, voice, tutorials, and tests all drive the same small command vocabulary, and
+							connecting one to your product is an explicit choice — never automatic.</span
+						>
+					</li>
+				</ul>
+				<a href="/capabilities/agent-assisted-forms">How agent-assisted forms work →</a>
+			</div>
+			<div>
+				<h3>Building the product</h3>
+				<ul>
+					<li>
+						<strong>Version-true agent docs</strong><span
+							>Every installed s-m-r-t package ships agent documentation written against the exact
+							release you have, not a website’s latest.</span
+						>
+					</li>
+					<li>
+						<strong>Project knowledge over MCP</strong><span
+							>A coding agent can ask the development server which objects, fields, relationships,
+							and interfaces this project actually declares.</span
+						>
+					</li>
+					<li>
+						<strong>One edit surface</strong><span
+							>Interfaces are generated, so an agent changes a model once instead of keeping routes,
+							schemas, tools, and commands consistent by hand.</span
+						>
+					</li>
+					<li>
+						<strong>Runtime awareness — tracked, not shipped</strong><span
+							>The goal: let development tooling compare what a project declares with what a live
+							environment actually loaded. Conditional until released, and labeled that way here.</span
+						>
+					</li>
+				</ul>
+				<a href="/tooling/dev-mcp">The development MCP →</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="boundaries" aria-labelledby="boundaries-heading">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Honest boundaries</p>
+				<h2 id="boundaries-heading">Released today, conditional where noted.</h2>
+			</div>
+		</div>
+		<p class="boundaries-copy">
+			Everything above describes released behavior. One direction stays deliberately conditional:
+			development tooling reads what a project declares and installs, but knowledge of a live,
+			running application is available only when a runtime bridge explicitly exposes it — never
+			assumed. Application data stays behind authenticated, permission-checked surfaces unless a
+			model explicitly declares public access.
+		</p>
+		<p class="boundaries-links">
+			<a href="/reference/security">Security defaults →</a>
+			<a href="/capabilities/agent-legible-applications">The runtime boundary →</a>
+		</p>
+	</section>
+
 	<section class="qualification" aria-labelledby="qualification-heading">
-		<h2 id="qualification-heading">A compact fit check</h2>
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Fit</p>
+				<h2 id="qualification-heading">Where it stands today</h2>
+			</div>
+		</div>
 		<div class="qualification-grid">
 			<p>
 				<strong>Web stack</strong><span>TypeScript models and SvelteKit application surfaces.</span>
@@ -76,120 +306,6 @@
 			<a href="/capabilities/mobile">mobile foundation</a><span aria-hidden="true">·</span>
 			<a href="https://github.com/happyvertical/s-m-r-t.dev">inspect this site’s source ↗</a>
 		</p>
-	</section>
-
-	<section class="storyboard" id="storyboard" aria-labelledby="storyboard-heading">
-		<div class="section-heading">
-			<div>
-				<p class="eyebrow">Released interaction pattern</p>
-				<h2 id="storyboard-heading">One Article form. A successful proposal and a refusal.</h2>
-			</div>
-			<p>
-				Static illustration — not a live LLM or registry demo. A deterministic interactive follow-up
-				is tracked separately.
-			</p>
-		</div>
-
-		<div class="storyboard-grid">
-			<section class="story-card success" aria-labelledby="success-heading">
-				<p class="card-label">Illustrated success</p>
-				<h3 id="success-heading">A proposal stays separate until review</h3>
-				<div class="transcript" aria-label="Successful Article form proposal">
-					<p><strong>Editor</strong> Move publication date to Friday and feature this article.</p>
-					<p>
-						<strong>Adapter</strong> Found <code>ArticleForm</code>. Both controls are writable;
-						validation passed.
-					</p>
-					<dl>
-						<div>
-							<dt>publicationDate</dt>
-							<dd>Aug 12 <span aria-hidden="true">→</span> Aug 14</dd>
-						</div>
-						<div>
-							<dt>featured</dt>
-							<dd>No <span aria-hidden="true">→</span> Yes</dd>
-						</div>
-					</dl>
-					<p class="pending">Proposed, not applied — review and confirmation still required.</p>
-				</div>
-			</section>
-
-			<section class="story-card refusal" aria-labelledby="refusal-heading">
-				<p class="card-label">Illustrated refusal</p>
-				<h3 id="refusal-heading">A description is not permission</h3>
-				<div class="transcript" aria-label="Refused Article form proposal">
-					<p><strong>Adapter</strong> Find <code>authorNotes</code> and replace its value.</p>
-					<p>
-						<strong>ArticleForm</strong> <code>authorNotes</code> is classified secret and is not writable
-						from this interaction.
-					</p>
-					<p class="denied">Refused — no value is revealed, staged, or changed.</p>
-				</div>
-				<p class="card-note">
-					<strong>Awareness is not authority.</strong> Controls can be legible without becoming an unrestricted
-					browser or bot API.
-				</p>
-			</section>
-		</div>
-		<p class="section-link">
-			<a href="/capabilities/agent-assisted-forms">Read the agent-assisted forms contract →</a>
-		</p>
-	</section>
-
-	<section class="model-section" aria-labelledby="model-heading">
-		<div class="section-heading">
-			<div>
-				<p class="eyebrow">One structural example</p>
-				<h2 id="model-heading">Keep the Article’s meaning close to every way it is used.</h2>
-			</div>
-			<p>
-				Not one magic decorator: one model, vocabulary, and security boundary projected into
-				deliberate interfaces.
-			</p>
-		</div>
-		<div class="model-map" aria-label="Article model projected into several interfaces">
-			<div class="model-node">
-				<span>Domain model</span><strong>Article</strong><small
-					>title · publicationDate · featured · authorNotes</small
-				>
-			</div>
-			<ul>
-				<li><strong>Form</strong><span>human controls and validation</span></li>
-				<li><strong>REST</strong><span>application clients</span></li>
-				<li><strong>CLI</strong><span>operator and script commands</span></li>
-				<li><strong>MCP</strong><span>selected structured tools</span></li>
-				<li><strong>WebMCP</strong><span>page-appropriate browser tools</span></li>
-			</ul>
-		</div>
-		<p class="model-copy">
-			This is <a href="/reference/saadl">Software as Agentic Domain Logic (SAADL)</a>: people and
-			software agents reach the same permitted domain operations, rather than a separate reduced bot
-			interface that can drift.
-		</p>
-	</section>
-
-	<section class="boundaries" aria-labelledby="boundaries-heading">
-		<div>
-			<p class="eyebrow">Governed by design</p>
-			<h2 id="boundaries-heading">Awareness is not authority.</h2>
-			<p>
-				A tool, form control, or runtime description can say what exists without granting permission
-				to use it. Application operations still resolve through explicit allowlists, the
-				authenticated principal, tenant scope, operation permissions, writable-field rules, and
-				confirmation policy.
-			</p>
-			<a href="/reference/security">Read the security defaults →</a>
-		</div>
-		<aside>
-			<p class="card-label">Conditional runtime awareness</p>
-			<h3>Useful when explicitly exposed — not assumed.</h3>
-			<p>
-				Released development tooling reads workspace and installed-package artifacts. Treat active
-				runtime knowledge as available only when a runtime bridge explicitly exposes it; application
-				data and mutations stay on authenticated application surfaces.
-			</p>
-			<a href="/capabilities/agent-legible-applications">See the runtime boundary →</a>
-		</aside>
 	</section>
 
 	<section class="start-options" aria-labelledby="start-heading">
@@ -271,12 +387,12 @@
 	<section class="claims" aria-labelledby="claims-heading">
 		<div class="section-heading">
 			<div>
-				<p class="eyebrow">Release-audit ledger</p>
-				<h2 id="claims-heading">Where homepage claims are verified</h2>
+				<p class="eyebrow">Verification</p>
+				<h2 id="claims-heading">Check the claims yourself.</h2>
 			</div>
 			<p>
-				Canonical pages hold the technical detail. Recheck their documentation, source references,
-				and demos at each release.
+				Every claim on this page traces to a canonical documentation page and released source,
+				rechecked at each release.
 			</p>
 		</div>
 		<div class="claims-list">
@@ -319,8 +435,7 @@
 		max-width: 810px;
 		padding: 0 0 44px;
 	}
-	.eyebrow,
-	.card-label {
+	.eyebrow {
 		color: var(--site-accent-strong);
 		font: 700 0.66rem var(--site-font-mono);
 		letter-spacing: 0.055em;
@@ -342,8 +457,8 @@
 		line-height: 1.7;
 	}
 	.hero-link,
-	.section-link a,
-	.boundaries a {
+	.machinery-grid > div > a,
+	.boundaries-links a {
 		display: inline-block;
 		margin-top: 22px;
 		color: var(--site-ink);
@@ -373,16 +488,104 @@
 		font-size: 0.84rem;
 		line-height: 1.58;
 	}
-	.qualification {
-		padding: 22px 0 28px;
+	.pattern-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+		gap: 26px;
+		align-items: start;
 	}
-	.qualification h2 {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		overflow: hidden;
-		clip: rect(0 0 0 0);
-		white-space: nowrap;
+	.projection-list {
+		border-top: 1px solid var(--site-line);
+		list-style: none;
+	}
+	.projection-list li {
+		border-bottom: 1px solid var(--site-line);
+	}
+	.projection-list a {
+		display: grid;
+		grid-template-columns: 104px minmax(0, 1fr) 16px;
+		gap: 12px;
+		align-items: baseline;
+		padding: 12px 6px;
+		color: var(--site-ink);
+		text-decoration: none;
+	}
+	.projection-list a:hover {
+		background: var(--site-surface);
+	}
+	.projection-list strong {
+		font-size: 0.8rem;
+	}
+	.projection-list span {
+		color: var(--site-muted);
+		font-size: 0.8rem;
+		line-height: 1.5;
+	}
+	.projection-list b {
+		font-weight: 500;
+	}
+	.pattern-copy {
+		max-width: 740px;
+		margin-top: 22px;
+		color: var(--site-muted);
+		font-size: 0.92rem;
+		line-height: 1.65;
+	}
+	.pattern-copy a {
+		color: var(--site-ink);
+	}
+	.power-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 34px 38px;
+	}
+	.power h3 {
+		font-size: 1.08rem;
+		letter-spacing: -0.02em;
+	}
+	.power p {
+		margin-top: 9px;
+		color: var(--site-muted);
+		font-size: 0.9rem;
+		line-height: 1.65;
+	}
+	.machinery-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 34px 38px;
+	}
+	.machinery-grid h3 {
+		font-size: 1.02rem;
+		letter-spacing: -0.02em;
+	}
+	.machinery-grid ul {
+		margin-top: 12px;
+		border-top: 1px solid var(--site-line);
+		list-style: none;
+	}
+	.machinery-grid li {
+		padding: 11px 2px;
+		border-bottom: 1px solid var(--site-line);
+	}
+	.machinery-grid li strong {
+		display: block;
+		font-size: 0.82rem;
+	}
+	.machinery-grid li span {
+		display: block;
+		margin-top: 4px;
+		color: var(--site-muted);
+		font-size: 0.8rem;
+		line-height: 1.55;
+	}
+	.boundaries-copy {
+		max-width: 760px;
+		color: var(--site-muted);
+		font-size: 0.9rem;
+		line-height: 1.65;
+	}
+	.boundaries-links a + a {
+		margin-left: 24px;
 	}
 	.qualification-grid {
 		display: grid;
@@ -391,198 +594,33 @@
 		background: var(--site-surface);
 	}
 	.qualification-grid p {
-		min-height: 111px;
 		padding: 15px;
 		border-right: 1px solid var(--site-line);
 	}
 	.qualification-grid p:last-child {
 		border-right: 0;
 	}
-	.qualification strong {
+	.qualification-grid strong {
 		display: block;
-		font-size: 0.76rem;
+		font-size: 0.78rem;
 	}
 	.qualification-grid span {
 		display: block;
 		margin-top: 7px;
 		color: var(--site-muted);
-		font-size: 0.71rem;
-		line-height: 1.48;
+		font-size: 0.76rem;
+		line-height: 1.5;
 	}
 	.qualification-links {
 		margin-top: 12px;
 		color: var(--site-muted);
-		font-size: 0.73rem;
+		font-size: 0.76rem;
 	}
 	.qualification-links a {
 		color: var(--site-ink);
 	}
 	.qualification-links span {
 		padding: 0 8px;
-	}
-	.storyboard-grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 14px;
-	}
-	.story-card {
-		padding: 22px;
-		border: 1px solid var(--site-line-strong);
-		background: var(--site-surface);
-	}
-	.story-card h3 {
-		margin-top: 9px;
-		font-size: 1.1rem;
-		letter-spacing: -0.02em;
-	}
-	.success {
-		border-top: 3px solid var(--site-accent);
-	}
-	.refusal {
-		border-top: 3px solid var(--site-line-strong);
-	}
-	.transcript {
-		margin-top: 18px;
-		padding: 15px;
-		border: 1px solid var(--site-line);
-		background: var(--site-paper);
-		font-size: 0.77rem;
-		line-height: 1.55;
-	}
-	.transcript p + p {
-		margin-top: 11px;
-	}
-	.transcript code {
-		font-family: var(--site-font-mono);
-		font-size: 0.9em;
-	}
-	.transcript dl {
-		margin-top: 13px;
-		border-top: 1px solid var(--site-line);
-	}
-	.transcript dl div {
-		display: flex;
-		justify-content: space-between;
-		gap: 12px;
-		padding: 8px 0;
-		border-bottom: 1px solid var(--site-line);
-	}
-	.transcript dt {
-		font-family: var(--site-font-mono);
-	}
-	.transcript dd {
-		color: var(--site-muted);
-		text-align: right;
-	}
-	.pending,
-	.denied {
-		font-weight: 650;
-	}
-	.pending {
-		color: var(--site-accent-strong);
-	}
-	.denied {
-		color: var(--site-ink);
-	}
-	.card-note {
-		margin-top: 15px;
-		color: var(--site-muted);
-		font-size: 0.76rem;
-		line-height: 1.55;
-	}
-	.model-map {
-		display: grid;
-		grid-template-columns: minmax(200px, 0.7fr) 1.3fr;
-		gap: 0;
-		border: 1px solid var(--site-line-strong);
-		background: var(--site-surface);
-	}
-	.model-node {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		padding: 24px;
-		border-right: 1px solid var(--site-line);
-	}
-	.model-node span {
-		color: var(--site-muted);
-		font: 700 0.63rem var(--site-font-mono);
-		text-transform: uppercase;
-	}
-	.model-node strong {
-		margin-top: 6px;
-		font-size: 1.35rem;
-	}
-	.model-node small {
-		margin-top: 8px;
-		color: var(--site-muted);
-		font: 0.68rem var(--site-font-mono);
-		line-height: 1.5;
-	}
-	.model-map ul {
-		display: grid;
-		grid-template-columns: repeat(5, 1fr);
-		list-style: none;
-	}
-	.model-map li {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		min-height: 132px;
-		padding: 13px;
-		border-right: 1px solid var(--site-line);
-	}
-	.model-map li:last-child {
-		border-right: 0;
-	}
-	.model-map li strong {
-		font-size: 0.79rem;
-	}
-	.model-map li span {
-		margin-top: 5px;
-		color: var(--site-muted);
-		font-size: 0.66rem;
-		line-height: 1.42;
-	}
-	.model-copy {
-		max-width: 720px;
-		margin-top: 18px;
-		color: var(--site-muted);
-		font-size: 0.88rem;
-		line-height: 1.65;
-	}
-	.model-copy a {
-		color: var(--site-ink);
-	}
-	.boundaries {
-		display: grid;
-		grid-template-columns: 1.15fr 0.85fr;
-		gap: 36px;
-		align-items: start;
-	}
-	.boundaries h2 {
-		margin-top: 9px;
-		font-size: clamp(1.6rem, 3vw, 2rem);
-		letter-spacing: -0.04em;
-	}
-	.boundaries > div > p:not(.eyebrow),
-	.boundaries aside > p:not(.card-label) {
-		margin-top: 14px;
-		color: var(--site-muted);
-		font-size: 0.88rem;
-		line-height: 1.65;
-	}
-	.boundaries aside {
-		padding: 20px;
-		border: 1px dashed var(--site-line-strong);
-		background: var(--site-surface);
-	}
-	.boundaries aside h3 {
-		margin-top: 9px;
-		font-size: 1rem;
-	}
-	.boundaries aside a {
-		margin-top: 15px;
 	}
 	.start-grid,
 	.update-grid {
@@ -694,12 +732,12 @@
 		border-bottom: 1px solid var(--site-line);
 	}
 	.claims-list h3 {
-		font-size: 0.84rem;
+		font-size: 0.86rem;
 		line-height: 1.45;
 	}
 	.claims-list p {
 		color: var(--site-muted);
-		font-size: 0.72rem;
+		font-size: 0.76rem;
 		line-height: 1.5;
 	}
 	.claims-list a {
@@ -731,6 +769,9 @@
 		font-weight: 700;
 	}
 	@media (max-width: 820px) {
+		.pattern-grid {
+			grid-template-columns: 1fr;
+		}
 		.qualification-grid {
 			grid-template-columns: 1fr 1fr;
 		}
@@ -745,16 +786,6 @@
 			border-right: 0;
 			border-bottom: 0;
 		}
-		.model-map {
-			grid-template-columns: 1fr;
-		}
-		.model-node {
-			border-right: 0;
-			border-bottom: 1px solid var(--site-line);
-		}
-		.model-map ul {
-			grid-template-columns: repeat(5, 1fr);
-		}
 	}
 	@media (max-width: 680px) {
 		.why-smrt {
@@ -767,24 +798,11 @@
 			flex-direction: column;
 			gap: 14px;
 		}
-		.storyboard-grid,
 		.start-grid,
 		.update-grid,
-		.boundaries {
+		.power-grid,
+		.machinery-grid {
 			grid-template-columns: 1fr;
-		}
-		.model-map ul {
-			grid-template-columns: 1fr 1fr;
-		}
-		.model-map li {
-			min-height: 76px;
-			border-bottom: 1px solid var(--site-line);
-		}
-		.model-map li:nth-child(2n) {
-			border-right: 0;
-		}
-		.model-map li:last-child {
-			border-bottom: 0;
 		}
 		.claims-list article {
 			grid-template-columns: 1fr;
@@ -795,9 +813,7 @@
 		.qualification-grid {
 			grid-template-columns: 1fr;
 		}
-		.qualification-grid p,
-		.qualification-grid p:nth-child(2) {
-			min-height: 0;
+		.qualification-grid p {
 			border-right: 0;
 			border-bottom: 1px solid var(--site-line);
 		}
@@ -805,12 +821,9 @@
 			grid-column: auto;
 			border-bottom: 0;
 		}
-		.model-map ul {
-			grid-template-columns: 1fr;
-		}
-		.model-map li,
-		.model-map li:nth-child(2n) {
-			border-right: 0;
+		.projection-list a {
+			grid-template-columns: 90px minmax(0, 1fr) 14px;
+			gap: 8px;
 		}
 	}
 </style>
