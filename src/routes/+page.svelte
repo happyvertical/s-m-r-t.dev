@@ -113,7 +113,7 @@ export class Article extends SmrtObject {
 		},
 		{
 			title: 'The version matrix.',
-			body: 'The s-m-r-t packages release in lockstep: one framework version that moves together, instead of a compatibility matrix you resolve at every upgrade.'
+			body: 'The s-m-r-t packages release in lockstep: one framework version that moves together — no dependency hell, no compatibility matrix to resolve at every upgrade.'
 		},
 		{
 			title: 'The lock-in bet.',
@@ -163,11 +163,11 @@ export class Article extends SmrtObject {
 		<div class="section-heading">
 			<div>
 				<h2 id="pattern-heading">How it works</h2>
+				<p>
+					A model names the fields and actions of one business record; decorators fine-tune the
+					object and its fields where the defaults are not enough. The framework derives the rest.
+				</p>
 			</div>
-			<p>
-				A model names the fields and actions of one business record; decorators fine-tune the object
-				and its fields where the defaults are not enough. The framework derives the rest.
-			</p>
 		</div>
 		<div class="pattern-grid">
 			<CodeBlock code={articleModel} filename="src/lib/objects/Article.ts" />
@@ -322,7 +322,6 @@ export class Article extends SmrtObject {
 			<div>
 				<h2 id="losses-heading">What you lose</h2>
 			</div>
-			<p>Familiar costs the shared model retires.</p>
 		</div>
 		<div class="power-grid">
 			{#each losses as loss (loss.title)}
@@ -557,6 +556,10 @@ export class Article extends SmrtObject {
 		color: var(--site-muted);
 		font-size: 0.84rem;
 		line-height: 1.58;
+	}
+	.pattern .section-heading p {
+		max-width: 680px;
+		margin-top: 10px;
 	}
 	.pattern-grid {
 		display: grid;
