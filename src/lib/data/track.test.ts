@@ -5,9 +5,11 @@ import { packages } from '$lib/data/packages';
 import { docsTrack, packageNeighbors, packageTrack, trackNeighbors } from '$lib/data/track';
 
 describe('documentation track', () => {
-	it('follows the sidebar order exactly', () => {
+	it('follows the sidebar order exactly, skipping in-page anchors', () => {
 		expect(docsTrack.map((step) => step.href)).toEqual(
-			docsNavigation.flatMap((group) => group.items.map((item) => item.href))
+			docsNavigation.flatMap((group) =>
+				group.items.map((item) => item.href).filter((href) => !href.includes('#'))
+			)
 		);
 	});
 

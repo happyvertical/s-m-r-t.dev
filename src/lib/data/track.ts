@@ -33,8 +33,15 @@ function normalize(pathname: string): string {
 	return path;
 }
 
+/**
+ * Sidebar items with a `#` fragment are in-page sections of a page that is
+ * already on the track, not pages of their own — walking them would send
+ * prev/next in circles, so the track keeps only whole pages.
+ */
 export const docsTrack: TrackStep[] = docsNavigation.flatMap((group) =>
-	group.items.map((item) => ({ label: item.label, href: item.href, caption: group.label }))
+	group.items
+		.filter((item) => !item.href.includes('#'))
+		.map((item) => ({ label: item.label, href: item.href, caption: group.label }))
 );
 
 export const packageTrack: TrackStep[] = packageCategories.flatMap((category) =>

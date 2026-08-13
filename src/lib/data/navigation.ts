@@ -16,15 +16,72 @@ export interface NavigationGroup {
 	items: NavigationItem[];
 }
 
+/**
+ * The homepage has four document-level destinations in the sidebar. Only one
+ * can describe the reader's current position, so its hash is tracked by the
+ * sidebar's scroll spy rather than treating every root link as a page match.
+ *
+ * `Choose a starting point` is an index, not an umbrella selection: once a
+ * visitor follows one of its child routes, that child is the active entry.
+ */
+export function isSidebarItemActive(
+	href: string,
+	pathname: string,
+	activeHomepageHref = '/'
+): boolean {
+	if (pathname === '/') {
+		if (href === '/' || href.startsWith('/#')) return href === activeHomepageHref;
+		return false;
+	}
+
+	if (href === '/') return false;
+	if (href === '/starters') return pathname === href;
+	return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+export function sidebarAriaCurrent(href: string): 'location' | 'page' {
+	return href.startsWith('/#') ? 'location' : 'page';
+}
+
 export const docsNavigation: NavigationGroup[] = [
+	{
+		label: 'Overview',
+		items: [
+			{
+				label: 'Why s-m-r-t?',
+				href: '/',
+				description:
+					'One source of truth for business logic generates storage, forms, APIs, commands, permissions, and AI-agent tools.',
+				keywords: [
+					'smrt',
+					'agent-native',
+					'agent-legible',
+					'governed',
+					'awareness is not authority',
+					'Software as Agentic Domain Logic',
+					'SAADL'
+				]
+			},
+			{
+				label: 'How it works',
+				href: '/#how-it-works',
+				description: 'A real model and the surfaces generated from it.'
+			},
+			{
+				label: 'What you get',
+				href: '/#what-you-get',
+				description: 'What the shared definition enables.'
+			},
+			{
+				label: 'What you lose',
+				href: '/#what-you-lose',
+				description: 'Familiar costs the shared model retires.'
+			}
+		]
+	},
 	{
 		label: 'Getting started',
 		items: [
-			{
-				label: 'Overview',
-				href: '/',
-				description: 'Understand the framework and choose where to begin.'
-			},
 			{
 				label: 'Choose a starting point',
 				href: '/starters',
