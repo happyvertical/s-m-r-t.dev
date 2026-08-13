@@ -204,137 +204,117 @@ export class Article extends SmrtObject {
 				</div>
 			{/each}
 		</div>
-	</section>
+		<div class="subsection">
+			<h3 class="subsection-title">
+				Built for agents that operate the product — and agents that build it.
+			</h3>
+			<div class="machinery-grid">
+				<div>
+					<h4>Operating the product</h4>
+					<ul>
+						<li>
+							<strong>Semantic control discovery</strong><span
+								>Every form control publishes a stable identity and description an agent can look up
+								— no guessing from the page structure, labels, or pixels.</span
+							>
+						</li>
+						<li>
+							<strong>Explain, highlight, validate</strong><span
+								>An agent can point at a field, say what it means and allows, and run the form’s own
+								checks without changing anything.</span
+							>
+						</li>
+						<li>
+							<strong>Staged changes and confirmation</strong><span
+								>An agent’s edit is a proposal held apart from the live value; applying it is a
+								separate, confirmed step.</span
+							>
+						</li>
+						<li>
+							<strong>Secret and read-only protection</strong><span
+								>Secret values cannot be read or written through the control registry, and read-only
+								controls reject changes — by contract, not convention.</span
+							>
+						</li>
+						<li>
+							<strong>Adapter wiring</strong><span
+								>Chat, voice, tutorials, and tests all drive the same small command vocabulary, and
+								connecting one to your product is an explicit choice — never automatic.</span
+							>
+						</li>
+					</ul>
+					<a href="/capabilities/agent-assisted-forms">How agent-assisted forms work →</a>
+				</div>
+				<div>
+					<h4>Building the product</h4>
+					<ul>
+						<li>
+							<strong>Version-true agent docs</strong><span
+								>Every installed s-m-r-t package ships agent documentation written against the exact
+								release you have, not a website’s latest.</span
+							>
+						</li>
+						<li>
+							<strong>Project knowledge over MCP</strong><span
+								>A coding agent can ask the development server which objects, fields, relationships,
+								and interfaces this project actually declares.</span
+							>
+						</li>
+						<li>
+							<strong>One edit surface</strong><span
+								>Interfaces are generated, so an agent changes a model once instead of keeping
+								routes, schemas, tools, and commands consistent by hand.</span
+							>
+						</li>
+						<li>
+							<strong>Runtime awareness — tracked, not shipped</strong><span
+								>The goal: let development tooling compare what a project declares with what a live
+								environment actually loaded. Conditional until released, and labeled that way here.</span
+							>
+						</li>
+					</ul>
+					<a href="/tooling/dev-mcp">The development MCP →</a>
+				</div>
+			</div>
+		</div>
 
-	<section class="machinery" aria-labelledby="machinery-heading">
-		<div class="section-heading">
-			<div>
-				<p class="eyebrow">Ground-up agent support</p>
-				<h2 id="machinery-heading">
-					Built for agents that operate the product — and agents that build it.
-				</h2>
-			</div>
-			<p>
-				Framework parts, not integrations — released except the one row labeled otherwise.
-				Generating every interface from the model is what lets these exist once, here, instead of as
-				per-app custom builds.
-			</p>
+		<div class="subsection" id="built-in-agents">
+			<h3 class="subsection-title">Built-in agents that learn, with boundaries.</h3>
+			<ul class="builtin-grid">
+				<li>
+					<strong>Outcome-weighted memory</strong><span
+						>Before a run, an agent recalls strategies that worked before; success strengthens a
+						memory, and a validated failure drops it below the reuse floor, so what stops working
+						stops being used.</span
+					>
+				</li>
+				<li>
+					<strong>Tenant-owned personas</strong><span
+						>One agent class can serve many tenants as durable instances — each with its own
+						instructions, tool ceiling, identity, schedule, and memory that never crosses tenants.</span
+					>
+				</li>
+				<li>
+					<strong>Authority that only narrows</strong><span
+						>Every action resolves as the intersection of the user’s permissions, the agent’s
+						ceiling, and the persona’s tool list — and delegation between agents can never widen it.</span
+					>
+				</li>
+				<li>
+					<strong>Proposals, not self-authorization</strong><span
+						>Reflection can draft better instructions for the agent itself, but activating a rewrite
+						is a separate human permission. An agent never silently rewrites its own authority.</span
+					>
+				</li>
+				<li>
+					<strong>Off by default</strong><span
+						>Learning is opt-in per agent class; an agent that has not opted in behaves exactly as
+						it always did.</span
+					>
+				</li>
+			</ul>
+			<a class="builtin-link" href="/capabilities/learning-agents">How learning agents work →</a>
 		</div>
-		<div class="machinery-grid">
-			<div>
-				<h3>Operating the product</h3>
-				<ul>
-					<li>
-						<strong>Semantic control discovery</strong><span
-							>Every form control publishes a stable identity and description an agent can look up —
-							no guessing from the page structure, labels, or pixels.</span
-						>
-					</li>
-					<li>
-						<strong>Explain, highlight, validate</strong><span
-							>An agent can point at a field, say what it means and allows, and run the form’s own
-							checks without changing anything.</span
-						>
-					</li>
-					<li>
-						<strong>Staged changes and confirmation</strong><span
-							>An agent’s edit is a proposal held apart from the live value; applying it is a
-							separate, confirmed step.</span
-						>
-					</li>
-					<li>
-						<strong>Secret and read-only protection</strong><span
-							>Secret values cannot be read or written through the control registry, and read-only
-							controls reject changes — by contract, not convention.</span
-						>
-					</li>
-					<li>
-						<strong>Adapter wiring</strong><span
-							>Chat, voice, tutorials, and tests all drive the same small command vocabulary, and
-							connecting one to your product is an explicit choice — never automatic.</span
-						>
-					</li>
-				</ul>
-				<a href="/capabilities/agent-assisted-forms">How agent-assisted forms work →</a>
-			</div>
-			<div>
-				<h3>Building the product</h3>
-				<ul>
-					<li>
-						<strong>Version-true agent docs</strong><span
-							>Every installed s-m-r-t package ships agent documentation written against the exact
-							release you have, not a website’s latest.</span
-						>
-					</li>
-					<li>
-						<strong>Project knowledge over MCP</strong><span
-							>A coding agent can ask the development server which objects, fields, relationships,
-							and interfaces this project actually declares.</span
-						>
-					</li>
-					<li>
-						<strong>One edit surface</strong><span
-							>Interfaces are generated, so an agent changes a model once instead of keeping routes,
-							schemas, tools, and commands consistent by hand.</span
-						>
-					</li>
-					<li>
-						<strong>Runtime awareness — tracked, not shipped</strong><span
-							>The goal: let development tooling compare what a project declares with what a live
-							environment actually loaded. Conditional until released, and labeled that way here.</span
-						>
-					</li>
-				</ul>
-				<a href="/tooling/dev-mcp">The development MCP →</a>
-			</div>
-		</div>
-	</section>
-
-	<section class="builtin" id="built-in-agents" aria-labelledby="builtin-heading">
-		<div class="section-heading">
-			<div>
-				<p class="eyebrow">Ship your own</p>
-				<h2 id="builtin-heading">Built-in agents that learn, with boundaries.</h2>
-			</div>
-			<p>
-				Agents your product ships run inside the same models and permissions as everything else —
-				and their learning is bounded on purpose.
-			</p>
-		</div>
-		<ul class="builtin-grid">
-			<li>
-				<strong>Outcome-weighted memory</strong><span
-					>Before a run, an agent recalls strategies that worked before; success strengthens a
-					memory, and a validated failure drops it below the reuse floor, so what stops working
-					stops being used.</span
-				>
-			</li>
-			<li>
-				<strong>Tenant-owned personas</strong><span
-					>One agent class can serve many tenants as durable instances — each with its own
-					instructions, tool ceiling, identity, schedule, and memory that never crosses tenants.</span
-				>
-			</li>
-			<li>
-				<strong>Authority that only narrows</strong><span
-					>Every action resolves as the intersection of the user’s permissions, the agent’s ceiling,
-					and the persona’s tool list — and delegation between agents can never widen it.</span
-				>
-			</li>
-			<li>
-				<strong>Proposals, not self-authorization</strong><span
-					>Reflection can draft better instructions for the agent itself, but activating a rewrite
-					is a separate human permission. An agent never silently rewrites its own authority.</span
-				>
-			</li>
-			<li>
-				<strong>Off by default</strong><span
-					>Learning is opt-in per agent class; an agent that has not opted in behaves exactly as it
-					always did.</span
-				>
-			</li>
-		</ul>
-		<a class="builtin-link" href="/capabilities/learning-agents">How learning agents work →</a>
 	</section>
 
 	<section class="losses" id="what-you-lose" aria-labelledby="losses-heading">
@@ -639,13 +619,23 @@ export class Article extends SmrtObject {
 		font-size: 0.9rem;
 		line-height: 1.65;
 	}
+	.subsection {
+		margin-top: 46px;
+	}
+	.subsection-title {
+		max-width: 640px;
+		font-size: 1.18rem;
+		letter-spacing: -0.025em;
+		line-height: 1.25;
+	}
 	.machinery-grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 34px 38px;
+		margin-top: 20px;
 	}
-	.machinery-grid h3 {
-		font-size: 1.02rem;
+	.machinery-grid h4 {
+		font-size: 0.98rem;
 		letter-spacing: -0.02em;
 	}
 	.machinery-grid ul {
@@ -672,6 +662,7 @@ export class Article extends SmrtObject {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 0 38px;
+		margin-top: 20px;
 		border-top: 1px solid var(--site-line);
 		list-style: none;
 	}
