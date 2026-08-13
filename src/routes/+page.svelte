@@ -265,6 +265,53 @@ export class Article extends SmrtObject {
 		</div>
 	</section>
 
+	<section class="builtin" id="built-in-agents" aria-labelledby="builtin-heading">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Ship your own</p>
+				<h2 id="builtin-heading">Built-in agents that learn, with boundaries.</h2>
+			</div>
+			<p>
+				Agents your product ships run inside the same models and permissions as everything else —
+				and their learning is bounded on purpose.
+			</p>
+		</div>
+		<ul class="builtin-grid">
+			<li>
+				<strong>Outcome-weighted memory</strong><span
+					>Before a run, an agent recalls strategies that worked before; success strengthens a
+					memory, and a validated failure drops it below the reuse floor, so what stops working
+					stops being used.</span
+				>
+			</li>
+			<li>
+				<strong>Tenant-owned personas</strong><span
+					>One agent class can serve many tenants as durable instances — each with its own
+					instructions, tool ceiling, identity, schedule, and memory that never crosses tenants.</span
+				>
+			</li>
+			<li>
+				<strong>Authority that only narrows</strong><span
+					>Every action resolves as the intersection of the user’s permissions, the agent’s ceiling,
+					and the persona’s tool list — and delegation between agents can never widen it.</span
+				>
+			</li>
+			<li>
+				<strong>Proposals, not self-authorization</strong><span
+					>Reflection can draft better instructions for the agent itself, but activating a rewrite
+					is a separate human permission. An agent never silently rewrites its own authority.</span
+				>
+			</li>
+			<li>
+				<strong>Off by default</strong><span
+					>Learning is opt-in per agent class; an agent that has not opted in behaves exactly as it
+					always did.</span
+				>
+			</li>
+		</ul>
+		<a class="builtin-link" href="/capabilities/learning-agents">How learning agents work →</a>
+	</section>
+
 	<section class="losses" id="what-you-lose" aria-labelledby="losses-heading">
 		<div class="section-heading">
 			<div>
@@ -474,7 +521,8 @@ export class Article extends SmrtObject {
 		line-height: 1.7;
 	}
 	.hero-link,
-	.machinery-grid > div > a {
+	.machinery-grid > div > a,
+	.builtin-link {
 		display: inline-block;
 		margin-top: 22px;
 		color: var(--site-ink);
@@ -589,6 +637,28 @@ export class Article extends SmrtObject {
 		font-size: 0.82rem;
 	}
 	.machinery-grid li span {
+		display: block;
+		margin-top: 4px;
+		color: var(--site-muted);
+		font-size: 0.8rem;
+		line-height: 1.55;
+	}
+	.builtin-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0 38px;
+		border-top: 1px solid var(--site-line);
+		list-style: none;
+	}
+	.builtin-grid li {
+		padding: 11px 2px;
+		border-bottom: 1px solid var(--site-line);
+	}
+	.builtin-grid strong {
+		display: block;
+		font-size: 0.82rem;
+	}
+	.builtin-grid span {
 		display: block;
 		margin-top: 4px;
 		color: var(--site-muted);
@@ -809,7 +879,8 @@ export class Article extends SmrtObject {
 		.start-grid,
 		.update-grid,
 		.power-grid,
-		.machinery-grid {
+		.machinery-grid,
+		.builtin-grid {
 			grid-template-columns: 1fr;
 		}
 		.claims-list article {
