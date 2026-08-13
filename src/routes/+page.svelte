@@ -125,11 +125,11 @@ export class Article extends SmrtObject {
 	<header class="hero">
 		<h1>Why s-m-r-t?</h1>
 		<p class="hero-copy">
-			Because an application should be built from the model outward. You write TypeScript models of
-			the records your product manages — an article, an order, a customer — and s-m-r-t generates
-			what surrounds them: storage, forms, REST APIs, CLI commands, permissions, and AI-agent tools,
-			all working from the same definition with the same limits. Change a model and every surface
-			updates with it. Give an agent access and it gets the operations you chose, nothing more.
+			One source of truth for your business logic. You describe the records your product manages —
+			an article, an order, a customer — as models, and s-m-r-t generates what surrounds them:
+			storage, forms, APIs, operator commands, permissions, and AI-agent tools, all working from the
+			same definition with the same limits. Change a model and every surface updates with it. Give
+			an agent access and it gets the operations you chose, nothing more.
 		</p>
 		<a class="hero-link" href="#how-it-works">How it works ↓</a>
 	</header>
