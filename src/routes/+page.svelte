@@ -34,8 +34,8 @@ export class Article extends SmrtObject {
 		},
 		{
 			label: 'Forms',
-			body: 'Form controls that share the model’s fields, validation, and field-level rules.',
-			href: '/capabilities/policy-aware-forms'
+			body: 'Form controls that share the model’s fields, validation, and field-level rules — and describe themselves, so an application agent can find, explain, and check them.',
+			href: '/capabilities/agent-assisted-forms'
 		},
 		{
 			label: 'CLI',
