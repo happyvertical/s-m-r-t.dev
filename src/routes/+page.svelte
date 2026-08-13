@@ -56,28 +56,28 @@ export class Article extends SmrtObject {
 
 	const powers = [
 		{
-			title: 'Change it once. It changes everywhere.',
-			body: 'Add a field to a model and the database, forms, API, and agent tools pick it up together. There is no second schema, route file, or tool description to update — the interfaces cannot drift, because they are not written separately.'
-		},
-		{
-			title: 'Agents without a second integration.',
-			body: 'Most applications add AI through a separate integration that re-describes the product to the model and goes stale as the product changes. Here, any agent — one your product ships, or one your customer brings — calls the same operations people use. A capability you choose to expose is available to them the day it exists: an include entry, not a new integration.'
-		},
-		{
-			title: 'You decide what agents can do.',
-			body: 'Agent access is declared per action, and the permissions that limit people limit agents. An agent can know a field exists without being able to read it, and can propose a change without being able to apply it until a person approves — awareness is not authority.'
+			title: 'Less code to write and maintain.',
+			body: 'The repetitive route, schema, command, and tool wiring is generated from the models. What is left to write, test, and review is the part that is actually your product.'
 		},
 		{
 			title: 'Most of the pieces, already built.',
 			body: 'Users, tenants, jobs, reports, content, commerce, messages, ledgers, images, and analytics ship as packages sharing the same model contract — frontend components and backend behavior together, made to wire into each other. Much of what many products need exists before you write anything; the package browser shows what is already there.'
 		},
 		{
-			title: 'A component library wired to the models.',
-			body: 'Accessible forms, collections, tables, feedback, overlays, layouts, and themes — the components this site itself is built from. They share the application’s session, permissions, and theme, and the form and collection pieces work from your models. Try them in the playground first.'
+			title: 'Change it once. It changes everywhere.',
+			body: 'Add a field to a model and the database, forms, API, and agent tools pick it up together. There is no second schema, route file, or tool description to update — the interfaces cannot drift, because they are not written separately.'
 		},
 		{
-			title: 'Less code to write and maintain.',
-			body: 'The repetitive route, schema, command, and tool wiring is generated from the models. What is left to write, test, and review is the part that is actually your product.'
+			title: 'You decide what agents can do.',
+			body: 'Agent access is declared per action, and the permissions that limit people limit agents. An agent can know a field exists without being able to read it, and can propose a change without being able to apply it until a person approves — awareness is not authority.'
+		},
+		{
+			title: 'Any agent, without a second integration.',
+			body: 'Most applications special-case AI behind a separate integration that re-describes the product and goes stale as the product changes. Here, the operations people use are the operations agents use — your own, your customer’s assistant, whatever comes next. A capability you choose to expose is available to all of them the day it exists: an include entry, not a new integration.'
+		},
+		{
+			title: 'A component library wired to the models.',
+			body: 'Accessible forms, collections, tables, feedback, overlays, layouts, and themes — the components this site itself is built from. They share the application’s session, permissions, and theme, and the form and collection pieces work from your models. Try them in the playground first.'
 		}
 	];
 
