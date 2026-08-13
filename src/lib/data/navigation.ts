@@ -16,6 +16,33 @@ export interface NavigationGroup {
 	items: NavigationItem[];
 }
 
+/**
+ * The homepage has four document-level destinations in the sidebar. Only one
+ * can describe the reader's current position, so its hash is tracked by the
+ * sidebar's scroll spy rather than treating every root link as a page match.
+ *
+ * `Choose a starting point` is an index, not an umbrella selection: once a
+ * visitor follows one of its child routes, that child is the active entry.
+ */
+export function isSidebarItemActive(
+	href: string,
+	pathname: string,
+	activeHomepageHref = '/'
+): boolean {
+	if (pathname === '/') {
+		if (href === '/' || href.startsWith('/#')) return href === activeHomepageHref;
+		return false;
+	}
+
+	if (href === '/') return false;
+	if (href === '/starters') return pathname === href;
+	return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+export function sidebarAriaCurrent(href: string): 'location' | 'page' {
+	return href.startsWith('/#') ? 'location' : 'page';
+}
+
 export const docsNavigation: NavigationGroup[] = [
 	{
 		label: 'Overview',

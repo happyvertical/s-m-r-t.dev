@@ -1,13 +1,57 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { page } from '$app/state';
-	import { docsNavigation } from '$lib/data/navigation';
+	import { docsNavigation, isSidebarItemActive, sidebarAriaCurrent } from '$lib/data/navigation';
 
 	let { children } = $props();
+	let activeHomepageHref = $state('/');
+	let frame: number | undefined;
+
+	const homepageHrefs = docsNavigation
+		.flatMap((group) => group.items)
+		.filter((item) => item.href.startsWith('/#'))
+		.map((item) => item.href);
 
 	function isActive(href: string) {
-		if (href === '/') return page.url.pathname === '/';
-		return page.url.pathname === href || page.url.pathname.startsWith(`${href}/`);
+		return isSidebarItemActive(href, page.url.pathname, activeHomepageHref);
 	}
+
+	function updateActiveHomepageSection() {
+		frame = undefined;
+		if (window.location.pathname !== '/') return;
+
+		const headerHeight = document.querySelector('header')?.getBoundingClientRect().height ?? 0;
+		const readingLine = headerHeight + 24;
+		activeHomepageHref = '/';
+
+		for (const href of homepageHrefs) {
+			const section = document.getElementById(href.slice(2));
+			if (!section || section.getBoundingClientRect().top > readingLine) break;
+			activeHomepageHref = href;
+		}
+	}
+
+	function scheduleActiveHomepageSection() {
+		if (frame === undefined) frame = requestAnimationFrame(updateActiveHomepageSection);
+	}
+
+	$effect(() => {
+		if (page.url.pathname === '/') scheduleActiveHomepageSection();
+	});
+
+	onMount(() => {
+		window.addEventListener('scroll', scheduleActiveHomepageSection, { passive: true });
+		window.addEventListener('resize', scheduleActiveHomepageSection);
+		window.addEventListener('hashchange', scheduleActiveHomepageSection);
+		scheduleActiveHomepageSection();
+
+		return () => {
+			window.removeEventListener('scroll', scheduleActiveHomepageSection);
+			window.removeEventListener('resize', scheduleActiveHomepageSection);
+			window.removeEventListener('hashchange', scheduleActiveHomepageSection);
+			if (frame !== undefined) cancelAnimationFrame(frame);
+		};
+	});
 </script>
 
 <div class="docs-shell">
@@ -18,7 +62,12 @@
 				<section>
 					<h2>{group.label}</h2>
 					{#each group.items as item (item.href)}
-						<a href={item.href} class:active={isActive(item.href)}>{item.label}</a>
+						<a
+							href={item.href}
+							class:active={isActive(item.href)}
+							aria-current={isActive(item.href) ? sidebarAriaCurrent(item.href) : undefined}
+							>{item.label}</a
+						>
 					{/each}
 				</section>
 			{/each}
@@ -88,7 +137,7 @@
 	.docs-sidebar a.active {
 		background: var(--site-accent-soft);
 		color: var(--site-ink);
-		font-weight: 650;
+		box-shadow: inset 2px 0 var(--site-accent-strong);
 	}
 
 	.docs-content {
