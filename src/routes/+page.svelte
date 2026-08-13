@@ -4,30 +4,41 @@
 	import { foundationGuides } from '$lib/data/guides';
 	import { whySmrtClaims } from '$lib/data/why-smrt-claims';
 
-	const articleModel = `import { field, smrt, SmrtObject } from '@happyvertical/smrt-core';
+	const articleModel = `import {
+  field, smrt, SmrtObject
+} from '@happyvertical/smrt-core';
 
 @smrt({
-  api: { include: ['list', 'get', 'create', 'update'] },
+  api: {
+    include: ['list', 'get', 'create', 'update']
+  },
   mcp: { include: ['publish'] },
   cli: false,
-  ui: { label: 'Articles', description: 'Stories your team writes and publishes.' }
+  ui: {
+    label: 'Articles',
+    description: 'Stories your team publishes.'
+  }
 })
 export class Article extends SmrtObject {
-  @field({ required: true, ui: { basic: true, order: 1 } })
   title = '';
-
-  @field({ description: 'The article itself.', ui: { basic: true, order: 2 } })
   body = '';
-
   featured = false;
 
-  @field({ unique: true, indexed: true, description: 'Import key from the legacy CMS.' })
-  externalId = '';
+  @field({ required: true })
+  author = '';
 
-  @field({ readonly: true, description: 'Server-set; generated writes cannot touch it.' })
+  @field({
+    readonly: true,
+    description: 'Server-set; writes cannot touch it.'
+  })
   viewCount = 0;
 
-  @field({ sensitive: true, description: 'Editorial notes — never serialized to a response.' })
+  @field({
+    sensitive: true,
+    exported: false,
+    description: 'Editorial notes for the team.',
+    ui: { group: 'Editorial', order: 10 }
+  })
   authorNotes = '';
 
   async publish() {
