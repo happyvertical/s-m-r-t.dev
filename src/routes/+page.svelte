@@ -4,17 +4,31 @@
 	import { foundationGuides } from '$lib/data/guides';
 	import { whySmrtClaims } from '$lib/data/why-smrt-claims';
 
-	const articleModel = `import { smrt, SmrtObject } from '@happyvertical/smrt-core';
+	const articleModel = `import { field, smrt, SmrtObject } from '@happyvertical/smrt-core';
 
 @smrt({
   api: { include: ['list', 'get', 'create', 'update'] },
   mcp: { include: ['publish'] },
-  cli: false
+  cli: false,
+  ui: { label: 'Articles', description: 'Stories your team writes and publishes.' }
 })
 export class Article extends SmrtObject {
+  @field({ required: true, ui: { basic: true, order: 1 } })
   title = '';
+
+  @field({ description: 'The article itself.', ui: { basic: true, order: 2 } })
   body = '';
+
   featured = false;
+
+  @field({ unique: true, indexed: true, description: 'Import key from the legacy CMS.' })
+  externalId = '';
+
+  @field({ readonly: true, description: 'Server-set; generated writes cannot touch it.' })
+  viewCount = 0;
+
+  @field({ sensitive: true, description: 'Editorial notes — never serialized to a response.' })
+  authorNotes = '';
 
   async publish() {
     return true;
@@ -140,8 +154,8 @@ export class Article extends SmrtObject {
 				<h2 id="pattern-heading">How it works</h2>
 			</div>
 			<p>
-				A model is a few lines of TypeScript naming the fields and actions of one business record.
-				The framework derives the rest.
+				A model names the fields and actions of one business record; decorators fine-tune the object
+				and its fields where the defaults are not enough. The framework derives the rest.
 			</p>
 		</div>
 		<div class="pattern-grid">
