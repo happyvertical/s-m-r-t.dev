@@ -68,6 +68,10 @@ export class Article extends SmrtObject {
 			body: 'Agent access is declared per action, and the permissions that limit people limit agents; a change an agent proposes can wait for a person’s approval. With a chat adapter wired to your product, asking an assistant to move a publication date stages the change for review, and asking it to read a secret field is refused — awareness is not authority.'
 		},
 		{
+			title: 'Most of the pieces, already built.',
+			body: 'Users, tenants, jobs, reports, content, commerce, messages, ledgers, images, and analytics ship as packages sharing the same model contract — frontend components and backend behavior together, made to wire into each other. Much of what many products need exists before you write anything; the package browser shows what is already there.'
+		},
+		{
 			title: 'A component library wired to the models.',
 			body: 'Accessible forms, collections, tables, feedback, overlays, layouts, and themes — the components this site itself is built from. They share the application’s session, permissions, and theme, and the form and collection pieces work from your models. Try them in the playground first.'
 		},
