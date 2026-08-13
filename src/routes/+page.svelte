@@ -20,9 +20,9 @@
   }
 })
 export class Article extends SmrtObject {
-  title = '';
-  body = '';
-  featured = false;
+  title = '';       // becomes a text column
+  body = '';        // text
+  featured = false; // boolean
 
   @field({ required: true })
   author = '';
