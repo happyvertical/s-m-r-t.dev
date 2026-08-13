@@ -61,11 +61,11 @@ export class Article extends SmrtObject {
 		},
 		{
 			title: 'Agents without a second integration.',
-			body: 'Most applications add AI through a separate integration that re-describes the product to the model and goes stale as the product changes. Here, any agent — one your product ships, or one your customer brings, connecting over MCP or through the browser — calls the same operations people use. A capability you choose to expose is available to them the day it exists: an include entry, not a new integration.'
+			body: 'Most applications add AI through a separate integration that re-describes the product to the model and goes stale as the product changes. Here, any agent — one your product ships, or one your customer brings — calls the same operations people use. A capability you choose to expose is available to them the day it exists: an include entry, not a new integration.'
 		},
 		{
 			title: 'You decide what agents can do.',
-			body: 'Agent access is declared per action, and the permissions that limit people limit agents; a change an agent proposes can wait for a person’s approval. With a chat adapter wired to your product, asking an assistant to move a publication date stages the change for review, and asking it to read a secret field is refused — awareness is not authority.'
+			body: 'Agent access is declared per action, and the permissions that limit people limit agents. An agent can know a field exists without being able to read it, and can propose a change without being able to apply it until a person approves — awareness is not authority.'
 		},
 		{
 			title: 'Most of the pieces, already built.',
