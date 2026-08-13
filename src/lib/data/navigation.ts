@@ -18,7 +18,7 @@ export interface NavigationGroup {
 
 export const docsNavigation: NavigationGroup[] = [
 	{
-		label: 'Getting started',
+		label: 'Overview',
 		items: [
 			{
 				label: 'Why s-m-r-t?',
@@ -35,6 +35,26 @@ export const docsNavigation: NavigationGroup[] = [
 					'SAADL'
 				]
 			},
+			{
+				label: 'How it works',
+				href: '/#how-it-works',
+				description: 'A real model and the surfaces generated from it.'
+			},
+			{
+				label: 'What you get',
+				href: '/#what-you-get',
+				description: 'What the shared definition enables.'
+			},
+			{
+				label: 'What you lose',
+				href: '/#what-you-lose',
+				description: 'Familiar costs the shared model retires.'
+			}
+		]
+	},
+	{
+		label: 'Getting started',
+		items: [
 			{
 				label: 'Choose a starting point',
 				href: '/starters',

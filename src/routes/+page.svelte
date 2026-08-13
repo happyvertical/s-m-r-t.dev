@@ -73,6 +73,21 @@ export class Article extends SmrtObject {
 		}
 	];
 
+	const losses = [
+		{
+			title: 'The glue between systems.',
+			body: 'A form library, an admin panel, an API framework, a job runner, an auth system, and an AI SDK each hold their own copy of your domain — and you write the wiring between them. Here they are one set of packages sharing one model, so that glue is not your code to write, test, or debug.'
+		},
+		{
+			title: 'The version matrix.',
+			body: 'The s-m-r-t packages release in lockstep: one framework version that moves together, instead of a compatibility matrix you resolve at every upgrade.'
+		},
+		{
+			title: 'The lock-in bet.',
+			body: 'Committing to a framework should not mean losing the exits. The license is MIT, models are TypeScript classes in your own repository, data lives in SQLite or Postgres, and agents connect over open protocols such as MCP.'
+		}
+	];
+
 	const updates = [
 		{
 			title: 'Agent-legible applications',
@@ -100,23 +115,21 @@ export class Article extends SmrtObject {
 
 <article class="why-smrt">
 	<header class="hero">
-		<p class="eyebrow">Why s-m-r-t?</p>
-		<h1>Build an application from the model outward.</h1>
+		<h1>Why s-m-r-t?</h1>
 		<p class="hero-copy">
-			You write TypeScript models of the records your product manages — an article, an order, a
-			customer. s-m-r-t generates what surrounds them: storage, forms, REST APIs, CLI commands,
-			permissions, and AI-agent tools, all working from the same definition with the same limits.
-			Change a model and every surface updates with it. Give an agent access and it gets the
-			operations you chose, nothing more.
+			Because an application should be built from the model outward. You write TypeScript models of
+			the records your product manages — an article, an order, a customer — and s-m-r-t generates
+			what surrounds them: storage, forms, REST APIs, CLI commands, permissions, and AI-agent tools,
+			all working from the same definition with the same limits. Change a model and every surface
+			updates with it. Give an agent access and it gets the operations you chose, nothing more.
 		</p>
-		<a class="hero-link" href="#pattern">See the pattern ↓</a>
+		<a class="hero-link" href="#how-it-works">How it works ↓</a>
 	</header>
 
-	<section class="pattern" id="pattern" aria-labelledby="pattern-heading">
+	<section class="pattern" id="how-it-works" aria-labelledby="pattern-heading">
 		<div class="section-heading">
 			<div>
-				<p class="eyebrow">The pattern</p>
-				<h2 id="pattern-heading">What one model generates.</h2>
+				<h2 id="pattern-heading">How it works</h2>
 			</div>
 			<p>
 				A model is a few lines of TypeScript naming the fields and actions of one business record.
@@ -144,11 +157,10 @@ export class Article extends SmrtObject {
 		</p>
 	</section>
 
-	<section class="powers" aria-labelledby="powers-heading">
+	<section class="powers" id="what-you-get" aria-labelledby="powers-heading">
 		<div class="section-heading">
 			<div>
-				<p class="eyebrow">The result</p>
-				<h2 id="powers-heading">What that enables.</h2>
+				<h2 id="powers-heading">What you get</h2>
 			</div>
 		</div>
 		<div class="power-grid">
@@ -245,24 +257,21 @@ export class Article extends SmrtObject {
 		</div>
 	</section>
 
-	<section class="boundaries" aria-labelledby="boundaries-heading">
+	<section class="losses" id="what-you-lose" aria-labelledby="losses-heading">
 		<div class="section-heading">
 			<div>
-				<p class="eyebrow">Honest boundaries</p>
-				<h2 id="boundaries-heading">Released today, conditional where noted.</h2>
+				<h2 id="losses-heading">What you lose</h2>
 			</div>
+			<p>Familiar costs the shared model retires.</p>
 		</div>
-		<p class="boundaries-copy">
-			Everything above describes released behavior. One direction stays deliberately conditional:
-			development tooling reads what a project declares and installs, but knowledge of a live,
-			running application is available only when a runtime bridge explicitly exposes it — never
-			assumed. Application data stays behind authenticated, permission-checked surfaces unless a
-			model explicitly declares public access.
-		</p>
-		<p class="boundaries-links">
-			<a href="/reference/security">Security defaults →</a>
-			<a href="/capabilities/agent-legible-applications">The runtime boundary →</a>
-		</p>
+		<div class="power-grid">
+			{#each losses as loss (loss.title)}
+				<div class="power">
+					<h3>{loss.title}</h3>
+					<p>{loss.body}</p>
+				</div>
+			{/each}
+		</div>
 	</section>
 
 	<section class="qualification" aria-labelledby="qualification-heading">
@@ -457,8 +466,7 @@ export class Article extends SmrtObject {
 		line-height: 1.7;
 	}
 	.hero-link,
-	.machinery-grid > div > a,
-	.boundaries-links a {
+	.machinery-grid > div > a {
 		display: inline-block;
 		margin-top: 22px;
 		color: var(--site-ink);
@@ -468,6 +476,7 @@ export class Article extends SmrtObject {
 	section {
 		padding: 44px 0 54px;
 		border-top: 1px solid var(--site-line);
+		scroll-margin-top: 86px;
 	}
 	.section-heading {
 		display: flex;
@@ -577,15 +586,6 @@ export class Article extends SmrtObject {
 		color: var(--site-muted);
 		font-size: 0.8rem;
 		line-height: 1.55;
-	}
-	.boundaries-copy {
-		max-width: 760px;
-		color: var(--site-muted);
-		font-size: 0.9rem;
-		line-height: 1.65;
-	}
-	.boundaries-links a + a {
-		margin-left: 24px;
 	}
 	.qualification-grid {
 		display: grid;
