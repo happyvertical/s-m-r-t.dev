@@ -2,8 +2,6 @@
 	import PlaygroundEmbed from '$lib/components/PlaygroundEmbed.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { playgroundModules } from '$lib/data/playgrounds';
-
-	const featuredEntryId = '@happyvertical/smrt-ui:data-table';
 </script>
 
 <SEO
@@ -12,44 +10,23 @@
 	url="https://s-m-r-t.dev/playground"
 />
 
-<article class="playground-page">
-	<header>
-		<a class="docs-link" href="/">← Back to docs</a>
-		<p>Component playground</p>
-		<h1>Try the interface before you import it.</h1>
-		<span
-			>These previews come from each package’s <code>./playground</code> export. Mock mode is safe for
-			browsing; packages can add a clearly labelled live mode when a working backend is available.</span
-		>
-	</header>
-
-	<aside>
-		<strong>{playgroundModules.length} package modules</strong>
-		<p>
-			Search by component, package, or tag. Foundation controls appear first, including the
-			agent-assisted form flow, followed by domain working views.
-		</p>
-		<a href="/packages">Browse package reference →</a>
-	</aside>
-
-	<PlaygroundEmbed modules={playgroundModules} selectedEntryId={featuredEntryId} />
-</article>
+<div class="playground-page">
+	<a class="docs-link" href="/">← Docs</a>
+	<PlaygroundEmbed modules={playgroundModules} standalone />
+</div>
 
 <style>
 	.playground-page {
-		width: min(1180px, calc(100% - 40px));
-		margin: 0 auto;
-		padding: 48px 0 82px;
-	}
-	header {
-		max-width: 760px;
-		padding-bottom: 28px;
+		min-height: 100svh;
+		display: grid;
+		grid-template-rows: auto minmax(0, 1fr);
+		gap: 16px;
+		padding: 16px;
 	}
 	.docs-link {
-		display: inline-block;
-		margin-bottom: 26px;
+		justify-self: start;
 		color: var(--site-ink);
-		font-size: 0.78rem;
+		font-size: 0.72rem;
 		font-weight: 700;
 		text-decoration: none;
 	}
@@ -57,59 +34,9 @@
 		text-decoration: underline;
 		text-underline-offset: 4px;
 	}
-	header > p {
-		color: var(--site-accent-strong);
-		font: 700 0.66rem var(--site-font-mono);
-		text-transform: uppercase;
-	}
-	h1 {
-		margin-top: 11px;
-		font-size: clamp(2.15rem, 5vw, 3.25rem);
-		letter-spacing: -0.04em;
-		line-height: 1.08;
-	}
-	header > span {
-		display: block;
-		margin-top: 16px;
-		color: var(--site-muted);
-		font-size: 0.9rem;
-		line-height: 1.62;
-	}
-	header code {
-		color: var(--site-ink);
-		font-family: var(--site-font-mono);
-		font-size: 0.82em;
-	}
-	aside {
-		display: grid;
-		grid-template-columns: 150px 1fr auto;
-		gap: 20px;
-		align-items: center;
-		margin-bottom: 20px;
-		padding: 13px 15px;
-		border: 1px solid var(--site-line);
-		background: var(--site-surface);
-	}
-	aside strong,
-	aside a {
-		font-size: 0.72rem;
-	}
-	aside p {
-		color: var(--site-muted);
-		font-size: 0.75rem;
-	}
-	aside a {
-		color: var(--site-ink);
-		font-weight: 650;
-	}
 	@media (max-width: 760px) {
 		.playground-page {
-			width: min(100% - 20px, 1180px);
-			padding-top: 34px;
-		}
-		aside {
-			grid-template-columns: 1fr;
-			gap: 5px;
+			padding: 10px;
 		}
 	}
 </style>

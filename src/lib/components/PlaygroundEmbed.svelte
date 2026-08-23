@@ -5,15 +5,14 @@
 	interface Props {
 		modules: SmrtPlaygroundModule[];
 		compact?: boolean;
-		selectedEntryId?: string | null;
+		standalone?: boolean;
 	}
-	let { modules, compact = false, selectedEntryId = null }: Props = $props();
+	let { modules, compact = false, standalone = false }: Props = $props();
 </script>
 
-<div class:compact class="playground-embed">
+<div class:compact class:standalone class="playground-embed">
 	<PlaygroundHost
 		{modules}
-		{selectedEntryId}
 		title="s-m-r-t playground"
 		subtitle="Package-owned components and working views"
 	/>
@@ -29,6 +28,12 @@
 	}
 	.playground-embed.compact {
 		min-height: 620px;
+	}
+	.playground-embed.standalone {
+		min-height: 0;
+		border: 0;
+		border-radius: 0;
+		background: transparent;
 	}
 	.playground-embed :global(.playground-shell) {
 		min-height: inherit;

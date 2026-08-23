@@ -56,8 +56,8 @@ export const docsNavigation: NavigationGroup[] = [
 			},
 			{
 				label: 'Data Table',
-				href: '/playground',
-				description: 'Try the sortable and selectable table preview.'
+				href: '/packages/smrt-ui?tab=components#collections-and-tables',
+				description: 'Find the table alongside the other collection components.'
 			}
 		]
 	},

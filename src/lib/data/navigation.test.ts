@@ -26,7 +26,10 @@ describe('sidebar navigation state', () => {
 		expect(docsNavigation[0].items).toEqual(
 			expect.arrayContaining([
 				expect.objectContaining({ label: 'All components' }),
-				expect.objectContaining({ label: 'Data Table', href: '/playground' })
+				expect.objectContaining({
+					label: 'Data Table',
+					href: '/packages/smrt-ui?tab=components#collections-and-tables'
+				})
 			])
 		);
 	});
