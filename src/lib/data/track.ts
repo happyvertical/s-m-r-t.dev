@@ -51,7 +51,8 @@ export const packageTrack: TrackStep[] = packageCategories.flatMap((category) =>
 );
 
 function neighborsIn(track: TrackStep[], href: string, label: string): TrackNeighbors | null {
-	const index = track.findIndex((step) => step.href === href);
+	const normalizedHref = normalize(href);
+	const index = track.findIndex((step) => normalize(step.href) === normalizedHref);
 	if (index === -1) return null;
 	return { track: label, prev: track[index - 1], next: track[index + 1] };
 }

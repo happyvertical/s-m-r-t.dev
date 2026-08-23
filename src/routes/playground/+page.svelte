@@ -2,7 +2,6 @@
 	import PlaygroundEmbed from '$lib/components/PlaygroundEmbed.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { playgroundModules } from '$lib/data/playgrounds';
-	import { SMRT_VERSION } from '$lib/version';
 
 	const featuredEntryId = '@happyvertical/smrt-ui:data-table';
 </script>
@@ -22,10 +21,6 @@
 			>These previews come from each package’s <code>./playground</code> export. Mock mode is safe for
 			browsing; packages can add a clearly labelled live mode when a working backend is available.</span
 		>
-		<p class="feature-note">
-			<strong>New in {SMRT_VERSION}: Data Table</strong> is selected below with the rest of the UI foundation
-			previews.
-		</p>
 	</header>
 
 	<aside>
@@ -79,15 +74,6 @@
 		color: var(--site-muted);
 		font-size: 0.9rem;
 		line-height: 1.62;
-	}
-	.feature-note {
-		margin-top: 12px;
-		color: var(--site-muted);
-		font-size: 0.82rem;
-		line-height: 1.55;
-	}
-	.feature-note strong {
-		color: var(--site-ink);
 	}
 	header code {
 		color: var(--site-ink);

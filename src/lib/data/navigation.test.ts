@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isSidebarItemActive, sidebarAriaCurrent } from './navigation';
+import { docsNavigation, isSidebarItemActive, sidebarAriaCurrent } from './navigation';
 
 describe('sidebar navigation state', () => {
 	it('scroll-spies the homepage overview without selecting other page groups', () => {
@@ -19,5 +19,19 @@ describe('sidebar navigation state', () => {
 		expect(sidebarAriaCurrent('/#how-it-works')).toBe('location');
 		expect(sidebarAriaCurrent('/')).toBe('page');
 		expect(sidebarAriaCurrent('/starters/ground-up')).toBe('page');
+	});
+
+	it('keeps components distinct while collecting all other docs in one group', () => {
+		expect(docsNavigation.map((group) => group.label)).toEqual(['Components', 'Documentation']);
+		expect(docsNavigation[0].items).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ label: 'All components' }),
+				expect.objectContaining({ label: 'Data Table', href: '/playground' })
+			])
+		);
+	});
+
+	it('recognizes a component-catalog link with a query string', () => {
+		expect(isSidebarItemActive('/packages/smrt-ui?tab=components', '/packages/smrt-ui')).toBe(true);
 	});
 });
