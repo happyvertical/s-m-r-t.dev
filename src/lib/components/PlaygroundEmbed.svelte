@@ -5,13 +5,15 @@
 	interface Props {
 		modules: SmrtPlaygroundModule[];
 		compact?: boolean;
+		selectedEntryId?: string | null;
 	}
-	let { modules, compact = false }: Props = $props();
+	let { modules, compact = false, selectedEntryId = null }: Props = $props();
 </script>
 
 <div class:compact class="playground-embed">
 	<PlaygroundHost
 		{modules}
+		{selectedEntryId}
 		title="s-m-r-t playground"
 		subtitle="Package-owned components and working views"
 	/>
