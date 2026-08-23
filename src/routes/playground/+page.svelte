@@ -11,8 +11,8 @@
 />
 
 <div class="playground-page">
-	<PlaygroundEmbed modules={playgroundModules} standalone />
 	<a class="docs-link" href="/">← Docs</a>
+	<PlaygroundEmbed modules={playgroundModules} standalone />
 </div>
 
 <style>
