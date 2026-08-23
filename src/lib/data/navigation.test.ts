@@ -23,15 +23,9 @@ describe('sidebar navigation state', () => {
 
 	it('keeps components distinct while collecting all other docs in one group', () => {
 		expect(docsNavigation.map((group) => group.label)).toEqual(['Components', 'Documentation']);
-		expect(docsNavigation[0].items).toEqual(
-			expect.arrayContaining([
-				expect.objectContaining({ label: 'All components' }),
-				expect.objectContaining({
-					label: 'Data Table',
-					href: '/packages/smrt-ui?tab=components#collections-and-tables'
-				})
-			])
-		);
+		expect(docsNavigation[0].items).toEqual([
+			expect.objectContaining({ label: 'Data Table', href: '/packages/smrt-ui?tab=components' })
+		]);
 	});
 
 	it('recognizes a component-catalog link with a query string', () => {

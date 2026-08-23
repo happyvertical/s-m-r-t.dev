@@ -50,13 +50,8 @@ export const docsNavigation: NavigationGroup[] = [
 		label: 'Components',
 		items: [
 			{
-				label: 'All components',
-				href: '/packages/smrt-ui?tab=components',
-				description: 'Browse the UI foundation component catalog.'
-			},
-			{
 				label: 'Data Table',
-				href: '/packages/smrt-ui?tab=components#collections-and-tables',
+				href: '/packages/smrt-ui?tab=components',
 				description: 'Find the table alongside the other collection components.'
 			}
 		]
