@@ -51,7 +51,7 @@ export const docsNavigation: NavigationGroup[] = [
 				label: 'Why s-m-r-t?',
 				href: '/',
 				description:
-					'One source of truth for business logic generates storage, forms, APIs, commands, permissions, and AI-agent tools.',
+					'One source of truth for application logic generates storage, forms, APIs, commands, permissions, and AI-agent tools.',
 				keywords: [
 					'smrt',
 					'agent-native',

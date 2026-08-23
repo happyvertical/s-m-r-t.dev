@@ -2,6 +2,8 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { foundationGuides } from '$lib/data/guides';
+	import { SMRT_VERSION } from '$lib/version';
+	import { DataTable, type DataTableColumn } from '@happyvertical/smrt-ui/data';
 	import { whySmrtClaims } from '$lib/data/why-smrt-claims';
 
 	const articleModel = `import {
@@ -121,6 +123,72 @@ export class Article extends SmrtObject {
 		}
 	];
 
+	interface ApplicationSurface {
+		id: string;
+		surface: string;
+		entry: string;
+		sharedRule: string;
+		for: string;
+	}
+
+	const applicationSurfaces: ApplicationSurface[] = [
+		{
+			id: 'browser',
+			surface: 'Browser UI',
+			entry: 'SvelteKit page',
+			sharedRule: 'Field policies and permissions',
+			for: 'People'
+		},
+		{
+			id: 'api',
+			surface: 'REST API',
+			entry: 'Generated route',
+			sharedRule: 'Model schema and tenant scope',
+			for: 'Integrations'
+		},
+		{
+			id: 'agent',
+			surface: 'Agent tool',
+			entry: 'MCP or WebMCP',
+			sharedRule: 'Operation permissions',
+			for: 'Agents'
+		},
+		{
+			id: 'operator',
+			surface: 'Operator command',
+			entry: 'Generated CLI',
+			sharedRule: 'Validated model action',
+			for: 'Operators'
+		},
+		{
+			id: 'table',
+			surface: 'Data table',
+			entry: 'DataTable',
+			sharedRule: 'Stable rows and view state',
+			for: 'Working teams'
+		},
+		{
+			id: 'report',
+			surface: 'Report view',
+			entry: 'Aggregate model',
+			sharedRule: 'Tenant-aware projection',
+			for: 'Decision makers'
+		}
+	];
+
+	const applicationSurfaceColumns: DataTableColumn<ApplicationSurface>[] = [
+		{ id: 'surface', label: 'Surface', accessor: 'surface', sortable: true, minWidth: '10rem' },
+		{ id: 'entry', label: 'Entry point', accessor: 'entry', sortable: true, minWidth: '10rem' },
+		{
+			id: 'sharedRule',
+			label: 'Shared application rule',
+			accessor: 'sharedRule',
+			sortable: true,
+			minWidth: '14rem'
+		},
+		{ id: 'for', label: 'For', accessor: 'for', sortable: true, minWidth: '9rem' }
+	];
+
 	const updates = [
 		{
 			title: 'Agent-legible applications',
@@ -150,14 +218,55 @@ export class Article extends SmrtObject {
 	<header class="hero">
 		<h1>Why s-m-r-t?</h1>
 		<p class="hero-copy">
-			One source of truth for your business logic. You describe the records your product manages —
-			an article, an order, a customer — as models, and s-m-r-t generates what surrounds them:
+			One source of truth for your application logic. You describe the records your product manages
+			— an article, an order, a customer — as models, and s-m-r-t generates what surrounds them:
 			storage, forms, APIs, operator commands, permissions, and AI-agent tools, all working from the
 			same definition with the same limits. Change a model and every surface updates with it. Give
 			an agent access and it gets the operations you chose, nothing more.
 		</p>
 		<a class="hero-link" href="#how-it-works">How it works ↓</a>
 	</header>
+
+	<section class="data-table-feature" aria-labelledby="data-table-heading">
+		<div class="data-table-summary">
+			<div>
+				<p class="release-label">New in {SMRT_VERSION}</p>
+				<h2 id="data-table-heading">Data tables for application logic</h2>
+			</div>
+			<p>
+				Sort, select, and page typed rows without separating the table from the rules that govern
+				the rest of the application.
+			</p>
+		</div>
+		<div class="data-table-showcase">
+			<div class="data-table-intro">
+				<h3>One model, many working surfaces</h3>
+				<p>
+					The same model can support people, integrations, agents, and operators. This interactive
+					table uses stable row identities, local sorting, selection, and paging from <code
+						>@happyvertical/smrt-ui/data</code
+					>.
+				</p>
+			</div>
+			<div class="data-table-frame">
+				<DataTable
+					data={applicationSurfaces}
+					columns={applicationSurfaceColumns}
+					rowKey="id"
+					selectable
+					sortable
+					striped
+					hoverable
+					pageSize={5}
+					caption="Application surfaces sharing one model"
+				/>
+			</div>
+			<div class="data-table-footer">
+				<p>Try a column header or row checkbox, then open the complete component example.</p>
+				<a href="/playground">Open the data table playground →</a>
+			</div>
+		</div>
+	</section>
 
 	<section class="pattern" id="how-it-works" aria-labelledby="pattern-heading">
 		<div class="section-heading">
@@ -684,6 +793,63 @@ export class Article extends SmrtObject {
 		font-size: 0.8rem;
 		line-height: 1.55;
 	}
+
+	.data-table-summary {
+		display: flex;
+		justify-content: space-between;
+		gap: 28px;
+		align-items: end;
+		margin-bottom: 24px;
+	}
+
+	.release-label {
+		color: var(--site-accent-strong);
+		font-family: var(--site-font-mono);
+		font-size: 0.65rem;
+		font-weight: 700;
+		letter-spacing: 0.055em;
+		text-transform: uppercase;
+	}
+
+	.data-table-summary h2 {
+		margin-top: 8px;
+		font-size: clamp(1.55rem, 3vw, 2.1rem);
+		letter-spacing: -0.035em;
+	}
+
+	.data-table-summary > p {
+		max-width: 400px;
+		color: var(--site-muted);
+		font-size: 0.86rem;
+		line-height: 1.6;
+	}
+
+	.data-table-showcase {
+		border: 1px solid var(--site-line-strong);
+		border-radius: 12px;
+		background: var(--site-surface);
+		overflow: hidden;
+	}
+
+	.data-table-intro {
+		display: flex;
+		justify-content: space-between;
+		gap: 28px;
+		align-items: baseline;
+		padding: 20px 22px;
+		border-bottom: 1px solid var(--site-line);
+	}
+
+	.data-table-intro h3 {
+		font-size: 1rem;
+	}
+
+	.data-table-intro p {
+		max-width: 530px;
+		color: var(--site-muted);
+		font-size: 0.8rem;
+		line-height: 1.55;
+	}
 	.qualification-grid {
 		display: grid;
 		grid-template-columns: repeat(5, 1fr);
@@ -719,6 +885,42 @@ export class Article extends SmrtObject {
 	.qualification-links span {
 		padding: 0 8px;
 	}
+
+	.data-table-intro code {
+		color: var(--site-ink);
+		font-family: var(--site-font-mono);
+		font-size: 0.9em;
+	}
+
+	.data-table-frame {
+		padding: 0 4px;
+		background: var(--site-paper);
+	}
+
+	.data-table-footer {
+		display: flex;
+		justify-content: space-between;
+		gap: 20px;
+		align-items: center;
+		padding: 14px 22px;
+		border-top: 1px solid var(--site-line);
+	}
+
+	.data-table-footer p,
+	.data-table-footer a {
+		font-size: 0.75rem;
+	}
+
+	.data-table-footer p {
+		color: var(--site-muted);
+	}
+
+	.data-table-footer a {
+		flex: 0 0 auto;
+		color: var(--site-ink);
+		font-weight: 700;
+	}
+
 	.start-grid,
 	.update-grid {
 		display: grid;
@@ -890,6 +1092,9 @@ export class Article extends SmrtObject {
 			padding-top: 38px;
 		}
 		.section-heading,
+		.data-table-summary,
+		.data-table-intro,
+		.data-table-footer,
 		.browse-callout {
 			align-items: flex-start;
 			flex-direction: column;

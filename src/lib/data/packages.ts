@@ -191,7 +191,8 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 	},
 	{
 		title: 'Collections and tables',
-		description: 'Add search, selection, list/grid views, pagination, and richer tabular browsing.',
+		description:
+			'Search, select, filter, page, and present typed collections with durable, serializable table view state.',
 		importPath: '@happyvertical/smrt-ui/data',
 		components: ['CollectionToolbar', 'CollectionList', 'ContentList', 'DataTable']
 	},
@@ -556,7 +557,13 @@ export const packages: SmrtPackage[] = [
 			highlights: [
 				'Required, optional, and global data scopes',
 				'AsyncLocalStorage context propagation',
-				'Tenant-safe interceptors and STI-aware global queries'
+				'Tenant-safe interceptors across lookups, hydration, search, and collection memory'
+			],
+			details: [
+				{
+					title: 'Scope covers each read path',
+					body: 'Tenant context applies to list and get calls, slug lookups, model hydration, vector search, and collection memory. Required models fail closed without a tenant context; system and super-admin contexts are the explicit cross-tenant paths.'
+				}
 			],
 			components: ['TenantCard', 'TenantSwitcher'],
 			componentImport: '@happyvertical/smrt-tenancy/svelte',
@@ -826,7 +833,8 @@ export const packages: SmrtPackage[] = [
 			highlights: [
 				'An opt-in allowlist for the methods a job row may call',
 				'A per-tenant ceiling on in-flight jobs',
-				'Retry counts clamped rather than trusted'
+				'Retry counts clamped rather than trusted',
+				'Automatic retention for terminal jobs and job events'
 			],
 			components: [
 				'JobDashboard',
@@ -844,6 +852,10 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'One tenant cannot drain the queue',
 					body: 'Enqueueing checks how many non-terminal jobs a tenant already holds and refuses to add another past the cap, which defaults to ten thousand and can be set per call or through the job builder. Setting it to zero disables the check, and jobs with no tenant are never counted against it. Requested retry counts are clamped to the supported maximum instead of being rejected, so a misconfigured caller cannot pin a worker on a poison job.'
+				},
+				{
+					title: 'Retention starts after the runner is stable',
+					body: 'TaskRunner schedules its first retention sweep one interval after start, never at startup. The default policy retains completed or cancelled jobs for seven days, failed jobs and events for thirty days, and supports dry-run cleanup before a deletion policy changes.'
 				}
 			],
 			componentImport: '@happyvertical/smrt-jobs/svelte',
@@ -933,7 +945,7 @@ export const packages: SmrtPackage[] = [
 			highlights: [
 				'One component contract for semantics, keyboard use, state, themes, and testing',
 				'Forms that chat, voice, tutorials, and tests can address through a consent-aware registry',
-				'Reusable collection, table, feedback, disclosure, and overlay patterns',
+				'Reusable collection, table, feedback, disclosure, and overlay patterns with stable row identity',
 				'Package-owned working examples in the shared playground'
 			],
 			componentGroups: smrtUiComponentGroups,
@@ -951,7 +963,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Reusable collection surfaces',
-					body: 'CollectionToolbar, CollectionList, and DataTable cover search, selection, list or grid presentation, filtering, pagination, expansion, density, and empty or loading states.'
+					body: 'CollectionToolbar, CollectionList, and DataTable cover search, selection, list or grid presentation, filtering, pagination, expansion, density, and empty or loading states. DataTable keeps a stable row key through local transforms and exposes serializable controller state when the application owns filtering, sorting, or paging.'
 				},
 				{
 					title: 'Feedback and focused tasks',
