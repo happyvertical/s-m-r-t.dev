@@ -20,17 +20,17 @@
 </svelte:head>
 
 <Provider>
-	<ThemeProvider preset="smrt" colorScheme="system" persist={true}>
-		{#if isStandalonePlayground}
-			<main class="playground-shell">{@render children()}</main>
-		{:else}
+	{#if isStandalonePlayground}
+		{@render children()}
+	{:else}
+		<ThemeProvider preset="smrt" colorScheme="system" persist={true}>
 			<div class="app">
 				<Header />
 				<main><DocsShell>{@render children()}</DocsShell></main>
 				<Footer />
 			</div>
-		{/if}
-	</ThemeProvider>
+		</ThemeProvider>
+	{/if}
 </Provider>
 
 <style>
@@ -44,11 +44,5 @@
 
 	main {
 		flex: 1;
-	}
-
-	.playground-shell {
-		min-height: 100svh;
-		background: var(--site-paper);
-		color: var(--site-ink);
 	}
 </style>

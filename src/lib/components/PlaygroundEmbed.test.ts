@@ -25,6 +25,16 @@ afterEach(() => {
 });
 
 describe('PlaygroundEmbed', () => {
+	it('renders the standalone host without a site wrapper', () => {
+		render(PlaygroundEmbed, {
+			modules: [ui],
+			standalone: true
+		});
+
+		expect(document.querySelector('.playground-embed')).toBeNull();
+		expect(document.querySelector('.playground-shell')).toBeTruthy();
+	});
+
 	it('switches between interactive package-owned previews', async () => {
 		render(PlaygroundEmbed, {
 			modules: [ui]

@@ -10,13 +10,21 @@
 	let { modules, compact = false, standalone = false }: Props = $props();
 </script>
 
-<div class:compact class:standalone class="playground-embed">
+{#if standalone}
 	<PlaygroundHost
 		{modules}
 		title="s-m-r-t playground"
 		subtitle="Package-owned components and working views"
 	/>
-</div>
+{:else}
+	<div class:compact class="playground-embed">
+		<PlaygroundHost
+			{modules}
+			title="s-m-r-t playground"
+			subtitle="Package-owned components and working views"
+		/>
+	</div>
+{/if}
 
 <style>
 	.playground-embed {
@@ -28,12 +36,6 @@
 	}
 	.playground-embed.compact {
 		min-height: 620px;
-	}
-	.playground-embed.standalone {
-		min-height: 0;
-		border: 0;
-		border-radius: 0;
-		background: transparent;
 	}
 	.playground-embed :global(.playground-shell) {
 		min-height: inherit;

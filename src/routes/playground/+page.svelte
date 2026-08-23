@@ -11,32 +11,39 @@
 />
 
 <div class="playground-page">
-	<a class="docs-link" href="/">← Docs</a>
 	<PlaygroundEmbed modules={playgroundModules} standalone />
+	<a class="docs-link" href="/">← Docs</a>
 </div>
 
 <style>
 	.playground-page {
-		min-height: 100svh;
-		display: grid;
-		grid-template-rows: auto minmax(0, 1fr);
-		gap: 16px;
-		padding: 16px;
+		display: contents;
 	}
 	.docs-link {
-		justify-self: start;
-		color: var(--site-ink);
-		font-size: 0.72rem;
+		position: fixed;
+		top: 0.8rem;
+		right: clamp(1.25rem, 3vw, 3rem);
+		z-index: 1;
+		border: 1px solid var(--smrt-color-outline-variant, #59616e);
+		border-radius: 999px;
+		background: var(--smrt-color-surface-container, #1b2028);
+		color: var(--smrt-color-on-surface, #f0f2f7);
+		font-family: var(--smrt-font-family, system-ui, sans-serif);
+		font-size: 0.75rem;
 		font-weight: 700;
+		line-height: 1;
+		padding: 0.55rem 0.75rem;
 		text-decoration: none;
 	}
 	.docs-link:hover {
+		background: var(--smrt-color-surface-container-high, #252b35);
 		text-decoration: underline;
 		text-underline-offset: 4px;
 	}
 	@media (max-width: 760px) {
-		.playground-page {
-			padding: 10px;
+		.docs-link {
+			top: 0.65rem;
+			right: 0.75rem;
 		}
 	}
 </style>
