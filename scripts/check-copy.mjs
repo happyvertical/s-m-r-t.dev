@@ -14,6 +14,7 @@ const COPY_GLOBS = [
 	'src/routes/**/+page.ts',
 	'src/lib/components/**/*.svelte',
 	'src/lib/data/**/*.ts',
+	'src/lib/version.ts',
 	'static/**/*.txt'
 ];
 
@@ -512,7 +513,6 @@ function createAuditedSourceResolver(ast) {
 		if (
 			ts.isStringLiteral(node) ||
 			ts.isNoSubstitutionTemplateLiteral(node) ||
-			ts.isTemplateExpression(node) ||
 			ts.isNumericLiteral(node) ||
 			node.kind === ts.SyntaxKind.TrueKeyword ||
 			node.kind === ts.SyntaxKind.FalseKeyword ||
@@ -520,6 +520,9 @@ function createAuditedSourceResolver(ast) {
 			node.kind === ts.SyntaxKind.UndefinedKeyword
 		) {
 			return true;
+		}
+		if (ts.isTemplateExpression(node)) {
+			return node.templateSpans.every((span) => isAuditedSourceExpression(span.expression, seen));
 		}
 		if (ts.isArrayLiteralExpression(node)) {
 			return node.elements.every((element) =>
@@ -609,7 +612,6 @@ function isSupportedProseInitializer(node, bindings, auditedSources) {
 	if (
 		ts.isStringLiteral(node) ||
 		ts.isNoSubstitutionTemplateLiteral(node) ||
-		ts.isTemplateExpression(node) ||
 		ts.isNumericLiteral(node) ||
 		node.kind === ts.SyntaxKind.TrueKeyword ||
 		node.kind === ts.SyntaxKind.FalseKeyword ||
@@ -618,10 +620,16 @@ function isSupportedProseInitializer(node, bindings, auditedSources) {
 	) {
 		return true;
 	}
+	if (ts.isTemplateExpression(node)) {
+		return node.templateSpans.every((span) =>
+			isSupportedProseInitializer(span.expression, bindings, auditedSources)
+		);
+	}
 	if (ts.isIdentifier(node)) {
 		return (
 			node.text === 'undefined' ||
 			bindingsHaveRoot(bindings, node.text) ||
+			auditedSources.isAuditedSourceExpression(node) ||
 			auditedSources.isAuditedParameterReference(node, node.text) ||
 			auditedSources.isAuditedIterationReference(node, node.text)
 		);
@@ -906,18 +914,30 @@ function callRootName(node) {
 	return undefined;
 }
 
+function isAuditedCopyImport(source) {
+	return source === '$lib/version' || source === '$lib/data' || source.startsWith('$lib/data/');
+}
+
 function extractAllowedDynamicNames(source, filename) {
 	const scriptKind = filename.endsWith('.js') ? ts.ScriptKind.JS : ts.ScriptKind.TS;
 	const ast = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true, scriptKind);
 	const names = new Set();
 
 	function visit(node) {
-		if (ts.isImportDeclaration(node) && node.importClause) {
+		if (
+			ts.isImportDeclaration(node) &&
+			ts.isStringLiteral(node.moduleSpecifier) &&
+			isAuditedCopyImport(node.moduleSpecifier.text) &&
+			node.importClause &&
+			!node.importClause.isTypeOnly
+		) {
 			if (node.importClause.name) names.add(node.importClause.name.text);
 			const bindings = node.importClause.namedBindings;
 			if (bindings && ts.isNamespaceImport(bindings)) names.add(bindings.name.text);
 			if (bindings && ts.isNamedImports(bindings)) {
-				for (const element of bindings.elements) names.add(element.name.text);
+				for (const element of bindings.elements) {
+					if (!element.isTypeOnly) names.add(element.name.text);
+				}
 			}
 		}
 		if (
@@ -935,6 +955,33 @@ function extractAllowedDynamicNames(source, filename) {
 
 	if (ast.parseDiagnostics.length === 0) visit(ast);
 	return names;
+}
+
+function extractRuntimeValueBindings(source, filename) {
+	const scriptKind = filename.endsWith('.js') ? ts.ScriptKind.JS : ts.ScriptKind.TS;
+	const ast = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true, scriptKind);
+	const bindings = new Map();
+
+	function visit(node) {
+		if (
+			ts.isImportDeclaration(node) &&
+			ts.isStringLiteral(node.moduleSpecifier) &&
+			node.moduleSpecifier.text === '$app/state' &&
+			node.importClause?.namedBindings &&
+			ts.isNamedImports(node.importClause.namedBindings)
+		) {
+			for (const element of node.importClause.namedBindings.elements) {
+				const importedName = element.propertyName?.text ?? element.name.text;
+				if (importedName !== 'page' || element.isTypeOnly) continue;
+				bindings.set(`${element.name.text}.status`, '');
+				bindings.set(`${element.name.text}.error.message`, '');
+			}
+		}
+		ts.forEachChild(node, visit);
+	}
+
+	if (ast.parseDiagnostics.length === 0) visit(ast);
+	return bindings;
 }
 
 function expressionBindingPath(node) {
@@ -1209,6 +1256,9 @@ export function extractSveltePassages(source, filename) {
 	const allowedDynamicNames = new Set();
 	for (const match of scripts) {
 		for (const [name, text] of extractScriptBindings(match[1], filename)) bindings.set(name, text);
+		for (const [name, text] of extractRuntimeValueBindings(match[1], filename)) {
+			bindings.set(name, text);
+		}
 		for (const name of extractAllowedDynamicNames(match[1], filename)) {
 			allowedDynamicNames.add(name);
 		}
@@ -1412,17 +1462,63 @@ export function extractSveltePassages(source, filename) {
 
 function extractPlainTextPassages(source, filename) {
 	const passages = [];
-	let inFence = false;
-	let offset = 0;
+	let fence;
+	let paragraph = [];
+	let paragraphOffset = 0;
 
-	for (const block of source.split(/\n\s*\n/gu)) {
-		const trimmed = block.trim();
-		if (trimmed.startsWith('```')) inFence = !inFence;
-		if (!inFence && trimmed && !trimmed.startsWith('#')) {
-			const text = normalizeText(trimmed.replace(/^>\s?/gmu, '').replace(/^[-*]\s+/gmu, ''));
-			if (text) passages.push({ file: filename, line: lineNumber(source, offset), text });
+	function flushParagraph() {
+		const text = normalizeText(
+			paragraph
+				.join('\n')
+				.replace(/^>\s?/gmu, '')
+				.replace(/^[-*]\s+/gmu, '')
+		);
+		if (text) passages.push({ file: filename, line: lineNumber(source, paragraphOffset), text });
+		paragraph = [];
+	}
+
+	for (const match of source.matchAll(/[^\n]*(?:\n|$)/gu)) {
+		if (!match[0]) continue;
+		const line = match[0].replace(/\n$/u, '');
+		const trimmed = line.trim();
+
+		const fenceMatch = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/u);
+		if (fence) {
+			if (
+				fenceMatch &&
+				fenceMatch[1][0] === fence.marker &&
+				fenceMatch[1].length >= fence.length &&
+				!fenceMatch[2].trim()
+			) {
+				fence = undefined;
+			}
+			continue;
 		}
-		offset += block.length + 2;
+		if (fenceMatch) {
+			flushParagraph();
+			fence = {
+				marker: fenceMatch[1][0],
+				length: fenceMatch[1].length,
+				offset: match.index
+			};
+			continue;
+		}
+		if (!trimmed || trimmed.startsWith('#')) {
+			flushParagraph();
+			continue;
+		}
+		if (paragraph.length === 0) paragraphOffset = match.index;
+		paragraph.push(line);
+	}
+	flushParagraph();
+	if (fence) {
+		passages.push({
+			file: filename,
+			line: lineNumber(source, fence.offset),
+			text: '',
+			extractionError: 'Cannot statically audit plain text after an unclosed fenced code block.',
+			extractionErrorId: 'copy-fence-unclosed'
+		});
 	}
 
 	return passages;

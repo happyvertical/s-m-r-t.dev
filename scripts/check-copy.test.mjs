@@ -112,6 +112,46 @@ describe('copy checker', () => {
 		);
 	});
 
+	it('rejects visible copy imported from an unscanned module', () => {
+		const passages = extractSveltePassages(
+			"<script>import { copy } from '$lib/messages';</script><p>{copy}</p>",
+			'fixture.svelte'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ extractionErrorId: 'copy-svelte-expression-unextractable' })
+			])
+		);
+	});
+
+	it('allows visible copy imported from an audited data module', () => {
+		const passages = extractSveltePassages(
+			"<script>import { copy } from '$lib/data/messages';</script><p>{copy}</p>",
+			'fixture.svelte'
+		);
+		expect(passages.some((item) => item.extractionError)).toBe(false);
+	});
+
+	it('rejects unclassified page data from SvelteKit runtime state', () => {
+		const passages = extractSveltePassages(
+			"<script>import { page } from '$app/state';</script><p>{page.data.copy}</p>",
+			'fixture.svelte'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ extractionErrorId: 'copy-svelte-expression-unextractable' })
+			])
+		);
+	});
+
+	it('allows the displayed SvelteKit error state fields', () => {
+		const passages = extractSveltePassages(
+			"<script>import { page } from '$app/state';</script><p>{page.status}</p><span>{page.error?.message}</span>",
+			'fixture.svelte'
+		);
+		expect(passages.some((item) => item.extractionError)).toBe(false);
+	});
+
 	it('checks literal alternatives in visible Svelte expressions', () => {
 		const passages = extractSveltePassages(
 			"<button>{open ? 'Close menu' : 'Open menu'}</button>",
@@ -433,6 +473,18 @@ describe('copy checker', () => {
 		);
 	});
 
+	it('rejects a dynamic producer inside a data prose template', () => {
+		const passages = extractTypeScriptPassages(
+			'export const item = { title: `Prefix ${getCopy()}` };',
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ extractionErrorId: 'copy-prose-value-unextractable' })
+			])
+		);
+	});
+
 	it('rejects a member value derived from an unsupported prose producer', () => {
 		const passages = extractTypeScriptPassages(
 			'export const item = { title: getCopy().title };',
@@ -594,5 +646,100 @@ describe('copy checker', () => {
 				})
 			])
 		);
+	});
+
+	it('audits prose after a same-block fenced code sample', async () => {
+		const projectRoot = await mkdtemp(path.join(tmpdir(), 'smrt-copy-check-'));
+		try {
+			const staticDirectory = path.join(projectRoot, 'static');
+			await mkdir(staticDirectory, { recursive: true });
+			await writeFile(
+				path.join(staticDirectory, 'llms.txt'),
+				'```js\nconst example = true;\n```\nUse business logic here.'
+			);
+			const result = await runCopyCheck(projectRoot);
+			expect(result.errors).toEqual(
+				expect.arrayContaining([
+					expect.objectContaining({ id: 'prohibited-business-logic', file: 'static/llms.txt' })
+				])
+			);
+		} finally {
+			await rm(projectRoot, { recursive: true, force: true });
+		}
+	});
+
+	it('does not close a long fence with a shorter marker', async () => {
+		const projectRoot = await mkdtemp(path.join(tmpdir(), 'smrt-copy-check-'));
+		try {
+			const staticDirectory = path.join(projectRoot, 'static');
+			await mkdir(staticDirectory, { recursive: true });
+			await writeFile(
+				path.join(staticDirectory, 'llms.txt'),
+				'````markdown\n```\n````\nUse business logic here.'
+			);
+			const result = await runCopyCheck(projectRoot);
+			expect(result.errors).toEqual(
+				expect.arrayContaining([
+					expect.objectContaining({ id: 'prohibited-business-logic', file: 'static/llms.txt' })
+				])
+			);
+		} finally {
+			await rm(projectRoot, { recursive: true, force: true });
+		}
+	});
+
+	it('supports tilde fences', async () => {
+		const projectRoot = await mkdtemp(path.join(tmpdir(), 'smrt-copy-check-'));
+		try {
+			const staticDirectory = path.join(projectRoot, 'static');
+			await mkdir(staticDirectory, { recursive: true });
+			await writeFile(
+				path.join(staticDirectory, 'llms.txt'),
+				'~~~js\nconst example = true;\n~~~\nUse business logic here.'
+			);
+			const result = await runCopyCheck(projectRoot);
+			expect(result.errors).toEqual(
+				expect.arrayContaining([
+					expect.objectContaining({ id: 'prohibited-business-logic', file: 'static/llms.txt' })
+				])
+			);
+		} finally {
+			await rm(projectRoot, { recursive: true, force: true });
+		}
+	});
+
+	it('reports an unclosed fence', async () => {
+		const projectRoot = await mkdtemp(path.join(tmpdir(), 'smrt-copy-check-'));
+		try {
+			const staticDirectory = path.join(projectRoot, 'static');
+			await mkdir(staticDirectory, { recursive: true });
+			await writeFile(path.join(staticDirectory, 'llms.txt'), '```js\nconst example = true;');
+			const result = await runCopyCheck(projectRoot);
+			expect(result.errors).toEqual(
+				expect.arrayContaining([
+					expect.objectContaining({ id: 'copy-fence-unclosed', file: 'static/llms.txt' })
+				])
+			);
+		} finally {
+			await rm(projectRoot, { recursive: true, force: true });
+		}
+	});
+
+	it('does not treat a four-space-indented marker as a fence', async () => {
+		const projectRoot = await mkdtemp(path.join(tmpdir(), 'smrt-copy-check-'));
+		try {
+			const staticDirectory = path.join(projectRoot, 'static');
+			await mkdir(staticDirectory, { recursive: true });
+			await writeFile(path.join(staticDirectory, 'llms.txt'), '    ```\nUse business logic here.');
+			const result = await runCopyCheck(projectRoot);
+			expect(result.errors).toEqual(
+				expect.arrayContaining([
+					expect.objectContaining({ id: 'prohibited-business-logic', file: 'static/llms.txt' })
+				])
+			);
+			expect(result.errors.some((item) => item.id === 'copy-fence-unclosed')).toBe(false);
+		} finally {
+			await rm(projectRoot, { recursive: true, force: true });
+		}
 	});
 });
