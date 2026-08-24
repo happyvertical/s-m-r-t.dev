@@ -321,7 +321,7 @@ function nearestProseProperty(node) {
 	return undefined;
 }
 
-export function extractTypeScriptPassages(source, filename, baseLine = 1, includeProse = true) {
+export function extractTypeScriptPassages(source, filename, baseLine = 1) {
 	const scriptKind =
 		filename.endsWith('.js') || filename.endsWith('.mjs') ? ts.ScriptKind.JS : ts.ScriptKind.TS;
 	const ast = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true, scriptKind);
@@ -351,7 +351,7 @@ export function extractTypeScriptPassages(source, filename, baseLine = 1, includ
 					classificationError: `Classify the data property "${name ?? '[unknown property]'}" as prose or an explicit exclusion.`
 				});
 			}
-			if (includeProse && name && PROSE_PROPERTIES.has(name) && ts.isIdentifier(node.initializer)) {
+			if (name && PROSE_PROPERTIES.has(name) && ts.isIdentifier(node.initializer)) {
 				const text = bindings.get(node.initializer.text);
 				if (text) {
 					passages.push({
@@ -369,10 +369,6 @@ export function extractTypeScriptPassages(source, filename, baseLine = 1, includ
 			ts.isNoSubstitutionTemplateLiteral(node) ||
 			ts.isTemplateExpression(node);
 		if (isStringValue) {
-			if (!includeProse) {
-				ts.forEachChild(node, visit);
-				return;
-			}
 			const name = nearestProseProperty(node);
 			if (!name || !PROSE_PROPERTIES.has(name)) {
 				ts.forEachChild(node, visit);
@@ -682,9 +678,16 @@ export function extractSveltePassages(source, filename) {
 	for (const match of scripts) {
 		const scriptSource = match[1];
 		const scriptOffset = match.index + match[0].indexOf(scriptSource);
-		passages.push(
-			...extractTypeScriptPassages(scriptSource, filename, lineNumber(source, scriptOffset), false)
+		const scriptPassages = extractTypeScriptPassages(
+			scriptSource,
+			filename,
+			lineNumber(source, scriptOffset)
 		);
+		for (const passage of scriptPassages) {
+			const alreadyRendered =
+				passage.text && passages.some((rendered) => rendered.text === passage.text);
+			if (!alreadyRendered) passages.push(passage);
+		}
 	}
 
 	return passages;

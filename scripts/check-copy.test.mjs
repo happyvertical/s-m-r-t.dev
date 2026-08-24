@@ -229,6 +229,19 @@ describe('copy checker', () => {
 		expect(passages.map((item) => item.text)).toEqual(['First.', 'Second.']);
 	});
 
+	it('checks unrendered prose configuration in Svelte scripts', () => {
+		const passages = extractSveltePassages(
+			"<script>const config = { meta: { title: 'Use business logic here.' } };</script><Widget {config} />",
+			'fixture.svelte'
+		);
+		expect(passages.map((item) => item.text)).toEqual(['Use business logic here.']);
+		expect(auditPassages(passages)).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ id: 'prohibited-business-logic', severity: 'error' })
+			])
+		);
+	});
+
 	it('keeps interpolated data copy in the project passages', async () => {
 		const { passages } = await extractProjectPassages();
 		expect(passages).toEqual(
