@@ -300,6 +300,14 @@ export function extractTypeScriptPassages(source, filename, baseLine = 1) {
 	const scriptKind =
 		filename.endsWith('.js') || filename.endsWith('.mjs') ? ts.ScriptKind.JS : ts.ScriptKind.TS;
 	const ast = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true, scriptKind);
+	if (ast.parseDiagnostics.length > 0) {
+		return ast.parseDiagnostics.map((diagnostic) => ({
+			file: filename,
+			line: baseLine + lineNumber(source, diagnostic.start ?? 0) - 1,
+			text: '',
+			parseError: `TypeScript parse error: ${ts.flattenDiagnosticMessageText(diagnostic.messageText, ' ')}`
+		}));
+	}
 	const passages = [];
 
 	function visit(node) {

@@ -158,4 +158,18 @@ describe('copy checker', () => {
 			])
 		);
 	});
+
+	it('reports malformed TypeScript copy sources', () => {
+		const passages = extractTypeScriptPassages(
+			"export const item = { title: 'Fine copy.';",
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					parseError: expect.stringContaining("'}' expected")
+				})
+			])
+		);
+	});
 });
