@@ -156,7 +156,8 @@ describe('copy checker', () => {
 		for (const source of [
 			'<Widget helperText="Help the reader." />',
 			"<Widget helperText={'Use business logic here.'} />",
-			"<Widget helperText={ready ? 'Ready.' : 'Wait.'} />"
+			"<Widget helperText={ready ? 'Ready.' : 'Wait.'} />",
+			"<Widget helperText={String('Use business logic here.')} />"
 		]) {
 			const passages = extractSveltePassages(source, 'fixture.svelte');
 			expect(passages).toEqual(
@@ -319,7 +320,7 @@ describe('copy checker', () => {
 
 	it('checks unrendered prose configuration in Svelte scripts', () => {
 		const passages = extractSveltePassages(
-			"<script>const config = { meta: { title: 'Use business logic here.' } };</script><Widget {config} />",
+			"<script>const config = { meta: { title: 'Use business logic here.' } };</script><Widget article={config} />",
 			'fixture.svelte'
 		);
 		expect(passages.map((item) => item.text)).toEqual(['Use business logic here.']);
@@ -332,7 +333,7 @@ describe('copy checker', () => {
 
 	it('keeps repeated unrendered script declarations separate', () => {
 		const passages = extractSveltePassages(
-			"<script>const first = { title: 'Same.' }; const second = { title: 'Same.' };</script><Widget {first} {second} />",
+			"<script>const first = { title: 'Same.' }; const second = { title: 'Same.' };</script><Widget article={first} guide={second} />",
 			'fixture.svelte'
 		);
 		expect(passages.map((item) => item.text)).toEqual(['Same.', 'Same.']);

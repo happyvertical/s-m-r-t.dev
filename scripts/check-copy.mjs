@@ -1176,23 +1176,14 @@ function isCopyAttribute(node, attribute, bindings) {
 	return !inputType || new Set(['button', 'image', 'reset', 'submit']).has(inputType);
 }
 
-function isClassifiedComponentAttribute(attribute, bindings, allowedDynamicNames) {
-	const expressionItems = Array.isArray(attribute.value)
-		? attribute.value.filter((item) => item.expression)
-		: [];
+function isClassifiedComponentAttribute(attribute) {
 	return (
 		COPY_ATTRIBUTES.has(attribute.name) ||
 		PROSE_PROPERTIES.has(attribute.name) ||
 		NON_PROSE_PROPERTIES.has(attribute.name) ||
 		COMPONENT_NON_COPY_ATTRIBUTES.has(attribute.name) ||
 		attribute.name.startsWith('data-') ||
-		attribute.name.startsWith('aria-') ||
-		(expressionItems.length > 0 &&
-			expressionItems.every(
-				(item) =>
-					!normalizeText(extractExpressionText(item.expression, bindings)) &&
-					!expressionHasUnextractableCopy(item.expression, bindings, allowedDynamicNames)
-			))
+		attribute.name.startsWith('aria-')
 	);
 }
 
@@ -1334,7 +1325,7 @@ export function extractSveltePassages(source, filename) {
 				if (attribute.type !== 'Attribute') continue;
 				if (
 					(node.type === 'Component' || node.type === 'InlineComponent') &&
-					!isClassifiedComponentAttribute(attribute, activeBindings, activeAllowedDynamicNames)
+					!isClassifiedComponentAttribute(attribute)
 				) {
 					passages.push({
 						file: filename,
