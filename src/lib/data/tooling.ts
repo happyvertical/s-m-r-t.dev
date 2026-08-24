@@ -895,7 +895,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 			{
 				title: 'Cache and tenancy safety',
 				intro:
-					'Catalogs are private by default on both planes. A shared catalog requires explicit opt-in. The server re-verifies the declared shape and downgrades invalid catalogs. This check prevents tenant-scoped or principal-gated tools from entering a shared cache. Workspace knowledge resources use a zero cache lifetime because the server rebuilds them per request. They carry no reliable invalidation signal.',
+					'Catalogs are private by default on both Development MCP and application MCP. A shared catalog requires explicit opt-in. The server re-verifies the declared shape and downgrades invalid catalogs. This check prevents tenant-scoped or principal-gated tools from entering a shared cache. Workspace knowledge resources use a zero cache lifetime because the server rebuilds them per request. They carry no reliable invalidation signal.',
 				points: [
 					'Tenant interceptors and field policy stay in the path for every generated operation.',
 					'Never expose the generated stdio server remotely; it has no per-request principal.',
@@ -903,7 +903,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 				],
 				links: [
 					{ label: 'Reference: security defaults', href: '/reference/security' },
-					{ label: 'Runtime plane detail', href: '/tooling/app-mcp' }
+					{ label: 'Application MCP detail', href: '/tooling/app-mcp' }
 				]
 			}
 		],
