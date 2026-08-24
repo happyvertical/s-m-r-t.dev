@@ -63,16 +63,6 @@ would otherwise parse as expressions and fail on at render time. Escape them as
 `{'{'}` / `{'}'}`. `eslint`'s `no-undef` rule is load-bearing for the same reason —
 it catches `{UndefinedVar}` in templates.
 
-`pnpm run check:copy` checks public prose against the objective project writing
-rules. It fails for prohibited terminology and gives advisory warnings for rules
-that need human review. Automated success never proves full ASD-STE100 conformity.
-
-## Documentation writing standard
-
-Public technical copy follows ASD-STE100 Simplified Technical English, Issue 9.
-Read `docs/writing-standard.md` before you add or change public copy. Each
-documentation pull request must include the manual review evidence defined there.
-
 ## How the content is authored
 
 The site is data-driven, not page-per-file: the guide, reference, and package
