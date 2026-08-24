@@ -1649,6 +1649,9 @@ export function guideLibrarySearchTerms(guide: GuideLibraryItem): string[] {
 		...guide.task.prerequisites,
 		...guide.task.concepts,
 		...guide.packages,
+		...guide.task.relatedUi.map((link) => link.label),
+		...guide.task.relatedModules.map((link) => link.label),
+		...guide.task.relatedReference.map((link) => link.label),
 		guide.task.expectedResult
 	];
 }

@@ -80,7 +80,12 @@ describe('guide library', () => {
 		const tenant = getGuideLibraryItem('/guides/multi-tenant-lifecycle');
 		expect(tenant).toBeDefined();
 		expect(guideLibrarySearchTerms(tenant!)).toEqual(
-			expect.arrayContaining(['Build the foundation', 'Tenant hierarchy', 'Intermediate'])
+			expect.arrayContaining([
+				'Build the foundation',
+				'Tenant hierarchy',
+				'Intermediate',
+				'Authorization reference'
+			])
 		);
 	});
 
