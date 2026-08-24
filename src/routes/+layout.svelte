@@ -3,12 +3,9 @@
 	import favicon from '$lib/assets/favicon-32.png';
 	import '$lib/styles/reset.css';
 	import '$lib/styles/variables.css';
-	import { ThemeProvider } from '@happyvertical/smrt-ui/themes';
 	import '@happyvertical/smrt-ui/themes/styles/all.css';
 	import { Provider } from '@happyvertical/smrt-svelte';
-	import Header from '$lib/components/Header.svelte';
-	import DocsShell from '$lib/components/DocsShell.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import SiteShell from '$lib/components/SiteShell.svelte';
 
 	let { children } = $props();
 	const isStandalonePlayground = $derived(page.url.pathname === '/playground');
@@ -23,26 +20,8 @@
 	{#if isStandalonePlayground}
 		{@render children()}
 	{:else}
-		<ThemeProvider preset="smrt" colorScheme="system" persist={true}>
-			<div class="app">
-				<Header />
-				<main><DocsShell>{@render children()}</DocsShell></main>
-				<Footer />
-			</div>
-		</ThemeProvider>
+		<SiteShell pathname={page.url.pathname} hash={page.url.hash}>
+			{@render children()}
+		</SiteShell>
 	{/if}
 </Provider>
-
-<style>
-	.app {
-		min-height: 100svh;
-		display: flex;
-		flex-direction: column;
-		background: var(--site-paper);
-		color: var(--site-ink);
-	}
-
-	main {
-		flex: 1;
-	}
-</style>
