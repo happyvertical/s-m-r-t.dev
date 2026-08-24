@@ -9,7 +9,196 @@ export const TOOLING_PINNED_VERSION = '0.42.4';
 /** Canonical upstream tree for the release above. */
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${TOOLING_PINNED_VERSION}`;
 
+export const toolingSurfaceBoundaries = [
+	{
+		label: 'CLI, templates, and scanner',
+		eyebrow: 'Developers and CI',
+		description:
+			'Runs in the local workspace. Commands can create files, generate artifacts, inspect manifests, and apply migrations to the configured database.',
+		plainEnglish:
+			'You need to start an app, change its model, generate interfaces, verify it, or operate its development database.',
+		href: '/tooling/development-workflow'
+	},
+	{
+		label: 'Knowledge commands',
+		eyebrow: 'Developers and coding agents',
+		description:
+			'Reads workspace files, generated knowledge, installed-package contracts, and git history. It does not inspect live application data.',
+		plainEnglish:
+			'You need a deterministic index, freshness result, change report, or review and architecture context.',
+		href: '/tooling/knowledge'
+	},
+	{
+		label: 'Development MCP',
+		eyebrow: 'Coding agents',
+		description:
+			'Runs as a local, read-only stdio server. It inspects the workspace and installed packages but cannot access the running application.',
+		plainEnglish:
+			'A coding agent needs structured discovery, diagnostics, generation output, or review context through MCP.',
+		href: '/tooling/dev-mcp'
+	},
+	{
+		label: 'Generated local MCP',
+		eyebrow: 'Local application agents',
+		description:
+			'Runs beside the application and operates live data. It gets credentials from its environment and has no per-request principal, so it stays local.',
+		plainEnglish:
+			'A trusted application agent on the same machine must use generated model operations.',
+		href: '/tooling/app-mcp'
+	},
+	{
+		label: 'Hosted application MCP',
+		eyebrow: 'Remote application agents',
+		description:
+			'Runs as a stateless HTTP route. A gateway terminates authorization, and the application resolves a principal for each request.',
+		plainEnglish:
+			'A remote application agent needs permitted operations against a deployed application.',
+		href: '/tooling/app-mcp'
+	},
+	{
+		label: 'WebMCP',
+		eyebrow: 'Browser-session application agents',
+		description:
+			'Registers tools in the browser page and calls the generated REST surface as the signed-in page user. It is not a separate server.',
+		plainEnglish:
+			'An application agent in the browser must use actions that the current page exposes.',
+		href: '/capabilities/webmcp'
+	},
+	{
+		label: 'Agent Plugin',
+		eyebrow: 'Coding-agent clients',
+		description:
+			'Packages the same local Development MCP server with manifests, schemas, and skills. The client keeps credentials outside the package.',
+		plainEnglish:
+			'A compatible coding-agent client can discover the development integration from a package.',
+		href: '/tooling/agent-plugin'
+	}
+] as const;
+
 export const toolingGuides: Guide[] = [
+	{
+		slug: 'development-workflow',
+		navTitle: 'CLI and local workflow',
+		eyebrow: 'Developer tooling',
+		title: 'Build, inspect, test, and run an application',
+		lede: 'Use the application starters and the framework CLI for the local development loop. The scanner builds the shared manifest. The Vitest plugin gives tests the same model metadata.',
+		plainEnglish:
+			'This page connects the tools a developer uses from the first scaffold through model changes, tests, migrations, and local operation.',
+		packages: ['smrt-cli', 'smrt-scanner', 'smrt-template-sveltekit', 'smrt-vitest'],
+		pinnedVersion: TOOLING_PINNED_VERSION,
+		sources: [
+			{ label: 'CLI README', href: `${SMRT_TREE}/packages/cli/README.md` },
+			{ label: 'CLI AGENTS.md', href: `${SMRT_TREE}/packages/cli/AGENTS.md` },
+			{ label: 'Scanner AGENTS.md', href: `${SMRT_TREE}/packages/scanner/AGENTS.md` },
+			{
+				label: 'SvelteKit template AGENTS.md',
+				href: `${SMRT_TREE}/packages/template-sveltekit/AGENTS.md`
+			},
+			{ label: 'Vitest AGENTS.md', href: `${SMRT_TREE}/packages/vitest/AGENTS.md` }
+		],
+		sections: [
+			{
+				title: 'Choose a supported starting point',
+				intro:
+					'The basic SvelteKit template is the small, ground-up path. It includes one model, SQLite, tenant and session hooks, the application shell, and generated interfaces. The SaaS starter is the production-shaped path with accounts, onboarding, subscriptions, workers, mobile clients, and deployment files.',
+				points: [
+					'Use the basic template when you want to learn or build a focused application.',
+					'Use the SaaS starter when the product needs the common multi-tenant application systems from the start.',
+					'Use smrt init only to add framework files to an existing SvelteKit project.'
+				],
+				links: [
+					{ label: 'Compare the application starters', href: '/starters' },
+					{ label: 'Ground-up SvelteKit guide', href: '/starters/ground-up' },
+					{ label: 'SaaS starter guide', href: '/starters/saas' }
+				]
+			},
+			{
+				title: 'Keep one short local loop',
+				intro:
+					'Start the Vite development server while you change models and pages. The framework plugins scan the object sources and refresh the local manifest, registration, types, routes, and knowledge artifact. Restart the server after you add a new object or change scanner inputs if the generated view does not update.',
+				filename: 'terminal',
+				lang: 'bash',
+				code: `pnpm dev
+
+# In a second terminal, inspect the generated project view.
+pnpm smrt introspect
+pnpm smrt doctor
+
+# Before review, check types and produce the static build.
+pnpm check
+pnpm build`,
+				links: [{ label: 'Framework concepts', href: '/framework' }]
+			},
+			{
+				title: 'Use the CLI as the developer control surface',
+				intro:
+					'The CLI discovers project and installed-package manifests. It can inspect objects, generate interfaces, scaffold playground files, run diagnostics, and operate the configured development database. Generated object commands use the action lists in the model manifest.',
+				points: [
+					'Use introspect, objects, schema, status, and doctor to inspect the project.',
+					'Use generate-types, generate-routes, generate-register, and generate-mcp for explicit generation tasks.',
+					'Use playground init, playground list, and playground dev for component and package previews.',
+					'Use the knowledge command family when the output is evidence for a coding agent.'
+				],
+				links: [
+					{ label: 'Deterministic knowledge commands', href: '/tooling/knowledge' },
+					{ label: 'Working Playground', href: '/playground' }
+				]
+			},
+			{
+				title: 'Treat the manifest as generated evidence',
+				intro:
+					'The scanner parses TypeScript syntax and never executes the source. It resolves supported class inheritance and converts the result into the manifest shape that migrations, tests, and interface generators consume. A scan is not a full TypeScript type check. Rebuild after source changes before you trust a generated artifact.',
+				points: [
+					'The scanner excludes dependency, hidden, and generated directories by default.',
+					'A scan diagnostic blocks production manifest generation instead of publishing a partial result.',
+					'The runtime manifest supports registration. The separate knowledge artifact supports developer and coding-agent inspection.'
+				],
+				links: [
+					{ label: 'Reference: decorators', href: '/reference/decorators' },
+					{ label: 'Reference: generated interfaces', href: '/reference/interfaces' }
+				]
+			},
+			{
+				title: 'Make migrations follow the model',
+				intro:
+					'Schema migrations are generated from the current manifest. The CLI does not generate migration files. Build first so the manifest is current. Then inspect the status or diff before you apply the change. The basic template makes its db:migrate script build before it runs the migration command.',
+				filename: 'terminal',
+				lang: 'bash',
+				code: `pnpm build
+pnpm smrt db:status
+pnpm smrt db:diff
+pnpm smrt db:migrate --dry-run
+pnpm smrt db:migrate`,
+				links: [{ label: 'Reference: configuration', href: '/reference/configuration' }]
+			},
+			{
+				title: 'Give tests the same generated model',
+				intro:
+					'Every framework test project uses smrtVitestPlugin. It scans source at Vitest startup, loads installed manifests, and registers the classes that tests use. Restart Vitest after you add a model or field. Use the isolated database helpers for model and policy tests.',
+				filename: 'vitest.config.ts',
+				code: `import { smrtVitestPlugin } from '@happyvertical/smrt-vitest';
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  plugins: [smrtVitestPlugin()],
+  test: {
+    environment: 'node',
+    setupFiles: ['@happyvertical/smrt-vitest/setup']
+  }
+});`,
+				links: [
+					{ label: 'Guide: test your application', href: '/guides/testing-your-app' },
+					{ label: 'Reference: testing', href: '/reference/testing' }
+				]
+			}
+		],
+		related: [
+			{ label: 'Framework overview', href: '/framework' },
+			{ label: 'Application starters', href: '/starters' },
+			{ label: 'Testing guide', href: '/guides/testing-your-app' },
+			{ label: 'Generated interfaces reference', href: '/reference/interfaces' }
+		]
+	},
 	{
 		slug: 'knowledge',
 		navTitle: 'Knowledge tooling',
@@ -117,6 +306,21 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 				]
 			},
 			{
+				title: 'Know what the evidence can prove',
+				intro:
+					'The index reports declared workspace and installed-package facts. It records the selected source and diagnostics so a coding agent can tell generated evidence from a fallback scan. It does not prove that a deployed process loaded the same artifact. It also does not prove that a caller has authority to use a generated operation.',
+				points: [
+					'Package versions and AGENTS.md hashes identify the installed contract that the index read.',
+					'Coverage and diagnostics identify missing or stale evidence instead of filling gaps with a model answer.',
+					'Only an explicit runtime bridge can report observed process capabilities, and it must label them separately.',
+					'Authentication, tenant scope, permission, and field policy remain runtime decisions.'
+				],
+				links: [
+					{ label: 'Development MCP runtime boundary', href: '/tooling/dev-mcp' },
+					{ label: 'Reference: security defaults', href: '/reference/security' }
+				]
+			},
+			{
 				title: 'When output looks stale',
 				intro:
 					'Stale output almost always means the artifact behind it is stale or was never built. Run the downstream build or dev server so the domain artifact exists, then re-run the checker. Because the checks are deterministic, the same workspace produces the same result, which makes a changed answer meaningful.',
@@ -133,6 +337,12 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 					'CLI callers request the full detail level, so command output embeds authored documents and complete package records. MCP callers receive the budgeted summary by default and can opt into detail full. The underlying knowledge is identical; only the projection differs.',
 				links: [{ label: 'Using it from an agent: smrt-dev-mcp', href: '/tooling/dev-mcp' }]
 			}
+		],
+		related: [
+			{ label: 'CLI and local workflow', href: '/tooling/development-workflow' },
+			{ label: 'Development MCP', href: '/tooling/dev-mcp' },
+			{ label: 'Framework overview', href: '/framework' },
+			{ label: 'Generated interfaces reference', href: '/reference/interfaces' }
 		]
 	},
 	{
@@ -142,7 +352,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 		title: 'The development MCP server',
 		lede: '@happyvertical/smrt-dev-mcp gives a coding agent the same deterministic workspace and installed-package knowledge as the CLI. It also provides class generation, project introspection, and portable review and architecture bundles.',
 		plainEnglish:
-			'This server helps an agent understand and change your codebase. It never touches your running application, its data, or your users.',
+			'This read-only server helps a coding agent understand your codebase. It returns generated source as output but never writes it. It cannot touch your running application, its data, or its users.',
 		packages: ['smrt-dev-mcp', 'smrt-scanner', 'smrt-core'],
 		pinnedVersion: TOOLING_PINNED_VERSION,
 		sources: [
@@ -165,6 +375,21 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 						label: 'The broader pattern: agent-legible applications',
 						href: '/capabilities/agent-legible-applications'
 					}
+				]
+			},
+			{
+				title: 'Inspect the complete declared workspace view',
+				intro:
+					'A coding agent can inspect project source, runtime manifests, knowledge artifacts, and installed package contracts through structured tools and resources. The results identify packages, objects, fields, relationships, generated interfaces, and authored documentation. Coverage and diagnostics state what the server did not find.',
+				points: [
+					'Source and manifest paths show where each declared object came from.',
+					'Object results include fields, relationships, methods, interface settings, and package identity when the selected evidence contains them.',
+					'Installed package entries include the package version and the hash of its version-matched AGENTS.md.',
+					'Review and architecture bundles carry the same coverage and diagnostics as the underlying index.'
+				],
+				links: [
+					{ label: 'Knowledge evidence and discovery order', href: '/tooling/knowledge' },
+					{ label: 'Reference: generated interfaces', href: '/reference/interfaces' }
 				]
 			},
 			{
@@ -304,10 +529,10 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 		slug: 'app-mcp',
 		navTitle: 'Generated and app MCP',
 		eyebrow: 'Developer tooling',
-		title: 'Exposing a running application over MCP',
-		lede: 'The Tier 1 runtime surfaces use the same @smrt() objects as your application. Serve them over local stdio or a stateless Streamable HTTP endpoint.',
+		title: 'Runtime MCP surfaces for application agents',
+		lede: 'Generated local MCP, hosted application MCP, and WebMCP use the same @smrt() model. They run at different boundaries and do not give an application agent the same identity or authority.',
 		plainEnglish:
-			'This is the plane where an agent performs real work on real data. Every call resolves through the same models, principals, tenants, and field policy as the rest of the application.',
+			'These surfaces let an application agent operate real data. Local stdio gets credentials from its environment. Hosted MCP resolves a principal per request. WebMCP uses the signed-in browser session.',
 		packages: ['smrt-app-mcp', 'smrt-core', 'smrt-app-cli'],
 		pinnedVersion: TOOLING_PINNED_VERSION,
 		sources: [
@@ -457,17 +682,39 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 					{ label: 'Reference: generated interfaces', href: '/reference/interfaces' },
 					{ label: 'Capability: WebMCP in the browser', href: '/capabilities/webmcp' }
 				]
+			},
+			{
+				title: 'WebMCP stays in the browser session',
+				intro:
+					'WebMCP is not the local stdio server and it is not the hosted application MCP route. The page registers selected tool descriptions in a compatible browser. Tool execution uses the generated REST client as the signed-in page user. Existing authentication, tenant, permission, writable-field, and field-policy checks stay in the request path.',
+				points: [
+					'The browser page selects which generated tool descriptions it registers.',
+					'The page session supplies the application identity. WebMCP does not introduce a coding-agent identity.',
+					'The browser surface does not give the Development MCP server access to application data.',
+					'Use hosted application MCP when a remote agent runs outside the browser session.'
+				],
+				links: [
+					{ label: 'WebMCP capability', href: '/capabilities/webmcp' },
+					{ label: 'Reference: generated interfaces', href: '/reference/interfaces' },
+					{ label: 'Reference: security defaults', href: '/reference/security' }
+				]
 			}
+		],
+		related: [
+			{ label: 'Expose an application over MCP', href: '/guides/expose-your-app-over-mcp' },
+			{ label: 'Generated interfaces reference', href: '/reference/interfaces' },
+			{ label: 'Security reference', href: '/reference/security' },
+			{ label: 'Development MCP', href: '/tooling/dev-mcp' }
 		]
 	},
 	{
 		slug: 'agent-plugin',
 		navTitle: 'Agent Plugin packaging',
 		eyebrow: 'Developer tooling',
-		title: 'The dev server ships as a portable plugin',
-		lede: 'The published smrt-dev-mcp package root is a self-contained Agent Plugins 1.0.0 plugin, so a compatible client can install and discover it without hand-written MCP configuration.',
+		title: 'The development server ships as an Agent Plugin',
+		lede: 'Agent Plugin is the precise name for the portable coding-agent integration package at the smrt-dev-mcp package root. A compatible client can discover it without hand-written MCP configuration.',
 		plainEnglish:
-			'A compatible client can read two small manifests instead of a configuration file. The manifests identify the server launcher and the bundled skill location.',
+			'A compatible coding-agent client can read two small manifests instead of a configuration file. The manifests identify the local server launcher and the bundled skill location.',
 		packages: ['smrt-dev-mcp'],
 		pinnedVersion: TOOLING_PINNED_VERSION,
 		sources: [
@@ -538,6 +785,11 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 					'Packaging is a distribution convenience, not a different server. Manifest-based and manually configured clients launch the same stdio binary. Both clients receive the same tools, prompts, and resources. Use direct configuration when your client does not support Agent Plugins or needs an absolute launcher path.',
 				links: [{ label: 'Direct stdio configuration', href: '/tooling/dev-mcp' }]
 			}
+		],
+		related: [
+			{ label: 'Development MCP', href: '/tooling/dev-mcp' },
+			{ label: 'Knowledge tooling', href: '/tooling/knowledge' },
+			{ label: 'Compatibility and operations', href: '/tooling/compatibility' }
 		]
 	},
 	{
@@ -624,6 +876,23 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 				]
 			},
 			{
+				title: 'Keep deployment and authorization boundaries explicit',
+				intro:
+					'Each surface has one supported deployment boundary. Development MCP and the Agent Plugin run locally for a coding-agent client. Generated stdio runs locally beside the application. Hosted application MCP runs behind a gateway that terminates authorization. WebMCP runs in the signed-in browser session.',
+				points: [
+					'Do not expose Development MCP or generated stdio as a remote server.',
+					'The hosted route trusts the principal that the application adapter supplies. It does not validate bearer tokens.',
+					'The gateway must validate the token before it creates the request principal.',
+					'WebMCP sends operations through the generated REST boundary as the signed-in page user.',
+					'The Agent Plugin manifest contains no credentials or remote transport settings.'
+				],
+				links: [
+					{ label: 'Runtime MCP surfaces', href: '/tooling/app-mcp' },
+					{ label: 'Agent Plugin credential boundary', href: '/tooling/agent-plugin' },
+					{ label: 'Reference: security defaults', href: '/reference/security' }
+				]
+			},
+			{
 				title: 'Cache and tenancy safety',
 				intro:
 					'Catalogs are private by default on both planes. A shared catalog requires explicit opt-in. The server re-verifies the declared shape and downgrades invalid catalogs. This check prevents tenant-scoped or principal-gated tools from entering a shared cache. Workspace knowledge resources use a zero cache lifetime because the server rebuilds them per request. They carry no reliable invalidation signal.',
@@ -637,6 +906,12 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 					{ label: 'Runtime plane detail', href: '/tooling/app-mcp' }
 				]
 			}
+		],
+		related: [
+			{ label: 'Runtime MCP surfaces', href: '/tooling/app-mcp' },
+			{ label: 'Development MCP', href: '/tooling/dev-mcp' },
+			{ label: 'Security reference', href: '/reference/security' },
+			{ label: 'Application MCP guide', href: '/guides/expose-your-app-over-mcp' }
 		]
 	}
 ];
