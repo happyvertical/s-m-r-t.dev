@@ -1,10 +1,14 @@
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
 	auditPassages,
 	extractProjectPassages,
 	extractSveltePassages,
 	extractTypeScriptPassages,
-	findProjectCopySources
+	findProjectCopySources,
+	runCopyCheck
 } from './check-copy.mjs';
 
 const passage = (text) => [{ file: 'fixture.svelte', line: 1, text }];
@@ -131,6 +135,32 @@ describe('copy checker', () => {
 				expect.objectContaining({ id: 'prohibited-business-logic', severity: 'error' })
 			])
 		);
+	});
+
+	it('fails closed for an unsupported Svelte copy attribute shape', () => {
+		const passages = extractSveltePassages('<input aria-label>', 'fixture.svelte');
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					extractionError: expect.stringContaining('aria-label')
+				})
+			])
+		);
+	});
+
+	it('reports an unsupported Svelte copy attribute shape as an error', async () => {
+		const projectRoot = await mkdtemp(path.join(tmpdir(), 'smrt-copy-check-'));
+		try {
+			const routeDirectory = path.join(projectRoot, 'src/routes');
+			await mkdir(routeDirectory, { recursive: true });
+			await writeFile(path.join(routeDirectory, '+page.svelte'), '<input aria-label>');
+			const result = await runCopyCheck(projectRoot);
+			expect(result.errors).toEqual(
+				expect.arrayContaining([expect.objectContaining({ id: 'copy-attribute-unextractable' })])
+			);
+		} finally {
+			await rm(projectRoot, { recursive: true, force: true });
+		}
 	});
 
 	it('checks visible copy referenced through script bindings', () => {

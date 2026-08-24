@@ -647,7 +647,16 @@ export function extractSveltePassages(source, filename) {
 			}
 
 			for (const attribute of node.attributes ?? []) {
-				if (!COPY_ATTRIBUTES.has(attribute.name) || !Array.isArray(attribute.value)) continue;
+				if (!COPY_ATTRIBUTES.has(attribute.name)) continue;
+				if (!Array.isArray(attribute.value)) {
+					passages.push({
+						file: filename,
+						line: lineNumber(source, attribute.start),
+						text: '',
+						extractionError: `Cannot extract the copy attribute "${attribute.name}" from its compiler value shape.`
+					});
+					continue;
+				}
 				const text = normalizeText(
 					attribute.value.map((item) => nodeText(item, activeBindings)).join(' ')
 				);
@@ -854,11 +863,23 @@ export async function runCopyCheck(projectRoot = PROJECT_ROOT) {
 			})
 		);
 	}
+	for (const passage of passages) {
+		if (!passage.extractionError) continue;
+		findings.push(
+			finding({
+				severity: 'error',
+				id: 'copy-attribute-unextractable',
+				message: passage.extractionError,
+				passage
+			})
+		);
+	}
 
 	return {
 		files,
-		passageCount: passages.filter((passage) => !passage.parseError && !passage.classificationError)
-			.length,
+		passageCount: passages.filter(
+			(passage) => !passage.parseError && !passage.classificationError && !passage.extractionError
+		).length,
 		findings,
 		errors: findings.filter((item) => item.severity === 'error'),
 		warnings: findings.filter((item) => item.severity === 'warning')
