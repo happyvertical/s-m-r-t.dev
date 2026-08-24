@@ -1,6 +1,6 @@
 # s-m-r-t
 
-> s-m-r-t gives an application an explicit, governed model of what it means, what it can do, what it shows, and what an agent may operate. That one model can project into human interfaces, APIs, CLI, MCP, and WebMCP without maintaining a separate bot surface. Awareness is not authority: discovery never grants permission.
+> s-m-r-t gives an application an explicit, governed model of its meaning, operations, interfaces, and agent access. The application model can project into human interfaces, APIs, CLI, MCP, and WebMCP without a separate bot surface. Awareness is not authority: discovery never grants permission.
 
 ## Canonical technical documentation
 
@@ -16,10 +16,10 @@
 
 ## Released boundaries
 
-This site documents the installed s-m-r-t release. The released framework supports a shared domain model and manifest; generated REST, CLI, MCP, and selected WebMCP surfaces; agent-assisted form controls with explain, validate, staged-change, and confirmed-apply flows; and application MCP allow-lists and policy checks. These are explicit surfaces, not a grant to expose every model method or field.
+This site documents the installed s-m-r-t release. The framework supports a shared domain model and manifest. It generates REST, CLI, MCP, and selected WebMCP surfaces. Agent-assisted form controls support explain, validate, staged-change, and confirmed-apply flows. Application MCP surfaces include allow-lists and policy checks. These explicit surfaces do not expose every model method or field.
 
 Generated runtime operations still resolve through the application’s principal, tenant scope, field policy, writable-field rules, permissions, and any required confirmation. Development MCP is a separate, read-only workspace plane; it does not access a running application, application data, principals, tenants, or credentials.
 
 ## Runtime-environment registry boundary: conditional and unreleased by default
 
-The released development MCP does not connect to a running application or inspect its live ObjectRegistry. A future or application-provided runtime bridge may expose bounded capability metadata when it is explicitly installed, exposed, and discovered; do not assume a runtime-environment registry exists. Such a bridge must distinguish observed facts from declared facts and must not expose application records, credentials, principals, or tenant data. Live data operations remain on the generated and application MCP runtime plane and remain policy-controlled.
+The released development MCP does not connect to a running application or inspect its live ObjectRegistry. A future or application-provided runtime bridge can expose bounded capability metadata after explicit installation, exposure, and discovery. Do not assume that a runtime-environment registry exists. Such a bridge must distinguish observed facts from declared facts. The bridge must not expose application records, credentials, principals, or tenant data. Live data operations remain on the generated and application MCP runtime plane and remain policy-controlled.

@@ -41,8 +41,8 @@
 		<h1>Package reference</h1>
 		<div class="intro">
 			<p>
-				Open a package to read what it does, browse its components and playground entries, and check
-				how its models appear through REST, MCP, WebMCP, and CLI.
+				Open a package and read its purpose. Browse its components and playground entries. Check how
+				its models appear through REST, MCP, WebMCP, and CLI.
 			</p>
 			<dl>
 				<div>

@@ -65,7 +65,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 			{
 				title: 'Where objects come from, and why that is recorded',
 				intro:
-					'Package discovery reads the workspace globs rather than assuming a packages directory, so apps are indexed the same way packages are. Resolution runs in a fixed order: the packages list in pnpm-workspace.yaml, then workspaces in package.json, then packages/* as a last-resort fallback. Within each package, objects resolve from a domain artifact, then a package-local manifest, then a source scan, and the winner is recorded as objectSource with a reason.',
+					'Package discovery reads the workspace globs rather than assuming a packages directory, so apps are indexed the same way packages are. Resolution runs in a fixed order: the packages list in pnpm-workspace.yaml, then workspaces in package.json, then packages/* as a last-resort fallback. Within each package, objects resolve from a domain artifact, a package-local manifest, or a source scan. objectSource records the selected source and reason.',
 				points: [
 					'objectSource is one of domain-artifact, manifest, scanner, or none.',
 					'The workspace root is indexed when it has a package.json, with member directories excluded.',
@@ -90,7 +90,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 			{
 				title: 'Coverage and diagnostics instead of a silent empty answer',
 				intro:
-					'Coverage and diagnostics were added in schemaVersion 2. Coverage names the workspace globs, where they were read from, the package directories found, and which authored packages have or lack objects with a reason and a remedy. Discovering zero authored objects is an error-grade diagnostic that names the roots and artifact paths checked, so an unreadable project is never reported as a project with no model.',
+					'Coverage and diagnostics were added in schemaVersion 2. Coverage names the workspace globs, their source, and the package directories found. Coverage also identifies authored packages with and without objects and gives a reason and remedy. A zero-object result produces an error-grade diagnostic that names the checked roots and artifact paths. The tool never reports an unreadable project as a project with no model.',
 				points: [
 					'Coverage and diagnostics are computed before scope filtering, because they describe discovery itself.',
 					'Diagnostics propagate into the architecture, review, and reflection results.',
@@ -100,7 +100,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 			{
 				title: 'Authored documentation is part of the contract',
 				intro:
-					'AGENTS.md chains are additive: a package carries its own instructions and an agent loads the chain it sits in. A package nested inside another workspace package deliberately carries no AGENTS.md or CLAUDE.md, because the agent would otherwise load the parent file and the child file together; that expertise belongs in the parent linked module docs instead.',
+					'AGENTS.md chains are additive: a package carries its own instructions and an agent loads the chain it sits in. A package nested inside another workspace package deliberately carries no AGENTS.md or CLAUDE.md. Otherwise, the agent would load the parent and child files together. Put that expertise in the linked module documentation for the parent.',
 				points: [
 					'Authored docs are required even for private packages.',
 					'A reappearing nested AGENTS.md raises a nested-agents-md error.',
@@ -140,7 +140,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 		navTitle: 'smrt-dev-mcp',
 		eyebrow: 'Developer tooling',
 		title: 'The development MCP server',
-		lede: '@happyvertical/smrt-dev-mcp gives a coding agent the same deterministic workspace and installed-package knowledge the CLI produces, plus class generation, project introspection, and portable review and architecture bundles.',
+		lede: '@happyvertical/smrt-dev-mcp gives a coding agent the same deterministic workspace and installed-package knowledge as the CLI. It also provides class generation, project introspection, and portable review and architecture bundles.',
 		plainEnglish:
 			'This server helps an agent understand and change your codebase. It never touches your running application, its data, or your users.',
 		packages: ['smrt-dev-mcp', 'smrt-scanner', 'smrt-core'],
@@ -170,7 +170,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 			{
 				title: 'Runtime awareness is a separate, optional bridge',
 				intro:
-					'The released development server does not connect to a running application or inspect its live ObjectRegistry. A future or application-provided connection can expose bounded runtime capability metadata beside the declared workspace view, but callers must discover that bridge rather than assume it exists.',
+					'The released development server does not connect to a running application or inspect its live ObjectRegistry. A future or application-provided connection can expose bounded runtime capability metadata beside the declared workspace view. Callers must discover that bridge before they use it.',
 				points: [
 					'Without a runtime bridge, the server remains fully useful and deterministic from source, manifests, generated knowledge, and installed package contracts.',
 					'A runtime bridge should label observed facts separately from declared facts and expose capability metadata rather than application records or credentials.',
@@ -206,7 +206,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 			{
 				title: 'Prefer an absolute launcher in global configuration',
 				intro:
-					'A user-level MCP client can start servers from repositories that do not install this package, and a package-manager launcher may run dependency-status or build-approval checks before the server starts. Install the package somewhere stable and point the client at the built server with an absolute path instead.',
+					'A user-level MCP client can start servers from repositories that do not install this package. A package-manager launcher can run dependency or build-approval checks before the server starts. Install the package in a stable location. Point the client at the built server with an absolute path.',
 				filename: 'config.toml',
 				lang: 'toml',
 				code: `[mcp_servers.smrt-dev-mcp]
@@ -216,7 +216,7 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 			{
 				title: 'Fifteen tools in six groups',
 				intro:
-					'Tool names are stable strings. Generation and introspection cover the code itself; the knowledge tools mirror the CLI commands; the context builders return prompt bundles that can be sent to any model.',
+					'Tool names are stable strings. Generation and introspection cover the code. The knowledge tools mirror the CLI commands. The context builders return prompt bundles for any model.',
 				points: [
 					'Generation and introspection: generate-smrt-class, introspect-project, review-smrt-project.',
 					'Knowledge reflection: reflect-knowledge, reflect-domain-knowledge.',
@@ -265,7 +265,7 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 			{
 				title: 'Catalogs are cached privately',
 				intro:
-					'The static tools and prompts catalogs advertise a one-day private cache lifetime. Workspace knowledge resources are also private but use a zero lifetime: they are rebuilt from the current workspace on every request and have no transport-visible invalidation signal that could make a longer promise honest.',
+					'The static tools and prompts catalogs advertise a one-day private cache lifetime. Workspace knowledge resources are also private, but they use a zero lifetime. The server rebuilds them from the current workspace for every request. The transport has no visible invalidation signal to support a longer lifetime.',
 				links: [
 					{ label: 'Shared catalogs on the runtime plane', href: '/tooling/app-mcp' },
 					{ label: 'Cache and tenancy safety', href: '/tooling/compatibility' }
@@ -305,7 +305,7 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 		navTitle: 'Generated and app MCP',
 		eyebrow: 'Developer tooling',
 		title: 'Exposing a running application over MCP',
-		lede: 'The Tier 1 runtime surfaces are generated from the same @smrt() objects your application already uses, and served either over local stdio or as a stateless Streamable HTTP endpoint.',
+		lede: 'The Tier 1 runtime surfaces use the same @smrt() objects as your application. Serve them over local stdio or a stateless Streamable HTTP endpoint.',
 		plainEnglish:
 			'This is the plane where an agent performs real work on real data. Every call resolves through the same models, principals, tenants, and field policy as the rest of the application.',
 		packages: ['smrt-app-mcp', 'smrt-core', 'smrt-app-cli'],
@@ -322,7 +322,7 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 			{
 				title: 'Describe the server once',
 				intro:
-					'createMcpAppServer wraps the generated core tools with an application allow-list and returns listTools and callTool. The allow-list decides which classes are reachable at all; public tool patterns decide what an unauthenticated caller may see; the tool policy decides per principal; workflow assertions run before generated dispatch.',
+					'createMcpAppServer wraps the generated core tools with an application allow-list and returns listTools and callTool. The allow-list determines which classes are reachable. Public tool patterns determine what an unauthenticated caller can see. The tool policy evaluates each principal. Workflow assertions run before generated dispatch.',
 				filename: 'src/lib/server/mcp.ts',
 				code: `import { createMcpAppServer, McpAccessError } from '@happyvertical/smrt-app-mcp';
 import { adminResources } from '$lib/admin/resources';
@@ -367,7 +367,7 @@ export const POST = mountMcpRoute(mcpServer);`,
 			{
 				title: 'Opt long-running actions into durable tasks',
 				intro:
-					'Long-running item actions can opt into the experimental io.modelcontextprotocol/tasks extension. Tasks are disabled by default: list each task action in the object’s MCP config, and keep the jobs runner’s dispatch allowlist aligned when the class uses backgroundEligible markers.',
+					'Long-running item actions can opt into the experimental io.modelcontextprotocol/tasks extension. Tasks are disabled by default. List each task action in the object’s MCP configuration. Align the jobs runner dispatch allowlist when the class uses backgroundEligible markers.',
 				filename: 'Report.ts',
 				code: `import { backgroundEligible } from '@happyvertical/smrt-jobs';
 
@@ -406,7 +406,7 @@ class Report extends SmrtObject {
 			{
 				title: 'Policy runs on discovery and on the call',
 				intro:
-					'The tool policy is evaluated for every tool eligible under the allow-list and the base public or authenticated rule, on both discovery and a direct call. Returning false hides the tool from discovery and denies a direct call with the non-retryable mcp_tool_access_denied code. A thrown policy error is treated as a denial, so policy failures fail closed.',
+					'The tool policy evaluates every tool that passes the allow-list and the base public or authenticated rule. The policy runs during discovery and direct calls. Returning false hides the tool from discovery and denies a direct call with the non-retryable mcp_tool_access_denied code. A thrown policy error is treated as a denial, so policy failures fail closed.',
 				points: [
 					'On the modern mount the denial arrives as a JSON-RPC protocol error carrying the code and a retryable flag in its data.',
 					'The deprecated REST aliases instead return the older ok, code, message, status, and retryable body.',
@@ -418,11 +418,11 @@ class Report extends SmrtObject {
 			{
 				title: 'Identity comes from the application',
 				intro:
-					'SvelteKit mounts resolve the request principal once and use it for both discovery and calls. McpAppPrincipal is deliberately unconstrained — an optional id, kind, roles, and scopes — so an application can represent a person or a scoped service without this package encoding its identity model. A missing principal means the request is unauthenticated.',
+					'SvelteKit mounts resolve the request principal once and use it for both discovery and calls. McpAppPrincipal has optional id, kind, roles, and scopes fields. This flexible shape represents a person or scoped service without encoding the application identity model. A missing principal means the request is unauthenticated.',
 				points: [
 					'resolvePrincipal is the current hook for applications that store the principal elsewhere.',
 					'resolveUser remains as a legacy compatibility alias.',
-					'resolveAuthenticated is a deprecated legacy boolean gate, consulted only when resolvePrincipal is absent. Only a false result clears the principal: an older mount that returns true keeps its calls user-less while discovery falls back to its old boolean behavior, so migrate it to resolvePrincipal.'
+					'resolveAuthenticated is a deprecated legacy boolean gate, consulted only when resolvePrincipal is absent. Only a false result clears the principal. An older mount that returns true keeps its calls without a user. Discovery then uses the old boolean behavior. Migrate the mount to resolvePrincipal.'
 				]
 			},
 			{
@@ -436,7 +436,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 			{
 				title: 'Authorization is terminated in front of the route',
 				intro:
-					'This package trusts the principal supplied by the application adapter. It does not implement an OAuth authorization server and does not validate bearer tokens itself. For a public deployment, terminate OAuth at the gateway, validate the token signature, issuer, audience or resource, expiry, and scopes, and populate the request principal, tenant, and permissions only after that validation succeeds.',
+					'This package trusts the principal supplied by the application adapter. It does not implement an OAuth authorization server and does not validate bearer tokens itself. For a public deployment, terminate OAuth at the gateway. Validate the token signature, issuer, audience or resource, expiry, and scopes. Populate the request principal, tenant, and permissions only after validation succeeds.',
 				points: [
 					'Use one stable HTTPS issuer identifier per authorization server.',
 					'Issuer values are compared as exact strings; a trailing-slash difference aborts the grant.',
@@ -448,7 +448,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 			{
 				title: 'Generated stdio stays local',
 				intro:
-					'The generated stdio server is the other Tier 1 surface. It obtains credentials from its environment and has no per-request authorization principal, so it must not be exposed remotely. To reach a deployed application from a local stdio client, use the bridge that @happyvertical/smrt-app-cli publishes as the smrt-mcp-bridge binary, which authenticates through the first-party terminal device flow and sends stored tokens only to the server they were saved with.',
+					'The generated stdio server is the other Tier 1 surface. It obtains credentials from its environment and has no per-request authorization principal, so it must not be exposed remotely. Use the smrt-mcp-bridge binary to reach a deployed application from a local stdio client. @happyvertical/smrt-app-cli publishes this bridge. It authenticates through the first-party terminal device flow. The bridge sends stored tokens only to their associated server.',
 				links: [
 					{
 						label: 'Task guide: expose your app over MCP',
@@ -467,7 +467,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 		title: 'The dev server ships as a portable plugin',
 		lede: 'The published smrt-dev-mcp package root is a self-contained Agent Plugins 1.0.0 plugin, so a compatible client can install and discover it without hand-written MCP configuration.',
 		plainEnglish:
-			'Instead of writing a config file, a compatible client reads two small manifests from the installed package and learns how to launch the server and where the bundled skill lives.',
+			'A compatible client can read two small manifests instead of a configuration file. The manifests identify the server launcher and the bundled skill location.',
 		packages: ['smrt-dev-mcp'],
 		pinnedVersion: TOOLING_PINNED_VERSION,
 		sources: [
@@ -506,7 +506,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 			{
 				title: 'Skills are found by location, not by declaration',
 				intro:
-					'plugin.json carries no skills field. Bundled skills live under the fixed skills directory, which is the Agent Plugins discovery location, and the package ships exactly one: skills/smrt-code-review/SKILL.md with its referenced output guide. Each skill is plain Markdown with YAML frontmatter naming and describing it, so a skill-unaware harness can ignore the frontmatter and read the body.',
+					'plugin.json carries no skills field. Bundled skills live under the fixed skills directory for Agent Plugins discovery. The package ships skills/smrt-code-review/SKILL.md and its referenced output guide. Each skill is plain Markdown with YAML frontmatter naming and describing it. A skill-unaware harness can ignore the frontmatter and read the body.',
 				points: [
 					'Skill-aware clients discover the file directly from the installed package root.',
 					'Other MCP clients can reach the same content through the get-agent-skill tool.',
@@ -535,7 +535,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 			{
 				title: 'How this relates to direct MCP configuration',
 				intro:
-					'Packaging is a distribution convenience, not a different server. A client that reads the plugin manifests and a client configured by hand launch the same stdio binary and receive the same tools, prompts, and resources. Use direct configuration when your client does not support Agent Plugins, or when you need an absolute launcher path.',
+					'Packaging is a distribution convenience, not a different server. Manifest-based and manually configured clients launch the same stdio binary. Both clients receive the same tools, prompts, and resources. Use direct configuration when your client does not support Agent Plugins or needs an absolute launcher path.',
 				links: [{ label: 'Direct stdio configuration', href: '/tooling/dev-mcp' }]
 			}
 		]
@@ -545,9 +545,9 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 		navTitle: 'Compatibility and operations',
 		eyebrow: 'Developer tooling',
 		title: 'Protocol support, conformance, and troubleshooting',
-		lede: 'The MCP surfaces target the 2026-07-28 protocol revision through an exactly pinned scoped SDK, keep a bounded set of compatibility aliases, and are exercised by conformance checks in continuous integration.',
+		lede: 'The MCP surfaces target the 2026-07-28 protocol revision through an exactly pinned scoped SDK. They keep a bounded set of compatibility aliases. Continuous integration runs conformance checks.',
 		plainEnglish:
-			'This page records what the framework promises about protocol behavior, what it keeps only for migration, and what to check first when a server does not respond as expected.',
+			'This page records the framework promises for protocol behavior and migration compatibility. It also lists the first checks for an unresponsive server.',
 		packages: ['smrt-app-mcp', 'smrt-dev-mcp', 'smrt-core'],
 		pinnedVersion: TOOLING_PINNED_VERSION,
 		sources: [
@@ -562,7 +562,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 			{
 				title: 'One protocol revision, one pinned SDK',
 				intro:
-					'Both MCP packages depend on @modelcontextprotocol/server at exactly 2.0.0, with no range. The 2026-07-28 revision itself is owned and enforced by that SDK rather than declared as a framework constant, which is why the pin is exact: the protocol envelope, header validation, and error codes come from one known version.',
+					'Both MCP packages depend on @modelcontextprotocol/server at exactly 2.0.0, with no range. That SDK owns and enforces the 2026-07-28 revision. The framework does not declare the revision as a constant. The exact pin provides one known source for the protocol envelope, header validation, and error codes.',
 				points: [
 					'The application HTTP mount serves the 2026-07-28 envelope, always reports tools, and advertises the optional tasks extension only when configured.',
 					'Client-side pins in the framework test suites request the same revision explicitly.',
@@ -572,7 +572,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 			{
 				title: 'What conformance covers',
 				intro:
-					'The framework keeps a conformance fixture that runs a generated server against the pinned conformance suite in continuous integration, alongside a protocol hygiene check on every pull request. The suite exercises version negotiation against the pinned revision rather than accepting whatever a client offers.',
+					'Continuous integration runs a generated server against the pinned conformance suite. Every pull request also runs a protocol hygiene check. The suite tests version negotiation against the pinned revision and rejects unsupported client revisions.',
 				points: [
 					'Conformance tooling is pinned exactly, like the SDK itself.',
 					'Header validation and the mismatch error are covered by transport tests.',
@@ -605,7 +605,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 			{
 				title: 'Local troubleshooting starts with the transport',
 				intro:
-					'A stdio MCP server speaks JSON-RPC on stdout, so anything else written there corrupts the channel. Framework code that writes progress lines through the SDK logger is therefore never called from a tool path, and suppressing console output is not a sufficient fix. Diagnostic logging belongs on stderr.',
+					'A stdio MCP server speaks JSON-RPC on stdout, so anything else written there corrupts the channel. Do not call framework code that writes SDK logger progress from a tool path. Suppressing console output does not fix the problem. Write diagnostic logs to stderr.',
 				points: [
 					'Set DEBUG to true in the server environment to enable diagnostic logging.',
 					'A client that fails immediately after launch is usually launching the wrong path or the wrong Node runtime.',
@@ -615,7 +615,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 			{
 				title: 'Remote failures are usually authorization, not protocol',
 				intro:
-					'On the HTTP surface, a rejected call is far more often an identity problem than a protocol one. A -32020 response means a required header was missing or disagreed with the body. A denial carries the non-retryable access-denied code and deliberately reveals nothing about the tool, principal, or policy, so the detail must come from your gateway logs.',
+					'On the HTTP surface, a rejected call is far more often an identity problem than a protocol one. A -32020 response means a required header was missing or disagreed with the body. A denial carries the non-retryable access-denied code. The denial reveals nothing about the tool, principal, or policy. Find the details in your gateway logs.',
 				points: [
 					'Confirm the gateway validated the token before the request reached the route.',
 					'Compare the response issuer and the discovered issuer as exact strings.',
@@ -626,7 +626,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 			{
 				title: 'Cache and tenancy safety',
 				intro:
-					'Catalogs are private by default on both planes. A shared catalog is an explicit opt-in that the server re-verifies and downgrades when the declared shape does not hold, so a tenant-scoped or principal-gated tool cannot end up in a shared cache. Workspace knowledge resources use a zero cache lifetime because they are rebuilt per request and carry no honest invalidation signal.',
+					'Catalogs are private by default on both planes. A shared catalog requires explicit opt-in. The server re-verifies the declared shape and downgrades invalid catalogs. This check prevents tenant-scoped or principal-gated tools from entering a shared cache. Workspace knowledge resources use a zero cache lifetime because the server rebuilds them per request. They carry no reliable invalidation signal.',
 				points: [
 					'Tenant interceptors and field policy stay in the path for every generated operation.',
 					'Never expose the generated stdio server remotely; it has no per-request principal.',

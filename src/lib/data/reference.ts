@@ -18,7 +18,7 @@ export const referenceGuides: Guide[] = [
 		title: 'Software as Agentic Domain Logic',
 		lede: 'A SAADL application exposes the same domain operations to people and software agents instead of maintaining a separate, reduced bot interface.',
 		plainEnglish:
-			'Define the work once. People can reach it through pages, HTTP, or the command line, while agents receive callable tools that resolve to the same models, permissions, and field policies.',
+			'Define the work once. People can reach it through pages, HTTP, or the command line. Agents receive callable tools that resolve to the same models, permissions, and field policies.',
 		packages: ['smrt-core', 'smrt-app-mcp', 'smrt-app-cli', 'smrt-web'],
 		visual: 'surfaces',
 		sections: [
@@ -30,7 +30,7 @@ export const referenceGuides: Guide[] = [
 			{
 				title: 'Useful to operators and builders',
 				intro:
-					'An operating agent receives the same permitted capabilities as a person. A coding agent receives a manifest of the objects, fields, relationships, and generated tools, so it can understand and change one definition instead of rediscovering every interface.'
+					'An operating agent receives the same permitted capabilities as a person. A coding agent receives a manifest of the objects, fields, relationships, and generated tools. Thus, the agent can understand and change one definition instead of rediscovering each interface.'
 			},
 			{
 				title: 'What does not count',
@@ -40,7 +40,7 @@ export const referenceGuides: Guide[] = [
 			{
 				title: 'Why s-m-r-t uses this shape',
 				intro:
-					'One model reduces duplicated code and review, keeps the codebase map current, makes infrastructure replaceable, and lets hardening flow from shared framework packages into each application.'
+					'One model reduces duplicated code and review. It keeps the codebase map current and makes infrastructure replaceable. Security improvements can then flow from shared framework packages into each application.'
 			}
 		],
 		related: [
@@ -77,7 +77,7 @@ export const referenceGuides: Guide[] = [
 			{
 				title: 'Write policy blocks mass assignment',
 				intro:
-					'Generated create and update handlers strip read-only fields, IDs, timestamps, tenant IDs, underscore-prefixed keys, and anything outside an optional writable allowlist before the model sees the request body.'
+					'Generated create and update handlers filter the request body before the model receives it. They remove read-only fields, IDs, timestamps, tenant IDs, underscore-prefixed keys, and fields outside an optional writable allowlist.'
 			},
 			{
 				title: 'Application code still owns its boundary',
@@ -86,13 +86,13 @@ export const referenceGuides: Guide[] = [
 				callout: {
 					variant: 'security',
 					title: 'The defaults do not extend to hand-written paths',
-					body: 'A generated route resolves the principal, applies the tenant scope, and filters fields for you. Code you write yourself does none of that automatically: a custom endpoint, background job, webhook receiver, or direct collection call runs with whatever authority you hand it. Treat every hand-written entry point as unauthenticated until it proves otherwise.'
+					body: 'A generated route resolves the principal, applies the tenant scope, and filters fields. Hand-written code does not get these controls automatically. A custom endpoint, background job, webhook receiver, or direct collection call uses the supplied authority. Treat each hand-written entry point as unauthenticated until it proves otherwise.'
 				}
 			},
 			{
 				title: 'Authentication is not authorization',
 				intro:
-					'These defaults answer whether a caller is known. Whether that caller may perform this operation on this tenant is a separate decision, made against the permission catalog by an application guard and, on Postgres, optionally by row-level security policies you generate and apply yourself.'
+					'These defaults answer whether a caller is known. Authorization is a separate decision about the operation and tenant. An application guard checks the permission catalog. On Postgres, generated row-level security policies can also check it.'
 			},
 			{
 				title: 'Field policy is presentation, not enforcement',
@@ -116,7 +116,7 @@ export const referenceGuides: Guide[] = [
 		navTitle: 'Authorization model',
 		eyebrow: 'Reference',
 		title: 'The permission catalog, the guard, and row-level security',
-		lede: 'Every public model operation contributes a named permission. An application guard checks that catalog before it acts, and on Postgres your tenant-scoped models can generate row-level security policies that check the same names on each row.',
+		lede: 'Every public model operation contributes a named permission. An application guard checks the catalog before it acts. On Postgres, tenant-scoped models can generate row-level security policies that check the same names on each row.',
 		plainEnglish:
 			'Your models produce a list of permission names. Application code checks that list before it acts, and Postgres can check it again on every row it returns or writes.',
 		packages: ['smrt-users', 'smrt-core', 'smrt-tenancy'],
@@ -171,7 +171,7 @@ export const referenceGuides: Guide[] = [
 				points: [
 					'registerPermissionDefinitions returns an unregister function, so a definition can be scoped to a bootstrap or a test.',
 					'Field policy uses the runtime path, not the manifest: importing @happyvertical/smrt-fields calls ensureFieldPolicyPermissionsRegistered, which adds fields.policy.manage and fields.policy.personalize with source runtime.',
-					'Those two entries declare no Postgres bindings, and FieldPolicy is deliberately not tenant-scoped, so its table is skipped by policy generation and both permissions are enforced by the guard alone.',
+					'These two entries declare no Postgres bindings. FieldPolicy is deliberately not tenant-scoped, so policy generation skips its table. The guard alone enforces both permissions.',
 					'Custom entries in smrt.config.ts may declare explicit Postgres bindings; conflicting metadata for one slug throws rather than silently winning.'
 				],
 				filename: 'src/lib/server/register-permissions.ts',
@@ -181,15 +181,15 @@ export const referenceGuides: Guide[] = [
 			{
 				title: 'The guard is for the code you write yourself',
 				intro:
-					'assertOperationPermission derives the same slug the catalog uses, requires that slug to exist, and then resolves the principal permissions in the ordinary order: membership role, group role, tenant override, then user override. Call it in form actions, custom endpoints, jobs, and CLI scripts — anywhere a generated route is not doing the work.',
+					'assertOperationPermission derives the catalog slug and requires it to exist. Then, it resolves principal permissions in this order: membership role, group role, tenant override, and user override. Call it in form actions, custom endpoints, jobs, and CLI scripts. Use it at each boundary without a generated route.',
 				points: [
 					'It throws OperationPermissionError, which carries status: 403, unless the decision is allowed or you passed onDeny: "return". Mapping that to an HTTP response is the application’s job outside the ready-made handlers.',
 					'A slug that is not in the catalog is refused with reason unknown_permission, so a typo denies rather than passes.',
 					'A call missing either a resolvable user or a resolvable tenant is refused with reason missing_principal.',
 					'checkOperationPermission, hasOperationPermission, and onDeny: "return" give a decision or a boolean instead of an exception.',
-					'For resource-anchored authorization pass the resource tenant id, and omit membership so the resolver looks it up; a membership from a different tenant is refused by design.',
-					'Both bypasses default to allowed and system context is checked first, so an operation that must require an explicit grant needs allowSuperAdminBypass: false and allowSystemContextBypass: false.',
-					'Neither bypass comes from a user record. They are set by the code that wrapped the call — withSystemContext, withSuperAdminBypass, or the matching context options — so passing superAdminBypass: true to the session handler publishes it on every request.'
+					'For resource-anchored authorization, pass the resource tenant id. Omit membership so the resolver finds it. The resolver refuses a membership from another tenant.',
+					'Both bypasses are allowed by default, and system context is checked first. An operation that requires an explicit grant needs allowSuperAdminBypass: false and allowSystemContextBypass: false.',
+					'Neither bypass comes from a user record. The wrapper sets it with withSystemContext, withSuperAdminBypass, or matching context options. superAdminBypass: true on the session handler publishes the bypass on every request.'
 				],
 				filename: 'src/routes/articles/+page.server.ts',
 				code: `import { assertOperationPermission } from '@happyvertical/smrt-users';\nimport { getSmrtConfig } from '$lib/server/smrt';\n\nexport const actions = {\n  publish: async ({ locals, params }) => {\n    const article = await loadArticle(params.id);\n\n    // Throws OperationPermissionError (status 403) when denied.\n    await assertOperationPermission({\n      ...getSmrtConfig('Permission'),\n      collection: 'articles',\n      action: 'publish',\n      userId: locals.user.id,\n      // The resource tenant, not the session tenant.\n      tenantId: article.tenantId\n    });\n\n    await article.publish();\n  }\n};`
@@ -201,10 +201,10 @@ export const referenceGuides: Guide[] = [
 				points: [
 					'Six transaction-local settings are published: smrt.tenant_id, smrt.user_id, smrt.session_id, smrt.permissions, smrt.super_admin_bypass, and smrt.system_context.',
 					'smrt.permissions is the resolved slug list as a JSON array; the policies read it as jsonb.',
-					'One request is one transaction. It is opened before the route runs and committed after, an unhandled error rolls back everything the request wrote, and work that outlives the handler runs after the commit and outside the policies.',
-					'The wrapper needs a database adapter that supports beginTransaction. It throws on the first request that enters the context, not at boot, and inside the session handler that throw is caught.',
+					'One request is one transaction. The transaction opens before the route runs and commits after it. An unhandled error rolls back all request writes. Work that outlives the handler runs after the commit and outside the policies.',
+					'The wrapper needs a database adapter that supports beginTransaction. The wrapper throws on the first request that enters the context, not at boot. The session handler catches that error.',
 					'Pass postgresRls to createSessionHandler explicitly. The handler reads its own option, not the config flag, for the two behaviors below.',
-					'With the handler option set, an anonymous request still enters the context and runs with an empty permission list rather than outside the policies, and a failure to establish the context returns a bare 500. That catch wraps the whole request, so an error thrown later in the route becomes the same 500. With only permissions.postgres.enabled in smrt.config.ts, anonymous requests skip the context and a context failure is logged and the request served.',
+					'With the handler option set, an anonymous request enters the context with an empty permission list. It does not run outside the policies. A context failure returns a bare 500. The catch wraps the complete request, so a later route error becomes the same 500. The permissions.postgres.enabled option alone makes anonymous requests skip the context. A context failure is logged, and the request continues.',
 					'getCollection only reaches for the request transaction when neither the call site nor objectOverrides supplies a db. An object pinned to its own connection runs outside the published variables, where the policies match nothing.',
 					'skipPaths is checked first, so a skipped route never enters the context. On a policy-covered table it will therefore read no rows at all.'
 				],
@@ -213,20 +213,20 @@ export const referenceGuides: Guide[] = [
 				callout: {
 					variant: 'security',
 					title: 'The config flag alone does not harden the handler',
-					body: 'The session handler reads its own postgresRls option when it decides whether to enter the context for an anonymous request and whether a context failure becomes a 500. Setting only permissions.postgres.enabled in smrt.config.ts still opens the transaction for a request that carries a session cookie, but anonymous requests skip the context and a context failure is logged and the request served anyway. Pass postgresRls: true to createSessionHandler as well.'
+					body: 'The session handler reads its own postgresRls option for anonymous context entry and context-failure handling. Setting only permissions.postgres.enabled in smrt.config.ts still opens a transaction for a request with a session cookie. Anonymous requests skip the context. A context failure is logged, and the request continues. Also pass postgresRls: true to createSessionHandler.'
 				}
 			},
 			{
 				title: 'What the generated policies check',
 				intro:
-					'generatePostgresPermissionSql emits three helper functions and, for each covered table, ENABLE and FORCE ROW LEVEL SECURITY plus a drop-and-create policy pair for every action that has at least one permission bound to it. Apart from the bypass, a policy requires both the tenant match and the permission, so neither one alone opens a row. Because current_setting is read with the missing_ok flag, a connection that never entered the context resolves to no tenant and an empty permission list, and matches nothing.',
+					'generatePostgresPermissionSql emits three helper functions. For each covered table, it emits ENABLE and FORCE ROW LEVEL SECURITY. It also emits a drop-and-create policy pair for each action with a bound permission. Apart from the bypass, a policy requires the tenant match and permission, and neither condition alone opens a row. current_setting uses the missing_ok flag, so a connection outside the context gets no tenant and an empty permission list. This connection matches nothing.',
 				lang: 'sql',
 				filename: 'generated-policies.sql',
 				code: `CREATE OR REPLACE FUNCTION smrt_has_permission(required_permission text)\nRETURNS boolean\nLANGUAGE sql\nSTABLE\nAS $$\n  SELECT smrt_rls_bypass()\n      OR jsonb_exists(COALESCE(NULLIF(current_setting('smrt.permissions', true), ''), '[]')::jsonb, required_permission)\n$$;\n\nALTER TABLE "public"."articles" ENABLE ROW LEVEL SECURITY;\nALTER TABLE "public"."articles" FORCE ROW LEVEL SECURITY;\n\nDROP POLICY IF EXISTS "smrt_articles_select_44e06f89" ON "public"."articles";\n\nCREATE POLICY "smrt_articles_select_44e06f89" ON "public"."articles"\n  FOR SELECT USING (\n    smrt_rls_bypass()\n    OR (("tenant_id"::text = smrt_current_tenant_id())\n        AND (smrt_has_permission('articles.read')))\n  );`,
 				points: [
 					'smrt_rls_bypass reads smrt.system_context and smrt.super_admin_bypass, mirroring the two bypasses the guard honors.',
 					'smrt_current_tenant_id reads smrt.tenant_id and returns null when it is unset or empty.',
-					'FORCE ROW LEVEL SECURITY is applied as well as ENABLE, so the table owner is also subject to the policies.',
+					'FORCE ROW LEVEL SECURITY and ENABLE are applied, so the table owner is also subject to the policies.',
 					'Postgres still exempts superusers and any role holding BYPASSRLS. Connect the application as an ordinary role, or the policies are inert.',
 					'SELECT and DELETE use USING; INSERT uses WITH CHECK; UPDATE uses both with the same condition.'
 				]
@@ -238,11 +238,11 @@ export const referenceGuides: Guide[] = [
 				points: [
 					'Import your model registration before generating. A script that loads only smrt-users produces zero targets and zero skips, applies the three helper functions, and exits cleanly without covering anything.',
 					'Seed the grants between syncing and applying. Sync creates permission rows and assigns none, so policies applied before any role holds the new slugs take every covered table to zero rows. The default matrix gives owner and admin every catalog permission.',
-					'Preview and read result.skipped. A table is skipped when the object is not tenant-scoped, when tenantScoped.mode is not "required", when no schema table name is available, or when several objects share one table.',
+					'Preview and read result.skipped. A table is skipped for an object without required tenant scope. A missing schema table name or multiple objects on one table also causes a skip.',
 					'applyPostgresPermissionPolicies refuses a connection it does not detect as Postgres. It is not transactional: statements run one at a time, so a failure part way through leaves partial state — fix the cause and re-run.',
 					'Re-running is safe for tables still in the target set, because each policy is dropped and recreated. A table that leaves the set keeps its old policies and its forced RLS; drop those by hand.',
-					'The automatic action mapping is fixed at SELECT/INSERT/UPDATE/DELETE to read/create/update/delete. A custom permission takes part only through an explicit Postgres binding — and a binding also forces RLS on that table, so bind every action you need or the unbound ones become deny-only.',
-					"Verify rather than assume: select tablename, policyname from pg_policies where policyname like 'smrt_%', and confirm the application role is neither a superuser nor a BYPASSRLS role."
+					'The automatic action mapping is SELECT/INSERT/UPDATE/DELETE to read/create/update/delete. A custom permission requires an explicit Postgres binding. A binding also forces RLS on that table. Bind each necessary action, or an unbound action becomes deny-only.',
+					"Verify the result. Select tablename, policyname from pg_policies where policyname like 'smrt_%'. Confirm that the application role is not a superuser or BYPASSRLS role."
 				],
 				filename: 'scripts/apply-rls.ts',
 				code: `import {\n  applyPostgresPermissionPolicies,\n  generatePostgresPermissionSql,\n  RoleCollection,\n  syncPermissionCatalog\n} from '@happyvertical/smrt-users';\n\n// Registers your models in the object registry. Without this the\n// generator sees no tables and applies nothing.\nimport '$lib/server/smrt-register';\n\nconst db = { db: { type: 'postgres' as const, url: process.env.DATABASE_URL! } };\n\nawait syncPermissionCatalog(db);\n\nconst roles = await RoleCollection.create(db);\nawait roles.seedSystemRoles({ seedPermissions: true });\n\nconst preview = generatePostgresPermissionSql(db);\nconsole.log(preview.targets); // tables that will be covered\nconsole.log(preview.skipped); // and why the rest were not\n\nawait applyPostgresPermissionPolicies(db);`,
@@ -257,20 +257,20 @@ export const referenceGuides: Guide[] = [
 				intro:
 					'The guard and the policies read the same permission list but scope it differently. Which layer answers a given request determines what is actually enforced.',
 				points: [
-					'Row filtering follows the session tenant. A root-tenant session acting on a child tenant row is authorized by the guard when you pass the resource tenant id, not by row-level security. On a covered table the operation is therefore permitted but the row stays invisible: the session has to switch to the child tenant, which rotates the session id.',
+					'Row filtering follows the session tenant. The guard can authorize a root-tenant session for a child tenant row when you pass the resource tenant id. Row-level security does not authorize this relationship. On a covered table, the operation is permitted but the row stays invisible. The session must switch to the child tenant, which rotates the session id.',
 					'A session whose tenant is the child tenant does get inherited authority in the policies, because the permission list is resolved before it is published.',
 					'A skipped table has no policies at all. For those tables the guard is the only check, so treat result.skipped as a list of places application code has to carry.',
-					'The bypass helpers are shared, so an operation that must resist a super-admin needs allowSuperAdminBypass: false in the guard and an explicit design decision at the data layer as well.'
+					'The bypass helpers are shared. An operation that must resist a super-admin needs allowSuperAdminBypass: false in the guard. It also needs an explicit data-layer design decision.'
 				]
 			},
 			{
 				title: 'Applications that do not run Postgres',
 				intro:
-					'Row-level security is a Postgres feature and there is no SQLite equivalent here. On SQLite the catalog and the guard work unchanged, permissions still resolve, and the context still carries the principal — but nothing is enforced at the data layer, so the guard is the whole boundary.',
+					'Row-level security is a Postgres feature, and this framework has no SQLite equivalent. On SQLite, the catalog and guard operate without changes. Permissions still resolve, and the context still carries the principal. The data layer enforces nothing. Thus, the guard is the complete boundary.',
 				points: [
 					'applyPostgresPermissionPolicies throws on a non-Postgres connection.',
-					'Setting postgresRls on a connection that is not Postgres runs the request without the transaction and without the session variables instead of failing, so the flag alone is not evidence that policies are in force.',
-					'Pass the published set as permissionSet so a guard check authorizes against the same snapshot the policies would have read, rather than re-resolving mid-request.',
+					'On a non-Postgres connection, postgresRls runs the request without the transaction or session variables. The request does not fail. Thus, the flag does not prove that policies are active.',
+					'Pass the published set as permissionSet. The guard then uses the same snapshot that the policies would read, instead of resolving permissions again during the request.',
 					'A development database on SQLite and a production database on Postgres therefore differ in enforcement, not only in performance. Cover permission behavior with tests that exercise the guard directly.'
 				],
 				filename: 'src/lib/server/tool-guard.ts',
@@ -278,7 +278,7 @@ export const referenceGuides: Guide[] = [
 				callout: {
 					variant: 'security',
 					title: 'postgresRls degrades silently off Postgres',
-					body: 'When the connection is not detected as Postgres the option is ignored: no transaction opens, no session variables are published, and no error is raised. The request simply runs with the guard as its only check. Do not read the flag as evidence that anything is enforced at the data layer.'
+					body: 'When the connection is not Postgres, the option is ignored. No transaction opens, no session variables are published, and no error occurs. The request runs with only the guard check. Do not use the flag as evidence of data-layer enforcement.'
 				}
 			}
 		],
@@ -377,7 +377,7 @@ const blurb = await article.describe({ maxTokens: 50 });`
 			{
 				title: 'What the model actually receives',
 				intro:
-					'All three methods serialize the instance through toPublicJSON() and place it ahead of your criteria or instructions as a delimited content body, so the model reasons over the record rather than the instruction string alone. Fields marked @field({ sensitive: true }) are excluded by that serialization and never reach the provider.',
+					'All three methods serialize the instance through toPublicJSON(). They put the result before the criteria or instructions as a delimited content body. Thus, the model reasons over the record and not only the instruction string. Serialization excludes fields marked @field({ sensitive: true }), so they never reach the provider.',
 				points: [
 					'includeData: false omits the content body, for callers that already curate the relevant fields into the instruction text.',
 					'maxDataLength overrides the 100,000-character truncation budget; truncation appends a visible marker so the model knows the data was cut.',
@@ -480,28 +480,28 @@ const similar = await articles.findSimilar(seed, { limit: 5 });`
 			{
 				title: 'Retrieval is not authority',
 				intro:
-					'All three search methods score vectors first, then hydrate the winning IDs through list({ where: { "id in": ids, ... } }). Tenant interceptors and any where clause you passed are applied on that read, and a sensitive field can be neither filtered on nor projected there, so a close vector is not a way around those boundaries. Sensitive values are stripped when the object is serialized for a client, not on the read itself. Ranking before the read also means the returned array can be shorter than limit.',
+					'All three search methods score vectors first and then hydrate the winning IDs through list({ where: { "id in": ids, ... } }). Tenant interceptors and the supplied where clause apply to that read. A sensitive field cannot be filtered or projected there, so a close vector cannot bypass these boundaries. Sensitive values are removed during client serialization, not during the read. Ranking before the read can also make the returned array shorter than limit.',
 				callout: {
 					variant: 'security',
 					title: 'Never treat retrieved text as an instruction',
-					body: 'Context memory and semantic search return application data, including text that users or external systems supplied. Passing it to a model does not make it trustworthy. Keep retrieved content on the data side of the prompt and let permissions, not relevance, decide what a caller may act on.'
+					body: 'Context memory and semantic search return application data, including text from users or external systems. Passing this text to a model does not make it trustworthy. Keep retrieved content on the data side of the prompt. Let permissions, not relevance, decide what a caller can act on.'
 				}
 			},
 			{
 				title: 'Where the vectors are stored',
 				intro:
-					'Embeddings live in the _smrt_embeddings system table: one row per object class, object ID, field name, and model, holding the vector, its dimension count, the provider, and the SHA-256 content hash used for staleness checks. The table is created with the rest of the system schema, so no extra infrastructure is required to start.',
+					'Embeddings live in the _smrt_embeddings system table. Each object class, object ID, field name, and model has one row. The row holds the vector, dimension count, provider, and SHA-256 content hash for staleness checks. The table is created with the rest of the system schema, so no extra infrastructure is required.',
 				points: [
 					'The default storage: "json" keeps each vector as text and ranks in process, loading every stored vector for that class, field, and model first.',
-					'storage: "native" adds a vector column and an approximate cosine index and pushes ranking into the database: an HNSW index on pgvector, a quantized index through the optional @sqliteai/sqlite-vector extension on SQLite.',
+					'storage: "native" adds a vector column and an approximate cosine index. It moves ranking into the database. Postgres uses an HNSW index on pgvector. SQLite uses a quantized index through the optional @sqliteai/sqlite-vector extension.',
 					'Native search falls back to the in-process path and logs a warning if the database query fails.',
-					'The model name is part of the row key and of every lookup, so changing model or provider hides the existing rows instead of rewriting them.'
+					'The model name is part of the row key and each lookup. Thus, a model or provider change hides the existing rows instead of rewriting them.'
 				]
 			},
 			{
 				title: 'Object memory: remember, recall, forget',
 				intro:
-					'remember() upserts a JSON value into the _smrt_contexts system table, keyed by owner class, owner ID, scope, key, and version, with a confidence score that defaults to 1. recall() returns the highest-confidence, highest-version match for one scope and key, or null. recallAll() returns a Map of key to value. forget() removes one entry and forgetScope() removes a scope, returning the number deleted. Objects and collections both inherit the full set, but a collection stores under its item class rather than one record, so those entries are class-wide.',
+					'remember() upserts a JSON value into the _smrt_contexts system table. Owner class, owner ID, scope, key, and version form the key, and the default confidence score is 1. recall() returns the highest-confidence, highest-version match for one scope and key, or null. recallAll() returns a Map of key to value. forget() removes one entry, and forgetScope() removes a scope and returns the deleted count. Collections store class-wide entries under the item class.',
 				points: [
 					'recall({ includeAncestors: true }) walks the scope upward — "a/b/c" to "a/b" to "a" to "global" — until something matches. It is off by default.',
 					'minConfidence sets a floor for recall and recallAll; includeDescendants widens recallAll and forgetScope to child scopes.',
@@ -532,7 +532,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				points: [
 					'expiresAt is stored on the row, but recall() and recallAll() do not filter on it. LearningMemory does drop expired records, so at the primitive level expiry is the caller to enforce.',
 					'SmrtObject.remember() leaves success_count and failure_count untouched when it updates an entry; SmrtCollection.remember() resets both to zero. Neither recall path changes them. LearningMemory maintains the counters from reported outcomes and decays confidence with them.',
-					'Entries are keyed to their owner, not to a tenant column, so tenant separation of memory comes from the owning record rather than from the table.',
+					'Entries use their owner as the key, not a tenant column. Thus, the owning record supplies tenant separation instead of the table.',
 					'describe() is unrelated to the embedding pipeline: vectors come from stored field text, never from generated prose.'
 				]
 			}
@@ -556,12 +556,12 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: 'Start with the smallest real boundary',
 				intro:
-					'Unit-test pure model behavior directly, use the collection and temporary database helpers for persistence, and add route or browser tests only when the behavior crosses those interfaces.'
+					'Unit-test pure model behavior directly. Use the collection and temporary database helpers for persistence. Add route or browser tests only when behavior crosses those interfaces.'
 			},
 			{
 				title: 'Generate the manifest in tests',
 				intro:
-					'Test setup should scan the objects under test and load consumed package manifests so decorators, inheritance, interfaces, and migrations behave as they do in the application build.'
+					'Scan the objects under test during test setup. Load consumed package manifests. Decorators, inheritance, interfaces, and migrations then behave as they do in the application build.'
 			},
 			{
 				title: 'Test security decisions explicitly',
@@ -575,7 +575,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 		navTitle: 'Configuration',
 		eyebrow: 'Reference',
 		title: 'Configuration',
-		lede: 'Keep framework and package settings in one typed configuration tree, then pass the relevant branch to collections, services, and generated runtimes.',
+		lede: 'Keep framework and package settings in one typed configuration tree. Pass the applicable branch to collections, services, and generated runtimes.',
 		plainEnglish:
 			'Configuration tells each package how your application connects to databases, services, models, and runtime options. Secrets should remain references or environment values, not committed strings.',
 		packages: ['smrt-config', 'smrt-core'],
@@ -597,7 +597,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				callout: {
 					variant: 'warning',
 					title: 'Anything the client bundle can read is public',
-					body: 'A value that reaches browser configuration ships to every visitor, however it was named. Keep API keys, database URLs, and signing material in server-only configuration and read them through the secret provider where they are used.'
+					body: 'A value that reaches browser configuration ships to every visitor, regardless of its name. Keep API keys, database URLs, and signing material in server-only configuration. Read them through the secret provider at the point of use.'
 				}
 			}
 		]
@@ -665,7 +665,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: 'A filter key carries its operator',
 				intro:
-					'Each where key is a field name, optionally followed by a space and an operator. Equality is the default. Field names are the ones declared on the model; the collection converts them to database columns before the statement is built, and validates them against the model so a typo reports the valid names instead of a SQL error.',
+					'Each where key is a field name with an optional space and operator. Equality is the default. Use the field names declared on the model. The collection converts them to database columns before it builds the statement. It validates each name against the model, so a typo reports the valid names instead of a SQL error.',
 				filename: 'list-invoices.ts',
 				code: `const overdue = await invoices.list({\n  where: {\n    status: 'open',                 // status = ?\n    'total >=': 100,                // total >= ?\n    'currency in': ['CAD', 'USD'],  // currency IN (?, ?)\n    'reference like': 'INV-2026-%', // reference LIKE ?\n    voidedAt: null                  // voided_at IS NULL\n  },\n  orderBy: 'created_at DESC',\n  limit: 50\n});`
 			},
@@ -677,8 +677,8 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 					'in and not in require a non-empty array. An empty one is rejected rather than compiled into invalid SQL; listByIds([]) returns an empty list instead.',
 					'like requires a string value, and you supply the % wildcards yourself.',
 					'contains and dot-notation JSON paths such as metadata.userId are rejected at the API boundary because the SQL query builder cannot execute them. Use like for text matching.',
-					'Fields marked @field({ sensitive: true }) are rejected as filter keys, so a where clause cannot be used to read a secret value back one character at a time.',
-					'Generated REST routes expose the same filters as field[op] query parameters — gt, gte, lt, lte, ne, in, and like, with in taking a comma-separated list. not in has no query-parameter spelling.'
+					'Fields marked @field({ sensitive: true }) are rejected as filter keys. Thus, a where clause cannot read a secret value one character at a time.',
+					'Generated REST routes expose the same filters as field[op] query parameters. The operators are gt, gte, lt, lte, ne, in, and like. in takes a comma-separated list. not in has no query-parameter spelling.'
 				]
 			},
 			{
@@ -686,7 +686,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				intro:
 					'Conditions in one where object are joined with AND. There is no OR, no negated group, no nested condition, no subquery, and no join. orderBy accepts a field name and a direction, not an expression.',
 				points: [
-					'The underlying query builder can emit OR from a two-dimensional condition array, but the collection validates where as a flat object of identifier keys and rejects that shape.',
+					'The underlying query builder can emit OR from a two-dimensional condition array. However, the collection validates where as a flat object of identifier keys and rejects that shape.',
 					'Keys must be identifiers followed only by an optional supported operator. Expression text and dot-separated JSON paths are rejected, which keeps request-supplied filter names from reaching the SQL field position.'
 				]
 			},
@@ -700,7 +700,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 					'Names inside the SQL string are database columns. Returned rows are converted back to the model field names during hydration.',
 					'Bind values as parameters; the placeholder style follows your database adapter. The collection does not parse the statement, so anything interpolated into the text is your own injection risk.',
 					'Tenant scope is not added for you. A beforeQuery interceptor guards tenant-scoped models, and allowRawOnTenantScoped opts out of it deliberately — then the tenant predicate is yours to write.',
-					'query() is documented for reads. It will run a write, and a statement that looks like a mutation invalidates this table in the read cache, but model hooks and save-time interceptors do not run.'
+					'query() is documented for reads, but it can run a write. A statement that looks like a mutation invalidates this table in the read cache. Model hooks and save-time interceptors do not run.'
 				]
 			},
 			{
@@ -711,8 +711,8 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				code: `const items = await products.listByIds(ids);\nconst byId = new Map(items.map((item) => [item.id, item]));\n\n// Long id lists need splitting; listByIds does not do it for you.\nconst all = [];\nfor (let i = 0; i < ids.length; i += 900) {\n  all.push(...(await products.listByIds(ids.slice(i, i + 900))));\n}`,
 				points: [
 					'Result order is not guaranteed. Index the result by id when the caller needs its own ordering back.',
-					'listByIds does not chunk. Databases cap the number of bound parameters in one statement, and the relationship batch loaders inside the framework split their own IN lists at 900 values for that reason — use a similar size for long id lists.',
-					'count() runs the same where conversion as list() and is never served from the read cache, so a cached page and a fresh count can briefly disagree inside the TTL window.'
+					'listByIds does not divide a request into chunks. Databases limit the bound parameters in one statement. Framework relationship loaders divide their IN lists at 900 values. Use a similar size for long id lists.',
+					'count() uses the same where conversion as list() and never uses the read cache. Thus, a cached page and a fresh count can briefly disagree during the TTL window.'
 				]
 			},
 			{
@@ -722,7 +722,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				filename: 'bulk-import.ts',
 				code: `const db = await getDatabase({ type: 'sqlite', url: 'app.db' });\nif (!db.transaction) throw new Error('This adapter does not support transactions.');\n\nawait db.transaction(async (tx) => {\n  const products = await ProductCollection.create({ db: tx });\n  for (const row of rows) {\n    await products.create(row);\n  }\n});`,
 				points: [
-					'A collection accepts an already-initialized database instance as its db option, which is how a batch of collection writes joins one transaction instead of opening its own.',
+					'A collection accepts an initialized database instance as its db option. Give the same instance to a batch of collection writes to put them in one transaction.',
 					'transaction() is an optional member of the adapter interface, so narrow it before calling; a bare call does not type-check under strict TypeScript.',
 					'The callback result is the transaction result, and a thrown error rolls the whole batch back rather than leaving it half-applied.',
 					'Nesting transaction() is adapter-specific: SQLite and PostgreSQL re-enter under a savepoint, while DuckDB and the JSON adapter throw. Pass the handle down instead of nesting.',
@@ -741,7 +741,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				callout: {
 					variant: 'note',
 					title: 'No benchmark is published here on purpose',
-					body: 'Transaction wrapping is a large win on a durable file-backed database and close to no change on an in-memory one, because what it removes is a commit per row rather than work. Any single figure would be true of one adapter and one machine, so measure the shape you actually deploy.'
+					body: 'A transaction can greatly improve a durable file-backed database and have little effect on an in-memory database. It removes one commit for each row, not application work. One figure would apply to only one adapter and machine. Measure the deployment shape that you use.'
 				}
 			},
 			{
@@ -780,7 +780,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: 'include batches the relationship rather than joining',
 				intro:
-					'list({ include }) hydrates the page first, then queries each named relationship in bulk and primes the cache on each object with the result. 100 orders and their customer become 2 queries rather than 101 — but there is no JOIN and no single-statement fetch, so read it as N+1 collapsing to 1+K.',
+					'list({ include }) hydrates the page first. Then, it queries each named relationship in bulk and puts the result in each object cache. One hundred orders and their customer need 2 queries instead of 101. There is no JOIN or single-statement fetch. Thus, N+1 becomes 1+K.',
 				filename: 'eager-load.ts',
 				code: `const page = await orders.list({\n  where: { status: 'open' },\n  include: ['customerId', 'lines'],\n  limit: 100\n});\n\nfor (const order of page) {\n  // Served from the primed cache; no further queries.\n  const customer = await order.getRelated('customerId');\n}`,
 				points: [
@@ -793,7 +793,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				callout: {
 					variant: 'note',
 					title: 'Fewer queries, not one query',
-					body: 'include is a batch loader, not a JOIN. The page is fetched, then each named relationship costs one more query — two for a manyToMany. That is the difference between a request that scales with page size and one that does not, but a page asking for several relationships still issues several queries.'
+					body: 'include is a batch loader, not a JOIN. The page is fetched first. Then, each named relationship uses one more query, or two for a manyToMany relationship. This behavior removes the query for each page row. A page that requests multiple relationships still uses multiple queries.'
 				}
 			},
 			{
@@ -813,7 +813,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 					'When a tenant-scoped object resolves a relationship into a different, non-null tenant, the loaders throw rather than returning the row. The check is a no-op for global objects and same-tenant reads, so it only fires on a genuine crossing.',
 				points: [
 					'Pass { allowCrossTenant: true } for deliberate cross-tenant work such as admin tooling or migrations.',
-					'A cache primed by include is re-checked on a later guarded call, so eager loading cannot be used to slip a cross-tenant object past the guard.'
+					'A later guarded call checks a cache that include initialized. Thus, eager loading cannot move a cross-tenant object past the guard.'
 				]
 			},
 			{
@@ -857,7 +857,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: 'Where each spelling appears',
 				intro:
-					'There is one place to use column names and one place to use field names, and the split follows whether the framework generated the surface or you wrote the SQL by hand.',
+					'Use column names in one location and field names in another. The correct name depends on whether the framework generated the surface or you wrote the SQL.',
 				points: [
 					'Model properties, where keys, orderBy fields, and select entries: the name declared on the class.',
 					'Database columns, indexes, and constraints: snake_case.',
@@ -870,7 +870,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: 'Table names follow a different rule',
 				intro:
-					'A class name becomes a table name through a separate conversion that only splits where a lowercase letter meets a capital, then pluralizes the last word. Item becomes items, JournalEntry becomes journal_entries, and Currency becomes currencies.',
+					'A separate conversion changes a class name to a table name. It splits only where a lowercase letter meets a capital. Then, it pluralizes the last word. Item becomes items, JournalEntry becomes journal_entries, and Currency becomes currencies.',
 				points: [
 					'An all-caps prefix has no lowercase-to-uppercase boundary, so the class APIKey becomes apikeys even though its apiKey field becomes api_key. The two conversions are not the same function.',
 					'Set tableName on @smrt() when the derived name is not the one you want. There is no per-field column-name override — a column name always follows from the field name.'
@@ -879,7 +879,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: 'Edge cases in the conversion',
 				intro:
-					'The conversion is a pair of small regular expressions, not a dictionary, so a few shapes behave in ways that are easy to misremember.',
+					'The conversion uses two small regular expressions, not a dictionary. Thus, some shapes have results that you can misremember.',
 				points: [
 					'Consecutive capitals are split individually: pdfURL becomes pdf_u_r_l. The round trip back to pdfURL is exact, but the column is harder to read and to type in hand-written SQL — prefer pdfUrl.',
 					'A field the model declares in snake_case stays that way through hydration: a declared publish_date is returned as publish_date rather than being renamed to publishDate.',
@@ -889,7 +889,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				callout: {
 					variant: 'note',
 					title: 'Digits do not split a name',
-					body: 'The conversion only reacts to capitals, so version2 stays version2 rather than becoming version_2, and a column genuinely named version_2 converts back to version_2 rather than version2. Let a capital do the splitting — version2Payload rather than version2 — if you want the underscore.'
+					body: 'The conversion reacts only to capitals. Thus, version2 stays version2 instead of becoming version_2. A column named version_2 converts back to version_2 and not version2. Use a capital for the split, such as version2Payload, when you need the underscore.'
 				}
 			},
 			{
@@ -948,7 +948,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 		navTitle: 'Field policy API',
 		eyebrow: 'Reference',
 		title: 'Field policy exports and semantics',
-		lede: 'What @happyvertical/smrt-fields exports, how an object is named, how a default is encoded on the wire, what a write is checked against, and where results are cached.',
+		lede: 'This page explains the @happyvertical/smrt-fields exports, object names, wire encoding, write validation, and result caches.',
 		plainEnglish:
 			'A policy row names one field of one object at one scope. These are the exact names, formats, and rules that row is checked against.',
 		packages: ['smrt-fields', 'smrt-core', 'smrt-users'],
@@ -1015,7 +1015,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 					'POST <collection>/resolve — resolveBatch, the context-scoped policy read used to bootstrap forms.',
 					'POST <collection>/editor-state — getEditorState, the gear bootstrap.',
 					'POST <collection>/policy-audit — policyAudit, the manage-gated organization roll-up.',
-					'MCP is closed entirely. The generated CLI is writes-only — create, update, and delete — because a CLI command needs an API route behind it and the read routes do not exist; the collection config closes the runtime CLI surface as well.'
+					'MCP is closed entirely. The generated CLI supports only create, update, and delete. A CLI command needs an API route, and the read routes do not exist. The collection configuration also closes the runtime CLI surface.'
 				]
 			},
 			{
@@ -1031,7 +1031,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: 'Version prerequisite',
 				intro:
-					'@happyvertical/smrt-fields first appeared in the 0.40.5x line and is not part of 0.39.x. It pins smrt-core, smrt-tenancy, smrt-ui, and smrt-users to its own exact version, so install it at the same version as the rest of your s-m-r-t packages; a mismatch installs a second object registry and policy resolution stops recognizing your objects.',
+					'@happyvertical/smrt-fields first appeared in the 0.40.5x line and is not part of 0.39.x. The package pins smrt-core, smrt-tenancy, smrt-ui, and smrt-users to its exact version. Install it at the same version as the other s-m-r-t packages. A mismatch installs a second object registry, and policy resolution stops recognizing your objects.',
 				points: [
 					'smrt-users is a required runtime dependency, not an optional one: the permission catalog and operation guard back every write and gear action.',
 					'The usage-learning loop is not in any published release yet.'
@@ -1053,7 +1053,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 		title: 'Terminology',
 		lede: 'A short map of the words used throughout the framework and these docs.',
 		plainEnglish:
-			'These names describe different jobs. Keeping them distinct makes data, identity, and authority easier to discuss.',
+			'These names describe different jobs. Keeping them distinct makes data, identity, and authority clear.',
 		packages: [],
 		sections: [
 			{

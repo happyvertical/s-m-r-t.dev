@@ -146,7 +146,7 @@ function haystack(entry: SearchEntry): string {
 /** Precomputed once so keystrokes only do string comparisons. */
 const indexed = searchEntries.map((entry) => ({
 	entry,
-	label: entry.label.toLowerCase(),
+	normalizedLabel: entry.label.toLowerCase(),
 	haystack: haystack(entry)
 }));
 
@@ -159,10 +159,10 @@ const indexed = searchEntries.map((entry) => ({
 function rank(candidate: (typeof indexed)[number], query: string, tokens: string[]): number | null {
 	if (!tokens.every((token) => candidate.haystack.includes(token))) return null;
 
-	if (candidate.label === query) return 0;
-	if (candidate.label.startsWith(query)) return 1;
-	if (candidate.label.includes(query)) return 2;
-	if (tokens.every((token) => candidate.label.includes(token))) return 3;
+	if (candidate.normalizedLabel === query) return 0;
+	if (candidate.normalizedLabel.startsWith(query)) return 1;
+	if (candidate.normalizedLabel.includes(query)) return 2;
+	if (tokens.every((token) => candidate.normalizedLabel.includes(token))) return 3;
 	if ((candidate.entry.breadcrumb ?? '').toLowerCase().includes(query)) return 4;
 	if ((candidate.entry.description ?? '').toLowerCase().includes(query)) return 5;
 	return 6;
@@ -185,8 +185,8 @@ export function searchDocs(query: string, limit = 12): SearchEntry[] {
 			(a, b) =>
 				a.score - b.score ||
 				kindRank[a.candidate.entry.kind] - kindRank[b.candidate.entry.kind] ||
-				a.candidate.label.length - b.candidate.label.length ||
-				a.candidate.label.localeCompare(b.candidate.label)
+				a.candidate.normalizedLabel.length - b.candidate.normalizedLabel.length ||
+				a.candidate.normalizedLabel.localeCompare(b.candidate.normalizedLabel)
 		)
 		.slice(0, limit)
 		.map((scored) => scored.candidate.entry);

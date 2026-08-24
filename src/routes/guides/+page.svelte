@@ -37,9 +37,9 @@
 		<strong>How these differ from the rest of the site.</strong>
 		<p>
 			A task guide assumes you want a working result today, so it repeats only as much background as
-			the next command needs. When a step raises a question about the underlying rule, follow the
-			link into <a href="/foundations">foundations</a>, <a href="/tooling">developer tooling</a>, or
-			the <a href="/reference">reference</a> rather than expecting the guide to settle it.
+			the next command needs. Follow links to <a href="/foundations">foundations</a>,
+			<a href="/tooling">developer tooling</a>, or the <a href="/reference">reference</a> for the underlying
+			rules. A task guide does not repeat those details.
 		</p>
 	</aside>
 </article>
