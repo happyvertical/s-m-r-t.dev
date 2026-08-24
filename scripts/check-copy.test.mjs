@@ -192,6 +192,34 @@ describe('copy checker', () => {
 		);
 	});
 
+	it('keeps inline each-block records in separate passages', () => {
+		const passages = extractSveltePassages(
+			"{#each [{ body: 'First.' }, { body: 'Second.' }] as item}<p>{item.body}</p>{/each}",
+			'fixture.svelte'
+		);
+		expect(passages.map((item) => item.text)).toEqual(['First.', 'Second.']);
+	});
+
+	it('keeps script-array records in separate passages', () => {
+		const passages = extractSveltePassages(
+			"<script>const items = ['First.', 'Second.'];</script>{#each items as item}<p>{item}</p>{/each}",
+			'fixture.svelte'
+		);
+		expect(passages.map((item) => item.text)).toEqual(['First.', 'Second.']);
+	});
+
+	it('checks nested script bindings in object-based each blocks', () => {
+		const passages = extractSveltePassages(
+			"<script>const copy = 'Use business logic here.'; const items = [{ body: copy }];</script>{#each items as item}<p>{item.body}</p>{/each}",
+			'fixture.svelte'
+		);
+		expect(auditPassages(passages)).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ id: 'prohibited-business-logic', severity: 'error' })
+			])
+		);
+	});
+
 	it('keeps interpolated data copy in the project passages', async () => {
 		const { passages } = await extractProjectPassages();
 		expect(passages).toEqual(

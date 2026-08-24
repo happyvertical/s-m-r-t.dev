@@ -432,8 +432,9 @@ function appendBindingText(bindings, name, text) {
 
 function collectStaticTypeScriptBindings(node, prefix, bindings) {
 	if (ts.isArrayLiteralExpression(node)) {
-		for (const element of node.elements) {
-			collectStaticTypeScriptBindings(element, prefix, bindings);
+		for (const [index, element] of node.elements.entries()) {
+			collectStaticTypeScriptBindings(element, `${prefix}[${index}]`, bindings);
+			appendBindingText(bindings, prefix, extractStaticTypeScriptText(element, bindings));
 		}
 		return;
 	}
@@ -545,6 +546,34 @@ function collectExpressionBindings(node, prefix, targetBindings, sourceBindings)
 	appendBindingText(targetBindings, prefix, extractExpressionText(node, sourceBindings));
 }
 
+function eachBindingSets(expression, contextName, sourceBindings) {
+	if (expression?.type === 'ArrayExpression') {
+		return (expression.elements ?? []).map((element) => {
+			const bindings = new Map(sourceBindings);
+			collectExpressionBindings(element, contextName, bindings, sourceBindings);
+			return bindings;
+		});
+	}
+	if (expression?.type === 'Identifier') {
+		const indexed = new Map();
+		const pattern = new RegExp(
+			`^${expression.name.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')}\\[(\\d+)\\](.*)$`,
+			'u'
+		);
+		for (const [name, text] of sourceBindings) {
+			const match = name.match(pattern);
+			if (!match) continue;
+			const bindings = indexed.get(match[1]) ?? new Map(sourceBindings);
+			appendBindingText(bindings, `${contextName}${match[2]}`, text);
+			indexed.set(match[1], bindings);
+		}
+		if (indexed.size > 0) return [...indexed.values()];
+	}
+	const bindings = new Map(sourceBindings);
+	collectExpressionBindings(expression, contextName, bindings, sourceBindings);
+	return [bindings];
+}
+
 function nodeText(node, bindings) {
 	if (node?.type === 'Text') return node.data ?? node.raw ?? '';
 	if (node?.expression) {
@@ -585,11 +614,15 @@ export function extractSveltePassages(source, filename) {
 			if (text) passages.push({ file: filename, line: lineNumber(source, node.start), text });
 		}
 		if (node.type === 'EachBlock') {
-			const eachBindings = new Map(activeBindings);
-			if (node.context?.type === 'Identifier') {
-				collectExpressionBindings(node.expression, node.context.name, eachBindings, activeBindings);
+			const bindingSets =
+				node.context?.type === 'Identifier'
+					? eachBindingSets(node.expression, node.context.name, activeBindings)
+					: [activeBindings];
+			for (const eachBindings of bindingSets) {
+				for (const child of node.children ?? []) {
+					visit(child, insideContentElement, eachBindings);
+				}
 			}
-			for (const child of node.children ?? []) visit(child, insideContentElement, eachBindings);
 			for (const child of node.else?.children ?? []) {
 				visit(child, insideContentElement, activeBindings);
 			}
