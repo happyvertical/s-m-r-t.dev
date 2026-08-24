@@ -213,11 +213,20 @@ describe('copy checker', () => {
 			"<script>const copy = 'Use business logic here.'; const items = [{ body: copy }];</script>{#each items as item}<p>{item.body}</p>{/each}",
 			'fixture.svelte'
 		);
+		expect(passages.map((item) => item.text)).toEqual(['Use business logic here.']);
 		expect(auditPassages(passages)).toEqual(
 			expect.arrayContaining([
 				expect.objectContaining({ id: 'prohibited-business-logic', severity: 'error' })
 			])
 		);
+	});
+
+	it('does not duplicate nested script object passages', () => {
+		const passages = extractSveltePassages(
+			"<script>const items = [{ meta: { body: 'First.' } }, { meta: { body: 'Second.' } }];</script>{#each items as item}<p>{item.meta.body}</p>{/each}",
+			'fixture.svelte'
+		);
+		expect(passages.map((item) => item.text)).toEqual(['First.', 'Second.']);
 	});
 
 	it('keeps interpolated data copy in the project passages', async () => {
