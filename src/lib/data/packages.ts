@@ -93,7 +93,7 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 	{
 		title: 'Fields and form structure',
 		description:
-			'Build labelled forms, group related fields, and make validation errors easy to find.',
+			'Build labeled forms, group related fields, and make validation errors clear and visible.',
 		importPath: '@happyvertical/smrt-ui/forms',
 		components: ['Form', 'Field', 'FormGroup', 'Fieldset', 'InputGroup', 'ErrorSummary']
 	},
@@ -586,25 +586,25 @@ export const packages: SmrtPackage[] = [
 			details: [
 				{
 					title: 'OIDC login against your identity provider',
-					body: 'Declare providers under packages.users.auth.oidc and mount createOidcLoginHandler and createOidcCallbackHandler from the /sveltekit subpath. Each login mints an independent state, nonce, and PKCE verifier; the challenge method is always S256. The callback checks state, the RFC 9207 authorization-response issuer, the provider error, the JWKS-signed ID token, and the nonce before it will read claims, and falls back to the UserInfo endpoint when the ID token omits email.',
+					body: 'Declare providers under packages.users.auth.oidc. Mount createOidcLoginHandler and createOidcCallbackHandler from the /sveltekit subpath. Each login creates an independent state, nonce, and PKCE verifier, and the challenge method is always S256. The callback checks state, the RFC 9207 authorization-response issuer, and provider errors. It also checks the JWKS-signed ID token and nonce before it reads claims. When the ID token omits email, the callback uses the UserInfo endpoint.',
 					href: '/foundations/users-and-profiles',
 					linkLabel: 'See the sign-in flows'
 				},
 				{
 					title: 'First identity binding fails closed',
-					body: 'When a new issuer and subject resolve to a canonical global Person that already has an owning User, provisioning stops with OidcProvisioningError code profile_owned before it creates a new User, OIDC identity, or session. An application that runs its own invitation or approval workflow can supply the authorizeProfileOwner hook to authorize that first binding. Returning undefined keeps the fail-closed default and null rejects the login.',
+					body: 'A new issuer and subject can resolve to a canonical global Person that already has an owning User. Provisioning then stops with OidcProvisioningError code profile_owned. It does not create a new User, OIDC identity, or session. An application with an invitation or approval workflow can supply authorizeProfileOwner to authorize that first binding. A return value of undefined keeps the fail-closed default. A null value rejects the login.',
 					href: '/foundations/users-and-profiles',
 					linkLabel: 'See the sign-in flows'
 				},
 				{
 					title: 'Terminal device-code sign-in',
-					body: 'TerminalAuthService runs the device-code flow for command-line tools: createRequest returns a device code the CLI keeps, a short user code the person types, and a verification URL. The device code is stored only as a hash, approval is idempotent, and exchangeDeviceCode answers pending, expired, or approved with a bearer token that resolves to the same session context as a browser cookie. Because user codes are short, failed approvals are rate limited per user and the handler surfaces that as 429.',
+					body: 'TerminalAuthService runs the device-code flow for command-line tools, and createRequest returns a device code, a short user code, and a verification URL. The CLI keeps the device code, and the person types the short user code. The service stores only a hash of the device code, and approval is idempotent. exchangeDeviceCode answers pending, expired, or approved. An approved answer includes a bearer token that resolves to the same session context as a browser cookie. Failed approvals have a per-user rate limit because user codes are short, and the handler reports the limit as 429.',
 					href: '/foundations/users-and-profiles',
 					linkLabel: 'See the sign-in flows'
 				},
 				{
 					title: 'Sync the permission catalog after migration',
-					body: 'syncPermissionCatalog merges three sources — permissions derived from the manifest, custom entries declared in smrt.config.ts, and definitions added at runtime — and reconciles them into Permission rows. It reports created, updated, and unchanged slugs, is safe to run on every deploy, and is additive: it never deletes a stale permission, grants a role, or emits row-level-security SQL.',
+					body: 'syncPermissionCatalog merges three sources: manifest permissions, custom entries from smrt.config.ts, and definitions added at runtime. It reconciles them into Permission rows. The operation reports created, updated, and unchanged slugs. You can run it on every deploy. It is additive and never deletes a stale permission, grants a role, or emits row-level-security SQL.',
 					href: '/reference/authorization',
 					linkLabel: 'Authorization model'
 				},
@@ -704,7 +704,7 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Generated object forms',
 					description:
-						'Build a create or edit form from generated browser field definitions and a resolved policy, or register every generated collection once and let forms ask for their object reference.',
+						'Build a create or edit form from generated browser field definitions and a resolved policy. Alternatively, register every generated collection once. Let each form request its object reference.',
 					importPath: '@happyvertical/smrt-fields/svelte',
 					components: ['ObjectForm', 'ObjectFormSourceProvider']
 				},
@@ -748,7 +748,7 @@ export const packages: SmrtPackage[] = [
 				}
 			],
 			surfaceNote:
-				'Policy rows are not a browsable resource. FieldPolicy generates create, update, and delete routes plus three collection actions (resolve, editor-state, policy-audit); generated list and get are deliberately closed because this model is not tenant-scoped and reading it freely would enumerate every tenant and user row. The generated CLI mirrors that shape and is writes-only; MCP is closed entirely.',
+				'Policy rows are not a browsable resource, and FieldPolicy generates create, update, and delete routes. It also generates the resolve, editor-state, and policy-audit collection actions. Generated list and get remain closed because the model is not tenant-scoped. Unrestricted reads would enumerate every tenant and user row. The generated CLI mirrors that shape and is writes-only. MCP is closed entirely.',
 			playgroundNote:
 				'This package does export a ./playground module, with a policy-driven form and a generated ObjectForm. It is not registered on this site yet: its Policy-Driven Form preview throws on mount because the preview renders FormHelp outside its FieldPolicyProvider. Tracked upstream as happyvertical/smrt#2272; the module goes back in once a release carries the fix.'
 		}
@@ -780,11 +780,11 @@ export const packages: SmrtPackage[] = [
 			details: [
 				{
 					title: 'The host owns the process, not the agent',
-					body: 'Signal handling is opt-in. Construct an agent with manageProcessSignals set to true and it installs SIGTERM and SIGINT handlers that shut down and exit; omit it — the default — and nothing is registered, which is what a server or job runner wants. Do not enable it for several agents in one process unless the host coordinates shutdown itself, because the first handler to finish exits the process.'
+					body: 'Signal handling is optional. An agent with manageProcessSignals set to true installs SIGTERM and SIGINT handlers. These handlers shut down and exit. The default false value registers nothing, which is suitable for a server or job runner. Do not enable this option for multiple agents unless the host coordinates shutdown. The first handler to finish exits the process.'
 				},
 				{
 					title: 'Resolve tenant agents, do not list them',
-					body: 'TenantAgent rows are explicit bindings between a tenant and an agent class. To answer what a tenant can actually run, call resolveForTenant on TenantAgentCollection with the tenant id and a function that returns its ancestor ids: it merges manifest permission defaults under explicit overrides, walks the tenant tree for inherited agents, and marks each result explicit or inherited with the tenant it came from. A plain list returns only the explicit rows, with no inheritance, no merged permissions, and no provenance.',
+					body: 'TenantAgent rows are explicit bindings between a tenant and an agent class. Call resolveForTenant on TenantAgentCollection to find what a tenant can run. Supply the tenant id and a function that returns ancestor ids. The resolver merges manifest permission defaults under explicit overrides and walks the tenant tree for inherited agents. Each result identifies its explicit or inherited source tenant. A plain list returns only explicit rows, without inheritance, merged permissions, or provenance.',
 					href: '/foundations/tenants',
 					linkLabel: 'How tenants nest'
 				},
@@ -796,7 +796,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Scheduling is declared here and run elsewhere',
-					body: 'AgentSchedule records the cron expression, next and last run, concurrency ceiling, timeout, target method, and success and failure counts. The runner that fires those schedules lives in smrt-jobs, so an application chooses its own execution host rather than inheriting a background worker with the agent model.',
+					body: 'AgentSchedule records the cron expression, next and last run, concurrency ceiling, timeout, target method, and success and failure counts. The runner that starts these schedules is in smrt-jobs. Thus, an application selects its execution host instead of receiving a background worker with the agent model.',
 					href: '/packages/smrt-jobs',
 					linkLabel: 'smrt-jobs'
 				},
@@ -847,15 +847,15 @@ export const packages: SmrtPackage[] = [
 			details: [
 				{
 					title: 'Say which methods a job may call',
-					body: 'A persisted job row names an object type and a method, so the runner needs to know which methods are reachable. Mark a method with the backgroundEligible decorator, or call markBackgroundEligible for non-decorator code, and the class gains an allowlist. The rule is deliberately restrictive rather than enabling: a class that marks nothing keeps the default behavior, but once any method is marked the runner refuses every method outside the list.'
+					body: 'A persisted job row names an object type and a method, so the runner must know which methods are reachable. Mark a method with the backgroundEligible decorator. For non-decorator code, call markBackgroundEligible. These operations add an allowlist to the class. A class that marks nothing keeps the default behavior. After one method is marked, the runner refuses every method outside the list.'
 				},
 				{
 					title: 'One tenant cannot drain the queue',
-					body: 'Enqueueing checks how many non-terminal jobs a tenant already holds and refuses to add another past the cap, which defaults to ten thousand and can be set per call or through the job builder. Setting it to zero disables the check, and jobs with no tenant are never counted against it. Requested retry counts are clamped to the supported maximum instead of being rejected, so a misconfigured caller cannot pin a worker on a poison job.'
+					body: 'Enqueueing counts the non-terminal jobs for a tenant and refuses another job above the limit. The default limit is ten thousand, and each call or job builder can change it. A value of zero disables the check. Jobs without a tenant do not count against the limit. Requested retry counts are clamped to the supported maximum. Thus, a misconfigured caller cannot pin a worker on a poison job.'
 				},
 				{
 					title: 'Retention starts after the runner is stable',
-					body: 'TaskRunner schedules its first retention sweep one interval after start, never at startup. The default policy retains completed or cancelled jobs for seven days, failed jobs and events for thirty days, and supports dry-run cleanup before a deletion policy changes.'
+					body: 'TaskRunner schedules its first retention sweep one interval after start, never at startup. The default policy keeps completed or canceled jobs for seven days. It keeps failed jobs and events for thirty days. Dry-run cleanup is available before a deletion policy changes.'
 				}
 			],
 			componentImport: '@happyvertical/smrt-jobs/svelte',
@@ -900,7 +900,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Authorization is terminated in front of it',
-					body: 'The package trusts the principal supplied by the application adapter. It does not implement an OAuth authorization server and does not validate bearer tokens itself, so a public deployment validates the token at the gateway and populates the request principal, tenant, and permissions only after that succeeds.',
+					body: 'The package trusts the principal supplied by the application adapter. It does not implement an OAuth authorization server or validate bearer tokens. A public deployment validates the token at the gateway. The deployment supplies the request principal, tenant, and permissions only after successful validation.',
 					href: '/tooling/compatibility',
 					linkLabel: 'Compatibility and operations'
 				}
@@ -927,7 +927,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Coverage instead of a silent empty answer',
-					body: 'Package discovery reads the workspace globs and records where each package objects came from. Discovering nothing is an error-grade diagnostic naming the roots and artifact paths checked, so an unreadable project is never reported as a project with no model.',
+					body: 'Package discovery reads the workspace globs and records the source of each package object. An empty result produces an error-grade diagnostic that names the checked roots and artifact paths. Thus, an unreadable project is not reported as a project without a model.',
 					href: '/tooling/knowledge',
 					linkLabel: 'Knowledge tooling'
 				}
@@ -953,7 +953,7 @@ export const packages: SmrtPackage[] = [
 			details: [
 				{
 					title: 'A shared component standard',
-					body: 'Foundation controls use native semantics first, stable server-safe IDs, Svelte 5 bindable state, visible focus and validation states, reduced-motion rules, semantic design tokens, and focused accessibility tests.'
+					body: 'Foundation controls use native semantics, stable server-safe IDs, and Svelte 5 bindable state. They have visible focus and validation states, reduced-motion rules, semantic design tokens, and focused accessibility tests.'
 				},
 				{
 					title: 'Forms agents can assist with',
@@ -971,7 +971,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Focused public imports',
-					body: 'Import from /forms, /ui, /feedback, /data, /layout, and /themes so application code says which part of the foundation it depends on. The package root remains a compatibility barrel.'
+					body: 'Import from /forms, /ui, /feedback, /data, /layout, and /themes. Each import then identifies the applicable foundation part. The package root remains a compatibility barrel.'
 				}
 			],
 			componentImport: '@happyvertical/smrt-ui/forms'
@@ -995,19 +995,19 @@ export const packages: SmrtPackage[] = [
 			details: [
 				{
 					title: 'Navigation the manifest already describes',
-					body: 'tenantNavFromManifest turns a manifest into ordered nav sections. It drops collections, internal and test classes, and anything without a REST list route, then drops single-table-inheritance subtypes that share a parent collection, because the polymorphic endpoint at that shared URL already covers them. Pass permittedResources and it filters to what a role may see, walking up the inheritance chain so a permitted subtype does not lose the base link it actually routes through. Output is sorted, so manifest churn never reshuffles the sidebar.',
+					body: 'tenantNavFromManifest turns a manifest into ordered navigation sections. It drops collections, internal and test classes, and items without a REST list route. It also drops single-table-inheritance subtypes that share a parent collection because the polymorphic endpoint already includes them. Pass permittedResources to filter the resources that a role can see. The filter checks the inheritance chain, so a permitted subtype keeps its applicable base link. Sorted output prevents manifest changes from reordering the sidebar.',
 					href: '/capabilities/application-shell',
 					linkLabel: 'How the shell is composed'
 				},
 				{
 					title: 'AdminShell replaced the first-generation shells',
-					body: 'The public workspace surface is the four-edge AdminShell contract. The earlier WorkspaceShell and RoleShell primitives remain in the package as migration references only and are not exported from any subpath, so new work should compose AdminShell panels and focus tools. The focus-tool dock from that generation stays reachable on the workspace/legacy subpath while applications move across.',
+					body: 'The public workspace surface is the four-edge AdminShell contract. The earlier WorkspaceShell and RoleShell primitives remain only as migration references. No subpath exports them. Compose new work with AdminShell panels and focus tools. The earlier focus-tool dock stays available on the workspace/legacy subpath during application migration.',
 					href: '/capabilities/application-shell',
 					linkLabel: 'How the shell is composed'
 				},
 				{
 					title: 'Browser AI preloads on a strategy you choose',
-					body: 'Provider accepts a preload strategy of none, eager, idle, or on-visible; idle is the default and schedules work in an idle callback. eager starts immediately, none defers every adapter to first use, and on-visible is a manual mode: the package schedules nothing and the application decides when to trigger the preload. Adapters warm sequentially, one failure is recorded rather than aborting the rest, and an initialized adapter is kept in a module-level cache so navigation does not re-download a model.'
+					body: 'Provider accepts a preload strategy of none, eager, idle, or on-visible. The default idle strategy schedules work in an idle callback. eager starts immediately, and none defers each adapter until first use. on-visible is manual: the package schedules nothing, and the application starts the preload. Adapters warm sequentially, and one failure does not stop the remaining adapters. A module-level cache keeps each initialized adapter, so navigation does not download a model again.'
 				},
 				{
 					title: 'Calling a local model from a component',
@@ -1015,7 +1015,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'One language snapshot per render',
-					body: 'buildI18nSnapshot resolves message templates for a locale on the server, including tenant overrides, and Provider accepts the result. Variables are interpolated in the browser, and a missing key falls back to the registered English default and then to the key itself, so a partly translated app still renders. The matching useI18n store and Trans component live in the UI foundation.',
+					body: 'buildI18nSnapshot resolves server message templates for a locale, including tenant overrides. Provider accepts the result. The browser interpolates variables. A missing key uses the registered English default and then the key itself. Thus, a partly translated application still renders. The matching useI18n store and Trans component are in the UI foundation.',
 					href: '/packages/smrt-ui',
 					linkLabel: 'smrt-ui'
 				}
@@ -1047,7 +1047,7 @@ export const packages: SmrtPackage[] = [
 			highlights: [
 				'One searchable catalog with the UI foundation first and packages grouped below it',
 				'Package-owned, lazy-loaded examples instead of a central copy of every demo',
-				'Clearly labelled mock and live modes with package overview pages'
+				'Clearly labeled mock and live modes with package overview pages'
 			],
 			components: ['PlaygroundHost'],
 			componentImport: '@happyvertical/smrt-playground/svelte'
@@ -1194,7 +1194,7 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Business & operations',
 		'smrt-products',
-		'A product catalogue and reference module for package, federation, standalone, and browser-store consumption.',
+		'A product catalog and reference module for package, federation, standalone, and browser-store consumption.',
 		{ exampleResource: 'products' }
 	),
 	definePackage(
@@ -1420,7 +1420,7 @@ export const packages: SmrtPackage[] = [
 			details: [
 				{
 					title: 'What you can rely on now',
-					body: 'The exported type definitions are stable enough to design against: a peer is a url, name, discoveredAt, and optional lastSeen, and federation configuration covers enabled, discoverability, peers, autodiscovery, and peerExchange. Nothing behind those types performs network work.'
+					body: 'The exported type definitions are stable enough for design work. A peer has a url, name, discoveredAt, and optional lastSeen. Federation configuration covers enabled, discoverability, peers, autodiscovery, and peerExchange. Nothing behind these types does network work.'
 				},
 				{
 					title: 'What is still to be built',
@@ -1428,7 +1428,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Check upstream before you plan around it',
-					body: 'The source is the current truth. The README carries the same stubs-only warning, but parts of it lag the code: it reports no dependencies while the package declares smrt-core and several SDK adapters. Read the source before assuming any of the planned behavior has arrived.',
+					body: 'The source is the current truth. The README has the same stubs-only warning, but some parts are behind the code. It reports no dependencies, although the package declares smrt-core and several SDK adapters. Read the source before you assume that planned behavior is available.',
 					href: 'https://github.com/happyvertical/smrt/tree/main/packages/gnode',
 					linkLabel: 'Open the package source'
 				}

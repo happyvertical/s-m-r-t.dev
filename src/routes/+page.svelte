@@ -86,7 +86,7 @@ export class Article extends SmrtObject {
 		},
 		{
 			title: 'Most of the pieces, already built.',
-			body: 'Users, tenants, jobs, reports, content, commerce, messages, ledgers, images, and analytics ship as packages sharing the same model contract — frontend components and backend behavior together, made to wire into each other. Much of what many products need exists before you write anything; the package browser shows what is already there.'
+			body: 'Users, tenants, jobs, reports, content, commerce, messages, ledgers, images, and analytics ship as packages that share one model contract. Frontend components and backend behavior work together. Much of what many products need exists before you write anything. The package browser shows what is already there.'
 		},
 		{
 			title: 'Change it once. It changes everywhere.',
@@ -94,7 +94,7 @@ export class Article extends SmrtObject {
 		},
 		{
 			title: 'You decide what agents can do.',
-			body: 'Agent access is declared per action, and the permissions that limit people limit agents. An agent can know a field exists without being able to read it, and can propose a change without being able to apply it until a person approves — awareness is not authority.'
+			body: 'Agent access is declared per action, and the permissions that limit people limit agents. An agent can know that a field exists without permission to read the field. The agent can propose a change, but a person must approve the change. Awareness is not authority.'
 		},
 		{
 			title: 'Any agent, without a second integration.',
@@ -109,7 +109,7 @@ export class Article extends SmrtObject {
 	const losses = [
 		{
 			title: 'The glue between systems.',
-			body: 'A form library, an admin panel, an API framework, a job runner, an auth system, and an AI SDK each hold their own copy of your domain — and you write the wiring between them. Here they are one set of packages sharing one model, so that glue is not your code to write, test, or debug.'
+			body: 'A form library, admin panel, API framework, job runner, authentication system, and AI SDK each hold a separate copy of your domain. You write the wiring between those copies. Here, one set of packages shares one model. You do not need to write, test, or debug that glue.'
 		},
 		{
 			title: 'The version matrix.',
@@ -117,7 +117,7 @@ export class Article extends SmrtObject {
 		},
 		{
 			title: 'The lock-in bet.',
-			body: 'Committing to a framework should not mean losing the exits. The license is MIT, models are TypeScript classes in your own repository, data lives in SQLite or Postgres, and agents connect over open protocols such as MCP.'
+			body: 'Committing to a framework should not mean losing the exits. The license is MIT. Models are TypeScript classes in your repository. Data lives in SQLite or Postgres. Agents connect over open protocols such as MCP.'
 		}
 	];
 
@@ -150,11 +150,10 @@ export class Article extends SmrtObject {
 	<header class="hero">
 		<h1>Why s-m-r-t?</h1>
 		<p class="hero-copy">
-			One source of truth for your application logic. You describe the records your product manages
-			— an article, an order, a customer — as models, and s-m-r-t generates what surrounds them:
-			storage, forms, APIs, operator commands, permissions, and AI-agent tools, all working from the
-			same definition with the same limits. Change a model and every surface updates with it. Give
-			an agent access and it gets the operations you chose, nothing more.
+			One source of truth for your application logic. Describe an article, order, or customer as a
+			model. s-m-r-t generates the surrounding storage, forms, APIs, operator commands, permissions,
+			and AI-agent tools. Every surface uses the same definition and limits. Change a model, and
+			every surface updates. Give an agent access, and the agent gets only the selected operations.
 		</p>
 		<a class="hero-link" href="#how-it-works">How it works ↓</a>
 	</header>
@@ -213,14 +212,14 @@ export class Article extends SmrtObject {
 					<ul>
 						<li>
 							<strong>Semantic control discovery</strong><span
-								>Every form control publishes a stable identity and description an agent can look up
-								— no guessing from the page structure, labels, or pixels.</span
+								>Every form control publishes a stable identity and description. Agents do not guess
+								from page structure, labels, or pixels.</span
 							>
 						</li>
 						<li>
 							<strong>Explain, highlight, validate</strong><span
-								>An agent can point at a field, say what it means and allows, and run the form’s own
-								checks without changing anything.</span
+								>An agent can identify a field, describe its meaning and allowed values, and run the
+								form checks without changes.</span
 							>
 						</li>
 						<li>
@@ -237,8 +236,8 @@ export class Article extends SmrtObject {
 						</li>
 						<li>
 							<strong>Adapter wiring</strong><span
-								>Chat, voice, tutorials, and tests all drive the same small command vocabulary, and
-								connecting one to your product is an explicit choice — never automatic.</span
+								>Chat, voice, tutorials, and tests use one command vocabulary. Each connection to
+								your product requires an explicit choice.</span
 							>
 						</li>
 					</ul>
@@ -282,21 +281,20 @@ export class Article extends SmrtObject {
 			<ul class="builtin-grid">
 				<li>
 					<strong>Outcome-weighted memory</strong><span
-						>Before a run, an agent recalls strategies that worked before; success strengthens a
-						memory, and a validated failure drops it below the reuse floor, so what stops working
-						stops being used.</span
+						>Before a run, an agent recalls successful strategies. Success strengthens a memory. A
+						validated failure drops the memory below the reuse floor and prevents further use.</span
 					>
 				</li>
 				<li>
 					<strong>Tenant-owned personas</strong><span
-						>One agent class can serve many tenants as durable instances — each with its own
-						instructions, tool ceiling, identity, schedule, and memory that never crosses tenants.</span
+						>One agent class can serve many tenants as durable instances. Each instance has separate
+						instructions, tool limits, identity, schedule, and memory.</span
 					>
 				</li>
 				<li>
 					<strong>Authority that only narrows</strong><span
-						>Every action resolves as the intersection of the user’s permissions, the agent’s
-						ceiling, and the persona’s tool list — and delegation between agents can never widen it.</span
+						>Every action uses the intersection of the user permissions, agent limits, and persona
+						tool list. Delegation between agents cannot increase authority.</span
 					>
 				</li>
 				<li>

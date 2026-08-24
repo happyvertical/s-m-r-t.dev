@@ -27,7 +27,7 @@ export const taskGuides: Guide[] = [
 		navTitle: 'Multi-tenant lifecycle',
 		eyebrow: 'Task guide',
 		title: 'Run a tenant from creation to a scoped request',
-		lede: 'Create tenants and their hierarchy, give a user a membership and a role, scope your own models, switch the active tenant safely, and know exactly which of those rules the database enforces for you.',
+		lede: 'Create tenants and their hierarchy. Give a user a membership and a role. Scope your models. Switch the active tenant safely. Identify the rules that the database enforces.',
 		plainEnglish:
 			'A tenant is the boundary that separates one customer account from another. This guide follows one tenant from the row that creates it to a request that can only see that tenant’s data.',
 		packages: ['smrt-users', 'smrt-tenancy', 'smrt-core'],
@@ -46,7 +46,7 @@ export const taskGuides: Guide[] = [
 			{
 				title: 'Know which package holds what',
 				intro:
-					'The split between the two packages is the thing that most often sends a first attempt into an import error. smrt-users owns the records — Tenant, User, Role, Membership, Permission, Session — and their collections. smrt-tenancy owns no models at all: it is the context and enforcement layer, providing the decorators, the request context, the collection interceptor, and the test helpers.',
+					'The split between the two packages can cause an import error during a first attempt. smrt-users owns Tenant, User, Role, Membership, Permission, Session, and their collections. smrt-tenancy owns no models. smrt-tenancy is the context and enforcement layer. The package provides decorators, request context, the collection interceptor, and test helpers.',
 				points: [
 					'Tenant, TenantCollection, Membership, and MembershipCollection import from @happyvertical/smrt-users.',
 					'TenantScoped, tenantId, withTenant, and enableTenancy import from @happyvertical/smrt-tenancy.',
@@ -58,7 +58,7 @@ export const taskGuides: Guide[] = [
 			{
 				title: 'Create the schema and the system roles',
 				intro:
-					'Two things must exist before a membership can. The tables come from a migration, and the built-in roles come from a seed call that also populates the permission catalogue. Both are ordinary application startup work rather than CLI-only steps, which is what makes them easy to run in a script and in a test.',
+					'Two things must exist before a membership can. A migration creates the tables. A seed call creates the built-in roles and populates the permission catalog. Both are ordinary application startup operations instead of CLI-only steps. Thus, scripts and tests can run them.',
 				filename: 'scripts/bootstrap.ts',
 				code: `import { ObjectRegistry, resolveDatabase } from '@happyvertical/smrt-core';
 import { migrateSmrtSchemas } from '@happyvertical/smrt-core/migrations';
@@ -115,7 +115,7 @@ await tenants.findChildren(network.id); // [ Edmonton Chapter ]`,
 			{
 				title: 'Give a user access through a membership',
 				intro:
-					'A membership is the join between one user, one tenant, and one role. There is no addMember helper — you create the row like any other, which keeps the role decision explicit at the call site rather than hidden in a convenience method.',
+					'A membership joins one user, one tenant, and one role. There is no addMember helper. Create the row like any other row. This operation keeps the role decision explicit at the call site instead of hiding it in a convenience method.',
 				filename: 'src/lib/server/invite.ts',
 				code: `import {
   MembershipCollection, MembershipStatus, RoleCollection
@@ -143,7 +143,7 @@ await memberships.findByUserAndTenant(user.id, chapter.id);`,
 			{
 				title: 'Put your own models inside the boundary',
 				intro:
-					'Marking a model tenant-scoped is what connects it to the interceptor. Either spelling below registers the same configuration; the decorator form keeps the tenant field visible in the class, and the core-option form avoids importing smrt-tenancy in your model file.',
+					'Marking a model tenant-scoped connects it to the interceptor. Either spelling below registers the same configuration. The decorator form keeps the tenant field visible in the class. The core-option form avoids a smrt-tenancy import in the model file.',
 				filename: 'src/lib/objects/Document.ts',
 				code: `import { smrt, SmrtObject } from '@happyvertical/smrt-core';
 import { TenantScoped, tenantId } from '@happyvertical/smrt-tenancy';
@@ -168,7 +168,7 @@ export class Document extends SmrtObject {
 			{
 				title: 'Establish the context a request runs in',
 				intro:
-					'Nothing is scoped until something establishes the tenant context. In SvelteKit that is two handles in sequence: the tenancy handle opens the async context for the request, and the session handler resolves the signed-in user, their membership, their permission snapshot, and the active tenant. Outside a request — a script, a job, a test — withTenant does the same job around a function.',
+					'Nothing is scoped until something establishes the tenant context. In SvelteKit, two handles run in sequence. The tenancy handle opens the asynchronous request context. The session handler resolves the signed-in user, membership, permission snapshot, and active tenant. Outside a request, withTenant supplies the same context around a script, job, or test function.',
 				filename: 'src/hooks.server.ts',
 				code: `import { sequence } from '@sveltejs/kit/hooks';
 import { createSvelteKitHandle } from '@happyvertical/smrt-tenancy/adapters';
@@ -198,7 +198,7 @@ export const handle = sequence(tenancyHandle, sessionHandle);`,
 			{
 				title: 'Switch the active tenant',
 				intro:
-					'Switching is the operation most worth getting right, because it is reachable from user input. The helper verifies the caller holds an active membership in the target tenant before it writes anything, then mints a new session and revokes the old one so a stolen identifier cannot follow the user into the new tenant.',
+					'Tenant switching is reachable from user input, so its controls are important. The helper verifies the caller has an active membership in the target tenant before it writes. Then, it creates a new session and revokes the old one. Thus, a stolen identifier cannot follow the user into the new tenant.',
 				filename: 'src/routes/api/tenant/switch/+server.ts',
 				code: `import { error, json } from '@sveltejs/kit';
 import { switchSessionTenant } from '@happyvertical/smrt-users/sveltekit';
@@ -217,7 +217,7 @@ export const POST = async (event) => {
   return json({ ok: true });
 };`,
 				points: [
-					'The membership check is fail-closed, so the tenant id may come from untrusted form data — but the boolean result must be honoured.',
+					'The membership check is fail-closed, so the tenant id may come from untrusted form data — but the Boolean result must be honored.',
 					'A successful switch into a tenant rotates the session id; the helper re-sets the cookie for you.',
 					'Clearing the tenant by passing null does not rotate.',
 					'If you call SessionService.switchTenant directly, persist the returned sessionId yourself.'
@@ -226,10 +226,10 @@ export const POST = async (event) => {
 			{
 				title: 'What the data layer actually enforces',
 				intro:
-					'Once the interceptor is enabled and a class is registered, list, get, count, save, and delete are all covered. The behaviours below are worth committing to memory because they differ from each other: a read that reaches the wrong tenant comes back empty, while a write that names the wrong tenant raises.',
+					'After interceptor enablement and class registration, list, get, count, save, and delete are covered. Reads and writes have different cross-tenant behavior. A read for the wrong tenant returns no result. A write that names the wrong tenant throws an error.',
 				points: [
-					'list() and count() have the tenant predicate injected, so another tenant’s rows are simply absent.',
-					'get() with a bare id becomes a lookup on id and tenant together, and returns null across a boundary rather than throwing.',
+					'list() and count() receive the tenant predicate, so rows from another tenant are absent.',
+					'get() with a bare id becomes a lookup on id and tenant together. It returns null across a boundary instead of throwing an error.',
 					'An explicit filter naming a different tenant throws TenantIsolationError, code TENANT_ISOLATION_VIOLATION.',
 					'A save whose tenant field disagrees with the context throws the same error; an empty field is populated from the context instead.',
 					'Any covered operation with no context at all, on a required-mode class, throws TenantContextError, code TENANT_CONTEXT_REQUIRED.'
@@ -264,13 +264,13 @@ await documents.list();
 				points: [
 					'Optional-mode reads with no context pass through unfiltered at the interceptor. Generated REST routes compensate by asking for global rows only; a hand-written route does not.',
 					'Raw SQL is gated, not filtered. The policy can throw, warn, or allow, but no tenant predicate is ever added, and a database handle obtained outside a collection bypasses interceptors entirely.',
-					'Context does not survive an async boundary such as a timer, an emitter, or a queue consumer unless you wrap the callback with TenantContext.bind or runWithJobContext.'
+					'Context does not survive an asynchronous boundary, such as a timer, emitter, or queue consumer. Wrap the callback with TenantContext.bind or runWithJobContext.'
 				]
 			},
 			{
 				title: 'Add row-level security where the database supports it',
 				intro:
-					'On PostgreSQL the same rules can be pushed into the database, so a query that skips the collection layer is still constrained. The generated policies read request-scoped settings that the session layer publishes inside the transaction; on SQLite the same permission set is still resolved and carried, but the database has no per-operation teeth.',
+					'On PostgreSQL, the database can enforce the same rules. Thus, a query that skips the collection layer is still constrained. Generated policies read request-scoped settings that the session layer publishes inside the transaction. On SQLite, the same permission set is resolved and carried. However, the database does not enforce each operation.',
 				filename: 'scripts/apply-rls.ts',
 				code: `import { applyPostgresPermissionPolicies } from '@happyvertical/smrt-users';
 
@@ -321,7 +321,7 @@ it('refuses a foreign filter', async () => {
 		navTitle: 'Expose your app over MCP',
 		eyebrow: 'Task guide',
 		title: 'Expose a running application over MCP',
-		lede: 'Turn the objects you already have into agent tools: generate a local stdio server, mount the stateless HTTP endpoint, call it with curl, and connect a real client — with the authorization boundary in the right place.',
+		lede: 'Turn existing objects into agent tools. Generate a local stdio server. Mount the stateless HTTP endpoint. Call it with curl. Connect a real client. Keep the authorization boundary in the correct location.',
 		plainEnglish:
 			'MCP lets an agent call your application’s operations as tools. The tools come from the same models your app already uses, so permissions, tenants, and field rules stay where they are.',
 		packages: ['smrt-app-mcp', 'smrt-core', 'smrt-app-cli'],
@@ -368,7 +368,7 @@ export class Article extends SmrtObject {
 				callout: {
 					variant: 'note',
 					title: 'Choose the output language by extension',
-					body: 'The default .js target is transpiled to runnable ESM JavaScript. Ask for a .ts or .mts path when you want to keep the annotated TypeScript for tsx or Node type stripping; CommonJS .cjs and .cts targets are rejected.'
+					body: 'The default .js target is transpiled to runnable ESM JavaScript. Use a .ts or .mts path to keep the annotated TypeScript for tsx or Node type stripping. CommonJS .cjs and .cts targets are rejected.'
 				},
 				filename: 'generate.sh',
 				lang: 'bash',
@@ -390,7 +390,7 @@ npx smrt generate-mcp --name my-app --version 0.1.0
 			{
 				title: 'Check it before wiring a client',
 				intro:
-					'A stdio server speaks JSON-RPC on stdout, so you can drive it from a shell and see the tool catalogue directly. This is the fastest way to confirm your classes were scanned before a client failure sends you looking in the wrong place.',
+					'A stdio server speaks JSON-RPC on stdout, so you can drive it from a shell and see the tool catalog directly. This is the fastest way to confirm your classes were scanned before a client failure sends you looking in the wrong place.',
 				filename: 'smoke-test.sh',
 				lang: 'bash',
 				code: `echo '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{"_meta":{
@@ -434,7 +434,7 @@ npx smrt generate-mcp --name my-app --version 0.1.0
 			{
 				title: 'Describe the application server',
 				intro:
-					'The HTTP surface is a different object with a different job. createMcpAppServer wraps the generated tools with four independent gates: the allow-list decides which classes are reachable at all, public patterns decide what an anonymous caller may see, the tool policy decides per principal, and workflow assertions run before dispatch.',
+					'The HTTP surface is a different object with a different job. createMcpAppServer wraps generated tools with four independent gates. The allow-list sets the reachable classes. Public patterns set what an anonymous caller can see. Tool policy makes a decision for each principal. Workflow assertions run before dispatch.',
 				filename: 'src/lib/server/mcp.ts',
 				code: `import { createMcpAppServer, McpAccessError } from '@happyvertical/smrt-app-mcp';
 import { getDbConfig } from './db';
@@ -487,14 +487,14 @@ export const POST = mountMcpRoute(mcpServer);
 				points: [
 					'A fresh protocol server is built per request, so no session id, sticky routing, or held stream is involved.',
 					'The mount serves server/discover, tools/list, and tools/call. It always reports tools and adds the optional tasks extension only when an allowed object enables a task action.',
-					'Tool discovery is sorted by name, so the catalogue is deterministic.',
+					'Tool discovery is sorted by name, so the catalog is deterministic.',
 					'Exporting it as GET returns 405 with code -32000.'
 				]
 			},
 			{
 				title: 'Call it with curl',
 				intro:
-					'A stock client sends more than the JSON-RPC body: the request carries a per-request envelope naming the protocol revision, and headers that must agree with the body. Reproducing that by hand is the quickest way to confirm the endpoint is live and the policy is doing what you meant.',
+					'A stock client sends more than the JSON-RPC body. The request has an envelope that names the protocol revision. Its headers must agree with the body. Send the request manually to confirm that the endpoint is live and the policy has the intended result.',
 				filename: 'tools-list.sh',
 				lang: 'bash',
 				code: `curl -sS -X POST 'https://app.example.com/api/mcp' \\
@@ -522,7 +522,7 @@ export const POST = mountMcpRoute(mcpServer);
 					'The _meta envelope is required. Both the protocol version and the client capabilities keys must be present; capabilities may be an empty object.',
 					'2026-07-28 is the only revision this release accepts.',
 					'The MCP-Protocol-Version header is optional, but if you send it, it must match the envelope.',
-					'The anonymous catalogue above contains only the read-only tools, because the base rule admits nothing else without a principal.'
+					'The anonymous catalog above contains only the read-only tools, because the base rule admits nothing else without a principal.'
 				]
 			},
 			{
@@ -649,7 +649,7 @@ export const POST = mountMcpRoute(mcpServer);
 		navTitle: 'Semantic search',
 		eyebrow: 'Task guide',
 		title: 'Search records by meaning',
-		lede: 'Declare which fields carry meaning, generate their embeddings, and query a collection with semanticSearch or findSimilar — then read the ranked results honestly, including where the ranking happens relative to your filters.',
+		lede: 'Declare the fields that carry meaning. Generate their embeddings. Query a collection with semanticSearch or findSimilar. Review where ranking occurs relative to the filters.',
 		plainEnglish:
 			'Semantic search finds records that mean something similar to a query, even when they share no words with it. The vectors that make that possible are stored beside your data and refreshed when the text changes.',
 		packages: ['smrt-core', 'smrt-tenancy'],
@@ -690,7 +690,7 @@ ObjectRegistry.registerCollection('Recipe', RecipeCollection);`,
 			{
 				title: 'Choose where the vectors come from',
 				intro:
-					'The project-level block decides which model produces the numbers. Local embedding runs on your machine through a transformers runtime and needs no API key; the ai provider calls the configured model provider through the SDK adapter. The default is local, at 768 dimensions.',
+					'The project-level block selects the model that produces the numbers. Local embedding uses a transformers runtime on your machine and needs no API key. The ai provider calls the configured model provider through the SDK adapter. The default is local with 768 dimensions.',
 				filename: 'smrt.config.js',
 				code: `export default defineConfig({
   smrt: {
@@ -712,7 +712,7 @@ ObjectRegistry.registerCollection('Recipe', RecipeCollection);`,
 			{
 				title: 'Generate the vectors',
 				intro:
-					'Saving a record schedules embedding generation, but that path is deliberate about its conditions: it only runs when a model client is resolvable, and it is not awaited. For a script, a seed, or a test you want the explicit call, because it finishes before the next line runs.',
+					'Saving a record schedules embedding generation only when a model client can resolve. The save does not wait for generation. Use the explicit call in a script, seed, or test. The explicit call finishes before the next line runs.',
 				filename: 'seed.ts',
 				code: `const recipes = await RecipeCollection.create({ db: dbConfig });
 
@@ -734,7 +734,7 @@ const stats = await recipes.generateMissingEmbeddings();
 			{
 				title: 'Query it',
 				intro:
-					'semanticSearch embeds the query text and returns hydrated model instances — real objects with their methods — each carrying a _similarity score between zero and one, sorted from most to least similar. findSimilar does the same starting from a record you already have.',
+					'semanticSearch embeds the query text and returns hydrated model instances with their methods. Each instance has a _similarity score between zero and one. Results are sorted from the highest similarity to the lowest. findSimilar starts the same operation from an existing record.',
 				filename: 'search.ts',
 				code: `const hits = await recipes.semanticSearch('baking bread at home', { limit: 3 });
 
@@ -745,7 +745,7 @@ hits.map((hit) => [hit.title, hit._similarity]);
 
 const related = await recipes.findSimilar(hits[0], { limit: 5 });`,
 				points: [
-					'The threshold option is named minSimilarity and defaults to 0. It is a floor, not a cut-off between clusters: adding minSimilarity: 0.5 to the call above would still return all three rows, because the weakest one scores 0.514.',
+					'The threshold option is named minSimilarity and defaults to 0. It is a minimum score and not a boundary between clusters. A value of 0.5 in the example still returns all three rows because the lowest score is 0.514.',
 					'limit defaults to 10 on semanticSearch and 5 on findSimilar.',
 					'findSimilar excludes the source record by default and reads its stored vector, so it raises if that record was never embedded.',
 					'field selects which configured field to search when a class declares more than one.'
@@ -774,16 +774,16 @@ export const GET = async ({ url, locals }) => {
 			{
 				title: 'Read the ranking honestly',
 				intro:
-					'The ranking stage and the filtering stage are separate, and knowing which runs first explains most surprising result sets. Similarity is computed over every stored vector for the class, truncated to limit, and only then are the surviving ids loaded through the collection — where tenant scope and your where clause finally apply.',
+					'The ranking and filtering stages are separate, and their order explains most unexpected result sets. Similarity is calculated for each stored class vector. The result is shortened to limit. Then, the collection loads the remaining ids and applies tenant scope and the where clause.',
 				callout: {
 					variant: 'warning',
 					title: 'limit counts candidates, not results',
-					body: 'Truncation happens before tenant scope and the where clause are applied, so a query with limit 10 can return fewer than ten rows even when more matches exist. Over-fetch and trim, rather than treating limit as a page size.'
+					body: 'Truncation occurs before tenant scope and the where clause apply. Thus, limit 10 can return fewer than ten rows when more matches exist. Request extra candidates and shorten the result. Do not use limit as a page size.'
 				},
 				points: [
 					'Nothing leaks: a tenant-scoped class still filters at the hydration step, so another tenant’s rows never reach the caller.',
-					'Field policy is not applied. Results are fully hydrated instances, so sensitive-field rules that live in the generated interfaces are not in this path — project the fields you return, as the route above does.',
-					'With json storage, every vector for the class is read and parsed on every query. That is fine for a catalogue and wrong for a corpus.',
+					'Field policy is not applied. Results are fully hydrated instances. Sensitive-field rules in the generated interfaces are not in this path. Project the fields that you return, as the route above does.',
+					'With json storage, every vector for the class is read and parsed on every query. That is sufficient for a catalog and not for a corpus.',
 					'Native vector search falls back to the in-application scan when the database call fails. Results stay correct and get much slower, and the only trace is a logged warning.'
 				],
 				links: [
@@ -794,7 +794,7 @@ export const GET = async ({ url, locals }) => {
 			{
 				title: 'Turn on native vectors when the dataset outgrows the scan',
 				intro:
-					'Native storage moves the comparison into the database. On PostgreSQL the extension and column are created for you on first use; on SQLite it requires opting into the native capability, which also means a local file rather than a remote connection.',
+					'Native storage moves the comparison into the database. On PostgreSQL, first use creates the extension and column. On SQLite, enable the native capability. SQLite native storage also requires a local file instead of a remote connection.',
 				filename: 'native-vectors.ts',
 				code: `// smrt.config.js
 embeddings: { provider: 'local', storage: 'native' }
@@ -821,7 +821,7 @@ const db = await getDatabase({
 		navTitle: 'Test your application',
 		eyebrow: 'Task guide',
 		title: 'Test a s-m-r-t application',
-		lede: 'Install the Vitest plugin, give every test its own rolled-back database, and cover the model, the tenant boundary, the generated surfaces, and the components from one configuration.',
+		lede: 'Install the Vitest plugin. Give each test its own rolled-back database. Use one configuration to cover the model, tenant boundary, generated surfaces, and components.',
 		plainEnglish:
 			'Tests run against the real models and the real database rather than mocks. Each test gets a private database inside a transaction, so tests can run in parallel and leave nothing behind.',
 		packages: ['smrt-vitest', 'smrt-core', 'smrt-tenancy'],
@@ -939,7 +939,7 @@ describe(\`Article (\${getAdapterDisplayName()})\`, () => {
 			{
 				title: 'Run it',
 				intro:
-					'The plugin prints what it generated before Vitest starts. Those lines are the fastest check that the manifest actually saw your classes: if the object count is zero, the scan globs are wrong and every model assertion afterwards would be meaningless.',
+					'The plugin prints its generated result before Vitest starts. Use these lines to confirm that the manifest found the classes. An object count of zero means the scan globs are wrong. Model assertions after that result have no meaning.',
 				filename: 'run.sh',
 				lang: 'bash',
 				code: `pnpm vitest run
@@ -955,7 +955,7 @@ describe(\`Article (\${getAdapterDisplayName()})\`, () => {
 			{
 				title: 'Pick the adapter with an environment variable',
 				intro:
-					'The helpers resolve the adapter from the environment rather than from a flag in each test. TEST_DB_ADAPTER wins if it is set; otherwise DATABASE_URL selects PostgreSQL; otherwise the run uses a unique SQLite temp file per worker. The same test file therefore covers both engines without a second copy.',
+					'The helpers resolve the adapter from the environment instead of a flag in each test. Use TEST_DB_ADAPTER to set the adapter explicitly. Otherwise, DATABASE_URL selects PostgreSQL. Without either value, each worker uses a unique temporary SQLite file. Thus, one test file covers both engines.',
 				points: [
 					'getTestAdapter() returns the resolved sqlite or postgres identifier.',
 					'getAdapterDisplayName() gives a label for the describe block, so failures say which engine ran.',
@@ -1040,7 +1040,7 @@ describe('tenant isolation', () => {
 			{
 				title: 'Test the generated surfaces in process',
 				intro:
-					'The MCP application server is an ordinary object with listTools and callTool, and the SvelteKit mount is an ordinary function from a request to a response. Neither needs a running server to test, so the tool catalogue and the policy that shapes it can be asserted in the same suite as the models.',
+					'The MCP application server is an ordinary object with listTools and callTool. The SvelteKit mount is an ordinary request handler. Neither needs a running server during tests. Thus, the model test suite can also check the tool catalog and its policy.',
 				filename: 'src/lib/server/__tests__/mcp.test.ts',
 				code: `import { createMcpAppServer } from '@happyvertical/smrt-app-mcp';
 import { mountMcpRoute } from '@happyvertical/smrt-app-mcp/sveltekit';
@@ -1086,7 +1086,7 @@ it('offers only read-only tools to an anonymous caller', async () => {
 				points: [
 					'The same shape covers the refusals: drop the Mcp-Method header and assert a 400 with code -32020.',
 					'Generated REST routes are also plain request handlers, so import the +server module and call its exported method directly.',
-					'Assert the denied cases as well as the permitted ones; a catalogue that is too large fails silently otherwise.'
+					'Assert the denied cases and the permitted cases. Otherwise, a tool catalog with too many entries can fail without a visible error.'
 				],
 				links: [
 					{
@@ -1098,7 +1098,7 @@ it('offers only read-only tools to an anonymous caller', async () => {
 			{
 				title: 'Test components in the same run',
 				intro:
-					'Component tests opt into a DOM per file rather than switching the whole project to jsdom, so database tests keep the faster node environment. The svelte-setup entry adds jest-dom matchers, Testing Library cleanup, and a jsdom dialog polyfill; it checks for a document first, so it stays inert in node-environment files.',
+					'Component tests enable a DOM for each file instead of changing the complete project to jsdom. Thus, database tests keep the faster node environment. The svelte-setup entry adds jest-dom matchers, Testing Library cleanup, and a jsdom dialog polyfill. It first checks for a document, so it stays inactive in node-environment files.',
 				filename: 'src/lib/components/ArticleCard.test.ts',
 				code: `// @vitest-environment jsdom
 import { render, screen, userEvent, expectNoA11yViolations }
@@ -1119,7 +1119,7 @@ describe('ArticleCard', () => {
 				points: [
 					'Add the setup entry alongside your existing one: setupFiles: [..., "@happyvertical/smrt-vitest/svelte-setup"].',
 					'The /svelte subpath re-exports render, screen, fireEvent, within, and userEvent from one import.',
-					'expectNoA11yViolations runs axe with colour contrast disabled, because jsdom does not paint.'
+					'expectNoA11yViolations runs axe with color contrast disabled, because jsdom does not paint.'
 				]
 			},
 			{
@@ -1170,7 +1170,7 @@ jobs:
 					'Most confusing test failures in a s-m-r-t project come from the manifest or from module state rather than from the assertion that reported them. These four account for nearly all of it.',
 				points: [
 					'"No field metadata found" or an unregistered class means the plugin is missing from this config, or the scan globs never reached your sources.',
-					'A model whose new field is ignored usually means watch mode is still holding the manifest generated at startup; restart Vitest after adding classes or fields.',
+					'Watch mode can keep the manifest generated at startup. A new field can then appear to be ignored. Restart Vitest after you add classes or fields.',
 					'A module-level singleton cache inside a collection survives between tests and ignores fresh mocks; call vi.resetModules() in beforeEach and await import(...) inside the test instead of importing at the top.',
 					'A create() on a tenant-scoped class whose tenant field is declared non-nullable fails validation before the interceptor can populate it. Either pass tenantId explicitly, or declare the field nullable so the context fills it.'
 				],

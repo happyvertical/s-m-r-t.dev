@@ -133,10 +133,10 @@
 	<aside>
 		<strong>Related material</strong>
 		<p>
-			The <a href="/reference/interfaces">generated interfaces</a> reference explains how REST, MCP,
-			WebMCP, and CLI views are produced from one model, and
+			The <a href="/reference/interfaces">generated interfaces</a> reference explains how one model
+			produces REST, MCP, WebMCP, and CLI views. The
 			<a href="/reference/security">security defaults</a>
-			covers how those interfaces fail closed. Package pages for
+			reference explains how those interfaces fail closed. Package pages for
 			<a href="/packages/smrt-app-mcp">smrt-app-mcp</a>
 			and <a href="/packages/smrt-dev-mcp">smrt-dev-mcp</a> hold the per-package detail.
 		</p>
