@@ -27,6 +27,7 @@ const COPY_IGNORES = [
 const PROSE_PROPERTIES = new Set([
 	'body',
 	'breadcrumb',
+	'caption',
 	'callout',
 	'claim',
 	'content',
@@ -56,27 +57,49 @@ const PROSE_PROPERTIES = new Set([
 	'summary',
 	'surfaceNote',
 	'title',
+	'track',
 	'version-added',
 	'warning'
 ]);
 
 const NON_PROSE_PROPERTIES = new Set([
 	'base',
+	'canonical',
 	'code',
+	'component',
+	'componentGroups',
 	'componentImport',
 	'components',
+	'demo',
+	'eager',
 	'exampleResource',
 	'filename',
+	'guides',
+	'haystack',
 	'href',
 	'importPath',
+	'items',
 	'keywords',
 	'kind',
 	'lang',
+	'links',
 	'module',
+	'next',
 	'packages',
+	'page',
+	'pinnedVersion',
+	'prev',
+	'related',
+	'score',
+	'section',
+	'sections',
 	'slug',
+	'slugs',
+	'source',
+	'sources',
 	'status',
 	'variant',
+	'version',
 	'visual'
 ]);
 
@@ -318,9 +341,33 @@ export function extractTypeScriptPassages(source, filename, baseLine = 1) {
 		}));
 	}
 	const passages = [];
+	const isDataFile = filename.startsWith('src/lib/data/');
+	const bindings = isDataFile ? extractScriptBindings(source, filename) : new Map();
 
 	function visit(node) {
 		if (ts.isPropertyAssignment(node)) {
+			const name = propertyName(node.name);
+			const classified =
+				name !== undefined &&
+				(PROSE_PROPERTIES.has(name) || NON_PROSE_PROPERTIES.has(name) || name.startsWith('smrt-'));
+			if (isDataFile && !classified) {
+				passages.push({
+					file: filename,
+					line: baseLine + lineNumber(source, node.name.getStart(ast)) - 1,
+					text: '',
+					classificationError: `Classify the data property "${name ?? '[unknown property]'}" as prose or an explicit exclusion.`
+				});
+			}
+			if (name && PROSE_PROPERTIES.has(name) && ts.isIdentifier(node.initializer)) {
+				const text = bindings.get(node.initializer.text);
+				if (text) {
+					passages.push({
+						file: filename,
+						line: baseLine + lineNumber(source, node.initializer.getStart(ast)) - 1,
+						text
+					});
+				}
+			}
 			visit(node.initializer);
 			return;
 		}
@@ -330,20 +377,6 @@ export function extractTypeScriptPassages(source, filename, baseLine = 1) {
 			ts.isTemplateExpression(node);
 		if (isStringValue) {
 			const name = nearestProseProperty(node);
-			const isDataFile = filename.startsWith('src/lib/data/');
-			const classified =
-				name === undefined ||
-				PROSE_PROPERTIES.has(name) ||
-				NON_PROSE_PROPERTIES.has(name) ||
-				name.startsWith('smrt-');
-			if (isDataFile && !classified) {
-				passages.push({
-					file: filename,
-					line: baseLine + lineNumber(source, node.getStart(ast)) - 1,
-					text: '',
-					classificationError: `Classify the data property "${name}" as prose or an explicit exclusion.`
-				});
-			}
 			if (!name || !PROSE_PROPERTIES.has(name)) {
 				ts.forEachChild(node, visit);
 				return;

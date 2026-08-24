@@ -172,9 +172,23 @@ describe('copy checker', () => {
 		);
 	});
 
+	it('rejects an unclassified data property with identifier-bound copy', () => {
+		const passages = extractTypeScriptPassages(
+			"const copy = 'Help the reader.'; export const item = { helperText: copy };",
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					classificationError: expect.stringContaining('helperText')
+				})
+			])
+		);
+	});
+
 	it('rejects a computed unclassified data-copy property', () => {
 		const passages = extractTypeScriptPassages(
-			"const key = 'helperText'; export const item = { [key]: 'Use business logic here.' };",
+			"const key = 'helperText'; const copy = 'Use business logic here.'; export const item = { [key]: copy };",
 			'src/lib/data/fixture.ts'
 		);
 		expect(passages).toEqual(
@@ -182,6 +196,18 @@ describe('copy checker', () => {
 				expect.objectContaining({
 					classificationError: expect.stringContaining('[computed property]')
 				})
+			])
+		);
+	});
+
+	it('checks prose properties with identifier-bound copy', () => {
+		const passages = extractTypeScriptPassages(
+			"const copy = 'Use business logic here.'; export const item = { title: copy };",
+			'src/lib/data/fixture.ts'
+		);
+		expect(auditPassages(passages)).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ id: 'prohibited-business-logic', severity: 'error' })
 			])
 		);
 	});
