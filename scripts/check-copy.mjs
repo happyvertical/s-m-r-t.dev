@@ -105,7 +105,17 @@ const CONTENT_ELEMENTS = new Set([
 ]);
 
 const EXCLUDED_ELEMENTS = new Set(['code', 'pre', 'script', 'style', 'svg']);
-const COPY_ATTRIBUTES = new Set(['alt', 'aria-label', 'content', 'placeholder', 'title']);
+const COPY_ATTRIBUTES = new Set([
+	'alt',
+	'aria-label',
+	'ariaLabel',
+	'backLabel',
+	'content',
+	'description',
+	'placeholder',
+	'subtitle',
+	'title'
+]);
 
 const IMPERATIVE_VERBS = new Set([
 	'add',
@@ -335,11 +345,48 @@ export function extractTypeScriptPassages(source, filename, baseLine = 1) {
 	return passages;
 }
 
+function extractExpressionText(node) {
+	if (!node || typeof node !== 'object') return '';
+	switch (node.type) {
+		case 'Literal':
+			return typeof node.value === 'string' ? node.value : '';
+		case 'TemplateLiteral':
+			return node.quasis
+				.map((quasi) => quasi.value?.cooked ?? quasi.value?.raw ?? '')
+				.join(' IDENTIFIER ');
+		case 'ConditionalExpression':
+			return `${extractExpressionText(node.consequent)} ${extractExpressionText(node.alternate)}`;
+		case 'LogicalExpression':
+		case 'BinaryExpression':
+			return `${extractExpressionText(node.left)} ${extractExpressionText(node.right)}`;
+		case 'ArrayExpression':
+			return (node.elements ?? []).map(extractExpressionText).join(' ');
+		case 'SequenceExpression':
+			return (node.expressions ?? []).map(extractExpressionText).join(' ');
+		case 'AwaitExpression':
+		case 'ChainExpression':
+			return extractExpressionText(node.argument ?? node.expression);
+		default:
+			return '';
+	}
+}
+
+function nodeText(node) {
+	if (node?.type === 'Text') return node.data ?? node.raw ?? '';
+	if (node?.expression) return extractExpressionText(node.expression);
+	return '';
+}
+
 function aggregateElementText(node) {
 	if (!node || EXCLUDED_ELEMENTS.has(node.name)) return '';
-	if (node.type === 'Text') return node.data ?? node.raw ?? '';
+	const directText = nodeText(node);
+	if (directText) return directText;
 	const children = node.children ?? node.nodes ?? [];
 	return children.map(aggregateElementText).join(' ');
+}
+
+function hasDirectVisibleText(node) {
+	return (node.children ?? node.nodes ?? []).some((child) => normalizeText(nodeText(child)));
 }
 
 export function extractSveltePassages(source, filename) {
@@ -353,7 +400,7 @@ export function extractSveltePassages(source, filename) {
 		if (node.type === 'Element' || node.type === 'InlineComponent' || node.type === 'Component') {
 			if (EXCLUDED_ELEMENTS.has(node.name)) return;
 
-			isContentElement = CONTENT_ELEMENTS.has(node.name);
+			isContentElement = CONTENT_ELEMENTS.has(node.name) || hasDirectVisibleText(node);
 			const shouldAggregate = isContentElement && !insideContentElement;
 			if (shouldAggregate) {
 				const text = normalizeText(aggregateElementText(node));
@@ -363,12 +410,7 @@ export function extractSveltePassages(source, filename) {
 
 			for (const attribute of node.attributes ?? []) {
 				if (!COPY_ATTRIBUTES.has(attribute.name) || !Array.isArray(attribute.value)) continue;
-				const text = normalizeText(
-					attribute.value
-						.filter((part) => part.type === 'Text')
-						.map((part) => part.data)
-						.join(' ')
-				);
+				const text = normalizeText(attribute.value.map(nodeText).join(' '));
 				if (text)
 					passages.push({ file: filename, line: lineNumber(source, attribute.start), text });
 			}

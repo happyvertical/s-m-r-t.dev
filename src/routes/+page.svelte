@@ -142,7 +142,7 @@ export class Article extends SmrtObject {
 
 <SEO
 	title="Why s-m-r-t? Applications built from domain models"
-	description="s-m-r-t is a TypeScript framework that generates storage, forms, APIs, CLI commands, permissions, and AI-agent tools from one set of domain models, so every interface shares the same definition and the same limits."
+	description="s-m-r-t generates storage, forms, APIs, CLI commands, permissions, and AI-agent tools from TypeScript domain models. Every interface shares the same definition and limits."
 	url="https://s-m-r-t.dev"
 />
 
@@ -288,7 +288,8 @@ export class Article extends SmrtObject {
 				<li>
 					<strong>Tenant-owned personas</strong><span
 						>One agent class can serve many tenants as durable instances. Each instance has separate
-						instructions, tool limits, identity, schedule, and memory.</span
+						instructions, tool limits, identity, and schedule. Memory cannot cross tenant
+						boundaries.</span
 					>
 				</li>
 				<li>

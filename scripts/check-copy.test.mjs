@@ -93,6 +93,46 @@ describe('copy checker', () => {
 		);
 	});
 
+	it('checks visible text in standalone elements', () => {
+		const passages = extractSveltePassages(
+			'<div>Public introduction.</div><span>Use business logic here.</span>',
+			'fixture.svelte'
+		);
+		expect(passages.map((item) => item.text)).toEqual(
+			expect.arrayContaining(['Public introduction.', 'Use business logic here.'])
+		);
+		expect(auditPassages(passages)).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ id: 'prohibited-business-logic', severity: 'error' })
+			])
+		);
+	});
+
+	it('checks literal alternatives in visible Svelte expressions', () => {
+		const passages = extractSveltePassages(
+			"<button>{open ? 'Close menu' : 'Open menu'}</button>",
+			'fixture.svelte'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ text: expect.stringContaining('Close menu') }),
+				expect.objectContaining({ text: expect.stringContaining('Open menu') })
+			])
+		);
+	});
+
+	it('checks literal alternatives in dynamic copy attributes', () => {
+		const passages = extractSveltePassages(
+			"<input placeholder={ready ? 'Search records' : 'Use business logic here.'}>",
+			'fixture.svelte'
+		);
+		expect(auditPassages(passages)).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ id: 'prohibited-business-logic', severity: 'error' })
+			])
+		);
+	});
+
 	it('keeps interpolated data copy in the project passages', async () => {
 		const { passages } = await extractProjectPassages();
 		expect(passages).toEqual(
