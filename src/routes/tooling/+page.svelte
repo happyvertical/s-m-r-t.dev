@@ -9,7 +9,7 @@
 	const audiences = [
 		{
 			name: 'Developers',
-			body: 'Developers create projects, change models, generate artifacts, run tests, and apply migrations. These actions can write files or change the configured development database.'
+			body: 'Developers create projects, change models, generate artifacts, run tests, and apply migrations. CI runs the same project checks and generation commands. These actions can write files or change the configured development database.'
 		},
 		{
 			name: 'Coding agents',

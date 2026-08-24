@@ -161,7 +161,7 @@ pnpm build`,
 			{
 				title: 'Make migrations follow the model',
 				intro:
-					'Schema migrations are generated from the current manifest. The CLI does not generate migration files. Build first so the manifest is current. Then inspect the status or diff before you apply the change. The basic template makes its db:migrate script build before it runs the migration command.',
+					'Schema changes are computed from the current manifest. The CLI does not write migration files to review or commit. Build first so the manifest is current. Then inspect the status or diff before you apply the change. The basic template makes its db:migrate script build before it runs the migration command.',
 				filename: 'terminal',
 				lang: 'bash',
 				code: `pnpm build
@@ -361,16 +361,16 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 		],
 		sections: [
 			{
-				title: 'It is a development plane, not a runtime one',
+				title: 'It inspects the workspace, not the running application',
 				intro:
-					'smrt-dev-mcp is the Tier 2 development server. It reads source, manifests, and authored documentation from a workspace on disk. It is read-only, never writes files, never executes generated code, and has no access to your application database, principals, or tenants. Live data operations belong to the Tier 1 generated and application MCP surfaces.',
+					'smrt-dev-mcp is the Development MCP server. It reads source, manifests, and authored documentation from a workspace on disk. It is read-only, never writes files, never executes generated code, and has no access to your application database, principals, or tenants. Live data operations belong to generated local MCP, hosted application MCP, or WebMCP.',
 				points: [
-					'Tier 1 is generated from your @smrt() objects and performs live data operations.',
-					'Tier 2 is this package: code generation and project analysis.',
+					'Application-agent surfaces are generated from your @smrt() objects and perform live data operations.',
+					'Development MCP provides code generation output and project analysis for a coding agent.',
 					'Its review and architecture tools are model-agnostic and call no model provider.'
 				],
 				links: [
-					{ label: 'The runtime plane: generated and application MCP', href: '/tooling/app-mcp' },
+					{ label: 'Generated and application MCP', href: '/tooling/app-mcp' },
 					{
 						label: 'The broader pattern: agent-legible applications',
 						href: '/capabilities/agent-legible-applications'
@@ -399,7 +399,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 				points: [
 					'Without a runtime bridge, the server remains fully useful and deterministic from source, manifests, generated knowledge, and installed package contracts.',
 					'A runtime bridge should label observed facts separately from declared facts and expose capability metadata rather than application records or credentials.',
-					'Live data operations remain on the Tier 1 application MCP surface and still resolve through principals, tenants, and policy.'
+					'Live data operations remain on an application-agent surface and still resolve through principals, tenants, and policy.'
 				],
 				links: [
 					{
@@ -407,7 +407,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 						href: 'https://github.com/happyvertical/smrt/issues/1824'
 					},
 					{
-						label: 'Upstream: live runtime development plane',
+						label: 'Upstream: live runtime bridge',
 						href: 'https://github.com/happyvertical/smrt/issues/1831'
 					}
 				]
@@ -492,7 +492,7 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 				intro:
 					'The static tools and prompts catalogs advertise a one-day private cache lifetime. Workspace knowledge resources are also private, but they use a zero lifetime. The server rebuilds them from the current workspace for every request. The transport has no visible invalidation signal to support a longer lifetime.',
 				links: [
-					{ label: 'Shared catalogs on the runtime plane', href: '/tooling/app-mcp' },
+					{ label: 'Shared runtime catalogs', href: '/tooling/app-mcp' },
 					{ label: 'Cache and tenancy safety', href: '/tooling/compatibility' }
 				]
 			},
@@ -673,7 +673,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 			{
 				title: 'Generated stdio stays local',
 				intro:
-					'The generated stdio server is the other Tier 1 surface. It obtains credentials from its environment and has no per-request authorization principal, so it must not be exposed remotely. Use the smrt-mcp-bridge binary to reach a deployed application from a local stdio client. @happyvertical/smrt-app-cli publishes this bridge. It authenticates through the first-party terminal device flow. The bridge sends stored tokens only to their associated server.',
+					'The generated local MCP server runs beside the application. It obtains credentials from its environment and has no per-request authorization principal, so it must not be exposed remotely. Use the smrt-mcp-bridge binary to reach a deployed application from a local stdio client. @happyvertical/smrt-app-cli publishes this bridge. It authenticates through the first-party terminal device flow. The bridge sends stored tokens only to their associated server.',
 				links: [
 					{
 						label: 'Task guide: expose your app over MCP',

@@ -75,6 +75,7 @@ describe('Tooling information architecture', () => {
 		expect(guideText('dev-mcp')).toMatch(/read-only/);
 		expect(guideText('app-mcp')).toMatch(/application agent/);
 		expect(guideText('app-mcp')).toMatch(/WebMCP is not the local stdio server/);
+		expect(JSON.stringify(toolingGuides)).not.toMatch(/Tier [12]|development plane|runtime plane/);
 	});
 
 	it('uses Agent Plugin only for the portable coding-agent package', () => {
