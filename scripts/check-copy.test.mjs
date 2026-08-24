@@ -163,6 +163,32 @@ describe('copy checker', () => {
 		}
 	});
 
+	it('fails closed for unresolved visible Svelte copy', () => {
+		for (const source of [
+			'<p>{copy}</p>',
+			'<input alt={copy}>',
+			'<input {...props}>',
+			'{#each getItems() as item}<p>{item.copy}</p>{/each}'
+		]) {
+			const passages = extractSveltePassages(source, 'fixture.svelte');
+			expect(passages).toEqual(
+				expect.arrayContaining([
+					expect.objectContaining({
+						extractionError: expect.any(String)
+					})
+				])
+			);
+		}
+	});
+
+	it('allows copy that arrives through an explicit component prop', () => {
+		const passages = extractSveltePassages(
+			'<script>let { copy } = $props();</script><p>{copy}</p><input alt={copy}>',
+			'fixture.svelte'
+		);
+		expect(passages.some((item) => item.extractionError)).toBe(false);
+	});
+
 	it('checks visible copy referenced through script bindings', () => {
 		const passages = extractSveltePassages(
 			"<script>const label = 'Use business logic here.';</script><p>{label}</p><input placeholder={label}>",
@@ -358,6 +384,38 @@ describe('copy checker', () => {
 				expect.objectContaining({ id: 'prohibited-business-logic', severity: 'error' })
 			])
 		);
+	});
+
+	it('rejects a computed value for a data prose property', () => {
+		const passages = extractTypeScriptPassages(
+			'export const item = { title: getCopy() };',
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					extractionErrorId: 'copy-prose-value-unextractable'
+				})
+			])
+		);
+	});
+
+	it('reports a computed data prose value as an end-to-end error', async () => {
+		const projectRoot = await mkdtemp(path.join(tmpdir(), 'smrt-copy-check-'));
+		try {
+			const dataDirectory = path.join(projectRoot, 'src/lib/data');
+			await mkdir(dataDirectory, { recursive: true });
+			await writeFile(
+				path.join(dataDirectory, 'fixture.ts'),
+				'export const item = { title: getCopy() };'
+			);
+			const result = await runCopyCheck(projectRoot);
+			expect(result.errors).toEqual(
+				expect.arrayContaining([expect.objectContaining({ id: 'copy-prose-value-unextractable' })])
+			);
+		} finally {
+			await rm(projectRoot, { recursive: true, force: true });
+		}
 	});
 
 	it('reports malformed TypeScript copy sources', () => {

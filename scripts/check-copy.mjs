@@ -321,6 +321,69 @@ function nearestProseProperty(node) {
 	return undefined;
 }
 
+const SAFE_PROSE_METHODS = new Set(['get', 'toLowerCase', 'toUpperCase', 'trim']);
+
+function isSupportedProseInitializer(node, bindings) {
+	if (!node) return false;
+	if (
+		ts.isStringLiteral(node) ||
+		ts.isNoSubstitutionTemplateLiteral(node) ||
+		ts.isTemplateExpression(node) ||
+		ts.isNumericLiteral(node) ||
+		node.kind === ts.SyntaxKind.TrueKeyword ||
+		node.kind === ts.SyntaxKind.FalseKeyword ||
+		node.kind === ts.SyntaxKind.NullKeyword ||
+		node.kind === ts.SyntaxKind.UndefinedKeyword
+	) {
+		return true;
+	}
+	if (ts.isIdentifier(node)) return true;
+	if (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) return true;
+	if (
+		ts.isCallExpression(node) &&
+		ts.isPropertyAccessExpression(node.expression) &&
+		SAFE_PROSE_METHODS.has(node.expression.name.text)
+	) {
+		return true;
+	}
+	if (
+		ts.isParenthesizedExpression(node) ||
+		ts.isAsExpression(node) ||
+		ts.isSatisfiesExpression(node) ||
+		ts.isNonNullExpression(node)
+	) {
+		return isSupportedProseInitializer(node.expression, bindings);
+	}
+	if (ts.isConditionalExpression(node)) {
+		return (
+			isSupportedProseInitializer(node.whenTrue, bindings) &&
+			isSupportedProseInitializer(node.whenFalse, bindings)
+		);
+	}
+	if (ts.isBinaryExpression(node)) {
+		return (
+			isSupportedProseInitializer(node.left, bindings) &&
+			isSupportedProseInitializer(node.right, bindings)
+		);
+	}
+	if (ts.isArrayLiteralExpression(node)) {
+		return node.elements.every((element) => isSupportedProseInitializer(element, bindings));
+	}
+	if (ts.isObjectLiteralExpression(node)) {
+		return node.properties.every((property) => {
+			if (ts.isPropertyAssignment(property)) {
+				return isSupportedProseInitializer(property.initializer, bindings);
+			}
+			if (ts.isShorthandPropertyAssignment(property)) return true;
+			if (ts.isSpreadAssignment(property)) {
+				return isSupportedProseInitializer(property.expression, bindings);
+			}
+			return false;
+		});
+	}
+	return false;
+}
+
 export function extractTypeScriptPassages(source, filename, baseLine = 1) {
 	const scriptKind =
 		filename.endsWith('.js') || filename.endsWith('.mjs') ? ts.ScriptKind.JS : ts.ScriptKind.TS;
@@ -360,6 +423,20 @@ export function extractTypeScriptPassages(source, filename, baseLine = 1) {
 						text
 					});
 				}
+			}
+			if (
+				isDataFile &&
+				name &&
+				PROSE_PROPERTIES.has(name) &&
+				!isSupportedProseInitializer(node.initializer, bindings)
+			) {
+				passages.push({
+					file: filename,
+					line: baseLine + lineNumber(source, node.initializer.getStart(ast)) - 1,
+					text: '',
+					extractionError: `Cannot statically audit the prose property "${name}" from this value expression.`,
+					extractionErrorId: 'copy-prose-value-unextractable'
+				});
 			}
 			visit(node.initializer);
 			return;
@@ -466,6 +543,57 @@ function extractScriptBindings(source, filename) {
 	return bindings;
 }
 
+function collectBindingNames(node, names) {
+	if (ts.isIdentifier(node)) {
+		names.add(node.text);
+		return;
+	}
+	if (ts.isObjectBindingPattern(node) || ts.isArrayBindingPattern(node)) {
+		for (const element of node.elements) {
+			if (ts.isBindingElement(element)) collectBindingNames(element.name, names);
+		}
+	}
+}
+
+function callRootName(node) {
+	if (ts.isIdentifier(node)) return node.text;
+	if (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) {
+		return callRootName(node.expression);
+	}
+	return undefined;
+}
+
+function extractAllowedDynamicNames(source, filename) {
+	const scriptKind = filename.endsWith('.js') ? ts.ScriptKind.JS : ts.ScriptKind.TS;
+	const ast = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true, scriptKind);
+	const names = new Set();
+
+	function visit(node) {
+		if (ts.isImportDeclaration(node) && node.importClause) {
+			if (node.importClause.name) names.add(node.importClause.name.text);
+			const bindings = node.importClause.namedBindings;
+			if (bindings && ts.isNamespaceImport(bindings)) names.add(bindings.name.text);
+			if (bindings && ts.isNamedImports(bindings)) {
+				for (const element of bindings.elements) names.add(element.name.text);
+			}
+		}
+		if (
+			ts.isVariableDeclaration(node) &&
+			node.initializer &&
+			ts.isCallExpression(node.initializer)
+		) {
+			const root = callRootName(node.initializer.expression);
+			if (root === '$props' || root === '$derived' || root === '$state') {
+				collectBindingNames(node.name, names);
+			}
+		}
+		ts.forEachChild(node, visit);
+	}
+
+	if (ast.parseDiagnostics.length === 0) visit(ast);
+	return names;
+}
+
 function expressionBindingPath(node) {
 	if (node?.type === 'Identifier') return node.name;
 	if (node?.type !== 'MemberExpression') return undefined;
@@ -515,6 +643,87 @@ function extractExpressionText(node, bindings = new Map()) {
 			return extractExpressionText(node.argument ?? node.expression, bindings);
 		default:
 			return '';
+	}
+}
+
+const SAFE_DYNAMIC_FORMATTERS = new Set(['Boolean', 'Number', 'String']);
+
+function bindingsHaveRoot(bindings, root) {
+	if (bindings.has(root)) return true;
+	for (const name of bindings.keys()) {
+		if (name.startsWith(`${root}.`) || name.startsWith(`${root}[`)) return true;
+	}
+	return false;
+}
+
+function expressionRootName(node) {
+	if (node?.type === 'Identifier') return node.name;
+	if (node?.type === 'MemberExpression') return expressionRootName(node.object);
+	if (node?.type === 'CallExpression') return expressionRootName(node.callee);
+	if (node?.type === 'ChainExpression') return expressionRootName(node.expression);
+	return undefined;
+}
+
+function expressionHasUnextractableCopy(node, bindings, allowedDynamicNames) {
+	if (!node || typeof node !== 'object') return false;
+	switch (node.type) {
+		case 'Literal':
+			return false;
+		case 'Identifier':
+			return !bindingsHaveRoot(bindings, node.name) && !allowedDynamicNames.has(node.name);
+		case 'MemberExpression': {
+			const path = expressionBindingPath(node);
+			const root = expressionRootName(node);
+			return (
+				!(path && bindingsHaveRoot(bindings, path)) && !(root && allowedDynamicNames.has(root))
+			);
+		}
+		case 'TemplateLiteral':
+			return (node.expressions ?? []).some((expression) =>
+				expressionHasUnextractableCopy(expression, bindings, allowedDynamicNames)
+			);
+		case 'ConditionalExpression':
+			return (
+				expressionHasUnextractableCopy(node.consequent, bindings, allowedDynamicNames) ||
+				expressionHasUnextractableCopy(node.alternate, bindings, allowedDynamicNames)
+			);
+		case 'LogicalExpression':
+		case 'BinaryExpression':
+			return (
+				expressionHasUnextractableCopy(node.left, bindings, allowedDynamicNames) ||
+				expressionHasUnextractableCopy(node.right, bindings, allowedDynamicNames)
+			);
+		case 'ArrayExpression':
+			return (node.elements ?? []).some((item) =>
+				expressionHasUnextractableCopy(item, bindings, allowedDynamicNames)
+			);
+		case 'ObjectExpression':
+			return (node.properties ?? []).some((property) => {
+				if (property.type === 'Property') {
+					return expressionHasUnextractableCopy(property.value, bindings, allowedDynamicNames);
+				}
+				return expressionHasUnextractableCopy(property.argument, bindings, allowedDynamicNames);
+			});
+		case 'SequenceExpression':
+			return (node.expressions ?? []).some((item) =>
+				expressionHasUnextractableCopy(item, bindings, allowedDynamicNames)
+			);
+		case 'AwaitExpression':
+		case 'ChainExpression':
+			return expressionHasUnextractableCopy(
+				node.argument ?? node.expression,
+				bindings,
+				allowedDynamicNames
+			);
+		case 'CallExpression': {
+			const root = expressionRootName(node);
+			return !(root && (allowedDynamicNames.has(root) || SAFE_DYNAMIC_FORMATTERS.has(root)));
+		}
+		case 'UnaryExpression':
+		case 'UpdateExpression':
+			return false;
+		default:
+			return true;
 	}
 }
 
@@ -576,11 +785,26 @@ function eachBindingSets(expression, contextName, sourceBindings) {
 
 function nodeText(node, bindings) {
 	if (node?.type === 'Text') return node.data ?? node.raw ?? '';
-	if (node?.expression) {
+	if ((node?.type === 'MustacheTag' || node?.type === 'RawMustacheTag') && node.expression) {
 		const text = extractExpressionText(node.expression, bindings);
 		return node.type === 'RawMustacheTag' ? text.replace(/<[^>]*>/gu, ' ') : text;
 	}
 	return '';
+}
+
+function elementHasUnextractableCopy(node, bindings, allowedDynamicNames) {
+	if (!node || EXCLUDED_ELEMENTS.has(node.name)) return false;
+	if (
+		(node.type === 'MustacheTag' || node.type === 'RawMustacheTag') &&
+		node.expression &&
+		expressionHasUnextractableCopy(node.expression, bindings, allowedDynamicNames)
+	) {
+		return true;
+	}
+	const children = node.children ?? node.nodes ?? [];
+	return children.some((child) =>
+		elementHasUnextractableCopy(child, bindings, allowedDynamicNames)
+	);
 }
 
 function aggregateElementText(node, bindings) {
@@ -602,29 +826,81 @@ export function extractSveltePassages(source, filename) {
 	const passages = [];
 	const scripts = [...source.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/giu)];
 	const bindings = new Map();
+	const allowedDynamicNames = new Set();
 	for (const match of scripts) {
 		for (const [name, text] of extractScriptBindings(match[1], filename)) bindings.set(name, text);
+		for (const name of extractAllowedDynamicNames(match[1], filename)) {
+			allowedDynamicNames.add(name);
+		}
 	}
+	function collectAllowedConstTags(node) {
+		if (!node || typeof node !== 'object') return;
+		if (
+			node.type === 'ConstTag' &&
+			node.expression?.left?.type === 'Identifier' &&
+			!expressionHasUnextractableCopy(node.expression.right, bindings, allowedDynamicNames)
+		) {
+			allowedDynamicNames.add(node.expression.left.name);
+		}
+		for (const child of node.children ?? node.nodes ?? []) collectAllowedConstTags(child);
+		for (const child of node.else?.children ?? []) collectAllowedConstTags(child);
+	}
+	collectAllowedConstTags(ast.html);
 
-	function visit(node, insideContentElement = false, activeBindings = bindings) {
+	function visit(
+		node,
+		insideContentElement = false,
+		activeBindings = bindings,
+		activeAllowedDynamicNames = allowedDynamicNames
+	) {
 		if (!node || typeof node !== 'object') return;
 		let isContentElement = false;
 		if (node.type === 'RawMustacheTag' && !insideContentElement) {
 			const text = normalizeText(nodeText(node, activeBindings));
 			if (text) passages.push({ file: filename, line: lineNumber(source, node.start), text });
+			if (
+				expressionHasUnextractableCopy(node.expression, activeBindings, activeAllowedDynamicNames)
+			) {
+				passages.push({
+					file: filename,
+					line: lineNumber(source, node.start),
+					text: '',
+					extractionError: 'Cannot statically audit this dynamic visible Svelte copy.',
+					extractionErrorId: 'copy-svelte-expression-unextractable'
+				});
+			}
 		}
 		if (node.type === 'EachBlock') {
 			const bindingSets =
 				node.context?.type === 'Identifier'
 					? eachBindingSets(node.expression, node.context.name, activeBindings)
 					: [activeBindings];
+			const eachAllowedDynamicNames = new Set(activeAllowedDynamicNames);
+			const eachSourceIsUnextractable = expressionHasUnextractableCopy(
+				node.expression,
+				activeBindings,
+				activeAllowedDynamicNames
+			);
+			if (node.context?.type === 'Identifier') {
+				eachAllowedDynamicNames.add(node.context.name);
+			}
+			if (node.index) eachAllowedDynamicNames.add(node.index);
+			if (eachSourceIsUnextractable) {
+				passages.push({
+					file: filename,
+					line: lineNumber(source, node.start),
+					text: '',
+					extractionError: 'Cannot statically audit copy from this dynamic Svelte each source.',
+					extractionErrorId: 'copy-svelte-expression-unextractable'
+				});
+			}
 			for (const eachBindings of bindingSets) {
 				for (const child of node.children ?? []) {
-					visit(child, insideContentElement, eachBindings);
+					visit(child, insideContentElement, eachBindings, eachAllowedDynamicNames);
 				}
 			}
 			for (const child of node.else?.children ?? []) {
-				visit(child, insideContentElement, activeBindings);
+				visit(child, insideContentElement, activeBindings, activeAllowedDynamicNames);
 			}
 			return;
 		}
@@ -643,17 +919,37 @@ export function extractSveltePassages(source, filename) {
 			if (shouldAggregate) {
 				const text = normalizeText(aggregateElementText(node, activeBindings));
 				if (text) passages.push({ file: filename, line: lineNumber(source, node.start), text });
+				if (elementHasUnextractableCopy(node, activeBindings, activeAllowedDynamicNames)) {
+					passages.push({
+						file: filename,
+						line: lineNumber(source, node.start),
+						text: '',
+						extractionError: 'Cannot statically audit this dynamic visible Svelte copy.',
+						extractionErrorId: 'copy-svelte-expression-unextractable'
+					});
+				}
 				insideContentElement = true;
 			}
 
 			for (const attribute of node.attributes ?? []) {
+				if (attribute.type === 'Spread') {
+					passages.push({
+						file: filename,
+						line: lineNumber(source, attribute.start),
+						text: '',
+						extractionError: 'Cannot statically audit copy-capable Svelte spread attributes.',
+						extractionErrorId: 'copy-svelte-spread-unextractable'
+					});
+					continue;
+				}
 				if (!COPY_ATTRIBUTES.has(attribute.name)) continue;
 				if (!Array.isArray(attribute.value)) {
 					passages.push({
 						file: filename,
 						line: lineNumber(source, attribute.start),
 						text: '',
-						extractionError: `Cannot extract the copy attribute "${attribute.name}" from its compiler value shape.`
+						extractionError: `Cannot extract the copy attribute "${attribute.name}" from its compiler value shape.`,
+						extractionErrorId: 'copy-attribute-unextractable'
 					});
 					continue;
 				}
@@ -662,23 +958,42 @@ export function extractSveltePassages(source, filename) {
 				);
 				if (text)
 					passages.push({ file: filename, line: lineNumber(source, attribute.start), text });
+				if (
+					attribute.value.some(
+						(item) =>
+							item.expression &&
+							expressionHasUnextractableCopy(
+								item.expression,
+								activeBindings,
+								activeAllowedDynamicNames
+							)
+					)
+				) {
+					passages.push({
+						file: filename,
+						line: lineNumber(source, attribute.start),
+						text: '',
+						extractionError: `Cannot statically audit the dynamic copy attribute "${attribute.name}".`,
+						extractionErrorId: 'copy-svelte-expression-unextractable'
+					});
+				}
 			}
 		}
 
 		for (const child of node.children ?? node.nodes ?? []) {
-			visit(child, insideContentElement, activeBindings);
+			visit(child, insideContentElement, activeBindings, activeAllowedDynamicNames);
 		}
 		for (const child of node.else?.children ?? []) {
-			visit(child, insideContentElement, activeBindings);
+			visit(child, insideContentElement, activeBindings, activeAllowedDynamicNames);
 		}
 		for (const child of node.pending?.children ?? []) {
-			visit(child, insideContentElement, activeBindings);
+			visit(child, insideContentElement, activeBindings, activeAllowedDynamicNames);
 		}
 		for (const child of node.then?.children ?? []) {
-			visit(child, insideContentElement, activeBindings);
+			visit(child, insideContentElement, activeBindings, activeAllowedDynamicNames);
 		}
 		for (const child of node.catch?.children ?? []) {
-			visit(child, insideContentElement, activeBindings);
+			visit(child, insideContentElement, activeBindings, activeAllowedDynamicNames);
 		}
 	}
 
@@ -868,7 +1183,7 @@ export async function runCopyCheck(projectRoot = PROJECT_ROOT) {
 		findings.push(
 			finding({
 				severity: 'error',
-				id: 'copy-attribute-unextractable',
+				id: passage.extractionErrorId ?? 'copy-source-unextractable',
 				message: passage.extractionError,
 				passage
 			})
