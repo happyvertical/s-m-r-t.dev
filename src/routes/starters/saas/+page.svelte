@@ -1,6 +1,10 @@
 <script lang="ts">
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import GuideLibraryMetadata from '$lib/components/GuideLibraryMetadata.svelte';
 	import SEO from '$lib/components/SEO.svelte';
+	import { getGuideLibraryItem } from '$lib/data/task-guides';
+
+	const guideMetadata = getGuideLibraryItem('/starters/saas');
 
 	const install = `git clone https://github.com/happyvertical/smrt-saas-starter.git my-app\ncd my-app\npnpm install\ncp .env.example .env\npnpm services:up\npnpm db:migrate\npnpm db:seed\npnpm --filter @happyvertical/smrt-saas-web dev`;
 
@@ -41,6 +45,8 @@
 			switching, billing, usage, jobs, app chrome, and infrastructure.
 		</p>
 	</aside>
+
+	{#if guideMetadata}<GuideLibraryMetadata guide={guideMetadata} />{/if}
 
 	<section>
 		<h2>1. Run the local reference app</h2>
