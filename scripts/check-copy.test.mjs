@@ -153,17 +153,20 @@ describe('copy checker', () => {
 	});
 
 	it('rejects an unclassified component text prop', () => {
-		const passages = extractSveltePassages(
+		for (const source of [
 			'<Widget helperText="Help the reader." />',
-			'fixture.svelte'
-		);
-		expect(passages).toEqual(
-			expect.arrayContaining([
-				expect.objectContaining({
-					classificationError: expect.stringContaining('helperText')
-				})
-			])
-		);
+			"<Widget helperText={'Use business logic here.'} />",
+			"<Widget helperText={ready ? 'Ready.' : 'Wait.'} />"
+		]) {
+			const passages = extractSveltePassages(source, 'fixture.svelte');
+			expect(passages).toEqual(
+				expect.arrayContaining([
+					expect.objectContaining({
+						classificationError: expect.stringContaining('helperText')
+					})
+				])
+			);
+		}
 	});
 
 	it('fails closed for an unsupported Svelte copy attribute shape', () => {

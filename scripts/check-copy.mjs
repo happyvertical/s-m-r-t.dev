@@ -1189,7 +1189,9 @@ function isClassifiedComponentAttribute(attribute, bindings, allowedDynamicNames
 		attribute.name.startsWith('aria-') ||
 		(expressionItems.length > 0 &&
 			expressionItems.every(
-				(item) => !expressionHasUnextractableCopy(item.expression, bindings, allowedDynamicNames)
+				(item) =>
+					!normalizeText(extractExpressionText(item.expression, bindings)) &&
+					!expressionHasUnextractableCopy(item.expression, bindings, allowedDynamicNames)
 			))
 	);
 }
