@@ -146,6 +146,40 @@ describe('copy checker', () => {
 		);
 	});
 
+	it('checks document-title copy', () => {
+		const passages = extractSveltePassages(
+			'<svelte:head><title>Use business logic here.</title></svelte:head>',
+			'fixture.svelte'
+		);
+		expect(auditPassages(passages)).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ id: 'prohibited-business-logic', severity: 'error' })
+			])
+		);
+	});
+
+	it('checks literal raw HTML copy', () => {
+		const passages = extractSveltePassages(
+			"{@html '<p>Use business logic here.</p>'}",
+			'fixture.svelte'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([expect.objectContaining({ text: 'Use business logic here.' })])
+		);
+	});
+
+	it('checks statically bound copy in each blocks', () => {
+		const passages = extractSveltePassages(
+			"{#each ['Use business logic here.'] as copy}<p>{copy}</p>{/each}",
+			'fixture.svelte'
+		);
+		expect(auditPassages(passages)).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ id: 'prohibited-business-logic', severity: 'error' })
+			])
+		);
+	});
+
 	it('keeps interpolated data copy in the project passages', async () => {
 		const { passages } = await extractProjectPassages();
 		expect(passages).toEqual(

@@ -23,7 +23,7 @@ The audit excludes code examples, API identifiers, package names, routes, exact 
 
 ## Automated result
 
-`pnpm run check:copy` scanned 55 files and 2,016 prose passages. The final result was 0 errors and 0 warnings.
+`pnpm run check:copy` scanned 55 files and 2,018 prose passages. The final result was 0 errors and 0 warnings.
 
 The checker found public copy through route, component, data, and static-text source patterns. Its tests confirm that each source group stays in scope. The checker rejects prohibited project terminology and source parse failures. It reports advisory findings for sentence length, paragraph length, selected phrases, ambiguous pronouns, and common non-American spellings.
 

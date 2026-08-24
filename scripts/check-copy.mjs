@@ -124,7 +124,8 @@ const CONTENT_ELEMENTS = new Set([
 	'p',
 	'summary',
 	'td',
-	'th'
+	'th',
+	'title'
 ]);
 
 const EXCLUDED_ELEMENTS = new Set(['code', 'pre', 'script', 'style', 'svg']);
@@ -478,7 +479,10 @@ function extractExpressionText(node, bindings = new Map()) {
 
 function nodeText(node, bindings) {
 	if (node?.type === 'Text') return node.data ?? node.raw ?? '';
-	if (node?.expression) return extractExpressionText(node.expression, bindings);
+	if (node?.expression) {
+		const text = extractExpressionText(node.expression, bindings);
+		return node.type === 'RawMustacheTag' ? text.replace(/<[^>]*>/gu, ' ') : text;
+	}
 	return '';
 }
 
@@ -505,17 +509,39 @@ export function extractSveltePassages(source, filename) {
 		for (const [name, text] of extractScriptBindings(match[1], filename)) bindings.set(name, text);
 	}
 
-	function visit(node, insideContentElement = false) {
+	function visit(node, insideContentElement = false, activeBindings = bindings) {
 		if (!node || typeof node !== 'object') return;
 		let isContentElement = false;
+		if (node.type === 'RawMustacheTag' && !insideContentElement) {
+			const text = normalizeText(nodeText(node, activeBindings));
+			if (text) passages.push({ file: filename, line: lineNumber(source, node.start), text });
+		}
+		if (node.type === 'EachBlock') {
+			const eachBindings = new Map(activeBindings);
+			if (node.context?.type === 'Identifier') {
+				const text = normalizeText(extractExpressionText(node.expression, activeBindings));
+				if (text) eachBindings.set(node.context.name, text);
+			}
+			for (const child of node.children ?? []) visit(child, insideContentElement, eachBindings);
+			for (const child of node.else?.children ?? []) {
+				visit(child, insideContentElement, activeBindings);
+			}
+			return;
+		}
 
-		if (node.type === 'Element' || node.type === 'InlineComponent' || node.type === 'Component') {
+		if (
+			node.type === 'Element' ||
+			node.type === 'InlineComponent' ||
+			node.type === 'Component' ||
+			node.type === 'Title'
+		) {
 			if (EXCLUDED_ELEMENTS.has(node.name)) return;
 
-			isContentElement = CONTENT_ELEMENTS.has(node.name) || hasDirectVisibleText(node, bindings);
+			isContentElement =
+				CONTENT_ELEMENTS.has(node.name) || hasDirectVisibleText(node, activeBindings);
 			const shouldAggregate = isContentElement && !insideContentElement;
 			if (shouldAggregate) {
-				const text = normalizeText(aggregateElementText(node, bindings));
+				const text = normalizeText(aggregateElementText(node, activeBindings));
 				if (text) passages.push({ file: filename, line: lineNumber(source, node.start), text });
 				insideContentElement = true;
 			}
@@ -523,18 +549,28 @@ export function extractSveltePassages(source, filename) {
 			for (const attribute of node.attributes ?? []) {
 				if (!COPY_ATTRIBUTES.has(attribute.name) || !Array.isArray(attribute.value)) continue;
 				const text = normalizeText(
-					attribute.value.map((item) => nodeText(item, bindings)).join(' ')
+					attribute.value.map((item) => nodeText(item, activeBindings)).join(' ')
 				);
 				if (text)
 					passages.push({ file: filename, line: lineNumber(source, attribute.start), text });
 			}
 		}
 
-		for (const child of node.children ?? node.nodes ?? []) visit(child, insideContentElement);
-		for (const child of node.else?.children ?? []) visit(child, insideContentElement);
-		for (const child of node.pending?.children ?? []) visit(child, insideContentElement);
-		for (const child of node.then?.children ?? []) visit(child, insideContentElement);
-		for (const child of node.catch?.children ?? []) visit(child, insideContentElement);
+		for (const child of node.children ?? node.nodes ?? []) {
+			visit(child, insideContentElement, activeBindings);
+		}
+		for (const child of node.else?.children ?? []) {
+			visit(child, insideContentElement, activeBindings);
+		}
+		for (const child of node.pending?.children ?? []) {
+			visit(child, insideContentElement, activeBindings);
+		}
+		for (const child of node.then?.children ?? []) {
+			visit(child, insideContentElement, activeBindings);
+		}
+		for (const child of node.catch?.children ?? []) {
+			visit(child, insideContentElement, activeBindings);
+		}
 	}
 
 	visit(ast.html);
