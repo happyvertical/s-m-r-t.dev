@@ -1,4 +1,5 @@
 <script lang="ts">
+	import AppTheme from '$lib/components/AppTheme.svelte';
 	import PlaygroundEmbed from '$lib/components/PlaygroundEmbed.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { playgroundModules } from '$lib/data/playgrounds';
@@ -10,10 +11,12 @@
 	url="https://s-m-r-t.dev/playground"
 />
 
-<div class="playground-page">
-	<a class="docs-link" href="/">← Docs</a>
-	<PlaygroundEmbed modules={playgroundModules} standalone />
-</div>
+<AppTheme>
+	<div class="playground-page">
+		<a class="docs-link" href="/">← Docs</a>
+		<PlaygroundEmbed modules={playgroundModules} standalone />
+	</div>
+</AppTheme>
 
 <style>
 	.playground-page {
