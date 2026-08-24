@@ -133,6 +133,19 @@ describe('copy checker', () => {
 		);
 	});
 
+	it('checks visible copy referenced through script bindings', () => {
+		const passages = extractSveltePassages(
+			"<script>const label = 'Use business logic here.';</script><p>{label}</p><input placeholder={label}>",
+			'fixture.svelte'
+		);
+		expect(passages.filter((item) => item.text === 'Use business logic here.')).toHaveLength(2);
+		expect(auditPassages(passages)).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ id: 'prohibited-business-logic', severity: 'error' })
+			])
+		);
+	});
+
 	it('keeps interpolated data copy in the project passages', async () => {
 		const { passages } = await extractProjectPassages();
 		expect(passages).toEqual(
@@ -154,6 +167,20 @@ describe('copy checker', () => {
 			expect.arrayContaining([
 				expect.objectContaining({
 					classificationError: expect.stringContaining('helperText')
+				})
+			])
+		);
+	});
+
+	it('rejects a computed unclassified data-copy property', () => {
+		const passages = extractTypeScriptPassages(
+			"const key = 'helperText'; export const item = { [key]: 'Use business logic here.' };",
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					classificationError: expect.stringContaining('[computed property]')
 				})
 			])
 		);
