@@ -37,22 +37,36 @@ describe('documentation home page', () => {
 	});
 
 	it('maps every approved documentation destination', () => {
-		render(Page);
+		const { container } = render(Page);
+		const featureLinks = [...container.querySelectorAll('.feature-map a')];
 
-		for (const destination of [
-			'Framework',
-			'Interaction',
-			'UI',
-			'Modules',
-			'Tooling',
-			'Playground',
-			'Reference'
-		]) {
-			expect(
-				screen.getAllByRole('link', { name: new RegExp(destination, 'i') }).length
-			).toBeGreaterThan(0);
-		}
+		expect(
+			featureLinks.map((link) => ({
+				label: link.querySelector('h3')?.textContent,
+				href: link.getAttribute('href')
+			}))
+		).toEqual([
+			{ label: 'Framework', href: '/framework' },
+			{ label: 'Interaction', href: '/interaction' },
+			{ label: 'UI', href: '/ui' },
+			{ label: 'Modules', href: '/modules' },
+			{ label: 'Tooling', href: '/tooling' },
+			{ label: 'Playground', href: '/playground' },
+			{ label: 'Reference', href: '/reference' }
+		]);
 		expect(screen.getByRole('link', { name: /browse guides/i })).toBeTruthy();
+	});
+
+	it('keeps the homepage content coherent with the existing anchor labels', () => {
+		const { container } = render(Page);
+
+		for (const [id, label] of [
+			['how-it-works', 'How it works'],
+			['what-you-get', 'What you get'],
+			['what-you-lose', 'What you lose']
+		]) {
+			expect(container.querySelector(`#${id}`)?.textContent).toContain(label);
+		}
 	});
 
 	it('links each UI highlight to documentation and the Playground', () => {

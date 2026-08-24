@@ -163,7 +163,7 @@
 		aria-labelledby="language-heading"
 	>
 		<div>
-			<p class="eyebrow">Interaction</p>
+			<p class="eyebrow">How it works · Interaction</p>
 			<h2 id="language-heading">Natural language is an interface</h2>
 		</div>
 		<div class="section-copy">
@@ -222,7 +222,7 @@
 	<section class="definition-section" id="what-you-get" aria-labelledby="definition-heading">
 		<div class="section-heading">
 			<div>
-				<p class="eyebrow">Shared application logic</p>
+				<p class="eyebrow">What you get · Shared application logic</p>
 				<h2 id="definition-heading">One definition, every surface</h2>
 			</div>
 			<p>
@@ -253,7 +253,7 @@
 	<section class="builder-section" id="what-you-lose" aria-labelledby="builder-heading">
 		<div class="section-heading">
 			<div>
-				<p class="eyebrow">Development</p>
+				<p class="eyebrow">What you lose · Parallel definitions</p>
 				<h2 id="builder-heading">Built for the persons who build it</h2>
 			</div>
 			<p>
