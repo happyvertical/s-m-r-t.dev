@@ -4,7 +4,7 @@ import type { Guide } from '$lib/data/guides';
  * Released s-m-r-t version every claim in this section was verified against.
  * When this moves, re-read the canonical sources listed on each page.
  */
-export const TOOLING_PINNED_VERSION = '0.40.63';
+export const TOOLING_PINNED_VERSION = '0.42.4';
 
 /** Canonical upstream tree for the release above. */
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${TOOLING_PINNED_VERSION}`;

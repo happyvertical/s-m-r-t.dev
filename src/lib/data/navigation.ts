@@ -29,14 +29,16 @@ export function isSidebarItemActive(
 	pathname: string,
 	activeHomepageHref = '/'
 ): boolean {
+	const hrefPathname = href.split(/[?#]/, 1)[0] || '/';
+
 	if (pathname === '/') {
-		if (href === '/' || href.startsWith('/#')) return href === activeHomepageHref;
+		if (hrefPathname === '/') return href === activeHomepageHref;
 		return false;
 	}
 
-	if (href === '/') return false;
-	if (href === '/starters') return pathname === href;
-	return pathname === href || pathname.startsWith(`${href}/`);
+	if (hrefPathname === '/') return false;
+	if (hrefPathname === '/starters') return pathname === hrefPathname;
+	return pathname === hrefPathname || pathname.startsWith(`${hrefPathname}/`);
 }
 
 export function sidebarAriaCurrent(href: string): 'location' | 'page' {
@@ -45,13 +47,23 @@ export function sidebarAriaCurrent(href: string): 'location' | 'page' {
 
 export const docsNavigation: NavigationGroup[] = [
 	{
-		label: 'Overview',
+		label: 'Components',
+		items: [
+			{
+				label: 'Data Table',
+				href: '/packages/smrt-ui?tab=components',
+				description: 'Find the table alongside the other collection components.'
+			}
+		]
+	},
+	{
+		label: 'Documentation',
 		items: [
 			{
 				label: 'Why s-m-r-t?',
 				href: '/',
 				description:
-					'One source of truth for business logic generates storage, forms, APIs, commands, permissions, and AI-agent tools.',
+					'One source of truth for application logic generates storage, forms, APIs, commands, permissions, and AI-agent tools.',
 				keywords: [
 					'smrt',
 					'agent-native',
@@ -76,12 +88,7 @@ export const docsNavigation: NavigationGroup[] = [
 				label: 'What you lose',
 				href: '/#what-you-lose',
 				description: 'Familiar costs the shared model retires.'
-			}
-		]
-	},
-	{
-		label: 'Getting started',
-		items: [
+			},
 			{
 				label: 'Choose a starting point',
 				href: '/starters',
@@ -96,30 +103,19 @@ export const docsNavigation: NavigationGroup[] = [
 				label: 'SaaS starter',
 				href: '/starters/saas',
 				description: 'Begin with the production-shaped monorepo.'
-			}
-		]
-	},
-	{
-		label: 'Application foundations',
-		items: foundationGuides.map((guide) => ({
-			label: guide.navTitle ?? guide.title,
-			href: `/foundations/${guide.slug}`,
-			description: guide.plainEnglish,
-			keywords: guide.packages
-		}))
-	},
-	{
-		label: 'Capabilities',
-		items: capabilityGuides.map((guide) => ({
-			label: guide.navTitle ?? guide.title,
-			href: `/capabilities/${guide.slug}`,
-			description: guide.plainEnglish,
-			keywords: guide.packages
-		}))
-	},
-	{
-		label: 'Task guides',
-		items: [
+			},
+			...foundationGuides.map((guide) => ({
+				label: guide.navTitle ?? guide.title,
+				href: `/foundations/${guide.slug}`,
+				description: guide.plainEnglish,
+				keywords: guide.packages
+			})),
+			...capabilityGuides.map((guide) => ({
+				label: guide.navTitle ?? guide.title,
+				href: `/capabilities/${guide.slug}`,
+				description: guide.plainEnglish,
+				keywords: guide.packages
+			})),
 			{
 				label: 'Guides overview',
 				href: '/guides',
@@ -131,27 +127,12 @@ export const docsNavigation: NavigationGroup[] = [
 				href: `/guides/${guide.slug}`,
 				description: guide.plainEnglish,
 				keywords: guide.packages
-			}))
-		]
-	},
-	{
-		label: 'Packages and tools',
-		items: [
+			})),
 			{
 				label: 'Packages',
 				href: '/packages',
 				description: 'Browse packages, components, and generated interfaces.'
 			},
-			{
-				label: 'Playground',
-				href: '/playground',
-				description: 'Try the components package by package.'
-			}
-		]
-	},
-	{
-		label: 'Developer tooling',
-		items: [
 			{
 				label: 'Tooling overview',
 				href: '/tooling',
@@ -163,12 +144,7 @@ export const docsNavigation: NavigationGroup[] = [
 				href: `/tooling/${guide.slug}`,
 				description: guide.plainEnglish,
 				keywords: guide.packages
-			}))
-		]
-	},
-	{
-		label: 'Reference',
-		items: [
+			})),
 			{
 				label: 'Reference overview',
 				href: '/reference',

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import favicon from '$lib/assets/favicon-32.png';
 	import '$lib/styles/reset.css';
 	import '$lib/styles/variables.css';
@@ -10,6 +11,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 
 	let { children } = $props();
+	const isStandalonePlayground = $derived(page.url.pathname === '/playground');
 </script>
 
 <svelte:head>
@@ -18,13 +20,17 @@
 </svelte:head>
 
 <Provider>
-	<ThemeProvider preset="smrt" colorScheme="system" persist={true}>
-		<div class="app">
-			<Header />
-			<main><DocsShell>{@render children()}</DocsShell></main>
-			<Footer />
-		</div>
-	</ThemeProvider>
+	{#if isStandalonePlayground}
+		{@render children()}
+	{:else}
+		<ThemeProvider preset="smrt" colorScheme="system" persist={true}>
+			<div class="app">
+				<Header />
+				<main><DocsShell>{@render children()}</DocsShell></main>
+				<Footer />
+			</div>
+		</ThemeProvider>
+	{/if}
 </Provider>
 
 <style>

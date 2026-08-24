@@ -5,17 +5,26 @@
 	interface Props {
 		modules: SmrtPlaygroundModule[];
 		compact?: boolean;
+		standalone?: boolean;
 	}
-	let { modules, compact = false }: Props = $props();
+	let { modules, compact = false, standalone = false }: Props = $props();
 </script>
 
-<div class:compact class="playground-embed">
+{#if standalone}
 	<PlaygroundHost
 		{modules}
 		title="s-m-r-t playground"
 		subtitle="Package-owned components and working views"
 	/>
-</div>
+{:else}
+	<div class:compact class="playground-embed">
+		<PlaygroundHost
+			{modules}
+			title="s-m-r-t playground"
+			subtitle="Package-owned components and working views"
+		/>
+	</div>
+{/if}
 
 <style>
 	.playground-embed {

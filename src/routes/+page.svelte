@@ -150,15 +150,14 @@ export class Article extends SmrtObject {
 	<header class="hero">
 		<h1>Why s-m-r-t?</h1>
 		<p class="hero-copy">
-			One source of truth for your business logic. You describe the records your product manages —
-			an article, an order, a customer — as models, and s-m-r-t generates what surrounds them:
+			One source of truth for your application logic. You describe the records your product manages
+			— an article, an order, a customer — as models, and s-m-r-t generates what surrounds them:
 			storage, forms, APIs, operator commands, permissions, and AI-agent tools, all working from the
 			same definition with the same limits. Change a model and every surface updates with it. Give
 			an agent access and it gets the operations you chose, nothing more.
 		</p>
 		<a class="hero-link" href="#how-it-works">How it works ↓</a>
 	</header>
-
 	<section class="pattern" id="how-it-works" aria-labelledby="pattern-heading">
 		<div class="section-heading">
 			<div>
