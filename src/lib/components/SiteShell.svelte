@@ -1,12 +1,13 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { afterNavigate } from '$app/navigation';
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import { AdminShell } from '@happyvertical/smrt-svelte/workspace';
 	import { onMount } from 'svelte';
 	import AppTheme from '$lib/components/AppTheme.svelte';
 	import ContextualNavigation from '$lib/components/ContextualNavigation.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import { createShellScrollMemory } from '$lib/scroll';
 	import { createDocsShellState } from '$lib/shell';
 
 	let {
@@ -15,6 +16,11 @@
 		children
 	}: { pathname: string; hash?: string; children: Snippet } = $props();
 	const shell = createDocsShellState();
+	const scrollMemory = createShellScrollMemory();
+
+	function shellMain() {
+		return document.querySelector<HTMLElement>('.smrt-admin-shell__main');
+	}
 
 	function focusHashTarget(activeHash: string) {
 		if (!activeHash) return;
@@ -29,10 +35,23 @@
 		}
 	}
 
-	afterNavigate(({ from, to }) => {
-		if (to?.url.hash && from?.url.pathname !== to.url.pathname) {
-			requestAnimationFrame(() => focusHashTarget(to.url.hash));
-		}
+	beforeNavigate(({ from }) => {
+		const main = shellMain();
+		if (from?.url && main) scrollMemory.capture(from.url, main.scrollTop);
+	});
+
+	afterNavigate(({ to, type }) => {
+		if (!to) return;
+		requestAnimationFrame(() => {
+			if (to.url.hash) {
+				focusHashTarget(to.url.hash);
+				return;
+			}
+			const top = scrollMemory.destination(to.url, type);
+			if (top === null) return;
+			shellMain()?.scrollTo({ top });
+			document.getElementById('main-content')?.focus({ preventScroll: true });
+		});
 	});
 
 	onMount(() => {
@@ -42,8 +61,7 @@
 					focusHashTarget(window.location.hash);
 					return;
 				}
-				const main = document.querySelector<HTMLElement>('.smrt-admin-shell__main');
-				main?.scrollTo({ top: 0 });
+				shellMain()?.scrollTo({ top: 0 });
 				document.getElementById('main-content')?.focus({ preventScroll: true });
 			});
 		}
