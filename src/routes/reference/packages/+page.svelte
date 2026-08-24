@@ -2,4 +2,4 @@
 	import PackageIndex from '$lib/components/PackageIndex.svelte';
 </script>
 
-<PackageIndex />
+<PackageIndex backHref="/reference/packages" />

@@ -245,6 +245,12 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 		components: ['createModuleUIRegistry', 'ModuleUIRegistry']
 	},
 	{
+		title: 'Internationalization',
+		description: 'Render translated text from the shared client message context.',
+		importPath: '@happyvertical/smrt-ui/i18n',
+		components: ['Trans']
+	},
+	{
 		title: 'Themes',
 		description: 'Apply the shared design tokens and light, dark, or system color preference.',
 		importPath: '@happyvertical/smrt-ui/themes',
@@ -797,7 +803,7 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Scheduling is declared here and run elsewhere',
 					body: 'AgentSchedule records the cron expression, next and last run, concurrency ceiling, timeout, target method, and success and failure counts. The runner that starts these schedules is in smrt-jobs. Thus, an application selects its execution host instead of receiving a background worker with the agent model.',
-					href: '/packages/smrt-jobs',
+					href: '/reference/packages/smrt-jobs',
 					linkLabel: 'smrt-jobs'
 				},
 				{
@@ -1016,7 +1022,7 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'One language snapshot per render',
 					body: 'buildI18nSnapshot resolves server message templates for a locale, including tenant overrides. Provider accepts the result. The browser interpolates variables. A missing key uses the registered English default and then the key itself. Thus, a partly translated application still renders. The matching useI18n store and Trans component are in the UI foundation.',
-					href: '/packages/smrt-ui',
+					href: '/reference/packages/smrt-ui',
 					linkLabel: 'smrt-ui'
 				}
 			],
