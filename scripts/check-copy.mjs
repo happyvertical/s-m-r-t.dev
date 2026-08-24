@@ -28,6 +28,7 @@ const PROSE_PROPERTIES = new Set([
 	'body',
 	'breadcrumb',
 	'caption',
+	'category',
 	'callout',
 	'claim',
 	'content',
@@ -64,6 +65,7 @@ const PROSE_PROPERTIES = new Set([
 
 const NON_PROSE_PROPERTIES = new Set([
 	'base',
+	'candidate',
 	'canonical',
 	'code',
 	'component',
@@ -72,8 +74,11 @@ const NON_PROSE_PROPERTIES = new Set([
 	'components',
 	'demo',
 	'eager',
+	'entry',
 	'exampleResource',
+	'family',
 	'filename',
+	'guide',
 	'guides',
 	'haystack',
 	'href',
@@ -85,6 +90,7 @@ const NON_PROSE_PROPERTIES = new Set([
 	'links',
 	'module',
 	'next',
+	'normalizedLabel',
 	'packages',
 	'page',
 	'pinnedVersion',
@@ -354,6 +360,7 @@ function nearestProseProperty(node) {
 }
 
 const SAFE_PROSE_METHODS = new Set(['get', 'toLowerCase', 'toUpperCase', 'trim']);
+const AUDITED_COLLECTION_METHODS = new Set(['filter', 'flatMap', 'map']);
 
 function bindingNameContains(node, name) {
 	if (ts.isIdentifier(node)) return node.text === name;
@@ -365,35 +372,205 @@ function bindingNameContains(node, name) {
 	return false;
 }
 
-function isFunctionParameterReference(node, name) {
-	let current = node.parent;
-	while (current) {
+function createAuditedSourceResolver(ast) {
+	const importedBindings = new Set();
+	const declarations = new Map();
+
+	function collect(node) {
 		if (
-			ts.isFunctionLike(current) &&
-			current.parameters.some((parameter) => bindingNameContains(parameter.name, name))
+			ts.isImportDeclaration(node) &&
+			ts.isStringLiteral(node.moduleSpecifier) &&
+			node.moduleSpecifier.text.startsWith('$lib/data/')
+		) {
+			const clause = node.importClause;
+			if (clause?.name && !clause.isTypeOnly) importedBindings.add(clause.name.text);
+			if (clause?.namedBindings && !clause.isTypeOnly) {
+				if (ts.isNamespaceImport(clause.namedBindings)) {
+					importedBindings.add(clause.namedBindings.name.text);
+				} else {
+					for (const element of clause.namedBindings.elements) {
+						if (!element.isTypeOnly) importedBindings.add(element.name.text);
+					}
+				}
+			}
+		}
+		if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
+			declarations.set(node.name.text, node.initializer);
+		}
+		ts.forEachChild(node, collect);
+	}
+
+	collect(ast);
+
+	function enclosingParameter(node, name) {
+		let current = node.parent;
+		while (current) {
+			if (ts.isFunctionLike(current)) {
+				const parameterIndex = current.parameters.findIndex((parameter) =>
+					bindingNameContains(parameter.name, name)
+				);
+				if (parameterIndex !== -1) return { functionNode: current, parameterIndex };
+			}
+			current = current.parent;
+		}
+		return undefined;
+	}
+
+	function localFunctionArguments(node, name) {
+		const parameter = enclosingParameter(node, name);
+		if (!parameter || !ts.isFunctionDeclaration(parameter.functionNode)) return undefined;
+		const { functionNode, parameterIndex } = parameter;
+		if (
+			!functionNode.name ||
+			functionNode.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword)
+		) {
+			return undefined;
+		}
+		const calls = [];
+		let escaped = false;
+		function collectCalls(current) {
+			if (
+				ts.isCallExpression(current) &&
+				ts.isIdentifier(current.expression) &&
+				current.expression.text === functionNode.name.text
+			) {
+				calls.push(
+					current.arguments[parameterIndex] ?? functionNode.parameters[parameterIndex].initializer
+				);
+			}
+			if (
+				ts.isIdentifier(current) &&
+				current.text === functionNode.name.text &&
+				current !== functionNode.name &&
+				!(ts.isCallExpression(current.parent) && current.parent.expression === current) &&
+				!(ts.isPropertyAccessExpression(current.parent) && current.parent.name === current) &&
+				!(
+					(ts.isPropertyAssignment(current.parent) || ts.isMethodDeclaration(current.parent)) &&
+					current.parent.name === current
+				)
+			) {
+				escaped = true;
+			}
+			ts.forEachChild(current, collectCalls);
+		}
+		collectCalls(ast);
+		return !escaped && calls.length > 0 && calls.every(Boolean) ? calls : undefined;
+	}
+
+	function isAuditedParameterReference(node, name, seen = new Set()) {
+		const parameter = enclosingParameter(node, name);
+		if (!parameter) return false;
+		const localArguments = localFunctionArguments(node, name);
+		if (
+			localArguments &&
+			localArguments.every((argument) => isAuditedSourceExpression(argument, seen))
 		) {
 			return true;
 		}
-		current = current.parent;
+		const { functionNode } = parameter;
+		const call = functionNode.parent;
+		if (!ts.isCallExpression(call) || !call.arguments.includes(functionNode)) return false;
+		if (
+			!ts.isPropertyAccessExpression(call.expression) ||
+			!AUDITED_COLLECTION_METHODS.has(call.expression.name.text)
+		) {
+			return false;
+		}
+		return isAuditedSourceExpression(call.expression.expression, seen);
 	}
-	return false;
-}
 
-function isIterationBindingReference(node, name) {
-	let current = node.parent;
-	while (current) {
-		if (ts.isForOfStatement(current) || ts.isForInStatement(current)) {
-			const initializer = current.initializer;
+	function isAuditedIterationReference(node, name, seen = new Set()) {
+		let current = node.parent;
+		while (current) {
+			if (ts.isForOfStatement(current) || ts.isForInStatement(current)) {
+				const initializer = current.initializer;
+				if (
+					ts.isVariableDeclarationList(initializer) &&
+					initializer.declarations.some((declaration) =>
+						bindingNameContains(declaration.name, name)
+					) &&
+					isAuditedSourceExpression(current.expression, seen)
+				) {
+					return true;
+				}
+			}
+			current = current.parent;
+		}
+		return false;
+	}
+
+	function isAuditedSourceExpression(node, seen = new Set()) {
+		if (!node) return false;
+		if (
+			ts.isParenthesizedExpression(node) ||
+			ts.isAsExpression(node) ||
+			ts.isSatisfiesExpression(node) ||
+			ts.isNonNullExpression(node)
+		) {
+			return isAuditedSourceExpression(node.expression, seen);
+		}
+		if (
+			ts.isStringLiteral(node) ||
+			ts.isNoSubstitutionTemplateLiteral(node) ||
+			ts.isTemplateExpression(node) ||
+			ts.isNumericLiteral(node) ||
+			ts.isArrayLiteralExpression(node) ||
+			ts.isObjectLiteralExpression(node)
+		) {
+			return true;
+		}
+		if (ts.isIdentifier(node)) {
+			if (importedBindings.has(node.text)) return true;
+			if (isAuditedParameterReference(node, node.text, seen)) return true;
+			if (isAuditedIterationReference(node, node.text, seen)) return true;
+			if (seen.has(node.text)) return false;
+			const initializer = declarations.get(node.text);
+			if (!initializer) return false;
+			return isAuditedSourceExpression(initializer, new Set(seen).add(node.text));
+		}
+		if (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) {
+			return isAuditedSourceExpression(node.expression, seen);
+		}
+		if (
+			ts.isNewExpression(node) &&
+			ts.isIdentifier(node.expression) &&
+			['Map', 'Set'].includes(node.expression.text)
+		) {
+			return Boolean(node.arguments?.length && isAuditedSourceExpression(node.arguments[0], seen));
+		}
+		if (ts.isCallExpression(node)) {
 			if (
-				ts.isVariableDeclarationList(initializer) &&
-				initializer.declarations.some((declaration) => bindingNameContains(declaration.name, name))
+				ts.isPropertyAccessExpression(node.expression) &&
+				AUDITED_COLLECTION_METHODS.has(node.expression.name.text)
+			) {
+				return isAuditedSourceExpression(node.expression.expression, seen);
+			}
+			if (
+				ts.isPropertyAccessExpression(node.expression) &&
+				ts.isIdentifier(node.expression.expression) &&
+				['Array', 'Object'].includes(node.expression.expression.text) &&
+				['entries', 'from', 'keys', 'values'].includes(node.expression.name.text)
+			) {
+				return node.arguments.length > 0 && isAuditedSourceExpression(node.arguments[0], seen);
+			}
+			if (
+				ts.isPropertyAccessExpression(node.expression) &&
+				node.expression.name.text === 'glob' &&
+				ts.isMetaProperty(node.expression.expression) &&
+				node.expression.expression.keywordToken === ts.SyntaxKind.ImportKeyword
 			) {
 				return true;
 			}
 		}
-		current = current.parent;
+		return false;
 	}
-	return false;
+
+	return {
+		getLocalFunctionArguments: localFunctionArguments,
+		isAuditedIterationReference,
+		isAuditedParameterReference,
+		isAuditedSourceExpression
+	};
 }
 
 function typeScriptExpressionRootName(node) {
@@ -404,7 +581,7 @@ function typeScriptExpressionRootName(node) {
 	return undefined;
 }
 
-function isSupportedProseInitializer(node, bindings) {
+function isSupportedProseInitializer(node, bindings, auditedSources) {
 	if (!node) return false;
 	if (
 		ts.isStringLiteral(node) ||
@@ -422,8 +599,8 @@ function isSupportedProseInitializer(node, bindings) {
 		return (
 			node.text === 'undefined' ||
 			bindingsHaveRoot(bindings, node.text) ||
-			isFunctionParameterReference(node, node.text) ||
-			isIterationBindingReference(node, node.text)
+			auditedSources.isAuditedParameterReference(node, node.text) ||
+			auditedSources.isAuditedIterationReference(node, node.text)
 		);
 	}
 	if (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) {
@@ -432,14 +609,16 @@ function isSupportedProseInitializer(node, bindings) {
 			root &&
 			(bindingsHaveRoot(bindings, node.getText()) ||
 				bindingsHaveRoot(bindings, root) ||
-				isFunctionParameterReference(node, root) ||
-				isIterationBindingReference(node, root))
+				auditedSources.isAuditedParameterReference(node, root) ||
+				auditedSources.isAuditedIterationReference(node, root))
 		);
 	}
 	if (
 		ts.isCallExpression(node) &&
 		ts.isPropertyAccessExpression(node.expression) &&
-		SAFE_PROSE_METHODS.has(node.expression.name.text)
+		SAFE_PROSE_METHODS.has(node.expression.name.text) &&
+		(isSupportedProseInitializer(node.expression.expression, bindings, auditedSources) ||
+			auditedSources.isAuditedSourceExpression(node.expression.expression))
 	) {
 		return true;
 	}
@@ -449,31 +628,33 @@ function isSupportedProseInitializer(node, bindings) {
 		ts.isSatisfiesExpression(node) ||
 		ts.isNonNullExpression(node)
 	) {
-		return isSupportedProseInitializer(node.expression, bindings);
+		return isSupportedProseInitializer(node.expression, bindings, auditedSources);
 	}
 	if (ts.isConditionalExpression(node)) {
 		return (
-			isSupportedProseInitializer(node.whenTrue, bindings) &&
-			isSupportedProseInitializer(node.whenFalse, bindings)
+			isSupportedProseInitializer(node.whenTrue, bindings, auditedSources) &&
+			isSupportedProseInitializer(node.whenFalse, bindings, auditedSources)
 		);
 	}
 	if (ts.isBinaryExpression(node)) {
 		return (
-			isSupportedProseInitializer(node.left, bindings) &&
-			isSupportedProseInitializer(node.right, bindings)
+			isSupportedProseInitializer(node.left, bindings, auditedSources) &&
+			isSupportedProseInitializer(node.right, bindings, auditedSources)
 		);
 	}
 	if (ts.isArrayLiteralExpression(node)) {
-		return node.elements.every((element) => isSupportedProseInitializer(element, bindings));
+		return node.elements.every((element) =>
+			isSupportedProseInitializer(element, bindings, auditedSources)
+		);
 	}
 	if (ts.isObjectLiteralExpression(node)) {
 		return node.properties.every((property) => {
 			if (ts.isPropertyAssignment(property)) {
-				return isSupportedProseInitializer(property.initializer, bindings);
+				return isSupportedProseInitializer(property.initializer, bindings, auditedSources);
 			}
 			if (ts.isShorthandPropertyAssignment(property)) return true;
 			if (ts.isSpreadAssignment(property)) {
-				return isSupportedProseInitializer(property.expression, bindings);
+				return isSupportedProseInitializer(property.expression, bindings, auditedSources);
 			}
 			return false;
 		});
@@ -496,6 +677,29 @@ export function extractTypeScriptPassages(source, filename, baseLine = 1) {
 	const passages = [];
 	const isDataFile = filename.startsWith('src/lib/data/');
 	const bindings = extractScriptBindings(source, filename);
+	const auditedSources = createAuditedSourceResolver(ast);
+
+	function appendProseIdentifierPassages(identifier) {
+		const text = bindings.get(identifier.text);
+		if (text) {
+			passages.push({
+				file: filename,
+				line: baseLine + lineNumber(source, identifier.getStart(ast)) - 1,
+				text
+			});
+			return;
+		}
+		for (const argument of auditedSources.getLocalFunctionArguments(identifier, identifier.text) ??
+			[]) {
+			const argumentText = normalizeText(extractStaticTypeScriptText(argument, bindings));
+			if (!argumentText) continue;
+			passages.push({
+				file: filename,
+				line: baseLine + lineNumber(source, argument.getStart(ast)) - 1,
+				text: argumentText
+			});
+		}
+	}
 
 	function visit(node) {
 		if (ts.isPropertyAssignment(node)) {
@@ -512,20 +716,13 @@ export function extractTypeScriptPassages(source, filename, baseLine = 1) {
 				});
 			}
 			if (name && PROSE_PROPERTIES.has(name) && ts.isIdentifier(node.initializer)) {
-				const text = bindings.get(node.initializer.text);
-				if (text) {
-					passages.push({
-						file: filename,
-						line: baseLine + lineNumber(source, node.initializer.getStart(ast)) - 1,
-						text
-					});
-				}
+				appendProseIdentifierPassages(node.initializer);
 			}
 			if (
 				isDataFile &&
 				name &&
 				PROSE_PROPERTIES.has(name) &&
-				!isSupportedProseInitializer(node.initializer, bindings)
+				!isSupportedProseInitializer(node.initializer, bindings, auditedSources)
 			) {
 				passages.push({
 					file: filename,
@@ -536,6 +733,32 @@ export function extractTypeScriptPassages(source, filename, baseLine = 1) {
 				});
 			}
 			visit(node.initializer);
+			return;
+		}
+		if (ts.isShorthandPropertyAssignment(node)) {
+			const name = node.name.text;
+			const classified =
+				PROSE_PROPERTIES.has(name) || NON_PROSE_PROPERTIES.has(name) || name.startsWith('smrt-');
+			if (isDataFile && !classified) {
+				passages.push({
+					file: filename,
+					line: baseLine + lineNumber(source, node.name.getStart(ast)) - 1,
+					text: '',
+					classificationError: `Classify the data property "${name}" as prose or an explicit exclusion.`
+				});
+			}
+			if (PROSE_PROPERTIES.has(name)) {
+				appendProseIdentifierPassages(node.name);
+				if (!isSupportedProseInitializer(node.name, bindings, auditedSources)) {
+					passages.push({
+						file: filename,
+						line: baseLine + lineNumber(source, node.name.getStart(ast)) - 1,
+						text: '',
+						extractionError: `Cannot statically audit the prose property "${name}" from this shorthand value.`,
+						extractionErrorId: 'copy-prose-value-unextractable'
+					});
+				}
+			}
 			return;
 		}
 		const isStringValue =

@@ -468,6 +468,86 @@ describe('copy checker', () => {
 		);
 	});
 
+	it('rejects prose derived from an unproven function parameter', () => {
+		const passages = extractTypeScriptPassages(
+			'export const derived = (item) => ({ title: item.title });',
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ extractionErrorId: 'copy-prose-value-unextractable' })
+			])
+		);
+	});
+
+	it('rejects a callback over an unsupported prose producer', () => {
+		const passages = extractTypeScriptPassages(
+			'export const derived = getCopy().map((item) => ({ title: item.title }));',
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ extractionErrorId: 'copy-prose-value-unextractable' })
+			])
+		);
+	});
+
+	it('rejects a callback over an unscanned imported collection', () => {
+		const passages = extractTypeScriptPassages(
+			"import { items } from 'external'; export const derived = items.map((item) => ({ title: item.title }));",
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ extractionErrorId: 'copy-prose-value-unextractable' })
+			])
+		);
+	});
+
+	it('allows a callback over an audited local data import', () => {
+		const passages = extractTypeScriptPassages(
+			"import { items } from '$lib/data/source'; export const derived = items.map((item) => ({ title: item.title }));",
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages.some((item) => item.extractionError)).toBe(false);
+	});
+
+	it('rejects a safe string method on an unsupported prose producer', () => {
+		const passages = extractTypeScriptPassages(
+			'export const item = { title: getCopy().trim() };',
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ extractionErrorId: 'copy-prose-value-unextractable' })
+			])
+		);
+	});
+
+	it('audits prose passed through a private static factory', () => {
+		const passages = extractTypeScriptPassages(
+			"function defineItem(summary) { return { summary }; } export const item = defineItem('Use business logic here.');",
+			'src/lib/data/fixture.ts'
+		);
+		expect(auditPassages(passages)).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ id: 'prohibited-business-logic', severity: 'error' })
+			])
+		);
+	});
+
+	it('rejects prose passed through a factory that escapes static analysis', () => {
+		const passages = extractTypeScriptPassages(
+			"function defineItem(summary) { return { summary }; } defineItem('Audited.'); export const escaped = defineItem;",
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ extractionErrorId: 'copy-prose-value-unextractable' })
+			])
+		);
+	});
+
 	it('reports a computed data prose value as an end-to-end error', async () => {
 		const projectRoot = await mkdtemp(path.join(tmpdir(), 'smrt-copy-check-'));
 		try {
