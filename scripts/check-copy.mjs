@@ -335,7 +335,7 @@ export function extractTypeScriptPassages(source, filename, baseLine = 1) {
 	}
 	const passages = [];
 	const isDataFile = filename.startsWith('src/lib/data/');
-	const bindings = isDataFile ? extractScriptBindings(source, filename) : new Map();
+	const bindings = extractScriptBindings(source, filename);
 
 	function visit(node) {
 		if (ts.isPropertyAssignment(node)) {
