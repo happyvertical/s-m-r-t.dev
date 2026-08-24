@@ -200,6 +200,20 @@ describe('copy checker', () => {
 		);
 	});
 
+	it('rejects a literal computed data-copy property', () => {
+		const passages = extractTypeScriptPassages(
+			"const copy = 'Use business logic here.'; export const item = { ['title']: copy };",
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					classificationError: expect.stringContaining('[computed property]')
+				})
+			])
+		);
+	});
+
 	it('checks prose properties with identifier-bound copy', () => {
 		const passages = extractTypeScriptPassages(
 			"const copy = 'Use business logic here.'; export const item = { title: copy };",

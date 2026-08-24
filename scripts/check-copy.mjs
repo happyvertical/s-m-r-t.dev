@@ -304,15 +304,7 @@ function propertyName(node) {
 	if (ts.isIdentifier(node) || ts.isStringLiteral(node) || ts.isNumericLiteral(node)) {
 		return node.text;
 	}
-	if (ts.isComputedPropertyName(node)) {
-		if (
-			ts.isStringLiteral(node.expression) ||
-			ts.isNoSubstitutionTemplateLiteral(node.expression)
-		) {
-			return node.expression.text;
-		}
-		return '[computed property]';
-	}
+	if (ts.isComputedPropertyName(node)) return '[computed property]';
 	return undefined;
 }
 
