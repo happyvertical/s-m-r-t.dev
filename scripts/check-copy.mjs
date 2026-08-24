@@ -131,7 +131,11 @@ const CONTENT_ELEMENTS = new Set([
 const EXCLUDED_ELEMENTS = new Set(['code', 'pre', 'script', 'style', 'svg']);
 const COPY_ATTRIBUTES = new Set([
 	'alt',
+	'aria-description',
 	'aria-label',
+	'aria-placeholder',
+	'aria-roledescription',
+	'aria-valuetext',
 	'ariaLabel',
 	'backLabel',
 	'content',
@@ -139,6 +143,34 @@ const COPY_ATTRIBUTES = new Set([
 	'placeholder',
 	'subtitle',
 	'title'
+]);
+
+const COMPONENT_NON_COPY_ATTRIBUTES = new Set([
+	'article',
+	'backHref',
+	'class',
+	'code',
+	'colorScheme',
+	'compact',
+	'filename',
+	'guide',
+	'id',
+	'image',
+	'lang',
+	'language',
+	'modules',
+	'neighbors',
+	'persist',
+	'pkg',
+	'preset',
+	'showLabels',
+	'slot',
+	'standalone',
+	'style',
+	'type',
+	'url',
+	'variant',
+	'visual'
 ]);
 
 const IMPERATIVE_VERBS = new Set([
@@ -323,6 +355,55 @@ function nearestProseProperty(node) {
 
 const SAFE_PROSE_METHODS = new Set(['get', 'toLowerCase', 'toUpperCase', 'trim']);
 
+function bindingNameContains(node, name) {
+	if (ts.isIdentifier(node)) return node.text === name;
+	if (ts.isObjectBindingPattern(node) || ts.isArrayBindingPattern(node)) {
+		return node.elements.some(
+			(element) => ts.isBindingElement(element) && bindingNameContains(element.name, name)
+		);
+	}
+	return false;
+}
+
+function isFunctionParameterReference(node, name) {
+	let current = node.parent;
+	while (current) {
+		if (
+			ts.isFunctionLike(current) &&
+			current.parameters.some((parameter) => bindingNameContains(parameter.name, name))
+		) {
+			return true;
+		}
+		current = current.parent;
+	}
+	return false;
+}
+
+function isIterationBindingReference(node, name) {
+	let current = node.parent;
+	while (current) {
+		if (ts.isForOfStatement(current) || ts.isForInStatement(current)) {
+			const initializer = current.initializer;
+			if (
+				ts.isVariableDeclarationList(initializer) &&
+				initializer.declarations.some((declaration) => bindingNameContains(declaration.name, name))
+			) {
+				return true;
+			}
+		}
+		current = current.parent;
+	}
+	return false;
+}
+
+function typeScriptExpressionRootName(node) {
+	if (ts.isIdentifier(node)) return node.text;
+	if (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) {
+		return typeScriptExpressionRootName(node.expression);
+	}
+	return undefined;
+}
+
 function isSupportedProseInitializer(node, bindings) {
 	if (!node) return false;
 	if (
@@ -337,8 +418,24 @@ function isSupportedProseInitializer(node, bindings) {
 	) {
 		return true;
 	}
-	if (ts.isIdentifier(node)) return true;
-	if (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) return true;
+	if (ts.isIdentifier(node)) {
+		return (
+			node.text === 'undefined' ||
+			bindingsHaveRoot(bindings, node.text) ||
+			isFunctionParameterReference(node, node.text) ||
+			isIterationBindingReference(node, node.text)
+		);
+	}
+	if (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) {
+		const root = typeScriptExpressionRootName(node);
+		return Boolean(
+			root &&
+			(bindingsHaveRoot(bindings, node.getText()) ||
+				bindingsHaveRoot(bindings, root) ||
+				isFunctionParameterReference(node, root) ||
+				isIterationBindingReference(node, root))
+		);
+	}
 	if (
 		ts.isCallExpression(node) &&
 		ts.isPropertyAccessExpression(node.expression) &&
@@ -807,6 +904,50 @@ function elementHasUnextractableCopy(node, bindings, allowedDynamicNames) {
 	);
 }
 
+function attributeText(attribute, bindings) {
+	if (!Array.isArray(attribute?.value)) return '';
+	return normalizeText(attribute.value.map((item) => nodeText(item, bindings)).join(' '));
+}
+
+function isCopyAttribute(node, attribute, bindings) {
+	if (COPY_ATTRIBUTES.has(attribute.name)) return true;
+	if (
+		(node.type === 'Component' || node.type === 'InlineComponent') &&
+		PROSE_PROPERTIES.has(attribute.name)
+	) {
+		return true;
+	}
+	if (attribute.name === 'label' && (node.name === 'optgroup' || node.name === 'track')) {
+		return true;
+	}
+	if (attribute.name === 'abbr' && node.name === 'th') return true;
+	if (attribute.name !== 'value' || node.name !== 'input') return false;
+	const typeAttribute = (node.attributes ?? []).find(
+		(item) => item.type === 'Attribute' && item.name === 'type'
+	);
+	if (!typeAttribute) return false;
+	const inputType = attributeText(typeAttribute, bindings).toLowerCase();
+	return !inputType || new Set(['button', 'image', 'reset', 'submit']).has(inputType);
+}
+
+function isClassifiedComponentAttribute(attribute, bindings, allowedDynamicNames) {
+	const expressionItems = Array.isArray(attribute.value)
+		? attribute.value.filter((item) => item.expression)
+		: [];
+	return (
+		COPY_ATTRIBUTES.has(attribute.name) ||
+		PROSE_PROPERTIES.has(attribute.name) ||
+		NON_PROSE_PROPERTIES.has(attribute.name) ||
+		COMPONENT_NON_COPY_ATTRIBUTES.has(attribute.name) ||
+		attribute.name.startsWith('data-') ||
+		attribute.name.startsWith('aria-') ||
+		(expressionItems.length > 0 &&
+			expressionItems.every(
+				(item) => !expressionHasUnextractableCopy(item.expression, bindings, allowedDynamicNames)
+			))
+	);
+}
+
 function aggregateElementText(node, bindings) {
 	if (!node || EXCLUDED_ELEMENTS.has(node.name)) return '';
 	const directText = nodeText(node, bindings);
@@ -942,7 +1083,20 @@ export function extractSveltePassages(source, filename) {
 					});
 					continue;
 				}
-				if (!COPY_ATTRIBUTES.has(attribute.name)) continue;
+				if (attribute.type !== 'Attribute') continue;
+				if (
+					(node.type === 'Component' || node.type === 'InlineComponent') &&
+					!isClassifiedComponentAttribute(attribute, activeBindings, activeAllowedDynamicNames)
+				) {
+					passages.push({
+						file: filename,
+						line: lineNumber(source, attribute.start),
+						text: '',
+						classificationError: `Classify the component attribute "${attribute.name}" as prose or an explicit exclusion.`
+					});
+					continue;
+				}
+				if (!isCopyAttribute(node, attribute, activeBindings)) continue;
 				if (!Array.isArray(attribute.value)) {
 					passages.push({
 						file: filename,

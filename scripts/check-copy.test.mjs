@@ -137,6 +137,35 @@ describe('copy checker', () => {
 		);
 	});
 
+	it('checks copy-bearing native attributes and component props', () => {
+		for (const source of [
+			'<input type="submit" value="Use business logic here.">',
+			'<div aria-description="Use business logic here."></div>',
+			'<Widget body="Use business logic here." />'
+		]) {
+			const findings = auditPassages(extractSveltePassages(source, 'fixture.svelte'));
+			expect(findings).toEqual(
+				expect.arrayContaining([
+					expect.objectContaining({ id: 'prohibited-business-logic', severity: 'error' })
+				])
+			);
+		}
+	});
+
+	it('rejects an unclassified component text prop', () => {
+		const passages = extractSveltePassages(
+			'<Widget helperText="Help the reader." />',
+			'fixture.svelte'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					classificationError: expect.stringContaining('helperText')
+				})
+			])
+		);
+	});
+
 	it('fails closed for an unsupported Svelte copy attribute shape', () => {
 		const passages = extractSveltePassages('<input aria-label>', 'fixture.svelte');
 		expect(passages).toEqual(
@@ -397,6 +426,45 @@ describe('copy checker', () => {
 					extractionErrorId: 'copy-prose-value-unextractable'
 				})
 			])
+		);
+	});
+
+	it('rejects a member value derived from an unsupported prose producer', () => {
+		const passages = extractTypeScriptPassages(
+			'export const item = { title: getCopy().title };',
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					extractionErrorId: 'copy-prose-value-unextractable'
+				})
+			])
+		);
+	});
+
+	it('rejects an unbound data prose identifier', () => {
+		const passages = extractTypeScriptPassages(
+			'declare const copy: string; export const item = { title: copy };',
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					extractionErrorId: 'copy-prose-value-unextractable'
+				})
+			])
+		);
+	});
+
+	it('allows callback-derived prose that points to audited source data', () => {
+		const passages = extractTypeScriptPassages(
+			"const items = [{ title: 'Source title.' }]; export const derived = items.map((item) => ({ title: item.title }));",
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages.some((item) => item.extractionError)).toBe(false);
+		expect(passages).toEqual(
+			expect.arrayContaining([expect.objectContaining({ text: 'Source title.' })])
 		);
 	});
 
