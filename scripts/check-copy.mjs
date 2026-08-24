@@ -674,6 +674,7 @@ export function extractSveltePassages(source, filename) {
 	}
 
 	visit(ast.html);
+	const renderedTexts = new Set(passages.map((passage) => passage.text).filter(Boolean));
 
 	for (const match of scripts) {
 		const scriptSource = match[1];
@@ -684,8 +685,7 @@ export function extractSveltePassages(source, filename) {
 			lineNumber(source, scriptOffset)
 		);
 		for (const passage of scriptPassages) {
-			const alreadyRendered =
-				passage.text && passages.some((rendered) => rendered.text === passage.text);
+			const alreadyRendered = passage.text && renderedTexts.has(passage.text);
 			if (!alreadyRendered) passages.push(passage);
 		}
 	}

@@ -242,6 +242,14 @@ describe('copy checker', () => {
 		);
 	});
 
+	it('keeps repeated unrendered script declarations separate', () => {
+		const passages = extractSveltePassages(
+			"<script>const first = { title: 'Same.' }; const second = { title: 'Same.' };</script><Widget {first} {second} />",
+			'fixture.svelte'
+		);
+		expect(passages.map((item) => item.text)).toEqual(['Same.', 'Same.']);
+	});
+
 	it('keeps interpolated data copy in the project passages', async () => {
 		const { passages } = await extractProjectPassages();
 		expect(passages).toEqual(
