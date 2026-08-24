@@ -17,4 +17,13 @@ describe('shared site theme', () => {
 		expect(playground).toContain('<AppTheme>');
 		expect(`${siteShell}\n${playground}`).not.toMatch(/preset=["']/);
 	});
+
+	it('uses the static light theme as the pre-hydration token fallback', () => {
+		const variables = readFileSync('src/lib/styles/variables.css', 'utf8');
+
+		expect(variables).toContain('--site-paper: var(--smrt-color-background, #edeff2)');
+		expect(variables).toContain('--site-ink: var(--smrt-color-on-background, #14171c)');
+		expect(variables).toContain('--site-accent: var(--smrt-color-primary, #e35d12)');
+		expect(variables).not.toContain('--site-paper: var(--smrt-color-background, #11150f)');
+	});
 });
