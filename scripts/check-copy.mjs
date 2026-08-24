@@ -514,10 +514,33 @@ function createAuditedSourceResolver(ast) {
 			ts.isNoSubstitutionTemplateLiteral(node) ||
 			ts.isTemplateExpression(node) ||
 			ts.isNumericLiteral(node) ||
-			ts.isArrayLiteralExpression(node) ||
-			ts.isObjectLiteralExpression(node)
+			node.kind === ts.SyntaxKind.TrueKeyword ||
+			node.kind === ts.SyntaxKind.FalseKeyword ||
+			node.kind === ts.SyntaxKind.NullKeyword ||
+			node.kind === ts.SyntaxKind.UndefinedKeyword
 		) {
 			return true;
+		}
+		if (ts.isArrayLiteralExpression(node)) {
+			return node.elements.every((element) =>
+				ts.isSpreadElement(element)
+					? isAuditedSourceExpression(element.expression, seen)
+					: isAuditedSourceExpression(element, seen)
+			);
+		}
+		if (ts.isObjectLiteralExpression(node)) {
+			return node.properties.every((property) => {
+				if (ts.isPropertyAssignment(property)) {
+					return isAuditedSourceExpression(property.initializer, seen);
+				}
+				if (ts.isShorthandPropertyAssignment(property)) {
+					return isAuditedSourceExpression(property.name, seen);
+				}
+				if (ts.isSpreadAssignment(property)) {
+					return isAuditedSourceExpression(property.expression, seen);
+				}
+				return false;
+			});
 		}
 		if (ts.isIdentifier(node)) {
 			if (importedBindings.has(node.text)) return true;

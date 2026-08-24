@@ -492,6 +492,18 @@ describe('copy checker', () => {
 		);
 	});
 
+	it('rejects a callback over an object that contains an unsupported producer', () => {
+		const passages = extractTypeScriptPassages(
+			'declare function loadUnscannedCopy(); const source = { items: loadUnscannedCopy() }; export const derived = Object.values(source).map((item) => ({ title: item.title }));',
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ extractionErrorId: 'copy-prose-value-unextractable' })
+			])
+		);
+	});
+
 	it('rejects a callback over an unscanned imported collection', () => {
 		const passages = extractTypeScriptPassages(
 			"import { items } from 'external'; export const derived = items.map((item) => ({ title: item.title }));",
