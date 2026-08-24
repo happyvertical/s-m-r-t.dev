@@ -424,6 +424,31 @@ function extractStaticTypeScriptText(node, bindings) {
 	return '';
 }
 
+function appendBindingText(bindings, name, text) {
+	const normalized = normalizeText(text);
+	if (!normalized) return;
+	bindings.set(name, normalizeText(`${bindings.get(name) ?? ''} ${normalized}`));
+}
+
+function collectStaticTypeScriptBindings(node, prefix, bindings) {
+	if (ts.isArrayLiteralExpression(node)) {
+		for (const element of node.elements) {
+			collectStaticTypeScriptBindings(element, prefix, bindings);
+		}
+		return;
+	}
+	if (ts.isObjectLiteralExpression(node)) {
+		for (const property of node.properties) {
+			if (!ts.isPropertyAssignment(property)) continue;
+			const name = propertyName(property.name);
+			if (!name || name === '[computed property]') continue;
+			collectStaticTypeScriptBindings(property.initializer, `${prefix}.${name}`, bindings);
+		}
+		return;
+	}
+	appendBindingText(bindings, prefix, extractStaticTypeScriptText(node, bindings));
+}
+
 function extractScriptBindings(source, filename) {
 	const scriptKind = filename.endsWith('.js') ? ts.ScriptKind.JS : ts.ScriptKind.TS;
 	const ast = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true, scriptKind);
@@ -431,14 +456,27 @@ function extractScriptBindings(source, filename) {
 
 	function visit(node) {
 		if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
-			const text = normalizeText(extractStaticTypeScriptText(node.initializer, bindings));
-			if (text) bindings.set(node.name.text, text);
+			collectStaticTypeScriptBindings(node.initializer, node.name.text, bindings);
 		}
 		ts.forEachChild(node, visit);
 	}
 
 	if (ast.parseDiagnostics.length === 0) visit(ast);
 	return bindings;
+}
+
+function expressionBindingPath(node) {
+	if (node?.type === 'Identifier') return node.name;
+	if (node?.type !== 'MemberExpression') return undefined;
+	const object = expressionBindingPath(node.object);
+	const property = node.computed
+		? node.property?.type === 'Literal' && typeof node.property.value === 'string'
+			? node.property.value
+			: undefined
+		: node.property?.type === 'Identifier'
+			? node.property.name
+			: undefined;
+	return object && property ? `${object}.${property}` : undefined;
 }
 
 function extractExpressionText(node, bindings = new Map()) {
@@ -448,6 +486,8 @@ function extractExpressionText(node, bindings = new Map()) {
 			return typeof node.value === 'string' ? node.value : '';
 		case 'Identifier':
 			return bindings.get(node.name) ?? '';
+		case 'MemberExpression':
+			return bindings.get(expressionBindingPath(node)) ?? '';
 		case 'TemplateLiteral':
 			return node.quasis
 				.map((quasi, index) => {
@@ -475,6 +515,34 @@ function extractExpressionText(node, bindings = new Map()) {
 		default:
 			return '';
 	}
+}
+
+function collectExpressionBindings(node, prefix, targetBindings, sourceBindings) {
+	if (node?.type === 'ArrayExpression') {
+		for (const element of node.elements ?? []) {
+			collectExpressionBindings(element, prefix, targetBindings, sourceBindings);
+		}
+		return;
+	}
+	if (node?.type === 'ObjectExpression') {
+		for (const property of node.properties ?? []) {
+			if (property.type !== 'Property') continue;
+			const name = property.computed
+				? property.key?.type === 'Literal' && typeof property.key.value === 'string'
+					? property.key.value
+					: undefined
+				: (property.key?.name ?? property.key?.value);
+			if (typeof name !== 'string') continue;
+			collectExpressionBindings(
+				property.value,
+				`${prefix}.${name}`,
+				targetBindings,
+				sourceBindings
+			);
+		}
+		return;
+	}
+	appendBindingText(targetBindings, prefix, extractExpressionText(node, sourceBindings));
 }
 
 function nodeText(node, bindings) {
@@ -519,8 +587,7 @@ export function extractSveltePassages(source, filename) {
 		if (node.type === 'EachBlock') {
 			const eachBindings = new Map(activeBindings);
 			if (node.context?.type === 'Identifier') {
-				const text = normalizeText(extractExpressionText(node.expression, activeBindings));
-				if (text) eachBindings.set(node.context.name, text);
+				collectExpressionBindings(node.expression, node.context.name, eachBindings, activeBindings);
 			}
 			for (const child of node.children ?? []) visit(child, insideContentElement, eachBindings);
 			for (const child of node.else?.children ?? []) {

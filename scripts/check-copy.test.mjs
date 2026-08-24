@@ -180,6 +180,18 @@ describe('copy checker', () => {
 		);
 	});
 
+	it('checks statically bound object properties in each blocks', () => {
+		const passages = extractSveltePassages(
+			"{#each [{ body: 'Use business logic here.' }] as item}<p>{item.body}</p>{/each}",
+			'fixture.svelte'
+		);
+		expect(auditPassages(passages)).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ id: 'prohibited-business-logic', severity: 'error' })
+			])
+		);
+	});
+
 	it('keeps interpolated data copy in the project passages', async () => {
 		const { passages } = await extractProjectPassages();
 		expect(passages).toEqual(
