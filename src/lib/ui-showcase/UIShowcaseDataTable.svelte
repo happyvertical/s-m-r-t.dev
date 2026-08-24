@@ -117,6 +117,7 @@
 
 	function resetTable() {
 		controller.dispatch({ type: 'reset' });
+		controller.dispatch({ type: 'setPageSize', pageSize: 3 });
 		dense = false;
 	}
 </script>
