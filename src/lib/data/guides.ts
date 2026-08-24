@@ -940,7 +940,7 @@ dispose();`
 			{
 				title: 'A missing identity denies rather than skips',
 				intro:
-					'Both the write guard and the read guard deny an absent identity component, although a context can carry permissions without a user id. Examples include API-key authentication, a service principal, a background job, and a bare tenant context. Such a context cannot change the user tier. User rows do not contain a tenant. Without the check, one principal could write another principal’s row. Thus, an absent identity causes a denial.',
+					'Both the write guard and the read guard deny an absent identity component, although a context can carry permissions without a user id. Examples include API-key authentication, a service principal, a background job, and a bare tenant context. Such a context cannot read or change the user tier. User rows do not contain a tenant. Without the check, one principal could write another principal’s row. Thus, an absent identity causes a denial.',
 				points: [
 					'The batch resolve action takes identity exclusively from the ambient context; the request body cannot select another tenant or user.',
 					'Saving or deleting an existing row is also authorized against the row’s persisted scope, looked up by primary key and by natural key.',

@@ -81,7 +81,7 @@ Explain an excluded item in clear STE copy when readers can misunderstand it. Do
 
 Run `pnpm run check:copy`. The check scans public route copy, data-driven content, navigation, search descriptions, metadata, callouts, package summaries, shared components, and static text.
 
-The check fails for prohibited project terminology or a copy source that it cannot parse. It gives advisory warnings for sentence length, paragraph length, and selected ambiguous or disallowed phrases.
+The check fails for prohibited terminology, an unclassified data-copy property, or a copy source that it cannot parse. It gives advisory warnings for sentence length, paragraph length, and selected ambiguous or disallowed phrases.
 
 The repository test workflow runs this command. The checker tests verify that route, component, data, and static copy files stay in scope.
 

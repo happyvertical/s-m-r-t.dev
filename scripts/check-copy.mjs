@@ -26,13 +26,16 @@ const COPY_IGNORES = [
 
 const PROSE_PROPERTIES = new Set([
 	'body',
+	'breadcrumb',
 	'callout',
 	'claim',
 	'content',
 	'description',
 	'details',
+	'deprecated',
 	'external',
 	'eyebrow',
+	'foundation',
 	'highlights',
 	'intro',
 	'label',
@@ -41,14 +44,40 @@ const PROSE_PROPERTIES = new Set([
 	'linkLabel',
 	'name',
 	'navTitle',
+	'new',
+	'note',
 	'notice',
 	'plainEnglish',
 	'playgroundNote',
 	'points',
+	'private',
+	'security',
+	'stub',
 	'summary',
 	'surfaceNote',
 	'title',
+	'version-added',
 	'warning'
+]);
+
+const NON_PROSE_PROPERTIES = new Set([
+	'base',
+	'code',
+	'componentImport',
+	'components',
+	'exampleResource',
+	'filename',
+	'href',
+	'importPath',
+	'keywords',
+	'kind',
+	'lang',
+	'module',
+	'packages',
+	'slug',
+	'status',
+	'variant',
+	'visual'
 ]);
 
 const CONTENT_ELEMENTS = new Set([
@@ -257,19 +286,37 @@ function nearestProseProperty(node) {
 	return undefined;
 }
 
-function extractTypeScriptPassages(source, filename, baseLine = 1) {
+export function extractTypeScriptPassages(source, filename, baseLine = 1) {
 	const scriptKind =
 		filename.endsWith('.js') || filename.endsWith('.mjs') ? ts.ScriptKind.JS : ts.ScriptKind.TS;
 	const ast = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true, scriptKind);
 	const passages = [];
 
 	function visit(node) {
-		if (
-			(ts.isStringLiteral(node) ||
-				ts.isNoSubstitutionTemplateLiteral(node) ||
-				ts.isTemplateExpression(node)) &&
-			PROSE_PROPERTIES.has(nearestProseProperty(node))
-		) {
+		const isStringValue =
+			ts.isStringLiteral(node) ||
+			ts.isNoSubstitutionTemplateLiteral(node) ||
+			ts.isTemplateExpression(node);
+		if (isStringValue) {
+			const name = nearestProseProperty(node);
+			const isDataFile = filename.startsWith('src/lib/data/');
+			const classified =
+				name === undefined ||
+				PROSE_PROPERTIES.has(name) ||
+				NON_PROSE_PROPERTIES.has(name) ||
+				name.startsWith('smrt-');
+			if (isDataFile && !classified) {
+				passages.push({
+					file: filename,
+					line: baseLine + lineNumber(source, node.getStart(ast)) - 1,
+					text: '',
+					classificationError: `Classify the data property "${name}" as prose or an explicit exclusion.`
+				});
+			}
+			if (!name || !PROSE_PROPERTIES.has(name)) {
+				ts.forEachChild(node, visit);
+				return;
+			}
 			const text = ts.isTemplateExpression(node)
 				? node.head.text +
 					` IDENTIFIER ` +
@@ -497,10 +544,22 @@ export async function runCopyCheck(projectRoot = PROJECT_ROOT) {
 			})
 		);
 	}
+	for (const passage of passages) {
+		if (!passage.classificationError) continue;
+		findings.push(
+			finding({
+				severity: 'error',
+				id: 'copy-property-unclassified',
+				message: passage.classificationError,
+				passage
+			})
+		);
+	}
 
 	return {
 		files,
-		passageCount: passages.filter((passage) => !passage.parseError).length,
+		passageCount: passages.filter((passage) => !passage.parseError && !passage.classificationError)
+			.length,
 		findings,
 		errors: findings.filter((item) => item.severity === 'error'),
 		warnings: findings.filter((item) => item.severity === 'warning')

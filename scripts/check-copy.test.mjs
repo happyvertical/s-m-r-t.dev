@@ -3,6 +3,7 @@ import {
 	auditPassages,
 	extractProjectPassages,
 	extractSveltePassages,
+	extractTypeScriptPassages,
 	findProjectCopySources
 } from './check-copy.mjs';
 
@@ -99,6 +100,20 @@ describe('copy checker', () => {
 				expect.objectContaining({
 					file: 'src/lib/data/guides.ts',
 					text: expect.stringContaining('current tooling reference is pinned')
+				})
+			])
+		);
+	});
+
+	it('rejects an unclassified data-copy property', () => {
+		const passages = extractTypeScriptPassages(
+			"export const item = { helperText: 'Help the reader.' };",
+			'src/lib/data/fixture.ts'
+		);
+		expect(passages).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					classificationError: expect.stringContaining('helperText')
 				})
 			])
 		);
