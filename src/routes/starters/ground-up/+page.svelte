@@ -1,6 +1,10 @@
 <script lang="ts">
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import GuideLibraryMetadata from '$lib/components/GuideLibraryMetadata.svelte';
 	import SEO from '$lib/components/SEO.svelte';
+	import { getGuideLibraryItem } from '$lib/data/task-guides';
+
+	const guideMetadata = getGuideLibraryItem('/starters/ground-up');
 
 	const install = `pnpm add -D @happyvertical/smrt-template-sveltekit\nnode --input-type=module -e "import { copyTemplate } from '@happyvertical/smrt-template-sveltekit'; copyTemplate('./my-app', { name: 'my-app' })"\ncd my-app\npnpm install\ncp .env.example .env\npnpm db:migrate\npnpm dev`;
 
@@ -37,6 +41,8 @@
 			>
 		</div>
 	</aside>
+
+	{#if guideMetadata}<GuideLibraryMetadata guide={guideMetadata} />{/if}
 
 	<section id="create">
 		<h2>1. Create and run the app</h2>

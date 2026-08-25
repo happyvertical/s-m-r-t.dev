@@ -459,6 +459,33 @@ describe('copy checker', () => {
 		);
 	});
 
+	it('checks guide metadata prose and accepts its structural fields', () => {
+		const passages = extractTypeScriptPassages(
+			`export const guide = {
+				task: {
+					purpose: 'Use business logic here.',
+					prerequisites: ['A working application'],
+					difficulty: 'Beginner',
+					supportRange: '1.x',
+					concepts: ['Application model'],
+					relatedUi: [],
+					relatedModules: [],
+					relatedReference: [],
+					expectedResult: 'The application starts.'
+				},
+				stepCount: 3
+			};`,
+			'src/lib/data/fixture.ts'
+		);
+
+		expect(passages.some((item) => item.classificationError)).toBe(false);
+		expect(auditPassages(passages)).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ id: 'prohibited-business-logic', severity: 'error' })
+			])
+		);
+	});
+
 	it('rejects a computed value for a data prose property', () => {
 		const passages = extractTypeScriptPassages(
 			'export const item = { title: getCopy() };',
