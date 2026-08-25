@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { uiStories } from '$lib/data/ui-stories';
+	import AgentAwareFormDemo from '$lib/ui-showcase/AgentAwareFormDemo.svelte';
 	import UILiveShellState from '$lib/ui-showcase/UILiveShellState.svelte';
 	import UIShowcaseDataTable from '$lib/ui-showcase/UIShowcaseDataTable.svelte';
 </script>
@@ -93,7 +94,9 @@
 					</div>
 				</div>
 
-				{#if story.id === 'data-table-and-collections'}
+				{#if story.id === 'agent-addressable-components'}
+					<AgentAwareFormDemo />
+				{:else if story.id === 'data-table-and-collections'}
 					<UIShowcaseDataTable />
 				{:else if story.id === 'application-shell'}
 					<UILiveShellState />

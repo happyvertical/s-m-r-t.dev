@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Page from './+page.svelte';
 
 beforeEach(() => {
+	window.history.replaceState({}, '', '/playground');
 	vi.stubGlobal(
 		'matchMedia',
 		vi.fn().mockImplementation(() => ({
@@ -31,5 +32,17 @@ describe('playground page', () => {
 
 		expect(host).toBeTruthy();
 		expect(docsLink.compareDocumentPosition(host!)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+	});
+
+	it('opens the agent-aware form from its stable deep link', async () => {
+		window.history.replaceState({}, '', '/playground?entry=agent-aware-form');
+		render(Page);
+
+		expect(
+			await screen.findByRole('heading', {
+				name: 'Agent-aware form: success and refusal',
+				level: 2
+			})
+		).toBeTruthy();
 	});
 });

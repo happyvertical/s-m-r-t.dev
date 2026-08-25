@@ -21,6 +21,10 @@ describe('/ui', () => {
 		expect(screen.getByRole('heading', { level: 3, name: 'Active ShellState' })).toBeTruthy();
 		expect(screen.getByRole('link', { name: /read the interaction contract/i })).toBeTruthy();
 		expect(screen.getByRole('link', { name: /framework architecture/i })).toBeTruthy();
+		expect(
+			screen.getByRole('heading', { name: 'A proposal succeeds. A protected change fails.' })
+		).toBeTruthy();
+		expect(screen.getByText(/no language model runs in this demo/i)).toBeTruthy();
 	});
 
 	it('operates controller-backed DataTable mechanisms through shared state', async () => {

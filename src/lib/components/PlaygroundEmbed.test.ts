@@ -1,6 +1,7 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/svelte';
 import ui from '@happyvertical/smrt-ui/playground';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { AGENT_AWARE_FORM_ENTRY_ID, sitePlayground } from '$lib/data/site-playground';
 import PlaygroundEmbed from './PlaygroundEmbed.svelte';
 
 beforeEach(() => {
@@ -58,5 +59,21 @@ describe('PlaygroundEmbed', () => {
 
 		await fireEvent.click(await screen.findByRole('button', { name: 'Name' }));
 		await screen.findByText('Sort: name asc');
+	});
+
+	it('opens the canonical site demonstration by stable entry identity', async () => {
+		render(PlaygroundEmbed, {
+			modules: [sitePlayground],
+			standalone: true,
+			selectedEntryId: AGENT_AWARE_FORM_ENTRY_ID
+		});
+
+		expect(
+			await screen.findByRole('heading', {
+				name: 'A proposal succeeds. A protected change fails.'
+			})
+		).toBeTruthy();
+		expect(screen.getAllByText(/no language model runs in this demo/i)).toHaveLength(2);
+		expect(screen.getByText('Scripted demonstration · released registry')).toBeTruthy();
 	});
 });

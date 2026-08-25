@@ -222,12 +222,22 @@ const interactionGuides: Guide[] = [
 			}
 		],
 		related: [
-			{ label: 'UI implementation: agent-assisted form playground', href: '/playground' },
+			{
+				label: 'UI implementation: canonical success-and-refusal demonstration',
+				href: '/ui#agent-addressable-components'
+			},
+			{
+				label: 'Playground: agent-aware form demonstration',
+				href: '/playground?entry=agent-aware-form'
+			},
 			{
 				label: 'Framework mechanism: agent-assisted forms',
 				href: '/capabilities/agent-assisted-forms'
 			},
-			{ label: 'Reference contract: security defaults', href: '/reference/security' },
+			{
+				label: 'Reference contract: control interaction registry',
+				href: '/reference/control-interaction'
+			},
 			{ label: 'Related guide: test your application', href: '/guides/testing-your-app' }
 		]
 	},

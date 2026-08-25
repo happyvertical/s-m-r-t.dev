@@ -6,13 +6,15 @@
 		modules: SmrtPlaygroundModule[];
 		compact?: boolean;
 		standalone?: boolean;
+		selectedEntryId?: string | null;
 	}
-	let { modules, compact = false, standalone = false }: Props = $props();
+	let { modules, compact = false, standalone = false, selectedEntryId = null }: Props = $props();
 </script>
 
 {#if standalone}
 	<PlaygroundHost
 		{modules}
+		{selectedEntryId}
 		title="s-m-r-t playground"
 		subtitle="Package-owned components and working views"
 	/>
@@ -20,6 +22,7 @@
 	<div class:compact class="playground-embed">
 		<PlaygroundHost
 			{modules}
+			{selectedEntryId}
 			title="s-m-r-t playground"
 			subtitle="Package-owned components and working views"
 		/>

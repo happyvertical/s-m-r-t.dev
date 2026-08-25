@@ -71,14 +71,14 @@ export const uiStories: UIStory[] = [
 		links: [
 			{
 				kind: 'playground',
-				label: 'Interactive Controls',
-				href: '/playground',
-				note: 'Open UI Foundation, then Interactive Controls.'
+				label: 'Agent-aware form: success and refusal',
+				href: '/playground?entry=agent-aware-form',
+				note: 'Run the same canonical demonstration in the standalone Playground.'
 			},
 			{
 				kind: 'reference',
-				label: 'smrt-ui component reference',
-				href: '/packages/smrt-ui?tab=components'
+				label: 'Control interaction contract',
+				href: '/reference/control-interaction'
 			}
 		]
 	},

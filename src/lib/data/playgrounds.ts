@@ -13,6 +13,7 @@ import messages from '@happyvertical/smrt-messages/playground';
 import projects from '@happyvertical/smrt-projects/playground';
 import tenancy from '@happyvertical/smrt-tenancy/playground';
 import users from '@happyvertical/smrt-users/playground';
+import { sitePlayground } from '$lib/data/site-playground';
 
 /**
  * `@happyvertical/smrt-fields/playground` is deliberately absent.
@@ -37,7 +38,8 @@ export const playgroundModules: SmrtPlaygroundModule[] = [
 	messages,
 	projects,
 	tenancy,
-	users
+	users,
+	sitePlayground
 ] as SmrtPlaygroundModule[];
 
 export const playgroundEntryTitles: Record<string, string[]> = {

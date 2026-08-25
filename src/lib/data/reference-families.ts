@@ -113,6 +113,7 @@ const guideFamily = new Map<string, string>([
 	['security', 'authorization'],
 	['authorization', 'authorization'],
 	['field-policies', 'field-policies'],
+	['control-interaction', 'components'],
 	['saadl', 'terminology'],
 	['terminology', 'terminology'],
 	['versions', 'versions'],
