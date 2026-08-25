@@ -2,10 +2,12 @@
 	import Callout from '$lib/components/Callout.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import GuideDiagram from '$lib/components/GuideDiagram.svelte';
+	import GuideLibraryMetadata from '$lib/components/GuideLibraryMetadata.svelte';
 	import PrevNext from '$lib/components/PrevNext.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { toAnchorId } from '$lib/data/anchors';
 	import type { Guide } from '$lib/data/guides';
+	import { getGuideLibraryItem } from '$lib/data/task-guides';
 	import { trackNeighbors } from '$lib/data/track';
 
 	interface Props {
@@ -16,6 +18,7 @@
 	let { guide, backHref, backLabel }: Props = $props();
 
 	const neighbors = $derived(trackNeighbors(`${backHref}/${guide.slug}`));
+	const libraryItem = $derived(getGuideLibraryItem(`${backHref}/${guide.slug}`));
 </script>
 
 <SEO
@@ -40,6 +43,8 @@
 			<strong>In plain English</strong>
 			<p>{guide.plainEnglish}</p>
 		</aside>
+
+		{#if libraryItem}<GuideLibraryMetadata guide={libraryItem} />{/if}
 
 		{#if guide.visual}<GuideDiagram visual={guide.visual} />{/if}
 

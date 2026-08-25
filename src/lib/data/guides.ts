@@ -8,6 +8,30 @@ export interface GuideLink {
 	external?: boolean;
 }
 
+export type TaskGuideFamilyId =
+	| 'getting-started'
+	| 'build-foundation'
+	| 'add-interfaces'
+	| 'add-modules'
+	| 'connect-agents'
+	| 'operate-and-ship';
+
+export type GuideDifficulty = 'Beginner' | 'Intermediate' | 'Advanced';
+
+export interface TaskGuideMetadata {
+	family: TaskGuideFamilyId;
+	purpose: string;
+	prerequisites: string[];
+	difficulty: GuideDifficulty;
+	/** Released framework version or supported range for this procedure. */
+	supportRange: string;
+	concepts: string[];
+	relatedUi: GuideLink[];
+	relatedModules: GuideLink[];
+	relatedReference: GuideLink[];
+	expectedResult: string;
+}
+
 export interface GuideSection {
 	title: string;
 	intro: string;
@@ -29,6 +53,8 @@ export interface Guide {
 	lede: string;
 	plainEnglish: string;
 	packages: string[];
+	/** Procedure and discovery metadata for pages in the task-guide library. */
+	task?: TaskGuideMetadata;
 	/** Released framework version every claim on the page was checked against. */
 	pinnedVersion?: string;
 	/** Canonical upstream documents an audit should re-read when this page ages. */
@@ -54,6 +80,12 @@ export interface Guide {
 	 * marked external open in a new tab.
 	 */
 	related?: { label: string; href: string; external?: boolean }[];
+}
+
+export type TaskGuide = Guide & { task: TaskGuideMetadata };
+
+export function isTaskGuide(guide: Guide): guide is TaskGuide {
+	return guide.task !== undefined;
 }
 
 export const foundationGuides: Guide[] = [

@@ -1,4 +1,4 @@
-import type { Guide } from '$lib/data/guides';
+import type { GuideDifficulty, TaskGuide, TaskGuideFamilyId } from '$lib/data/guides';
 
 /**
  * Released s-m-r-t version every step in this section was executed against.
@@ -15,13 +15,358 @@ export const TASK_GUIDES_PINNED_VERSION = '0.42.4';
 /** Canonical upstream tree for the release above. */
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${TASK_GUIDES_PINNED_VERSION}`;
 
+export interface TaskGuideFamily {
+	id: TaskGuideFamilyId;
+	label: string;
+	description: string;
+}
+
+export const taskGuideFamilies: TaskGuideFamily[] = [
+	{
+		id: 'getting-started',
+		label: 'Getting started',
+		description: 'Choose a starter and run your first s-m-r-t application.'
+	},
+	{
+		id: 'build-foundation',
+		label: 'Build the foundation',
+		description: 'Set up the data, identity, and access boundaries for an application.'
+	},
+	{
+		id: 'add-interfaces',
+		label: 'Add interfaces',
+		description: 'Publish selected model operations through generated application interfaces.'
+	},
+	{
+		id: 'add-modules',
+		label: 'Add application modules',
+		description: 'Connect prebuilt application parts to the shared application model.'
+	},
+	{
+		id: 'connect-agents',
+		label: 'Connect agents',
+		description: 'Give agents a narrow application surface with explicit authority.'
+	},
+	{
+		id: 'operate-and-ship',
+		label: 'Operate and ship',
+		description: 'Validate, deploy, and maintain a completed application.'
+	}
+];
+
+export const guideDifficulties: GuideDifficulty[] = ['Beginner', 'Intermediate', 'Advanced'];
+
+export type GuideMigrationDecision = 'keep' | 'move' | 'merge' | 'split' | 'retire';
+
+export interface GuideMigrationRecord {
+	source: string;
+	decision: GuideMigrationDecision;
+	family: TaskGuideFamilyId;
+}
+
+/** Content decisions for the guide sources that this issue reorganizes. */
+export const guideMigrationDecisions: GuideMigrationRecord[] = [
+	{
+		source: '/guides/multi-tenant-lifecycle',
+		decision: 'keep',
+		family: 'build-foundation'
+	},
+	{
+		source: '/guides/expose-your-app-over-mcp',
+		decision: 'keep',
+		family: 'connect-agents'
+	},
+	{
+		source: '/guides/semantic-search',
+		decision: 'keep',
+		family: 'add-modules'
+	},
+	{
+		source: '/guides/testing-your-app',
+		decision: 'keep',
+		family: 'operate-and-ship'
+	},
+	{ source: '/starters', decision: 'merge', family: 'getting-started' },
+	{
+		source: '/starters/ground-up',
+		decision: 'move',
+		family: 'getting-started'
+	},
+	{
+		source: '/starters/saas',
+		decision: 'move',
+		family: 'getting-started'
+	},
+	{
+		source: '/foundations/interfaces',
+		decision: 'split',
+		family: 'add-interfaces'
+	},
+	{
+		source: '/capabilities/agent-legible-applications',
+		decision: 'split',
+		family: 'connect-agents'
+	}
+];
+
+export function getTaskGuideFamily(id: TaskGuideFamilyId): TaskGuideFamily {
+	const family = taskGuideFamilies.find((candidate) => candidate.id === id);
+	if (!family) throw new Error(`Task guide family not found: ${id}`);
+	return family;
+}
+
+export function taskGuideSearchTerms(guide: TaskGuide): string[] {
+	const family = getTaskGuideFamily(guide.task.family);
+	return [
+		family.label,
+		family.description,
+		guide.task.purpose,
+		guide.task.difficulty,
+		guide.task.supportRange,
+		...guide.task.prerequisites,
+		...guide.task.concepts,
+		...guide.packages,
+		...guide.task.relatedUi.map((link) => link.label),
+		...guide.task.relatedModules.map((link) => link.label),
+		...guide.task.relatedReference.map((link) => link.label),
+		guide.task.expectedResult
+	];
+}
+
 /**
  * Task guides are the runnable, end-to-end pages: each one walks a single job
  * from an empty file to a verified result. They deliberately cross section
  * boundaries — a task usually touches foundations, a capability, and tooling —
  * and they link to the reference pages instead of restating them.
  */
-export const taskGuides: Guide[] = [
+const guideMigrationDrafts: TaskGuide[] = [
+	{
+		slug: 'start-with-basic-sveltekit',
+		navTitle: 'Start with basic SvelteKit',
+		eyebrow: 'Getting started',
+		title: 'Start a basic s-m-r-t SvelteKit application',
+		lede: 'Copy the basic template. Run the application. Review the first model and its generated interfaces.',
+		plainEnglish:
+			'Use this path when you want a small application that keeps each framework layer visible.',
+		packages: ['smrt-template-sveltekit', 'smrt-core', 'smrt-svelte', 'smrt-ui'],
+		task: {
+			family: 'getting-started',
+			purpose: 'Create a small SvelteKit application from the basic template.',
+			prerequisites: ['Node 24.18 or newer', 'pnpm', 'A terminal'],
+			difficulty: 'Beginner',
+			supportRange: TASK_GUIDES_PINNED_VERSION,
+			concepts: ['Application model', 'Tenant scope', 'Generated interfaces', 'Application shell'],
+			relatedUi: [{ label: 'UI overview', href: '/ui' }],
+			relatedModules: [{ label: 'Application modules', href: '/modules' }],
+			relatedReference: [
+				{ label: 'Decorator reference', href: '/reference/decorators' },
+				{ label: 'Generated interfaces reference', href: '/reference/interfaces' }
+			],
+			expectedResult: 'The development server shows a working application with one example object.'
+		},
+		pinnedVersion: TASK_GUIDES_PINNED_VERSION,
+		visual: 'app-model',
+		sections: [
+			{
+				title: 'Create the application',
+				intro: 'Run these commands in a directory that can contain the new project.',
+				filename: 'terminal',
+				lang: 'bash',
+				code: `pnpm add -D @happyvertical/smrt-template-sveltekit
+node --input-type=module -e "import { copyTemplate } from '@happyvertical/smrt-template-sveltekit'; copyTemplate('./my-app', { name: 'my-app' })"
+cd my-app
+pnpm install
+cp .env.example .env
+pnpm db:migrate
+pnpm dev`
+			},
+			{
+				title: 'Review the first model',
+				intro:
+					'Open the Item model. Its declaration supplies stored fields, tenant scope, and generated interfaces.',
+				filename: 'src/lib/objects/Item.ts',
+				code: `@smrt({
+  api: { include: ['list', 'get', 'create', 'update', 'delete'] },
+  mcp: { include: ['list', 'get', 'create', 'update', 'delete'] },
+  cli: { include: ['list', 'get', 'create', 'update', 'delete'] }
+})
+@TenantScoped({ mode: 'optional' })
+export class Item extends SmrtObject {
+  @tenantId({ nullable: true })
+  tenantId: string | null = null;
+  title = '';
+  status = 'draft';
+}`
+			},
+			{
+				title: 'Validate the template',
+				intro:
+					'Stop the development server. Run the project checks before you change the example model.',
+				filename: 'terminal',
+				lang: 'bash',
+				code: `pnpm test
+pnpm run check
+pnpm run build`
+			}
+		],
+		related: [
+			{ label: 'Build a tenant foundation', href: '/guides/multi-tenant-lifecycle' },
+			{
+				label: 'Basic template source',
+				href: `${SMRT_TREE}/packages/template-sveltekit`,
+				external: true
+			}
+		]
+	},
+	{
+		slug: 'start-with-saas-starter',
+		navTitle: 'Start with the SaaS starter',
+		eyebrow: 'Getting started',
+		title: 'Start with the s-m-r-t SaaS application',
+		lede: 'Run the reference application. Find each application area. Replace the example model while you keep the framework foundations.',
+		plainEnglish:
+			'Use this path when your application needs accounts, tenants, subscriptions, jobs, mobile clients, and deployment.',
+		packages: ['smrt-core', 'smrt-svelte', 'smrt-users', 'smrt-tenancy'],
+		task: {
+			family: 'getting-started',
+			purpose: 'Run the SaaS starter and find the correct place for application logic.',
+			prerequisites: ['Node 24.18 or newer', 'pnpm', 'Docker', 'Git'],
+			difficulty: 'Intermediate',
+			supportRange: TASK_GUIDES_PINNED_VERSION,
+			concepts: ['Monorepo', 'Tenant administration', 'Jobs', 'Mobile clients', 'Deployment'],
+			relatedUi: [{ label: 'UI overview', href: '/ui' }],
+			relatedModules: [{ label: 'Application modules', href: '/modules' }],
+			relatedReference: [
+				{ label: 'Configuration reference', href: '/reference/configuration' },
+				{ label: 'Authorization reference', href: '/reference/authorization' }
+			],
+			expectedResult:
+				'The local reference application starts with its database and development services.'
+		},
+		pinnedVersion: TASK_GUIDES_PINNED_VERSION,
+		visual: 'shell',
+		sections: [
+			{
+				title: 'Run the reference application',
+				intro: 'Clone the starter. Then start its services and web application.',
+				filename: 'terminal',
+				lang: 'bash',
+				code: `git clone https://github.com/happyvertical/smrt-saas-starter.git my-app
+cd my-app
+pnpm install
+cp .env.example .env
+pnpm services:up
+pnpm db:migrate
+pnpm db:seed
+pnpm --filter @happyvertical/smrt-saas-web dev`
+			},
+			{
+				title: 'Find each responsibility',
+				intro:
+					'Use the repository areas to find web, worker, mobile, model, UI, and deployment code.',
+				points: [
+					'apps/web contains the public site, onboarding, accounts, tenant administration, billing, and MCP routes.',
+					'apps/worker contains queued and scheduled jobs.',
+					'apps/mobile contains the Android and iOS application shells.',
+					'packages/app-objects contains the starter models and services.',
+					'packages/app-ui contains reusable application components.',
+					'manifests contains deployment configuration.'
+				]
+			},
+			{
+				title: 'Replace the example model',
+				intro:
+					'Start in packages/app-objects. Keep the tenant, permission, session, and generated-interface patterns.',
+				points: [
+					'Choose public, invite-only, or request-access onboarding.',
+					'Replace the example plans, entitlements, and usage measures.',
+					'Add application navigation to the shared shell.',
+					'Contribute reusable framework improvements to s-m-r-t.'
+				]
+			}
+		],
+		related: [
+			{ label: 'Build a tenant foundation', href: '/guides/multi-tenant-lifecycle' },
+			{
+				label: 'SaaS starter source',
+				href: 'https://github.com/happyvertical/smrt-saas-starter',
+				external: true
+			}
+		]
+	},
+	{
+		slug: 'add-generated-interfaces',
+		navTitle: 'Add generated interfaces',
+		eyebrow: 'Add interfaces',
+		title: 'Add generated interfaces to a model',
+		lede: 'Select operations for REST, MCP, and CLI. Regenerate the application manifest. Verify each interface at its authorization boundary.',
+		plainEnglish:
+			'One model declaration can supply routes, tools, and commands without separate copies of the application logic.',
+		packages: ['smrt-core', 'smrt-app-mcp', 'smrt-app-cli', 'smrt-web'],
+		task: {
+			family: 'add-interfaces',
+			purpose: 'Publish selected model operations through generated application interfaces.',
+			prerequisites: ['A scanned SmrtObject model', 'A migrated application database'],
+			difficulty: 'Intermediate',
+			supportRange: TASK_GUIDES_PINNED_VERSION,
+			concepts: ['Model manifest', 'REST', 'MCP', 'CLI', 'Authorization'],
+			relatedUi: [{ label: 'UI overview', href: '/ui' }],
+			relatedModules: [],
+			relatedReference: [
+				{ label: 'Generated interfaces reference', href: '/reference/interfaces' },
+				{ label: 'Authorization reference', href: '/reference/authorization' }
+			],
+			expectedResult:
+				'The generated manifest contains only the selected operations for each interface.'
+		},
+		pinnedVersion: TASK_GUIDES_PINNED_VERSION,
+		visual: 'surfaces',
+		sections: [
+			{
+				title: 'Select the operations',
+				intro: 'Declare an explicit operation list for each generated interface.',
+				filename: 'src/lib/objects/Article.ts',
+				code: `import { SmrtObject, smrt } from '@happyvertical/smrt-core';
+
+@smrt({
+  api: { include: ['list', 'get', 'create', 'update'] },
+  mcp: { include: ['list', 'get'] },
+  cli: { include: ['list', 'get', 'create', 'update'] }
+})
+export class Article extends SmrtObject {
+  title = '';
+  status = 'draft';
+}`
+			},
+			{
+				title: 'Regenerate the manifest',
+				intro:
+					'Restart the development process after you change model decorators. The scanner then refreshes the application manifest.',
+				points: [
+					'Inspect the manifest before you publish a generated interface.',
+					'Confirm that sensitive and transient fields do not appear.',
+					'Confirm that each interface contains only its selected operations.'
+				]
+			},
+			{
+				title: 'Verify the boundary',
+				intro:
+					'Call one permitted operation and one omitted operation through each enabled interface.',
+				points: [
+					'Authenticate the caller at the transport boundary.',
+					'Authorize the operation with the application principal and tenant context.',
+					'Keep application MCP separate from development MCP.'
+				]
+			}
+		],
+		related: [
+			{ label: 'Connect an agent through MCP', href: '/guides/expose-your-app-over-mcp' },
+			{ label: 'Generated interfaces reference', href: '/reference/interfaces' }
+		]
+	}
+];
+
+export const taskGuides: TaskGuide[] = [
 	{
 		slug: 'multi-tenant-lifecycle',
 		navTitle: 'Multi-tenant lifecycle',
@@ -31,6 +376,21 @@ export const taskGuides: Guide[] = [
 		plainEnglish:
 			'A tenant is the boundary that separates one customer account from another. This guide follows one tenant from the row that creates it to a request that can only see that tenant’s data.',
 		packages: ['smrt-users', 'smrt-tenancy', 'smrt-core'],
+		task: {
+			family: 'build-foundation',
+			purpose: 'Create a tenant boundary and prove that scoped data stays isolated.',
+			prerequisites: ['A s-m-r-t application', 'A configured SQLite or PostgreSQL database'],
+			difficulty: 'Intermediate',
+			supportRange: TASK_GUIDES_PINNED_VERSION,
+			concepts: ['Tenant hierarchy', 'Membership', 'Role', 'Tenant context', 'Row isolation'],
+			relatedUi: [],
+			relatedModules: [{ label: 'Application modules', href: '/modules' }],
+			relatedReference: [
+				{ label: 'Authorization reference', href: '/reference/authorization' },
+				{ label: 'Security reference', href: '/reference/security' }
+			],
+			expectedResult: 'Tests prove that each tenant can read and change only its permitted records.'
+		},
 		pinnedVersion: TASK_GUIDES_PINNED_VERSION,
 		visual: 'tenants',
 		sources: [
@@ -325,6 +685,25 @@ it('refuses a foreign filter', async () => {
 		plainEnglish:
 			'MCP lets an agent call your application’s operations as tools. The tools come from the same models your app already uses, so permissions, tenants, and field rules stay where they are.',
 		packages: ['smrt-app-mcp', 'smrt-core', 'smrt-app-cli'],
+		task: {
+			family: 'connect-agents',
+			purpose: 'Expose selected application operations to an MCP client.',
+			prerequisites: [
+				'A scanned s-m-r-t model',
+				'An MCP client',
+				'An application authentication plan'
+			],
+			difficulty: 'Advanced',
+			supportRange: TASK_GUIDES_PINNED_VERSION,
+			concepts: ['Application agent', 'MCP tool', 'Principal', 'Tenant scope', 'Authorization'],
+			relatedUi: [],
+			relatedModules: [{ label: 'Application modules', href: '/modules' }],
+			relatedReference: [
+				{ label: 'Generated interfaces reference', href: '/reference/interfaces' },
+				{ label: 'Security reference', href: '/reference/security' }
+			],
+			expectedResult: 'A client lists and calls only the MCP tools that the application exposes.'
+		},
 		pinnedVersion: TASK_GUIDES_PINNED_VERSION,
 		visual: 'surfaces',
 		sources: [
@@ -653,6 +1032,22 @@ export const POST = mountMcpRoute(mcpServer);
 		plainEnglish:
 			'Semantic search finds records that mean something similar to a query, even when they share no words with it. The vectors that make that possible are stored beside your data and refreshed when the text changes.',
 		packages: ['smrt-core', 'smrt-tenancy'],
+		task: {
+			family: 'add-modules',
+			purpose: 'Add semantic search to records that contain meaningful text.',
+			prerequisites: ['A s-m-r-t collection', 'Records with text fields', 'An embedding provider'],
+			difficulty: 'Intermediate',
+			supportRange: TASK_GUIDES_PINNED_VERSION,
+			concepts: ['Embedding', 'Semantic search', 'Candidate limit', 'Tenant filter'],
+			relatedUi: [],
+			relatedModules: [{ label: 'Application modules', href: '/modules' }],
+			relatedReference: [
+				{ label: 'AI and retrieval reference', href: '/reference/ai-and-retrieval' },
+				{ label: 'Collections reference', href: '/reference/collections' }
+			],
+			expectedResult:
+				'A collection query returns relevant records without crossing the active tenant boundary.'
+		},
 		pinnedVersion: TASK_GUIDES_PINNED_VERSION,
 		sources: [
 			{ label: 'smrt-core AGENTS.md', href: `${SMRT_TREE}/packages/core/AGENTS.md` },
@@ -825,6 +1220,22 @@ const db = await getDatabase({
 		plainEnglish:
 			'Tests run against the real models and the real database rather than mocks. Each test gets a private database inside a transaction, so tests can run in parallel and leave nothing behind.',
 		packages: ['smrt-vitest', 'smrt-core', 'smrt-tenancy'],
+		task: {
+			family: 'operate-and-ship',
+			purpose: 'Test models, tenant boundaries, generated interfaces, and Svelte components.',
+			prerequisites: ['A s-m-r-t application', 'Vitest', 'A generated model manifest'],
+			difficulty: 'Intermediate',
+			supportRange: TASK_GUIDES_PINNED_VERSION,
+			concepts: ['Isolated database', 'Tenant boundary', 'Generated interface', 'Component test'],
+			relatedUi: [{ label: 'UI overview', href: '/ui' }],
+			relatedModules: [],
+			relatedReference: [
+				{ label: 'Testing reference', href: '/reference/testing' },
+				{ label: 'Security reference', href: '/reference/security' }
+			],
+			expectedResult:
+				'The test suite validates model behavior, isolation, interfaces, and components in one run.'
+		},
 		pinnedVersion: TASK_GUIDES_PINNED_VERSION,
 		sources: [
 			{ label: 'smrt-vitest README', href: `${SMRT_TREE}/packages/vitest/README.md` },
@@ -1180,6 +1591,93 @@ jobs:
 	}
 ];
 
-export function getTaskGuide(slug: string): Guide | undefined {
+export interface GuideLibraryItem {
+	href: string;
+	title: string;
+	summary: string;
+	packages: string[];
+	task: TaskGuide['task'];
+	stepCount: number;
+}
+
+interface MigrationGuideDestination {
+	href: string;
+	stepCount: number;
+}
+
+const migrationGuideDestinations = new Map<string, MigrationGuideDestination>([
+	['start-with-basic-sveltekit', { href: '/starters/ground-up', stepCount: 3 }],
+	['start-with-saas-starter', { href: '/starters/saas', stepCount: 4 }],
+	['add-generated-interfaces', { href: '/foundations/interfaces', stepCount: 3 }]
+]);
+
+function guideLibraryItem(
+	guide: TaskGuide,
+	href: string,
+	stepCount = guide.sections.length
+): GuideLibraryItem {
+	return {
+		href,
+		title: guide.navTitle ?? guide.title,
+		summary: guide.plainEnglish,
+		packages: guide.packages,
+		task: guide.task,
+		stepCount
+	};
+}
+
+/**
+ * Section-owned guide catalog. Existing route paths stay in place until #187
+ * performs the coordinated route and integration migration.
+ */
+export const guideLibrary: GuideLibraryItem[] = [
+	...guideMigrationDrafts.map((guide) => {
+		const destination = migrationGuideDestinations.get(guide.slug);
+		return guideLibraryItem(
+			guide,
+			destination?.href ?? `/guides/${guide.slug}`,
+			destination?.stepCount
+		);
+	}),
+	...taskGuides.map((guide) => guideLibraryItem(guide, `/guides/${guide.slug}`))
+];
+
+export function guideLibraryItemsInFamily(family: TaskGuideFamilyId): GuideLibraryItem[] {
+	return guideLibrary.filter((guide) => guide.task.family === family);
+}
+
+export function getGuideLibraryItem(href: string): GuideLibraryItem | undefined {
+	return guideLibrary.find((guide) => guide.href === href);
+}
+
+export function guideLibrarySearchTerms(guide: GuideLibraryItem): string[] {
+	const family = getTaskGuideFamily(guide.task.family);
+	return [
+		family.label,
+		family.description,
+		guide.title,
+		guide.summary,
+		guide.task.purpose,
+		guide.task.difficulty,
+		guide.task.supportRange,
+		...guide.task.prerequisites,
+		...guide.task.concepts,
+		...guide.packages,
+		...guide.task.relatedUi.map((link) => link.label),
+		...guide.task.relatedModules.map((link) => link.label),
+		...guide.task.relatedReference.map((link) => link.label),
+		guide.task.expectedResult
+	];
+}
+
+export function guidesInTaskFamily(family: TaskGuideFamilyId): TaskGuide[] {
+	return taskGuides.filter((guide) => guide.task.family === family);
+}
+
+export function taskGuideSiblings(guide: TaskGuide): TaskGuide[] {
+	return guidesInTaskFamily(guide.task.family).filter((candidate) => candidate.slug !== guide.slug);
+}
+
+export function getTaskGuide(slug: string): TaskGuide | undefined {
 	return taskGuides.find((guide) => guide.slug === slug);
 }
