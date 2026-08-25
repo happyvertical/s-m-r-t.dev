@@ -1600,20 +1600,29 @@ export interface GuideLibraryItem {
 	stepCount: number;
 }
 
-const migrationDraftHrefs = new Map<string, string>([
-	['start-with-basic-sveltekit', '/starters/ground-up'],
-	['start-with-saas-starter', '/starters/saas'],
-	['add-generated-interfaces', '/foundations/interfaces']
+interface MigrationGuideDestination {
+	href: string;
+	stepCount: number;
+}
+
+const migrationGuideDestinations = new Map<string, MigrationGuideDestination>([
+	['start-with-basic-sveltekit', { href: '/starters/ground-up', stepCount: 3 }],
+	['start-with-saas-starter', { href: '/starters/saas', stepCount: 4 }],
+	['add-generated-interfaces', { href: '/foundations/interfaces', stepCount: 3 }]
 ]);
 
-function guideLibraryItem(guide: TaskGuide, href: string): GuideLibraryItem {
+function guideLibraryItem(
+	guide: TaskGuide,
+	href: string,
+	stepCount = guide.sections.length
+): GuideLibraryItem {
 	return {
 		href,
 		title: guide.navTitle ?? guide.title,
 		summary: guide.plainEnglish,
 		packages: guide.packages,
 		task: guide.task,
-		stepCount: guide.sections.length
+		stepCount
 	};
 }
 
@@ -1622,9 +1631,14 @@ function guideLibraryItem(guide: TaskGuide, href: string): GuideLibraryItem {
  * performs the coordinated route and integration migration.
  */
 export const guideLibrary: GuideLibraryItem[] = [
-	...guideMigrationDrafts.map((guide) =>
-		guideLibraryItem(guide, migrationDraftHrefs.get(guide.slug) ?? `/guides/${guide.slug}`)
-	),
+	...guideMigrationDrafts.map((guide) => {
+		const destination = migrationGuideDestinations.get(guide.slug);
+		return guideLibraryItem(
+			guide,
+			destination?.href ?? `/guides/${guide.slug}`,
+			destination?.stepCount
+		);
+	}),
 	...taskGuides.map((guide) => guideLibraryItem(guide, `/guides/${guide.slug}`))
 ];
 

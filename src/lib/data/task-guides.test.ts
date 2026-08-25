@@ -51,6 +51,12 @@ describe('guide library', () => {
 		expect(getGuideLibraryItem('/starters/saas')?.task.family).toBe('getting-started');
 	});
 
+	it('uses the step counts from migrated destination pages', () => {
+		expect(getGuideLibraryItem('/starters/ground-up')?.stepCount).toBe(3);
+		expect(getGuideLibraryItem('/starters/saas')?.stepCount).toBe(4);
+		expect(getGuideLibraryItem('/foundations/interfaces')?.stepCount).toBe(3);
+	});
+
 	it('places the procedural agent guide in Connect agents', () => {
 		expect(getGuideLibraryItem('/guides/expose-your-app-over-mcp')?.task.family).toBe(
 			'connect-agents'
