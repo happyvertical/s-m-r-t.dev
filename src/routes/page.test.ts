@@ -69,16 +69,36 @@ describe('documentation home page', () => {
 		}
 	});
 
-	it('links each UI highlight to documentation and the Playground', () => {
+	it('links UI highlights to documentation and only available Playground examples', () => {
 		const { container } = render(Page);
 		const cards = [...container.querySelectorAll('.ui-grid article')];
 
 		expect(cards).toHaveLength(6);
-		for (const card of cards) {
-			const hrefs = [...card.querySelectorAll('a')].map((link) => link.getAttribute('href'));
-			expect(hrefs).toHaveLength(2);
-			expect(hrefs[1]).toBe('/playground');
-		}
+		expect(
+			cards.map((card) => ({
+				title: card.querySelector('h3')?.textContent,
+				hrefs: [...card.querySelectorAll('a')].map((link) => link.getAttribute('href'))
+			}))
+		).toEqual([
+			{
+				title: 'Agent-addressable controls',
+				hrefs: ['/capabilities/agent-assisted-forms', '/playground']
+			},
+			{
+				title: 'DataTable',
+				hrefs: ['/packages/smrt-ui?tab=components', '/playground']
+			},
+			{
+				title: 'Chat and tool visibility',
+				hrefs: ['/packages/smrt-chat?tab=components', '/playground']
+			},
+			{
+				title: 'Forms',
+				hrefs: ['/packages/smrt-ui?tab=components', '/playground']
+			},
+			{ title: 'Application shell', hrefs: ['/capabilities/application-shell'] },
+			{ title: 'Voice', hrefs: ['/packages/smrt-svelte?tab=components'] }
+		]);
 	});
 
 	it('keeps the module teaser curated and moves the detailed example out of the homepage', () => {

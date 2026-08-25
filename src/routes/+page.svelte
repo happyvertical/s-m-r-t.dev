@@ -65,32 +65,38 @@
 		{
 			title: 'Agent-addressable controls',
 			body: 'Stable control identities support explanation, validation, staging, confirmation, and refusal.',
-			storyHref: '/capabilities/agent-assisted-forms'
+			storyHref: '/capabilities/agent-assisted-forms',
+			playgroundHref: '/playground'
 		},
 		{
 			title: 'DataTable',
 			body: 'Search, selection, filtering, sorting, paging, expansion, and serializable view state.',
-			storyHref: '/packages/smrt-ui?tab=components'
+			storyHref: '/packages/smrt-ui?tab=components',
+			playgroundHref: '/playground'
 		},
 		{
 			title: 'Chat and tool visibility',
 			body: 'Chat layouts keep messages, agent activity, and available actions visible.',
-			storyHref: '/packages/smrt-chat?tab=components'
+			storyHref: '/packages/smrt-chat?tab=components',
+			playgroundHref: '/playground'
 		},
 		{
 			title: 'Forms',
 			body: 'Form controls share model fields, validation, permissions, and field policy.',
-			storyHref: '/packages/smrt-ui?tab=components'
+			storyHref: '/packages/smrt-ui?tab=components',
+			playgroundHref: '/playground'
 		},
 		{
 			title: 'Application shell',
 			body: 'A shared shell coordinates navigation, panels, route content, and application state.',
-			storyHref: '/capabilities/application-shell'
+			storyHref: '/capabilities/application-shell',
+			playgroundHref: null
 		},
 		{
 			title: 'Voice',
 			body: 'Speech input uses capability checks and reports model download state.',
-			storyHref: '/packages/smrt-svelte?tab=components'
+			storyHref: '/packages/smrt-svelte?tab=components',
+			playgroundHref: null
 		}
 	];
 
@@ -322,7 +328,9 @@
 					<p>{highlight.body}</p>
 					<div>
 						<a href={highlight.storyHref}>Read the story</a>
-						<a href="/playground">Open the example</a>
+						{#if highlight.playgroundHref}
+							<a href={highlight.playgroundHref}>Open the example</a>
+						{/if}
 					</div>
 				</article>
 			{/each}
