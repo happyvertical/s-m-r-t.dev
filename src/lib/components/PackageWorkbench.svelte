@@ -4,19 +4,28 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import PlaygroundEmbed from '$lib/components/PlaygroundEmbed.svelte';
 	import PrevNext from '$lib/components/PrevNext.svelte';
+	import ReferenceFamilyBar from '$lib/components/ReferenceFamilyBar.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { toAnchorId } from '$lib/data/anchors';
-	import { packageStatusLabels, type SmrtPackage } from '$lib/data/packages';
+	import {
+		packageCategories,
+		packageStatusLabels,
+		packages,
+		type SmrtPackage
+	} from '$lib/data/packages';
 	import { getPlaygroundEntries, playgroundModules } from '$lib/data/playgrounds';
+	import { taskGuides } from '$lib/data/task-guides';
 	import { packageNeighbors } from '$lib/data/track';
+	import { uiComponents } from '$lib/data/ui-components.generated';
 
 	type Tab = 'overview' | 'components' | 'playground' | 'rest' | 'mcp' | 'webmcp' | 'cli';
 
 	interface Props {
 		pkg: SmrtPackage;
+		backHref?: string;
 	}
 
-	let { pkg }: Props = $props();
+	let { pkg, backHref = '/packages' }: Props = $props();
 	let activeTab = $state<Tab>('overview');
 	const tabs: { id: Tab; label: string }[] = [
 		{ id: 'overview', label: 'Overview' },
@@ -34,7 +43,34 @@
 		playgroundModules.filter((module) => module.packageName === pkg.name)
 	);
 	const packagePlaygroundEntries = $derived(getPlaygroundEntries(pkg.slug));
-	const neighbors = $derived(packageNeighbors(pkg.slug));
+	const referencePackageTrack = packageCategories.flatMap((category) =>
+		packages
+			.filter((entry) => entry.category === category)
+			.map((entry) => ({
+				label: entry.name,
+				href: `/reference/packages/${entry.slug}`,
+				caption: category
+			}))
+	);
+	const neighbors = $derived.by(() => {
+		if (backHref === '/packages') return packageNeighbors(pkg.slug);
+		const index = referencePackageTrack.findIndex(
+			(entry) => entry.href === `/reference/packages/${pkg.slug}`
+		);
+		if (index === -1) return null;
+		return {
+			track: 'Package catalog',
+			prev: referencePackageTrack[index - 1],
+			next: referencePackageTrack[index + 1]
+		};
+	});
+	const relatedGuides = $derived(
+		taskGuides.filter((guide) => guide.packages.includes(pkg.slug)).slice(0, 4)
+	);
+	const packageHref = $derived(`/reference/packages/${pkg.slug}`);
+	const uiComponentHrefByName = new Map(
+		uiComponents.map((component) => [component.name, `/reference/components/${component.slug}`])
+	);
 	const sourceInstallCode =
 		'# Distributed from the s-m-r-t source tree\n# See the package README for Gradle/SPM setup';
 	const sourceDirectory = $derived(
@@ -69,14 +105,20 @@
 		else url.searchParams.set('tab', tab);
 		window.history.replaceState({}, '', url);
 	}
+
+	function componentReferenceHref(component: string): string | undefined {
+		return pkg.slug === 'smrt-ui' ? uiComponentHrefByName.get(component) : undefined;
+	}
 </script>
 
-<SEO title={pkg.name} description={pkg.summary} url={`https://s-m-r-t.dev/packages/${pkg.slug}`} />
+<SEO title={pkg.name} description={pkg.summary} url={`https://s-m-r-t.dev${packageHref}`} />
+
+<ReferenceFamilyBar id="packages" />
 
 <article class="workbench">
 	<header class="package-hero">
 		<div>
-			<a class="back-link" href="/packages">← All packages</a>
+			<a class="back-link" href={backHref}>← All packages</a>
 			<div class="package-meta">
 				<span>{pkg.category}</span>
 				<span>v{pkg.version}</span>
@@ -89,7 +131,7 @@
 		</div>
 		<a
 			class="source-link"
-			href={`https://github.com/happyvertical/smrt/tree/main/packages/${sourceDirectory}`}
+			href={`https://github.com/happyvertical/smrt/tree/v${pkg.version}/packages/${sourceDirectory}`}
 			target="_blank"
 			rel="noreferrer"
 		>
@@ -227,8 +269,16 @@
 									</header>
 									<div class="component-index">
 										{#each group.components as component (component)}
+											{@const referenceHref = componentReferenceHref(component)}
 											<div>
-												<samp>{component}</samp><span>Exported from {group.importPath}</span>
+												{#if referenceHref}
+													<a href={referenceHref}
+														><samp>{component}</samp><span>Open contract →</span></a
+													>
+												{:else}
+													<samp>{component}</samp>
+												{/if}
+												<span>Exported from {group.importPath}</span>
 											</div>
 										{/each}
 									</div>
@@ -465,6 +515,31 @@
 		{/if}
 	</div>
 
+	<section class="related-content" aria-labelledby="related-content-title">
+		<div>
+			<p class="kicker">Continue from the contract</p>
+			<h2 id="related-content-title">Related stories and guides</h2>
+		</div>
+		<div class="related-links">
+			<a href="/modules">
+				<strong>Application modules</strong>
+				<span>See the application outcomes that packages provide.</span>
+			</a>
+			{#each relatedGuides as guide (guide.slug)}
+				<a href={`/guides/${guide.slug}`}>
+					<strong>{guide.navTitle ?? guide.title}</strong>
+					<span>{guide.plainEnglish}</span>
+				</a>
+			{/each}
+			{#if relatedGuides.length === 0}
+				<a href="/guides">
+					<strong>All guides</strong>
+					<span>Find a task procedure that uses this part of the framework.</span>
+				</a>
+			{/if}
+		</div>
+	</section>
+
 	<div class="package-prev-next">
 		<PrevNext {neighbors} />
 	</div>
@@ -477,6 +552,7 @@
 
 	.package-hero,
 	.package-notice,
+	.related-content,
 	.package-prev-next,
 	.panel,
 	.tabs {
@@ -629,6 +705,49 @@
 		font-weight: 750;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
+	}
+
+	.related-content {
+		display: grid;
+		grid-template-columns: minmax(15rem, 0.65fr) minmax(0, 1.35fr);
+		gap: clamp(2rem, 6vw, 6rem);
+		padding: 2.75rem 0;
+		border-block: 1px solid var(--site-line-strong);
+	}
+
+	.related-content h2 {
+		font-size: clamp(1.25rem, 3vw, 1.7rem);
+		letter-spacing: -0.03em;
+	}
+
+	.related-links {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.65rem;
+	}
+
+	.related-links a {
+		display: grid;
+		gap: 0.35rem;
+		padding: 0.9rem;
+		border: 1px solid var(--site-line);
+		border-radius: var(--site-radius-md);
+		color: var(--site-ink);
+		text-decoration: none;
+	}
+
+	.related-links a:hover {
+		border-color: var(--site-accent-strong);
+	}
+
+	.related-links strong {
+		font-size: 0.8rem;
+	}
+
+	.related-links span {
+		color: var(--site-muted);
+		font-size: 0.72rem;
+		line-height: 1.45;
 	}
 
 	.overview-copy h2,
@@ -898,6 +1017,26 @@
 		font-family: var(--site-font-mono);
 	}
 
+	.component-index a {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		color: var(--site-ink);
+		text-decoration: none;
+	}
+
+	.component-index a:hover samp {
+		text-decoration: underline;
+		text-decoration-color: var(--site-accent-strong);
+		text-underline-offset: 0.2rem;
+	}
+
+	.component-index a span {
+		color: var(--site-accent-strong);
+		font: 0.62rem var(--site-font-mono);
+	}
+
 	.component-index span {
 		color: var(--site-muted);
 		font-size: 0.72rem;
@@ -973,6 +1112,9 @@
 
 	@media (max-width: 800px) {
 		.package-hero,
+		.package-notice,
+		.related-content,
+		.package-prev-next,
 		.panel,
 		.tabs {
 			width: min(100% - 28px, 1180px);
@@ -981,7 +1123,12 @@
 		.package-hero,
 		.overview-grid,
 		.panel-heading,
+		.related-content,
 		.surface-example {
+			grid-template-columns: 1fr;
+		}
+
+		.related-links {
 			grid-template-columns: 1fr;
 		}
 

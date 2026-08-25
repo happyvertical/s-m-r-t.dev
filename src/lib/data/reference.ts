@@ -286,7 +286,7 @@ export const referenceGuides: Guide[] = [
 			{ label: 'Grant access', href: '/foundations/memberships-and-permissions' },
 			{ label: 'Security defaults', href: '/reference/security' },
 			{ label: 'Field policy operations', href: '/capabilities/field-policy-operations' },
-			{ label: 'smrt-users package', href: '/packages/smrt-users' }
+			{ label: 'smrt-users package', href: '/reference/packages/smrt-users' }
 		]
 	},
 	{
@@ -1042,8 +1042,59 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{ label: 'How resolution works', href: '/capabilities/field-policies' },
 			{ label: 'Build a policy-aware form', href: '/capabilities/policy-aware-forms' },
 			{ label: 'Operate field policies', href: '/capabilities/field-policy-operations' },
-			{ label: 'smrt-fields package', href: '/packages/smrt-fields' },
+			{ label: 'smrt-fields package', href: '/reference/packages/smrt-fields' },
 			{ label: 'Security defaults', href: '/reference/security' }
+		]
+	},
+	{
+		slug: 'versions',
+		navTitle: 'Versions and support status',
+		eyebrow: 'Reference',
+		title: 'Versions and support status',
+		lede: 'Use one exact framework release across the package tree, and read each package status before you adopt its surface.',
+		plainEnglish:
+			'Package pages show the release, implementation status, limitations, and source evidence that this site verified.',
+		packages: ['smrt-core', 'smrt-ui', 'smrt-svelte'],
+		pinnedVersion: REFERENCE_PINNED_VERSION,
+		sources: [
+			{ label: 'Framework package catalog', href: `${SMRT_TREE}/package.json` },
+			{ label: 'smrt-ui package manifest', href: `${SMRT_TREE}/packages/smrt-ui/package.json` },
+			{
+				label: 'smrt-svelte package manifest',
+				href: `${SMRT_TREE}/packages/smrt-svelte/package.json`
+			}
+		],
+		sections: [
+			{
+				title: 'Use one exact release',
+				intro:
+					'All framework packages release together. Install the same exact version for every @happyvertical/smrt-* dependency. Do not mix exact and range versions.',
+				points: [
+					'A split package tree can load more than one ObjectRegistry singleton. Objects registered in one copy are then absent from the other copy.',
+					'The package reference shows the verified release on every entry.',
+					'The source link on a package page uses the matching release tag.'
+				]
+			},
+			{
+				title: 'Read the status before adoption',
+				intro:
+					'A stable package has a released implementation. A foundation package is a required core layer. A source-distribution package needs repository-specific installation. A not-implemented package is a published placeholder and must not be presented as working behavior.',
+				points: [
+					'Package notices state known limitations before the workbench tabs.',
+					'Playground entries appear only when a package publishes or registers a working preview.',
+					'Generated-interface tabs identify packages that do not define a representative resource.'
+				]
+			},
+			{
+				title: 'Use source evidence',
+				intro:
+					'Treat the package manifest, README, AGENTS.md, exported declarations, and package-owned Playground module as the canonical evidence for a released surface. This site links to that evidence instead of copying an upstream generator output by hand.'
+			}
+		],
+		related: [
+			{ label: 'Package Reference', href: '/reference/packages' },
+			{ label: 'UI Component Reference', href: '/reference/components' },
+			{ label: 'Generated interfaces', href: '/reference/interfaces' }
 		]
 	},
 	{
@@ -1081,6 +1132,10 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				intro:
 					'Server-side rendering supplies the first HTML and data. Hydration hands those rows to browser state. A live collection can then receive changes and replay offline writes.'
 			}
+		],
+		related: [
+			{ label: 'What is a SAADL?', href: '/reference/saadl' },
+			{ label: 'Generated interfaces', href: '/reference/interfaces' }
 		]
 	}
 ];
