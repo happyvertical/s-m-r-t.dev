@@ -86,7 +86,7 @@ export const uiStories: UIStory[] = [
 		id: 'data-table-and-collections',
 		eyebrow: 'Prominent working surface',
 		title: 'DataTable and collections',
-		lede: 'DataTable keeps visible table operations and programmatic commands on one serializable state contract.',
+		lede: 'DataTable keeps controller-backed operations and programmatic commands on one serializable state contract.',
 		description:
 			'A durable row key lets a person, an adapter, and a later request refer to the same row after sorting, filtering, paging, or expansion.',
 		components: [
@@ -99,7 +99,8 @@ export const uiStories: UIStory[] = [
 		highlights: [
 			'Search and declarative filters',
 			'Ordered sorting and pagination',
-			'Expansion, density, and selection',
+			'Expansion and selection in controller state',
+			'Density as a presentational component prop',
 			'Local and manual ownership modes',
 			'Controlled state proposals',
 			'agentAddressable requires durable rowKey identity',
@@ -116,7 +117,7 @@ export const uiStories: UIStory[] = [
 			},
 			{
 				kind: 'operate',
-				body: 'An adapter can dispatch the same commands as rendered controls. Local mode transforms rows, while manual mode leaves filtering, sorting, or paging to the caller.'
+				body: 'An adapter can dispatch the same commands as controller-backed rendered controls. Density stays outside the controller snapshot as a presentational prop. Local mode transforms rows, while manual mode leaves filtering, sorting, or paging to the caller.'
 			},
 			{
 				kind: 'confirm',

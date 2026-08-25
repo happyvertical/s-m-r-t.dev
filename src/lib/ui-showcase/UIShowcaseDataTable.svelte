@@ -24,7 +24,7 @@
 			ownership: 'Local or manual',
 			readiness: 'Released',
 			summary:
-				'Search, filters, ordered sorting, paging, expansion, density, and selection share one controller.',
+				'Search, filters, ordered sorting, paging, expansion, and selection share one controller. Density stays a presentational DataTable prop.',
 			failure: 'Duplicate row identities fail closed.'
 		},
 		{
@@ -115,10 +115,9 @@
 		});
 	}
 
-	function resetTable() {
+	function resetControllerState() {
 		controller.dispatch({ type: 'reset' });
 		controller.dispatch({ type: 'setPageSize', pageSize: 3 });
-		dense = false;
 	}
 </script>
 
@@ -135,7 +134,8 @@
 			<p class="eyebrow">Released component</p>
 			<h3>Operate a real DataTable</h3>
 			<p>
-				Rendered controls and programmatic commands update the same serializable controller state.
+				Controller-backed controls and programmatic commands update the same serializable state.
+				Density demonstrates the separate presentational prop.
 			</p>
 		</div>
 		<div class="state-summary" aria-live="polite">
@@ -159,7 +159,7 @@
 		<button type="button" class:active={dense} onclick={() => (dense = !dense)}>
 			{dense ? 'Use comfortable rows' : 'Use dense rows'}
 		</button>
-		<button type="button" onclick={resetTable}>Reset table</button>
+		<button type="button" onclick={resetControllerState}>Reset controller state</button>
 	</div>
 
 	<div class="table-frame">

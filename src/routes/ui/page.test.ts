@@ -23,8 +23,8 @@ describe('/ui', () => {
 		expect(screen.getByRole('link', { name: /framework architecture/i })).toBeTruthy();
 	});
 
-	it('operates every visible DataTable mechanism through shared controller state', async () => {
-		render(Page);
+	it('operates controller-backed DataTable mechanisms through shared state', async () => {
+		const { container } = render(Page);
 		const table = screen.getByRole('table', { name: 'Released SMRT UI surfaces' });
 
 		expect(within(table).getByText('DataTable')).toBeTruthy();
@@ -35,7 +35,7 @@ describe('/ui', () => {
 		expect(within(table).getByText('Browser AI')).toBeTruthy();
 		expect(within(table).queryByText('DataTable')).toBeNull();
 
-		await fireEvent.click(screen.getByRole('button', { name: 'Reset table' }));
+		await fireEvent.click(screen.getByRole('button', { name: 'Reset controller state' }));
 		expect(within(table).getByText('DataTable')).toBeTruthy();
 
 		await fireEvent.click(screen.getByRole('button', { name: 'Show released previews' }));
@@ -50,7 +50,7 @@ describe('/ui', () => {
 		expect(within(table).getByText('DataTable')).toBeTruthy();
 		expect(screen.getByText('2', { selector: '.controller-state dd' })).toBeTruthy();
 
-		await fireEvent.click(screen.getByRole('button', { name: 'Reset table' }));
+		await fireEvent.click(screen.getByRole('button', { name: 'Reset controller state' }));
 		await fireEvent.click(within(table).getAllByRole('button', { name: 'Expand row' })[0]);
 		expect(within(table).getByText(/duplicate row identities fail closed/i)).toBeTruthy();
 		expect(screen.getByText('1', { selector: '.controller-state div:last-child dd' })).toBeTruthy();
@@ -58,9 +58,21 @@ describe('/ui', () => {
 		await fireEvent.click(within(table).getAllByRole('checkbox', { name: 'Select row' })[0]);
 		expect(screen.getByText('1', { selector: '.state-summary strong' })).toBeTruthy();
 
+		const controllerStateBeforeDensity = container.querySelector('.controller-state')?.textContent;
+		const selectedCountBeforeDensity =
+			container.querySelector('.state-summary strong')?.textContent;
 		await fireEvent.click(screen.getByRole('button', { name: 'Use dense rows' }));
 		expect(table.classList.contains('data-table--dense')).toBe(true);
 		expect(screen.getByRole('button', { name: 'Use comfortable rows' })).toBeTruthy();
+		expect(container.querySelector('.controller-state')?.textContent).toBe(
+			controllerStateBeforeDensity
+		);
+		expect(container.querySelector('.state-summary strong')?.textContent).toBe(
+			selectedCountBeforeDensity
+		);
+
+		await fireEvent.click(screen.getByRole('button', { name: 'Reset controller state' }));
+		expect(table.classList.contains('data-table--dense')).toBe(true);
 	});
 
 	it('operates the active ShellState without creating another shell in the story', async () => {
