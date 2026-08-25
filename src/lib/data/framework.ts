@@ -239,7 +239,7 @@ export const frameworkTopics: FrameworkTopic[] = [
 			},
 			{
 				label: 'smrt-web package instructions',
-				href: `${SMRT_TREE}/packages/web/AGENTS.md`,
+				href: `${SMRT_TREE}/packages/smrt-web/AGENTS.md`,
 				external: true
 			}
 		]
@@ -430,7 +430,7 @@ export const frameworkTopics: FrameworkTopic[] = [
 			},
 			{
 				label: 'smrt-web package instructions',
-				href: `${SMRT_TREE}/packages/web/AGENTS.md`,
+				href: `${SMRT_TREE}/packages/smrt-web/AGENTS.md`,
 				external: true
 			}
 		]
