@@ -1,115 +1,75 @@
 <script lang="ts">
 	import SEO from '$lib/components/SEO.svelte';
-	import { TOOLING_PINNED_VERSION, toolingGuides } from '$lib/data/tooling';
+	import {
+		TOOLING_PINNED_VERSION,
+		toolingGuides,
+		toolingSurfaceBoundaries
+	} from '$lib/data/tooling';
 
-	const planes = [
+	const audiences = [
 		{
-			tier: 'Tier 2',
-			name: 'Development and knowledge',
-			body: 'Reads a workspace on disk plus the contracts shipped by installed SMRT and SDK packages. It never touches application data, principals, or tenants. The framework CLI and the development MCP server both live here.'
+			name: 'Developers',
+			body: 'Developers create projects, change models, generate artifacts, run tests, and apply migrations. CI runs the same project checks and generation commands. These actions can write files or change the configured development database.'
 		},
 		{
-			tier: 'Tier 1',
-			name: 'Application runtime',
-			body: 'Generated from the @smrt() objects an application already defines, and served over local stdio or a stateless HTTP endpoint. Every call resolves through the same models, permissions, tenants, and field policy as the rest of the app.'
-		}
-	];
-
-	const surfaces = [
-		{
-			surface: 'Framework CLI',
-			plane: 'Tier 2',
-			runs: 'Your terminal',
-			when: 'A person or a script needs the knowledge index, a freshness check, a diff against a base ref, or a prompt bundle.',
-			href: '/tooling/knowledge'
+			name: 'Coding agents',
+			body: 'Coding agents inspect source, manifests, package contracts, and generated knowledge. Development MCP is read-only. Any separate permission to edit the repository comes from the coding-agent client.'
 		},
 		{
-			surface: 'smrt-dev-mcp',
-			plane: 'Tier 2',
-			runs: 'Local stdio, launched by your client',
-			when: 'A coding agent needs workspace and installed-package knowledge, plus class generation, introspection, and review or architecture context.',
-			href: '/tooling/dev-mcp'
-		},
-		{
-			surface: 'Generated stdio MCP',
-			plane: 'Tier 1',
-			runs: 'Local stdio, beside the application',
-			when: 'An agent on the same machine should perform real data operations. It takes credentials from its environment, so it stays local.',
-			href: '/tooling/app-mcp'
-		},
-		{
-			surface: 'App MCP over HTTP',
-			plane: 'Tier 1',
-			runs: 'One route in your deployed app',
-			when: 'A remote agent needs application capabilities, with authorization terminated at the gateway and a principal resolved per request.',
-			href: '/tooling/app-mcp'
-		},
-		{
-			surface: 'Packaged Agent Plugin',
-			plane: 'Tier 2',
-			runs: 'Discovered from the installed package root',
-			when: 'Your client supports Agent Plugins and you would rather install the development server than hand-write its configuration.',
-			href: '/tooling/agent-plugin'
+			name: 'Application agents',
+			body: 'Application agents use generated local MCP, hosted application MCP, or WebMCP. Their calls can operate live data and remain inside the application authentication, tenant, permission, and field-policy boundaries.'
 		}
 	];
 </script>
 
 <SEO
 	title="s-m-r-t developer tooling"
-	description="Choose between the s-m-r-t CLI, the smrt-dev-mcp development server, generated stdio MCP, application MCP over HTTP, and packaged Agent Plugins."
+	description="Use s-m-r-t tools to build, inspect, test, and operate applications. Keep development MCP, generated MCP, hosted application MCP, and WebMCP separate."
 	url="https://s-m-r-t.dev/tooling"
 />
 
 <article class="tooling-index">
 	<header>
-		<p>Developer tooling · {TOOLING_PINNED_VERSION}</p>
-		<h1>Choose the surface that matches the job.</h1>
+		<p>Tooling · {TOOLING_PINNED_VERSION}</p>
+		<h1>Build the application. Inspect the workspace. Operate the correct surface.</h1>
 		<span
-			>s-m-r-t exposes its work to people and to software agents through several surfaces. They are
-			not interchangeable: three of them describe your codebase, and two of them operate your
-			running application. Every claim in this section was verified against the released {TOOLING_PINNED_VERSION}
-			packages.</span
+			>This section covers systems for developers and coding agents. It also explains the runtime
+			surfaces that application agents use. These surfaces are not interchangeable. Every claim in
+			this section was verified against the released {TOOLING_PINNED_VERSION} packages.</span
 		>
 	</header>
 
 	<section>
-		<h2>Two planes</h2>
-		<div class="plane-grid">
-			{#each planes as plane (plane.tier)}
-				<div class="plane">
-					<span>{plane.tier}</span>
-					<strong>{plane.name}</strong>
-					<p>{plane.body}</p>
+		<h2>Three audiences</h2>
+		<div class="audience-grid">
+			{#each audiences as audience (audience.name)}
+				<div class="audience">
+					<strong>{audience.name}</strong>
+					<p>{audience.body}</p>
 				</div>
 			{/each}
 		</div>
-		<p class="note">
-			The separation is the point. The development server analyses code and cannot read application
-			data; the generated and application servers operate on data and know nothing about your
-			workspace layout. A framework documentation tier also exists, but it is no longer launched
-			from the framework monorepo and is configured separately.
-		</p>
 	</section>
 
 	<section>
-		<h2>Decision path</h2>
+		<h2>Separate surfaces</h2>
 		<div class="table-scroll">
 			<table>
 				<thead>
 					<tr>
 						<th scope="col">Surface</th>
-						<th scope="col">Plane</th>
-						<th scope="col">Runs where</th>
+						<th scope="col">Primary audience</th>
+						<th scope="col">Boundary</th>
 						<th scope="col">Reach for it when</th>
 					</tr>
 				</thead>
 				<tbody>
-					{#each surfaces as row (row.surface)}
+					{#each toolingSurfaceBoundaries as row (row.label)}
 						<tr>
-							<th scope="row"><a href={row.href}>{row.surface}</a></th>
-							<td class="plane-cell">{row.plane}</td>
-							<td>{row.runs}</td>
-							<td>{row.when}</td>
+							<th scope="row"><a href={row.href}>{row.label}</a></th>
+							<td class="audience-cell">{row.eyebrow}</td>
+							<td>{row.description}</td>
+							<td>{row.plainEnglish}</td>
 						</tr>
 					{/each}
 				</tbody>
@@ -133,10 +93,14 @@
 	<aside>
 		<strong>Related material</strong>
 		<p>
-			The <a href="/reference/interfaces">generated interfaces</a> reference explains how one model
+			The <a href="/framework">Framework section</a> explains the shared application model. The
+			<a href="/reference/interfaces">generated interfaces</a> reference defines how that model
 			produces REST, MCP, WebMCP, and CLI views. The
 			<a href="/reference/security">security defaults</a>
-			reference explains how those interfaces fail closed. Package pages for
+			reference defines how those interfaces fail closed. Use the
+			<a href="/guides/testing-your-app">testing guide</a> or the
+			<a href="/guides/expose-your-app-over-mcp">application MCP guide</a> for a complete procedure.
+			Package pages for
 			<a href="/packages/smrt-app-mcp">smrt-app-mcp</a>
 			and <a href="/packages/smrt-dev-mcp">smrt-dev-mcp</a> hold the per-package detail.
 		</p>
@@ -179,46 +143,34 @@
 		margin-bottom: 18px;
 		font-size: 1.1rem;
 	}
-	.plane-grid {
+	.audience-grid {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: repeat(3, 1fr);
 		gap: 12px;
 	}
-	.plane {
+	.audience {
 		padding: 18px;
 		border: 1px solid var(--site-line-strong);
 		border-left: 4px solid var(--site-accent);
 		border-radius: 7px;
 		background: var(--site-surface);
 	}
-	.plane span {
-		color: var(--site-accent-strong);
-		font: 700 0.6rem var(--site-font-mono);
-		text-transform: uppercase;
-	}
-	.plane strong {
+	.audience strong {
 		display: block;
-		margin-top: 7px;
 		font-size: 0.92rem;
 	}
-	.plane p {
+	.audience p {
 		margin-top: 9px;
 		color: var(--site-muted);
 		font-size: 0.8rem;
 		line-height: 1.6;
-	}
-	.note {
-		margin-top: 16px;
-		color: var(--site-muted);
-		font-size: 0.82rem;
-		line-height: 1.65;
 	}
 	.table-scroll {
 		overflow-x: auto;
 	}
 	table {
 		width: 100%;
-		min-width: 640px;
+		min-width: 760px;
 		border-collapse: collapse;
 		text-align: left;
 	}
@@ -235,7 +187,7 @@
 		text-transform: uppercase;
 	}
 	tbody th {
-		width: 168px;
+		width: 150px;
 		font-size: 0.82rem;
 	}
 	tbody th a {
@@ -250,8 +202,8 @@
 		font-size: 0.79rem;
 		line-height: 1.55;
 	}
-	.plane-cell {
-		width: 74px;
+	.audience-cell {
+		width: 122px;
 		color: var(--site-accent-strong);
 		font: 0.68rem var(--site-font-mono);
 	}
@@ -308,7 +260,7 @@
 			width: min(100% - 28px, 940px);
 			padding-top: 36px;
 		}
-		.plane-grid {
+		.audience-grid {
 			grid-template-columns: 1fr;
 		}
 		.page-list a {
