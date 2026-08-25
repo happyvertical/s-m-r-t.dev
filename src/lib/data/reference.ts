@@ -112,6 +112,99 @@ export const referenceGuides: Guide[] = [
 		]
 	},
 	{
+		slug: 'control-interaction',
+		navTitle: 'Control interaction contract',
+		eyebrow: 'Reference',
+		title: 'Control interaction registry contract',
+		lede: 'The registry gives an adapter stable control identity, serializable metadata, bounded commands, staged proposals, confirmation rules, and explicit refusal reasons.',
+		plainEnglish:
+			'An adapter can inspect and help with a declared form control. The registry does not give the adapter unrestricted page or data access.',
+		packages: ['smrt-ui', 'smrt-svelte'],
+		pinnedVersion: REFERENCE_PINNED_VERSION,
+		sources: [
+			{
+				label: 'smrt-ui interaction contract',
+				href: `${SMRT_TREE}/packages/smrt-ui/src/components/forms/control-interaction.ts`
+			},
+			{
+				label: 'smrt-ui form primitive',
+				href: `${SMRT_TREE}/packages/smrt-ui/src/components/forms/Form.svelte`
+			},
+			{
+				label: 'smrt-ui interaction tests',
+				href: `${SMRT_TREE}/packages/smrt-ui/src/components/forms/__tests__/control-interaction.test.ts`
+			}
+		],
+		sections: [
+			{
+				title: 'Address controls by declared identity',
+				intro:
+					'ControlIdentity combines a formId, a controlId, and an optional subject. An adapter uses this address instead of DOM position or visible text.',
+				points: [
+					'Form supplies the stable form scope and the interaction registry.',
+					'Each registered control supplies metadata and small imperative handles.',
+					'list returns snapshots for all controls or one form. get returns one exact identity.'
+				]
+			},
+			{
+				title: 'Inspect a minimized snapshot',
+				intro:
+					'A snapshot contains identity, metadata, runtime state, the readable live value, and a separately staged value. Classification controls value exposure and capabilities.',
+				points: [
+					'Metadata can include kind, label, description, sensitivity, options, constraints, unit, and capabilities.',
+					'Runtime state can include disabled, read-only, valid, and validation-message values.',
+					'A secret or non-readable control reports valueRedacted and omits its value.',
+					'A secret control omits read, stage, apply, clear, and undo capabilities.'
+				]
+			},
+			{
+				title: 'Use the bounded command set',
+				intro:
+					'execute accepts focus, reveal, highlight, explain, validate, stage, apply, clear, or undo. ControlCommandContext records the request source and confirmation signal.',
+				points: [
+					'Stage stores a proposed value without calling the control writer.',
+					'Apply uses the staged value unless the command supplies a value.',
+					'Undo restores the previous value from the current registry history.',
+					'User, voice, agent, tutorial, and test are the declared command sources.'
+				]
+			},
+			{
+				title: 'Apply the default refusal policy',
+				intro:
+					'The default policy checks mutation authority before it runs a control capability. A custom policy can make these rules stricter for application risk and permissions.',
+				points: [
+					'A secret mutation returns sensitive_control.',
+					'A non-writable mutation returns control_not_writable.',
+					'A disabled or read-only mutation returns control_not_editable.',
+					'An unconfirmed agent apply, clear, or undo returns consent_required.',
+					'An unknown identity returns not_found, and an unavailable capability returns unsupported.'
+				]
+			},
+			{
+				title: 'Observe registry events',
+				intro:
+					'subscribe receives registered, unregistered, staged, and command events. Command events retain the command source, result, identity, and registry timestamp.',
+				points: [
+					'Events do not make a transport or durable audit log.',
+					'The application owns authentication, authorization, persistence, and external rollback.',
+					'The registry does not include a language model or a chat transport.'
+				]
+			}
+		],
+		related: [
+			{
+				label: 'Canonical success-and-refusal demonstration',
+				href: '/ui#agent-addressable-components'
+			},
+			{
+				label: 'Standalone Playground demonstration',
+				href: '/playground?entry=agent-aware-form'
+			},
+			{ label: 'Interaction lifecycle', href: '/interaction#commands-and-lifecycle' },
+			{ label: 'Agent-assisted forms guide', href: '/capabilities/agent-assisted-forms' }
+		]
+	},
+	{
 		slug: 'authorization',
 		navTitle: 'Authorization model',
 		eyebrow: 'Reference',

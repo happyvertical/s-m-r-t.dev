@@ -3,6 +3,15 @@
 	import PlaygroundEmbed from '$lib/components/PlaygroundEmbed.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { playgroundModules } from '$lib/data/playgrounds';
+	import { AGENT_AWARE_FORM_ENTRY_ID } from '$lib/data/site-playground';
+	import { browser } from '$app/environment';
+	import { page } from '$app/state';
+
+	const selectedEntryId = $derived(
+		browser && page.url.searchParams.get('entry') === 'agent-aware-form'
+			? AGENT_AWARE_FORM_ENTRY_ID
+			: null
+	);
 </script>
 
 <SEO
@@ -14,7 +23,7 @@
 <AppTheme>
 	<div class="playground-page">
 		<a class="docs-link" href="/">← Docs</a>
-		<PlaygroundEmbed modules={playgroundModules} standalone />
+		<PlaygroundEmbed modules={playgroundModules} {selectedEntryId} standalone />
 	</div>
 </AppTheme>
 

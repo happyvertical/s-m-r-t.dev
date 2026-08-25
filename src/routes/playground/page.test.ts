@@ -1,8 +1,18 @@
 import { cleanup, render, screen } from '@testing-library/svelte';
+import { page } from '$app/state';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Page from './+page.svelte';
 
+vi.mock('$app/environment', () => ({ browser: true }));
+
+vi.mock('$app/state', async () => {
+	const { SvelteURL } = await import('svelte/reactivity');
+	return { page: { url: new SvelteURL('http://localhost/playground') } };
+});
+
 beforeEach(() => {
+	window.history.replaceState({}, '', '/playground');
+	page.url.search = '';
 	vi.stubGlobal(
 		'matchMedia',
 		vi.fn().mockImplementation(() => ({
@@ -31,5 +41,37 @@ describe('playground page', () => {
 
 		expect(host).toBeTruthy();
 		expect(docsLink.compareDocumentPosition(host!)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+	});
+
+	it('opens the agent-aware form from its stable deep link', async () => {
+		page.url.search = '?entry=agent-aware-form';
+		render(Page);
+
+		expect(
+			await screen.findByRole('heading', {
+				name: 'Agent-aware form: success and refusal',
+				level: 2
+			})
+		).toBeTruthy();
+	});
+
+	it('updates one mounted host during query-only client navigation in both directions', async () => {
+		const { container } = render(Page);
+		const mountedHost = container.querySelector('.playground-shell');
+
+		expect(mountedHost).toBeTruthy();
+		expect(screen.getByRole('heading', { name: 'Base Controls', level: 2 })).toBeTruthy();
+
+		page.url.search = '?entry=agent-aware-form';
+		expect(
+			await screen.findByRole('heading', {
+				name: 'Agent-aware form: success and refusal',
+				level: 2
+			})
+		).toBeTruthy();
+
+		page.url.search = '';
+		expect(await screen.findByRole('heading', { name: 'Base Controls', level: 2 })).toBeTruthy();
+		expect(container.querySelector('.playground-shell')).toBe(mountedHost);
 	});
 });

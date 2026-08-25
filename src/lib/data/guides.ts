@@ -490,7 +490,15 @@ export const capabilityGuides: Guide[] = [
 		],
 		related: [
 			{ label: 'Agent-legible applications', href: '/capabilities/agent-legible-applications' },
-			{ label: 'Component playground', href: '/playground' },
+			{
+				label: 'Canonical success-and-refusal demonstration',
+				href: '/ui#agent-addressable-components'
+			},
+			{
+				label: 'Standalone Playground demonstration',
+				href: '/playground?entry=agent-aware-form'
+			},
+			{ label: 'Control interaction contract', href: '/reference/control-interaction' },
 			{ label: 'WebMCP', href: '/capabilities/webmcp' }
 		]
 	},
