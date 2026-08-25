@@ -4,16 +4,14 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import { playgroundModules } from '$lib/data/playgrounds';
 	import { AGENT_AWARE_FORM_ENTRY_ID } from '$lib/data/site-playground';
-	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
+	import { page } from '$app/state';
 
-	let selectedEntryId = $state<string | null>(null);
-
-	onMount(() => {
-		selectedEntryId =
-			new URLSearchParams(window.location.search).get('entry') === 'agent-aware-form'
-				? AGENT_AWARE_FORM_ENTRY_ID
-				: null;
-	});
+	const selectedEntryId = $derived(
+		browser && page.url.searchParams.get('entry') === 'agent-aware-form'
+			? AGENT_AWARE_FORM_ENTRY_ID
+			: null
+	);
 </script>
 
 <SEO

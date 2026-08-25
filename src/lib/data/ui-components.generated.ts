@@ -1488,6 +1488,18 @@ export const uiComponents: UiComponentReference[] = [
 				description: ''
 			},
 			{
+				name: 'controller',
+				code: 'DataTableController',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'dataSurface',
+				code: 'CollectionToolbarDataSurfaceOptions',
+				status: false,
+				description: ''
+			},
+			{
 				name: 'class',
 				code: 'string',
 				status: false,
@@ -1707,6 +1719,12 @@ export const uiComponents: UiComponentReference[] = [
 				description: ''
 			},
 			{
+				name: 'rowLabel',
+				code: '(row: T, index: number) => string',
+				status: false,
+				description: ''
+			},
+			{
 				name: 'sortable',
 				code: 'boolean',
 				status: false,
@@ -1751,6 +1769,12 @@ export const uiComponents: UiComponentReference[] = [
 			{
 				name: 'manualPagination',
 				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'virtualization',
+				code: 'DataTableVirtualizationOptions',
 				status: false,
 				description: ''
 			},
@@ -1803,6 +1827,12 @@ export const uiComponents: UiComponentReference[] = [
 				description: ''
 			},
 			{
+				name: 'structuralRows',
+				code: 'readonly DataTableStructuralRow<T>[]',
+				status: false,
+				description: ''
+			},
+			{
 				name: 'visibleColumnIds',
 				code: 'Set<string>',
 				status: false,
@@ -1839,8 +1869,44 @@ export const uiComponents: UiComponentReference[] = [
 				description: ''
 			},
 			{
+				name: 'dataSurface',
+				code: 'DataTableDataSurfaceOptions',
+				status: false,
+				description: ''
+			},
+			{
 				name: 'loading',
 				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'refreshing',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'stale',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'partialResults',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'error',
+				code: 'DataTableLoadError | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onRetry',
+				code: '() => void',
 				status: false,
 				description: ''
 			},
@@ -1960,6 +2026,12 @@ export const uiComponents: UiComponentReference[] = [
 			{
 				name: 'onStateChange',
 				code: '(state: DataTableViewState, command: DataTableCommand) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onRetry',
+				code: '() => void',
 				status: false,
 				description: ''
 			}

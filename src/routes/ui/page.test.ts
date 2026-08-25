@@ -46,7 +46,7 @@ describe('/ui', () => {
 		expect(screen.getByRole('button', { name: 'Show every preview status' })).toBeTruthy();
 		await fireEvent.click(screen.getByRole('button', { name: 'Show every preview status' }));
 
-		await fireEvent.click(within(table).getByRole('button', { name: 'Surface' }));
+		await fireEvent.click(within(table).getByRole('button', { name: 'Sort Surface ascending' }));
 		expect(within(table).getByText('Browser AI')).toBeTruthy();
 		expect(screen.getByText(/title (asc|desc)/, { selector: '.controller-state dd' })).toBeTruthy();
 
@@ -55,11 +55,11 @@ describe('/ui', () => {
 		expect(screen.getByText('2', { selector: '.controller-state dd' })).toBeTruthy();
 
 		await fireEvent.click(screen.getByRole('button', { name: 'Reset controller state' }));
-		await fireEvent.click(within(table).getAllByRole('button', { name: 'Expand row' })[0]);
+		await fireEvent.click(within(table).getByRole('button', { name: 'Expand row 1' }));
 		expect(within(table).getByText(/duplicate row identities fail closed/i)).toBeTruthy();
 		expect(screen.getByText('1', { selector: '.controller-state div:last-child dd' })).toBeTruthy();
 
-		await fireEvent.click(within(table).getAllByRole('checkbox', { name: 'Select row' })[0]);
+		await fireEvent.click(within(table).getByRole('checkbox', { name: 'Select row 1' }));
 		expect(screen.getByText('1', { selector: '.state-summary strong' })).toBeTruthy();
 
 		const controllerStateBeforeDensity = container.querySelector('.controller-state')?.textContent;

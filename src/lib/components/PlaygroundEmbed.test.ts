@@ -57,7 +57,7 @@ describe('PlaygroundEmbed', () => {
 			'true'
 		);
 
-		await fireEvent.click(await screen.findByRole('button', { name: 'Name' }));
+		await fireEvent.click(await screen.findByRole('button', { name: 'Sort Name ascending' }));
 		await screen.findByText('Sort: name asc');
 	});
 
