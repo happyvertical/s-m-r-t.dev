@@ -102,7 +102,7 @@ export const foundationModuleClusters: ApplicationModuleCluster[] = [
 			'smrt-jobs supplies runners and queue controls, but each deployment must select and operate an execution host.'
 		],
 		packages: [
-			{ slug: 'smrt-agents', status: 'Released' },
+			{ slug: 'smrt-agents', status: 'New' },
 			{ slug: 'smrt-personas', status: 'New' },
 			{ slug: 'smrt-chat', status: 'New' },
 			{ slug: 'smrt-jobs', status: 'Released' },
