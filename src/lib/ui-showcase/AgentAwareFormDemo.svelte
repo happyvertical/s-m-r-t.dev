@@ -373,7 +373,9 @@
 					aria-current={phase === 'reviewed' ? 'step' : undefined}
 				>
 					<div>
-						<strong>Confirm and apply</strong><span>Send the explicit confirmation signal.</span>
+						<strong>Confirm and apply</strong><span
+							>A real click supplies the confirmation an agent cannot send.</span
+						>
 					</div>
 					<Button
 						size="sm"
