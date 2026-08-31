@@ -73,10 +73,9 @@ const DOC_FILE = 'AGENTS.md';
  */
 export function collectInstalled(root) {
 	// The `smrt` CLI binary pnpm links into `root`'s own `node_modules`. Derived
-	// from the `root` parameter (not the module's own `ROOT`) so a caller that
-	// deliberately passes a different tree — the tests point this at a
-	// workspace-free scratch directory to sidestep an unrelated nested-worktree
-	// root-detection quirk — runs that tree's own CLI, not this module's.
+	// from the `root` parameter rather than the module's own `ROOT`, so this
+	// function actually honours the tree it was asked to inspect instead of
+	// silently defaulting back to the one it was defined in.
 	const smrtBin = join(root, 'node_modules', '.bin', 'smrt');
 	let stdout;
 	try {
@@ -215,7 +214,11 @@ export function diffPackages(baseline, current) {
 	};
 }
 
-/** Packages the data files describe that are not installed here at all. */
+/**
+ * Packages the data files describe that `current` does not cover — either not
+ * installed at all, or (like a transitive-only dependency such as `smrt-core`)
+ * outside what `smrt dev:knowledge-index --scope installed` reaches.
+ */
 export function undocumentableSlugs(references, current) {
 	const installed = new Set(Object.keys(current).map((name) => name.slice(SCOPE.length + 1)));
 	return [...references.keys()].filter((slug) => !installed.has(slug)).sort();
