@@ -61,7 +61,7 @@ export const uiStories: UIStory[] = [
 			},
 			{
 				kind: 'confirm',
-				body: 'An agent can stage a value without changing the live value. An agent apply operation requires an explicit confirmation signal by default.'
+				body: 'An agent can stage a value without changing the live value. An agent apply operation is always refused by default; only a human, through a real local click, can apply it.'
 			},
 			{
 				kind: 'failure',

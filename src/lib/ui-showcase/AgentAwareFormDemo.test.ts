@@ -11,7 +11,7 @@ function reviewValue(label: string): string | null | undefined {
 
 describe('AgentAwareFormDemo', () => {
 	it('runs the real staged, confirmed, applied, and undo registry flow', async () => {
-		render(AgentAwareFormDemo);
+		render(AgentAwareFormDemo, { props: { isLocalGesture: () => true } });
 
 		expect(screen.getByText(/no language model runs in this demo/i)).toBeTruthy();
 		expect(reviewValue('Live value')).toBe('Willow Reed');
@@ -32,8 +32,10 @@ describe('AgentAwareFormDemo', () => {
 		const stageButton = screen.getByRole('button', { name: 'Stage proposal' });
 		await waitFor(() => expect(document.activeElement).toBe(stageButton));
 		await fireEvent.click(stageButton);
-		expect(reviewValue('Live value')).toBe('Willow Reed');
-		expect(reviewValue('Proposed value')).toBe('Willow Griffin');
+		await waitFor(() => {
+			expect(reviewValue('Live value')).toBe('Willow Reed');
+			expect(reviewValue('Proposed value')).toBe('Willow Griffin');
+		});
 
 		const reviewButton = screen.getByRole('button', { name: 'Mark reviewed' });
 		await waitFor(() => expect(document.activeElement).toBe(reviewButton));
@@ -58,7 +60,9 @@ describe('AgentAwareFormDemo', () => {
 	});
 
 	it('shows the released secret-control refusal without exposing a protected value', async () => {
-		const { container } = render(AgentAwareFormDemo);
+		const { container } = render(AgentAwareFormDemo, {
+			props: { isLocalGesture: () => true }
+		});
 		const protectedInput = container.querySelector<HTMLInputElement>(
 			'[data-protected-control="true"]'
 		);
@@ -69,11 +73,13 @@ describe('AgentAwareFormDemo', () => {
 
 		await waitFor(() => expect((attemptButton as HTMLButtonElement).disabled).toBe(false));
 		await fireEvent.click(attemptButton);
-		expect(screen.getByText('Refused by the released policy')).toBeTruthy();
-		expect(screen.getByRole('status').textContent).toMatch(/sensitive_control/i);
-		expect(container.querySelector('.refusal-result')?.textContent).toMatch(
-			/no protected value was read,\s*staged, or shown/i
-		);
+		await waitFor(() => {
+			expect(screen.getByText('Refused by the released policy')).toBeTruthy();
+			expect(screen.getByRole('status').textContent).toMatch(/sensitive_control/i);
+			expect(container.querySelector('.refusal-result')?.textContent).toMatch(
+				/no protected value was read,\s*staged, or shown/i
+			);
+		});
 		expect(container.querySelector('.refusal-result')?.hasAttribute('aria-live')).toBe(false);
 		expect(protectedInput?.value).toBe('');
 	});

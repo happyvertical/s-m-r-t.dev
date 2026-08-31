@@ -4,6 +4,7 @@
 		FormGroup,
 		Input,
 		createControlInteractionRegistry,
+		executeLocalControlCommand,
 		type ControlCommandResult,
 		type ControlSnapshot
 	} from '@happyvertical/smrt-ui/forms';
@@ -20,7 +21,25 @@
 	const MAX_NAME_LENGTH = 30;
 	const DISPLAY_NAME_PATTERN = /^[A-Za-z][A-Za-z .'-]*$/;
 	const SUBJECT = { type: 'Profile', id: '42', label: 'Example profile' };
-	const registry = createControlInteractionRegistry();
+
+	/**
+	 * Test-only escape hatch for the registry's local-gesture check — never
+	 * supplied by production callers (both real usages render `<AgentAwareFormDemo
+	 * />` with no props). smrt-ui (#2528) requires apply/discard/clear/undo to
+	 * run through `executeLocalControlCommand` with the real click event: the
+	 * registry checks the event's native `isTrusted` flag while it is actively
+	 * dispatching, and always refuses a `source: 'agent'` apply/undo outright —
+	 * an agent may stage a proposal but never self-confirm it. jsdom's synthetic
+	 * `dispatchEvent` always reports `isTrusted: false`, so
+	 * `AgentAwareFormDemo.test.ts` passes this prop to stand in for a real
+	 * gesture; the shipped page never does, so it keeps the native check.
+	 */
+	let { isLocalGesture }: { isLocalGesture?: (_event: Event) => boolean } = $props();
+
+	// Read once, in a closure, at component init: this prop is a fixed test
+	// seam, never expected to change after the initial render.
+	const registry = (() =>
+		createControlInteractionRegistry(isLocalGesture ? { isLocalGesture } : undefined))();
 
 	let phase = $state<Phase>('ready');
 	let displayName = $state('Willow Reed');
@@ -133,10 +152,15 @@
 		await focusStep('apply');
 	}
 
-	async function confirmAndApply() {
-		const result = await registry.execute(
+	async function confirmAndApply(event: MouseEvent) {
+		// Apply is a human confirmation, not an agent proposal: the registry
+		// only accepts it from a real, actively-dispatching click event, so it
+		// runs through `executeLocalControlCommand` with the click's own event
+		// rather than a hand-built `{ source: 'agent' }` context.
+		const result = await executeLocalControlCommand(
+			registry,
 			{ action: 'apply', identity: displayIdentity },
-			{ source: 'agent', confirmed: true }
+			event
 		);
 		if (!result.ok) {
 			status = `The registry refused apply: ${result.reason ?? 'denied'}.`;
@@ -150,10 +174,11 @@
 		await focusStep('undo');
 	}
 
-	async function undoAppliedValue() {
-		const result = await registry.execute(
+	async function undoAppliedValue(event: MouseEvent) {
+		const result = await executeLocalControlCommand(
+			registry,
 			{ action: 'undo', identity: displayIdentity },
-			{ source: 'agent', confirmed: true }
+			event
 		);
 		if (!result.ok) {
 			status = `The registry refused undo: ${result.reason ?? 'denied'}.`;
@@ -217,7 +242,21 @@
 				</div>
 			</dl>
 
-			<Form formId={FORM_ID} interactionRegistry={registry} aria-label="Profile demonstration form">
+			<!--
+				stagedReview={false}: smrt-ui's Form component (#2528) mounts its own built-in
+				staged-review surface inside Form by default. This demo already
+				implements its own bespoke find/validate/stage/review/apply/undo
+				storyboard against the raw registry below, so the built-in surface
+				would duplicate apply/discard controls and its own hidden
+				role="status" live region once a proposal is staged. Opt out with the
+				documented prop instead of letting the two surfaces compete.
+			-->
+			<Form
+				formId={FORM_ID}
+				interactionRegistry={registry}
+				stagedReview={false}
+				aria-label="Profile demonstration form"
+			>
 				<FormGroup
 					label="Display name"
 					hint="3–30 characters. Start with a letter."
@@ -334,7 +373,9 @@
 					aria-current={phase === 'reviewed' ? 'step' : undefined}
 				>
 					<div>
-						<strong>Confirm and apply</strong><span>Send the explicit confirmation signal.</span>
+						<strong>Confirm and apply</strong><span
+							>A real click supplies the confirmation an agent cannot send.</span
+						>
 					</div>
 					<Button
 						size="sm"

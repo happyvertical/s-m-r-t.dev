@@ -468,7 +468,7 @@ export const capabilityGuides: Guide[] = [
 			{
 				title: 'Propose first, then ask',
 				intro:
-					'Staging records a proposed value separately from the live form. Applying, clearing, or undoing an agent change requires an explicit confirmed command by default, so the UI has a natural place for a review step.',
+					'Staging records a proposed value separately from the live form. Applying, clearing, or undoing an agent change is always refused by default — only a human, through a real local click routed via executeLocalControlCommand, can confirm one — so the UI has a natural place for a review step.',
 				points: [
 					'Secret values are redacted and cannot be read or changed through the registry.',
 					'Read-only, disabled, and non-writable controls reject mutation commands.',
@@ -480,7 +480,7 @@ export const capabilityGuides: Guide[] = [
 				intro:
 					'The registry deliberately does not know about a particular chat model, voice service, WebMCP transport, or DOM implementation. Your adapter translates a trusted tool call or tutorial step into the small command vocabulary.',
 				filename: 'AgentAssistedProfile.svelte',
-				code: `<script lang="ts">\n  import {\n    Form, FormGroup, Input,\n    createControlInteractionRegistry\n  } from '@happyvertical/smrt-ui/forms';\n\n  const controls = createControlInteractionRegistry();\n\n  async function proposeDisplayName(value: string) {\n    await controls.execute({\n      action: 'stage',\n      identity: { formId: 'profile', controlId: 'displayName' },\n      value\n    }, { source: 'agent' });\n  }\n\n  async function confirmDisplayName() {\n    await controls.execute({\n      action: 'apply',\n      identity: { formId: 'profile', controlId: 'displayName' }\n    }, { source: 'agent', confirmed: true });\n  }\n</script>\n\n<Form formId="profile" interactionRegistry={controls}>\n  <FormGroup label="Display name">\n    <Input name="displayName" />\n  </FormGroup>\n</Form>`
+				code: `<script lang="ts">\n  import {\n    Form, FormGroup, Input,\n    createControlInteractionRegistry,\n    executeLocalControlCommand\n  } from '@happyvertical/smrt-ui/forms';\n  import { Button } from '@happyvertical/smrt-ui/ui';\n\n  const controls = createControlInteractionRegistry();\n\n  async function proposeDisplayName(value: string) {\n    await controls.execute({\n      action: 'stage',\n      identity: { formId: 'profile', controlId: 'displayName' },\n      value\n    }, { source: 'agent' });\n  }\n\n  // An agent-sourced apply is always refused, even with confirmed: true.\n  // Only a real click can confirm: forward its own event as local-gesture\n  // proof through executeLocalControlCommand.\n  async function confirmDisplayName(event: MouseEvent) {\n    await executeLocalControlCommand(controls, {\n      action: 'apply',\n      identity: { formId: 'profile', controlId: 'displayName' }\n    }, event);\n  }\n</script>\n\n<Form formId="profile" interactionRegistry={controls}>\n  <FormGroup label="Display name">\n    <Input name="displayName" />\n  </FormGroup>\n</Form>\n<Button onclick={confirmDisplayName}>Apply</Button>`
 			},
 			{
 				title: 'Know where the boundary is today',

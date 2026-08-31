@@ -203,7 +203,7 @@ const interactionGuides: Guide[] = [
 			{
 				title: 'Confirm agent mutations',
 				intro:
-					'An agent apply, clear, or undo command requires confirmed: true under the default policy. A command without confirmation returns consent_required.',
+					'An agent apply, clear, or undo command returns human_confirmation_required under the default policy for an otherwise-permitted control, regardless of confirmed — a more specific refusal (sensitive, non-writable, disabled) still takes precedence. Only a human, through a real local click routed via executeLocalControlCommand, can apply, clear, or undo.',
 				points: [
 					'Apply uses the staged value unless the command supplies a direct value.',
 					'Apply stores the previous value for undo and then validates the new value.',
@@ -347,7 +347,7 @@ const interactionGuides: Guide[] = [
 				intro:
 					'Sensitive and secret are different classifications in the released API. Sensitive does not automatically redact a value or deny staging under the default policy.',
 				points: [
-					'Agent apply, clear, and undo still require confirmation for a sensitive control.',
+					'Agent apply, clear, and undo are refused outright for any control, sensitive or not — sensitivity adds independent read and write restrictions on top.',
 					'An application that must deny or redact sensitive values supplies a stricter custom policy and readable metadata.',
 					'The application must test that policy before it exposes the adapter.'
 				]
@@ -355,9 +355,9 @@ const interactionGuides: Guide[] = [
 			{
 				title: 'Require consent for agent mutations',
 				intro:
-					'The default policy permits an agent to stage a proposal. It denies agent apply, clear, and undo until the context has confirmed: true.',
+					'The default policy permits an agent to stage a proposal. It always denies agent apply, clear, and undo — confirmed: true does not change that. Only a human, through a real local gesture verified by executeLocalControlCommand, can confirm one.',
 				points: [
-					'Confirmation is an explicit signal from the trusted adapter.',
+					'Confirmation is a real local click that the registry verifies, not a signal an adapter can assert.',
 					'The registry does not create a confirmation dialog or authenticate the person who confirmed.',
 					'The application can require confirmation for more sources and actions in a custom policy.'
 				]
