@@ -17,33 +17,21 @@
 			"version": "0.43.9",
 			"agentsMd": "0b73f5655366eb0aaee625ce18bccb56425a0720534f9248691a2950f6c68573"
 		},
+		"@happyvertical/smrt-cli": {
+			"version": "0.43.9",
+			"agentsMd": "2e2641658a71c8d88cd2384cb8e0f90e7fd69eb1272dabc461b8d46cc09ab032"
+		},
 		"@happyvertical/smrt-commerce": {
 			"version": "0.43.9",
 			"agentsMd": "f035496d82d1652a35ace8a3309637df43ce1aa5093b435c9c642f5f70ace02a"
-		},
-		"@happyvertical/smrt-config": {
-			"version": "0.43.9",
-			"agentsMd": "728d5debea853e3f70bbd50d07efe79c50bbb63f010f857a315886c56a70754d"
 		},
 		"@happyvertical/smrt-content": {
 			"version": "0.43.9",
 			"agentsMd": "9bfa2ade9b555e0c49fe38053f0413a36bb497eb9fce51c2b4628e228a6e98f2"
 		},
-		"@happyvertical/smrt-core": {
-			"version": "0.43.9",
-			"agentsMd": "271fe1a30ab094368f077a0e47a2108104f5fb33ba6bdaa4b3f26f99c2a56357"
-		},
 		"@happyvertical/smrt-events": {
 			"version": "0.43.9",
 			"agentsMd": "c020c54c72cc890a8fccc8d784f0fde9edde4b62df91a038b401de97c2ce47cf"
-		},
-		"@happyvertical/smrt-facts": {
-			"version": "0.43.9",
-			"agentsMd": "3dff097c8282b094889f06247bdab664e75e54c85c4025219c82007f57b3a1bd"
-		},
-		"@happyvertical/smrt-features": {
-			"version": "0.43.9",
-			"agentsMd": "0d14be2150e562d6834a67a6fd2a5d8bf63a1654e1f5a5165d1c97c2057574a8"
 		},
 		"@happyvertical/smrt-fields": {
 			"version": "0.43.9",
@@ -57,10 +45,6 @@
 			"version": "0.43.9",
 			"agentsMd": "f9b10be5ad5a560f3ce4c47646eb546918bb9c775f8d0986d29756c9bca6e234"
 		},
-		"@happyvertical/smrt-languages": {
-			"version": "0.43.9",
-			"agentsMd": "6dc270bd9bb9c51d48f526396544ab2a54a071c42f60869f4806520818f7e864"
-		},
 		"@happyvertical/smrt-ledgers": {
 			"version": "0.43.9",
 			"agentsMd": "6fa28e0fe0c03c7a9c201154f935286ca0e72fd59f7e3fa24b440f87e687d7c8"
@@ -69,17 +53,9 @@
 			"version": "0.43.9",
 			"agentsMd": "712dcc2f244d01db8b49d764b8c076e94cb9274fa4b458d7c902434a0473f127"
 		},
-		"@happyvertical/smrt-mobile-contract": {
-			"version": "0.43.9",
-			"agentsMd": "e3769aff93a1a56f2f6862e175a6e35a7996fc5c77c82bfd5cac629711ea8ebe"
-		},
 		"@happyvertical/smrt-personas": {
 			"version": "0.43.9",
 			"agentsMd": "fe6c54f7d6c724b76906629eeb7bd17a332faad631179771acea73db1e159733"
-		},
-		"@happyvertical/smrt-places": {
-			"version": "0.43.9",
-			"agentsMd": "1f12a465f3ef103ac0ba27bcec1ec2b982fd0f5e8a63b9a42738f2c79ecebe49"
 		},
 		"@happyvertical/smrt-playground": {
 			"version": "0.43.9",
@@ -93,41 +69,17 @@
 			"version": "0.43.9",
 			"agentsMd": "1642532c0c1bf16fb07b0184326f76f9fb3b142cb111e39f8e763c2d08be40d3"
 		},
-		"@happyvertical/smrt-prompts": {
-			"version": "0.43.9",
-			"agentsMd": "13aa7057261beb5701f5526dcdf85b859e743565c250a39e14ab73f0d8aef8ee"
-		},
 		"@happyvertical/smrt-reports": {
 			"version": "0.43.9",
 			"agentsMd": "1328f1da3d58fba2369d696cb9fa42c9d324255257978fa3ae9d1086e9de5af6"
-		},
-		"@happyvertical/smrt-scanner": {
-			"version": "0.43.9",
-			"agentsMd": "3caaf8ff7953be8593b3bdde874e3485f7536feaa21227286cc3d6f509920caa"
-		},
-		"@happyvertical/smrt-secrets": {
-			"version": "0.43.9",
-			"agentsMd": "96fe8095cb8a2673fb8752fdc2940b53ce09d83c42715396ba6812ce215e990b"
-		},
-		"@happyvertical/smrt-subscriptions": {
-			"version": "0.43.9",
-			"agentsMd": "65bbe59fcb4bfe3d3fdabbb643d117c090a40d59b32e5159d0b0f64e2bcfccca"
 		},
 		"@happyvertical/smrt-svelte": {
 			"version": "0.43.9",
 			"agentsMd": "5f6886cc2ea6dc7b1cba3ef8ff1ebc6fc23bb4eac709af81143d753d0d422e97"
 		},
-		"@happyvertical/smrt-tags": {
-			"version": "0.43.9",
-			"agentsMd": "900516b49407d5a521c2f0f2bdb2d4ab0c97e620808115718779f7ecf3ace222"
-		},
 		"@happyvertical/smrt-tenancy": {
 			"version": "0.43.9",
 			"agentsMd": "712ade2d4a37ad90f911a3f88b6625dee351a72233b89ade5a723db8b17131bb"
-		},
-		"@happyvertical/smrt-types": {
-			"version": "0.43.9",
-			"agentsMd": "6ddab0f869bceacd82176096b934a9c54791aac8e5a6835faf66785e5e5143bc"
 		},
 		"@happyvertical/smrt-ui": {
 			"version": "0.43.9",

@@ -23,6 +23,12 @@ describe('committed baseline', () => {
 	// an advisory audit into the merge blocker it is designed not to be. Drift is
 	// the scheduled workflow's job to report. What is asserted is that the walk
 	// still works and the file is still shaped like a baseline.
+	// `collectInstalled` now shells out to `smrt dev:knowledge-index`, which
+	// spawns a cold Node process that loads the CLI's own dependency graph and
+	// serializes every installed package's AGENTS.md. That is comfortably under a
+	// second on this repository, but a generous explicit timeout keeps a slower
+	// or colder CI runner from turning a merely-slow subprocess into a spurious
+	// PR-gate failure (vitest's default is 5s).
 	it('reads the real installed tree', () => {
 		const installed = collectInstalled(ROOT);
 
@@ -32,7 +38,7 @@ describe('committed baseline', () => {
 			expect(entry.version).toMatch(/^\d+\.\d+\.\d+/);
 			expect(entry.agentsMd).toMatch(/^[0-9a-f]{64}$/);
 		}
-	});
+	}, 30_000);
 
 	it('records a version and an AGENTS.md hash for every package', () => {
 		const entries = Object.entries(baseline.packages);
@@ -140,9 +146,15 @@ describe('collectReferences', () => {
 	it('names packages the site documents but does not install', () => {
 		const missing = undocumentableSlugs(references, baseline.packages);
 		// The audit is blind to these; the report has to say so rather than imply
-		// the whole site was checked.
-		expect(missing).toContain('smrt-cli');
-		expect(missing).not.toContain('smrt-core');
+		// the whole site was checked. `smrt-cli` is now a devDependency (the CLI
+		// this audit itself shells out to), so it is discovered like any other
+		// installed package and is no longer in this list. `smrt dev:knowledge-index
+		// --scope installed` discovers direct dependencies only (it does not walk the
+		// pnpm store for transitive-only packages the way the old hand-rolled scan
+		// did), so `smrt-core` — a transitive dependency with its own page — is now
+		// correctly reported as unauditable rather than silently assumed covered.
+		expect(missing).not.toContain('smrt-cli');
+		expect(missing).toContain('smrt-core');
 	});
 });
 

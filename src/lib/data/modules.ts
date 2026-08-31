@@ -63,8 +63,7 @@ export const foundationModuleClusters: ApplicationModuleCluster[] = [
 		],
 		body: 'This foundation removes the separate account, session, tenant, role, permission, invitation, feature-control, and field-preference projects that most applications need.',
 		warning: [
-			'Postgres supplies the generated row-level security layer. Other databases do not provide that additional data-layer check.',
-			'The smrt-fields Playground module is temporarily unregistered because its released preview has an upstream provider error.'
+			'Postgres supplies the generated row-level security layer. Other databases do not provide that additional data-layer check.'
 		],
 		packages: [
 			{ slug: 'smrt-users', status: 'Released' },

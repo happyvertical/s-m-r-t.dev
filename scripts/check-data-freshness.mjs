@@ -18,16 +18,17 @@
  * that package's documentation was rewritten upstream; the site entries that
  * mention it are the ones worth re-reading.
  *
- * It deliberately does NOT judge the prose. There is no upstream tool that can:
- * `smrt dev:knowledge-check` indexes an smrt *workspace*, and pointed at this
- * consumer app it exhausts the Node heap — happyvertical/smrt#2275. Delete this
- * script when that lands. Until then, this is the deterministic subset that
- * works today.
+ * It deliberately does NOT judge the prose — that half is delegated to
+ * `smrt dev:knowledge-index --scope installed`, which discovers every installed
+ * `@happyvertical/smrt-*` package and hashes its shipped `AGENTS.md`
+ * (`agentDocSha256`). What stays local is what the CLI cannot know: the
+ * committed baseline, the diff against it, and the mapping from a changed
+ * package to the `src/lib/data/*.ts` files that mention it.
  *
  * Run with `--help` for flags and exit codes; `USAGE` below is the one copy.
  */
 
-import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -44,78 +45,80 @@ const SCOPE = '@happyvertical';
 const PREFIX = 'smrt-';
 
 /**
- * The per-package file the site's prose is written against. Hashing it is what
- * makes "this package's documentation changed" a deterministic fact rather than
- * a version-number guess: a patch release that rewrites the guidance is caught,
- * and a version bump that does not touch it is not reported as content drift.
+ * The per-package file the site's prose is written against, named only in the
+ * report copy below — the hash itself now comes from the CLI's
+ * `agentDocSha256`.
  */
 const DOC_FILE = 'AGENTS.md';
 
-const sha256 = (buffer) => createHash('sha256').update(buffer).digest('hex');
-
-/**
- * Read one candidate package directory.
- *
- * @param {string} dir directory holding a package.json
- * @returns {{ name: string, version: string, doc: string | null } | null}
- */
-function readPackage(dir) {
-	let manifest;
-	try {
-		manifest = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'));
-	} catch {
-		return null;
-	}
-	if (typeof manifest.name !== 'string' || typeof manifest.version !== 'string') return null;
-	const docPath = join(dir, DOC_FILE);
-	return {
-		name: manifest.name,
-		version: manifest.version,
-		doc: existsSync(docPath) ? sha256(readFileSync(docPath)) : null
-	};
-}
-
 /**
  * Every `@happyvertical/smrt-*` package present in the installed tree, keyed by
- * package name.
+ * package name, as reported by `smrt dev:knowledge-index --scope installed`.
  *
- * Both the hoisted links (`node_modules/@happyvertical/*`, direct dependencies
- * only) and the pnpm store (`node_modules/.pnpm/<id>/node_modules/@happyvertical/*`)
- * are walked, because the site documents packages it depends on transitively —
- * `smrt-core` and `smrt-scanner` have pages but are not listed in package.json.
+ * The CLI walks the hoisted links (`node_modules/@happyvertical/*`) only — a
+ * transitive-only dependency such as `smrt-core` (a page in `src/lib/data/`
+ * describes it, but it is not in `package.json`) is not discovered this way.
+ * That is a real, intentional narrowing versus the previous hand-rolled scan,
+ * which also walked the pnpm store: `undocumentableSlugs` now correctly
+ * reports those packages as unauditable instead of silently assuming they were
+ * checked.
+ *
+ * The CLI writes one non-JSON banner line to stdout before the JSON payload
+ * when it cannot find a `.smrt/register.js` (expected here — this is a
+ * consumer app, not an object-authoring package) — parsing starts at the first
+ * `{` rather than at the start of stdout to tolerate that.
  *
  * @param {string} root repository root
  * @returns {Record<string, { version: string, agentsMd: string | null }>}
  */
 export function collectInstalled(root) {
+	// The `smrt` CLI binary pnpm links into `root`'s own `node_modules`. Derived
+	// from the `root` parameter rather than the module's own `ROOT`, so this
+	// function actually honours the tree it was asked to inspect instead of
+	// silently defaulting back to the one it was defined in.
+	const smrtBin = join(root, 'node_modules', '.bin', 'smrt');
+	let stdout;
+	try {
+		stdout = execFileSync(
+			smrtBin,
+			['dev:knowledge-index', '--scope', 'installed', '--format', 'json'],
+			{
+				cwd: root,
+				encoding: 'utf8',
+				maxBuffer: 64 * 1024 * 1024
+			}
+		);
+	} catch (cause) {
+		throw new Error(`\`smrt dev:knowledge-index --scope installed\` failed: ${cause.message}`);
+	}
+
+	const jsonStart = stdout.indexOf('{');
+	if (jsonStart === -1) {
+		throw new Error(
+			'`smrt dev:knowledge-index --scope installed --format json` produced no JSON payload.'
+		);
+	}
+
+	/** @type {{ packages: Array<{ name: string, version: string, hasAgentsMd: boolean, agentDocSha256?: string }> }} */
+	let index;
+	try {
+		index = JSON.parse(stdout.slice(jsonStart));
+	} catch (cause) {
+		throw new Error(
+			`Could not parse \`smrt dev:knowledge-index\` output as JSON: ${cause.message}`
+		);
+	}
+
 	/** @type {Map<string, { version: string, agentsMd: string | null }>} */
 	const packages = new Map();
-
-	const scan = (scopeDir) => {
-		if (!existsSync(scopeDir)) return;
-		for (const entry of readdirSync(scopeDir)) {
-			if (!entry.startsWith(PREFIX)) continue;
-			const info = readPackage(join(scopeDir, entry));
-			if (!info || info.name !== `${SCOPE}/${entry}`) continue;
-			// pnpm materializes one copy per resolution id; identical copies are
-			// expected, so first write wins and a genuine duplicate surfaces as a
-			// version mismatch in the report rather than silently overwriting.
-			const seen = packages.get(info.name);
-			if (seen && seen.version !== info.version) {
-				throw new Error(
-					`${info.name} is installed at both ${seen.version} and ${info.version}. ` +
-						'The dependency policy is that every smrt package sits on the same exact ' +
-						'version; a split tree means duplicate ObjectRegistry singletons.'
-				);
-			}
-			if (!seen) packages.set(info.name, { version: info.version, agentsMd: info.doc });
-		}
-	};
-
-	scan(join(root, 'node_modules', SCOPE));
-	const store = join(root, 'node_modules', '.pnpm');
-	if (existsSync(store)) {
-		for (const id of readdirSync(store)) scan(join(store, id, 'node_modules', SCOPE));
+	for (const pkg of index.packages ?? []) {
+		if (typeof pkg.name !== 'string' || !pkg.name.startsWith(`${SCOPE}/${PREFIX}`)) continue;
+		if (typeof pkg.version !== 'string') continue;
+		packages.set(pkg.name, {
+			version: pkg.version,
+			agentsMd:
+				pkg.hasAgentsMd && typeof pkg.agentDocSha256 === 'string' ? pkg.agentDocSha256 : null
+		});
 	}
 
 	return Object.fromEntries([...packages].sort(([a], [b]) => a.localeCompare(b)));
@@ -211,7 +214,11 @@ export function diffPackages(baseline, current) {
 	};
 }
 
-/** Packages the data files describe that are not installed here at all. */
+/**
+ * Packages the data files describe that `current` does not cover — either not
+ * installed at all, or (like a transitive-only dependency such as `smrt-core`)
+ * outside what `smrt dev:knowledge-index --scope installed` reaches.
+ */
 export function undocumentableSlugs(references, current) {
 	const installed = new Set(Object.keys(current).map((name) => name.slice(SCOPE.length + 1)));
 	return [...references.keys()].filter((slug) => !installed.has(slug)).sort();
@@ -303,8 +310,10 @@ export function formatReport(diff, references, current) {
 		lines.push(
 			'',
 			`${unresolved.length} package${unresolved.length === 1 ? '' : 's'} named in` +
-				' `src/lib/data/` are not dependencies of this site, so their documentation cannot be' +
-				' audited from `node_modules` and this report says nothing about them:',
+				' `src/lib/data/` are not *direct* dependencies of this site — some may not be' +
+				' installed at all, others (a transitive dependency such as `smrt-core`) may sit in' +
+				' `node_modules` but outside what `smrt dev:knowledge-index --scope installed` reaches —' +
+				' so this report says nothing about them:',
 			'',
 			unresolved.map((slug) => `\`${slug}\``).join(', ')
 		);
