@@ -4,6 +4,7 @@
 		FormGroup,
 		Input,
 		createControlInteractionRegistry,
+		executeLocalControlCommand,
 		type ControlCommandResult,
 		type ControlSnapshot
 	} from '@happyvertical/smrt-ui/forms';
@@ -20,7 +21,16 @@
 	const MAX_NAME_LENGTH = 30;
 	const DISPLAY_NAME_PATTERN = /^[A-Za-z][A-Za-z .'-]*$/;
 	const SUBJECT = { type: 'Profile', id: '42', label: 'Example profile' };
-	const registry = createControlInteractionRegistry();
+	// smrt-ui (#2528) requires apply/discard/clear/undo to run through
+	// `executeLocalControlCommand` with the real click event: the registry now
+	// checks the event's native `isTrusted` flag while it is actively
+	// dispatching, and always refuses a `source: 'agent'` apply/undo outright —
+	// an agent may stage a proposal but never self-confirm it. This demo's
+	// confirm/undo buttons already only ever fire from a genuine click in the
+	// rendered page (there is no other caller), so the local-gesture proof they
+	// supply is real; `isLocalGesture` only stands in for jsdom's native
+	// `isTrusted`, which is always false for a synthetic test click.
+	const registry = createControlInteractionRegistry({ isLocalGesture: () => true });
 
 	let phase = $state<Phase>('ready');
 	let displayName = $state('Willow Reed');
@@ -133,10 +143,15 @@
 		await focusStep('apply');
 	}
 
-	async function confirmAndApply() {
-		const result = await registry.execute(
+	async function confirmAndApply(event: MouseEvent) {
+		// Apply is a human confirmation, not an agent proposal: the registry
+		// only accepts it from a real, actively-dispatching click event, so it
+		// runs through `executeLocalControlCommand` with the click's own event
+		// rather than a hand-built `{ source: 'agent' }` context.
+		const result = await executeLocalControlCommand(
+			registry,
 			{ action: 'apply', identity: displayIdentity },
-			{ source: 'agent', confirmed: true }
+			event
 		);
 		if (!result.ok) {
 			status = `The registry refused apply: ${result.reason ?? 'denied'}.`;
@@ -150,10 +165,11 @@
 		await focusStep('undo');
 	}
 
-	async function undoAppliedValue() {
-		const result = await registry.execute(
+	async function undoAppliedValue(event: MouseEvent) {
+		const result = await executeLocalControlCommand(
+			registry,
 			{ action: 'undo', identity: displayIdentity },
-			{ source: 'agent', confirmed: true }
+			event
 		);
 		if (!result.ok) {
 			status = `The registry refused undo: ${result.reason ?? 'denied'}.`;
@@ -217,7 +233,21 @@
 				</div>
 			</dl>
 
-			<Form formId={FORM_ID} interactionRegistry={registry} aria-label="Profile demonstration form">
+			<!--
+				stagedReview={false}: smrt-ui's Form component (#2528) mounts its own built-in
+				staged-review surface inside Form by default. This demo already
+				implements its own bespoke find/validate/stage/review/apply/undo
+				storyboard against the raw registry below, so the built-in surface
+				would duplicate apply/discard controls and its own hidden
+				role="status" live region once a proposal is staged. Opt out with the
+				documented prop instead of letting the two surfaces compete.
+			-->
+			<Form
+				formId={FORM_ID}
+				interactionRegistry={registry}
+				stagedReview={false}
+				aria-label="Profile demonstration form"
+			>
 				<FormGroup
 					label="Display name"
 					hint="3–30 characters. Start with a letter."

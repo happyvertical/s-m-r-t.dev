@@ -32,8 +32,10 @@ describe('AgentAwareFormDemo', () => {
 		const stageButton = screen.getByRole('button', { name: 'Stage proposal' });
 		await waitFor(() => expect(document.activeElement).toBe(stageButton));
 		await fireEvent.click(stageButton);
-		expect(reviewValue('Live value')).toBe('Willow Reed');
-		expect(reviewValue('Proposed value')).toBe('Willow Griffin');
+		await waitFor(() => {
+			expect(reviewValue('Live value')).toBe('Willow Reed');
+			expect(reviewValue('Proposed value')).toBe('Willow Griffin');
+		});
 
 		const reviewButton = screen.getByRole('button', { name: 'Mark reviewed' });
 		await waitFor(() => expect(document.activeElement).toBe(reviewButton));
@@ -69,11 +71,13 @@ describe('AgentAwareFormDemo', () => {
 
 		await waitFor(() => expect((attemptButton as HTMLButtonElement).disabled).toBe(false));
 		await fireEvent.click(attemptButton);
-		expect(screen.getByText('Refused by the released policy')).toBeTruthy();
-		expect(screen.getByRole('status').textContent).toMatch(/sensitive_control/i);
-		expect(container.querySelector('.refusal-result')?.textContent).toMatch(
-			/no protected value was read,\s*staged, or shown/i
-		);
+		await waitFor(() => {
+			expect(screen.getByText('Refused by the released policy')).toBeTruthy();
+			expect(screen.getByRole('status').textContent).toMatch(/sensitive_control/i);
+			expect(container.querySelector('.refusal-result')?.textContent).toMatch(
+				/no protected value was read,\s*staged, or shown/i
+			);
+		});
 		expect(container.querySelector('.refusal-result')?.hasAttribute('aria-live')).toBe(false);
 		expect(protectedInput?.value).toBe('');
 	});
