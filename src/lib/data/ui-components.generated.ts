@@ -2114,7 +2114,7 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'currency',
-				code: "'CAD' | 'USD'",
+				code: 'string',
 				status: false,
 				description: ''
 			},
@@ -3662,6 +3662,12 @@ export const uiComponents: UiComponentReference[] = [
 				description: ''
 			},
 			{
+				name: 'stagedReview',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
 				name: 'children',
 				code: 'Snippet',
 				status: true,
@@ -4470,6 +4476,56 @@ export const uiComponents: UiComponentReference[] = [
 			href: '/ui'
 		},
 		source: 'src/components/forms/Slider.svelte'
+	},
+	{
+		slug: 'staged-control-review',
+		name: 'StagedControlReview',
+		family: 'forms',
+		category: 'Forms and controls',
+		importPath: '@happyvertical/smrt-ui/forms',
+		summary: 'StagedControlReview is part of the forms and controls component family.',
+		details: [
+			{
+				name: 'registry',
+				code: 'ControlInteractionRegistry',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'formId',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'formElement',
+				code: 'HTMLFormElement | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'summary',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'labels',
+				code: 'Partial<StagedControlReviewLabels>',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'src/components/forms/StagedControlReview.svelte'
 	},
 	{
 		slug: 'switch',
