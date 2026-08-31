@@ -72,9 +72,11 @@ export class Article extends SmrtObject {
 
 /**
  * The homepage's "Describe the record once" section (`#what-you-get`) shows a
- * trimmed variant of the same model — the `@smrt()` config block plus two
- * fields — so the section stays one viewport tall. This is a teaser of the
- * data above, not a copy: Framework keeps the full `frameworkModelExample`.
+ * trimmed variant of the same model — the `@smrt()` config block plus the
+ * three field policies the adjacent copy names (required, read-only,
+ * secret) — so the section stays about one viewport tall. This is a teaser
+ * of the data above, not a copy: Framework keeps the full
+ * `frameworkModelExample`.
  */
 export const homepageModelExample = `import {
   field, smrt, SmrtObject
@@ -96,6 +98,20 @@ export class Article extends SmrtObject {
 
   @field({ required: true })
   author = '';
+
+  @field({
+    readonly: true,
+    description: 'Server-set; writes cannot touch it.'
+  })
+  viewCount = 0;
+
+  @field({
+    sensitive: true,
+    exported: false,
+    description: 'Editorial notes for the team.',
+    ui: { group: 'Editorial', order: 10 }
+  })
+  authorNotes = '';
 }`;
 
 export const frameworkModelProjections: ModelProjection[] = [

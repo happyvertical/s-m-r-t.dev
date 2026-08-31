@@ -36,7 +36,7 @@ export const whySmrtClaims: WhySmrtClaim[] = [
 		claim:
 			'Controls can be explained, validated, staged, confirmed, or refused through a semantic registry.',
 		display:
-			'Every control can be explained, validated, staged, confirmed, or refused through one registry.',
+			'Any control can be explained, validated, staged, confirmed, or refused through one registry.',
 		canonical: { label: 'Agent-assisted forms', href: '/capabilities/agent-assisted-forms' },
 		source: {
 			label: 'smrt-ui release contract',

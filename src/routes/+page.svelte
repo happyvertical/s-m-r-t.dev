@@ -315,7 +315,7 @@
 			</div>
 			<p>
 				This is what each layer contains. Every package releases together, at the same version. The
-				full catalog describes each one; the packages this site itself runs on are marked.
+				full catalog describes each one; the packages this site installs directly are marked.
 			</p>
 		</div>
 
