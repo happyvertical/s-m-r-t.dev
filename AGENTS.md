@@ -124,8 +124,7 @@ and this section grows with every defect. Record one in the **upstream issue**
 why it is deliberate), plus a **repo issue** where a fix makes something here due.
 Then one line below.
 
-- `scripts/check-data-freshness.mjs` still fronts the data baseline even though the
-  released CLI now supports installed-package discovery — replace it in #158.
+None currently tracked.
 
 ## Agent lifecycle posture
 

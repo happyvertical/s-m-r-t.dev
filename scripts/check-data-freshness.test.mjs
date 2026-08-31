@@ -140,9 +140,15 @@ describe('collectReferences', () => {
 	it('names packages the site documents but does not install', () => {
 		const missing = undocumentableSlugs(references, baseline.packages);
 		// The audit is blind to these; the report has to say so rather than imply
-		// the whole site was checked.
-		expect(missing).toContain('smrt-cli');
-		expect(missing).not.toContain('smrt-core');
+		// the whole site was checked. `smrt-cli` is now a devDependency (the CLI
+		// this audit itself shells out to), so it is discovered like any other
+		// installed package and is no longer in this list. `smrt dev:knowledge-index
+		// --scope installed` discovers direct dependencies only (it does not walk the
+		// pnpm store for transitive-only packages the way the old hand-rolled scan
+		// did), so `smrt-core` — a transitive dependency with its own page — is now
+		// correctly reported as unauditable rather than silently assumed covered.
+		expect(missing).not.toContain('smrt-cli');
+		expect(missing).toContain('smrt-core');
 	});
 });
 
