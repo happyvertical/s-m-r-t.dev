@@ -39,7 +39,7 @@ for public consumption; a local patch defeats the point.
 
 ## Framework documentation
 
-All 22 installed `@happyvertical/smrt-*` packages ship an `AGENTS.md` inside
+All 23 installed `@happyvertical/smrt-*` packages ship an `AGENTS.md` inside
 `node_modules`, written against the version you actually have. Read
 `node_modules/@happyvertical/<package>/AGENTS.md` before working on a package —
 it is the authority on that package's API, and no summary here could stay true.
@@ -97,7 +97,7 @@ and says what to do when one drops.
 
 ## Dependency policy
 
-All 22 `@happyvertical/smrt-*` packages are public on npmjs and released in
+All 23 `@happyvertical/smrt-*` packages are public on npmjs and released in
 lockstep; the project `.npmrc` pins that registry, so installs need no auth.
 
 **They are pinned to exact versions, not caret ranges.** `smrt-fields` pins its own

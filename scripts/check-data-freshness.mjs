@@ -44,9 +44,6 @@ const DATA_DIR = join(ROOT, 'src', 'lib', 'data');
 const SCOPE = '@happyvertical';
 const PREFIX = 'smrt-';
 
-/** The `smrt` CLI binary pnpm links into this project's own `node_modules`. */
-const SMRT_BIN = join(ROOT, 'node_modules', '.bin', 'smrt');
-
 /**
  * The per-package file the site's prose is written against, named only in the
  * report copy below — the hash itself now comes from the CLI's
@@ -75,10 +72,16 @@ const DOC_FILE = 'AGENTS.md';
  * @returns {Record<string, { version: string, agentsMd: string | null }>}
  */
 export function collectInstalled(root) {
+	// The `smrt` CLI binary pnpm links into `root`'s own `node_modules`. Derived
+	// from the `root` parameter (not the module's own `ROOT`) so a caller that
+	// deliberately passes a different tree — the tests point this at a
+	// workspace-free scratch directory to sidestep an unrelated nested-worktree
+	// root-detection quirk — runs that tree's own CLI, not this module's.
+	const smrtBin = join(root, 'node_modules', '.bin', 'smrt');
 	let stdout;
 	try {
 		stdout = execFileSync(
-			SMRT_BIN,
+			smrtBin,
 			['dev:knowledge-index', '--scope', 'installed', '--format', 'json'],
 			{
 				cwd: root,
@@ -111,6 +114,7 @@ export function collectInstalled(root) {
 	const packages = new Map();
 	for (const pkg of index.packages ?? []) {
 		if (typeof pkg.name !== 'string' || !pkg.name.startsWith(`${SCOPE}/${PREFIX}`)) continue;
+		if (typeof pkg.version !== 'string') continue;
 		packages.set(pkg.name, {
 			version: pkg.version,
 			agentsMd:
@@ -303,8 +307,10 @@ export function formatReport(diff, references, current) {
 		lines.push(
 			'',
 			`${unresolved.length} package${unresolved.length === 1 ? '' : 's'} named in` +
-				' `src/lib/data/` are not dependencies of this site, so their documentation cannot be' +
-				' audited from `node_modules` and this report says nothing about them:',
+				' `src/lib/data/` are not *direct* dependencies of this site — some may not be' +
+				' installed at all, others (a transitive dependency such as `smrt-core`) may sit in' +
+				' `node_modules` but outside what `smrt dev:knowledge-index --scope installed` reaches —' +
+				' so this report says nothing about them:',
 			'',
 			unresolved.map((slug) => `\`${slug}\``).join(', ')
 		);
