@@ -351,8 +351,10 @@
 
 		<p class="scope-reconciliation">
 			These five layers place {packageCount - unlayeredPackageCount} of the catalog's {packageCount}
-			packages. The rest is native mobile (source-only, unpublished) and coding-agent and CI tooling,
-			covered under <a href="/tooling">Tooling</a> and the Mobile capability page.
+			packages. The rest is native mobile — source-only and unpublished — plus the command-line, testing,
+			and project-scaffold packages: see <a href="/tooling">Tooling</a>, the
+			<a href="/capabilities/mobile">Mobile capability page</a>, and the
+			<a href="/packages">full catalog</a>.
 		</p>
 
 		<nav class="scope-feature-links" aria-label="Documentation destinations">

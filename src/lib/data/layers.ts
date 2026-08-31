@@ -9,11 +9,13 @@ import sitePackageJson from '../../../package.json';
  *
  * Package membership is derived from `packages.ts` categories (never
  * hand-counted): each layer filters the real catalog, so a package added or
- * removed from `packages.ts` moves the counts and chips automatically. Native
- * mobile (`smrt-mobile`, `smrt-mobile-contract`, `smrt-android`, `smrt-ios`)
- * sits outside this stack entirely — every mobile package is still
- * `status: 'private'` (unpublished) and none of the five layers describes a
- * native-app surface.
+ * removed from `packages.ts` moves the counts and chips automatically. Two
+ * groups sit outside this stack entirely, and neither is a person- or
+ * agent-facing application surface: native mobile (`smrt-mobile`,
+ * `smrt-mobile-contract`, `smrt-android`, `smrt-ios` — still `status:
+ * 'private'`, unpublished), and coding-agent/CI tooling (`DEV_TOOLING_SLUGS`
+ * below — command-line, testing, and project-scaffold packages covered by the
+ * Tooling documentation section instead).
  */
 
 const WHO_CAN_DO_WHAT_SLUGS = new Set(['smrt-users', 'smrt-profiles']);
