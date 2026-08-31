@@ -19,7 +19,13 @@
 	const PROPOSED_NAME = 'Willow Griffin';
 	const MIN_NAME_LENGTH = 3;
 	const MAX_NAME_LENGTH = 30;
-	const DISPLAY_NAME_PATTERN = /^[A-Za-z][A-Za-z .'-]*$/;
+	// The trailing `-` in the character class must be escaped: Chrome validates
+	// the HTML `pattern` attribute in "v-mode" (unicode sets), which rejects an
+	// unescaped `-` there even at the end of the class (#205). The escape is a
+	// no-op for this plain (non-`v`-flag) RegExp literal, which is exactly why
+	// eslint calls it useless — silence that rule for this one intentional case.
+	// eslint-disable-next-line no-useless-escape
+	const DISPLAY_NAME_PATTERN = /^[A-Za-z][A-Za-z .'\-]*$/;
 	const SUBJECT = { type: 'Profile', id: '42', label: 'Example profile' };
 
 	/**
