@@ -754,9 +754,7 @@ export const packages: SmrtPackage[] = [
 				}
 			],
 			surfaceNote:
-				'Policy rows are not a browsable resource, and FieldPolicy generates create, update, and delete routes. It also generates the resolve, editor-state, and policy-audit collection actions. Generated list and get remain closed because the model is not tenant-scoped. Unrestricted reads would enumerate every tenant and user row. The generated CLI mirrors that shape and is writes-only. MCP is closed entirely.',
-			playgroundNote:
-				'This package does export a ./playground module, with a policy-driven form and a generated ObjectForm. It is not registered on this site yet: its Policy-Driven Form preview throws on mount because the preview renders FormHelp outside its FieldPolicyProvider. Tracked upstream as happyvertical/smrt#2272; the module goes back in once a release carries the fix.'
+				'Policy rows are not a browsable resource, and FieldPolicy generates create, update, and delete routes. It also generates the resolve, editor-state, and policy-audit collection actions. Generated list and get remain closed because the model is not tenant-scoped. Unrestricted reads would enumerate every tenant and user row. The generated CLI mirrors that shape and is writes-only. MCP is closed entirely.'
 		}
 	),
 

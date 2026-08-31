@@ -7,6 +7,7 @@ import chat from '@happyvertical/smrt-chat/playground';
 import commerce from '@happyvertical/smrt-commerce/playground';
 import content from '@happyvertical/smrt-content/playground';
 import events from '@happyvertical/smrt-events/playground';
+import fields from '@happyvertical/smrt-fields/playground';
 import images from '@happyvertical/smrt-images/playground';
 import jobs from '@happyvertical/smrt-jobs/playground';
 import messages from '@happyvertical/smrt-messages/playground';
@@ -15,15 +16,6 @@ import tenancy from '@happyvertical/smrt-tenancy/playground';
 import users from '@happyvertical/smrt-users/playground';
 import { sitePlayground } from '$lib/data/site-playground';
 
-/**
- * `@happyvertical/smrt-fields/playground` is deliberately absent.
- *
- * Its `Policy-Driven Form` entry throws on mount — the preview renders
- * `<FormHelp>` outside its `<FieldPolicyProvider>` — so registering the module
- * would put a permanently broken preview on the site. Tracked upstream in
- * happyvertical/smrt#2272 and in this repo's CLAUDE.md; re-add the import and
- * the array entry once a release carries the fix.
- */
 export const playgroundModules: SmrtPlaygroundModule[] = [
 	ui,
 	agents,
@@ -33,6 +25,7 @@ export const playgroundModules: SmrtPlaygroundModule[] = [
 	commerce,
 	content,
 	events,
+	fields,
 	images,
 	jobs,
 	messages,
@@ -65,6 +58,7 @@ export const playgroundEntryTitles: Record<string, string[]> = {
 		'Governance Manager'
 	],
 	'smrt-events': ['Meeting View'],
+	'smrt-fields': ['Policy-Driven Form', 'Generated ObjectForm'],
 	'smrt-images': ['Image Uploader', 'Image Editor', 'Image Studio Route'],
 	'smrt-jobs': ['Job Dashboard', 'Job Detail', 'Job Status Badge'],
 	'smrt-messages': ['Account List', 'Message List', 'Message Detail', 'Compose Form'],
