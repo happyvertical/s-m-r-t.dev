@@ -93,6 +93,14 @@
 	let tableState = $state(controller.getState());
 	let dense = $state(false);
 
+	/**
+	 * `full` (default) renders the component's own eyebrow/title/description —
+	 * used standalone on `/ui`. `compact` drops that header so an embedding
+	 * page (the homepage Section 5 card) can supply its own heading without
+	 * duplicating this component's copy.
+	 */
+	let { variant = 'full' }: { variant?: 'full' | 'compact' } = $props();
+
 	onMount(() =>
 		controller.subscribe((transition) => {
 			tableState = transition.next.state;
@@ -129,20 +137,22 @@
 {/snippet}
 
 <div class="workbench">
-	<div class="workbench-heading">
-		<div>
-			<p class="eyebrow">Released component</p>
-			<h3>Operate a real DataTable</h3>
-			<p>
-				Controller-backed controls and programmatic commands update the same serializable state.
-				Density demonstrates the separate presentational prop.
-			</p>
+	{#if variant === 'full'}
+		<div class="workbench-heading">
+			<div>
+				<p class="eyebrow">Released component</p>
+				<h3>Operate a real DataTable</h3>
+				<p>
+					Controller-backed controls and programmatic commands update the same serializable state.
+					Density demonstrates the separate presentational prop.
+				</p>
+			</div>
+			<div class="state-summary" aria-live="polite">
+				<strong>{tableState.selectedRowIds.length}</strong>
+				<span>selected</span>
+			</div>
 		</div>
-		<div class="state-summary" aria-live="polite">
-			<strong>{tableState.selectedRowIds.length}</strong>
-			<span>selected</span>
-		</div>
-	</div>
+	{/if}
 
 	<div class="table-controls" aria-label="DataTable controls">
 		<label>

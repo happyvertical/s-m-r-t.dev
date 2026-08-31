@@ -404,7 +404,7 @@
 				<h3>{recordsGroup.title}</h3>
 				<p>{recordsGroup.body}</p>
 				<div class="live-table-embed">
-					<UIShowcaseDataTable />
+					<UIShowcaseDataTable variant="compact" />
 				</div>
 				<p class="includes">
 					<em
@@ -533,7 +533,7 @@
 		display: grid;
 		grid-template-columns: minmax(0, 1.1fr) minmax(20rem, 0.9fr);
 		gap: clamp(2.5rem, 7vw, 5rem);
-		align-items: start;
+		align-items: center;
 		padding-bottom: clamp(4rem, 9vw, 7rem);
 	}
 
