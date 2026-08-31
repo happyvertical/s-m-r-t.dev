@@ -176,7 +176,7 @@ export const referenceGuides: Guide[] = [
 					'A secret mutation returns sensitive_control.',
 					'A non-writable mutation returns control_not_writable.',
 					'A disabled or read-only mutation returns control_not_editable.',
-					'An agent apply, clear, or undo always returns human_confirmation_required, regardless of confirmed.',
+					'An agent apply, clear, or undo on an otherwise-permitted control always returns human_confirmation_required, regardless of confirmed — a more specific refusal still takes precedence.',
 					'An unknown identity returns not_found, and an unavailable capability returns unsupported.'
 				]
 			},

@@ -468,7 +468,7 @@ export const capabilityGuides: Guide[] = [
 			{
 				title: 'Propose first, then ask',
 				intro:
-					'Staging records a proposed value separately from the live form. Applying, clearing, or undoing an agent change requires an explicit confirmed command by default, so the UI has a natural place for a review step.',
+					'Staging records a proposed value separately from the live form. Applying, clearing, or undoing an agent change is always refused by default — only a human, through a real local click routed via executeLocalControlCommand, can confirm one — so the UI has a natural place for a review step.',
 				points: [
 					'Secret values are redacted and cannot be read or changed through the registry.',
 					'Read-only, disabled, and non-writable controls reject mutation commands.',

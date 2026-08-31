@@ -51,7 +51,7 @@ describe('Human-Agent Interaction content', () => {
 		}
 		expect(text).toContain('Stage does not call the control writer');
 		expect(text).toContain(
-			'apply, clear, or undo command always returns human_confirmation_required'
+			'apply, clear, or undo command returns human_confirmation_required under the default policy for an otherwise-permitted control'
 		);
 	});
 
