@@ -70,6 +70,34 @@ export class Article extends SmrtObject {
   }
 }`;
 
+/**
+ * The homepage's "Describe the record once" section (`#what-you-get`) shows a
+ * trimmed variant of the same model — the `@smrt()` config block plus two
+ * fields — so the section stays one viewport tall. This is a teaser of the
+ * data above, not a copy: Framework keeps the full `frameworkModelExample`.
+ */
+export const homepageModelExample = `import {
+  field, smrt, SmrtObject
+} from '@happyvertical/smrt-core';
+
+@smrt({
+  api: {
+    include: ['list', 'get', 'create', 'update']
+  },
+  mcp: { include: ['publish'] },
+  cli: false,
+  ui: {
+    label: 'Articles',
+    description: 'Stories your team publishes.'
+  }
+})
+export class Article extends SmrtObject {
+  title = '';
+
+  @field({ required: true })
+  author = '';
+}`;
+
 export const frameworkModelProjections: ModelProjection[] = [
 	{
 		label: 'Storage and collections',

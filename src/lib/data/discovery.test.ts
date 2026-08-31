@@ -8,19 +8,15 @@ const llms = readFileSync('static/llms.txt', 'utf8');
 
 describe('Why s-m-r-t discovery surfaces', () => {
 	it('uses the canonical homepage in navigation, search, and the sitemap', async () => {
-		const why = docsNavigation
-			.flatMap((group) => group.items)
-			.filter((item) => item.label === 'Why s-m-r-t?');
+		const why = docsNavigation.flatMap((group) => group.items).filter((item) => item.href === '/');
 
 		expect(why).toHaveLength(1);
-		expect(why[0]?.href).toBe('/');
-		expect(searchDocs('why s-m-r-t')[0]).toMatchObject({
-			label: 'Why s-m-r-t?',
-			href: '/',
-			kind: 'page'
-		});
-		expect(searchDocs('why smrt')[0]).toMatchObject({
-			label: 'Why s-m-r-t?',
+		expect(why[0]?.label).toBe('Home');
+		expect(why[0]?.keywords).toEqual(
+			expect.arrayContaining(['SAADL', 'Software as Agentic Domain Logic'])
+		);
+		expect(searchDocs('home')[0]).toMatchObject({
+			label: 'Home',
 			href: '/',
 			kind: 'page'
 		});

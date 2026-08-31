@@ -2,7 +2,19 @@
 	import ReferenceFamilyBar from '$lib/components/ReferenceFamilyBar.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 
-	const groups = [
+	interface FaqItem {
+		q: string;
+		a: string;
+		/** Optional canonical link for an answer that expands elsewhere on the site. */
+		link?: { label: string; href: string };
+	}
+
+	interface FaqGroup {
+		title: string;
+		items: FaqItem[];
+	}
+
+	const groups: FaqGroup[] = [
 		{
 			title: 'Starting out',
 			items: [
@@ -65,6 +77,35 @@
 					a: 's-m-r-t generates browser tool descriptors for exposed collection actions and registers them with document.modelContext. CRUD tools execute through the normal REST client as the signed-in page user, preserving authentication, tenant, permission, and field policy.'
 				}
 			]
+		},
+		{
+			title: 'Why s-m-r-t',
+			items: [
+				{
+					q: 'Why build one application for both people and agents?',
+					a: 'Building two systems — a person-facing application and a separate, reduced set of endpoints or bots for software — means keeping two descriptions of the same operations in sync by hand, and the second one tends to drift and shrink over time. A s-m-r-t application describes each operation once; people reach it through pages, HTTP, or the command line, and software agents reach the identical operation as a callable tool, so there is no second definition to fall behind.'
+				},
+				{
+					q: 'What is SAADL, and how is it pronounced?',
+					a: 'SAADL — Software as Agentic Domain Logic: software whose domain logic exposes the same operations to human users (UI, HTTP, CLI) and to software agents (callable tools). Pronounced "saddle."',
+					link: { label: 'Read the full SAADL reference', href: '/reference/saadl' }
+				},
+				{
+					q: 'Can an agent do anything a signed-in person cannot?',
+					a: 'No. An agent can do only what three lists all allow: what the signed-in person may do, what its kind of agent may ever do, and what its assigned role permits. The check runs from the moment an agent reads a description to the stored record itself — a description does not by itself grant a session, a tenant, or a permission.',
+					link: { label: 'Security defaults', href: '/reference/security' }
+				},
+				{
+					q: "Does asking in chat skip the application's rules?",
+					a: 'No. However a request arrives — a click, a typed command, or a natural-language chat message — it enters through the same declared control or operation, and the same tenant, permission, and field-policy checks apply.',
+					link: { label: 'Human-agent interaction', href: '/interaction' }
+				},
+				{
+					q: 'Is this site itself built with s-m-r-t?',
+					a: 'Yes. s-m-r-t.dev runs on the same released @happyvertical/smrt-* packages it documents — the component playground, the agent-aware form demo, and the data table on this site are the actual packages, not mockups.',
+					link: { label: 'Component playground', href: '/playground' }
+				}
+			]
 		}
 	];
 </script>
@@ -97,6 +138,9 @@
 						<details>
 							<summary>{item.q}<span>+</span></summary>
 							<p>{item.a}</p>
+							{#if item.link}
+								<a class="faq-link" href={item.link.href}>{item.link.label} <span>→</span></a>
+							{/if}
 						</details>
 					{/each}
 				</div>
@@ -190,6 +234,19 @@
 		padding: 0 40px 24px 0;
 		color: var(--site-muted);
 		line-height: 1.7;
+	}
+	.faq-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		margin: -8px 0 24px;
+		color: var(--site-ink);
+		font-size: 0.82rem;
+		font-weight: 700;
+		text-underline-offset: 0.25rem;
+	}
+	.faq-link span {
+		color: var(--site-accent-strong);
 	}
 	footer {
 		display: flex;

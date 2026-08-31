@@ -30,7 +30,7 @@ describe('application bar', () => {
 		const links = within(nav).getAllByRole('link');
 
 		expect(links.map((link) => link.textContent)).toEqual([
-			'Why s-m-r-t?',
+			'Home',
 			'Framework',
 			'Interaction',
 			'UI',

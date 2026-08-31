@@ -12,7 +12,7 @@ import {
 describe('primary navigation', () => {
 	it('uses the approved eight destinations in order', () => {
 		expect(primaryNavigation.map((item) => item.label)).toEqual([
-			'Why s-m-r-t?',
+			'Home',
 			'Framework',
 			'Interaction',
 			'UI',

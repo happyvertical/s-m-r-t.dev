@@ -36,9 +36,11 @@ const PROSE_PROPERTIES = new Set([
 	'description',
 	'details',
 	'deprecated',
+	'display',
 	'external',
 	'eyebrow',
 	'foundation',
+	'heroLine',
 	'highlights',
 	'intro',
 	'label',
@@ -57,6 +59,7 @@ const PROSE_PROPERTIES = new Set([
 	'prerequisites',
 	'private',
 	'purpose',
+	'scopeCopy',
 	'security',
 	'stub',
 	'summary',
@@ -73,6 +76,7 @@ const NON_PROSE_PROPERTIES = new Set([
 	'base',
 	'candidate',
 	'canonical',
+	'chips',
 	'code',
 	'component',
 	'componentGroups',
@@ -94,6 +98,8 @@ const NON_PROSE_PROPERTIES = new Set([
 	'href',
 	'id',
 	'importPath',
+	'index',
+	'installed',
 	'items',
 	'keywords',
 	'kind',
@@ -117,6 +123,7 @@ const NON_PROSE_PROPERTIES = new Set([
 	'score',
 	'section',
 	'sections',
+	'shortName',
 	'slug',
 	'slugs',
 	'source',
@@ -1220,8 +1227,40 @@ function elementHasUnextractableCopy(node, bindings, allowedDynamicNames) {
 	) {
 		return true;
 	}
+	// EachBlock introduces its own item/index names, exactly like the main
+	// `visit()` walk does. Without this, a nested `{#each}` inside a content
+	// element (e.g. a `<li>` that aggregates its whole subtree in one pass)
+	// checks the loop variable against the *outer* scope, which never has it,
+	// and reports a false positive.
+	if (node.type === 'EachBlock') {
+		if (expressionHasUnextractableCopy(node.expression, bindings, allowedDynamicNames)) {
+			return true;
+		}
+		const eachAllowedDynamicNames = new Set(allowedDynamicNames);
+		if (node.context?.type === 'Identifier') eachAllowedDynamicNames.add(node.context.name);
+		if (node.index) eachAllowedDynamicNames.add(node.index);
+		const children = node.children ?? node.nodes ?? [];
+		if (
+			children.some((child) =>
+				elementHasUnextractableCopy(child, bindings, eachAllowedDynamicNames)
+			)
+		) {
+			return true;
+		}
+		const elseChildren = node.else?.children ?? [];
+		return elseChildren.some((child) =>
+			elementHasUnextractableCopy(child, bindings, allowedDynamicNames)
+		);
+	}
 	const children = node.children ?? node.nodes ?? [];
-	return children.some((child) =>
+	if (children.some((child) => elementHasUnextractableCopy(child, bindings, allowedDynamicNames))) {
+		return true;
+	}
+	// IfBlock's `{:else}` branch lives under `.else.children` rather than
+	// `.children` — check it too, so an else-branch mustache isn't silently
+	// skipped.
+	const elseChildren = node.else?.children ?? [];
+	return elseChildren.some((child) =>
 		elementHasUnextractableCopy(child, bindings, allowedDynamicNames)
 	);
 }

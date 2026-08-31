@@ -102,7 +102,7 @@ const itemByHref = (items: NavigationItem[], href: string): NavigationItem => {
 };
 
 const whyItem: NavigationItem = {
-	label: 'Why s-m-r-t?',
+	label: 'Home',
 	href: '/',
 	description:
 		'One application model supplies storage, forms, APIs, commands, permissions, and agent tools.',
@@ -191,8 +191,8 @@ const relatedGuides = (...hrefs: string[]): NavigationGroup => ({
 export const documentationSections: DocumentationSection[] = [
 	{
 		id: 'why',
-		label: 'Why s-m-r-t?',
-		title: 'Why s-m-r-t?',
+		label: 'Home',
+		title: 'Home',
 		href: '/',
 		description:
 			'Start with the reason for one shared application model and choose a deeper section.',
@@ -200,8 +200,8 @@ export const documentationSections: DocumentationSection[] = [
 			{
 				label: 'On this overview',
 				items: [
-					{ label: 'How it works', href: '/#how-it-works' },
 					{ label: 'What you get', href: '/#what-you-get' },
+					{ label: 'How it works', href: '/#how-it-works' },
 					{ label: 'What you lose', href: '/#what-you-lose' }
 				]
 			},
@@ -384,7 +384,7 @@ export const documentationSections: DocumentationSection[] = [
 ];
 
 export const primaryNavigation: PrimaryNavigationItem[] = [
-	{ label: 'Why s-m-r-t?', href: '/', section: 'why' },
+	{ label: 'Home', href: '/', section: 'why' },
 	{ label: 'Framework', href: '/framework', section: 'framework' },
 	{ label: 'Interaction', href: '/interaction', section: 'interaction' },
 	{ label: 'UI', href: '/ui', section: 'ui' },
@@ -468,11 +468,11 @@ export function isNavigationGroupActive(
  */
 export const docsNavigation: NavigationGroup[] = [
 	{
-		label: 'Why s-m-r-t?',
+		label: 'Home',
 		items: [
 			whyItem,
-			{ label: 'How it works', href: '/#how-it-works' },
 			{ label: 'What you get', href: '/#what-you-get' },
+			{ label: 'How it works', href: '/#how-it-works' },
 			{ label: 'What you lose', href: '/#what-you-lose' },
 			{ label: 'Choose a starting point', href: '/starters' },
 			{ label: 'Basic SvelteKit app', href: '/starters/ground-up' },
