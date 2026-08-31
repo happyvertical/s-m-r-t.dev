@@ -21,16 +21,25 @@
 	const MAX_NAME_LENGTH = 30;
 	const DISPLAY_NAME_PATTERN = /^[A-Za-z][A-Za-z .'-]*$/;
 	const SUBJECT = { type: 'Profile', id: '42', label: 'Example profile' };
-	// smrt-ui (#2528) requires apply/discard/clear/undo to run through
-	// `executeLocalControlCommand` with the real click event: the registry now
-	// checks the event's native `isTrusted` flag while it is actively
-	// dispatching, and always refuses a `source: 'agent'` apply/undo outright —
-	// an agent may stage a proposal but never self-confirm it. This demo's
-	// confirm/undo buttons already only ever fire from a genuine click in the
-	// rendered page (there is no other caller), so the local-gesture proof they
-	// supply is real; `isLocalGesture` only stands in for jsdom's native
-	// `isTrusted`, which is always false for a synthetic test click.
-	const registry = createControlInteractionRegistry({ isLocalGesture: () => true });
+
+	/**
+	 * Test-only escape hatch for the registry's local-gesture check — never
+	 * supplied by production callers (both real usages render `<AgentAwareFormDemo
+	 * />` with no props). smrt-ui (#2528) requires apply/discard/clear/undo to
+	 * run through `executeLocalControlCommand` with the real click event: the
+	 * registry checks the event's native `isTrusted` flag while it is actively
+	 * dispatching, and always refuses a `source: 'agent'` apply/undo outright —
+	 * an agent may stage a proposal but never self-confirm it. jsdom's synthetic
+	 * `dispatchEvent` always reports `isTrusted: false`, so
+	 * `AgentAwareFormDemo.test.ts` passes this prop to stand in for a real
+	 * gesture; the shipped page never does, so it keeps the native check.
+	 */
+	let { isLocalGesture }: { isLocalGesture?: (_event: Event) => boolean } = $props();
+
+	// Read once, in a closure, at component init: this prop is a fixed test
+	// seam, never expected to change after the initial render.
+	const registry = (() =>
+		createControlInteractionRegistry(isLocalGesture ? { isLocalGesture } : undefined))();
 
 	let phase = $state<Phase>('ready');
 	let displayName = $state('Willow Reed');

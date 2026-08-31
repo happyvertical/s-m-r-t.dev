@@ -11,7 +11,7 @@ function reviewValue(label: string): string | null | undefined {
 
 describe('AgentAwareFormDemo', () => {
 	it('runs the real staged, confirmed, applied, and undo registry flow', async () => {
-		render(AgentAwareFormDemo);
+		render(AgentAwareFormDemo, { props: { isLocalGesture: () => true } });
 
 		expect(screen.getByText(/no language model runs in this demo/i)).toBeTruthy();
 		expect(reviewValue('Live value')).toBe('Willow Reed');
@@ -60,7 +60,9 @@ describe('AgentAwareFormDemo', () => {
 	});
 
 	it('shows the released secret-control refusal without exposing a protected value', async () => {
-		const { container } = render(AgentAwareFormDemo);
+		const { container } = render(AgentAwareFormDemo, {
+			props: { isLocalGesture: () => true }
+		});
 		const protectedInput = container.querySelector<HTMLInputElement>(
 			'[data-protected-control="true"]'
 		);
