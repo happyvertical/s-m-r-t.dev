@@ -111,7 +111,7 @@
 
 <style>
 	.interaction-index {
-		width: min(980px, calc(100% - 48px));
+		width: min(70rem, calc(100% - 3rem));
 		margin: 0 auto;
 		padding: 54px 0 88px;
 	}
@@ -352,7 +352,7 @@
 	}
 	@media (max-width: 620px) {
 		.interaction-index {
-			width: min(100% - 28px, 980px);
+			width: min(100% - 1.75rem, 70rem);
 			padding-top: 36px;
 		}
 		.boundary > div,
