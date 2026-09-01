@@ -10,6 +10,7 @@ const base: Reference = {
 	category: 'Forms and controls',
 	importPath: '@happyvertical/smrt-ui/forms',
 	summary: 'SampleControl is part of the forms and controls component family.',
+	summarySynthesized: true,
 	details: [
 		{ name: 'value', code: 'string', status: false, description: '' },
 		{ name: 'label', code: 'string', status: true, description: 'Visible name for the control.' }
@@ -51,6 +52,7 @@ describe('UI component reference page', () => {
 			component: {
 				...base,
 				summary: 'Collects a single value and reports every change to its host.',
+				summarySynthesized: false,
 				details: [
 					{ name: 'value', code: 'string', status: false, description: 'Current control value.' }
 				]

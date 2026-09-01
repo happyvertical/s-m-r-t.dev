@@ -19,6 +19,8 @@ export interface UiComponentReference {
 	category: string;
 	importPath: string;
 	summary: string;
+	/** True when no package prose was found and `summary` is a generated placeholder. */
+	summarySynthesized: boolean;
 	details: UiComponentMember[];
 	sources: string[];
 	sections: UiComponentMember[];
@@ -39,6 +41,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary: 'Accordion is part of the actions and display component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'value',
@@ -100,6 +103,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary: 'AccordionItem is part of the actions and display component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'value',
@@ -147,37 +151,39 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'actions-display',
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Avatar is part of the actions and display component family.',
+		summary:
+			'Avatar — user/entity image with initials fallback and optional presence dot. Renders the image when `src` is set, otherwise initials derived from `name`. `name` is always the accessible label (image alt / initials aria-label), so an Avatar is never an unlabelled graphic.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'src',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Image URL. When absent, initials from `name` are shown.'
 			},
 			{
 				name: 'name',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Accessible name; also the image alt and initials fallback source.'
 			},
 			{
 				name: 'size',
 				code: 'AvatarSize',
 				status: false,
-				description: ''
+				description: 'Size variant.'
 			},
 			{
 				name: 'status',
 				code: 'AvatarStatus',
 				status: false,
-				description: ''
+				description: 'Optional presence indicator.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Extra class on the root.'
 			}
 		],
 		sources: ["Omit<HTMLAttributes<HTMLSpanElement>, 'class'>"],
@@ -198,6 +204,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary: 'Badge is part of the actions and display component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'variant',
@@ -239,55 +246,59 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'actions-display',
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Button is part of the actions and display component family.',
+		summary:
+			'Button - Versatile button component Supports both button and link rendering. When href is provided, renders as an anchor tag. Otherwise renders as a button.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'variant',
 				code: 'ButtonVariant',
 				status: false,
-				description: ''
+				description: 'Visual variant'
 			},
 			{
 				name: 'size',
 				code: 'ButtonSize',
 				status: false,
-				description: ''
+				description: 'Size variant'
 			},
 			{
 				name: 'href',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'URL for link mode (renders as <a> tag)'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Snippet for button content'
 			},
 			{
 				name: 'fullWidth',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Full width button'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Loading state'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description:
+					'Extra class(es) appended after the base `button {variant} {size}` styling. Lets callers adopt Button for custom-styled buttons without losing their own CSS (issue #1589) — the base button styling still applies.'
 			},
 			{
 				name: 'target',
 				code: "HTMLAnchorAttributes['target']",
 				status: false,
-				description: ''
+				description:
+					'Anchor-mode attributes (link mode only, i.e. when `href` is set). The component already spreads these onto the rendered `<a>`; they are declared here so callers migrating an external `<a target="_blank" rel="...">` to Button (issue #1589) keep them type-checked. Ignored in button mode.'
 			},
 			{
 				name: 'rel',
@@ -324,6 +335,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary: 'Card is part of the actions and display component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'variant',
@@ -379,61 +391,63 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'actions-display',
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Chip is part of the actions and display component family.',
+		summary:
+			'Chip — compact token, optionally selectable (toggle) and/or closeable. When `selectable`, the body is a `<button>` reflecting `selected` via `aria-pressed`. When `closeable`, a labelled remove `<button>` is appended. Both are native buttons, so keyboard activation is built in.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: "Text label; also the close button's accessible name (`Remove <label>`)."
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Chip content; falls back to `label`.'
 			},
 			{
 				name: 'selectable',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Render the body as a toggle button reflecting `selected`.'
 			},
 			{
 				name: 'selected',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Selected state (only meaningful with `selectable`).'
 			},
 			{
 				name: 'closeable',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Append a remove (×) button.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disable both buttons.'
 			},
 			{
 				name: 'size',
 				code: 'ChipSize',
 				status: false,
-				description: ''
+				description: 'Size variant.'
 			},
 			{
 				name: 'onselect',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when a selectable chip body is activated.'
 			},
 			{
 				name: 'onclose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the remove button is activated.'
 			}
 		],
 		sources: [],
@@ -443,13 +457,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onselect',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when a selectable chip body is activated.'
 			},
 			{
 				name: 'onclose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the remove button is activated.'
 			}
 		],
 		components: [],
@@ -467,6 +481,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary: 'Disclosure is part of the actions and display component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'title',
@@ -533,43 +548,45 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'actions-display',
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Dropdown is part of the actions and display component family.',
+		summary:
+			'Dropdown / Menu — a trigger button and a positioned menu list. Implements the WAI-ARIA menu-button pattern: trigger has `aria-haspopup="menu"` + `aria-expanded`; the list is `role="menu"` with `role="menuitem"` buttons under roving focus (ArrowUp/Down/Home/End), Enter/ Space to activate, Escape to close + refocus the trigger, and click-outside to dismiss. CSS-anchored via `placement` — no JS positioning dependency.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Trigger button text (ignored when a `trigger` snippet is given).'
 			},
 			{
 				name: 'trigger',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Custom trigger content.'
 			},
 			{
 				name: 'items',
 				code: 'MenuItem[]',
 				status: true,
-				description: ''
+				description: 'Menu items.'
 			},
 			{
 				name: 'placement',
 				code: 'DropdownPlacement',
 				status: false,
-				description: ''
+				description: 'Menu placement relative to the trigger.'
 			},
 			{
 				name: 'onselect',
 				code: '(id: string) => void',
 				status: false,
-				description: ''
+				description: "Fired with the activated item's id."
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disable the trigger.'
 			}
 		],
 		sources: [],
@@ -579,7 +596,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onselect',
 				code: '(id: string) => void',
 				status: false,
-				description: ''
+				description: "Fired with the activated item's id."
 			}
 		],
 		components: [],
@@ -600,43 +617,45 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'actions-display',
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Menu is part of the actions and display component family.',
+		summary:
+			'Dropdown / Menu — a trigger button and a positioned menu list. Implements the WAI-ARIA menu-button pattern: trigger has `aria-haspopup="menu"` + `aria-expanded`; the list is `role="menu"` with `role="menuitem"` buttons under roving focus (ArrowUp/Down/Home/End), Enter/ Space to activate, Escape to close + refocus the trigger, and click-outside to dismiss. CSS-anchored via `placement` — no JS positioning dependency.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Trigger button text (ignored when a `trigger` snippet is given).'
 			},
 			{
 				name: 'trigger',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Custom trigger content.'
 			},
 			{
 				name: 'items',
 				code: 'MenuItem[]',
 				status: true,
-				description: ''
+				description: 'Menu items.'
 			},
 			{
 				name: 'placement',
 				code: 'DropdownPlacement',
 				status: false,
-				description: ''
+				description: 'Menu placement relative to the trigger.'
 			},
 			{
 				name: 'onselect',
 				code: '(id: string) => void',
 				status: false,
-				description: ''
+				description: "Fired with the activated item's id."
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disable the trigger.'
 			}
 		],
 		sources: [],
@@ -646,7 +665,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onselect',
 				code: '(id: string) => void',
 				status: false,
-				description: ''
+				description: "Fired with the activated item's id."
 			}
 		],
 		components: [],
@@ -667,49 +686,50 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'actions-display',
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Pagination is part of the actions and display component family.',
+		summary: 'Props for Pagination component',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'currentPage',
 				code: 'number',
 				status: true,
-				description: ''
+				description: 'Current active page (1-based)'
 			},
 			{
 				name: 'totalPages',
 				code: 'number',
 				status: true,
-				description: ''
+				description: 'Total number of pages'
 			},
 			{
 				name: 'baseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: "Base URL for link mode (e.g., '/articles')"
 			},
 			{
 				name: 'onPageChange',
 				code: '(page: number) => void',
 				status: false,
-				description: ''
+				description: 'When provided, renders buttons instead of links and calls this on page change'
 			},
 			{
 				name: 'aria-label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessible label for pagination nav'
 			},
 			{
 				name: 'showFirstLast',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show first/last page buttons'
 			},
 			{
 				name: 'maxVisible',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Maximum number of visible page numbers'
 			}
 		],
 		sources: [],
@@ -719,7 +739,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onPageChange',
 				code: '(page: number) => void',
 				status: false,
-				description: ''
+				description: 'When provided, renders buttons instead of links and calls this on page change'
 			}
 		],
 		components: [],
@@ -737,6 +757,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary: 'Popover is part of the actions and display component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'label',
@@ -821,37 +842,39 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'actions-display',
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Skeleton is part of the actions and display component family.',
+		summary:
+			'Skeleton — shape-matching loading placeholder. Variants: `text` (one or more lines), `circle`, `rect`. The wrapper is a polite `role="status"` region with an sr-only label so assistive tech announces that content is loading; the shimmer honors `prefers-reduced-motion`.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'variant',
 				code: 'SkeletonVariant',
 				status: false,
-				description: ''
+				description: 'Placeholder shape.'
 			},
 			{
 				name: 'width',
 				code: 'string',
 				status: false,
-				description: ''
+				description: "CSS width (e.g. '100%', '8rem')."
 			},
 			{
 				name: 'height',
 				code: 'string',
 				status: false,
-				description: ''
+				description: "CSS height (e.g. '1rem', '48px')."
 			},
 			{
 				name: 'lines',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Number of lines for the `text` variant.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessible loading label.'
 			}
 		],
 		sources: [],
@@ -871,31 +894,33 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'actions-display',
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Tooltip is part of the actions and display component family.',
+		summary:
+			'Tooltip — anchored, delayed text bubble for a trigger. Shows on hover and keyboard focus, hides on leave / blur / Escape. The trigger is wired to the bubble via `aria-describedby` (always set; the bubble is in the DOM and revealed on open), and the bubble carries `role="tooltip"`. CSS-anchored via a `placement` prop — no JS positioning dependency.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'text',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Tooltip text.'
 			},
 			{
 				name: 'placement',
 				code: 'TooltipPlacement',
 				status: false,
-				description: ''
+				description: 'Placement relative to the trigger.'
 			},
 			{
 				name: 'delay',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Show delay in ms.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: true,
-				description: ''
+				description: 'The trigger content.'
 			}
 		],
 		sources: [],
@@ -916,36 +941,37 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary: 'Tree is part of the actions and display component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'nodes',
 				code: 'TreeNode[]',
 				status: true,
-				description: ''
+				description: 'Root nodes.'
 			},
 			{
 				name: 'selectedId',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Selected node id.'
 			},
 			{
 				name: 'expanded',
 				code: 'string[]',
 				status: false,
-				description: ''
+				description: 'Initially expanded node ids.'
 			},
 			{
 				name: 'onselect',
 				code: '(id: string) => void',
 				status: false,
-				description: ''
+				description: 'Fired with the selected node id.'
 			},
 			{
 				name: 'aria-label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessible label for the tree.'
 			}
 		],
 		sources: [],
@@ -955,7 +981,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onselect',
 				code: '(id: string) => void',
 				status: false,
-				description: ''
+				description: 'Fired with the selected node id.'
 			}
 		],
 		components: [],
@@ -973,6 +999,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Calendar',
 		importPath: '@happyvertical/smrt-ui/calendar',
 		summary: 'Calendar is part of the calendar component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'events',
@@ -1002,19 +1029,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onMonthNavigate',
 				code: "(direction: 'prev' | 'next', year: number, month: number) => void",
 				status: false,
-				description: ''
+				description: 'Callback when navigating to prev/next month'
 			},
 			{
 				name: 'onDateSelect',
 				code: '(date: string, hasEvents: boolean) => void',
 				status: false,
-				description: ''
+				description: 'Callback when a date cell is clicked'
 			},
 			{
 				name: 'onTodayClick',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when Today button is clicked'
 			}
 		],
 		sources: [],
@@ -1024,19 +1051,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onMonthNavigate',
 				code: "(direction: 'prev' | 'next', year: number, month: number) => void",
 				status: false,
-				description: ''
+				description: 'Callback when navigating to prev/next month'
 			},
 			{
 				name: 'onDateSelect',
 				code: '(date: string, hasEvents: boolean) => void',
 				status: false,
-				description: ''
+				description: 'Callback when a date cell is clicked'
 			},
 			{
 				name: 'onTodayClick',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when Today button is clicked'
 			}
 		],
 		components: [],
@@ -1054,6 +1081,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Calendar',
 		importPath: '@happyvertical/smrt-ui/calendar',
 		summary: 'DayView is part of the calendar component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'date',
@@ -1083,7 +1111,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onEventClick',
 				code: '(eventType: string, eventName: string) => void',
 				status: false,
-				description: ''
+				description: 'Callback when an event card is clicked'
 			}
 		],
 		sources: [],
@@ -1093,7 +1121,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onEventClick',
 				code: '(eventType: string, eventName: string) => void',
 				status: false,
-				description: ''
+				description: 'Callback when an event card is clicked'
 			}
 		],
 		components: [],
@@ -1110,67 +1138,71 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'chat',
 		category: 'Chat',
 		importPath: '@happyvertical/smrt-ui/chat',
-		summary: 'MessageBubble is part of the chat component family.',
+		summary:
+			'MessageBubble — a single chat message, tokenised and a11y-clean. Two complementary forms share one styled container: - **Bare bubble** (the common case for a message list that renders its own author/time/reactions around each row): opt into the styling axes by passing `variant` and/or `own` (plus `content` or a `children` snippet). No header or labelled group is rendered — unless you also pass an `author` — so it nests cleanly inside an already-labelled message row without a redundant landmark. - **Self-contained card** (legacy form): pass `role` / `author` / `timestamp` (and optionally the `reactions` / `actions` snippets) without the styling axes. A header and a labelled `role="group"` (`<author|role> (<role>)`) are rendered so assistive tech can announce who sent each message; `author` falls back to a role label ("You" / "Assistant" / "System"). `variant` + `own` are the canonical styling axes. The legacy `role` prop sets the header\'s role label and derives `variant`/`own` when those are not given.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'variant',
 				code: 'MessageBubbleVariant',
 				status: false,
-				description: ''
+				description: 'Visual tone. Canonical styling axis.'
 			},
 			{
 				name: 'own',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description:
+					'Whether the current viewer authored this message — drives alignment + own-color.'
 			},
 			{
 				name: 'role',
 				code: 'ChatMessageRole',
 				status: false,
-				description: ''
+				description:
+					"Legacy role. Prefer `variant` + `own`. Sets the header's role label and, when `variant`/`own` are unset, derives them (user → own default, agent → agent, system → system)."
 			},
 			{
 				name: 'content',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Plain-text body. Ignored when a `children` snippet is provided.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Body snippet (takes precedence over `content`).'
 			},
 			{
 				name: 'author',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Display name of the sender. When set, a header + labelled group render.'
 			},
 			{
 				name: 'timestamp',
 				code: 'Date',
 				status: false,
-				description: ''
+				description: 'Message time; rendered in a `<time datetime>` element in the header.'
 			},
 			{
 				name: 'timestampLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Override the visible timestamp text (defaults to a locale time).'
 			},
 			{
 				name: 'reactions',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional reactions row (e.g. a `ReactionPicker` or reaction chips).'
 			},
 			{
 				name: 'actions',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional per-message actions (reply, copy, …).'
 			}
 		],
 		sources: [],
@@ -1191,36 +1223,38 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat',
 		importPath: '@happyvertical/smrt-ui/chat',
 		summary: 'ReactionPicker is part of the chat component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'emojis',
 				code: 'string[]',
 				status: false,
-				description: ''
+				description: 'Emoji set to offer.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessible label for the group. Defaults to a translated "Add reaction".'
 			},
 			{
 				name: 'emojiLabel',
 				code: '(emoji: string) => string',
 				status: false,
-				description: ''
+				description:
+					'Accessible name for each emoji button. Defaults to a built-in name for the common reactions, else a translated "React with {emoji}".'
 			},
 			{
 				name: 'isOpen',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the picker is shown.'
 			},
 			{
 				name: 'onpick',
 				code: '(emoji: string) => void',
 				status: false,
-				description: ''
+				description: 'Fired with the chosen emoji.'
 			}
 		],
 		sources: [],
@@ -1230,7 +1264,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onpick',
 				code: '(emoji: string) => void',
 				status: false,
-				description: ''
+				description: 'Fired with the chosen emoji.'
 			}
 		],
 		components: [],
@@ -1247,25 +1281,27 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'chat',
 		category: 'Chat',
 		importPath: '@happyvertical/smrt-ui/chat',
-		summary: 'TypingIndicator is part of the chat component family.',
+		summary:
+			'TypingIndicator — animated "…is typing" affordance. Renders a visible label plus decorative animated dots (`aria-hidden`) inside a polite `role="status"` live region, so both sighted users and screen readers learn who is typing. Honors reduced-motion. Pass `names` to announce one or more typists ("Ada is typing", "Ada and Bob are typing", "Ada and 2 others are typing") — an empty list renders nothing. Or pass a single `name` / a full `label` override. The animated dots stand in for the trailing ellipsis, so the label text omits it.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'name',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Who is typing (single).'
 			},
 			{
 				name: 'names',
 				code: 'string[]',
 				status: false,
-				description: ''
+				description: 'Names of everyone currently typing — aggregated into the label.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Full label override; defaults to an aggregation of `names`/`name`.'
 			}
 		],
 		sources: [],
@@ -1286,6 +1322,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Collections and tables',
 		importPath: '@happyvertical/smrt-ui/data',
 		summary: 'CollectionList is part of the collections and tables component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'items',
@@ -1414,6 +1451,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Collections and tables',
 		importPath: '@happyvertical/smrt-ui/data',
 		summary: 'CollectionToolbar is part of the collections and tables component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'search',
@@ -1491,13 +1529,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'controller',
 				code: 'DataTableController',
 				status: false,
-				description: ''
+				description: 'Shares search state with a DataTable controller when supplied.'
 			},
 			{
 				name: 'dataSurface',
 				code: 'CollectionToolbarDataSurfaceOptions',
 				status: false,
-				description: ''
+				description: 'Registers this toolbar only when explicitly supplied.'
 			},
 			{
 				name: 'class',
@@ -1541,6 +1579,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Collections and tables',
 		importPath: '@happyvertical/smrt-ui/data',
 		summary: 'ContentList is part of the collections and tables component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'items',
@@ -1668,301 +1707,310 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'collections-tables',
 		category: 'Collections and tables',
 		importPath: '@happyvertical/smrt-ui/data',
-		summary: 'DataTable is part of the collections and tables component family.',
+		summary:
+			'DataTable - A flexible, accessible data table component Features: - Sortable columns with custom sort functions - Row selection (single and multi-select) - Custom cell and header renderers via Snippets - Loading and empty states - Responsive with sticky header option - Material 3 styling with theme token support',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'data',
 				code: 'T[]',
 				status: true,
-				description: ''
+				description: 'Data rows'
 			},
 			{
 				name: 'columns',
 				code: 'DataTableColumn<T>[]',
 				status: true,
-				description: ''
+				description: 'Column definitions'
 			},
 			{
 				name: 'rowKey',
 				code: 'DataTableRowKey<T>',
 				status: false,
-				description: ''
+				description: 'Unique key accessor for rows'
 			},
 			{
 				name: 'agentAddressable',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description:
+					'Declares that a DataSurface or agent will address rows. Such tables must provide `rowKey`, even if they do not render selection controls.'
 			},
 			{
 				name: 'selectable',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Enable row selection'
 			},
 			{
 				name: 'selected',
 				code: 'Set<string | number>',
 				status: false,
-				description: ''
+				description: 'Selected row keys'
 			},
 			{
 				name: 'onSelectionChange',
 				code: '(selected: Set<string | number>) => void',
 				status: false,
-				description: ''
+				description: 'Selection change callback'
 			},
 			{
 				name: 'onRowClick',
 				code: '(row: T, index: number) => void',
 				status: false,
-				description: ''
+				description: 'Row click callback'
 			},
 			{
 				name: 'rowLabel',
 				code: '(row: T, index: number) => string',
 				status: false,
-				description: ''
+				description:
+					"Supplies the accessible label used for a row's selection and expansion controls. Defaults to the 1-based display row number."
 			},
 			{
 				name: 'sortable',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Enable sorting'
 			},
 			{
 				name: 'sort',
 				code: 'SortState',
 				status: false,
-				description: ''
+				description: 'Current sort state'
 			},
 			{
 				name: 'onSortChange',
 				code: '(sort: SortState) => void',
 				status: false,
-				description: ''
+				description: 'Sort change callback'
 			},
 			{
 				name: 'manualSorting',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Parent owns sorting and supplies already-sorted rows.'
 			},
 			{
 				name: 'filterFn',
 				code: '(row: T, index: number) => boolean',
 				status: false,
-				description: ''
+				description: 'Optional client-side row filter.'
 			},
 			{
 				name: 'page',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Current 1-based page. Pagination is enabled when pageSize is set.'
 			},
 			{
 				name: 'pageSize',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Rows per page.'
 			},
 			{
 				name: 'manualPagination',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Parent owns pagination and supplies only the current page.'
 			},
 			{
 				name: 'virtualization',
 				code: 'DataTableVirtualizationOptions',
 				status: false,
-				description: ''
+				description:
+					'Opt-in fixed-height virtualization for the data body. It requires rowKey and falls back to the normal semantic body when expanded rows are enabled.'
 			},
 			{
 				name: 'totalRows',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Total server row count when manualPagination is enabled.'
 			},
 			{
 				name: 'onPageChange',
 				code: '(page: number) => void',
 				status: false,
-				description: ''
+				description: 'Page change callback.'
 			},
 			{
 				name: 'expanded',
 				code: 'Set<string | number>',
 				status: false,
-				description: ''
+				description: 'Controlled set of expanded row keys.'
 			},
 			{
 				name: 'onExpandedChange',
 				code: '(expanded: Set<string | number>) => void',
 				status: false,
-				description: ''
+				description: 'Expansion change callback.'
 			},
 			{
 				name: 'canExpand',
 				code: '(row: T, index: number) => boolean',
 				status: false,
-				description: ''
+				description: 'Predicate controlling which rows can expand.'
 			},
 			{
 				name: 'expandedContent',
 				code: 'Snippet<[{ row: T; index: number; }]>',
 				status: false,
-				description: ''
+				description: 'Expanded row content.'
 			},
 			{
 				name: 'toolbar',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional content above the table.'
 			},
 			{
 				name: 'footer',
 				code: 'Snippet<[{ rows: T[]; }]>',
 				status: false,
-				description: ''
+				description: 'Optional full-width table footer content.'
 			},
 			{
 				name: 'structuralRows',
 				code: 'readonly DataTableStructuralRow<T>[]',
 				status: false,
-				description: ''
+				description: 'Generic report-like rows rendered independently from data row interactions.'
 			},
 			{
 				name: 'visibleColumnIds',
 				code: 'Set<string>',
 				status: false,
-				description: ''
+				description: 'Controlled visible column ids. Column.hidden is still respected.'
 			},
 			{
 				name: 'controller',
 				code: 'DataTableController',
 				status: false,
-				description: ''
+				description:
+					'Headless controller used by rendered interactions and programmatic commands. When supplied, it takes precedence over `state` and the legacy bindables.'
 			},
 			{
 				name: 'state',
 				code: 'DataTableViewStateInput',
 				status: false,
-				description: ''
+				description:
+					'Explicit controlled serializable state when no external controller is supplied.'
 			},
 			{
 				name: 'initialState',
 				code: 'Partial<DataTableViewState>',
 				status: false,
-				description: ''
+				description: 'Initial serializable state for uncontrolled controller-backed tables.'
 			},
 			{
 				name: 'onStateChange',
 				code: '(state: DataTableViewState, command: DataTableCommand) => void',
 				status: false,
-				description: ''
+				description: 'Called after a controller command proposes or applies a new state.'
 			},
 			{
 				name: 'modes',
 				code: 'Partial<DataTableModes>',
 				status: false,
-				description: ''
+				description:
+					'Explicit ownership for local or caller-supplied filtering, sorting, and paging.'
 			},
 			{
 				name: 'dataSurface',
 				code: 'DataTableDataSurfaceOptions',
 				status: false,
-				description: ''
+				description: 'Registers this mounted instance only when explicitly supplied.'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description:
+					'The initial loading state. When rows are already present, loading keeps them interactive and is announced as a refresh instead of replacing them.'
 			},
 			{
 				name: 'refreshing',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Explicitly announces a refresh while rendered rows remain available.'
 			},
 			{
 				name: 'stale',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Marks rendered rows as stale while a caller refreshes them.'
 			},
 			{
 				name: 'partialResults',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Marks rendered rows as a partial result set.'
 			},
 			{
 				name: 'error',
 				code: 'DataTableLoadError | null',
 				status: false,
-				description: ''
+				description: 'Load failure shown without discarding already rendered rows.'
 			},
 			{
 				name: 'onRetry',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked by the localized retry button when a load error is present.'
 			},
 			{
 				name: 'empty',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Empty state content'
 			},
 			{
 				name: 'rowClass',
 				code: '(row: T, index: number) => string',
 				status: false,
-				description: ''
+				description: 'Custom row class function'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Table size variant'
 			},
 			{
 				name: 'striped',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Enable striped rows'
 			},
 			{
 				name: 'hoverable',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Enable hover highlight'
 			},
 			{
 				name: 'stickyHeader',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Enable sticky header'
 			},
 			{
 				name: 'caption',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Table caption for accessibility'
 			},
 			{
 				name: 'dense',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Dense mode (reduced padding)'
 			},
 			{
 				name: 'cell',
 				code: 'Snippet<[ { column: DataTableColumn<T>; row: T; value: unknown; index: number; } ]>',
 				status: false,
-				description: ''
+				description: 'Global cell renderer - takes precedence over column.cell'
 			}
 		],
 		sources: [],
@@ -1971,25 +2019,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'selected',
 				code: 'Set<string | number>',
 				status: false,
-				description: ''
+				description: 'Selected row keys'
 			},
 			{
 				name: 'sort',
 				code: 'SortState',
 				status: false,
-				description: ''
+				description: 'Current sort state'
 			},
 			{
 				name: 'page',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Current 1-based page. Pagination is enabled when pageSize is set.'
 			},
 			{
 				name: 'expanded',
 				code: 'Set<string | number>',
 				status: false,
-				description: ''
+				description: 'Controlled set of expanded row keys.'
 			}
 		],
 		items: [
@@ -1997,43 +2045,43 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onSelectionChange',
 				code: '(selected: Set<string | number>) => void',
 				status: false,
-				description: ''
+				description: 'Selection change callback'
 			},
 			{
 				name: 'onRowClick',
 				code: '(row: T, index: number) => void',
 				status: false,
-				description: ''
+				description: 'Row click callback'
 			},
 			{
 				name: 'onSortChange',
 				code: '(sort: SortState) => void',
 				status: false,
-				description: ''
+				description: 'Sort change callback'
 			},
 			{
 				name: 'onPageChange',
 				code: '(page: number) => void',
 				status: false,
-				description: ''
+				description: 'Page change callback.'
 			},
 			{
 				name: 'onExpandedChange',
 				code: '(expanded: Set<string | number>) => void',
 				status: false,
-				description: ''
+				description: 'Expansion change callback.'
 			},
 			{
 				name: 'onStateChange',
 				code: '(state: DataTableViewState, command: DataTableCommand) => void',
 				status: false,
-				description: ''
+				description: 'Called after a controller command proposes or applies a new state.'
 			},
 			{
 				name: 'onRetry',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked by the localized retry button when a load error is present.'
 			}
 		],
 		components: ['sort', 'page', 'selected', 'expanded'],
@@ -2054,37 +2102,39 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'display-status',
 		category: 'Display and status',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'ConfidenceBadge is part of the display and status component family.',
+		summary:
+			'ConfidenceBadge - Displays AI confidence level indicator Shows a visual indicator for confidence scores (0-100). Useful for OCR results, AI predictions, etc. Accessibility: Uses role="meter" with aria-valuenow for screen readers',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'confidence',
 				code: 'number',
 				status: true,
-				description: ''
+				description: 'Confidence value (0-100)'
 			},
 			{
 				name: 'showPercent',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show percentage value'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Size variant'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional CSS class'
 			},
 			{
 				name: 'aria-label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessible label'
 			}
 		],
 		sources: [],
@@ -2104,55 +2154,57 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'display-status',
 		category: 'Display and status',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'CurrencyDisplay is part of the display and status component family.',
+		summary:
+			'CurrencyDisplay - Formats and displays monetary values Displays formatted currency with configurable unit. Use `unit="cents"` (default) when amount is in the currency\'s minor units, or `unit="dollars"` when it is already in major units. Accepts ISO 4217 currency codes, normalized by trimming whitespace and uppercasing before locale formatting. Unsupported codes render an accessible inline error instead of throwing during a collection render.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'amount',
 				code: 'number',
 				status: true,
-				description: ''
+				description: 'Amount value'
 			},
 			{
 				name: 'currency',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ISO 4217 currency code. Whitespace is trimmed and letters are uppercased.'
 			},
 			{
 				name: 'unit',
 				code: "'cents' | 'dollars'",
 				status: false,
-				description: ''
+				description: 'Whether amount is a safe integer of ISO minor units or a major-unit number'
 			},
 			{
 				name: 'showSign',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show +/- sign for non-zero values'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Display size'
 			},
 			{
 				name: 'highlightNegative',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Highlight negative values in red'
 			},
 			{
 				name: 'highlightPositive',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Highlight positive values in green'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional CSS class'
 			}
 		],
 		sources: [],
@@ -2172,43 +2224,45 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'display-status',
 		category: 'Display and status',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'DateDisplay is part of the display and status component family.',
+		summary:
+			'DateDisplay - Formats and displays dates Supports various format options and relative time display.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'date',
 				code: 'Date | string | number | null | undefined',
 				status: true,
-				description: ''
+				description: 'Date to display (Date, ISO string, or timestamp)'
 			},
 			{
 				name: 'format',
 				code: "'short' | 'medium' | 'long' | 'relative'",
 				status: false,
-				description: ''
+				description: 'Display format'
 			},
 			{
 				name: 'fallback',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Fallback text when date is null/undefined'
 			},
 			{
 				name: 'showTime',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show time along with date'
 			},
 			{
 				name: 'locale',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Locale for formatting (defaults to en-CA)'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional CSS class'
 			}
 		],
 		sources: [],
@@ -2228,43 +2282,45 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'display-status',
 		category: 'Display and status',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'Icon is part of the display and status component family.',
+		summary:
+			'Icon - SVG icon component Displays SVG icons from presets or custom paths. Accessibility: - Use aria-label for informative icons - Uses aria-hidden="true" by default (decorative)',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'name',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Preset icon name'
 			},
 			{
 				name: 'path',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Custom SVG path'
 			},
 			{
 				name: 'size',
 				code: 'string | number',
 				status: false,
-				description: ''
+				description: 'Icon size (number for pixels, string for CSS value)'
 			},
 			{
 				name: 'color',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Icon color'
 			},
 			{
 				name: 'viewBox',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'SVG viewBox'
 			},
 			{
 				name: 'aria-label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessible label (makes icon informative)'
 			}
 		],
 		sources: [],
@@ -2284,37 +2340,39 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'display-status',
 		category: 'Display and status',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'StatusBadge is part of the display and status component family.',
+		summary:
+			'StatusBadge - Generic status indicator badge Provides pre-defined color schemes for common status domains (invoice, project, etc.) or allows custom styling via CSS variables.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'status',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'The status value to display'
 			},
 			{
 				name: 'type',
 				code: 'StatusType',
 				status: false,
-				description: ''
+				description: 'Pre-defined color scheme type'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Badge size'
 			},
 			{
 				name: 'variant',
 				code: "'filled' | 'outline'",
 				status: false,
-				description: ''
+				description: 'Visual variant'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional custom label (defaults to status value)'
 			}
 		],
 		sources: [],
@@ -2339,6 +2397,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Alert is part of the feedback and overlays component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'variant',
@@ -2411,61 +2470,62 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'feedback-overlays',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
-		summary: 'ConfirmDialog is part of the feedback and overlays component family.',
+		summary: 'Props for ConfirmDialog component',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'open',
 				code: 'boolean',
 				status: true,
-				description: ''
+				description: 'Whether the dialog is open'
 			},
 			{
 				name: 'title',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Dialog title'
 			},
 			{
 				name: 'message',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Dialog message'
 			},
 			{
 				name: 'confirmLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Confirm button label'
 			},
 			{
 				name: 'cancelLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Cancel button label'
 			},
 			{
 				name: 'destructive',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Use destructive (red) styling for confirm'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show loading state on confirm'
 			},
 			{
 				name: 'onconfirm',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when confirm is clicked'
 			},
 			{
 				name: 'oncancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when cancel is clicked or dialog closed'
 			}
 		],
 		sources: [],
@@ -2475,13 +2535,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onconfirm',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when confirm is clicked'
 			},
 			{
 				name: 'oncancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when cancel is clicked or dialog closed'
 			}
 		],
 		components: [],
@@ -2503,6 +2563,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Drawer is part of the feedback and overlays component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'open',
@@ -2599,55 +2660,57 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'feedback-overlays',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
-		summary: 'LoadingOverlay is part of the feedback and overlays component family.',
+		summary:
+			'Loading Overlay Component A generic full-screen loading overlay for any async operation. Shows progress, completed items, and error states.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'show',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to show the overlay'
 			},
 			{
 				name: 'message',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Loading message to display'
 			},
 			{
 				name: 'progress',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Progress percentage (0-100)'
 			},
 			{
 				name: 'items',
 				code: 'string[]',
 				status: false,
-				description: ''
+				description: 'List of completed items'
 			},
 			{
 				name: 'error',
 				code: '{ message: string; } | null',
 				status: false,
-				description: ''
+				description: 'Error object with message'
 			},
 			{
 				name: 'dismissible',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Allow dismissing the overlay'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Custom CSS class'
 			},
 			{
 				name: 'ondismiss',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when dismissed'
 			}
 		],
 		sources: [],
@@ -2657,7 +2720,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'ondismiss',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when dismissed'
 			}
 		],
 		components: [],
@@ -2679,6 +2742,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Meter is part of the feedback and overlays component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'value',
@@ -2762,85 +2826,87 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'feedback-overlays',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
-		summary: 'Modal is part of the feedback and overlays component family.',
+		summary:
+			'Modal - An accessible dialog component Features: - Native dialog element for accessibility - Backdrop click to close (optional) - Escape key to close - Focus trap - Multiple sizes - Custom header/footer via snippets - Material 3 styling',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'open',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the modal is open'
 			},
 			{
 				name: 'onClose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when modal requests to close'
 			},
 			{
 				name: 'title',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Modal title'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg' | 'xl' | 'full'",
 				status: false,
-				description: ''
+				description: 'Modal size variant'
 			},
 			{
 				name: 'placement',
 				code: "'center' | 'start' | 'end'",
 				status: false,
-				description: ''
+				description: 'Placement: center (default), start, or end for full-height drawers'
 			},
 			{
 				name: 'closeOnBackdrop',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether clicking backdrop closes modal'
 			},
 			{
 				name: 'closeOnEscape',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether pressing Escape closes modal'
 			},
 			{
 				name: 'showClose',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show close button'
 			},
 			{
 				name: 'header',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Custom header snippet'
 			},
 			{
 				name: 'footer',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Custom footer snippet'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Main content'
 			},
 			{
 				name: 'ariaLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ARIA label for the dialog'
 			},
 			{
 				name: 'ariaDescribedBy',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ARIA described by ID'
 			}
 		],
 		sources: [],
@@ -2850,7 +2916,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onClose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when modal requests to close'
 			}
 		],
 		components: [],
@@ -2872,6 +2938,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Progress is part of the feedback and overlays component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'value',
@@ -2943,49 +3010,50 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'feedback-overlays',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
-		summary: 'ProgressBar is part of the feedback and overlays component family.',
+		summary: 'Props for ProgressBar component',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'value',
 				code: 'number',
 				status: true,
-				description: ''
+				description: 'Current value (0-100 or custom range)'
 			},
 			{
 				name: 'max',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Maximum value (default 100)'
 			},
 			{
 				name: 'status',
 				code: "'default' | 'healthy' | 'warning' | 'critical' | 'over'",
 				status: false,
-				description: ''
+				description: 'Status determines color'
 			},
 			{
 				name: 'showLabel',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show percentage label'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Custom label text'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Size variant'
 			},
 			{
 				name: 'showValue',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show value over max (e.g., "75/100")'
 			}
 		],
 		sources: [],
@@ -3010,6 +3078,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Sheet is part of the feedback and overlays component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'open',
@@ -3107,6 +3176,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Spinner is part of the feedback and overlays component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'label',
@@ -3149,6 +3219,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'ToastViewport is part of the feedback and overlays component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'toaster',
@@ -3191,6 +3262,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Checkbox is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'checked',
@@ -3245,6 +3317,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Combobox is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'options',
@@ -3342,6 +3415,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'DatePicker is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'value',
@@ -3390,6 +3464,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'ErrorSummary is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'errors',
@@ -3441,6 +3516,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Field is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'label',
@@ -3476,7 +3552,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Agent/tutorial interaction metadata inherited by the wrapped control.'
 			},
 			{
 				name: 'children',
@@ -3507,6 +3583,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Fieldset is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'legend',
@@ -3557,6 +3634,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'FilePicker is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'files',
@@ -3629,7 +3707,9 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
-		summary: 'Form is part of the forms and controls component family.',
+		summary:
+			"Form — the Provider-free base `<form>` primitive. A thin, dependency-free wrapper around the native `<form>` element so domain components have a primitive to adopt instead of hand-rolling raw `<form>` markup (issue #1589). It forwards every native form attribute (including `onsubmit`) and renders its children — no Provider, no i18n, no spoken-input logic. For the rich, Provider-backed form with field registration and voice input, use `Form` from `@happyvertical/smrt-svelte/forms` instead. This one is the leaf-level building block; that one composes app state on top. `preventDefault` (default `true`) calls `event.preventDefault()` before invoking the consumer's `onsubmit`, so a click/Enter submit runs the handler without a full-page navigation — the near-universal SPA pattern. Pass `preventDefault={false}` to keep native submission (e.g. a GET/POST `action`).",
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'class',
@@ -3647,25 +3727,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'formId',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Stable form scope used by voice/chat/tutorial adapters.'
 			},
 			{
 				name: 'interactionRegistry',
 				code: 'ControlInteractionRegistry',
 				status: false,
-				description: ''
+				description: 'Supply a registry to coordinate multiple forms or inspect commands.'
 			},
 			{
 				name: 'oninteraction',
 				code: '(event: ControlInteractionEvent) => void',
 				status: false,
-				description: ''
+				description: 'Receives registry lifecycle and command events.'
 			},
 			{
 				name: 'stagedReview',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Render the built-in human review surface for staged changes.'
 			},
 			{
 				name: 'children',
@@ -3681,7 +3761,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'oninteraction',
 				code: '(event: ControlInteractionEvent) => void',
 				status: false,
-				description: ''
+				description: 'Receives registry lifecycle and command events.'
 			}
 		],
 		components: [],
@@ -3703,6 +3783,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'FormGroup is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'label',
@@ -3738,7 +3819,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Agent/tutorial interaction metadata inherited by the wrapped control.'
 			},
 			{
 				name: 'children',
@@ -3769,6 +3850,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Input is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'value',
@@ -3786,7 +3868,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Stable identity and sensitivity metadata for interaction adapters.'
 			}
 		],
 		sources: ["Omit<HTMLInputAttributes, 'class' | 'value'>"],
@@ -3811,6 +3893,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'InputGroup is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'prefix',
@@ -3855,6 +3938,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Listbox is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'options',
@@ -3934,6 +4018,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'MultiSelect is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'options',
@@ -4019,6 +4104,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Radio is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'value',
@@ -4061,6 +4147,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'RadioGroup is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'name',
@@ -4158,6 +4245,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'RangeSlider is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'value',
@@ -4267,6 +4355,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'SegmentedControl is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'options',
@@ -4352,6 +4441,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Select is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'value',
@@ -4400,6 +4490,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Slider is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'value',
@@ -4484,6 +4575,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'StagedControlReview is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'registry',
@@ -4534,6 +4626,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Switch is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'checked',
@@ -4594,6 +4687,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'TagsInput is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'values',
@@ -4685,6 +4779,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Textarea is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'value',
@@ -4733,6 +4828,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'TimePicker is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'value',
@@ -4780,67 +4876,69 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
-		summary: 'Toggle is part of the forms and controls component family.',
+		summary:
+			'SMRTToggle - An accessible toggle/switch component Features: - Native checkbox semantics for accessibility - Bindable checked state - Disabled state - Labels on either side - Size variants - Material 3 styling',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'checked',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the toggle is checked'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the toggle is disabled'
 			},
 			{
 				name: 'name',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Name attribute for form submission'
 			},
 			{
 				name: 'value',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Value attribute for form submission'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Label text'
 			},
 			{
 				name: 'labelPosition',
 				code: "'left' | 'right'",
 				status: false,
-				description: ''
+				description: 'Position of the label'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Size variant'
 			},
 			{
 				name: 'id',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ID for the input element'
 			},
 			{
 				name: 'ariaLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ARIA label for accessibility'
 			},
 			{
 				name: 'onchange',
 				code: '(checked: boolean) => void',
 				status: false,
-				description: ''
+				description: 'Change callback'
 			}
 		],
 		sources: [],
@@ -4850,7 +4948,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onchange',
 				code: '(checked: boolean) => void',
 				status: false,
-				description: ''
+				description: 'Change callback'
 			}
 		],
 		components: [],
@@ -4872,6 +4970,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'ToggleButton is part of the forms and controls component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'pressed',
@@ -4919,19 +5018,21 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'internationalization',
 		category: 'Internationalization',
 		importPath: '@happyvertical/smrt-ui/i18n',
-		summary: 'Trans is part of the internationalization component family.',
+		summary:
+			'`<Trans>` — the component form of `$t` (S13 #1418), for translating strings in element bodies. Equal first-class partner to `useI18n().t` for attributes.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'key',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Message key, e.g. `ui.data_table.empty`.'
 			},
 			{
 				name: 'vars',
 				code: 'LanguageVariables',
 				status: false,
-				description: ''
+				description: 'Variables substituted into `{var}` placeholders.'
 			}
 		],
 		sources: [],
@@ -4952,6 +5053,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary: 'Container is part of the layout component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'maxWidth',
@@ -4983,49 +5085,51 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'layout',
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
-		summary: 'EmptyState is part of the layout component family.',
+		summary:
+			'EmptyState - Placeholder for empty lists/content refactored for Material 3 Provides a consistent empty state display with optional icon, description, and call-to-action button.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'title',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Main title text'
 			},
 			{
 				name: 'description',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional description'
 			},
 			{
 				name: 'icon',
 				code: "'document' | 'folder' | 'users' | 'search' | 'inbox' | Snippet",
 				status: false,
-				description: ''
+				description: 'Icon slot or default icon name'
 			},
 			{
 				name: 'actionLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Action button label'
 			},
 			{
 				name: 'actionHref',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Action button href'
 			},
 			{
 				name: 'onaction',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Action button click handler'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Size variant'
 			}
 		],
 		sources: [],
@@ -5035,7 +5139,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onaction',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Action button click handler'
 			}
 		],
 		components: [],
@@ -5053,6 +5157,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary: 'Footer is part of the layout component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'children',
@@ -5079,48 +5184,49 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary: 'Grid is part of the layout component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'columns',
 				code: "number | 'auto' | ResponsiveColumns",
 				status: false,
-				description: ''
+				description: "Number of columns, 'auto' for auto-fill, or responsive object"
 			},
 			{
 				name: 'gap',
 				code: 'GapConfig',
 				status: false,
-				description: ''
+				description: 'Gap between items - size or { row, column }'
 			},
 			{
 				name: 'header',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Header snippet rendered above the grid'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Main grid content'
 			},
 			{
 				name: 'alignItems',
 				code: 'AlignItems',
 				status: false,
-				description: ''
+				description: 'Vertical alignment of grid items'
 			},
 			{
 				name: 'justifyItems',
 				code: 'JustifyItems',
 				status: false,
-				description: ''
+				description: 'Horizontal alignment of grid items'
 			},
 			{
 				name: 'autoFlow',
 				code: 'AutoFlow',
 				status: false,
-				description: ''
+				description: 'Grid auto-flow direction'
 			}
 		],
 		sources: ["Omit<HTMLAttributes<HTMLDivElement>, 'class'>"],
@@ -5141,6 +5247,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary: 'Header is part of the layout component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'logo',
@@ -5173,6 +5280,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary: 'Masthead is part of the layout component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'date',
@@ -5228,43 +5336,45 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'layout',
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
-		summary: 'PageHeader is part of the layout component family.',
+		summary:
+			'PageHeader - Standard page header with optional back navigation refactored for Material 3 Provides consistent page header layout with title, optional back link, and slot for action buttons.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'title',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Page title'
 			},
 			{
 				name: 'subtitle',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional subtitle/description'
 			},
 			{
 				name: 'backHref',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Back navigation URL'
 			},
 			{
 				name: 'backLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Back link label'
 			},
 			{
 				name: 'actions',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Slot for action buttons'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Slot for additional content below title'
 			}
 		],
 		sources: [],
@@ -5284,55 +5394,58 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'layout',
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
-		summary: 'SummaryCard is part of the layout component family.',
+		summary:
+			'SummaryCard - Statistic/summary display card refactored for Material 3 Shows a label with a prominent value, optionally with a count badge and link functionality.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'label',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Card label'
 			},
 			{
 				name: 'value',
 				code: 'string | number',
 				status: true,
-				description: ''
+				description: 'Primary value to display'
 			},
 			{
 				name: 'count',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Optional count badge'
 			},
 			{
 				name: 'highlight',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Highlight the card'
 			},
 			{
 				name: 'href',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Make card clickable with href'
 			},
 			{
 				name: 'icon',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional icon name, rendered via the {@link Icon} component.'
 			},
 			{
 				name: 'iconContent',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description:
+					"Optional custom icon content, rendered as a Svelte snippet. Use this escape hatch for bespoke icon markup. It replaces the former raw-SVG **string** support, removed in #1591: SummaryCard no longer renders any consumer-supplied value via `{@html}` (an XSS sink). `iconContent` is rendered as a snippet, so the trust boundary moves to the consumer — the snippet's contents are whatever the consumer authors. When both `iconContent` and `icon` are provided, `iconContent` wins."
 			},
 			{
 				name: 'variant',
 				code: "'default' | 'success' | 'warning' | 'danger'",
 				status: false,
-				description: ''
+				description: 'Value color variant'
 			}
 		],
 		sources: [],
@@ -5353,6 +5466,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Membership and permissions',
 		importPath: '@happyvertical/smrt-ui',
 		summary: 'MembershipCard is part of the membership and permissions component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'membership',
@@ -5416,6 +5530,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Membership and permissions',
 		importPath: '@happyvertical/smrt-ui',
 		summary: 'MembershipList is part of the membership and permissions component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'memberships',
@@ -5485,42 +5600,43 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Membership and permissions',
 		importPath: '@happyvertical/smrt-ui',
 		summary: 'PermissionCheck is part of the membership and permissions component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'permission',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Single permission to check'
 			},
 			{
 				name: 'permissions',
 				code: 'string[]',
 				status: false,
-				description: ''
+				description: 'Multiple permissions to check'
 			},
 			{
 				name: 'userPermissions',
 				code: 'string[]',
 				status: true,
-				description: ''
+				description: "User's current permissions"
 			},
 			{
 				name: 'mode',
 				code: "'all' | 'any'",
 				status: false,
-				description: ''
+				description: "'all' requires all permissions, 'any' requires at least one"
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: true,
-				description: ''
+				description: 'Content to show when permission check passes'
 			},
 			{
 				name: 'fallback',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional fallback content when check fails'
 			}
 		],
 		sources: [],
@@ -5540,7 +5656,8 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'membership-permissions',
 		category: 'Membership and permissions',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'RoleBadge is part of the membership and permissions component family.',
+		summary: 'RoleBadge - Role label component refactored for Material 3',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'role',
@@ -5572,7 +5689,9 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'membership-permissions',
 		category: 'Membership and permissions',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'RoleSelector is part of the membership and permissions component family.',
+		summary:
+			'RoleSelector — a trigger button and a single-select listbox of roles. Implements keyboard support per the WAI-ARIA listbox pattern, mirroring the roving-focus approach in `ui/Dropdown.svelte`: the trigger opens on ArrowDown/ArrowUp/Enter/Space; the open list moves focus onto the selected (or first) option; ArrowUp/Down/Home/End move roving focus; Enter/Space pick the focused option; Escape closes and refocuses the trigger; Tab closes. Click-outside also dismisses.',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'roles',
@@ -5636,42 +5755,43 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Navigation',
 		importPath: '@happyvertical/smrt-ui',
 		summary: 'FilterChips is part of the navigation component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'options',
 				code: 'FilterOption[]',
 				status: true,
-				description: ''
+				description: 'Available filter options'
 			},
 			{
 				name: 'selected',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Currently selected value'
 			},
 			{
 				name: 'onchange',
 				code: '(value: string) => void',
 				status: false,
-				description: ''
+				description: 'Called when selection changes'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md'",
 				status: false,
-				description: ''
+				description: 'Size variant'
 			},
 			{
 				name: 'showAll',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show "All" option'
 			},
 			{
 				name: 'allLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'All option label'
 			}
 		],
 		sources: [],
@@ -5681,7 +5801,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onchange',
 				code: '(value: string) => void',
 				status: false,
-				description: ''
+				description: 'Called when selection changes'
 			}
 		],
 		components: [],
@@ -5698,49 +5818,51 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'navigation',
 		category: 'Navigation',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'Tabs is part of the navigation component family.',
+		summary:
+			'Tabs - Tab navigation component refactored for Material 3 Provides tabbed navigation with optional counts and content slots. Accessibility: - Supports keyboard navigation with Arrow keys - Proper ARIA roles: tablist, tab, tabpanel - aria-selected indicates active tab - aria-controls links tab to panel',
+		summarySynthesized: false,
 		details: [
 			{
 				name: 'tabs',
 				code: 'Tab[]',
 				status: true,
-				description: ''
+				description: 'Available tabs'
 			},
 			{
 				name: 'active',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Currently active tab id'
 			},
 			{
 				name: 'onchange',
 				code: '(id: string) => void',
 				status: false,
-				description: ''
+				description: 'Called when tab changes'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Size variant'
 			},
 			{
 				name: 'variant',
 				code: "'primary' | 'secondary'",
 				status: false,
-				description: ''
+				description: 'Visual variant'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Tab content slot'
 			},
 			{
 				name: 'aria-label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessible label for the tablist'
 			}
 		],
 		sources: [],
@@ -5750,7 +5872,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onchange',
 				code: '(id: string) => void',
 				status: false,
-				description: ''
+				description: 'Called when tab changes'
 			}
 		],
 		components: [],
@@ -5768,30 +5890,31 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Themes',
 		importPath: '@happyvertical/smrt-ui/themes',
 		summary: 'ColorSchemeToggle is part of the themes component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'showLabels',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show labels with icons'
 			},
 			{
 				name: 'variant',
 				code: "'switch' | 'buttons' | 'segmented'",
 				status: false,
-				description: ''
+				description: "Button variant: 'switch' | 'buttons' | 'segmented'"
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class'
 			},
 			{
 				name: 'ariaLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessible label'
 			}
 		],
 		sources: [],
@@ -5812,66 +5935,69 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Themes',
 		importPath: '@happyvertical/smrt-ui/themes',
 		summary: 'ThemeProvider is part of the themes component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'preset',
 				code: 'ThemePreset',
 				status: false,
-				description: ''
+				description: 'Theme preset to use'
 			},
 			{
 				name: 'colorScheme',
 				code: 'ColorScheme',
 				status: false,
-				description: ''
+				description: 'Color scheme preference'
 			},
 			{
 				name: 'primaryColor',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Primary accent color override'
 			},
 			{
 				name: 'borderRadius',
 				code: "ThemeConfig['borderRadius']",
 				status: false,
-				description: ''
+				description: 'Border radius preference'
 			},
 			{
 				name: 'overrides',
 				code: 'Record<string, string>',
 				status: false,
-				description: ''
+				description: 'Custom CSS variable overrides'
 			},
 			{
 				name: 'paintSurface',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description:
+					"Paint the theme's background/color/font onto the wrapper. Set false when the host app owns its surface palette and only wants the CSS variables + scheme context — avoids specificity-fighting `.smrt-theme-root`."
 			},
 			{
 				name: 'persist',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Persist preferences to localStorage'
 			},
 			{
 				name: 'storageKey',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Storage key for persistence'
 			},
 			{
 				name: 'inlineVariables',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description:
+					"Force runtime generation of the full CSS variable set onto the wrapper's inline style (the legacy delivery path). Defaults to `true` for custom registered themes — they have no static stylesheet — and `false` for built-in presets, whose variables ship as static CSS (`themes/styles/<preset>.css`) selected by the `data-theme` / `data-color-scheme` attributes. Leave unset unless you cannot import the static stylesheet for a built-in preset."
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: true,
-				description: ''
+				description: 'Content'
 			}
 		],
 		sources: [],
@@ -5892,30 +6018,31 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Themes',
 		importPath: '@happyvertical/smrt-ui/themes',
 		summary: 'ThemeSwitcher is part of the themes component family.',
+		summarySynthesized: true,
 		details: [
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Custom label text'
 			},
 			{
 				name: 'showIcons',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show icons for each theme'
 			},
 			{
 				name: 'variant',
 				code: "'select' | 'buttons' | 'segmented'",
 				status: false,
-				description: ''
+				description: "Button variant: 'select' | 'buttons' | 'segmented'"
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class'
 			}
 		],
 		sources: [],

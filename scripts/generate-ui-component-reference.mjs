@@ -229,6 +229,54 @@ function typeText(node, source) {
 	return node ? node.getText(source).replace(/\s+/g, ' ').trim() : 'unknown';
 }
 
+/**
+ * Prose from a JSDoc block attached to a declaration. `svelte-package` preserves
+ * these comments into the shipped `.d.ts`, so roughly half the props in the
+ * installed tree already describe themselves and only needed reading.
+ */
+function jsDocText(node) {
+	for (const doc of ts.getJSDocCommentsAndTags(node)) {
+		if (!ts.isJSDoc(doc)) continue;
+		const text = ts.getTextOfJSDocComment(doc.comment);
+		if (text) return text.replace(/\s+/g, ' ').trim();
+	}
+	return '';
+}
+
+/**
+ * Prose from the JSDoc block at the top of a declaration file, which is where a
+ * component describes itself rather than its individual props. Tag sections are
+ * dropped; `@example` bodies are code, not summary prose.
+ */
+function fileDocText(sourceText) {
+	for (const range of ts.getLeadingCommentRanges(sourceText, 0) ?? []) {
+		const raw = sourceText.slice(range.pos, range.end);
+		if (!raw.startsWith('/**')) continue;
+		const prose = raw
+			.slice(3, -2)
+			.split('\n')
+			.map((line) => line.replace(/^\s*\*?\s?/, ''))
+			.join('\n')
+			.split(/\n\s*@/)[0]
+			.replace(/\s+/g, ' ')
+			.trim();
+		if (prose) return prose;
+	}
+	return '';
+}
+
+/**
+ * A component's own description, preferring the file header (which describes the
+ * component) over the props interface (which describes its options bag).
+ */
+function componentSummary(file, interfaceName) {
+	const header = fileDocText(readFileSync(file, 'utf8'));
+	if (header) return header;
+	if (!interfaceName) return '';
+	const found = interfaceIn(file, interfaceName);
+	return found ? jsDocText(found.declaration) : '';
+}
+
 function collectProps(file, name, seen = new Set()) {
 	const key = `${file}:${name}`;
 	if (seen.has(key)) return { props: [], inherits: [] };
@@ -273,7 +321,8 @@ function collectProps(file, name, seen = new Set()) {
 							.replace(/^[^(]+/, '')
 							.replace(/;$/, '')
 					: typeText(member.type, source),
-				required: !member.questionToken
+				required: !member.questionToken,
+				doc: jsDocText(member)
 			});
 		}
 	}
@@ -359,6 +408,13 @@ function buildComponent(name, declarationPath, group) {
 		(prop) => prop.name.startsWith('on') && /=>|EventHandler|Callback/.test(prop.type)
 	);
 	const exampleId = exampleByComponent.get(name);
+	const authoredSummary = componentSummary(declarationPath, interfaceName);
+	const member = (prop) => ({
+		name: prop.name,
+		code: prop.type,
+		status: prop.required,
+		description: prop.doc ?? ''
+	});
 
 	return {
 		slug: slugify(name),
@@ -366,28 +422,13 @@ function buildComponent(name, declarationPath, group) {
 		family: group.id,
 		category: group.title,
 		importPath: group.importPath,
-		summary: `${name} is part of the ${group.title.toLowerCase()} component family.`,
-		details: props.map((prop) => ({
-			name: prop.name,
-			code: prop.type,
-			status: prop.required,
-			description: ''
-		})),
+		summary:
+			authoredSummary || `${name} is part of the ${group.title.toLowerCase()} component family.`,
+		summarySynthesized: !authoredSummary,
+		details: props.map(member),
 		sources: inherits,
-		sections: props
-			.filter((prop) => bindingSet.has(prop.name))
-			.map((prop) => ({
-				name: prop.name,
-				code: prop.type,
-				status: prop.required,
-				description: ''
-			})),
-		items: eventProps.map((prop) => ({
-			name: prop.name,
-			code: prop.type,
-			status: prop.required,
-			description: ''
-		})),
+		sections: props.filter((prop) => bindingSet.has(prop.name)).map(member),
+		items: eventProps.map(member),
 		components: bindingNames,
 		demo: exampleId
 			? { id: exampleId, label: exampleLabels[exampleId], href: `/playground` }
@@ -420,6 +461,8 @@ export interface UiComponentReference {
 	category: string;
 	importPath: string;
 	summary: string;
+	/** True when no package prose was found and \`summary\` is a generated placeholder. */
+	summarySynthesized: boolean;
 	details: UiComponentMember[];
 	sources: string[];
 	sections: UiComponentMember[];

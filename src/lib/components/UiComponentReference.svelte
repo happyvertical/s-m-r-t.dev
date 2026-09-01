@@ -12,16 +12,7 @@
 	let { component }: { component: UiComponentReference } = $props();
 	const importCode = $derived(`import { ${component.name} } from '${component.importPath}';`);
 
-	/**
-	 * The generator synthesizes a placeholder summary for every component whose
-	 * package ships no description of its own. Detect that exact shape so the
-	 * page reports the gap rather than printing a sentence that reads as
-	 * authored documentation. Replace this test with the generator's own flag
-	 * once the reference records which summaries are synthesized.
-	 */
-	const SYNTHESIZED_SUMMARY = /^.+ is part of the .+ component family\.$/;
-
-	const summaryAuthored = $derived(!SYNTHESIZED_SUMMARY.test(component.summary));
+	const summaryAuthored = $derived(!component.summarySynthesized);
 	const describedProps = $derived(
 		component.details.filter((prop: UiComponentMember) => prop.description).length
 	);

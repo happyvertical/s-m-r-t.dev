@@ -15,6 +15,29 @@ describe('generated UI component reference', () => {
 		}
 	});
 
+	it('publishes the prop prose the packages already ship', () => {
+		const described = uiComponents.flatMap((component) =>
+			component.details.filter((prop) => prop.description)
+		);
+		const props = uiComponents.flatMap((component) => component.details);
+
+		// Roughly half of smrt-ui's props carry JSDoc, and svelte-package preserves
+		// it into the shipped declarations. A collapse to zero means the generator
+		// stopped reading them, which is the defect this guards.
+		expect(described.length).toBeGreaterThan(props.length * 0.3);
+		expect(uiComponents.some((component) => !component.summarySynthesized)).toBe(true);
+
+		const cell = getUiComponent('data-table')?.details.find((prop) => prop.name === 'cell');
+		expect(cell?.description).toBe('Global cell renderer - takes precedence over column.cell');
+	});
+
+	it('marks a summary it had to synthesize', () => {
+		for (const component of uiComponents) {
+			const placeholder = `${component.name} is part of the ${component.category.toLowerCase()} component family.`;
+			expect(component.summarySynthesized).toBe(component.summary === placeholder);
+		}
+	});
+
 	it('puts DataTable under Components with its complete public contract', () => {
 		const table = getUiComponent('data-table');
 		expect(table).toMatchObject({

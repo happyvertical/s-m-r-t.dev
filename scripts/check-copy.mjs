@@ -145,6 +145,7 @@ const NON_PROSE_PROPERTIES = new Set([
 	'sources',
 	'status',
 	'stepCount',
+	'summarySynthesized',
 	'supportRange',
 	'task',
 	'tags',
