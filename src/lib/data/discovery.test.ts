@@ -20,6 +20,11 @@ describe('Why s-m-r-t discovery surfaces', () => {
 			href: '/',
 			kind: 'page'
 		});
+		// The visible nav label moved from "Why s-m-r-t?" to "Home", but the old
+		// queries stay discoverable via keywords so a returning visitor's habit
+		// still works.
+		expect(searchDocs('why s-m-r-t')[0]).toMatchObject({ label: 'Home', href: '/' });
+		expect(searchDocs('why smrt')[0]).toMatchObject({ label: 'Home', href: '/' });
 
 		const sitemapXml = await (await sitemap({} as never)).text();
 		expect(sitemapXml).toContain('<loc>https://s-m-r-t.dev</loc>');
