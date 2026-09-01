@@ -1,5 +1,8 @@
 import type { GuideCallout } from '$lib/data/callouts';
 import { TOOLING_PINNED_VERSION } from '$lib/data/tooling';
+import { SMRT_VERSION } from '$lib/version';
+
+const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${SMRT_VERSION}`;
 
 export interface GuideLink {
 	label: string;
@@ -637,7 +640,8 @@ export const capabilityGuides: Guide[] = [
 		lede: 's-m-r-t generates WebMCP tools from the model actions and field metadata that MCP uses. It registers the tools with the browser. In-page agents can then discover and invoke the tools.',
 		plainEnglish:
 			'In a browser with WebMCP support, your page can advertise useful application actions to an AI agent. Those actions still run as the signed-in page user through the generated REST API, so existing authentication, tenant, permission, and field policies remain in charge.',
-		packages: ['smrt-web', 'smrt-core', 'smrt-app-mcp'],
+		packages: ['smrt-web', 'smrt-core', 'smrt-app-mcp', 'smrt-svelte'],
+		pinnedVersion: SMRT_VERSION,
 		visual: 'webmcp',
 		sections: [
 			{
@@ -653,28 +657,52 @@ export const capabilityGuides: Guide[] = [
 			{
 				title: 'Register only the tools this page should offer',
 				intro:
-					'Pass the generated web collection definitions to registerWebMcpTools. A filter can narrow the page to read-only tools or any other deliberate subset, and the returned disposer removes every registration together.',
+					'Pass the generated web tool definitions to registerWebMcpTools. Omitting an exposure policy is deliberate: it registers read-only tools only. The returned disposer removes every registration together.',
 				filename: 'webmcp.client.ts',
-				code: `import { collectionDefinitions } from '@happyvertical/smrt-virt-web';
+				code: `import { webMcpToolDefinitions } from '@happyvertical/smrt-virt-web';
 import { registerWebMcpTools } from '@happyvertical/smrt-web';
 
-const dispose = registerWebMcpTools(
-  Object.values(collectionDefinitions),
-  { filter: (_definition, tool) => tool.readOnly }
-);
+// Omitting an exposure policy registers read-only tools only.
+const dispose = registerWebMcpTools(webMcpToolDefinitions);
 
 // Remove this page's tools when the surface unmounts.
 dispose();`
 			},
 			{
-				title: 'The page session is the security boundary',
+				title: 'Opt into more than read-only',
 				intro:
-					'WebMCP execution reuses the generated REST fetchers as the authenticated page user. REST authentication, tenant gates, writable-field rules, sensitive-field policy, and operation permissions are enforced in their existing server boundary rather than copied into browser tool code.'
+					'Name the effects a page may register, prefix its tool names to avoid collisions between two Providers on one page, and cap how many tools one call may register. No implicit budget applies to a whole-manifest read registration.',
+				filename: 'webmcp.client.ts',
+				code: `registerWebMcpTools(webMcpToolDefinitions, {
+  effects: ['read', 'write', 'destructive'],
+  namespace: 'admin',
+  maxTools: 32
+});`
 			},
 			{
-				title: 'The first slice is deliberately honest',
+				title: 'The page session is the security boundary',
 				intro:
-					'Generated CRUD actions are wired today. Custom model actions already receive descriptors, but their browser execution currently returns a clear not-wired response until they join the shared client collection path.'
+					'WebMCP execution reuses the generated REST fetchers as the authenticated page user. REST authentication, tenant gates, writable-field rules, sensitive-field policy, and operation permissions are enforced in their existing server boundary rather than copied into browser tool code. The exposure policy above is a capability choice, not an authorization boundary.',
+				links: [
+					{ label: 'Exposure is not authorization', href: '/agents#exposure-is-not-authorization' }
+				]
+			}
+		],
+		related: [
+			{ label: 'Agents overview', href: '/agents' },
+			{ label: 'One vocabulary, four projections', href: '/agents#one-vocabulary' },
+			{ label: 'UI overview', href: '/ui' }
+		],
+		sources: [
+			{
+				label: 'smrt-web package instructions',
+				href: `${SMRT_TREE}/packages/smrt-web/AGENTS.md`,
+				external: true
+			},
+			{
+				label: 'smrt-web package README',
+				href: `${SMRT_TREE}/packages/smrt-web/README.md`,
+				external: true
 			}
 		]
 	},

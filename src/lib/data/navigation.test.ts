@@ -10,10 +10,11 @@ import {
 } from './navigation';
 
 describe('primary navigation', () => {
-	it('uses the approved eight destinations in order', () => {
+	it('uses the approved nine destinations in order', () => {
 		expect(primaryNavigation.map((item) => item.label)).toEqual([
 			'Home',
 			'Framework',
+			'Agents',
 			'Interaction',
 			'UI',
 			'Modules',
@@ -31,6 +32,8 @@ describe('primary navigation', () => {
 		expect(active('/foundations/objects-and-collections').map((item) => item.label)).toEqual([
 			'Framework'
 		]);
+		expect(active('/agents').map((item) => item.label)).toEqual(['Agents']);
+		expect(active('/capabilities/webmcp').map((item) => item.label)).toEqual(['Agents']);
 		expect(active('/capabilities/agent-assisted-forms').map((item) => item.label)).toEqual([
 			'Interaction'
 		]);
@@ -45,6 +48,8 @@ describe('contextual navigation', () => {
 	it('resolves every route family to one section', () => {
 		expect(documentationSectionForPathname('/').id).toBe('why');
 		expect(documentationSectionForPathname('/framework').id).toBe('framework');
+		expect(documentationSectionForPathname('/agents').id).toBe('agents');
+		expect(documentationSectionForPathname('/capabilities/webmcp').id).toBe('agents');
 		expect(documentationSectionForPathname('/interaction').id).toBe('interaction');
 		expect(documentationSectionForPathname('/ui').id).toBe('ui');
 		expect(documentationSectionForPathname('/modules').id).toBe('modules');
@@ -79,6 +84,32 @@ describe('contextual navigation', () => {
 		expect(isNavigationItemActive('/#how-it-works', '/', '#how-it-works')).toBe(true);
 		expect(isNavigationItemActive('/', '/', '#how-it-works')).toBe(false);
 		expect(isNavigationItemActive('/#what-you-get', '/', '#how-it-works')).toBe(false);
+	});
+
+	it('marks exactly one /agents "On this page" anchor active for the current topic', () => {
+		const section = documentationSections.find((candidate) => candidate.id === 'agents');
+		const onThisPage = section?.groups.find((group) => group.label === 'On this page');
+		expect(onThisPage).toBeTruthy();
+		expect(onThisPage!.items.length).toBeGreaterThan(1);
+
+		for (const target of onThisPage!.items) {
+			const hash = new URL(target.href, 'https://s-m-r-t.dev').hash;
+			const activeHrefs = onThisPage!.items
+				.filter((item) => isNavigationItemActive(item.href, '/agents', hash))
+				.map((item) => item.href);
+
+			expect(activeHrefs).toEqual([target.href]);
+		}
+	});
+
+	it('keeps prefix matching for section overview and nested-page links', () => {
+		// Long-standing pattern: a hash-less overview link (e.g. /tooling) stays
+		// active on its own page and on every nested page under it, alongside the
+		// exact-match link for that nested page. Same-page hash anchors must not
+		// change this.
+		expect(isNavigationItemActive('/tooling', '/tooling/dev-mcp', '')).toBe(true);
+		expect(isNavigationItemActive('/tooling/dev-mcp', '/tooling/dev-mcp', '')).toBe(true);
+		expect(isNavigationItemActive('/tooling', '/tooling', '#anything')).toBe(true);
 	});
 
 	it('gives every task guide a family link and a non-Guides contextual link', () => {

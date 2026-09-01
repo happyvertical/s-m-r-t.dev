@@ -438,7 +438,7 @@
 				{#if hasGeneratedSurface || pkg.slug === 'smrt-web' || pkg.slug === 'smrt-core'}
 					<div class="surface-example">
 						<CodeBlock
-							code={`import { collectionDefinitions } from '@happyvertical/smrt-virt-web';\nimport { registerWebMcpTools } from '@happyvertical/smrt-web';\n\nconst dispose = registerWebMcpTools(\n  Object.values(collectionDefinitions),\n  { filter: (_definition, tool) => tool.readOnly }\n);`}
+							code={`import { webMcpToolDefinitions } from '@happyvertical/smrt-virt-web';\nimport { registerWebMcpTools } from '@happyvertical/smrt-web';\n\n// Omitting an exposure policy registers read-only tools only.\nconst dispose = registerWebMcpTools(webMcpToolDefinitions);`}
 							language="typescript"
 						/>
 						<div>

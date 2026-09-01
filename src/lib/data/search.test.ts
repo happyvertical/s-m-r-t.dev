@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
+import { agentsTopics } from '$lib/data/agents';
+import { frameworkTopics } from '$lib/data/framework';
 import { guidePages } from '$lib/data/guide-families';
+import { interactionContent } from '$lib/data/interaction';
 import { searchDocs, searchEntries } from '$lib/data/search';
 
 describe('search index', () => {
@@ -47,5 +50,77 @@ describe('search index', () => {
 
 	it('returns nothing for a query with no match', () => {
 		expect(searchDocs('zzzznotathing')).toHaveLength(0);
+	});
+
+	describe('landing-page tracks', () => {
+		it('gives every Framework topic a section-level entry (previously none)', () => {
+			for (const topic of frameworkTopics) {
+				const entry = searchEntries.find(
+					(candidate) =>
+						candidate.kind === 'section' && candidate.href === `/framework#${topic.slug}`
+				);
+				expect(entry?.label, `missing entry for /framework#${topic.slug}`).toBe(topic.navTitle);
+			}
+		});
+
+		it('gives every Framework subsection its own deep-linkable entry', () => {
+			const topic = frameworkTopics[0];
+			const item = topic.content[0];
+			const entry = searchEntries.find(
+				(candidate) =>
+					candidate.kind === 'section' &&
+					candidate.href ===
+						`/framework#${topic.slug}-${item.title
+							.toLowerCase()
+							.replace(/[^a-z0-9]+/g, '-')
+							.replace(/(^-|-$)/g, '')}`
+			);
+			expect(entry?.label).toBe(item.title);
+		});
+
+		it('gives every Interaction concept a topic-level entry only (no invented subsection anchors)', () => {
+			for (const guide of interactionContent.guides) {
+				const entry = searchEntries.find(
+					(candidate) =>
+						candidate.kind === 'section' && candidate.href === `/interaction#${guide.slug}`
+				);
+				expect(entry?.label, `missing entry for /interaction#${guide.slug}`).toBe(
+					guide.navTitle ?? guide.title
+				);
+			}
+			const subsectionEntries = searchEntries.filter((candidate) =>
+				candidate.href.startsWith('/interaction#human-agent-communication-')
+			);
+			expect(subsectionEntries).toHaveLength(0);
+		});
+
+		it('gives every Agents topic and subsection a section-level entry', () => {
+			for (const topic of agentsTopics) {
+				const topicEntry = searchEntries.find(
+					(candidate) => candidate.kind === 'section' && candidate.href === `/agents#${topic.slug}`
+				);
+				expect(topicEntry?.label, `missing entry for /agents#${topic.slug}`).toBe(topic.navTitle);
+
+				for (const item of topic.content) {
+					const anchorId = item.title
+						.toLowerCase()
+						.replace(/[^a-z0-9]+/g, '-')
+						.replace(/(^-|-$)/g, '');
+					const subEntry = searchEntries.find(
+						(candidate) =>
+							candidate.kind === 'section' && candidate.href === `/agents#${topic.slug}-${anchorId}`
+					);
+					expect(subEntry?.label, `missing entry for /agents#${topic.slug}-${anchorId}`).toBe(
+						item.title
+					);
+				}
+			}
+		});
+
+		it('resolves an Agents topic heading through fuzzy search', () => {
+			const [first] = searchDocs('Where agents connect');
+			expect(first.kind).toBe('section');
+			expect(first.href).toBe('/agents#where-agents-connect');
+		});
 	});
 });

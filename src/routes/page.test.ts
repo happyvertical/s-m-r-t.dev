@@ -113,6 +113,7 @@ describe('documentation home page', () => {
 			}))
 		).toEqual([
 			{ label: 'Framework', href: '/framework' },
+			{ label: 'Agents', href: '/agents' },
 			{ label: 'Interaction', href: '/interaction' },
 			{ label: 'UI', href: '/ui' },
 			{ label: 'Modules', href: '/modules' },

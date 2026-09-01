@@ -4,8 +4,9 @@
 	import GuideDiagram from '$lib/components/GuideDiagram.svelte';
 	import { toAnchorId } from '$lib/data/anchors';
 	import type { FrameworkTopic } from '$lib/data/framework';
+	import type { Snippet } from 'svelte';
 
-	let { section }: { section: FrameworkTopic } = $props();
+	let { section, extra }: { section: FrameworkTopic; extra?: Snippet } = $props();
 	const topic = $derived(section);
 </script>
 
@@ -58,6 +59,8 @@
 			</section>
 		{/each}
 	</div>
+
+	{#if extra}{@render extra()}{/if}
 
 	<div class="topic-footer">
 		{#if topic.related?.length}
@@ -117,6 +120,7 @@
 		font-size: clamp(2rem, 5vw, 3.35rem);
 		letter-spacing: -0.045em;
 		line-height: 1.05;
+		text-wrap: balance;
 	}
 
 	header > span {

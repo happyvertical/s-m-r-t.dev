@@ -32,6 +32,7 @@ describe('application bar', () => {
 		expect(links.map((link) => link.textContent)).toEqual([
 			'Home',
 			'Framework',
+			'Agents',
 			'Interaction',
 			'UI',
 			'Modules',
@@ -70,7 +71,7 @@ describe('application bar', () => {
 		await fireEvent.click(toggle);
 		const navs = screen.getAllByRole('navigation', { name: 'Primary navigation' });
 		expect(navs).toHaveLength(2);
-		expect(within(navs[1]).getAllByRole('link')).toHaveLength(8);
+		expect(within(navs[1]).getAllByRole('link')).toHaveLength(9);
 		expect(toggle.getAttribute('aria-expanded')).toBe('true');
 	});
 });

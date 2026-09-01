@@ -12,6 +12,7 @@ const baseUrl = 'https://s-m-r-t.dev';
 const staticRoutes = [
 	{ path: '', priority: '1.0', changefreq: 'weekly' },
 	{ path: '/framework', priority: '0.95', changefreq: 'weekly' },
+	{ path: '/agents', priority: '0.95', changefreq: 'weekly' },
 	{ path: '/interaction', priority: '0.95', changefreq: 'weekly' },
 	{ path: '/ui', priority: '0.95', changefreq: 'weekly' },
 	{ path: '/modules', priority: '0.95', changefreq: 'weekly' },
