@@ -36,7 +36,6 @@
 	<a href="/" class="brand" aria-label="s-m-r-t documentation home">
 		<img src={brandMark} alt="" width="30" height="30" />
 		<span>s-m-r-t</span>
-		<small>docs</small>
 	</a>
 
 	<button
@@ -183,13 +182,6 @@
 		letter-spacing: -0.045em;
 	}
 
-	.brand small {
-		padding-inline-start: 0.45rem;
-		border-inline-start: 1px solid var(--site-line-strong);
-		color: var(--site-muted);
-		font-size: 0.66rem;
-	}
-
 	.panel-toggle,
 	.menu-toggle,
 	.icon-action {
@@ -323,7 +315,6 @@
 			gap: 0.15rem;
 		}
 
-		.brand small,
 		.panel-toggle span {
 			display: none;
 		}
