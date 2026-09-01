@@ -56,86 +56,102 @@
 	</header>
 
 	{#each agentsTopics as topic (topic.slug)}
-		<FrameworkTopic section={topic} />
-
 		{#if topic.slug === 'where-agents-connect'}
-			<div class="doors-table-wrap">
-				<div class="doors-table" aria-label="The four tool surfaces">
-					<div class="doors-head" aria-hidden="true">
-						<span></span>
-						<span>Door</span>
-						<span>One line</span>
-						<span>Plane</span>
-					</div>
-					{#each agentsDoors as door (door.index)}
-						<div class="doors-row">
-							<span class="doors-index">{door.index}</span>
-							<span class="doors-name">{door.door}</span>
-							<span class="doors-desc">{door.description}</span>
-							<span class="doors-chip" data-plane={door.plane}>{door.planeChip}</span>
+			<FrameworkTopic section={topic}>
+				{#snippet extra()}
+					<div class="doors-table-wrap">
+						<div class="doors-table" role="group" aria-label="The four tool surfaces">
+							<div class="doors-head" aria-hidden="true">
+								<span></span>
+								<span>Door</span>
+								<span>One line</span>
+								<span>Plane</span>
+							</div>
+							{#each agentsDoors as door (door.index)}
+								<div class="doors-row">
+									<span class="doors-index">{door.index}</span>
+									<span class="doors-name">{door.door}</span>
+									<span class="doors-desc">{door.description}</span>
+									<span class="doors-chip" data-plane={door.plane}>{door.planeChip}</span>
+								</div>
+							{/each}
 						</div>
-					{/each}
-				</div>
-				<p class="scope-reconciliation">{agentsDoorsReconciliation}</p>
-			</div>
+						<p class="scope-reconciliation">{agentsDoorsReconciliation}</p>
+					</div>
+				{/snippet}
+			</FrameworkTopic>
 		{:else if topic.slug === 'two-planes'}
-			<div class="two-plane-wrap">
-				<div class="two-plane-diagram" aria-label={agentsTwoPlanes.ariaLabel}>
-					<div class="plane-top">
-						<div class="plane-card">
-							<span class="plane-chip">{agentsTwoPlanes.browser.chip}</span>
-							<p class="plane-rows">{agentsTwoPlanes.browser.rows.join(' → ')}</p>
-							<p class="plane-acts-as">{agentsTwoPlanes.browser.actsAs}</p>
+			<FrameworkTopic section={topic}>
+				{#snippet extra()}
+					<div class="two-plane-wrap">
+						<div class="two-plane-diagram" role="group" aria-label={agentsTwoPlanes.ariaLabel}>
+							<div class="plane-top">
+								<div class="plane-card">
+									<span class="plane-chip">{agentsTwoPlanes.browser.chip}</span>
+									<p class="plane-rows">{agentsTwoPlanes.browser.rows.join(' → ')}</p>
+									<p class="plane-acts-as">{agentsTwoPlanes.browser.actsAs}</p>
+								</div>
+								<div class="plane-card">
+									<span class="plane-chip">{agentsTwoPlanes.server.chip}</span>
+									<p class="plane-rows">{agentsTwoPlanes.server.rows.join(' → ')}</p>
+									<p class="plane-acts-as">{agentsTwoPlanes.server.actsAs}</p>
+								</div>
+							</div>
+							<div class="plane-connectors" aria-hidden="true">
+								<span></span>
+								<span></span>
+							</div>
+							<div class="plane-boundary">
+								<strong>{agentsTwoPlanes.boundary.title}</strong>
+								<span>{agentsTwoPlanes.boundary.subline}</span>
+							</div>
+							<div class="plane-connector-single" aria-hidden="true"></div>
+							<div class="plane-records">
+								<span>{agentsTwoPlanes.records.label}</span>
+							</div>
 						</div>
-						<div class="plane-card">
-							<span class="plane-chip">{agentsTwoPlanes.server.chip}</span>
-							<p class="plane-rows">{agentsTwoPlanes.server.rows.join(' → ')}</p>
-							<p class="plane-acts-as">{agentsTwoPlanes.server.actsAs}</p>
-						</div>
 					</div>
-					<div class="plane-connectors" aria-hidden="true">
-						<span></span>
-						<span></span>
-					</div>
-					<div class="plane-boundary">
-						<strong>{agentsTwoPlanes.boundary.title}</strong>
-						<span>{agentsTwoPlanes.boundary.subline}</span>
-					</div>
-					<div class="plane-connector-single" aria-hidden="true"></div>
-					<div class="plane-records">
-						<span>{agentsTwoPlanes.records.label}</span>
-					</div>
-				</div>
-			</div>
+				{/snippet}
+			</FrameworkTopic>
 		{:else if topic.slug === 'state-not-screen'}
-			<div class="agent-demo-embed">
-				<AgentAwareFormDemo />
-			</div>
-			<p class="demo-pointer">
-				The same demo, with its technical notes, is on the <a href="/ui">UI overview</a> and in the
-				<a href="/playground?entry=agent-aware-form">Playground</a>.
-			</p>
+			<FrameworkTopic section={topic}>
+				{#snippet extra()}
+					<div class="agent-demo-embed">
+						<AgentAwareFormDemo />
+					</div>
+					<p class="demo-pointer">
+						The same demo, with its technical notes, is on the <a href="/ui">UI overview</a> and in
+						the <a href="/playground?entry=agent-aware-form">Playground</a>.
+					</p>
+				{/snippet}
+			</FrameworkTopic>
 		{:else if topic.slug === 'what-you-turn-on'}
-			<div class="evidence-table-wrap agents-ladder">
-				<table class="evidence-table">
-					<thead>
-						<tr>
-							<th scope="col">Layer</th>
-							<th scope="col">Default</th>
-							<th scope="col">What changes it</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each agentsDefaultsLadder as row (row.layer)}
-							<tr>
-								<td data-label="Layer">{row.layer}</td>
-								<td data-label="Default">{row.defaultValue}</td>
-								<td data-label="What changes it">{row.changedBy}</td>
-							</tr>
-						{/each}
-					</tbody>
-				</table>
-			</div>
+			<FrameworkTopic section={topic}>
+				{#snippet extra()}
+					<div class="evidence-table-wrap agents-ladder">
+						<table class="evidence-table">
+							<thead>
+								<tr>
+									<th scope="col">Layer</th>
+									<th scope="col">Default</th>
+									<th scope="col">What changes it</th>
+								</tr>
+							</thead>
+							<tbody>
+								{#each agentsDefaultsLadder as row (row.layer)}
+									<tr>
+										<td data-label="Layer">{row.layer}</td>
+										<td data-label="Default">{row.defaultValue}</td>
+										<td data-label="What changes it">{row.changedBy}</td>
+									</tr>
+								{/each}
+							</tbody>
+						</table>
+					</div>
+				{/snippet}
+			</FrameworkTopic>
+		{:else}
+			<FrameworkTopic section={topic} />
 		{/if}
 	{/each}
 
