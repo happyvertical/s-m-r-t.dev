@@ -19,6 +19,10 @@ export interface UiComponentReference {
 	category: string;
 	importPath: string;
 	summary: string;
+	/** True when no package prose was found and `summary` is a generated placeholder. */
+	summarySynthesized: boolean;
+	/** The ModuleUIRegistry slot this component fills, when its package declares one. */
+	slot: { id: string; label: string; icon: string; category: string } | null;
 	details: UiComponentMember[];
 	sources: string[];
 	sections: UiComponentMember[];
@@ -29,38 +33,4082 @@ export interface UiComponentReference {
 	source: string;
 }
 
-const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${SMRT_VERSION}/packages/smrt-ui`;
+const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${SMRT_VERSION}`;
 
 export const uiComponents: UiComponentReference[] = [
 	{
-		slug: 'accordion',
-		name: 'Accordion',
-		family: 'actions-display',
-		category: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Accordion is part of the actions and display component family.',
+		slug: 'agent-admin-panel',
+		name: 'AgentAdminPanel',
+		family: 'smrt-agents-svelte',
+		category: 'Agents · Components',
+		importPath: '@happyvertical/smrt-agents/svelte/admin',
+		summary: 'AgentAdminPanel is part of the agents · components component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
-				name: 'value',
-				code: 'string | string[]',
+				name: 'registry',
+				code: 'AgentUIComponentRegistry',
+				status: true,
+				description: 'The registry to look up components from'
+			},
+			{
+				name: 'agentClass',
+				code: 'string',
+				status: true,
+				description: "The agent class name (e.g., 'Praeco')"
+			},
+			{
+				name: 'slotId',
+				code: 'string',
+				status: true,
+				description: 'The slot ID to render'
+			},
+			{
+				name: 'slot',
+				code: 'AgentUISlot',
+				status: true,
+				description: 'The slot definition'
+			},
+			{
+				name: 'config',
+				code: 'unknown',
+				status: true,
+				description: 'The current configuration for this slot'
+			},
+			{
+				name: 'onSave',
+				code: '(config: unknown) => Promise<void>',
+				status: false,
+				description: 'Callback when config is saved'
+			},
+			{
+				name: 'readonly',
+				code: 'boolean',
+				status: false,
+				description: 'Whether the panel is read-only'
+			},
+			{
+				name: 'fileConfig',
+				code: 'unknown',
+				status: false,
+				description: 'File-based config defaults'
+			},
+			{
+				name: 'dbConfig',
+				code: 'unknown',
+				status: false,
+				description: 'Database-persisted config overrides'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSave',
+				code: '(config: unknown) => Promise<void>',
+				status: false,
+				description: 'Callback when config is saved'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/agents/src/svelte/components/AgentAdminPanel.svelte'
+	},
+	{
+		slug: 'agent-admin-tabs',
+		name: 'AgentAdminTabs',
+		family: 'smrt-agents-svelte',
+		category: 'Agents · Components',
+		importPath: '@happyvertical/smrt-agents/svelte/admin',
+		summary: 'AgentAdminTabs is part of the agents · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'registry',
+				code: 'AgentUIComponentRegistry',
+				status: true,
+				description: 'The registry to look up components from'
+			},
+			{
+				name: 'agentClass',
+				code: 'string',
+				status: true,
+				description: "The agent class name (e.g., 'Praeco')"
+			},
+			{
+				name: 'slots',
+				code: 'AgentUISlots',
+				status: true,
+				description: 'UI slots declared by the agent'
+			},
+			{
+				name: 'configs',
+				code: 'Record<string, unknown>',
+				status: true,
+				description: 'Config data for each slot (keyed by slotId)'
+			},
+			{
+				name: 'onSave',
+				code: '(slotId: string, config: unknown) => Promise<void>',
+				status: false,
+				description: 'Callback when a slot config is saved'
+			},
+			{
+				name: 'readonly',
+				code: 'boolean',
+				status: false,
+				description: 'Whether all panels are read-only'
+			},
+			{
+				name: 'fileConfigs',
+				code: 'Record<string, unknown>',
+				status: false,
+				description: 'File-based configs for each slot'
+			},
+			{
+				name: 'dbConfigs',
+				code: 'Record<string, unknown>',
+				status: false,
+				description: 'Database configs for each slot'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSave',
+				code: '(slotId: string, config: unknown) => Promise<void>',
+				status: false,
+				description: 'Callback when a slot config is saved'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/agents/src/svelte/components/AgentAdminTabs.svelte'
+	},
+	{
+		slug: 'agent-dashboard',
+		name: 'AgentDashboard',
+		family: 'smrt-agents-svelte',
+		category: 'Agents · Components',
+		importPath: '@happyvertical/smrt-agents/svelte',
+		summary: 'Combined overview panel for agent schedules',
+		summarySynthesized: false,
+		slot: {
+			id: 'agent-dashboard',
+			label: 'Agent Dashboard',
+			icon: 'activity',
+			category: 'admin'
+		},
+		details: [
+			{
+				name: 'schedules',
+				code: 'AgentScheduleData[]',
+				status: true,
+				description: 'All schedules'
+			},
+			{
+				name: 'recentHistory',
+				code: 'AgentRunHistoryEntry[]',
+				status: false,
+				description: 'Recent run history'
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Loading state'
+			},
+			{
+				name: 'onScheduleClick',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: 'Callbacks'
+			},
+			{
+				name: 'onEnable',
+				code: '(schedule: AgentScheduleData) => void',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'multiple',
+				name: 'onDisable',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onDelete',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onRunNow',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onCreateSchedule',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onHistoryEntryClick',
+				code: '(entry: AgentRunHistoryEntry) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onScheduleClick',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: 'Callbacks'
+			},
+			{
+				name: 'onEnable',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onDisable',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onDelete',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onRunNow',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onCreateSchedule',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onHistoryEntryClick',
+				code: '(entry: AgentRunHistoryEntry) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/agents/src/svelte/components/AgentDashboard.svelte'
+	},
+	{
+		slug: 'agent-run-history',
+		name: 'AgentRunHistory',
+		family: 'smrt-agents-svelte',
+		category: 'Agents · Components',
+		importPath: '@happyvertical/smrt-agents/svelte',
+		summary: 'History of agent runs',
+		summarySynthesized: false,
+		slot: {
+			id: 'agent-run-history',
+			label: 'Agent Run History',
+			icon: 'clock',
+			category: 'list'
+		},
+		details: [
+			{
+				name: 'history',
+				code: 'AgentRunHistoryEntry[]',
+				status: true,
+				description: 'Run history entries'
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Loading state'
+			},
+			{
+				name: 'onEntryClick',
+				code: '(entry: AgentRunHistoryEntry) => void',
+				status: false,
+				description: 'Callback when entry is clicked'
+			},
+			{
+				name: 'empty',
+				code: 'Snippet',
+				status: false,
+				description: 'Empty state snippet'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onEntryClick',
+				code: '(entry: AgentRunHistoryEntry) => void',
+				status: false,
+				description: 'Callback when entry is clicked'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/agents/src/svelte/components/AgentRunHistory.svelte'
+	},
+	{
+		slug: 'agent-schedule-form',
+		name: 'AgentScheduleForm',
+		family: 'smrt-agents-svelte',
+		category: 'Agents · Components',
+		importPath: '@happyvertical/smrt-agents/svelte',
+		summary: 'Form for creating or editing agent schedules',
+		summarySynthesized: false,
+		slot: {
+			id: 'agent-schedule-form',
+			label: 'Agent Schedule Form',
+			icon: 'edit',
+			category: 'form'
+		},
+		details: [
+			{
+				name: 'initialData',
+				code: 'Partial<ScheduleFormData>',
+				status: false,
+				description: 'Initial form data (for editing)'
+			},
+			{
+				name: 'agentTypes',
+				code: 'string[]',
+				status: false,
+				description: 'Available agent types'
+			},
+			{
+				name: 'onSubmit',
+				code: '(data: ScheduleFormData) => void',
+				status: false,
+				description: 'Submit callback'
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: 'Cancel callback'
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Loading state'
+			},
+			{
+				name: 'editMode',
+				code: 'boolean',
+				status: false,
+				description: 'Edit mode'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSubmit',
+				code: '(data: ScheduleFormData) => void',
+				status: false,
+				description: 'Submit callback'
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: 'Cancel callback'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/agents/src/svelte/components/AgentScheduleForm.svelte'
+	},
+	{
+		slug: 'agent-schedule-list',
+		name: 'AgentScheduleList',
+		family: 'smrt-agents-svelte',
+		category: 'Agents · Components',
+		importPath: '@happyvertical/smrt-agents/svelte',
+		summary: 'List of scheduled agents',
+		summarySynthesized: false,
+		slot: {
+			id: 'agent-schedule-list',
+			label: 'Agent Schedule List',
+			icon: 'calendar',
+			category: 'list'
+		},
+		details: [
+			{
+				name: 'schedules',
+				code: 'AgentScheduleData[]',
+				status: true,
+				description: 'Schedules to display'
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Loading state'
+			},
+			{
+				name: 'showActions',
+				code: 'boolean',
+				status: false,
+				description: 'Show actions column'
+			},
+			{
+				name: 'onScheduleClick',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: 'Callback when schedule is clicked'
+			},
+			{
+				name: 'onEnable',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: 'Callback when enable is clicked'
+			},
+			{
+				name: 'onDisable',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: 'Callback when disable is clicked'
+			},
+			{
+				name: 'onRunNow',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: 'Callback when run now is clicked'
+			},
+			{
+				name: 'empty',
+				code: 'Snippet',
+				status: false,
+				description: 'Empty state snippet'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onScheduleClick',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: 'Callback when schedule is clicked'
+			},
+			{
+				name: 'onEnable',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: 'Callback when enable is clicked'
+			},
+			{
+				name: 'onDisable',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: 'Callback when disable is clicked'
+			},
+			{
+				name: 'onRunNow',
+				code: '(schedule: AgentScheduleData) => void',
+				status: false,
+				description: 'Callback when run now is clicked'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/agents/src/svelte/components/AgentScheduleList.svelte'
+	},
+	{
+		slug: 'agent-settings-form',
+		name: 'AgentSettingsForm',
+		family: 'smrt-agents-svelte',
+		category: 'Agents · Components',
+		importPath: '@happyvertical/smrt-agents/svelte/admin',
+		summary: 'AgentSettingsForm is part of the agents · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'config',
+				code: 'Record<string, unknown>',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'schema',
+				code: 'AgentSettingsSchema',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(config: Record<string, unknown>) => Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'readonly',
 				code: 'boolean',
 				status: false,
 				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSave',
+				code: '(config: Record<string, unknown>) => Promise<void>',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/agents/src/svelte/components/AgentSettingsForm.svelte'
+	},
+	{
+		slug: 'agent-settings-shell',
+		name: 'AgentSettingsShell',
+		family: 'smrt-agents-svelte',
+		category: 'Agents · Components',
+		importPath: '@happyvertical/smrt-agents/svelte/admin',
+		summary: 'AgentSettingsShell is part of the agents · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'registry',
+				code: 'AgentUIComponentRegistry',
+				status: true,
+				description: 'The registry to look up components from'
+			},
+			{
+				name: 'agents',
+				code: 'AgentData[]',
+				status: true,
+				description: 'List of agents to display (serialized data, not instances)'
+			},
+			{
+				name: 'configs',
+				code: 'Record<string, Record<string, unknown>>',
+				status: true,
+				description: 'Config data for each agent and slot: agentId -> slotId -> config'
+			},
+			{
+				name: 'onSave',
+				code: '(agentId: string, slotId: string, config: unknown) => Promise<void>',
+				status: false,
+				description: 'Callback when a config is saved'
+			},
+			{
+				name: 'readonly',
+				code: 'boolean',
+				status: false,
+				description: 'Whether all panels are read-only'
+			},
+			{
+				name: 'fileConfigs',
+				code: 'Record<string, Record<string, unknown>>',
+				status: false,
+				description: 'File configs: agentId -> slotId -> config'
+			},
+			{
+				name: 'dbConfigs',
+				code: 'Record<string, Record<string, unknown>>',
+				status: false,
+				description: 'Database configs: agentId -> slotId -> config'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSave',
+				code: '(agentId: string, slotId: string, config: unknown) => Promise<void>',
+				status: false,
+				description: 'Callback when a config is saved'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/agents/src/svelte/components/AgentSettingsShell.svelte'
+	},
+	{
+		slug: 'schedule-status-badge',
+		name: 'ScheduleStatusBadge',
+		family: 'smrt-agents-svelte',
+		category: 'Agents · Components',
+		importPath: '@happyvertical/smrt-agents/svelte',
+		summary: 'Status indicator for schedule states',
+		summarySynthesized: false,
+		slot: {
+			id: 'schedule-status-badge',
+			label: 'Schedule Status Badge',
+			icon: 'tag',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'status',
+				code: 'ScheduleStatus',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'size',
+				code: "'sm' | 'md'",
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/agents/src/svelte/components/ScheduleStatusBadge.svelte'
+	},
+	{
+		slug: 'analytics-summary',
+		name: 'AnalyticsSummary',
+		family: 'smrt-analytics-svelte',
+		category: 'Analytics · Components',
+		importPath: '@happyvertical/smrt-analytics/svelte',
+		summary: 'Summary cards for pageviews, users, and trend deltas across today/yesterday',
+		summarySynthesized: false,
+		slot: {
+			id: 'analytics-summary',
+			label: 'Analytics Summary',
+			icon: 'bar-chart-3',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'stats',
+				code: 'PropertyStatsWithTrend | null',
+				status: true,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/analytics/src/svelte/AnalyticsSummary.svelte'
+	},
+	{
+		slug: 'events-table',
+		name: 'EventsTable',
+		family: 'smrt-analytics-svelte',
+		category: 'Analytics · Components',
+		importPath: '@happyvertical/smrt-analytics/svelte',
+		summary: 'Tabular display of recent analytics events with filters',
+		summarySynthesized: false,
+		slot: {
+			id: 'events-table',
+			label: 'Events Table',
+			icon: 'list',
+			category: 'list'
+		},
+		details: [
+			{
+				name: 'events',
+				code: 'EventRow[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'maxRows',
+				code: 'number',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/analytics/src/svelte/EventsTable.svelte'
+	},
+	{
+		slug: 'property-info',
+		name: 'PropertyInfo',
+		family: 'smrt-analytics-svelte',
+		category: 'Analytics · Components',
+		importPath: '@happyvertical/smrt-analytics/svelte',
+		summary: 'Display analytics property identifiers and configuration',
+		summarySynthesized: false,
+		slot: {
+			id: 'property-info',
+			label: 'Property Info',
+			icon: 'info',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'propertyId',
+				code: 'string | null',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'measurementId',
+				code: 'string | null',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'provider',
+				code: 'string | null',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'status',
+				code: "'active' | 'inactive' | 'pending'",
+				status: true,
+				description: ''
+			},
+			{
+				name: 'lastSyncAt',
+				code: 'string | null',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'siteDomain',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/analytics/src/svelte/PropertyInfo.svelte'
+	},
+	{
+		slug: 'property-status-badge',
+		name: 'PropertyStatusBadge',
+		family: 'smrt-analytics-svelte',
+		category: 'Analytics · Components',
+		importPath: '@happyvertical/smrt-analytics/svelte',
+		summary: 'Compact status indicator for an analytics property',
+		summarySynthesized: false,
+		slot: {
+			id: 'property-status-badge',
+			label: 'Property Status Badge',
+			icon: 'badge',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'status',
+				code: "'active' | 'inactive' | 'pending'",
+				status: true,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/analytics/src/svelte/PropertyStatusBadge.svelte'
+	},
+	{
+		slug: 'stat-card',
+		name: 'StatCard',
+		family: 'smrt-analytics-svelte',
+		category: 'Analytics · Components',
+		importPath: '@happyvertical/smrt-analytics/svelte',
+		summary: 'Single-metric card with label, value, optional trend and subtitle',
+		summarySynthesized: false,
+		slot: {
+			id: 'stat-card',
+			label: 'Stat Card',
+			icon: 'trending-up',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'label',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'value',
+				code: 'number | string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'trend',
+				code: "'up' | 'down' | 'flat'",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'trendPercent',
+				code: 'number | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'subtitle',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/analytics/src/svelte/StatCard.svelte'
+	},
+	{
+		slug: 'trend-badge',
+		name: 'TrendBadge',
+		family: 'smrt-analytics-svelte',
+		category: 'Analytics · Components',
+		importPath: '@happyvertical/smrt-analytics/svelte',
+		summary: 'Up/down/flat trend indicator with percentage delta',
+		summarySynthesized: false,
+		slot: {
+			id: 'trend-badge',
+			label: 'Trend Badge',
+			icon: 'arrow-up-right',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'trend',
+				code: "'up' | 'down' | 'flat'",
+				status: true,
+				description: ''
+			},
+			{
+				name: 'percent',
+				code: 'number | null',
+				status: true,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/analytics/src/svelte/TrendBadge.svelte'
+	},
+	{
+		slug: 'action-bar',
+		name: 'ActionBar',
+		family: 'smrt-assets-svelte',
+		category: 'Assets · Components',
+		importPath: '@happyvertical/smrt-assets/svelte',
+		summary: 'ActionBar is part of the assets · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'selectedAssets',
+				code: 'PersistedAsset[]',
+				status: true,
+				description: 'Currently selected assets'
+			},
+			{
+				name: 'customActions',
+				code: 'AssetAction[]',
+				status: false,
+				description: 'Custom actions from the consumer'
+			},
+			{
+				name: 'onClearSelection',
+				code: '() => void',
+				status: true,
+				description: 'Callback to clear selection'
+			},
+			{
+				name: 'onclearselection',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onDelete',
+				code: '(assets: PersistedAsset[]) => void | Promise<void>',
+				status: true,
+				description: 'Callback for delete action'
+			},
+			{
+				name: 'ondelete',
+				code: '(assets: PersistedAsset[]) => void | Promise<void>',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onClearSelection',
+				code: '() => void',
+				status: true,
+				description: 'Callback to clear selection'
+			},
+			{
+				name: 'onclearselection',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onDelete',
+				code: '(assets: PersistedAsset[]) => void | Promise<void>',
+				status: true,
+				description: 'Callback for delete action'
+			},
+			{
+				name: 'ondelete',
+				code: '(assets: PersistedAsset[]) => void | Promise<void>',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/assets/src/svelte/ActionBar.svelte'
+	},
+	{
+		slug: 'asset-detail',
+		name: 'AssetDetail',
+		family: 'smrt-assets-svelte',
+		category: 'Assets · Components',
+		importPath: '@happyvertical/smrt-assets/svelte',
+		summary: 'Detailed view of a single asset with metadata and preview',
+		summarySynthesized: false,
+		slot: {
+			id: 'asset-detail',
+			label: 'Asset Detail',
+			icon: 'file-text',
+			category: 'detail'
+		},
+		details: [
+			{
+				name: 'asset',
+				code: 'PersistedAsset | null',
+				status: true,
+				description: 'The asset to display'
+			},
+			{
+				name: 'open',
+				code: 'boolean',
+				status: true,
+				description: 'Whether the detail view is open'
+			},
+			{
+				name: 'onClose',
+				code: '() => void',
+				status: false,
+				description: 'Callback when detail is closed'
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(asset: PersistedAsset, updates: AssetDetailUpdates) => void | Promise<void>',
+				status: false,
+				description: 'Callback when asset is updated (save metadata)'
+			},
+			{
+				name: 'onsave',
+				code: '(asset: PersistedAsset, updates: AssetDetailUpdates) => void | Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onDelete',
+				code: '(asset: PersistedAsset) => void',
+				status: false,
+				description: 'Callback when asset is deleted'
+			},
+			{
+				name: 'ondelete',
+				code: '(asset: PersistedAsset) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onEdit',
+				code: '(asset: PersistedAsset) => void',
+				status: false,
+				description: 'Callback to open the image editor'
+			},
+			{
+				name: 'onedit',
+				code: '(asset: PersistedAsset) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'contentReferences',
+				code: 'Snippet<[{ assetId: string; }]>',
+				status: false,
+				description: 'Content references snippet (injected by smrt-content)'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onClose',
+				code: '() => void',
+				status: false,
+				description: 'Callback when detail is closed'
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(asset: PersistedAsset, updates: AssetDetailUpdates) => void | Promise<void>',
+				status: false,
+				description: 'Callback when asset is updated (save metadata)'
+			},
+			{
+				name: 'onsave',
+				code: '(asset: PersistedAsset, updates: AssetDetailUpdates) => void | Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onDelete',
+				code: '(asset: PersistedAsset) => void',
+				status: false,
+				description: 'Callback when asset is deleted'
+			},
+			{
+				name: 'ondelete',
+				code: '(asset: PersistedAsset) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onEdit',
+				code: '(asset: PersistedAsset) => void',
+				status: false,
+				description: 'Callback to open the image editor'
+			},
+			{
+				name: 'onedit',
+				code: '(asset: PersistedAsset) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/assets/src/svelte/AssetDetail.svelte'
+	},
+	{
+		slug: 'asset-grid',
+		name: 'AssetGrid',
+		family: 'smrt-assets-svelte',
+		category: 'Assets · Components',
+		importPath: '@happyvertical/smrt-assets/svelte',
+		summary: 'Grid view of asset thumbnails with selection',
+		summarySynthesized: false,
+		slot: {
+			id: 'asset-grid',
+			label: 'Asset Grid',
+			icon: 'grid',
+			category: 'list'
+		},
+		details: [
+			{
+				name: 'assets',
+				code: 'PersistedAsset[]',
+				status: true,
+				description: 'Assets to display'
+			},
+			{
+				name: 'selectedIds',
+				code: 'Set<string>',
+				status: true,
+				description: 'Currently selected asset IDs'
+			},
+			{
+				name: 'onSelectionChange',
+				code: '(ids: Set<string>) => void',
+				status: true,
+				description: 'Callback when selection changes'
+			},
+			{
+				name: 'onAssetClick',
+				code: '(asset: PersistedAsset) => void',
+				status: true,
+				description: 'Callback when an asset is clicked for detail view'
+			},
+			{
+				name: 'onAssetDblClick',
+				code: '(asset: PersistedAsset) => void',
+				status: false,
+				description: 'Callback when an asset is double-clicked'
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Whether the grid is loading'
+			},
+			{
+				name: 'mode',
+				code: 'AssetManagerMode',
+				status: false,
+				description:
+					'Operating mode — drives the per-card action label ("Open" in manage mode, "Select" in pick mode, where a card click toggles selection).'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSelectionChange',
+				code: '(ids: Set<string>) => void',
+				status: true,
+				description: 'Callback when selection changes'
+			},
+			{
+				name: 'onAssetClick',
+				code: '(asset: PersistedAsset) => void',
+				status: true,
+				description: 'Callback when an asset is clicked for detail view'
+			},
+			{
+				name: 'onAssetDblClick',
+				code: '(asset: PersistedAsset) => void',
+				status: false,
+				description: 'Callback when an asset is double-clicked'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/assets/src/svelte/AssetGrid.svelte'
+	},
+	{
+		slug: 'asset-list',
+		name: 'AssetList',
+		family: 'smrt-assets-svelte',
+		category: 'Assets · Components',
+		importPath: '@happyvertical/smrt-assets/svelte',
+		summary: 'Sortable list view of assets with metadata columns',
+		summarySynthesized: false,
+		slot: {
+			id: 'asset-list',
+			label: 'Asset List',
+			icon: 'list',
+			category: 'list'
+		},
+		details: [
+			{
+				name: 'assets',
+				code: 'PersistedAsset[]',
+				status: true,
+				description: 'Assets to display'
+			},
+			{
+				name: 'selectedIds',
+				code: 'Set<string>',
+				status: true,
+				description: 'Currently selected asset IDs'
+			},
+			{
+				name: 'sort',
+				code: 'AssetSort',
+				status: true,
+				description: 'Current sort state'
+			},
+			{
+				name: 'onSelectionChange',
+				code: '(ids: Set<string>) => void',
+				status: true,
+				description: 'Callback when selection changes'
+			},
+			{
+				name: 'onAssetClick',
+				code: '(asset: PersistedAsset) => void',
+				status: true,
+				description: 'Callback when an asset is clicked for detail view'
+			},
+			{
+				name: 'onSortChange',
+				code: '(sort: AssetSort) => void',
+				status: true,
+				description: 'Callback when sort changes'
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Whether the list is loading'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSelectionChange',
+				code: '(ids: Set<string>) => void',
+				status: true,
+				description: 'Callback when selection changes'
+			},
+			{
+				name: 'onAssetClick',
+				code: '(asset: PersistedAsset) => void',
+				status: true,
+				description: 'Callback when an asset is clicked for detail view'
+			},
+			{
+				name: 'onSortChange',
+				code: '(sort: AssetSort) => void',
+				status: true,
+				description: 'Callback when sort changes'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/assets/src/svelte/AssetList.svelte'
+	},
+	{
+		slug: 'asset-manager',
+		name: 'AssetManager',
+		family: 'smrt-assets-svelte',
+		category: 'Assets · Components',
+		importPath: '@happyvertical/smrt-assets/svelte',
+		summary:
+			'Combined asset management surface with toolbar, grid/list view, detail, and selection',
+		summarySynthesized: false,
+		slot: {
+			id: 'asset-manager',
+			label: 'Asset Manager',
+			icon: 'folder-image',
+			category: 'admin'
+		},
+		details: [
+			{
+				name: 'tenantId',
+				code: 'string',
+				status: false,
+				description: 'Tenant ID to scope assets to'
+			},
+			{
+				name: 'dbFilters',
+				code: 'AssetDbFilters',
+				status: false,
+				description: 'Arbitrary database-level query filters forwarded to AssetCollection'
+			},
+			{
+				name: 'mode',
+				code: 'AssetManagerMode',
+				status: false,
+				description: 'Operating mode'
+			},
+			{
+				name: 'accept',
+				code: 'string',
+				status: false,
+				description: "MIME type filter (e.g., 'image/*' to only show images)"
+			},
+			{
+				name: 'customActions',
+				code: 'AssetAction[]',
+				status: false,
+				description: 'Custom actions added to the action bar'
+			},
+			{
+				name: 'uploader',
+				code: 'Snippet<[AssetManagerUploaderProps]>',
+				status: false,
+				description:
+					'Optional custom uploader snippet (e.g., to inject ImageUploader from smrt-images)'
+			},
+			{
+				name: 'onSelect',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: 'Callback when assets are selected (useful in pick mode)'
+			},
+			{
+				name: 'onselect',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onConfirm',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: 'Callback when an asset is double-clicked or "confirmed" in pick mode'
+			},
+			{
+				name: 'onconfirm',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'initialView',
+				code: 'AssetViewMode',
+				status: false,
+				description: 'Initial view mode'
+			},
+			{
+				name: 'showFolders',
+				code: 'boolean',
+				status: false,
+				description: 'Whether to show folder navigation'
+			},
+			{
+				name: 'onSave',
+				code: '(asset: PersistedAsset, updates: Record<string, unknown>) => void | Promise<void>',
+				status: false,
+				description:
+					'Persist an asset edit from the detail drawer. Consumer-supplied — when omitted, edits apply to local state only (preview/demo). Awaited; a rejection surfaces an error and skips the local update.'
+			},
+			{
+				name: 'onCreate',
+				code: '(data: AssetCreateData) => void | Promise<void>',
+				status: false,
+				description:
+					'Persist a newly created asset. Consumer-supplied; awaited. A rejection propagates to the create modal, which surfaces it and keeps the form.'
+			},
+			{
+				name: 'onDelete',
+				code: '(assets: PersistedAsset[]) => void | Promise<void>',
+				status: false,
+				description:
+					'Persist asset deletion. Consumer-supplied — when omitted, deletion applies to local state only. Awaited; a rejection surfaces an error and skips the local removal.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSelect',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: 'Callback when assets are selected (useful in pick mode)'
+			},
+			{
+				name: 'onselect',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onConfirm',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: 'Callback when an asset is double-clicked or "confirmed" in pick mode'
+			},
+			{
+				name: 'onconfirm',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(asset: PersistedAsset, updates: Record<string, unknown>) => void | Promise<void>',
+				status: false,
+				description:
+					'Persist an asset edit from the detail drawer. Consumer-supplied — when omitted, edits apply to local state only (preview/demo). Awaited; a rejection surfaces an error and skips the local update.'
+			},
+			{
+				name: 'onCreate',
+				code: '(data: AssetCreateData) => void | Promise<void>',
+				status: false,
+				description:
+					'Persist a newly created asset. Consumer-supplied; awaited. A rejection propagates to the create modal, which surfaces it and keeps the form.'
+			},
+			{
+				name: 'onDelete',
+				code: '(assets: PersistedAsset[]) => void | Promise<void>',
+				status: false,
+				description:
+					'Persist asset deletion. Consumer-supplied — when omitted, deletion applies to local state only. Awaited; a rejection surfaces an error and skips the local removal.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/assets/src/svelte/AssetManager.svelte'
+	},
+	{
+		slug: 'asset-toolbar',
+		name: 'AssetToolbar',
+		family: 'smrt-assets-svelte',
+		category: 'Assets · Components',
+		importPath: '@happyvertical/smrt-assets/svelte',
+		summary: 'Toolbar with view toggle, filters, sort, and upload action',
+		summarySynthesized: false,
+		slot: {
+			id: 'asset-toolbar',
+			label: 'Asset Toolbar',
+			icon: 'sliders',
+			category: 'action'
+		},
+		details: [
+			{
+				name: 'view',
+				code: 'AssetViewMode',
+				status: true,
+				description: 'Current view mode'
+			},
+			{
+				name: 'filters',
+				code: 'AssetFilters',
+				status: true,
+				description: 'Current filters'
+			},
+			{
+				name: 'sort',
+				code: 'AssetSort',
+				status: true,
+				description: 'Current sort'
+			},
+			{
+				name: 'onViewChange',
+				code: '(view: AssetViewMode) => void',
+				status: true,
+				description: 'Callback when view changes'
+			},
+			{
+				name: 'onviewchange',
+				code: '(view: AssetViewMode) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onFilterChange',
+				code: '(filters: AssetFilters) => void',
+				status: true,
+				description: 'Callback when filters change'
+			},
+			{
+				name: 'onfilterchange',
+				code: '(filters: AssetFilters) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSortChange',
+				code: '(sort: AssetSort) => void',
+				status: true,
+				description: 'Callback when sort changes'
+			},
+			{
+				name: 'onsortchange',
+				code: '(sort: AssetSort) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onUpload',
+				code: '() => void',
+				status: true,
+				description: 'Callback when upload is requested'
+			},
+			{
+				name: 'onupload',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onViewChange',
+				code: '(view: AssetViewMode) => void',
+				status: true,
+				description: 'Callback when view changes'
+			},
+			{
+				name: 'onviewchange',
+				code: '(view: AssetViewMode) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onFilterChange',
+				code: '(filters: AssetFilters) => void',
+				status: true,
+				description: 'Callback when filters change'
+			},
+			{
+				name: 'onfilterchange',
+				code: '(filters: AssetFilters) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSortChange',
+				code: '(sort: AssetSort) => void',
+				status: true,
+				description: 'Callback when sort changes'
+			},
+			{
+				name: 'onsortchange',
+				code: '(sort: AssetSort) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onUpload',
+				code: '() => void',
+				status: true,
+				description: 'Callback when upload is requested'
+			},
+			{
+				name: 'onupload',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/assets/src/svelte/AssetToolbar.svelte'
+	},
+	{
+		slug: 'create-asset-modal',
+		name: 'CreateAssetModal',
+		family: 'smrt-assets-svelte',
+		category: 'Assets · Components',
+		importPath: '@happyvertical/smrt-assets/svelte',
+		summary: 'CreateAssetModal is part of the assets · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'open',
+				code: 'boolean',
+				status: true,
+				description: 'Whether the modal is open'
+			},
+			{
+				name: 'initialFile',
+				code: 'File | null',
+				status: false,
+				description: 'Pre-loaded file (from paste or drag)'
+			},
+			{
+				name: 'oncreate',
+				code: '(data: { file: File; name: string; description: string; altText: string; }) => void | Promise<void>',
+				status: true,
+				description:
+					'Callback when creation is complete. May be async; a rejection keeps the form populated and surfaces an error instead of clearing silently.'
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: 'Callback when modal is closed'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'oncreate',
+				code: '(data: { file: File; name: string; description: string; altText: string; }) => void | Promise<void>',
+				status: true,
+				description:
+					'Callback when creation is complete. May be async; a rejection keeps the form populated and surfaces an error instead of clearing silently.'
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: 'Callback when modal is closed'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/assets/src/svelte/CreateAssetModal.svelte'
+	},
+	{
+		slug: 'agent-chat',
+		name: 'AgentChat',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'Full agent conversation interface',
+		summarySynthesized: false,
+		slot: {
+			id: 'agent-chat',
+			label: 'Agent Chat',
+			icon: 'bot',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'session',
+				code: 'AgentSessionData',
+				status: true,
+				description: 'Agent session data'
+			},
+			{
+				name: 'messages',
+				code: 'ChatMessageData[]',
+				status: true,
+				description: 'Messages in this conversation'
+			},
+			{
+				name: 'currentProfileId',
+				code: 'string',
+				status: true,
+				description: "Current user's profile ID"
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Whether the AI is currently processing'
+			},
+			{
+				name: 'onsend',
+				code: '(content: string) => void',
+				status: true,
+				description: 'Send a message to the agent'
+			},
+			{
+				name: 'onapplychange',
+				code: '(content: string) => void',
+				status: false,
+				description: 'Apply suggested markdown edit to host'
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: false,
+				description: 'Close the agent chat'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsend',
+				code: '(content: string) => void',
+				status: true,
+				description: 'Send a message to the agent'
+			},
+			{
+				name: 'onapplychange',
+				code: '(content: string) => void',
+				status: false,
+				description: 'Apply suggested markdown edit to host'
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: false,
+				description: 'Close the agent chat'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/agent/AgentChat.svelte'
+	},
+	{
+		slug: 'agent-selector',
+		name: 'AgentSelector',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'AgentSelector is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'agents',
+				code: 'AgentDescriptor[]',
+				status: true,
+				description: 'Available agents'
+			},
+			{
+				name: 'onselect',
+				code: '(agentId: string) => void',
+				status: true,
+				description: 'Select an agent'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselect',
+				code: '(agentId: string) => void',
+				status: true,
+				description: 'Select an agent'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/agent/AgentSelector.svelte'
+	},
+	{
+		slug: 'agent-session-panel',
+		name: 'AgentSessionPanel',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'AgentSessionPanel is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'sessions',
+				code: 'AgentSessionData[]',
+				status: true,
+				description: 'Available sessions'
+			},
+			{
+				name: 'currentSessionId',
+				code: 'string',
+				status: false,
+				description: 'Currently active session ID'
+			},
+			{
+				name: 'onselectsession',
+				code: '(sessionId: string) => void',
+				status: true,
+				description: 'Select a session'
+			},
+			{
+				name: 'onnewsession',
+				code: '() => void',
+				status: false,
+				description: 'Create a new session'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselectsession',
+				code: '(sessionId: string) => void',
+				status: true,
+				description: 'Select a session'
+			},
+			{
+				name: 'onnewsession',
+				code: '() => void',
+				status: false,
+				description: 'Create a new session'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/agent/AgentSessionPanel.svelte'
+	},
+	{
+		slug: 'chat-avatar',
+		name: 'Avatar',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'Avatar is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'name',
+				code: 'string',
+				status: true,
+				description: 'Display name used for initials fallback.'
+			},
+			{
+				name: 'avatarUrl',
+				code: 'string',
+				status: false,
+				description: 'URL for the avatar image.'
+			},
+			{
+				name: 'onlineStatus',
+				code: "'online' | 'away' | 'dnd' | 'offline'",
+				status: false,
+				description: 'Online presence status.'
+			},
+			{
+				name: 'size',
+				code: "'sm' | 'md' | 'lg'",
+				status: false,
+				description: 'Avatar size.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/shared/Avatar.svelte'
+	},
+	{
+		slug: 'chat-layout',
+		name: 'ChatLayout',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'Discord/Slack-style chat layout with sidebar',
+		summarySynthesized: false,
+		slot: {
+			id: 'chat-layout',
+			label: 'Chat Layout',
+			icon: 'message-square',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'rooms',
+				code: 'ChatRoomData[]',
+				status: true,
+				description: 'Available chat rooms'
+			},
+			{
+				name: 'currentRoomId',
+				code: 'string',
+				status: false,
+				description: 'Currently selected room ID'
+			},
+			{
+				name: 'currentProfileId',
+				code: 'string',
+				status: true,
+				description: "Current user's profile ID"
+			},
+			{
+				name: 'onselectroom',
+				code: '(roomId: string) => void',
+				status: true,
+				description: 'Callback when a room is selected'
+			},
+			{
+				name: 'oncreateroom',
+				code: '() => void',
+				status: false,
+				description: 'Callback to open the create-room affordance in the room list'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
+				status: true,
+				description: 'Main content slot'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselectroom',
+				code: '(roomId: string) => void',
+				status: true,
+				description: 'Callback when a room is selected'
+			},
+			{
+				name: 'oncreateroom',
+				code: '() => void',
+				status: false,
+				description: 'Callback to open the create-room affordance in the room list'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/layout/ChatLayout.svelte'
+	},
+	{
+		slug: 'chat-tab',
+		name: 'ChatTab',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'ChatTab is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'tab',
+				code: 'ChatTabState',
+				status: true,
+				description: 'Tab state'
+			},
+			{
+				name: 'messages',
+				code: 'ChatMessageData[]',
+				status: true,
+				description: 'Messages in this chat'
+			},
+			{
+				name: 'currentProfileId',
+				code: 'string',
+				status: true,
+				description: "Current user's profile ID"
+			},
+			{
+				name: 'onsend',
+				code: '(content: string) => void',
+				status: true,
+				description: 'Send a message'
+			},
+			{
+				name: 'oncollapse',
+				code: '() => void',
+				status: true,
+				description: 'Collapse this tab'
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: 'Close this tab'
+			},
+			{
+				name: 'onexpand',
+				code: '() => void',
+				status: true,
+				description: 'Expand this tab'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsend',
+				code: '(content: string) => void',
+				status: true,
+				description: 'Send a message'
+			},
+			{
+				name: 'oncollapse',
+				code: '() => void',
+				status: true,
+				description: 'Collapse this tab'
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: 'Close this tab'
+			},
+			{
+				name: 'onexpand',
+				code: '() => void',
+				status: true,
+				description: 'Expand this tab'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/tabs/ChatTab.svelte'
+	},
+	{
+		slug: 'chat-tab-list',
+		name: 'ChatTabList',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'ChatTabList is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'tabs',
+				code: 'ChatTabState[]',
+				status: true,
+				description: 'Collapsed/minimized tabs'
+			},
+			{
+				name: 'onselect',
+				code: '(roomId: string) => void',
+				status: true,
+				description: 'Select (expand) a tab'
+			},
+			{
+				name: 'onclose',
+				code: '(roomId: string) => void',
+				status: true,
+				description: 'Close a tab'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselect',
+				code: '(roomId: string) => void',
+				status: true,
+				description: 'Select (expand) a tab'
+			},
+			{
+				name: 'onclose',
+				code: '(roomId: string) => void',
+				status: true,
+				description: 'Close a tab'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/tabs/ChatTabList.svelte'
+	},
+	{
+		slug: 'chat-tabs',
+		name: 'ChatTabs',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'Facebook-style expandable chat tabs',
+		summarySynthesized: false,
+		slot: {
+			id: 'chat-tabs',
+			label: 'Chat Tabs',
+			icon: 'columns',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'tabs',
+				code: 'ChatTabState[]',
+				status: true,
+				description: 'Active chat tabs'
+			},
+			{
+				name: 'messagesByRoom',
+				code: 'Record<string, ChatMessageData[]>',
+				status: false,
+				description: 'Messages keyed by roomId'
+			},
+			{
+				name: 'currentProfileId',
+				code: 'string',
+				status: false,
+				description: "Current user's profile ID"
+			},
+			{
+				name: 'onexpand',
+				code: '(roomId: string) => void',
+				status: true,
+				description: 'Expand a tab'
+			},
+			{
+				name: 'oncollapse',
+				code: '(roomId: string) => void',
+				status: true,
+				description: 'Collapse a tab'
+			},
+			{
+				name: 'onclose',
+				code: '(roomId: string) => void',
+				status: true,
+				description: 'Close a tab'
+			},
+			{
+				name: 'onsend',
+				code: '(roomId: string, content: string) => void',
+				status: false,
+				description: 'Send a message in a tab'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onexpand',
+				code: '(roomId: string) => void',
+				status: true,
+				description: 'Expand a tab'
+			},
+			{
+				name: 'oncollapse',
+				code: '(roomId: string) => void',
+				status: true,
+				description: 'Collapse a tab'
+			},
+			{
+				name: 'onclose',
+				code: '(roomId: string) => void',
+				status: true,
+				description: 'Close a tab'
+			},
+			{
+				name: 'onsend',
+				code: '(roomId: string, content: string) => void',
+				status: false,
+				description: 'Send a message in a tab'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/tabs/ChatTabs.svelte'
+	},
+	{
+		slug: 'chat-file-upload',
+		name: 'FileUpload',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'FileUpload is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'onupload',
+				code: '(files: FileList) => void',
+				status: true,
+				description: 'Callback when files are selected'
+			},
+			{
+				name: 'accept',
+				code: 'string',
+				status: false,
+				description: 'Accepted file types (e.g., "image/*,.pdf")'
+			},
+			{
+				name: 'maxSize',
+				code: 'number',
+				status: false,
+				description: 'Maximum file size in bytes'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Whether the upload is disabled'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onupload',
+				code: '(files: FileList) => void',
+				status: true,
+				description: 'Callback when files are selected'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/shared/FileUpload.svelte'
+	},
+	{
+		slug: 'link-preview',
+		name: 'LinkPreview',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'LinkPreview - URL preview card Compact card with thumbnail, title, and description.',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'url',
+				code: 'string',
+				status: true,
+				description: 'The URL being previewed'
+			},
+			{
+				name: 'title',
+				code: 'string',
+				status: false,
+				description: 'Title of the linked page'
+			},
+			{
+				name: 'description',
+				code: 'string',
+				status: false,
+				description: 'Description of the linked page'
+			},
+			{
+				name: 'imageUrl',
+				code: 'string',
+				status: false,
+				description: 'Preview thumbnail image URL'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/shared/LinkPreview.svelte'
+	},
+	{
+		slug: 'member-list',
+		name: 'MemberList',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'MemberList is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'participants',
+				code: 'ChatParticipantData[]',
+				status: true,
+				description: 'Room participants'
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: 'Callback to close the member panel'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: 'Callback to close the member panel'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/layout/MemberList.svelte'
+	},
+	{
+		slug: 'mention-autocomplete',
+		name: 'MentionAutocomplete',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'MentionAutocomplete is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'query',
+				code: 'string',
+				status: true,
+				description: 'Current search query (text after'
+			},
+			{
+				name: 'suggestions',
+				code: 'Array<{ id: string; name: string; avatarUrl?: string; }>',
+				status: true,
+				description: 'Matching suggestions'
+			},
+			{
+				name: 'onselect',
+				code: '(id: string) => void',
+				status: true,
+				description: 'Select a suggestion'
+			},
+			{
+				name: 'isVisible',
+				code: 'boolean',
+				status: true,
+				description: 'Whether the popup is visible'
+			},
+			{
+				name: 'oncancel',
+				code: '() => void',
+				status: false,
+				description: 'Dismiss the popup (e.g. Escape pressed) without selecting'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselect',
+				code: '(id: string) => void',
+				status: true,
+				description: 'Select a suggestion'
+			},
+			{
+				name: 'oncancel',
+				code: '() => void',
+				status: false,
+				description: 'Dismiss the popup (e.g. Escape pressed) without selecting'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/shared/MentionAutocomplete.svelte'
+	},
+	{
+		slug: 'message-input',
+		name: 'MessageInput',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'Chat message input with attachments',
+		summarySynthesized: false,
+		slot: {
+			id: 'message-input',
+			label: 'Message Input',
+			icon: 'edit-2',
+			category: 'form'
+		},
+		details: [
+			{
+				name: 'onsend',
+				code: '(content: string) => void',
+				status: true,
+				description: 'Callback when a message is sent'
+			},
+			{
+				name: 'placeholder',
+				code: 'string',
+				status: false,
+				description: 'Placeholder text'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disable the input'
+			},
+			{
+				name: 'replyTo',
+				code: '{ id: string; senderName: string; content: string; } | null',
+				status: false,
+				description: 'Reply context if replying to a message'
+			},
+			{
+				name: 'oncancelreply',
+				code: '() => void',
+				status: false,
+				description: 'Cancel reply callback'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsend',
+				code: '(content: string) => void',
+				status: true,
+				description: 'Callback when a message is sent'
+			},
+			{
+				name: 'oncancelreply',
+				code: '() => void',
+				status: false,
+				description: 'Cancel reply callback'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/messages/MessageInput.svelte'
+	},
+	{
+		slug: 'message-item',
+		name: 'MessageItem',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'MessageItem is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'message',
+				code: 'ChatMessageData',
+				status: true,
+				description: 'Message data to render'
+			},
+			{
+				name: 'isOwn',
+				code: 'boolean',
+				status: true,
+				description: 'Whether this message was sent by the current user'
+			},
+			{
+				name: 'onreply',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Reply callback'
+			},
+			{
+				name: 'onreact',
+				code: '(id: string, emoji: string) => void',
+				status: false,
+				description: 'React callback'
+			},
+			{
+				name: 'onedit',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Edit callback'
+			},
+			{
+				name: 'ondelete',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Delete callback'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onreply',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Reply callback'
+			},
+			{
+				name: 'onreact',
+				code: '(id: string, emoji: string) => void',
+				status: false,
+				description: 'React callback'
+			},
+			{
+				name: 'onedit',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Edit callback'
+			},
+			{
+				name: 'ondelete',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Delete callback'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/messages/MessageItem.svelte'
+	},
+	{
+		slug: 'message-list',
+		name: 'MessageList',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'Scrollable chat message feed',
+		summarySynthesized: false,
+		slot: {
+			id: 'message-list',
+			label: 'Message List',
+			icon: 'message-circle',
+			category: 'list'
+		},
+		details: [
+			{
+				name: 'messages',
+				code: 'ChatMessageData[]',
+				status: true,
+				description: 'Messages to display'
+			},
+			{
+				name: 'currentProfileId',
+				code: 'string',
+				status: true,
+				description: "Current user's profile ID to determine own messages"
+			},
+			{
+				name: 'onloadmore',
+				code: '() => void',
+				status: false,
+				description: 'Load more messages (infinite scroll)'
+			},
+			{
+				name: 'onreply',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Reply to a message'
+			},
+			{
+				name: 'onreact',
+				code: '(id: string, emoji: string) => void',
+				status: false,
+				description: 'React to a message'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onloadmore',
+				code: '() => void',
+				status: false,
+				description: 'Load more messages (infinite scroll)'
+			},
+			{
+				name: 'onreply',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Reply to a message'
+			},
+			{
+				name: 'onreact',
+				code: '(id: string, emoji: string) => void',
+				status: false,
+				description: 'React to a message'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/messages/MessageList.svelte'
+	},
+	{
+		slug: 'mini-chat',
+		name: 'MiniChat',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'MiniChat is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'messages',
+				code: 'ChatMessageData[]',
+				status: true,
+				description: 'Messages to display'
+			},
+			{
+				name: 'currentProfileId',
+				code: 'string',
+				status: true,
+				description: "Current user's profile ID"
+			},
+			{
+				name: 'onsend',
+				code: '(content: string) => void',
+				status: true,
+				description: 'Send a message'
+			},
+			{
+				name: 'maxHeight',
+				code: 'number',
+				status: false,
+				description: 'Maximum height for the message area in px'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsend',
+				code: '(content: string) => void',
+				status: true,
+				description: 'Send a message'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/tabs/MiniChat.svelte'
+	},
+	{
+		slug: 'chat-reaction-picker',
+		name: 'ReactionPicker',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'ReactionPicker is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'onreact',
+				code: '(emoji: string) => void',
+				status: true,
+				description: 'Callback when an emoji is selected'
+			},
+			{
+				name: 'isOpen',
+				code: 'boolean',
+				status: false,
+				description: 'Whether the picker is visible'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onreact',
+				code: '(emoji: string) => void',
+				status: true,
+				description: 'Callback when an emoji is selected'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/shared/ReactionPicker.svelte'
+	},
+	{
+		slug: 'read-receipts',
+		name: 'ReadReceipts',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'ReadReceipts is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'readBy',
+				code: 'Array<{ name: string; avatarUrl?: string; }>',
+				status: true,
+				description: 'Users who have read the message'
+			},
+			{
+				name: 'totalParticipants',
+				code: 'number',
+				status: true,
+				description: 'Total participants in the conversation'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/shared/ReadReceipts.svelte'
+	},
+	{
+		slug: 'room-create-dialog',
+		name: 'RoomCreateDialog',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'RoomCreateDialog is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'isOpen',
+				code: 'boolean',
+				status: true,
+				description: 'Whether the dialog is open'
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: 'Callback to close the dialog'
+			},
+			{
+				name: 'oncreate',
+				code: '(params: { name: string; roomType: string; description: string; }) => void',
+				status: true,
+				description: 'Callback when room is created'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: 'Callback to close the dialog'
+			},
+			{
+				name: 'oncreate',
+				code: '(params: { name: string; roomType: string; description: string; }) => void',
+				status: true,
+				description: 'Callback when room is created'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/dialogs/RoomCreateDialog.svelte'
+	},
+	{
+		slug: 'room-header',
+		name: 'RoomHeader',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'RoomHeader is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'room',
+				code: 'ChatRoomData',
+				status: true,
+				description: 'Current room data'
+			},
+			{
+				name: 'participantCount',
+				code: 'number',
+				status: true,
+				description: 'Number of participants in the room'
+			},
+			{
+				name: 'onshowmembers',
+				code: '() => void',
+				status: false,
+				description: 'Callback to show member list panel'
+			},
+			{
+				name: 'onshowsearch',
+				code: '() => void',
+				status: false,
+				description: 'Callback to show message search'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onshowmembers',
+				code: '() => void',
+				status: false,
+				description: 'Callback to show member list panel'
+			},
+			{
+				name: 'onshowsearch',
+				code: '() => void',
+				status: false,
+				description: 'Callback to show message search'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/layout/RoomHeader.svelte'
+	},
+	{
+		slug: 'room-list',
+		name: 'RoomList',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'Sidebar room navigation with unread badges',
+		summarySynthesized: false,
+		slot: {
+			id: 'room-list',
+			label: 'Room List',
+			icon: 'list',
+			category: 'list'
+		},
+		details: [
+			{
+				name: 'rooms',
+				code: 'ChatRoomData[]',
+				status: true,
+				description: 'Available chat rooms'
+			},
+			{
+				name: 'currentRoomId',
+				code: 'string',
+				status: false,
+				description: 'Currently selected room ID'
+			},
+			{
+				name: 'onselectroom',
+				code: '(roomId: string) => void',
+				status: true,
+				description: 'Callback when a room is selected'
+			},
+			{
+				name: 'oncreateroom',
+				code: '() => void',
+				status: false,
+				description: 'Callback to open create room dialog'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselectroom',
+				code: '(roomId: string) => void',
+				status: true,
+				description: 'Callback when a room is selected'
+			},
+			{
+				name: 'oncreateroom',
+				code: '() => void',
+				status: false,
+				description: 'Callback to open create room dialog'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/layout/RoomList.svelte'
+	},
+	{
+		slug: 'search-messages',
+		name: 'SearchMessages',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'SearchMessages is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'isOpen',
+				code: 'boolean',
+				status: true,
+				description: 'Whether the search panel is open'
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: 'Callback to close the search panel'
+			},
+			{
+				name: 'onsearch',
+				code: '(query: string) => void',
+				status: true,
+				description: 'Callback when a search query is submitted'
+			},
+			{
+				name: 'results',
+				code: 'ChatMessageData[]',
+				status: true,
+				description: 'Search results'
+			},
+			{
+				name: 'onselectresult',
+				code: '(messageId: string) => void',
+				status: false,
+				description: 'Callback when a result is selected'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: 'Callback to close the search panel'
+			},
+			{
+				name: 'onsearch',
+				code: '(query: string) => void',
+				status: true,
+				description: 'Callback when a search query is submitted'
+			},
+			{
+				name: 'onselectresult',
+				code: '(messageId: string) => void',
+				status: false,
+				description: 'Callback when a result is selected'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/dialogs/SearchMessages.svelte'
+	},
+	{
+		slug: 'thread-panel',
+		name: 'ThreadPanel',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'Threaded conversation side panel',
+		summarySynthesized: false,
+		slot: {
+			id: 'thread-panel',
+			label: 'Thread Panel',
+			icon: 'git-branch',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'thread',
+				code: 'ChatThreadData',
+				status: true,
+				description: 'Thread metadata'
+			},
+			{
+				name: 'messages',
+				code: 'ChatMessageData[]',
+				status: true,
+				description: 'Messages in the thread'
+			},
+			{
+				name: 'currentProfileId',
+				code: 'string',
+				status: true,
+				description: "Current user's profile ID"
+			},
+			{
+				name: 'onsend',
+				code: '(content: string) => void',
+				status: true,
+				description: 'Send a reply to the thread'
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: 'Close the thread panel'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsend',
+				code: '(content: string) => void',
+				status: true,
+				description: 'Send a reply to the thread'
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: 'Close the thread panel'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/messages/ThreadPanel.svelte'
+	},
+	{
+		slug: 'tool-call-display',
+		name: 'ToolCallDisplay',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'ToolCallDisplay is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'toolCall',
+				code: 'ToolCallDisplayData',
+				status: true,
+				description: 'Tool call data'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/agent/ToolCallDisplay.svelte'
+	},
+	{
+		slug: 'user-presence',
+		name: 'UserPresence',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'UserPresence - Online/offline status indicator with optional label',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'status',
+				code: "'online' | 'away' | 'dnd' | 'offline'",
+				status: true,
+				description: 'Current presence status'
+			},
+			{
+				name: 'showLabel',
+				code: 'boolean',
+				status: false,
+				description: 'Whether to show a text label next to the dot'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/shared/UserPresence.svelte'
+	},
+	{
+		slug: 'invoice-actions',
+		name: 'InvoiceActions',
+		family: 'smrt-commerce-svelte',
+		category: 'Commerce · Components',
+		importPath: '@happyvertical/smrt-commerce/svelte',
+		summary: 'Props for InvoiceActions component',
+		summarySynthesized: false,
+		slot: {
+			id: 'invoice-actions',
+			label: 'Invoice Actions',
+			icon: 'more-horizontal',
+			category: 'action'
+		},
+		details: [
+			{
+				name: 'status',
+				code: 'InvoiceStatus',
+				status: true,
+				description: 'Current invoice status'
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Loading state'
+			},
+			{
+				name: 'onsend',
+				code: '() => void',
+				status: false,
+				description: 'Called when send is clicked'
+			},
+			{
+				name: 'onmarkpaid',
+				code: '() => void',
+				status: false,
+				description: 'Called when mark paid is clicked'
+			},
+			{
+				name: 'onedit',
+				code: '() => void',
+				status: false,
+				description: 'Called when edit is clicked'
+			},
+			{
+				name: 'ondelete',
+				code: '() => void',
+				status: false,
+				description: 'Called when delete is clicked'
+			},
+			{
+				name: 'onprint',
+				code: '() => void',
+				status: false,
+				description: 'Called when print is clicked'
+			},
+			{
+				name: 'onexport',
+				code: '() => void',
+				status: false,
+				description: 'Called when export/download is clicked'
+			},
+			{
+				name: 'size',
+				code: "'sm' | 'md'",
+				status: false,
+				description: 'Size variant'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsend',
+				code: '() => void',
+				status: false,
+				description: 'Called when send is clicked'
+			},
+			{
+				name: 'onmarkpaid',
+				code: '() => void',
+				status: false,
+				description: 'Called when mark paid is clicked'
+			},
+			{
+				name: 'onedit',
+				code: '() => void',
+				status: false,
+				description: 'Called when edit is clicked'
+			},
+			{
+				name: 'ondelete',
+				code: '() => void',
+				status: false,
+				description: 'Called when delete is clicked'
+			},
+			{
+				name: 'onprint',
+				code: '() => void',
+				status: false,
+				description: 'Called when print is clicked'
+			},
+			{
+				name: 'onexport',
+				code: '() => void',
+				status: false,
+				description: 'Called when export/download is clicked'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/commerce/src/svelte/components/InvoiceActions.svelte'
+	},
+	{
+		slug: 'invoice-card',
+		name: 'InvoiceCard',
+		family: 'smrt-commerce-svelte',
+		category: 'Commerce · Components',
+		importPath: '@happyvertical/smrt-commerce/svelte',
+		summary: 'Props for InvoiceCard component',
+		summarySynthesized: false,
+		slot: {
+			id: 'invoice-card',
+			label: 'Invoice Card',
+			icon: 'file-text',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'invoice',
+				code: 'InvoiceData',
+				status: true,
+				description: 'Invoice data'
+			},
+			{
+				name: 'currency',
+				code: "'CAD' | 'USD'",
+				status: false,
+				description: 'Currency code'
+			},
+			{
+				name: 'href',
+				code: 'string',
+				status: false,
+				description: 'Navigation href'
+			},
+			{
+				name: 'onclick',
+				code: '() => void',
+				status: false,
+				description: 'Click handler'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onclick',
+				code: '() => void',
+				status: false,
+				description: 'Click handler'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/commerce/src/svelte/components/InvoiceCard.svelte'
+	},
+	{
+		slug: 'invoice-header',
+		name: 'InvoiceHeader',
+		family: 'smrt-commerce-svelte',
+		category: 'Commerce · Components',
+		importPath: '@happyvertical/smrt-commerce/svelte',
+		summary: 'Props for InvoiceHeader component',
+		summarySynthesized: false,
+		slot: {
+			id: 'invoice-header',
+			label: 'Invoice Header',
+			icon: 'file-text',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'invoiceNumber',
+				code: 'string',
+				status: true,
+				description: 'Invoice number/reference'
+			},
+			{
+				name: 'status',
+				code: 'InvoiceStatus',
+				status: true,
+				description: 'Current status'
+			},
+			{
+				name: 'issueDate',
+				code: 'Date | string',
+				status: true,
+				description: 'Issue date'
+			},
+			{
+				name: 'dueDate',
+				code: 'Date | string | null',
+				status: false,
+				description: 'Due date'
+			},
+			{
+				name: 'paidDate',
+				code: 'Date | string | null',
+				status: false,
+				description: 'Paid date'
+			},
+			{
+				name: 'customerName',
+				code: 'string',
+				status: false,
+				description: 'Customer/client name'
+			},
+			{
+				name: 'projectName',
+				code: 'string',
+				status: false,
+				description: 'Project name'
+			},
+			{
+				name: 'editable',
+				code: 'boolean',
+				status: false,
+				description: 'Allow editing'
+			},
+			{
+				name: 'onstatuschange',
+				code: '(status: InvoiceStatus) => void',
+				status: false,
+				description: 'Called when status changes'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onstatuschange',
+				code: '(status: InvoiceStatus) => void',
+				status: false,
+				description: 'Called when status changes'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/commerce/src/svelte/components/InvoiceHeader.svelte'
+	},
+	{
+		slug: 'invoice-line-items',
+		name: 'InvoiceLineItems',
+		family: 'smrt-commerce-svelte',
+		category: 'Commerce · Components',
+		importPath: '@happyvertical/smrt-commerce/svelte',
+		summary: 'Props for InvoiceLineItems component',
+		summarySynthesized: false,
+		slot: {
+			id: 'invoice-line-items',
+			label: 'Invoice Line Items',
+			icon: 'list',
+			category: 'list'
+		},
+		details: [
+			{
+				name: 'items',
+				code: 'LineItem[]',
+				status: true,
+				description: 'Line items to display'
+			},
+			{
+				name: 'editable',
+				code: 'boolean',
+				status: false,
+				description: 'Enable editing mode'
+			},
+			{
+				name: 'currency',
+				code: "'CAD' | 'USD'",
+				status: false,
+				description: 'Currency code'
+			},
+			{
+				name: 'onupdate',
+				code: '(id: string, item: Partial<LineItem>) => void',
+				status: false,
+				description: 'Called when item is updated'
+			},
+			{
+				name: 'ondelete',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Called when item is deleted'
+			},
+			{
+				name: 'onadd',
+				code: '() => void',
+				status: false,
+				description: 'Called when add button is clicked'
+			},
+			{
+				name: 'showSource',
+				code: 'boolean',
+				status: false,
+				description: 'Show source type column'
+			},
+			{
+				name: 'emptyMessage',
+				code: 'string',
+				status: false,
+				description: 'Empty state message'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onupdate',
+				code: '(id: string, item: Partial<LineItem>) => void',
+				status: false,
+				description: 'Called when item is updated'
+			},
+			{
+				name: 'ondelete',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Called when item is deleted'
+			},
+			{
+				name: 'onadd',
+				code: '() => void',
+				status: false,
+				description: 'Called when add button is clicked'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/commerce/src/svelte/components/InvoiceLineItems.svelte'
+	},
+	{
+		slug: 'invoice-totals',
+		name: 'InvoiceTotals',
+		family: 'smrt-commerce-svelte',
+		category: 'Commerce · Components',
+		importPath: '@happyvertical/smrt-commerce/svelte',
+		summary: 'Props for InvoiceTotals component',
+		summarySynthesized: false,
+		slot: {
+			id: 'invoice-totals',
+			label: 'Invoice Totals',
+			icon: 'calculator',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'subtotal',
+				code: 'number',
+				status: true,
+				description: 'Subtotal in decimal dollars'
+			},
+			{
+				name: 'taxRate',
+				code: 'number',
+				status: false,
+				description: 'Tax rate as percentage (e.g., 5 for 5%)'
+			},
+			{
+				name: 'taxAmount',
+				code: 'number',
+				status: false,
+				description: 'Tax amount in decimal dollars (calculated from rate if not provided)'
+			},
+			{
+				name: 'total',
+				code: 'number',
+				status: true,
+				description: 'Total in decimal dollars'
+			},
+			{
+				name: 'amountPaid',
+				code: 'number',
+				status: false,
+				description: 'Amount already paid in decimal dollars'
+			},
+			{
+				name: 'currency',
+				code: "'CAD' | 'USD'",
+				status: false,
+				description: 'Currency code'
+			},
+			{
+				name: 'showTax',
+				code: 'boolean',
+				status: false,
+				description: 'Show tax breakdown'
+			},
+			{
+				name: 'showPaid',
+				code: 'boolean',
+				status: false,
+				description: 'Show payment status'
+			},
+			{
+				name: 'taxLabel',
+				code: 'string',
+				status: false,
+				description: 'Tax label'
+			},
+			{
+				name: 'size',
+				code: "'sm' | 'md' | 'lg'",
+				status: false,
+				description: 'Size variant'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/commerce/src/svelte/components/InvoiceTotals.svelte'
+	},
+	{
+		slug: 'unbilled-items',
+		name: 'UnbilledItems',
+		family: 'smrt-commerce-svelte',
+		category: 'Commerce · Components',
+		importPath: '@happyvertical/smrt-commerce/svelte',
+		summary: 'Props for UnbilledItems component',
+		summarySynthesized: false,
+		slot: {
+			id: 'unbilled-items',
+			label: 'Unbilled Items',
+			icon: 'clock',
+			category: 'list'
+		},
+		details: [
+			{
+				name: 'items',
+				code: 'UnbilledItem[]',
+				status: true,
+				description: 'Unbilled items'
+			},
+			{
+				name: 'currency',
+				code: "'CAD' | 'USD'",
+				status: false,
+				description: 'Currency code'
+			},
+			{
+				name: 'onselectionchange',
+				code: '(selectedIds: string[]) => void',
+				status: false,
+				description: 'Called when selection changes'
+			},
+			{
+				name: 'oncreate',
+				code: '(selectedIds: string[]) => void',
+				status: false,
+				description: 'Called when create invoice is clicked'
+			},
+			{
+				name: 'emptyMessage',
+				code: 'string',
+				status: false,
+				description: 'Empty state message'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselectionchange',
+				code: '(selectedIds: string[]) => void',
+				status: false,
+				description: 'Called when selection changes'
+			},
+			{
+				name: 'oncreate',
+				code: '(selectedIds: string[]) => void',
+				status: false,
+				description: 'Called when create invoice is clicked'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/commerce/src/svelte/components/UnbilledItems.svelte'
+	},
+	{
+		slug: 'article-card',
+		name: 'ArticleCard',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'Article preview card with title, excerpt, and metadata',
+		summarySynthesized: false,
+		slot: {
+			id: 'article-card',
+			label: 'Article Card',
+			icon: 'file-text',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'article',
+				code: 'Article',
+				status: true,
+				description: 'Article data to display'
+			},
+			{
+				name: 'showExcerpt',
+				code: 'boolean',
+				status: false,
+				description: 'Show article excerpt/description'
+			},
+			{
+				name: 'showDate',
+				code: 'boolean',
+				status: false,
+				description: 'Show publication date'
+			},
+			{
+				name: 'showAuthor',
+				code: 'boolean',
+				status: false,
+				description: 'Show author name'
+			},
+			{
+				name: 'showTags',
+				code: 'boolean',
+				status: false,
+				description: 'Show tags'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ArticleCard.svelte'
+	},
+	{
+		slug: 'article-list',
+		name: 'ArticleList',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'Grid or list of article cards',
+		summarySynthesized: false,
+		slot: {
+			id: 'article-list',
+			label: 'Article List',
+			icon: 'list',
+			category: 'list'
+		},
+		details: [
+			{
+				name: 'articles',
+				code: 'Article[]',
+				status: true,
+				description: 'Array of articles to display'
+			},
+			{
+				name: 'columns',
+				code: "number | 'auto'",
+				status: false,
+				description: "Number of columns in grid (or 'auto')"
+			},
+			{
+				name: 'showExcerpt',
+				code: 'boolean',
+				status: false,
+				description: 'Show article excerpts'
+			},
+			{
+				name: 'showDate',
+				code: 'boolean',
+				status: false,
+				description: 'Show publication dates'
+			},
+			{
+				name: 'showAuthor',
+				code: 'boolean',
+				status: false,
+				description: 'Show author names'
+			},
+			{
+				name: 'showTags',
+				code: 'boolean',
+				status: false,
+				description: 'Show tags'
+			},
+			{
+				name: 'emptyMessage',
+				code: 'string',
+				status: false,
+				description: 'Message when no articles'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ArticleList.svelte'
+	},
+	{
+		slug: 'content-agent-chat',
+		name: 'ContentAgentChat',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentAgentChat is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'onvaluechange',
-				code: '(value: string | string[]) => void',
+				name: 'assistantContext',
+				code: 'ContentEditorAssistantContext | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'contentId',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'currentEditorState',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'currentReferenceIds',
+				code: 'string[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'formFields',
+				code: 'Record<string, string>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'currentProfileId',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'assistantFieldAllowList',
+				code: 'ContentEditorAssistantFieldUpdateAllowList',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onapplyfields',
+				code: '(fields: Record<string, string>) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onapplyfields',
+				code: '(fields: Record<string, string>) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentAgentChat.svelte'
+	},
+	{
+		slug: 'content-body-editor',
+		name: 'ContentBodyEditor',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentBodyEditor is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'value',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'format',
+				code: 'ContentBodyFormat | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'placeholder',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'selectedImageIndex',
+				code: 'number',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onChange',
+				code: '(change: ContentBodyEditorChange) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onOpenImageChooser',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSelectImage',
+				code: '(index: number) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onUseImageAsThumbnail',
+				code: '(assetId: string) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onResolveImage',
+				code: '(selected: ImageLike | File | string) => Promise<unknown> | unknown',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onChange',
+				code: '(change: ContentBodyEditorChange) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onOpenImageChooser',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSelectImage',
+				code: '(index: number) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onUseImageAsThumbnail',
+				code: '(assetId: string) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onResolveImage',
+				code: '(selected: ImageLike | File | string) => Promise<unknown> | unknown',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentBodyEditor.svelte'
+	},
+	{
+		slug: 'content-body-renderer',
+		name: 'ContentBodyRenderer',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentBodyRenderer is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'content',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'format',
+				code: 'ContentBodyFormat | null',
 				status: false,
 				description: ''
 			},
@@ -73,50 +4121,2823 @@ export const uiComponents: UiComponentReference[] = [
 		],
 		sources: [],
 		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentBodyRenderer.svelte'
+	},
+	{
+		slug: 'content-claim-audit-tool',
+		name: 'ContentClaimAuditTool',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentClaimAuditTool is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'contentId',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onFactAuditChange',
+				code: '(state: FactAuditStateData | null) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
 		items: [
 			{
-				name: 'onvaluechange',
-				code: '(value: string | string[]) => void',
+				name: 'onFactAuditChange',
+				code: '(state: FactAuditStateData | null) => void',
 				status: false,
 				description: ''
 			}
 		],
 		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentClaimAuditTool.svelte'
+	},
+	{
+		slug: 'content-contribution-form',
+		name: 'ContentContributionForm',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentContributionForm is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'types',
+				code: 'ContentContributionTypeData[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'initial',
+				code: 'Partial<ContentContributionData>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showContributorFields',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'submitLabel',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'action',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSubmit',
+				code: '(payload: ContentContributionFormSubmitData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSubmit',
+				code: '(payload: ContentContributionFormSubmitData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentContributionForm.svelte'
+	},
+	{
+		slug: 'content-contribution-inbox',
+		name: 'ContentContributionInbox',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentContributionInbox is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'contributions',
+				code: 'ContentContributionData[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'selectedId',
+				code: 'string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'emptyMessage',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'workflowFormAction',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSelect',
+				code: '(contribution: ContentContributionData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onApprove',
+				code: "(contribution: ContentContributionData, options: { targetStatus: 'draft' | 'review'; note: string; }) => void",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onRequestChanges',
+				code: '(contribution: ContentContributionData, options: { note: string; }) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onReject',
+				code: '(contribution: ContentContributionData, options: { note: string; }) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSelect',
+				code: '(contribution: ContentContributionData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onApprove',
+				code: "(contribution: ContentContributionData, options: { targetStatus: 'draft' | 'review'; note: string; }) => void",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onRequestChanges',
+				code: '(contribution: ContentContributionData, options: { note: string; }) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onReject',
+				code: '(contribution: ContentContributionData, options: { note: string; }) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentContributionInbox.svelte'
+	},
+	{
+		slug: 'content-contribution-portal',
+		name: 'ContentContributionPortal',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentContributionPortal is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'contributions',
+				code: 'ContentContributionData[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'selectedId',
+				code: 'string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'emptyMessage',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSelect',
+				code: '(contribution: ContentContributionData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onWithdraw',
+				code: '(contribution: ContentContributionData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSelect',
+				code: '(contribution: ContentContributionData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onWithdraw',
+				code: '(contribution: ContentContributionData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentContributionPortal.svelte'
+	},
+	{
+		slug: 'content-contributions-route',
+		name: 'ContentContributionsRoute',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentContributionsRoute is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'client',
+				code: 'ReturnType<typeof createClient>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'navigation',
+				code: 'ContentRouteNavigationItem[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'embedded',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/routes/ContentContributionsRoute.svelte'
+	},
+	{
+		slug: 'content-contribution-type-manager',
+		name: 'ContentContributionTypeManager',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentContributionTypeManager is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'types',
+				code: 'ContentContributionTypeData[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(type: Partial<ContentContributionTypeData>) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onDelete',
+				code: '(type: ContentContributionTypeData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSave',
+				code: '(type: Partial<ContentContributionTypeData>) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onDelete',
+				code: '(type: ContentContributionTypeData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentContributionTypeManager.svelte'
+	},
+	{
+		slug: 'content-contributor-manager',
+		name: 'ContentContributorManager',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentContributorManager is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'contributors',
+				code: 'ContentContributorData[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(contributor: Partial<ContentContributorData>) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onDelete',
+				code: '(contributor: ContentContributorData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSave',
+				code: '(contributor: Partial<ContentContributorData>) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onDelete',
+				code: '(contributor: ContentContributorData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentContributorManager.svelte'
+	},
+	{
+		slug: 'content-corrections-tool',
+		name: 'ContentCorrectionsTool',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentCorrectionsTool is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'contentId',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'defaultRelationship',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onCorrectionsChange',
+				code: '(corrections: ContentCorrectionData[]) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onCorrectionsChange',
+				code: '(corrections: ContentCorrectionData[]) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentCorrectionsTool.svelte'
+	},
+	{
+		slug: 'content-editor',
+		name: 'ContentEditor',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentEditor is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'content',
+				code: 'ContentData | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'contentId',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'factAudit',
+				code: 'FactAuditStateData | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'saveDisabled',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'saveNotice',
+				code: 'string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'agentChatEnabled',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'agentChatNotice',
+				code: 'string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'hideActions',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'hideChat',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'assistantFieldAllowList',
+				code: 'ContentEditorAssistantFieldUpdateAllowList',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onAssistantContextChange',
+				code: 'ContentEditorAssistantContextChange',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onChange',
+				code: '(data: ContentEditorSnapshot) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onFactAuditChange',
+				code: '(state: FactAuditStateData | null) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(data: ContentEditorSavePayload) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: true,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onAssistantContextChange',
+				code: 'ContentEditorAssistantContextChange',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onChange',
+				code: '(data: ContentEditorSnapshot) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onFactAuditChange',
+				code: '(state: FactAuditStateData | null) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(data: ContentEditorSavePayload) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: true,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentEditor.svelte'
+	},
+	{
+		slug: 'content-facts-route',
+		name: 'ContentFactsRoute',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentFactsRoute is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'client',
+				code: 'ReturnType<typeof createClient>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'navigation',
+				code: 'ContentRouteNavigationItem[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'createHref',
+				code: 'string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'embedded',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/routes/ContentFactsRoute.svelte'
+	},
+	{
+		slug: 'content-governance-assignment-editor',
+		name: 'ContentGovernanceAssignmentEditor',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary:
+			'ContentGovernanceAssignmentEditor is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'assignment',
+				code: 'Partial<ContentGovernanceAssignmentData>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'profiles',
+				code: 'ContentGovernanceProfileData[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(assignment: Partial<ContentGovernanceAssignmentData>) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSave',
+				code: '(assignment: Partial<ContentGovernanceAssignmentData>) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentGovernanceAssignmentEditor.svelte'
+	},
+	{
+		slug: 'content-governance-manager',
+		name: 'ContentGovernanceManager',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentGovernanceManager is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'client',
+				code: 'ContentGovernanceManagerClient',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onChange',
+				code: '(definitions: ContentGovernanceDefinitionsData | null) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onChange',
+				code: '(definitions: ContentGovernanceDefinitionsData | null) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentGovernanceManager.svelte'
+	},
+	{
+		slug: 'content-governance-panel',
+		name: 'ContentGovernancePanel',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentGovernancePanel is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'contentId',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'draftType',
+				code: 'string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'draftVariant',
+				code: 'string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'selectedFactIds',
+				code: 'string[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'selectedFacts',
+				code: 'FactData[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'defaultRelationship',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'reviewProfileKey',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'customReviewLabel',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'customReviewInstructions',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'customReviewPolicyKey',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showFactCatalog',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onFactsChange',
+				code: '(factIds: string[], facts: FactData[]) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onGovernanceStateChange',
+				code: '(state: ContentGovernanceStateData | null) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onFactAuditChange',
+				code: '(state: FactAuditStateData | null) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'hiddenSections',
+				code: 'ContentGovernancePanelSection[]',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onFactsChange',
+				code: '(factIds: string[], facts: FactData[]) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onGovernanceStateChange',
+				code: '(state: ContentGovernanceStateData | null) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onFactAuditChange',
+				code: '(state: FactAuditStateData | null) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentGovernancePanel.svelte'
+	},
+	{
+		slug: 'content-governance-policy-editor',
+		name: 'ContentGovernancePolicyEditor',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentGovernancePolicyEditor is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'policy',
+				code: 'Partial<ContentReviewPolicyData>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(policy: Partial<ContentReviewPolicyData>) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSave',
+				code: '(policy: Partial<ContentReviewPolicyData>) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentGovernancePolicyEditor.svelte'
+	},
+	{
+		slug: 'content-governance-profile-editor',
+		name: 'ContentGovernanceProfileEditor',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentGovernanceProfileEditor is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'profile',
+				code: 'Partial<ContentGovernanceProfileData>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'policies',
+				code: 'ContentReviewPolicyData[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(profile: Partial<ContentGovernanceProfileData>) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSave',
+				code: '(profile: Partial<ContentGovernanceProfileData>) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentGovernanceProfileEditor.svelte'
+	},
+	{
+		slug: 'content-governance-route',
+		name: 'ContentGovernanceRoute',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentGovernanceRoute is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'client',
+				code: 'ContentGovernanceManagerClient',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'navigation',
+				code: 'ContentRouteNavigationItem[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'embedded',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/routes/ContentGovernanceRoute.svelte'
+	},
+	{
+		slug: 'content-governance-tool',
+		name: 'ContentGovernanceTool',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentGovernanceTool is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'section',
+				code: 'ContentGovernanceToolSection',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'contentId',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onGovernanceStateChange',
+				code: '(state: ContentGovernanceStateData | null) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onFactAuditChange',
+				code: '(state: FactAuditStateData | null) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onGovernanceStateChange',
+				code: '(state: ContentGovernanceStateData | null) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onFactAuditChange',
+				code: '(state: FactAuditStateData | null) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentGovernanceTool.svelte'
+	},
+	{
+		slug: 'content-image-browser',
+		name: 'ContentImageBrowser',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentImageBrowser is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'assets',
+				code: 'ContentEditorAsset[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'thumbnailAssetId',
+				code: 'string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'addButtonLabel',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'selectActionLabel',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showUploaderInitially',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSelectImage',
+				code: '(image: ImageLike | File | string) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onUseAsset',
+				code: '(asset: ContentEditorAsset) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onRemoveAsset',
+				code: '(assetId: string) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onUseAsThumbnail',
+				code: '(assetId: string) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSelectImage',
+				code: '(image: ImageLike | File | string) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onUseAsset',
+				code: '(asset: ContentEditorAsset) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onRemoveAsset',
+				code: '(assetId: string) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onUseAsThumbnail',
+				code: '(assetId: string) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentImageBrowser.svelte'
+	},
+	{
+		slug: 'content-image-chooser',
+		name: 'ContentImageChooser',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentImageChooser is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'body',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'format',
+				code: 'ContentBodyFormat | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'selectedIndex',
+				code: 'number',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSelect',
+				code: '(index: number) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSelect',
+				code: '(index: number) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentImageChooser.svelte'
+	},
+	{
+		slug: 'content-content-list',
+		name: 'ContentList',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentList is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'contents',
+				code: 'ContentData[]',
+				status: false,
+				description:
+					'Client-side rows. Ignored when `query` is supplied — the server then owns filtering, sorting, and paging, and these rows would be a second, disagreeing source of truth.'
+			},
+			{
+				name: 'type',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'defaultViewMode',
+				code: 'ContentListViewMode',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onEdit',
+				code: '(content: ContentData) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onDelete',
+				code: '(content: ContentData) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onAdd',
+				code: '() => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'controls',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'getViewHref',
+				code: '(content: ContentData) => string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Announced uniformly by every presentation; #2455 extends it.'
+			},
+			{
+				name: 'error',
+				code: 'string | null',
+				status: false,
+				description: 'Load failure announced instead of the list.'
+			},
+			{
+				name: 'onRetry',
+				code: '() => void',
+				status: false,
+				description: 'Retry affordance rendered with an error.'
+			},
+			{
+				name: 'dataSurface',
+				code: 'ContentListDataSurface',
+				status: false,
+				description: 'Opt-in agent addressability. Non-table presentations land with #2456.'
+			},
+			{
+				name: 'query',
+				code: 'ContentListQuerySource',
+				status: false,
+				description:
+					'Opt-in server-backed rows (#2452). `bind()` is called exactly once, during initialization, so a `remoteQuery(...)` binding is disposed with this component. Supplying it switches the list into server mode: `contents` is ignored and the local select/paginate transform never runs.'
+			},
+			{
+				name: 'urlState',
+				code: 'ContentListUrlStateBinding',
+				status: false,
+				description: 'Opt-in shareable URL state. The host owns navigation.'
+			},
+			{
+				name: 'savedViews',
+				code: 'ContentListSavedViewStore',
+				status: false,
+				description: 'Opt-in saved views. `createContentListSavedViewStore()` is the default store.'
+			},
+			{
+				name: 'jobs',
+				code: 'ContentListJobBinding',
+				status: false,
+				description: 'Shared background-workflow state. The same binding guards submissions.'
+			},
+			{
+				name: 'workflows',
+				code: 'ContentListWorkflowBinding',
+				status: false,
+				description: 'Opt-in, authenticated preview/apply client for bulk workflows (#2453).'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onEdit',
+				code: '(content: ContentData) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onDelete',
+				code: '(content: ContentData) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onAdd',
+				code: '() => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onRetry',
+				code: '() => void',
+				status: false,
+				description: 'Retry affordance rendered with an error.'
+			}
+		],
+		components: [],
 		demo: {
-			id: 'feedback-overlays',
-			label: 'Feedback & Overlays',
+			id: 'collections',
+			label: 'Collections & Content Lists',
 			href: '/playground'
 		},
 		related: {
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/ui/Accordion.svelte'
+		source: 'packages/content/src/svelte/components/ContentList.svelte'
 	},
 	{
-		slug: 'accordion-item',
-		name: 'AccordionItem',
-		family: 'actions-display',
-		category: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'AccordionItem is part of the actions and display component family.',
+		slug: 'content-metadata-fields',
+		name: 'ContentMetadataFields',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentMetadataFields is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'data',
+				code: 'ContentMetadataFieldData',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onChange',
+				code: '(change: Record<string, unknown>) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onChange',
+				code: '(change: Record<string, unknown>) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentMetadataFields.svelte'
+	},
+	{
+		slug: 'content-references-panel',
+		name: 'ContentReferencesPanel',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentReferencesPanel is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'referenceIds',
+				code: 'string[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'references',
+				code: 'ContentEditorReference[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onReferenceIdsChange',
+				code: '(referenceIds: string[]) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description:
+					'Optional snippet rendered inside the panel beneath the references list and the "add reference by ID" input. Host applications use this to inject a richer picker (browsing a tenant asset pool, searching an external archive, etc.) without forking the component. The snippet is responsible for calling `onReferenceIdsChange` (or otherwise mutating the parent state) when the user selects an entry.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onReferenceIdsChange',
+				code: '(referenceIds: string[]) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentReferencesPanel.svelte'
+	},
+	{
+		slug: 'content-review-status-tray',
+		name: 'ContentReviewStatusTray',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentReviewStatusTray is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'items',
+				code: 'ContentReviewStatusTrayItem[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'activeId',
+				code: 'string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'open',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSelect',
+				code: '(item: ContentReviewStatusTrayItem) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSelect',
+				code: '(item: ContentReviewStatusTrayItem) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentReviewStatusTray.svelte'
+	},
+	{
+		slug: 'content-status-fields',
+		name: 'ContentStatusFields',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentStatusFields is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'data',
+				code: 'ContentStatusFieldData',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onChange',
+				code: '(change: Record<string, unknown>) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onChange',
+				code: '(change: Record<string, unknown>) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentStatusFields.svelte'
+	},
+	{
+		slug: 'content-title-field',
+		name: 'ContentTitleField',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentTitleField is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
 				code: 'string',
-				status: true,
+				status: false,
+				description: ''
+			},
+			{
+				name: 'placeholder',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'required',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onChange',
+				code: '(value: string) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onChange',
+				code: '(value: string) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentTitleField.svelte'
+	},
+	{
+		slug: 'content-transparency-report',
+		name: 'ContentTransparencyReport',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentTransparencyReport is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'transparency',
+				code: 'ContentTransparencyData | null',
+				status: false,
 				description: ''
 			},
 			{
 				name: 'title',
 				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'emptyCopy',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentTransparencyReport.svelte'
+	},
+	{
+		slug: 'content-transparency-tool',
+		name: 'ContentTransparencyTool',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentTransparencyTool is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'contentId',
+				code: 'string',
 				status: true,
 				description: ''
+			},
+			{
+				name: 'onGovernanceStateChange',
+				code: '(state: ContentGovernanceStateData | null) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onGovernanceStateChange',
+				code: '(state: ContentGovernanceStateData | null) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentTransparencyTool.svelte'
+	},
+	{
+		slug: 'content-versions-tool',
+		name: 'ContentVersionsTool',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentVersionsTool is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'contentId',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onVersionsChange',
+				code: '(versions: ContentVersionData[]) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onVersionsChange',
+				code: '(versions: ContentVersionData[]) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/ContentVersionsTool.svelte'
+	},
+	{
+		slug: 'content-workspace-route',
+		name: 'ContentWorkspaceRoute',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'ContentWorkspaceRoute is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'client',
+				code: 'ReturnType<typeof createClient>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'navigation',
+				code: 'ContentRouteNavigationItem[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'getPublishedHref',
+				code: '(content: ContentData) => string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'embedded',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/routes/ContentWorkspaceRoute.svelte'
+	},
+	{
+		slug: 'governed-content-editor',
+		name: 'GovernedContentEditor',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'GovernedContentEditor is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'content',
+				code: 'ContentData',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'contentId',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'defaultRelationship',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'reviewProfileKey',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'customReviewLabel',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'customReviewInstructions',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'customReviewPolicyKey',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'enforcePublishReadiness',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'saveDisabled',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'saveNotice',
+				code: 'string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'agentChatEnabled',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'agentChatNotice',
+				code: 'string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'hideActions',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'hideChat',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showFactCatalog',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showGovernancePanel',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onAssistantContextChange',
+				code: 'ContentEditorAssistantContextChange',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(data: GovernedContentEditorSaveData) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: true,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onAssistantContextChange',
+				code: 'ContentEditorAssistantContextChange',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(data: GovernedContentEditorSaveData) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: true,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/GovernedContentEditor.svelte'
+	},
+	{
+		slug: 'markdown',
+		name: 'Markdown',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'Props for the Markdown component',
+		summarySynthesized: false,
+		slot: {
+			id: 'markdown',
+			label: 'Markdown',
+			icon: 'code',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'content',
+				code: 'string',
+				status: true,
+				description: 'Markdown content to render'
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'Optional CSS class for styling'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/components/Markdown.svelte'
+	},
+	{
+		slug: 'published-article-route',
+		name: 'PublishedArticleRoute',
+		family: 'smrt-content-svelte',
+		category: 'Content · Components',
+		importPath: '@happyvertical/smrt-content/svelte',
+		summary: 'PublishedArticleRoute is part of the content · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'data',
+				code: 'PublishedContentArticleRouteData',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'backHref',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'backLabel',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/content/src/svelte/routes/PublishedArticleRoute.svelte'
+	},
+	{
+		slug: 'meeting-view',
+		name: 'MeetingView',
+		family: 'smrt-events-svelte',
+		category: 'Events · Components',
+		importPath: '@happyvertical/smrt-events/svelte',
+		summary: 'Full meeting details with documents and resources',
+		summarySynthesized: false,
+		slot: {
+			id: 'meeting-view',
+			label: 'Meeting View',
+			icon: 'calendar',
+			category: 'detail'
+		},
+		details: [
+			{
+				name: 'meeting',
+				code: 'Meeting',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'calendarUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/events/src/svelte/components/MeetingView.svelte'
+	},
+	{
+		slug: 'advanced-fields',
+		name: 'AdvancedFields',
+		family: 'smrt-fields-svelte',
+		category: 'Fields · Components',
+		importPath: '@happyvertical/smrt-fields/svelte',
+		summary: 'AdvancedFields is part of the fields · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'title',
+				code: 'string',
+				status: false,
+				description: 'Title for the disclosure. Defaults to "Advanced" with the field count.'
+			},
+			{
+				name: 'open',
+				code: 'boolean',
+				status: false,
+				description: 'Whether the disclosure starts open.'
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description: 'Children — the advanced fields to render inside the disclosure.'
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'Additional class.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/fields/src/svelte/components/AdvancedFields.svelte'
+	},
+	{
+		slug: 'field-policy-control-panel',
+		name: 'FieldPolicyControlPanel',
+		family: 'smrt-fields-svelte',
+		category: 'Fields · Components',
+		importPath: '@happyvertical/smrt-fields/svelte',
+		summary: 'FieldPolicyControlPanel is part of the fields · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'data',
+				code: 'FieldPolicySettingsCatalogData',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'adapter',
+				code: 'FieldPolicyControlPanelAdapter',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'catalog',
+				code: 'Component<FieldPolicyCatalogComponentProps>',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'baseUrl',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'permissions',
+				code: 'readonly string[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'heading',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onchanged',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'confirmAction',
+				code: '(message: string) => boolean | Promise<boolean>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'suggestionAdapter',
+				code: 'FieldPolicySuggestionAdapter',
+				status: false,
+				description: 'Optional reviewed-suggestion queue transport.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchanged',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [''],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/fields/src/svelte/components/FieldPolicyControlPanel.svelte'
+	},
+	{
+		slug: 'field-policy-editor',
+		name: 'FieldPolicyEditor',
+		family: 'smrt-fields-svelte',
+		category: 'Fields · Components',
+		importPath: '@happyvertical/smrt-fields/svelte',
+		summary: 'FieldPolicyEditor is part of the fields · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'state',
+				code: 'FieldPolicyEditorState',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'adapter',
+				code: 'FieldPolicyEditorAdapter',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'fields',
+				code: 'Readonly<Record<string, ObjectFormFieldDefinition>>',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'inputRegistry',
+				code: 'FieldInputRegistry',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'organizationScope',
+				code: 'FieldPolicyOrganizationScope',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onmutated',
+				code: '() => Promise<void>',
+				status: true,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onmutated',
+				code: '() => Promise<void>',
+				status: true,
+				description: ''
+			}
+		],
+		components: [''],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/fields/src/svelte/components/FieldPolicyEditor.svelte'
+	},
+	{
+		slug: 'field-policy-gear-button',
+		name: 'FieldPolicyGearButton',
+		family: 'smrt-fields-svelte',
+		category: 'Fields · Components',
+		importPath: '@happyvertical/smrt-fields/svelte',
+		summary: 'FieldPolicyGearButton is part of the fields · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/fields/src/svelte/components/FieldPolicyGearButton.svelte'
+	},
+	{
+		slug: 'field-policy-gear-provider',
+		name: 'FieldPolicyGearProvider',
+		family: 'smrt-fields-svelte',
+		category: 'Fields · Components',
+		importPath: '@happyvertical/smrt-fields/svelte',
+		summary: 'FieldPolicyGearProvider is part of the fields · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'objectRef',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'fields',
+				code: 'Readonly<Record<string, ObjectFormFieldDefinition>>',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'adapter',
+				code: 'FieldPolicyEditorAdapter',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'inputRegistry',
+				code: 'FieldInputRegistry',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'organizationScope',
+				code: 'FieldPolicyOrganizationScope',
+				status: false,
+				description: 'Hosts in an app-wide context pass app; tenant hosts retain the default.'
+			},
+			{
+				name: 'suggestionAdapter',
+				code: 'FieldPolicySuggestionAdapter',
+				status: false,
+				description: 'Optional reviewed-suggestion transport for the gear badge.'
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/fields/src/svelte/components/FieldPolicyGearProvider.svelte'
+	},
+	{
+		slug: 'field-policy-provider',
+		name: 'FieldPolicyProvider',
+		family: 'smrt-fields-svelte',
+		category: 'Fields · Components',
+		importPath: '@happyvertical/smrt-fields/svelte',
+		summary:
+			'FieldPolicyProvider — the form-level entry point for policy-driven forms. Receives a resolved {@link ResolvedObjectFieldPolicy} **as props** (SSR `initialData` or a client fetch by the app). Owns mode state (`basic`/ `advanced`) and publishes the reactive context consumed by `PolicyField`, `ModeSwitch`, `AdvancedFields`, and `FormHelp`. No `smrt-web` import in the core primitive — an optional `./web` adapter can wire live invalidation for apps that want it; this component is policy-source agnostic. SSR seeding: props seed `$state` via `untrack()` so the first render reflects the request, with a client-only `$effect` resync — the same pattern as ThemeProvider (`smrt-ui/src/themes/ThemeProvider.svelte:53-70`).',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'policy',
+				code: 'ResolvedObjectFieldPolicy',
+				status: true,
+				description:
+					'Pre-resolved field policy for the object. Pass the output of `resolveFieldPolicy()` (server-side) or the `resolveBatch` endpoint response (client-side).'
+			},
+			{
+				name: 'mode',
+				code: 'FieldPolicyMode',
+				status: false,
+				description: "Initial display mode — 'basic' hides advanced-tier fields."
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description: 'Children rendered inside the provider.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/fields/src/svelte/components/FieldPolicyProvider.svelte'
+	},
+	{
+		slug: 'field-policy-suggestion-queue',
+		name: 'FieldPolicySuggestionQueue',
+		family: 'smrt-fields-svelte',
+		category: 'Fields · Components',
+		importPath: '@happyvertical/smrt-fields/svelte',
+		summary: 'FieldPolicySuggestionQueue is part of the fields · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'adapter',
+				code: 'FieldPolicySuggestionAdapter',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'objectRefs',
+				code: 'readonly string[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'heading',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onchanged',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchanged',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/fields/src/svelte/components/FieldPolicySuggestionQueue.svelte'
+	},
+	{
+		slug: 'form-help',
+		name: 'FormHelp',
+		family: 'smrt-fields-svelte',
+		category: 'Fields · Components',
+		importPath: '@happyvertical/smrt-fields/svelte',
+		summary: 'FormHelp is part of the fields · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'objectDescription',
+				code: 'string',
+				status: false,
+				description:
+					'Object-level description (e.g. the SmrtObject class `description`). When provided, it appears at the top of the help panel.'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Label for the toggle button.'
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'Additional class.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/fields/src/svelte/components/FormHelp.svelte'
+	},
+	{
+		slug: 'mode-switch',
+		name: 'ModeSwitch',
+		family: 'smrt-fields-svelte',
+		category: 'Fields · Components',
+		importPath: '@happyvertical/smrt-fields/svelte',
+		summary: 'ModeSwitch is part of the fields · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Accessible label for the segmented control.'
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'Additional class.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/fields/src/svelte/components/ModeSwitch.svelte'
+	},
+	{
+		slug: 'object-form',
+		name: 'ObjectForm',
+		family: 'smrt-fields-svelte',
+		category: 'Fields · Components',
+		importPath: '@happyvertical/smrt-fields/svelte',
+		summary: 'ObjectForm is part of the fields · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'objectRef',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'fields',
+				code: 'Readonly<Record<string, ObjectFormFieldDefinition>>',
+				status: false,
+				description:
+					'Generated browser-safe definitions — never pass raw server registry fields. Omit with `policy` to resolve both through ObjectFormSourceProvider.'
+			},
+			{
+				name: 'policy',
+				code: 'ResolvedObjectFieldPolicy',
+				status: false,
+				description: 'Pre-resolved policy for the same objectRef. Omit with `fields` for a source.'
+			},
+			{
+				name: 'value',
+				code: 'Record<string, unknown>',
+				status: false,
+				description: 'Mutable create/edit record. Bind this prop to retain values in the host.'
+			},
+			{
+				name: 'isNewRecord',
+				code: 'boolean',
+				status: false,
+				description: 'True for creates (defaults may prefill), false for loaded edits.'
+			},
+			{
+				name: 'createSessionKey',
+				code: 'string | number',
+				status: false,
+				description:
+					'Optional identity for a create session. Change this when reusing a mounted form for another new record; defaults then apply once to missing values. With no key, replacing the bound record with an empty object starts a new create session automatically.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
+				description: ''
+			},
+			{
+				name: 'showModeSwitch',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showPolicyGear',
+				code: 'boolean',
+				status: false,
+				description: 'Render a provider-registered policy gear next to the mode control.'
+			},
+			{
+				name: 'inputRegistry',
+				code: 'FieldInputRegistry',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'renderers',
+				code: 'Readonly<Record<string, Snippet<[ObjectFormFieldSnippetProps]>>>',
+				status: false,
+				description: 'Per-field custom widget snippets, keyed by field name.'
+			},
+			{
+				name: 'actions',
+				code: 'Snippet',
+				status: false,
+				description: 'Optional controls rendered after the policy-ordered fields inside the form.'
+			},
+			{
+				name: 'usageReporter',
+				code: 'FieldUsageReporter',
+				status: false,
+				description:
+					'Optional telemetry transport. It runs only when `onsubmit` explicitly resolves `true` after persistence; identity and field sensitivity remain server-derived.'
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onsubmit',
+				code: 'ObjectFormSubmitHandler',
+				status: false,
+				description: 'Return true only after the host has persisted this record successfully.'
+			}
+		],
+		sources: [],
+		sections: [
+			{
+				name: 'value',
+				code: 'Record<string, unknown>',
+				status: false,
+				description: 'Mutable create/edit record. Bind this prop to retain values in the host.'
+			}
+		],
+		items: [
+			{
+				name: 'onsubmit',
+				code: 'ObjectFormSubmitHandler',
+				status: false,
+				description: 'Return true only after the host has persisted this record successfully.'
+			}
+		],
+		components: ['value'],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/fields/src/svelte/components/ObjectForm.svelte'
+	},
+	{
+		slug: 'object-form-source-provider',
+		name: 'ObjectFormSourceProvider',
+		family: 'smrt-fields-svelte',
+		category: 'Fields · Components',
+		importPath: '@happyvertical/smrt-fields/svelte',
+		summary: 'Provides one app-local generated ObjectForm source to descendant forms.',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'source',
+				code: 'ObjectFormSource',
+				status: true,
 				description: ''
 			},
 			{
@@ -130,29 +6951,816 @@ export const uiComponents: UiComponentReference[] = [
 		sections: [],
 		items: [],
 		components: [],
-		demo: {
-			id: 'feedback-overlays',
-			label: 'Feedback & Overlays',
-			href: '/playground'
-		},
+		demo: null,
 		related: {
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/ui/AccordionItem.svelte'
+		source: 'packages/fields/src/svelte/components/ObjectFormSourceProvider.svelte'
 	},
 	{
-		slug: 'avatar',
-		name: 'Avatar',
-		family: 'actions-display',
-		category: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Avatar is part of the actions and display component family.',
+		slug: 'policy-field',
+		name: 'PolicyField',
+		family: 'smrt-fields-svelte',
+		category: 'Fields · Components',
+		importPath: '@happyvertical/smrt-fields/svelte',
+		summary:
+			'PolicyField — layout-neutral wrapper around any input. Contributes: - Visibility by resolved tier × current mode (advanced fields hidden in basic mode) - Initial-value prefill from the resolved default (new records only — never clobbers loaded values) - Label rendering (the resolved label; when the policy has no label the label element is omitted rather than fabricated from the raw field name, and tooltip-density help falls back to a visible hint) - Help hint rendered from resolved help (manifest description → org/user override) - Required marker Label ↔ control association: the default wrapper renders `<label for={name}>`, so the wrapped control should carry an `id` equal to the field `name`. When the first wrapped control has a different `id`, the `for` attribute is re-pointed to it after mount; when it has no `id` at all, the wrapper assigns `id={name}` so the association is guaranteed. Headless escape hatch: pass a `render` snippet receiving `{visible, label, help, defaultValue, required, tier}` for fully custom rendering. Without a snippet, PolicyField wraps children in a label + help affordance and controls visibility. Graceful degradation: outside a FieldPolicyProvider, PolicyField renders its children verbatim (no visibility filtering, no label/help injection) so forms can adopt it incrementally.',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
-				name: 'src',
+				name: 'name',
+				code: 'string',
+				status: true,
+				description: "The field name matching a key in the resolved policy's `fields`."
+			},
+			{
+				name: 'id',
 				code: 'string',
 				status: false,
+				description: 'Stable per-form control id; defaults to `name` for standalone use.'
+			},
+			{
+				name: 'helpId',
+				code: 'string',
+				status: false,
+				description: 'Stable per-form help id; defaults to `${id}-help`.'
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description:
+					'Children — the actual input(s). Always rendered when the field is visible (unless the `render` snippet escape hatch is used).'
+			},
+			{
+				name: 'render',
+				code: 'Snippet<[PolicyFieldSnippetProps]>',
+				status: false,
+				description:
+					'Headless escape hatch: a snippet receiving all resolved policy data for fully custom rendering. When provided, it replaces the default label + children + help layout entirely.'
+			},
+			{
+				name: 'isNewRecord',
+				code: 'boolean',
+				status: false,
+				description:
+					'Whether this is a new record. When true (default) and the field has a resolved default, the provider can prefill. Set to false for loaded records to prevent overwriting existing values.'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description:
+					'Override the resolved label. When provided, takes precedence over the policy label.'
+			},
+			{
+				name: 'help',
+				code: 'string',
+				status: false,
+				description:
+					'Override the resolved help text. When provided, takes precedence over the policy help.'
+			},
+			{
+				name: 'helpDensity',
+				code: "'hint' | 'tooltip'",
+				status: false,
+				description:
+					"Density of the help hint: 'hint' (inline hint text, default) or 'tooltip' (title attribute on the label)."
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'Additional class for the wrapper element.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/fields/src/svelte/components/PolicyField.svelte'
+	},
+	{
+		slug: 'assets-gallery',
+		name: 'AssetsGallery',
+		family: 'smrt-images-svelte',
+		category: 'Images · Components',
+		importPath: '@happyvertical/smrt-images/svelte',
+		summary: 'Grid gallery of image assets with filtering and selection',
+		summarySynthesized: false,
+		slot: {
+			id: 'assets-gallery',
+			label: 'Assets Gallery',
+			icon: 'images',
+			category: 'list'
+		},
+		details: [
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'client',
+				code: 'ImagesGalleryClient',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSelect',
+				code: '(image: ImageLike) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'enableDragToEditor',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSelect',
+				code: '(image: ImageLike) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/images/src/svelte/components/AssetsGallery.svelte'
+	},
+	{
+		slug: 'image-editor',
+		name: 'ImageEditor',
+		family: 'smrt-images-svelte',
+		category: 'Images · Components',
+		importPath: '@happyvertical/smrt-images/svelte',
+		summary: 'Resize, crop, convert, and AI-edit an image with derivative tracking',
+		summarySynthesized: false,
+		slot: {
+			id: 'image-editor',
+			label: 'Image Editor',
+			icon: 'image',
+			category: 'form'
+		},
+		details: [
+			{
+				name: 'image',
+				code: 'ImageLike | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'client',
+				code: 'ImageEditorClient',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(image: ImageLike) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSave',
+				code: '(image: ImageLike) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/images/src/svelte/components/ImageEditor.svelte'
+	},
+	{
+		slug: 'image-uploader',
+		name: 'ImageUploader',
+		family: 'smrt-images-svelte',
+		category: 'Images · Components',
+		importPath: '@happyvertical/smrt-images/svelte',
+		summary: 'Upload images with metadata extraction and AI categorization',
+		summarySynthesized: false,
+		slot: {
+			id: 'image-uploader',
+			label: 'Image Uploader',
+			icon: 'upload',
+			category: 'form'
+		},
+		details: [
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'editorClient',
+				code: 'ImageEditorClient',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'galleryClient',
+				code: 'ImagesGalleryClient',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSelect',
+				code: '(image: ImageLike | File | string) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'allowedTabs',
+				code: "('gallery' | 'upload' | 'camera' | 'external')[]",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'enableDragToEditor',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSelect',
+				code: '(image: ImageLike | File | string) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/images/src/svelte/components/ImageUploader.svelte'
+	},
+	{
+		slug: 'job-actions',
+		name: 'JobActions',
+		family: 'smrt-jobs-svelte',
+		category: 'Jobs · Components',
+		importPath: '@happyvertical/smrt-jobs/svelte',
+		summary: 'Action buttons for job operations',
+		summarySynthesized: false,
+		slot: {
+			id: 'job-actions',
+			label: 'Job Actions',
+			icon: 'more-horizontal',
+			category: 'action'
+		},
+		details: [
+			{
+				name: 'job',
+				code: 'JobData',
+				status: true,
+				description: 'Job to perform actions on'
+			},
+			{
+				name: 'showRetry',
+				code: 'boolean',
+				status: false,
+				description: 'Show retry button'
+			},
+			{
+				name: 'showCancel',
+				code: 'boolean',
+				status: false,
+				description: 'Show cancel button'
+			},
+			{
+				name: 'showDelete',
+				code: 'boolean',
+				status: false,
+				description: 'Show delete button'
+			},
+			{
+				name: 'onRetry',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when retry is clicked'
+			},
+			{
+				name: 'onCancel',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when cancel is clicked'
+			},
+			{
+				name: 'onDelete',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when delete is clicked'
+			},
+			{
+				name: 'compact',
+				code: 'boolean',
+				status: false,
+				description: 'Compact mode'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onRetry',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when retry is clicked'
+			},
+			{
+				name: 'onCancel',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when cancel is clicked'
+			},
+			{
+				name: 'onDelete',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when delete is clicked'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/jobs/src/svelte/components/JobActions.svelte'
+	},
+	{
+		slug: 'job-dashboard',
+		name: 'JobDashboard',
+		family: 'smrt-jobs-svelte',
+		category: 'Jobs · Components',
+		importPath: '@happyvertical/smrt-jobs/svelte',
+		summary: 'Combined overview panel for background jobs',
+		summarySynthesized: false,
+		slot: {
+			id: 'job-dashboard',
+			label: 'Job Dashboard',
+			icon: 'briefcase',
+			category: 'admin'
+		},
+		details: [
+			{
+				name: 'stats',
+				code: 'JobStats',
+				status: true,
+				description: 'Statistics data'
+			},
+			{
+				name: 'queues',
+				code: 'QueueStats[]',
+				status: false,
+				description: 'Queue breakdown'
+			},
+			{
+				name: 'recentJobs',
+				code: 'JobData[]',
+				status: false,
+				description: 'Recent jobs'
+			},
+			{
+				name: 'failedJobs',
+				code: 'JobData[]',
+				status: false,
+				description: 'Failed jobs'
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Loading state'
+			},
+			{
+				name: 'onJobClick',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when job is clicked'
+			},
+			{
+				name: 'onRetry',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when retry is clicked'
+			},
+			{
+				name: 'onCancel',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when cancel is clicked'
+			},
+			{
+				name: 'onViewAll',
+				code: '() => void',
+				status: false,
+				description: 'Callback when view all is clicked'
+			},
+			{
+				name: 'onViewFailed',
+				code: '() => void',
+				status: false,
+				description: 'Callback when view failed is clicked'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onJobClick',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when job is clicked'
+			},
+			{
+				name: 'onRetry',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when retry is clicked'
+			},
+			{
+				name: 'onCancel',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when cancel is clicked'
+			},
+			{
+				name: 'onViewAll',
+				code: '() => void',
+				status: false,
+				description: 'Callback when view all is clicked'
+			},
+			{
+				name: 'onViewFailed',
+				code: '() => void',
+				status: false,
+				description: 'Callback when view failed is clicked'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/jobs/src/svelte/components/JobDashboard.svelte'
+	},
+	{
+		slug: 'job-detail',
+		name: 'JobDetail',
+		family: 'smrt-jobs-svelte',
+		category: 'Jobs · Components',
+		importPath: '@happyvertical/smrt-jobs/svelte',
+		summary: 'Detailed view of a single job',
+		summarySynthesized: false,
+		slot: {
+			id: 'job-detail',
+			label: 'Job Detail',
+			icon: 'file-text',
+			category: 'detail'
+		},
+		details: [
+			{
+				name: 'job',
+				code: 'JobData',
+				status: true,
+				description: 'Job to display'
+			},
+			{
+				name: 'showResult',
+				code: 'boolean',
+				status: false,
+				description: 'Show result data'
+			},
+			{
+				name: 'onRetry',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when retry is clicked'
+			},
+			{
+				name: 'onCancel',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when cancel is clicked'
+			},
+			{
+				name: 'onDelete',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when delete is clicked'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onRetry',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when retry is clicked'
+			},
+			{
+				name: 'onCancel',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when cancel is clicked'
+			},
+			{
+				name: 'onDelete',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when delete is clicked'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/jobs/src/svelte/components/JobDetail.svelte'
+	},
+	{
+		slug: 'job-list',
+		name: 'JobList',
+		family: 'smrt-jobs-svelte',
+		category: 'Jobs · Components',
+		importPath: '@happyvertical/smrt-jobs/svelte',
+		summary: 'Filterable, sortable list of background jobs',
+		summarySynthesized: false,
+		slot: {
+			id: 'job-list',
+			label: 'Job List',
+			icon: 'list',
+			category: 'list'
+		},
+		details: [
+			{
+				name: 'jobs',
+				code: 'JobData[]',
+				status: true,
+				description: 'Jobs to display'
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Loading state'
+			},
+			{
+				name: 'selectable',
+				code: 'boolean',
+				status: false,
+				description: 'Selectable rows'
+			},
+			{
+				name: 'selected',
+				code: 'Set<string>',
+				status: false,
+				description: 'Selected job IDs'
+			},
+			{
+				name: 'showActions',
+				code: 'boolean',
+				status: false,
+				description: 'Show actions column'
+			},
+			{
+				name: 'onSelectionChange',
+				code: '(selected: Set<string>) => void',
+				status: false,
+				description: 'Callback when selection changes'
+			},
+			{
+				name: 'onJobClick',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when job is clicked'
+			},
+			{
+				name: 'onRetry',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when retry is clicked'
+			},
+			{
+				name: 'onCancel',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when cancel is clicked'
+			},
+			{
+				name: 'empty',
+				code: 'Snippet',
+				status: false,
+				description: 'Empty state snippet'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSelectionChange',
+				code: '(selected: Set<string>) => void',
+				status: false,
+				description: 'Callback when selection changes'
+			},
+			{
+				name: 'onJobClick',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when job is clicked'
+			},
+			{
+				name: 'onRetry',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when retry is clicked'
+			},
+			{
+				name: 'onCancel',
+				code: '(job: JobData) => void',
+				status: false,
+				description: 'Callback when cancel is clicked'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/jobs/src/svelte/components/JobList.svelte'
+	},
+	{
+		slug: 'job-stats',
+		name: 'JobStats',
+		family: 'smrt-jobs-svelte',
+		category: 'Jobs · Components',
+		importPath: '@happyvertical/smrt-jobs/svelte',
+		summary: 'Statistics dashboard for job queues',
+		summarySynthesized: false,
+		slot: {
+			id: 'job-stats',
+			label: 'Job Stats',
+			icon: 'bar-chart',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'stats',
+				code: 'JobStats',
+				status: true,
+				description: 'Statistics data'
+			},
+			{
+				name: 'queues',
+				code: 'QueueStats[]',
+				status: false,
+				description: 'Queue breakdown'
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Loading state'
+			},
+			{
+				name: 'compact',
+				code: 'boolean',
+				status: false,
+				description: 'Compact mode'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/jobs/src/svelte/components/JobStats.svelte'
+	},
+	{
+		slug: 'job-status-badge',
+		name: 'JobStatusBadge',
+		family: 'smrt-jobs-svelte',
+		category: 'Jobs · Components',
+		importPath: '@happyvertical/smrt-jobs/svelte',
+		summary: 'Status indicator for job states',
+		summarySynthesized: false,
+		slot: {
+			id: 'job-status-badge',
+			label: 'Job Status Badge',
+			icon: 'tag',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'status',
+				code: 'JobStatus',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'size',
+				code: "'sm' | 'md'",
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/jobs/src/svelte/components/JobStatusBadge.svelte'
+	},
+	{
+		slug: 'account-avatar',
+		name: 'AccountAvatar',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'AccountAvatar - Provider icon with fallback initials',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'providerType',
+				code: 'string',
+				status: true,
 				description: ''
 			},
 			{
@@ -163,24 +7771,12 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'size',
-				code: 'AvatarSize',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'status',
-				code: 'AvatarStatus',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'class',
-				code: 'string',
+				code: "'sm' | 'md' | 'lg'",
 				status: false,
 				description: ''
 			}
 		],
-		sources: ["Omit<HTMLAttributes<HTMLSpanElement>, 'class'>"],
+		sources: [],
 		sections: [],
 		items: [],
 		components: [],
@@ -189,84 +7785,2344 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/ui/Avatar.svelte'
+		source: 'packages/messages/src/svelte/components/AccountAvatar.svelte'
 	},
 	{
-		slug: 'badge',
-		name: 'Badge',
-		family: 'actions-display',
-		category: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Badge is part of the actions and display component family.',
+		slug: 'account-card',
+		name: 'AccountCard',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'AccountCard is part of the messages · components component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
-				name: 'variant',
-				code: 'BadgeVariant',
+				name: 'account',
+				code: 'AccountData',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onsync',
+				code: '(account: AccountData) => void',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'size',
-				code: 'BadgeSize',
+				name: 'onactivate',
+				code: '(account: AccountData) => void',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'children',
-				code: 'Snippet',
+				name: 'ondeactivate',
+				code: '(account: AccountData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onremove',
+				code: '(account: AccountData) => void',
 				status: false,
 				description: ''
 			}
 		],
-		sources: ["Omit<HTMLAttributes<HTMLSpanElement>, 'class'>"],
+		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onsync',
+				code: '(account: AccountData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onactivate',
+				code: '(account: AccountData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondeactivate',
+				code: '(account: AccountData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onremove',
+				code: '(account: AccountData) => void',
+				status: false,
+				description: ''
+			}
+		],
 		components: [],
-		demo: {
-			id: 'base-controls',
-			label: 'Base Controls',
-			href: '/playground'
-		},
+		demo: null,
 		related: {
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/ui/Badge.svelte'
+		source: 'packages/messages/src/svelte/components/AccountCard.svelte'
 	},
 	{
-		slug: 'button',
-		name: 'Button',
-		family: 'actions-display',
-		category: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Button is part of the actions and display component family.',
+		slug: 'account-list',
+		name: 'AccountList',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'Account management list with sync status',
+		summarySynthesized: false,
+		slot: {
+			id: 'account-list',
+			label: 'Account List',
+			icon: 'users',
+			category: 'list'
+		},
 		details: [
 			{
-				name: 'variant',
-				code: 'ButtonVariant',
+				name: 'accounts',
+				code: 'AccountData[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'size',
-				code: 'ButtonSize',
+				name: 'onaccountclick',
+				code: '(account: AccountData) => void',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'href',
+				name: 'onsync',
+				code: '(account: AccountData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onremove',
+				code: '(account: AccountData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onaccountclick',
+				code: '(account: AccountData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onsync',
+				code: '(account: AccountData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onremove',
+				code: '(account: AccountData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/AccountList.svelte'
+	},
+	{
+		slug: 'attachment-chip',
+		name: 'AttachmentChip',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'AttachmentChip is part of the messages · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'attachment',
+				code: 'AttachmentData',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onclick',
+				code: '(attachment: AttachmentData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onclick',
+				code: '(attachment: AttachmentData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/AttachmentChip.svelte'
+	},
+	{
+		slug: 'attachment-upload',
+		name: 'AttachmentUpload',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'AttachmentUpload is part of the messages · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'attachments',
+				code: 'AttachmentData[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onattach',
+				code: '(files: File[]) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onremove',
+				code: '(index: number) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'maxSize',
+				code: 'number',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onattach',
+				code: '(files: File[]) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onremove',
+				code: '(index: number) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/AttachmentUpload.svelte'
+	},
+	{
+		slug: 'compose-form',
+		name: 'ComposeForm',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'Full message compose form with type-adaptive fields',
+		summarySynthesized: false,
+		slot: {
+			id: 'compose-form',
+			label: 'Compose Form',
+			icon: 'edit',
+			category: 'action'
+		},
+		details: [
+			{
+				name: 'type',
+				code: "'email' | 'slack' | 'tweet'",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'accounts',
+				code: 'AccountData[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'initialState',
+				code: 'Partial<ComposeState>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onsend',
+				code: '(state: ComposeState) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onsavedraft',
+				code: '(state: ComposeState) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondiscard',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsend',
+				code: '(state: ComposeState) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onsavedraft',
+				code: '(state: ComposeState) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondiscard',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/ComposeForm.svelte'
+	},
+	{
+		slug: 'email-account-manager',
+		name: 'EmailAccountManager',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'EmailAccountManager is part of the messages · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'accounts',
+				code: 'EmailAccountData[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'readonly',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onsave',
+				code: '(data: Partial<EmailAccountData>, id?: string) => Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondelete',
+				code: '(account: EmailAccountData) => Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ontest',
+				code: '(account: EmailAccountData) => Promise<{ success: boolean; error?: string; }>',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsave',
+				code: '(data: Partial<EmailAccountData>, id?: string) => Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondelete',
+				code: '(account: EmailAccountData) => Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ontest',
+				code: '(account: EmailAccountData) => Promise<{ success: boolean; error?: string; }>',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/EmailAccountManager.svelte'
+	},
+	{
+		slug: 'email-filter-manager',
+		name: 'EmailFilterManager',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'EmailFilterManager is part of the messages · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'whitelist',
+				code: 'WhitelistEntry[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'blacklist',
+				code: 'BlacklistEntry[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'readonly',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onaddwhitelist',
+				code: "(data: Omit<WhitelistEntry, 'id'>) => Promise<void>",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onremovewhitelist',
+				code: '(entry: WhitelistEntry) => Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onaddblacklist',
+				code: "(data: Omit<BlacklistEntry, 'id'>) => Promise<void>",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onremoveblacklist',
+				code: '(entry: BlacklistEntry) => Promise<void>',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onaddwhitelist',
+				code: "(data: Omit<WhitelistEntry, 'id'>) => Promise<void>",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onremovewhitelist',
+				code: '(entry: WhitelistEntry) => Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onaddblacklist',
+				code: "(data: Omit<BlacklistEntry, 'id'>) => Promise<void>",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onremoveblacklist',
+				code: '(entry: BlacklistEntry) => Promise<void>',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/EmailFilterManager.svelte'
+	},
+	{
+		slug: 'folder-nav',
+		name: 'FolderNav',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'FolderNav is part of the messages · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'folders',
+				code: 'FolderData[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'activeFolderId',
 				code: 'string',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'children',
-				code: 'Snippet',
+				name: 'showCounts',
+				code: 'boolean',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'fullWidth',
+				name: 'onfolderclick',
+				code: '(folder: FolderData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onfolderclick',
+				code: '(folder: FolderData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/FolderNav.svelte'
+	},
+	{
+		slug: 'forward-form',
+		name: 'ForwardForm',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'ForwardForm is part of the messages · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'originalMessage',
+				code: 'MessageData',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onsend',
+				code: '(to: RecipientEntry[], body: string) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'oncancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsend',
+				code: '(to: RecipientEntry[], body: string) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'oncancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/ForwardForm.svelte'
+	},
+	{
+		slug: 'message-card',
+		name: 'MessageCard',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'Single message row with type-adaptive rendering',
+		summarySynthesized: false,
+		slot: {
+			id: 'message-card',
+			label: 'Message Card',
+			icon: 'mail',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'message',
+				code: 'MessageData',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'selected',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'compact',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showAccount',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showType',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onclick',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onselect',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onflag',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'account',
+				code: 'AccountData',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'typeContent',
+				code: 'Snippet<[{ message: MessageData; }]>',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onclick',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onselect',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onflag',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/MessageCard.svelte'
+	},
+	{
+		slug: 'message-detail',
+		name: 'MessageDetail',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'Full message view with type-adaptive sections',
+		summarySynthesized: false,
+		slot: {
+			id: 'message-detail',
+			label: 'Message Detail',
+			icon: 'file-text',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'message',
+				code: 'MessageData',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'attachments',
+				code: 'AttachmentData[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'account',
+				code: 'AccountData',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showHtml',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onreply',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onforward',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondelete',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'typeDetail',
+				code: 'Snippet<[{ message: MessageData; }]>',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onreply',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onforward',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondelete',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/MessageDetail.svelte'
+	},
+	{
+		slug: 'message-filters',
+		name: 'MessageFilters',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'Filter and sort controls for message lists',
+		summarySynthesized: false,
+		slot: {
+			id: 'message-filters',
+			label: 'Message Filters',
+			icon: 'filter',
+			category: 'action'
+		},
+		details: [
+			{
+				name: 'filters',
+				code: 'MessageFilterState',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'sort',
+				code: 'MessageSort',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'accounts',
+				code: 'AccountData[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'availableTypes',
+				code: 'MessageType[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onfilterchange',
+				code: '(filters: MessageFilterState) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onsearch',
+				code: '(query: string) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onfilterchange',
+				code: '(filters: MessageFilterState) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onsearch',
+				code: '(query: string) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/MessageFilters.svelte'
+	},
+	{
+		slug: 'messages-message-list',
+		name: 'MessageList',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'Unified message list with selection and filtering',
+		summarySynthesized: false,
+		slot: {
+			id: 'message-list',
+			label: 'Message List',
+			icon: 'list',
+			category: 'list'
+		},
+		details: [
+			{
+				name: 'messages',
+				code: 'MessageData[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'selected',
+				code: 'Set<string>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'activeMessageId',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'accounts',
+				code: 'AccountData[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'emptyMessage',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onmessageclick',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onselect',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onflag',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showType',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showAccount',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'compact',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'card',
+				code: 'Snippet<[{ message: MessageData; }]>',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onmessageclick',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onselect',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onflag',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/MessageList.svelte'
+	},
+	{
+		slug: 'message-status-indicator',
+		name: 'MessageStatusIndicator',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'MessageStatusIndicator is part of the messages · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'isRead',
+				code: 'boolean',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'isFlagged',
+				code: 'boolean',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'hasAttachments',
+				code: 'boolean',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'isAnswered',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'isDraft',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/MessageStatusIndicator.svelte'
+	},
+	{
+		slug: 'message-toolbar',
+		name: 'MessageToolbar',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'MessageToolbar is part of the messages · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'selectedCount',
+				code: 'number',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'totalCount',
+				code: 'number',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onaction',
+				code: '(action: BulkAction) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onselectall',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onclearselection',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'extraActions',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onaction',
+				code: '(action: BulkAction) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onselectall',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onclearselection',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/MessageToolbar.svelte'
+	},
+	{
+		slug: 'message-type-badge',
+		name: 'MessageTypeBadge',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'MessageTypeBadge is part of the messages · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'type',
+				code: 'MessageType',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'size',
+				code: "'sm' | 'md'",
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/MessageTypeBadge.svelte'
+	},
+	{
+		slug: 'messaging-settings-panel',
+		name: 'MessagingSettingsPanel',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'MessagingSettingsPanel is part of the messages · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'personaId',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'profileId',
+				code: 'string',
+				status: false,
+				description: "Current user's profile, attached to destinations created by this panel."
+			},
+			{
+				name: 'providers',
+				code: 'PublicProvider[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'accounts',
+				code: 'MessagingAccountView[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'endpoints',
+				code: 'MessagingEndpointView[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'routes',
+				code: 'PersonaMessageRoute[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onSaveAccount',
+				code: '(input: MessagingAccountInput) => Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSaveEndpoint',
+				code: '(input: MessagingEndpointInput) => Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSaveRoute',
+				code: '(input: PersonaMessageRouteInput) => Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'readonly',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onSaveAccount',
+				code: '(input: MessagingAccountInput) => Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSaveEndpoint',
+				code: '(input: MessagingEndpointInput) => Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSaveRoute',
+				code: '(input: PersonaMessageRouteInput) => Promise<void>',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/MessagingSettingsPanel.svelte'
+	},
+	{
+		slug: 'recipient-input',
+		name: 'RecipientInput',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'RecipientInput is part of the messages · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'recipients',
+				code: 'RecipientEntry[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onchange',
+				code: '(recipients: RecipientEntry[]) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'placeholder',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(recipients: RecipientEntry[]) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/RecipientInput.svelte'
+	},
+	{
+		slug: 'reply-form',
+		name: 'ReplyForm',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'Inline reply form with quoted original',
+		summarySynthesized: false,
+		slot: {
+			id: 'reply-form',
+			label: 'Reply Form',
+			icon: 'reply',
+			category: 'action'
+		},
+		details: [
+			{
+				name: 'originalMessage',
+				code: 'MessageData',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'replyAll',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onsend',
+				code: '(body: string) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'oncancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsend',
+				code: '(body: string) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'oncancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/ReplyForm.svelte'
+	},
+	{
+		slug: 'send-status-badge',
+		name: 'SendStatusBadge',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'SendStatusBadge is part of the messages · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'status',
+				code: "'draft' | 'pending' | 'sending' | 'sent' | 'failed' | 'scheduled'",
+				status: true,
+				description: ''
+			},
+			{
+				name: 'size',
+				code: "'sm' | 'md'",
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/SendStatusBadge.svelte'
+	},
+	{
+		slug: 'thread-view',
+		name: 'ThreadView',
+		family: 'smrt-messages-svelte',
+		category: 'Messages · Components',
+		importPath: '@happyvertical/smrt-messages/svelte',
+		summary: 'Conversation thread with collapsible messages',
+		summarySynthesized: false,
+		slot: {
+			id: 'thread-view',
+			label: 'Thread View',
+			icon: 'message-circle',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'messages',
+				code: 'MessageData[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'activeMessageId',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'initialCollapsed',
+				code: 'Set<string>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onmessageclick',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onreply',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onmessageclick',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onreply',
+				code: '(message: MessageData) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/messages/src/svelte/components/ThreadView.svelte'
+	},
+	{
+		slug: 'directive-review-queue',
+		name: 'DirectiveReviewQueue',
+		family: 'smrt-personas-svelte',
+		category: 'Personas · Components',
+		importPath: '@happyvertical/smrt-personas/svelte',
+		summary: 'DirectiveReviewQueue is part of the personas · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'proposals',
+				code: 'DirectiveProposalView[]',
+				status: false,
+				description: 'Proposals to review (typically the pending queue).'
+			},
+			{
+				name: 'busy',
+				code: 'boolean',
+				status: false,
+				description: 'Disable actions while a review is in flight.'
+			},
+			{
+				name: 'onApprove',
+				code: '(id: string, editedInstructions?: string) => void',
+				status: false,
+				description: 'Approve a proposal, optionally with reviewer-edited instructions.'
+			},
+			{
+				name: 'onReject',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Reject a proposal.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onApprove',
+				code: '(id: string, editedInstructions?: string) => void',
+				status: false,
+				description: 'Approve a proposal, optionally with reviewer-edited instructions.'
+			},
+			{
+				name: 'onReject',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Reject a proposal.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/personas/src/svelte/components/DirectiveReviewQueue.svelte'
+	},
+	{
+		slug: 'playground-host',
+		name: 'PlaygroundHost',
+		family: 'smrt-playground-svelte',
+		category: 'Playground · Components',
+		importPath: '@happyvertical/smrt-playground/svelte',
+		summary: 'PlaygroundHost is part of the playground · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'modules',
+				code: 'SmrtPlaygroundModule[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'title',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'subtitle',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'embedded',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'selectedEntryId',
+				code: 'string | null',
+				status: false,
+				description:
+					"Qualified entry ID controlled by the parent. Clearing a previously controlled selection restores the playground's default selection."
+			},
+			{
+				name: 'hideEntryList',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [''],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-playground/src/svelte/PlaygroundHost.svelte'
+	},
+	{
+		slug: 'approval-actions',
+		name: 'ApprovalActions',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'Props for ApprovalActions component',
+		summarySynthesized: false,
+		slot: {
+			id: 'approval-actions',
+			label: 'Approval Actions',
+			icon: 'check',
+			category: 'action'
+		},
+		details: [
+			{
+				name: 'status',
+				code: 'ApprovalStatus',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onsubmit',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onapprove',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onreject',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onedit',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondelete',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'layout',
+				code: "'horizontal' | 'vertical'",
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsubmit',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onapprove',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onreject',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onedit',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondelete',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/projects/src/svelte/components/ApprovalActions.svelte'
+	},
+	{
+		slug: 'assistance-launcher',
+		name: 'AssistanceLauncher',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'Open a contextual support or development conversation',
+		summarySynthesized: false,
+		slot: {
+			id: 'assistance-launcher',
+			label: 'Assistance Launcher',
+			icon: 'message-circle',
+			category: 'form'
+		},
+		details: [
+			{
+				name: 'requesterId',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'applicationContext',
+				code: 'Record<string, unknown>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'evidence',
+				code: 'DevelopmentRequestEvidence[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onsubmit',
+				code: '(value: ManagedAssistanceRequestInput) => void | Promise<void>',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsubmit',
+				code: '(value: ManagedAssistanceRequestInput) => void | Promise<void>',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/projects/src/svelte/AssistanceLauncher.svelte'
+	},
+	{
+		slug: 'bulk-actions',
+		name: 'BulkActions',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'Props for BulkActions component',
+		summarySynthesized: false,
+		slot: {
+			id: 'bulk-actions',
+			label: 'Bulk Actions',
+			icon: 'select-all',
+			category: 'action'
+		},
+		details: [
+			{
+				name: 'selectedCount',
+				code: 'number',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onapprove',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onreject',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondelete',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onexport',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onclear',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onapprove',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onreject',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondelete',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onexport',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onclear',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/projects/src/svelte/components/BulkActions.svelte'
+	},
+	{
+		slug: 'delivery-status',
+		name: 'DeliveryStatus',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'Ordered timeline of delivery outcomes',
+		summarySynthesized: false,
+		slot: {
+			id: 'delivery-status',
+			label: 'Delivery Status',
+			icon: 'activity',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'events',
+				code: 'DeliveryEventView[]',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/projects/src/svelte/DeliveryStatus.svelte'
+	},
+	{
+		slug: 'development-board',
+		name: 'DevelopmentBoard',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'Visibility-filtered projection of connected delivery work',
+		summarySynthesized: false,
+		slot: {
+			id: 'development-board',
+			label: 'Development Board',
+			icon: 'columns',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'requests',
+				code: 'DevelopmentRequestView[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'columns',
+				code: 'string[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onselect',
+				code: '(request: DevelopmentRequestView) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselect',
+				code: '(request: DevelopmentRequestView) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/projects/src/svelte/DevelopmentBoard.svelte'
+	},
+	{
+		slug: 'development-request-detail',
+		name: 'DevelopmentRequestDetail',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'Provider-neutral request detail and delivery timeline',
+		summarySynthesized: false,
+		slot: {
+			id: 'development-request-detail',
+			label: 'Development Request Detail',
+			icon: 'file-text',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'request',
+				code: 'DevelopmentRequestView',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'events',
+				code: 'DeliveryEventView[]',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/projects/src/svelte/DevelopmentRequestDetail.svelte'
+	},
+	{
+		slug: 'development-request-form',
+		name: 'DevelopmentRequestForm',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'Reusable managed-application request submission form',
+		summarySynthesized: false,
+		slot: {
+			id: 'development-request-form',
+			label: 'Development Request Form',
+			icon: 'send',
+			category: 'form'
+		},
+		details: [
+			{
+				name: 'onsubmit',
+				code: '(request: DevelopmentRequestSubmission) => void | Promise<void>',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsubmit',
+				code: '(request: DevelopmentRequestSubmission) => void | Promise<void>',
+				status: true,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/projects/src/svelte/components/DevelopmentRequestForm.svelte'
+	},
+	{
+		slug: 'development-request-list',
+		name: 'DevelopmentRequestList',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'Requester-facing list of managed development requests',
+		summarySynthesized: false,
+		slot: {
+			id: 'development-request-list',
+			label: 'Development Request List',
+			icon: 'list',
+			category: 'list'
+		},
+		details: [
+			{
+				name: 'requesterId',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'requests',
+				code: 'DevelopmentRequestListItem[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'emptyMessage',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/projects/src/svelte/components/DevelopmentRequestList.svelte'
+	},
+	{
+		slug: 'duration-display',
+		name: 'DurationDisplay',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'Props for DurationDisplay component',
+		summarySynthesized: false,
+		slot: {
+			id: 'duration-display',
+			label: 'Duration Display',
+			icon: 'timer',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'hours',
+				code: 'number',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'format',
+				code: "'decimal' | 'hhmm'",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'size',
+				code: "'sm' | 'md' | 'lg'",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showLabel',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/projects/src/svelte/components/DurationDisplay.svelte'
+	},
+	{
+		slug: 'preview-approval-panel',
+		name: 'PreviewApprovalPanel',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'PreviewApprovalPanel is part of the projects · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'preview',
+				code: 'PreviewApprovalView',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'busy',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondecide',
+				code: '(approved: boolean) => void | Promise<void>',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'ondecide',
+				code: '(approved: boolean) => void | Promise<void>',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/projects/src/svelte/PreviewApprovalPanel.svelte'
+	},
+	{
+		slug: 'project-board',
+		name: 'ProjectBoard',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'A controlled project board is movable only with an authoritative refresh.',
+		summarySynthesized: false,
+		slot: {
+			id: 'project-board',
+			label: 'Project Board',
+			icon: 'columns',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'projectId',
+				code: 'string',
+				status: true,
+				description: 'Provider project identity, forwarded only to the injected move action.'
+			},
+			{
+				name: 'statuses',
+				code: 'readonly ProjectStatus[]',
+				status: true,
+				description: 'Canonical, ordered provider statuses. Their supplied order is preserved.'
+			},
+			{
+				name: 'items',
+				code: 'readonly ProjectItem[]',
+				status: true,
+				description: 'Authoritative provider items; this adapter never reorders them locally.'
+			},
+			{
+				name: 'onselect',
+				code: '(item: ProjectItem) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onmove',
+				code: '(intent: ProjectBoardMoveIntent) => void | Promise<void>',
+				status: false,
+				description:
+					'Browser-safe mutation boundary. Its consumer attaches authorization in a server action before it calls ProjectBoardService.'
+			},
+			{
+				name: 'onrefresh',
+				code: '() => void | Promise<void>',
+				status: false,
+				description: 'Required reconciliation of controlled cards after every move attempt.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselect',
+				code: '(item: ProjectItem) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onmove',
+				code: '(intent: ProjectBoardMoveIntent) => void | Promise<void>',
+				status: false,
+				description:
+					'Browser-safe mutation boundary. Its consumer attaches authorization in a server action before it calls ProjectBoardService.'
+			},
+			{
+				name: 'onrefresh',
+				code: '() => void | Promise<void>',
+				status: false,
+				description: 'Required reconciliation of controlled cards after every move attempt.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/projects/src/svelte/ProjectBoard.svelte'
+	},
+	{
+		slug: 'reject-dialog',
+		name: 'RejectDialog',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'Props for RejectDialog component',
+		summarySynthesized: false,
+		slot: {
+			id: 'reject-dialog',
+			label: 'Reject Dialog',
+			icon: 'x-circle',
+			category: 'form'
+		},
+		details: [
+			{
+				name: 'open',
+				code: 'boolean',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'title',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'message',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'confirmLabel',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'cancelLabel',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'placeholder',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'required',
 				code: 'boolean',
 				status: false,
 				description: ''
@@ -278,91 +10134,65 @@ export const uiComponents: UiComponentReference[] = [
 				description: ''
 			},
 			{
-				name: 'class',
-				code: 'string',
-				status: false,
+				name: 'onconfirm',
+				code: '(reason: string) => void',
+				status: true,
 				description: ''
 			},
 			{
-				name: 'target',
-				code: "HTMLAnchorAttributes['target']",
-				status: false,
-				description: ''
-			},
-			{
-				name: 'rel',
-				code: "HTMLAnchorAttributes['rel']",
-				status: false,
-				description: ''
-			},
-			{
-				name: 'download',
-				code: "HTMLAnchorAttributes['download']",
-				status: false,
+				name: 'oncancel',
+				code: '() => void',
+				status: true,
 				description: ''
 			}
 		],
-		sources: ["Omit<HTMLButtonAttributes, 'class' | 'href'>"],
+		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onconfirm',
+				code: '(reason: string) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'oncancel',
+				code: '() => void',
+				status: true,
+				description: ''
+			}
+		],
 		components: [],
-		demo: {
-			id: 'base-controls',
-			label: 'Base Controls',
-			href: '/playground'
-		},
+		demo: null,
 		related: {
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/ui/Button.svelte'
+		source: 'packages/projects/src/svelte/components/RejectDialog.svelte'
 	},
 	{
-		slug: 'card',
-		name: 'Card',
-		family: 'actions-display',
-		category: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Card is part of the actions and display component family.',
+		slug: 'service-evidence-list',
+		name: 'ServiceEvidenceList',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'Shared service duration, charge, and compensation evidence',
+		summarySynthesized: false,
+		slot: {
+			id: 'service-evidence-list',
+			label: 'Service Evidence List',
+			icon: 'receipt',
+			category: 'display'
+		},
 		details: [
 			{
-				name: 'variant',
-				code: 'CardVariant',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'padding',
-				code: 'CardPadding',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'hoverable',
-				code: 'boolean',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'children',
-				code: 'Snippet',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'header',
-				code: 'Snippet',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'footer',
-				code: 'Snippet',
+				name: 'entries',
+				code: 'ServiceEvidenceView[]',
 				status: false,
 				description: ''
 			}
 		],
-		sources: ["Omit<HTMLAttributes<HTMLDivElement>, 'class'>"],
+		sources: [],
 		sections: [],
 		items: [],
 		components: [],
@@ -371,25 +10201,38 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/ui/Card.svelte'
+		source: 'packages/projects/src/svelte/ServiceEvidenceList.svelte'
 	},
 	{
-		slug: 'chip',
-		name: 'Chip',
-		family: 'actions-display',
-		category: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Chip is part of the actions and display component family.',
+		slug: 'time-entry-card',
+		name: 'TimeEntryCard',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'Props for TimeEntryCard component',
+		summarySynthesized: false,
+		slot: {
+			id: 'time-entry-card',
+			label: 'Time Entry Card',
+			icon: 'clock',
+			category: 'display'
+		},
 		details: [
 			{
-				name: 'label',
+				name: 'entry',
+				code: 'TimeEntry',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'href',
 				code: 'string',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'children',
-				code: 'Snippet',
+				name: 'onclick',
+				code: '() => void',
 				status: false,
 				description: ''
 			},
@@ -406,32 +10249,20 @@ export const uiComponents: UiComponentReference[] = [
 				description: ''
 			},
 			{
-				name: 'closeable',
-				code: 'boolean',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'disabled',
-				code: 'boolean',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'size',
-				code: 'ChipSize',
-				status: false,
-				description: ''
-			},
-			{
 				name: 'onselect',
-				code: '() => void',
+				code: '(id: string, selected: boolean) => void',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'onclose',
-				code: '() => void',
+				name: 'currency',
+				code: 'Currency',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'actions',
+				code: 'Snippet',
 				status: false,
 				description: ''
 			}
@@ -440,14 +10271,14 @@ export const uiComponents: UiComponentReference[] = [
 		sections: [],
 		items: [
 			{
-				name: 'onselect',
+				name: 'onclick',
 				code: '() => void',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'onclose',
-				code: '() => void',
+				name: 'onselect',
+				code: '(id: string, selected: boolean) => void',
 				status: false,
 				description: ''
 			}
@@ -458,43 +10289,1210 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/ui/Chip.svelte'
+		source: 'packages/projects/src/svelte/components/TimeEntryCard.svelte'
 	},
 	{
-		slug: 'disclosure',
-		name: 'Disclosure',
-		family: 'actions-display',
-		category: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Disclosure is part of the actions and display component family.',
+		slug: 'time-entry-list',
+		name: 'TimeEntryList',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'Props for TimeEntryList component',
+		summarySynthesized: false,
+		slot: {
+			id: 'time-entry-list',
+			label: 'Time Entry List',
+			icon: 'list',
+			category: 'list'
+		},
 		details: [
 			{
-				name: 'title',
-				code: 'string',
+				name: 'entries',
+				code: 'TimeEntry[]',
 				status: true,
 				description: ''
 			},
 			{
-				name: 'open',
+				name: 'selectable',
 				code: 'boolean',
 				status: false,
 				description: ''
+			},
+			{
+				name: 'selectedIds',
+				code: 'string[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onselectionchange',
+				code: '(ids: string[]) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'emptyMessage',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'baseHref',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'currency',
+				code: 'Currency',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'canSelect',
+				code: '(entry: TimeEntry) => boolean',
+				status: false,
+				description: 'Filter function to determine which entries can be selected'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselectionchange',
+				code: '(ids: string[]) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/projects/src/svelte/components/TimeEntryList.svelte'
+	},
+	{
+		slug: 'time-summary',
+		name: 'TimeSummary',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'Props for TimeSummary component',
+		summarySynthesized: false,
+		slot: {
+			id: 'time-summary',
+			label: 'Time Summary',
+			icon: 'chart',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'totalHours',
+				code: 'number',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'totalAmount',
+				code: 'number',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'pendingHours',
+				code: 'number',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'pendingAmount',
+				code: 'number',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'approvedHours',
+				code: 'number',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'approvedAmount',
+				code: 'number',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'entryCount',
+				code: 'number',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'currency',
+				code: 'Currency',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showPending',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showApproved',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'layout',
+				code: "'horizontal' | 'grid'",
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/projects/src/svelte/components/TimeSummary.svelte'
+	},
+	{
+		slug: 'board',
+		name: 'Board',
+		family: 'smrt-svelte-board',
+		category: 'Svelte · Board',
+		importPath: '@happyvertical/smrt-svelte/board',
+		summary: 'Board is part of the svelte · board component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'columns',
+				code: 'readonly Column[]',
+				status: true,
+				description: 'Ordered lanes. The Board does not impose statuses or workflow names.'
+			},
+			{
+				name: 'cards',
+				code: 'readonly Card[]',
+				status: false,
+				description: 'Authoritative controlled cards. Omit to use `defaultCards`.'
+			},
+			{
+				name: 'defaultCards',
+				code: 'readonly Card[]',
+				status: false,
+				description: 'Initial cards for an uncontrolled Board.'
+			},
+			{
+				name: 'getCardColumnId',
+				code: '(card: Card) => string',
+				status: true,
+				description: 'Resolves the lane containing a card.'
+			},
+			{
+				name: 'setCardColumnId',
+				code: '(card: Card, columnId: string) => Card',
+				status: true,
+				description: 'Returns a copy of a card assigned to `columnId`; keeps Board domain-free.'
+			},
+			{
+				name: 'getCardLabel',
+				code: '(card: Card) => string',
+				status: true,
+				description: 'Accessible text announced while a card is moved.'
+			},
+			{
+				name: 'card',
+				code: 'Snippet<[BoardCardSnippetProps<Card, Column>]>',
+				status: true,
+				description: 'Required visual content for each card.'
+			},
+			{
+				name: 'columnHeader',
+				code: 'Snippet<[BoardColumnHeaderSnippetProps<Column>]>',
+				status: false,
+				description: 'Optional lane-header content, rendered beside the built-in count.'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Accessible name for the board.'
+			},
+			{
+				name: 'collapsible',
+				code: 'boolean',
+				status: false,
+				description: 'Makes lane headers collapse their card lists.'
+			},
+			{
+				name: 'allowSameColumnReorder',
+				code: 'boolean',
+				status: false,
+				description:
+					'Whether cards may be repositioned within their current lane. Defaults to `true`; set `false` for adapters whose persistence layer only supports column/status transitions.'
+			},
+			{
+				name: 'optimistic',
+				code: 'boolean',
+				status: false,
+				description:
+					'In controlled mode, retain the locally reordered presentation until the owner supplies a new `cards` array. The owner remains authoritative.'
+			},
+			{
+				name: 'onselect',
+				code: '(card: Card) => void',
+				status: false,
+				description: 'Called when a card is activated without starting a move.'
+			},
+			{
+				name: 'onmove',
+				code: '(intent: BoardMoveIntent<Card, Column>) => void | Promise<void>',
+				status: false,
+				description:
+					'Receives a typed move intent. It may persist asynchronously; a rejection restores the existing presentation and is announced to assistive tech.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselect',
+				code: '(card: Card) => void',
+				status: false,
+				description: 'Called when a card is activated without starting a move.'
+			},
+			{
+				name: 'onmove',
+				code: '(intent: BoardMoveIntent<Card, Column>) => void | Promise<void>',
+				status: false,
+				description:
+					'Receives a typed move intent. It may persist asynchronously; a rejection restores the existing presentation and is announced to assistive tech.'
+			}
+		],
+		components: [''],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/board/Board.svelte'
+	},
+	{
+		slug: 'ai-loading-overlay',
+		name: 'AILoadingOverlay',
+		family: 'smrt-svelte-browser-ai',
+		category: 'Svelte · Browser Ai',
+		importPath: '@happyvertical/smrt-svelte/browser-ai/svelte',
+		summary: 'AILoadingOverlay is part of the svelte · browser ai component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'message',
+				code: 'string',
+				status: false,
+				description: 'Custom loading message (overrides auto-detected phase label)'
+			},
+			{
+				name: 'show',
+				code: 'boolean',
+				status: false,
+				description: 'Whether to show the overlay (auto-detected from state if not provided)'
+			},
+			{
+				name: 'dismissible',
+				code: 'boolean',
+				status: false,
+				description: 'Allow dismissing the overlay'
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'Custom CSS class'
+			},
+			{
+				name: 'ondismiss',
+				code: '() => void',
+				status: false,
+				description: 'Callback when dismissed'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'ondismiss',
+				code: '() => void',
+				status: false,
+				description: 'Callback when dismissed'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/browser-ai/svelte/components/AILoadingOverlay.svelte'
+	},
+	{
+		slug: 'capability-gate',
+		name: 'CapabilityGate',
+		family: 'smrt-svelte-browser-ai',
+		category: 'Svelte · Browser Ai',
+		importPath: '@happyvertical/smrt-svelte/browser-ai/svelte',
+		summary: 'CapabilityGate is part of the svelte · browser ai component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'requireSmrt',
+				code: 'boolean',
+				status: false,
+				description: "Require 'smrt' mode to be enabled"
+			},
+			{
+				name: 'require',
+				code: "'stt' | 'tts' | 'llm' | 'webgpu'",
+				status: false,
+				description: 'Require specific capability'
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: true,
+				description: 'Content to show when requirements are met'
+			},
+			{
+				name: 'fallback',
+				code: 'Snippet',
+				status: false,
+				description: 'Fallback content when requirements are not met'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/browser-ai/svelte/components/CapabilityGate.svelte'
+	},
+	{
+		slug: 'download-progress',
+		name: 'DownloadProgress',
+		family: 'smrt-svelte-browser-ai',
+		category: 'Svelte · Browser Ai',
+		importPath: '@happyvertical/smrt-svelte/browser-ai/svelte',
+		summary: 'DownloadProgress is part of the svelte · browser ai component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'progress',
+				code: 'DownloadProgressInfo | null',
+				status: true,
+				description: 'Progress data'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Label to show above progress bar'
+			},
+			{
+				name: 'showPercent',
+				code: 'boolean',
+				status: false,
+				description: 'Show percentage text'
+			},
+			{
+				name: 'showBytes',
+				code: 'boolean',
+				status: false,
+				description: 'Show bytes downloaded'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/browser-ai/svelte/components/DownloadProgress.svelte'
+	},
+	{
+		slug: 'stt-test',
+		name: 'STTTest',
+		family: 'smrt-svelte-browser-ai',
+		category: 'Svelte · Browser Ai',
+		importPath: '@happyvertical/smrt-svelte/browser-ai/svelte',
+		summary: 'Props for STTTest component',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'Optional CSS class'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/browser-ai/svelte/components/STTTest.svelte'
+	},
+	{
+		slug: 'voice-input',
+		name: 'VoiceInput',
+		family: 'smrt-svelte-browser-ai',
+		category: 'Svelte · Browser Ai',
+		importPath: '@happyvertical/smrt-svelte/browser-ai/svelte',
+		summary: 'VoiceInput is part of the svelte · browser ai component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'onTranscription',
+				code: '(text: string) => void',
+				status: false,
+				description: 'Callback with transcribed text'
+			},
+			{
+				name: 'language',
+				code: 'string',
+				status: false,
+				description: 'Language code (BCP-47)'
+			},
+			{
+				name: 'continuous',
+				code: 'boolean',
+				status: false,
+				description: 'Enable continuous mode'
+			},
+			{
+				name: 'size',
+				code: "'sm' | 'md' | 'lg'",
+				status: false,
+				description: 'Size of the button'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disabled state'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onTranscription',
+				code: '(text: string) => void',
+				status: false,
+				description: 'Callback with transcribed text'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/browser-ai/svelte/components/VoiceInput.svelte'
+	},
+	{
+		slug: 'provider',
+		name: 'Provider',
+		family: 'smrt-svelte-components',
+		category: 'Svelte · Components',
+		importPath: '@happyvertical/smrt-svelte',
+		summary: 'Provider is part of the svelte · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'mode',
+				code: 'AppMode',
+				status: false,
+				description:
+					"Initial mode: 'default' | 'smrt' If not provided, mode is auto-detected based on capabilities"
+			},
+			{
+				name: 'autoEnableSmrt',
+				code: 'boolean',
+				status: false,
+				description: 'Whether to auto-enable smrt mode when capabilities are available'
+			},
+			{
+				name: 'user',
+				code: 'User | null',
+				status: false,
+				description:
+					'User object from smrt-users (from your load function) Pass null when not authenticated'
+			},
+			{
+				name: 'permissions',
+				code: 'string[]',
+				status: false,
+				description: 'Resolved permissions (from PermissionResolver in your load function)'
+			},
+			{
+				name: 'socket',
+				code: 'SocketConfig',
+				status: false,
+				description:
+					'WebSocket configuration If provided, connects on mount and disconnects on unmount'
+			},
+			{
+				name: 'ai',
+				code: 'AIConfig',
+				status: false,
+				description: 'AI configuration for preloading and warm clients'
+			},
+			{
+				name: 'onReady',
+				code: '() => void',
+				status: false,
+				description: 'Callback when capabilities are detected'
+			},
+			{
+				name: 'onModeChange',
+				code: '(mode: AppMode) => void',
+				status: false,
+				description: 'Callback when mode changes'
+			},
+			{
+				name: 'onAILoadingChange',
+				code: '(state: AILoadingState) => void',
+				status: false,
+				description: 'Callback when AI loading state changes'
+			},
+			{
+				name: 'i18n',
+				code: 'I18nSnapshot',
+				status: false,
+				description:
+					'i18n snapshot from your load function (`buildI18nSnapshot` on `@happyvertical/smrt-svelte/i18n/server`). Provides the active locale + resolved message templates to `useI18n()` / `<Trans>`. Omit for English-default-only rendering.'
+			},
+			{
+				name: 'webmcp',
+				code: 'boolean | WebMcpProviderConfig',
+				status: false,
+				description:
+					'Opt in to generated data tools and the fixed mounted-UI tool adapter for this browser surface. WebMCP is feature-detected, so this is safe during SSR and on browsers that do not expose `document.modelContext`.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
+				status: true,
+				description: 'Children to render'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onReady',
+				code: '() => void',
+				status: false,
+				description: 'Callback when capabilities are detected'
+			},
+			{
+				name: 'onModeChange',
+				code: '(mode: AppMode) => void',
+				status: false,
+				description: 'Callback when mode changes'
+			},
+			{
+				name: 'onAILoadingChange',
+				code: '(state: AILoadingState) => void',
+				status: false,
+				description: 'Callback when AI loading state changes'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/Provider.svelte'
+	},
+	{
+		slug: 'address-input',
+		name: 'AddressInput',
+		family: 'smrt-svelte-forms',
+		category: 'Svelte · Forms and controls',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		summary: 'AddressInput is part of the svelte · forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'name',
+				code: 'string',
+				status: true,
+				description: 'Field name prefix'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Field label'
+			},
+			{
+				name: 'description',
+				code: 'string',
+				status: false,
+				description: 'Description for voice extraction'
+			},
+			{
+				name: 'value',
+				code: 'Partial<AddressValue>',
+				status: false,
+				description: 'Current value (bindable)'
+			},
+			{
+				name: 'fields',
+				code: 'AddressField[]',
+				status: false,
+				description: 'Which fields to show'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disabled state'
+			},
+			{
+				name: 'required',
+				code: 'boolean',
+				status: false,
+				description: 'Required field'
+			},
+			{
+				name: 'error',
+				code: 'string',
+				status: false,
+				description: 'Error message to display'
+			},
+			{
+				name: 'countries',
+				code: 'Array<{ value: string; label: string; }>',
+				status: false,
+				description: 'Country options for dropdown'
+			},
+			{
+				name: 'provinces',
+				code: 'Array<{ value: string; label: string; }>',
+				status: false,
+				description: 'Province/state options for dropdown'
+			},
+			{
+				name: 'onchange',
+				code: '(value: Partial<AddressValue>) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(value: Partial<AddressValue>) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/forms/AddressInput.svelte'
+	},
+	{
+		slug: 'checkbox-input',
+		name: 'CheckboxInput',
+		family: 'smrt-svelte-forms',
+		category: 'Svelte · Forms and controls',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		summary: 'CheckboxInput is part of the svelte · forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'name',
+				code: 'string',
+				status: true,
+				description: 'Field name'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Field label'
+			},
+			{
+				name: 'description',
+				code: 'string',
+				status: false,
+				description: 'Description for voice extraction'
+			},
+			{
+				name: 'checked',
+				code: 'boolean',
+				status: false,
+				description: 'Current value (bindable)'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disabled state'
+			},
+			{
+				name: 'required',
+				code: 'boolean',
+				status: false,
+				description: 'Required field'
+			},
+			{
+				name: 'onchange',
+				code: '(checked: boolean) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(checked: boolean) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/forms/CheckboxInput.svelte'
+	},
+	{
+		slug: 'date-range-input',
+		name: 'DateRangeInput',
+		family: 'smrt-svelte-forms',
+		category: 'Svelte · Forms and controls',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		summary: 'DateRangeInput is part of the svelte · forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'name',
+				code: 'string',
+				status: true,
+				description: 'Field name'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Field label'
+			},
+			{
+				name: 'description',
+				code: 'string',
+				status: false,
+				description: 'Description for voice extraction'
+			},
+			{
+				name: 'startPlaceholder',
+				code: 'string',
+				status: false,
+				description: 'Start date placeholder'
+			},
+			{
+				name: 'endPlaceholder',
+				code: 'string',
+				status: false,
+				description: 'End date placeholder'
+			},
+			{
+				name: 'startDate',
+				code: 'string',
+				status: false,
+				description: 'Current start date (ISO format YYYY-MM-DD, bindable)'
+			},
+			{
+				name: 'endDate',
+				code: 'string',
+				status: false,
+				description: 'Current end date (ISO format YYYY-MM-DD, bindable)'
+			},
+			{
+				name: 'minDate',
+				code: 'string',
+				status: false,
+				description: 'Minimum selectable date'
+			},
+			{
+				name: 'maxDate',
+				code: 'string',
+				status: false,
+				description: 'Maximum selectable date'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disabled state'
+			},
+			{
+				name: 'required',
+				code: 'boolean',
+				status: false,
+				description: 'Required field'
+			},
+			{
+				name: 'error',
+				code: 'string',
+				status: false,
+				description: 'Error message to display'
+			},
+			{
+				name: 'onchange',
+				code: '(value: DateRangeValue) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(value: DateRangeValue) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/forms/DateRangeInput.svelte'
+	},
+	{
+		slug: 'date-time-input',
+		name: 'DateTimeInput',
+		family: 'smrt-svelte-forms',
+		category: 'Svelte · Forms and controls',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		summary: 'DateTimeInput is part of the svelte · forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'name',
+				code: 'string',
+				status: true,
+				description: 'Field name'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Field label'
+			},
+			{
+				name: 'description',
+				code: 'string',
+				status: false,
+				description: 'Description for LLM field extraction'
+			},
+			{
+				name: 'includeTime',
+				code: 'boolean',
+				status: false,
+				description: 'Include time in the picker'
+			},
+			{
+				name: 'placeholder',
+				code: 'string',
+				status: false,
+				description: 'Placeholder text'
+			},
+			{
+				name: 'value',
+				code: 'string',
+				status: false,
+				description: 'Current value (ISO format, bindable)'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disabled state'
+			},
+			{
+				name: 'required',
+				code: 'boolean',
+				status: false,
+				description: 'Required field'
+			},
+			{
+				name: 'onchange',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/forms/DateTimeInput.svelte'
+	},
+	{
+		slug: 'file-upload',
+		name: 'FileUpload',
+		family: 'smrt-svelte-forms',
+		category: 'Svelte · Forms and controls',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		summary: 'FileUpload is part of the svelte · forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'accept',
+				code: 'string',
+				status: false,
+				description: "Accepted file types (e.g., '.pdf,.csv' or 'application/pdf,text/csv')"
+			},
+			{
+				name: 'multiple',
+				code: 'boolean',
+				status: false,
+				description: 'Allow multiple files'
+			},
+			{
+				name: 'files',
+				code: 'File[]',
+				status: false,
+				description: 'Selected files (bindable)'
+			},
+			{
+				name: 'onchange',
+				code: '(files: File[]) => void',
+				status: false,
+				description: 'Callback when files change'
+			},
+			{
+				name: 'maxSize',
+				code: 'number',
+				status: false,
+				description: 'Maximum file size in bytes'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disabled state'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Label text for the drop zone'
+			},
+			{
+				name: 'hint',
+				code: 'string',
+				status: false,
+				description: 'Hint text shown below the label'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(files: File[]) => void',
+				status: false,
+				description: 'Callback when files change'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/forms/FileUpload.svelte'
+	},
+	{
+		slug: 'svelte-form',
+		name: 'Form',
+		family: 'smrt-svelte-forms',
+		category: 'Svelte · Forms and controls',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		summary: 'Form is part of the svelte · forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: true,
+				description: 'Form children'
+			},
+			{
+				name: 'showModeToggle',
+				code: 'boolean',
+				status: false,
+				description: 'Show mode toggle button'
+			},
+			{
+				name: 'showFormListen',
+				code: 'boolean',
+				status: false,
+				description: 'Show form-level listen button'
+			},
+			{
+				name: 'silenceTimeout',
+				code: 'number',
+				status: false,
+				description: 'Silence timeout in seconds before stopping'
+			},
+			{
+				name: 'sttAdapter',
+				code: 'STTAdapterType',
+				status: false,
+				description: 'STT adapter type'
+			},
+			{
+				name: 'llmModel',
+				code: 'LLMModelId',
+				status: false,
+				description: "LLM model for extraction (or 'none' for regex-only)"
+			},
+			{
+				name: 'onsubmit',
+				code: '(data: Record<string, unknown>) => void | Promise<void>',
+				status: false,
+				description: 'Called when form is submitted (if provided, prevents native submission)'
+			},
+			{
+				name: 'webmcp',
+				code: 'boolean | { name?: string; description?: string; }',
+				status: false,
+				description: 'Let WebMCP propose field changes for local human review.'
+			},
+			{
+				name: 'collection',
+				code: 'string',
+				status: false,
+				description: 'Collection/model identity used when naming the generated intent.'
+			},
+			{
+				name: 'method',
+				code: "'GET' | 'POST'",
+				status: false,
+				description: 'HTTP method for native form submission (default: GET)'
+			},
+			{
+				name: 'action',
+				code: 'string',
+				status: false,
+				description: 'Form action URL for native form submission'
+			},
+			{
+				name: 'formId',
+				code: 'string',
+				status: false,
+				description: 'Stable identity used by control/agent interaction adapters.'
+			},
+			{
+				name: 'subject',
+				code: 'ControlSubject',
+				status: false,
+				description: 'Default record-qualified identity for registered fields.'
+			},
+			{
+				name: 'interactionRegistry',
+				code: 'ControlInteractionRegistry',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'onopenchange',
-				code: '(open: boolean) => void',
+				name: 'oninteraction',
+				code: '(event: ControlInteractionEvent) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'stagedReview',
+				code: 'boolean',
+				status: false,
+				description: 'Render the built-in human review surface for staged changes.'
+			},
+			{
+				name: 'id',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'name',
+				code: 'string',
 				status: false,
 				description: ''
 			},
@@ -509,243 +11507,1204 @@ export const uiComponents: UiComponentReference[] = [
 		sections: [],
 		items: [
 			{
-				name: 'onopenchange',
-				code: '(open: boolean) => void',
+				name: 'onsubmit',
+				code: '(data: Record<string, unknown>) => void | Promise<void>',
+				status: false,
+				description: 'Called when form is submitted (if provided, prevents native submission)'
+			},
+			{
+				name: 'oninteraction',
+				code: '(event: ControlInteractionEvent) => void',
 				status: false,
 				description: ''
 			}
 		],
 		components: [],
 		demo: {
-			id: 'feedback-overlays',
-			label: 'Feedback & Overlays',
+			id: 'base-controls',
+			label: 'Base Controls',
 			href: '/playground'
 		},
 		related: {
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/ui/Disclosure.svelte'
+		source: 'packages/smrt-svelte/src/components/forms/Form.svelte'
 	},
 	{
-		slug: 'dropdown',
-		name: 'Dropdown',
-		family: 'actions-display',
-		category: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Dropdown is part of the actions and display component family.',
+		slug: 'form-mic-button',
+		name: 'FormMicButton',
+		family: 'smrt-svelte-forms',
+		category: 'Svelte · Forms and controls',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		summary: 'FormMicButton is part of the svelte · forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
+			{
+				name: 'size',
+				code: 'number',
+				status: false,
+				description: 'Size of the mic icon'
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'Additional CSS class'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/forms/FormMicButton.svelte'
+	},
+	{
+		slug: 'measurement-input',
+		name: 'MeasurementInput',
+		family: 'smrt-svelte-forms',
+		category: 'Svelte · Forms and controls',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		summary: 'MeasurementInput is part of the svelte · forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'name',
+				code: 'string',
+				status: true,
+				description: 'Field name'
+			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Field label'
 			},
 			{
-				name: 'trigger',
-				code: 'Snippet',
+				name: 'description',
+				code: 'string',
 				status: false,
-				description: ''
+				description: 'Description for voice extraction'
 			},
 			{
-				name: 'items',
-				code: 'MenuItem[]',
-				status: true,
-				description: ''
-			},
-			{
-				name: 'placement',
-				code: 'DropdownPlacement',
+				name: 'placeholder',
+				code: 'string',
 				status: false,
-				description: ''
+				description: 'Placeholder text'
 			},
 			{
-				name: 'onselect',
-				code: '(id: string) => void',
+				name: 'value',
+				code: 'number | null',
 				status: false,
-				description: ''
+				description: 'Current value (bindable)'
+			},
+			{
+				name: 'unit',
+				code: 'MeasurementUnit',
+				status: false,
+				description: 'Current unit (bindable)'
+			},
+			{
+				name: 'units',
+				code: 'MeasurementUnit[]',
+				status: false,
+				description: 'Available units to choose from'
+			},
+			{
+				name: 'min',
+				code: 'number',
+				status: false,
+				description: 'Minimum value'
+			},
+			{
+				name: 'max',
+				code: 'number',
+				status: false,
+				description: 'Maximum value'
+			},
+			{
+				name: 'step',
+				code: 'number',
+				status: false,
+				description: 'Step increment'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disabled state'
+			},
+			{
+				name: 'required',
+				code: 'boolean',
+				status: false,
+				description: 'Required field'
+			},
+			{
+				name: 'error',
+				code: 'string',
+				status: false,
+				description: 'Error message to display'
+			},
+			{
+				name: 'onchange',
+				code: '(measurement: MeasurementValue | null) => void',
+				status: false,
+				description: 'Called when value changes'
 			}
 		],
 		sources: [],
 		sections: [],
 		items: [
 			{
-				name: 'onselect',
-				code: '(id: string) => void',
+				name: 'onchange',
+				code: '(measurement: MeasurementValue | null) => void',
 				status: false,
-				description: ''
+				description: 'Called when value changes'
 			}
 		],
 		components: [],
-		demo: {
-			id: 'feedback-overlays',
-			label: 'Feedback & Overlays',
-			href: '/playground'
-		},
+		demo: null,
 		related: {
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/ui/Dropdown.svelte'
+		source: 'packages/smrt-svelte/src/components/forms/MeasurementInput.svelte'
 	},
 	{
-		slug: 'menu',
-		name: 'Menu',
-		family: 'actions-display',
-		category: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Menu is part of the actions and display component family.',
+		slug: 'money-input',
+		name: 'MoneyInput',
+		family: 'smrt-svelte-forms',
+		category: 'Svelte · Forms and controls',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		summary: 'MoneyInput is part of the svelte · forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
+			{
+				name: 'name',
+				code: 'string',
+				status: true,
+				description: 'Field name'
+			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Field label'
 			},
 			{
-				name: 'trigger',
-				code: 'Snippet',
+				name: 'description',
+				code: 'string',
 				status: false,
-				description: ''
+				description: 'Description for voice extraction'
 			},
 			{
-				name: 'items',
-				code: 'MenuItem[]',
-				status: true,
-				description: ''
-			},
-			{
-				name: 'placement',
-				code: 'DropdownPlacement',
+				name: 'placeholder',
+				code: 'string',
 				status: false,
-				description: ''
+				description: 'Placeholder text'
 			},
 			{
-				name: 'onselect',
-				code: '(id: string) => void',
+				name: 'value',
+				code: 'number | null',
 				status: false,
-				description: ''
+				description: 'Current value in cents (bindable)'
+			},
+			{
+				name: 'currency',
+				code: "'CAD' | 'USD'",
+				status: false,
+				description: 'Currency code for display'
+			},
+			{
+				name: 'min',
+				code: 'number',
+				status: false,
+				description: 'Minimum value in cents'
+			},
+			{
+				name: 'max',
+				code: 'number',
+				status: false,
+				description: 'Maximum value in cents'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disabled state'
+			},
+			{
+				name: 'required',
+				code: 'boolean',
+				status: false,
+				description: 'Required field'
+			},
+			{
+				name: 'error',
+				code: 'string',
+				status: false,
+				description: 'Error message to display'
+			},
+			{
+				name: 'onchange',
+				code: '(cents: number | null) => void',
+				status: false,
+				description: 'Called when value changes'
 			}
 		],
 		sources: [],
 		sections: [],
 		items: [
 			{
-				name: 'onselect',
-				code: '(id: string) => void',
+				name: 'onchange',
+				code: '(cents: number | null) => void',
 				status: false,
-				description: ''
+				description: 'Called when value changes'
 			}
 		],
 		components: [],
-		demo: {
-			id: 'feedback-overlays',
-			label: 'Feedback & Overlays',
-			href: '/playground'
-		},
+		demo: null,
 		related: {
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/ui/Dropdown.svelte'
+		source: 'packages/smrt-svelte/src/components/forms/MoneyInput.svelte'
 	},
 	{
-		slug: 'pagination',
-		name: 'Pagination',
-		family: 'actions-display',
-		category: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Pagination is part of the actions and display component family.',
+		slug: 'number-input',
+		name: 'NumberInput',
+		family: 'smrt-svelte-forms',
+		category: 'Svelte · Forms and controls',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		summary: 'NumberInput is part of the svelte · forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
-				name: 'currentPage',
-				code: 'number',
+				name: 'name',
+				code: 'string',
 				status: true,
-				description: ''
+				description: 'Field name'
 			},
 			{
-				name: 'totalPages',
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Field label'
+			},
+			{
+				name: 'description',
+				code: 'string',
+				status: false,
+				description: 'Description for voice extraction'
+			},
+			{
+				name: 'placeholder',
+				code: 'string',
+				status: false,
+				description: 'Placeholder text'
+			},
+			{
+				name: 'value',
+				code: 'number | null',
+				status: false,
+				description: 'Current value (bindable)'
+			},
+			{
+				name: 'min',
 				code: 'number',
+				status: false,
+				description: 'Minimum value'
+			},
+			{
+				name: 'max',
+				code: 'number',
+				status: false,
+				description: 'Maximum value'
+			},
+			{
+				name: 'step',
+				code: 'number',
+				status: false,
+				description: 'Step increment'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disabled state'
+			},
+			{
+				name: 'required',
+				code: 'boolean',
+				status: false,
+				description: 'Required field'
+			},
+			{
+				name: 'onchange',
+				code: '(value: number | null) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(value: number | null) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/forms/NumberInput.svelte'
+	},
+	{
+		slug: 'phone-input',
+		name: 'PhoneInput',
+		family: 'smrt-svelte-forms',
+		category: 'Svelte · Forms and controls',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		summary: 'PhoneInput is part of the svelte · forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'name',
+				code: 'string',
+				status: true,
+				description: 'Field name'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Field label'
+			},
+			{
+				name: 'description',
+				code: 'string',
+				status: false,
+				description: 'Description for voice extraction'
+			},
+			{
+				name: 'placeholder',
+				code: 'string',
+				status: false,
+				description: 'Placeholder text'
+			},
+			{
+				name: 'value',
+				code: 'string',
+				status: false,
+				description: 'Current value (bindable)'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disabled state'
+			},
+			{
+				name: 'required',
+				code: 'boolean',
+				status: false,
+				description: 'Required field'
+			},
+			{
+				name: 'onchange',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/forms/PhoneInput.svelte'
+	},
+	{
+		slug: 'search-input',
+		name: 'SearchInput',
+		family: 'smrt-svelte-forms',
+		category: 'Svelte · Forms and controls',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		summary: 'SearchInput is part of the svelte · forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'value',
+				code: 'string',
+				status: false,
+				description: 'Current search value'
+			},
+			{
+				name: 'placeholder',
+				code: 'string',
+				status: false,
+				description: 'Placeholder text'
+			},
+			{
+				name: 'debounce',
+				code: 'number',
+				status: false,
+				description: 'Debounce delay in ms (0 for no debounce)'
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Show loading indicator'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Whether the input is disabled'
+			},
+			{
+				name: 'size',
+				code: "'sm' | 'md' | 'lg'",
+				status: false,
+				description: 'Size variant'
+			},
+			{
+				name: 'id',
+				code: 'string',
+				status: false,
+				description: 'ID for the input element'
+			},
+			{
+				name: 'name',
+				code: 'string',
+				status: false,
+				description: 'Name attribute'
+			},
+			{
+				name: 'ariaLabel',
+				code: 'string',
+				status: false,
+				description: 'ARIA label'
+			},
+			{
+				name: 'onsearch',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Callback when value changes (after debounce)'
+			},
+			{
+				name: 'oninput',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Callback for immediate value changes'
+			},
+			{
+				name: 'onsubmit',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Callback when Enter is pressed'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsearch',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Callback when value changes (after debounce)'
+			},
+			{
+				name: 'oninput',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Callback for immediate value changes'
+			},
+			{
+				name: 'onsubmit',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Callback when Enter is pressed'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/forms/SearchInput.svelte'
+	},
+	{
+		slug: 'select-input',
+		name: 'SelectInput',
+		family: 'smrt-svelte-forms',
+		category: 'Svelte · Forms and controls',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		summary: 'SelectInput is part of the svelte · forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'name',
+				code: 'string',
+				status: true,
+				description: 'Field name'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Field label'
+			},
+			{
+				name: 'description',
+				code: 'string',
+				status: false,
+				description: 'Description for voice extraction'
+			},
+			{
+				name: 'options',
+				code: 'SelectOption[]',
+				status: true,
+				description: 'Available options'
+			},
+			{
+				name: 'placeholder',
+				code: 'string',
+				status: false,
+				description: 'Placeholder text'
+			},
+			{
+				name: 'value',
+				code: 'string',
+				status: false,
+				description: 'Current value (bindable)'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disabled state'
+			},
+			{
+				name: 'required',
+				code: 'boolean',
+				status: false,
+				description: 'Required field'
+			},
+			{
+				name: 'onchange',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/forms/SelectInput.svelte'
+	},
+	{
+		slug: 'textarea-input',
+		name: 'TextareaInput',
+		family: 'smrt-svelte-forms',
+		category: 'Svelte · Forms and controls',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		summary: 'TextareaInput is part of the svelte · forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'name',
+				code: 'string',
+				status: true,
+				description: 'Field name'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Field label'
+			},
+			{
+				name: 'description',
+				code: 'string',
+				status: false,
+				description: 'Description for voice extraction'
+			},
+			{
+				name: 'placeholder',
+				code: 'string',
+				status: false,
+				description: 'Placeholder text'
+			},
+			{
+				name: 'value',
+				code: 'string',
+				status: false,
+				description: 'Current value (bindable)'
+			},
+			{
+				name: 'rows',
+				code: 'number',
+				status: false,
+				description: 'Number of rows'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disabled state'
+			},
+			{
+				name: 'required',
+				code: 'boolean',
+				status: false,
+				description: 'Required field'
+			},
+			{
+				name: 'appendMode',
+				code: 'boolean',
+				status: false,
+				description: 'Append to existing value instead of overwriting'
+			},
+			{
+				name: 'onchange',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/forms/TextareaInput.svelte'
+	},
+	{
+		slug: 'text-input',
+		name: 'TextInput',
+		family: 'smrt-svelte-forms',
+		category: 'Svelte · Forms and controls',
+		importPath: '@happyvertical/smrt-svelte/forms',
+		summary: 'TextInput is part of the svelte · forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'name',
+				code: 'string',
+				status: true,
+				description: 'Field name'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Field label'
+			},
+			{
+				name: 'description',
+				code: 'string',
+				status: false,
+				description: 'Description for LLM field extraction'
+			},
+			{
+				name: 'type',
+				code: "'text' | 'email'",
+				status: false,
+				description: 'Input type'
+			},
+			{
+				name: 'placeholder',
+				code: 'string',
+				status: false,
+				description: 'Placeholder text'
+			},
+			{
+				name: 'value',
+				code: 'string',
+				status: false,
+				description: 'Current value (bindable)'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disabled state'
+			},
+			{
+				name: 'required',
+				code: 'boolean',
+				status: false,
+				description: 'Required field'
+			},
+			{
+				name: 'appendMode',
+				code: 'boolean',
+				status: false,
+				description: 'Append to existing value instead of overwriting'
+			},
+			{
+				name: 'onchange',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Called when value changes'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/forms/TextInput.svelte'
+	},
+	{
+		slug: 'module-panel',
+		name: 'ModulePanel',
+		family: 'smrt-svelte-module',
+		category: 'Svelte · Module',
+		importPath: '@happyvertical/smrt-svelte',
+		summary:
+			"ModulePanel - Shell component for rendering module UI slots Dynamically renders a module's registered UI component by looking up the component in the ModuleUIRegistry. Usage: 1. Import ModulePanel from '@happyvertical/smrt-svelte' 2. Import the module's svelte package to register components 3. Use ModulePanel with moduleName and slotId props",
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'moduleName',
+				code: 'string',
+				status: true,
+				description: "Module name (e.g., '@happyvertical/smrt-commerce')"
+			},
+			{
+				name: 'slotId',
+				code: 'string',
+				status: true,
+				description: 'Slot ID to render'
+			}
+		],
+		sources: ['ModuleUIBaseProps'],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/module/ModulePanel.svelte'
+	},
+	{
+		slug: 'settings-catalog',
+		name: 'SettingsCatalog',
+		family: 'smrt-svelte-settings',
+		category: 'Svelte · Settings',
+		importPath: '@happyvertical/smrt-svelte/settings',
+		summary: 'SettingsCatalog is part of the svelte · settings component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'page',
+				code: 'SettingsCatalogPage<T, D>',
 				status: true,
 				description: ''
 			},
 			{
 				name: 'baseUrl',
 				code: 'string',
-				status: false,
+				status: true,
 				description: ''
 			},
 			{
-				name: 'onPageChange',
-				code: '(page: number) => void',
-				status: false,
+				name: 'detail',
+				code: 'Snippet<[{ item: D; }]>',
+				status: true,
 				description: ''
 			},
 			{
-				name: 'aria-label',
+				name: 'searchPlaceholder',
 				code: 'string',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'showFirstLast',
-				code: 'boolean',
+				name: 'searchLabel',
+				code: 'string',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'maxVisible',
-				code: 'number',
+				name: 'resultsLabel',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'emptyLabel',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'selectionLabel',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'preservedParams',
+				code: 'Record<string, string>',
 				status: false,
 				description: ''
 			}
 		],
 		sources: [],
 		sections: [],
-		items: [
+		items: [],
+		components: [''],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/settings/SettingsCatalog.svelte'
+	},
+	{
+		slug: 'activity-badge',
+		name: 'ActivityBadge',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		summary: 'ActivityBadge is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
 			{
-				name: 'onPageChange',
-				code: '(page: number) => void',
+				name: 'edge',
+				code: 'PanelEdge',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'label',
+				code: 'string',
 				status: false,
 				description: ''
 			}
 		],
+		sources: [],
+		sections: [],
+		items: [],
 		components: [],
 		demo: null,
 		related: {
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/ui/Pagination.svelte'
+		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ActivityBadge.svelte'
 	},
 	{
-		slug: 'popover',
-		name: 'Popover',
-		family: 'actions-display',
-		category: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Popover is part of the actions and display component family.',
+		slug: 'activity-item',
+		name: 'ActivityItem',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		summary: 'ActivityItem is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
-				name: 'label',
-				code: 'string',
+				name: 'activity',
+				code: 'ShellActivity',
 				status: true,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ActivityItem.svelte'
+	},
+	{
+		slug: 'activity-list',
+		name: 'ActivityList',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		summary: 'ActivityList is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'filter',
+				code: 'ShellActivityFilter',
+				status: false,
 				description: ''
 			},
 			{
-				name: 'trigger',
+				name: 'hideWhenEmpty',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'emptyLabel',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ActivityList.svelte'
+	},
+	{
+		slug: 'activity-toasts',
+		name: 'ActivityToasts',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		summary: 'ActivityToasts is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'max',
+				code: 'number',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'notify',
+				code: '(event: ShellActivityEvent) => boolean',
+				status: false,
+				description:
+					'Which lifecycle events raise a toast. Defaults to lifecycle-only: a newly-created activity ("started") or a status transition (completed / failed / canceled). Progress-only updates keep the same status and carry a `previous` snapshot, so they never toast — otherwise a running job spawns one toast per progress tick.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ActivityToasts.svelte'
+	},
+	{
+		slug: 'admin-shell',
+		name: 'AdminShell',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		summary: 'AdminShell is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'title',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'subtitle',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'config',
+				code: 'ShellPanelDefaults',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'settings',
+				code: 'ShellSettingsDelta',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'settingsAdapter',
+				code: 'ShellSettingsAdapter',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'storageKey',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'state',
+				code: 'ShellState',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'appBar',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'appPanel',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'tenantRail',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'tenantPanel',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'tenantFooter',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'focusRail',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'focusPanel',
+				code: 'Snippet<[{ tool: ShellFocusTool | null; }]>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'systemBar',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'systemPanel',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'topLeftCorner',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'topRightCorner',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'bottomLeftCorner',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'bottomRightCorner',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'shortcutsOverlay',
 				code: 'Snippet',
 				status: false,
 				description: ''
@@ -753,12 +12712,98 @@ export const uiComponents: UiComponentReference[] = [
 			{
 				name: 'children',
 				code: 'Snippet',
+				status: true,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/AdminShell.svelte'
+	},
+	{
+		slug: 'app-scope-panel',
+		name: 'AppScopePanel',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		summary: 'AppScopePanel is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'appName',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'tenantName',
+				code: 'string',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'open',
+				name: 'environment',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'search',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'docs',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'switcher',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showSettings',
 				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/AppScopePanel.svelte'
+	},
+	{
+		slug: 'hotkey-input',
+		name: 'HotkeyInput',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		summary: 'HotkeyInput is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'value',
+				code: 'ShellHotkeyBinding | null',
 				status: false,
 				description: ''
 			},
@@ -769,26 +12814,14 @@ export const uiComponents: UiComponentReference[] = [
 				description: ''
 			},
 			{
-				name: 'placement',
-				code: "'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
+				name: 'conflictsWith',
+				code: 'string | null',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'closeOnOutsideClick',
-				code: 'boolean',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'onopenchange',
-				code: '(open: boolean) => void',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'class',
-				code: 'string',
+				name: 'oncapture',
+				code: '(binding: ShellHotkeyBinding | null) => void',
 				status: false,
 				description: ''
 			}
@@ -797,98 +12830,34 @@ export const uiComponents: UiComponentReference[] = [
 		sections: [],
 		items: [
 			{
-				name: 'onopenchange',
-				code: '(open: boolean) => void',
+				name: 'oncapture',
+				code: '(binding: ShellHotkeyBinding | null) => void',
 				status: false,
 				description: ''
 			}
 		],
-		components: [],
-		demo: {
-			id: 'feedback-overlays',
-			label: 'Feedback & Overlays',
-			href: '/playground'
-		},
-		related: {
-			label: 'UI showcase',
-			href: '/ui'
-		},
-		source: 'src/components/ui/Popover.svelte'
-	},
-	{
-		slug: 'skeleton',
-		name: 'Skeleton',
-		family: 'actions-display',
-		category: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Skeleton is part of the actions and display component family.',
-		details: [
-			{
-				name: 'variant',
-				code: 'SkeletonVariant',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'width',
-				code: 'string',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'height',
-				code: 'string',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'lines',
-				code: 'number',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'label',
-				code: 'string',
-				status: false,
-				description: ''
-			}
-		],
-		sources: [],
-		sections: [],
-		items: [],
 		components: [],
 		demo: null,
 		related: {
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/ui/Skeleton.svelte'
+		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/HotkeyInput.svelte'
 	},
 	{
-		slug: 'tooltip',
-		name: 'Tooltip',
-		family: 'actions-display',
-		category: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Tooltip is part of the actions and display component family.',
+		slug: 'shell-corner',
+		name: 'ShellCorner',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		summary: 'ShellCorner is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
-				name: 'text',
-				code: 'string',
+				name: 'side',
+				code: "'left' | 'right'",
 				status: true,
-				description: ''
-			},
-			{
-				name: 'placement',
-				code: 'TooltipPlacement',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'delay',
-				code: 'number',
-				status: false,
 				description: ''
 			},
 			{
@@ -907,43 +12876,130 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/ui/Tooltip.svelte'
+		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ShellCorner.svelte'
 	},
 	{
-		slug: 'tree',
-		name: 'Tree',
-		family: 'actions-display',
-		category: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		summary: 'Tree is part of the actions and display component family.',
+		slug: 'shell-dock-tool',
+		name: 'ShellDockTool',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		summary: 'ShellDockTool is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
-				name: 'nodes',
-				code: 'TreeNode[]',
+				name: 'id',
+				code: 'string',
 				status: true,
 				description: ''
 			},
 			{
-				name: 'selectedId',
+				name: 'label',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'description',
 				code: 'string',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'expanded',
+				name: 'order',
+				code: 'number',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'badge',
+				code: 'number | string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'icon',
+				code: 'Component | null',
+				status: false,
+				description: 'Optional icon component rendered by the default focus rail.'
+			},
+			{
+				name: 'component',
+				code: 'Component | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'render',
+				code: 'Snippet<[{ tool: ShellFocusTool; }]>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'scopeId',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'subject',
+				code: 'ShellFocusToolSubject',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'activityKinds',
 				code: 'string[]',
 				status: false,
 				description: ''
-			},
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ShellDockTool.svelte'
+	},
+	{
+		slug: 'shell-settings-panel',
+		name: 'ShellSettingsPanel',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		summary: 'ShellSettingsPanel is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ShellSettingsPanel.svelte'
+	},
+	{
+		slug: 'shortcuts-overlay',
+		name: 'ShortcutsOverlay',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		summary: 'ShortcutsOverlay is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
 			{
-				name: 'onselect',
-				code: '(id: string) => void',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'aria-label',
-				code: 'string',
+				name: 'onclose',
+				code: '() => void',
 				status: false,
 				description: ''
 			}
@@ -952,8 +13008,8 @@ export const uiComponents: UiComponentReference[] = [
 		sections: [],
 		items: [
 			{
-				name: 'onselect',
-				code: '(id: string) => void',
+				name: 'onclose',
+				code: '() => void',
 				status: false,
 				description: ''
 			}
@@ -964,15 +13020,426 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/ui/Tree.svelte'
+		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ShortcutsOverlay.svelte'
+	},
+	{
+		slug: 'system-scope-panel',
+		name: 'SystemScopePanel',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		summary: 'SystemScopePanel is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'panels',
+				code: 'ShellSystemPanel[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'showActivities',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/SystemScopePanel.svelte'
+	},
+	{
+		slug: 'system-status-chips',
+		name: 'SystemStatusChips',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		summary: 'SystemStatusChips is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'chips',
+				code: 'ShellStatusChip[]',
+				status: true,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/SystemStatusChips.svelte'
+	},
+	{
+		slug: 'tenant-nav',
+		name: 'TenantNav',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		summary: 'TenantNav is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'items',
+				code: 'ShellNavItem[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'currentHref',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'iconComponent',
+				code: 'Component<{ name: string; size?: number; }>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'collapsed',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onNavigate',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onNavigate',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [''],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/TenantNav.svelte'
+	},
+	{
+		slug: 'tools-dock',
+		name: 'ToolsDock',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace/legacy',
+		summary: 'ToolsDock is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'dock',
+				code: 'ToolsDockInstance',
+				status: true,
+				description: 'Instance produced by `defineToolsDock(...)`.'
+			},
+			{
+				name: 'context',
+				code: 'ToolsDockContext | null',
+				status: false,
+				description:
+					'Optional initial context. Alternative to calling `dock.setContext()` directly.'
+			},
+			{
+				name: 'closeLabel',
+				code: 'string',
+				status: false,
+				description: 'Optional override label for the open/close rail toggle, for a11y.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/workspace/tools-dock/ToolsDock.svelte'
+	},
+	{
+		slug: 'workspace-account-menu',
+		name: 'WorkspaceAccountMenu',
+		family: 'smrt-svelte-workspace',
+		category: 'Svelte · Workspace',
+		importPath: '@happyvertical/smrt-svelte/workspace',
+		summary: 'WorkspaceAccountMenu is part of the svelte · workspace component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'userName',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'userLabel',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'avatarUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'tenantLabel',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'roleLabel',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'tenants',
+				code: 'WorkspaceAccountTenant[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'currentTenantId',
+				code: 'string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'placement',
+				code: 'DropdownPlacement',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onTenantSelect',
+				code: '(tenantId: string) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSignOut',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onTenantSelect',
+				code: '(tenantId: string) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSignOut',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/WorkspaceAccountMenu.svelte'
+	},
+	{
+		slug: 'tenant-card',
+		name: 'TenantCard',
+		family: 'smrt-tenancy-svelte',
+		category: 'Tenancy · Components',
+		importPath: '@happyvertical/smrt-tenancy/svelte',
+		summary: 'TenantCard - Tenant information and management refactored for Material 3',
+		summarySynthesized: false,
+		slot: {
+			id: 'tenant-card',
+			label: 'Tenant Card',
+			icon: 'building',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'tenant',
+				code: 'Tenant',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'memberCount',
+				code: 'number',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onclick',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'selected',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'actions',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onedit',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondelete',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onclick',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onedit',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondelete',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/tenancy/src/svelte/components/TenantCard.svelte'
+	},
+	{
+		slug: 'tenant-switcher',
+		name: 'TenantSwitcher',
+		family: 'smrt-tenancy-svelte',
+		category: 'Tenancy · Components',
+		importPath: '@happyvertical/smrt-tenancy/svelte',
+		summary: 'Dropdown for switching between tenants',
+		summarySynthesized: false,
+		slot: {
+			id: 'tenant-switcher',
+			label: 'Tenant Switcher',
+			icon: 'switch',
+			category: 'form'
+		},
+		details: [
+			{
+				name: 'memberships',
+				code: 'Membership[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'tenants',
+				code: 'Map<string, Tenant>',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'currentTenantId',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onchange',
+				code: '(tenantId: string) => void',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(tenantId: string) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/tenancy/src/svelte/components/TenantSwitcher.svelte'
 	},
 	{
 		slug: 'calendar',
 		name: 'Calendar',
-		family: 'calendar',
+		family: 'smrt-ui-calendar',
 		category: 'Calendar',
 		importPath: '@happyvertical/smrt-ui/calendar',
 		summary: 'Calendar is part of the calendar component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'events',
@@ -1002,19 +13469,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onMonthNavigate',
 				code: "(direction: 'prev' | 'next', year: number, month: number) => void",
 				status: false,
-				description: ''
+				description: 'Callback when navigating to prev/next month'
 			},
 			{
 				name: 'onDateSelect',
 				code: '(date: string, hasEvents: boolean) => void',
 				status: false,
-				description: ''
+				description: 'Callback when a date cell is clicked'
 			},
 			{
 				name: 'onTodayClick',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when Today button is clicked'
 			}
 		],
 		sources: [],
@@ -1024,19 +13491,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onMonthNavigate',
 				code: "(direction: 'prev' | 'next', year: number, month: number) => void",
 				status: false,
-				description: ''
+				description: 'Callback when navigating to prev/next month'
 			},
 			{
 				name: 'onDateSelect',
 				code: '(date: string, hasEvents: boolean) => void',
 				status: false,
-				description: ''
+				description: 'Callback when a date cell is clicked'
 			},
 			{
 				name: 'onTodayClick',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when Today button is clicked'
 			}
 		],
 		components: [],
@@ -1045,15 +13512,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/calendar/Calendar.svelte'
+		source: 'packages/smrt-ui/src/components/calendar/Calendar.svelte'
 	},
 	{
 		slug: 'day-view',
 		name: 'DayView',
-		family: 'calendar',
+		family: 'smrt-ui-calendar',
 		category: 'Calendar',
 		importPath: '@happyvertical/smrt-ui/calendar',
 		summary: 'DayView is part of the calendar component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'date',
@@ -1083,7 +13552,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onEventClick',
 				code: '(eventType: string, eventName: string) => void',
 				status: false,
-				description: ''
+				description: 'Callback when an event card is clicked'
 			}
 		],
 		sources: [],
@@ -1093,7 +13562,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onEventClick',
 				code: '(eventType: string, eventName: string) => void',
 				status: false,
-				description: ''
+				description: 'Callback when an event card is clicked'
 			}
 		],
 		components: [],
@@ -1102,75 +13571,80 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/calendar/DayView.svelte'
+		source: 'packages/smrt-ui/src/components/calendar/DayView.svelte'
 	},
 	{
 		slug: 'message-bubble',
 		name: 'MessageBubble',
-		family: 'chat',
+		family: 'smrt-ui-chat',
 		category: 'Chat',
 		importPath: '@happyvertical/smrt-ui/chat',
-		summary: 'MessageBubble is part of the chat component family.',
+		summary:
+			'MessageBubble — a single chat message, tokenised and a11y-clean. Two complementary forms share one styled container: - **Bare bubble** (the common case for a message list that renders its own author/time/reactions around each row): opt into the styling axes by passing `variant` and/or `own` (plus `content` or a `children` snippet). No header or labelled group is rendered — unless you also pass an `author` — so it nests cleanly inside an already-labelled message row without a redundant landmark. - **Self-contained card** (legacy form): pass `role` / `author` / `timestamp` (and optionally the `reactions` / `actions` snippets) without the styling axes. A header and a labelled `role="group"` (`<author|role> (<role>)`) are rendered so assistive tech can announce who sent each message; `author` falls back to a role label ("You" / "Assistant" / "System"). `variant` + `own` are the canonical styling axes. The legacy `role` prop sets the header\'s role label and derives `variant`/`own` when those are not given.',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'variant',
 				code: 'MessageBubbleVariant',
 				status: false,
-				description: ''
+				description: 'Visual tone. Canonical styling axis.'
 			},
 			{
 				name: 'own',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description:
+					'Whether the current viewer authored this message — drives alignment + own-color.'
 			},
 			{
 				name: 'role',
 				code: 'ChatMessageRole',
 				status: false,
-				description: ''
+				description:
+					"Legacy role. Prefer `variant` + `own`. Sets the header's role label and, when `variant`/`own` are unset, derives them (user → own default, agent → agent, system → system)."
 			},
 			{
 				name: 'content',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Plain-text body. Ignored when a `children` snippet is provided.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Body snippet (takes precedence over `content`).'
 			},
 			{
 				name: 'author',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Display name of the sender. When set, a header + labelled group render.'
 			},
 			{
 				name: 'timestamp',
 				code: 'Date',
 				status: false,
-				description: ''
+				description: 'Message time; rendered in a `<time datetime>` element in the header.'
 			},
 			{
 				name: 'timestampLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Override the visible timestamp text (defaults to a locale time).'
 			},
 			{
 				name: 'reactions',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional reactions row (e.g. a `ReactionPicker` or reaction chips).'
 			},
 			{
 				name: 'actions',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional per-message actions (reply, copy, …).'
 			}
 		],
 		sources: [],
@@ -1182,45 +13656,48 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/chat/MessageBubble.svelte'
+		source: 'packages/smrt-ui/src/components/chat/MessageBubble.svelte'
 	},
 	{
 		slug: 'reaction-picker',
 		name: 'ReactionPicker',
-		family: 'chat',
+		family: 'smrt-ui-chat',
 		category: 'Chat',
 		importPath: '@happyvertical/smrt-ui/chat',
 		summary: 'ReactionPicker is part of the chat component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'emojis',
 				code: 'string[]',
 				status: false,
-				description: ''
+				description: 'Emoji set to offer.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessible label for the group. Defaults to a translated "Add reaction".'
 			},
 			{
 				name: 'emojiLabel',
 				code: '(emoji: string) => string',
 				status: false,
-				description: ''
+				description:
+					'Accessible name for each emoji button. Defaults to a built-in name for the common reactions, else a translated "React with {emoji}".'
 			},
 			{
 				name: 'isOpen',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the picker is shown.'
 			},
 			{
 				name: 'onpick',
 				code: '(emoji: string) => void',
 				status: false,
-				description: ''
+				description: 'Fired with the chosen emoji.'
 			}
 		],
 		sources: [],
@@ -1230,7 +13707,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onpick',
 				code: '(emoji: string) => void',
 				status: false,
-				description: ''
+				description: 'Fired with the chosen emoji.'
 			}
 		],
 		components: [],
@@ -1239,33 +13716,36 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/chat/ReactionPicker.svelte'
+		source: 'packages/smrt-ui/src/components/chat/ReactionPicker.svelte'
 	},
 	{
 		slug: 'typing-indicator',
 		name: 'TypingIndicator',
-		family: 'chat',
+		family: 'smrt-ui-chat',
 		category: 'Chat',
 		importPath: '@happyvertical/smrt-ui/chat',
-		summary: 'TypingIndicator is part of the chat component family.',
+		summary:
+			'TypingIndicator — animated "…is typing" affordance. Renders a visible label plus decorative animated dots (`aria-hidden`) inside a polite `role="status"` live region, so both sighted users and screen readers learn who is typing. Honors reduced-motion. Pass `names` to announce one or more typists ("Ada is typing", "Ada and Bob are typing", "Ada and 2 others are typing") — an empty list renders nothing. Or pass a single `name` / a full `label` override. The animated dots stand in for the trailing ellipsis, so the label text omits it.',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'name',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Who is typing (single).'
 			},
 			{
 				name: 'names',
 				code: 'string[]',
 				status: false,
-				description: ''
+				description: 'Names of everyone currently typing — aggregated into the label.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Full label override; defaults to an aggregation of `names`/`name`.'
 			}
 		],
 		sources: [],
@@ -1277,15 +13757,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/chat/TypingIndicator.svelte'
+		source: 'packages/smrt-ui/src/components/chat/TypingIndicator.svelte'
 	},
 	{
 		slug: 'collection-list',
 		name: 'CollectionList',
-		family: 'collections-tables',
+		family: 'smrt-ui-data',
 		category: 'Collections and tables',
 		importPath: '@happyvertical/smrt-ui/data',
 		summary: 'CollectionList is part of the collections and tables component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'items',
@@ -1405,15 +13887,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/data/CollectionList.svelte'
+		source: 'packages/smrt-ui/src/components/data/CollectionList.svelte'
 	},
 	{
 		slug: 'collection-toolbar',
 		name: 'CollectionToolbar',
-		family: 'collections-tables',
+		family: 'smrt-ui-data',
 		category: 'Collections and tables',
 		importPath: '@happyvertical/smrt-ui/data',
 		summary: 'CollectionToolbar is part of the collections and tables component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'search',
@@ -1491,13 +13975,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'controller',
 				code: 'DataTableController',
 				status: false,
-				description: ''
+				description: 'Shares search state with a DataTable controller when supplied.'
 			},
 			{
 				name: 'dataSurface',
 				code: 'CollectionToolbarDataSurfaceOptions',
 				status: false,
-				description: ''
+				description: 'Registers this toolbar only when explicitly supplied.'
 			},
 			{
 				name: 'class',
@@ -1532,15 +14016,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/data/CollectionToolbar.svelte'
+		source: 'packages/smrt-ui/src/components/data/CollectionToolbar.svelte'
 	},
 	{
 		slug: 'content-list',
 		name: 'ContentList',
-		family: 'collections-tables',
+		family: 'smrt-ui-data',
 		category: 'Collections and tables',
 		importPath: '@happyvertical/smrt-ui/data',
 		summary: 'ContentList is part of the collections and tables component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'items',
@@ -1660,309 +14146,319 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/data/CollectionList.svelte'
+		source: 'packages/smrt-ui/src/components/data/CollectionList.svelte'
 	},
 	{
 		slug: 'data-table',
 		name: 'DataTable',
-		family: 'collections-tables',
+		family: 'smrt-ui-data',
 		category: 'Collections and tables',
 		importPath: '@happyvertical/smrt-ui/data',
-		summary: 'DataTable is part of the collections and tables component family.',
+		summary:
+			'DataTable - A flexible, accessible data table component Features: - Sortable columns with custom sort functions - Row selection (single and multi-select) - Custom cell and header renderers via Snippets - Loading and empty states - Responsive with sticky header option - Material 3 styling with theme token support',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'data',
 				code: 'T[]',
 				status: true,
-				description: ''
+				description: 'Data rows'
 			},
 			{
 				name: 'columns',
 				code: 'DataTableColumn<T>[]',
 				status: true,
-				description: ''
+				description: 'Column definitions'
 			},
 			{
 				name: 'rowKey',
 				code: 'DataTableRowKey<T>',
 				status: false,
-				description: ''
+				description: 'Unique key accessor for rows'
 			},
 			{
 				name: 'agentAddressable',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description:
+					'Declares that a DataSurface or agent will address rows. Such tables must provide `rowKey`, even if they do not render selection controls.'
 			},
 			{
 				name: 'selectable',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Enable row selection'
 			},
 			{
 				name: 'selected',
 				code: 'Set<string | number>',
 				status: false,
-				description: ''
+				description: 'Selected row keys'
 			},
 			{
 				name: 'onSelectionChange',
 				code: '(selected: Set<string | number>) => void',
 				status: false,
-				description: ''
+				description: 'Selection change callback'
 			},
 			{
 				name: 'onRowClick',
 				code: '(row: T, index: number) => void',
 				status: false,
-				description: ''
+				description: 'Row click callback'
 			},
 			{
 				name: 'rowLabel',
 				code: '(row: T, index: number) => string',
 				status: false,
-				description: ''
+				description:
+					"Supplies the accessible label used for a row's selection and expansion controls. Defaults to the 1-based display row number."
 			},
 			{
 				name: 'sortable',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Enable sorting'
 			},
 			{
 				name: 'sort',
 				code: 'SortState',
 				status: false,
-				description: ''
+				description: 'Current sort state'
 			},
 			{
 				name: 'onSortChange',
 				code: '(sort: SortState) => void',
 				status: false,
-				description: ''
+				description: 'Sort change callback'
 			},
 			{
 				name: 'manualSorting',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Parent owns sorting and supplies already-sorted rows.'
 			},
 			{
 				name: 'filterFn',
 				code: '(row: T, index: number) => boolean',
 				status: false,
-				description: ''
+				description: 'Optional client-side row filter.'
 			},
 			{
 				name: 'page',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Current 1-based page. Pagination is enabled when pageSize is set.'
 			},
 			{
 				name: 'pageSize',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Rows per page.'
 			},
 			{
 				name: 'manualPagination',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Parent owns pagination and supplies only the current page.'
 			},
 			{
 				name: 'virtualization',
 				code: 'DataTableVirtualizationOptions',
 				status: false,
-				description: ''
+				description:
+					'Opt-in fixed-height virtualization for the data body. It requires rowKey and falls back to the normal semantic body when expanded rows are enabled.'
 			},
 			{
 				name: 'totalRows',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Total server row count when manualPagination is enabled.'
 			},
 			{
 				name: 'onPageChange',
 				code: '(page: number) => void',
 				status: false,
-				description: ''
+				description: 'Page change callback.'
 			},
 			{
 				name: 'expanded',
 				code: 'Set<string | number>',
 				status: false,
-				description: ''
+				description: 'Controlled set of expanded row keys.'
 			},
 			{
 				name: 'onExpandedChange',
 				code: '(expanded: Set<string | number>) => void',
 				status: false,
-				description: ''
+				description: 'Expansion change callback.'
 			},
 			{
 				name: 'canExpand',
 				code: '(row: T, index: number) => boolean',
 				status: false,
-				description: ''
+				description: 'Predicate controlling which rows can expand.'
 			},
 			{
 				name: 'expandedContent',
 				code: 'Snippet<[{ row: T; index: number; }]>',
 				status: false,
-				description: ''
+				description: 'Expanded row content.'
 			},
 			{
 				name: 'toolbar',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional content above the table.'
 			},
 			{
 				name: 'footer',
 				code: 'Snippet<[{ rows: T[]; }]>',
 				status: false,
-				description: ''
+				description: 'Optional full-width table footer content.'
 			},
 			{
 				name: 'structuralRows',
 				code: 'readonly DataTableStructuralRow<T>[]',
 				status: false,
-				description: ''
+				description: 'Generic report-like rows rendered independently from data row interactions.'
 			},
 			{
 				name: 'visibleColumnIds',
 				code: 'Set<string>',
 				status: false,
-				description: ''
+				description: 'Controlled visible column ids. Column.hidden is still respected.'
 			},
 			{
 				name: 'controller',
 				code: 'DataTableController',
 				status: false,
-				description: ''
+				description:
+					'Headless controller used by rendered interactions and programmatic commands. When supplied, it takes precedence over `state` and the legacy bindables.'
 			},
 			{
 				name: 'state',
 				code: 'DataTableViewStateInput',
 				status: false,
-				description: ''
+				description:
+					'Explicit controlled serializable state when no external controller is supplied.'
 			},
 			{
 				name: 'initialState',
 				code: 'Partial<DataTableViewState>',
 				status: false,
-				description: ''
+				description: 'Initial serializable state for uncontrolled controller-backed tables.'
 			},
 			{
 				name: 'onStateChange',
 				code: '(state: DataTableViewState, command: DataTableCommand) => void',
 				status: false,
-				description: ''
+				description: 'Called after a controller command proposes or applies a new state.'
 			},
 			{
 				name: 'modes',
 				code: 'Partial<DataTableModes>',
 				status: false,
-				description: ''
+				description:
+					'Explicit ownership for local or caller-supplied filtering, sorting, and paging.'
 			},
 			{
 				name: 'dataSurface',
 				code: 'DataTableDataSurfaceOptions',
 				status: false,
-				description: ''
+				description: 'Registers this mounted instance only when explicitly supplied.'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description:
+					'The initial loading state. When rows are already present, loading keeps them interactive and is announced as a refresh instead of replacing them.'
 			},
 			{
 				name: 'refreshing',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Explicitly announces a refresh while rendered rows remain available.'
 			},
 			{
 				name: 'stale',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Marks rendered rows as stale while a caller refreshes them.'
 			},
 			{
 				name: 'partialResults',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Marks rendered rows as a partial result set.'
 			},
 			{
 				name: 'error',
 				code: 'DataTableLoadError | null',
 				status: false,
-				description: ''
+				description: 'Load failure shown without discarding already rendered rows.'
 			},
 			{
 				name: 'onRetry',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked by the localized retry button when a load error is present.'
 			},
 			{
 				name: 'empty',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Empty state content'
 			},
 			{
 				name: 'rowClass',
 				code: '(row: T, index: number) => string',
 				status: false,
-				description: ''
+				description: 'Custom row class function'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Table size variant'
 			},
 			{
 				name: 'striped',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Enable striped rows'
 			},
 			{
 				name: 'hoverable',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Enable hover highlight'
 			},
 			{
 				name: 'stickyHeader',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Enable sticky header'
 			},
 			{
 				name: 'caption',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Table caption for accessibility'
 			},
 			{
 				name: 'dense',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Dense mode (reduced padding)'
 			},
 			{
 				name: 'cell',
 				code: 'Snippet<[ { column: DataTableColumn<T>; row: T; value: unknown; index: number; } ]>',
 				status: false,
-				description: ''
+				description: 'Global cell renderer - takes precedence over column.cell'
 			}
 		],
 		sources: [],
@@ -1971,25 +14467,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'selected',
 				code: 'Set<string | number>',
 				status: false,
-				description: ''
+				description: 'Selected row keys'
 			},
 			{
 				name: 'sort',
 				code: 'SortState',
 				status: false,
-				description: ''
+				description: 'Current sort state'
 			},
 			{
 				name: 'page',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Current 1-based page. Pagination is enabled when pageSize is set.'
 			},
 			{
 				name: 'expanded',
 				code: 'Set<string | number>',
 				status: false,
-				description: ''
+				description: 'Controlled set of expanded row keys.'
 			}
 		],
 		items: [
@@ -1997,43 +14493,43 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onSelectionChange',
 				code: '(selected: Set<string | number>) => void',
 				status: false,
-				description: ''
+				description: 'Selection change callback'
 			},
 			{
 				name: 'onRowClick',
 				code: '(row: T, index: number) => void',
 				status: false,
-				description: ''
+				description: 'Row click callback'
 			},
 			{
 				name: 'onSortChange',
 				code: '(sort: SortState) => void',
 				status: false,
-				description: ''
+				description: 'Sort change callback'
 			},
 			{
 				name: 'onPageChange',
 				code: '(page: number) => void',
 				status: false,
-				description: ''
+				description: 'Page change callback.'
 			},
 			{
 				name: 'onExpandedChange',
 				code: '(expanded: Set<string | number>) => void',
 				status: false,
-				description: ''
+				description: 'Expansion change callback.'
 			},
 			{
 				name: 'onStateChange',
 				code: '(state: DataTableViewState, command: DataTableCommand) => void',
 				status: false,
-				description: ''
+				description: 'Called after a controller command proposes or applies a new state.'
 			},
 			{
 				name: 'onRetry',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked by the localized retry button when a load error is present.'
 			}
 		],
 		components: ['sort', 'page', 'selected', 'expanded'],
@@ -2046,45 +14542,48 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/data/DataTable.svelte'
+		source: 'packages/smrt-ui/src/components/data/DataTable.svelte'
 	},
 	{
 		slug: 'confidence-badge',
 		name: 'ConfidenceBadge',
-		family: 'display-status',
+		family: 'smrt-ui-display',
 		category: 'Display and status',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'ConfidenceBadge is part of the display and status component family.',
+		summary:
+			'ConfidenceBadge - Displays AI confidence level indicator Shows a visual indicator for confidence scores (0-100). Useful for OCR results, AI predictions, etc. Accessibility: Uses role="meter" with aria-valuenow for screen readers',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'confidence',
 				code: 'number',
 				status: true,
-				description: ''
+				description: 'Confidence value (0-100)'
 			},
 			{
 				name: 'showPercent',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show percentage value'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Size variant'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional CSS class'
 			},
 			{
 				name: 'aria-label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessible label'
 			}
 		],
 		sources: [],
@@ -2096,63 +14595,66 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/display/ConfidenceBadge.svelte'
+		source: 'packages/smrt-ui/src/components/display/ConfidenceBadge.svelte'
 	},
 	{
 		slug: 'currency-display',
 		name: 'CurrencyDisplay',
-		family: 'display-status',
+		family: 'smrt-ui-display',
 		category: 'Display and status',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'CurrencyDisplay is part of the display and status component family.',
+		summary:
+			'CurrencyDisplay - Formats and displays monetary values Displays formatted currency with configurable unit. Use `unit="cents"` (default) when amount is in the currency\'s minor units, or `unit="dollars"` when it is already in major units. Accepts ISO 4217 currency codes, normalized by trimming whitespace and uppercasing before locale formatting. Unsupported codes render an accessible inline error instead of throwing during a collection render.',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'amount',
 				code: 'number',
 				status: true,
-				description: ''
+				description: 'Amount value'
 			},
 			{
 				name: 'currency',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ISO 4217 currency code. Whitespace is trimmed and letters are uppercased.'
 			},
 			{
 				name: 'unit',
 				code: "'cents' | 'dollars'",
 				status: false,
-				description: ''
+				description: 'Whether amount is a safe integer of ISO minor units or a major-unit number'
 			},
 			{
 				name: 'showSign',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show +/- sign for non-zero values'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Display size'
 			},
 			{
 				name: 'highlightNegative',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Highlight negative values in red'
 			},
 			{
 				name: 'highlightPositive',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Highlight positive values in green'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional CSS class'
 			}
 		],
 		sources: [],
@@ -2164,51 +14666,54 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/display/CurrencyDisplay.svelte'
+		source: 'packages/smrt-ui/src/components/display/CurrencyDisplay.svelte'
 	},
 	{
 		slug: 'date-display',
 		name: 'DateDisplay',
-		family: 'display-status',
+		family: 'smrt-ui-display',
 		category: 'Display and status',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'DateDisplay is part of the display and status component family.',
+		summary:
+			'DateDisplay - Formats and displays dates Supports various format options and relative time display.',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'date',
 				code: 'Date | string | number | null | undefined',
 				status: true,
-				description: ''
+				description: 'Date to display (Date, ISO string, or timestamp)'
 			},
 			{
 				name: 'format',
 				code: "'short' | 'medium' | 'long' | 'relative'",
 				status: false,
-				description: ''
+				description: 'Display format'
 			},
 			{
 				name: 'fallback',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Fallback text when date is null/undefined'
 			},
 			{
 				name: 'showTime',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show time along with date'
 			},
 			{
 				name: 'locale',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Locale for formatting (defaults to en-CA)'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional CSS class'
 			}
 		],
 		sources: [],
@@ -2220,51 +14725,54 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/display/DateDisplay.svelte'
+		source: 'packages/smrt-ui/src/components/display/DateDisplay.svelte'
 	},
 	{
 		slug: 'icon',
 		name: 'Icon',
-		family: 'display-status',
+		family: 'smrt-ui-display',
 		category: 'Display and status',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'Icon is part of the display and status component family.',
+		summary:
+			'Icon - SVG icon component Displays SVG icons from presets or custom paths. Accessibility: - Use aria-label for informative icons - Uses aria-hidden="true" by default (decorative)',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'name',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Preset icon name'
 			},
 			{
 				name: 'path',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Custom SVG path'
 			},
 			{
 				name: 'size',
 				code: 'string | number',
 				status: false,
-				description: ''
+				description: 'Icon size (number for pixels, string for CSS value)'
 			},
 			{
 				name: 'color',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Icon color'
 			},
 			{
 				name: 'viewBox',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'SVG viewBox'
 			},
 			{
 				name: 'aria-label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessible label (makes icon informative)'
 			}
 		],
 		sources: [],
@@ -2276,45 +14784,48 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/display/Icon.svelte'
+		source: 'packages/smrt-ui/src/components/display/Icon.svelte'
 	},
 	{
 		slug: 'status-badge',
 		name: 'StatusBadge',
-		family: 'display-status',
+		family: 'smrt-ui-display',
 		category: 'Display and status',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'StatusBadge is part of the display and status component family.',
+		summary:
+			'StatusBadge - Generic status indicator badge Provides pre-defined color schemes for common status domains (invoice, project, etc.) or allows custom styling via CSS variables.',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'status',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'The status value to display'
 			},
 			{
 				name: 'type',
 				code: 'StatusType',
 				status: false,
-				description: ''
+				description: 'Pre-defined color scheme type'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Badge size'
 			},
 			{
 				name: 'variant',
 				code: "'filled' | 'outline'",
 				status: false,
-				description: ''
+				description: 'Visual variant'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional custom label (defaults to status value)'
 			}
 		],
 		sources: [],
@@ -2330,15 +14841,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/display/StatusBadge.svelte'
+		source: 'packages/smrt-ui/src/components/display/StatusBadge.svelte'
 	},
 	{
 		slug: 'alert',
 		name: 'Alert',
-		family: 'feedback-overlays',
+		family: 'smrt-ui-feedback',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Alert is part of the feedback and overlays component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'variant',
@@ -2403,69 +14916,71 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/feedback/Alert.svelte'
+		source: 'packages/smrt-ui/src/components/feedback/Alert.svelte'
 	},
 	{
 		slug: 'confirm-dialog',
 		name: 'ConfirmDialog',
-		family: 'feedback-overlays',
+		family: 'smrt-ui-feedback',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
-		summary: 'ConfirmDialog is part of the feedback and overlays component family.',
+		summary: 'Props for ConfirmDialog component',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'open',
 				code: 'boolean',
 				status: true,
-				description: ''
+				description: 'Whether the dialog is open'
 			},
 			{
 				name: 'title',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Dialog title'
 			},
 			{
 				name: 'message',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Dialog message'
 			},
 			{
 				name: 'confirmLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Confirm button label'
 			},
 			{
 				name: 'cancelLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Cancel button label'
 			},
 			{
 				name: 'destructive',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Use destructive (red) styling for confirm'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show loading state on confirm'
 			},
 			{
 				name: 'onconfirm',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when confirm is clicked'
 			},
 			{
 				name: 'oncancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when cancel is clicked or dialog closed'
 			}
 		],
 		sources: [],
@@ -2475,13 +14990,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onconfirm',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when confirm is clicked'
 			},
 			{
 				name: 'oncancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when cancel is clicked or dialog closed'
 			}
 		],
 		components: [],
@@ -2494,15 +15009,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/feedback/ConfirmDialog.svelte'
+		source: 'packages/smrt-ui/src/components/feedback/ConfirmDialog.svelte'
 	},
 	{
 		slug: 'drawer',
 		name: 'Drawer',
-		family: 'feedback-overlays',
+		family: 'smrt-ui-feedback',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Drawer is part of the feedback and overlays component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'open',
@@ -2591,63 +15108,66 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/feedback/Drawer.svelte'
+		source: 'packages/smrt-ui/src/components/feedback/Drawer.svelte'
 	},
 	{
 		slug: 'loading-overlay',
 		name: 'LoadingOverlay',
-		family: 'feedback-overlays',
+		family: 'smrt-ui-feedback',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
-		summary: 'LoadingOverlay is part of the feedback and overlays component family.',
+		summary:
+			'Loading Overlay Component A generic full-screen loading overlay for any async operation. Shows progress, completed items, and error states.',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'show',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to show the overlay'
 			},
 			{
 				name: 'message',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Loading message to display'
 			},
 			{
 				name: 'progress',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Progress percentage (0-100)'
 			},
 			{
 				name: 'items',
 				code: 'string[]',
 				status: false,
-				description: ''
+				description: 'List of completed items'
 			},
 			{
 				name: 'error',
 				code: '{ message: string; } | null',
 				status: false,
-				description: ''
+				description: 'Error object with message'
 			},
 			{
 				name: 'dismissible',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Allow dismissing the overlay'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Custom CSS class'
 			},
 			{
 				name: 'ondismiss',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when dismissed'
 			}
 		],
 		sources: [],
@@ -2657,7 +15177,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'ondismiss',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when dismissed'
 			}
 		],
 		components: [],
@@ -2670,15 +15190,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/feedback/LoadingOverlay.svelte'
+		source: 'packages/smrt-ui/src/components/feedback/LoadingOverlay.svelte'
 	},
 	{
 		slug: 'meter',
 		name: 'Meter',
-		family: 'feedback-overlays',
+		family: 'smrt-ui-feedback',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Meter is part of the feedback and overlays component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -2754,93 +15276,96 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/feedback/Meter.svelte'
+		source: 'packages/smrt-ui/src/components/feedback/Meter.svelte'
 	},
 	{
 		slug: 'modal',
 		name: 'Modal',
-		family: 'feedback-overlays',
+		family: 'smrt-ui-feedback',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
-		summary: 'Modal is part of the feedback and overlays component family.',
+		summary:
+			'Modal - An accessible dialog component Features: - Native dialog element for accessibility - Backdrop click to close (optional) - Escape key to close - Focus trap - Multiple sizes - Custom header/footer via snippets - Material 3 styling',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'open',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the modal is open'
 			},
 			{
 				name: 'onClose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when modal requests to close'
 			},
 			{
 				name: 'title',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Modal title'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg' | 'xl' | 'full'",
 				status: false,
-				description: ''
+				description: 'Modal size variant'
 			},
 			{
 				name: 'placement',
 				code: "'center' | 'start' | 'end'",
 				status: false,
-				description: ''
+				description: 'Placement: center (default), start, or end for full-height drawers'
 			},
 			{
 				name: 'closeOnBackdrop',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether clicking backdrop closes modal'
 			},
 			{
 				name: 'closeOnEscape',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether pressing Escape closes modal'
 			},
 			{
 				name: 'showClose',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show close button'
 			},
 			{
 				name: 'header',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Custom header snippet'
 			},
 			{
 				name: 'footer',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Custom footer snippet'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Main content'
 			},
 			{
 				name: 'ariaLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ARIA label for the dialog'
 			},
 			{
 				name: 'ariaDescribedBy',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ARIA described by ID'
 			}
 		],
 		sources: [],
@@ -2850,7 +15375,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onClose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when modal requests to close'
 			}
 		],
 		components: [],
@@ -2863,15 +15388,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/feedback/Modal.svelte'
+		source: 'packages/smrt-ui/src/components/feedback/Modal.svelte'
 	},
 	{
 		slug: 'progress',
 		name: 'Progress',
-		family: 'feedback-overlays',
+		family: 'smrt-ui-feedback',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Progress is part of the feedback and overlays component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -2935,57 +15462,59 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/feedback/Progress.svelte'
+		source: 'packages/smrt-ui/src/components/feedback/Progress.svelte'
 	},
 	{
 		slug: 'progress-bar',
 		name: 'ProgressBar',
-		family: 'feedback-overlays',
+		family: 'smrt-ui-feedback',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
-		summary: 'ProgressBar is part of the feedback and overlays component family.',
+		summary: 'Props for ProgressBar component',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'value',
 				code: 'number',
 				status: true,
-				description: ''
+				description: 'Current value (0-100 or custom range)'
 			},
 			{
 				name: 'max',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Maximum value (default 100)'
 			},
 			{
 				name: 'status',
 				code: "'default' | 'healthy' | 'warning' | 'critical' | 'over'",
 				status: false,
-				description: ''
+				description: 'Status determines color'
 			},
 			{
 				name: 'showLabel',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show percentage label'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Custom label text'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Size variant'
 			},
 			{
 				name: 'showValue',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show value over max (e.g., "75/100")'
 			}
 		],
 		sources: [],
@@ -3001,15 +15530,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/feedback/ProgressBar.svelte'
+		source: 'packages/smrt-ui/src/components/feedback/ProgressBar.svelte'
 	},
 	{
 		slug: 'sheet',
 		name: 'Sheet',
-		family: 'feedback-overlays',
+		family: 'smrt-ui-feedback',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Sheet is part of the feedback and overlays component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'open',
@@ -3098,15 +15629,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/feedback/Drawer.svelte'
+		source: 'packages/smrt-ui/src/components/feedback/Drawer.svelte'
 	},
 	{
 		slug: 'spinner',
 		name: 'Spinner',
-		family: 'feedback-overlays',
+		family: 'smrt-ui-feedback',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Spinner is part of the feedback and overlays component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'label',
@@ -3140,15 +15673,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/feedback/Spinner.svelte'
+		source: 'packages/smrt-ui/src/components/feedback/Spinner.svelte'
 	},
 	{
 		slug: 'toast-viewport',
 		name: 'ToastViewport',
-		family: 'feedback-overlays',
+		family: 'smrt-ui-feedback',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'ToastViewport is part of the feedback and overlays component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'toaster',
@@ -3182,15 +15717,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/feedback/ToastViewport.svelte'
+		source: 'packages/smrt-ui/src/components/feedback/ToastViewport.svelte'
 	},
 	{
 		slug: 'checkbox',
 		name: 'Checkbox',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Checkbox is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'checked',
@@ -3236,15 +15773,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/Checkbox.svelte'
+		source: 'packages/smrt-ui/src/components/forms/Checkbox.svelte'
 	},
 	{
 		slug: 'combobox',
 		name: 'Combobox',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Combobox is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'options',
@@ -3333,15 +15872,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/Combobox.svelte'
+		source: 'packages/smrt-ui/src/components/forms/Combobox.svelte'
 	},
 	{
 		slug: 'date-picker',
 		name: 'DatePicker',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'DatePicker is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -3381,15 +15922,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/DatePicker.svelte'
+		source: 'packages/smrt-ui/src/components/forms/DatePicker.svelte'
 	},
 	{
 		slug: 'error-summary',
 		name: 'ErrorSummary',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'ErrorSummary is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'errors',
@@ -3432,15 +15975,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/ErrorSummary.svelte'
+		source: 'packages/smrt-ui/src/components/forms/ErrorSummary.svelte'
 	},
 	{
 		slug: 'field',
 		name: 'Field',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Field is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'label',
@@ -3476,7 +16021,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Agent/tutorial interaction metadata inherited by the wrapped control.'
 			},
 			{
 				name: 'children',
@@ -3498,15 +16043,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/FormGroup.svelte'
+		source: 'packages/smrt-ui/src/components/forms/FormGroup.svelte'
 	},
 	{
 		slug: 'fieldset',
 		name: 'Fieldset',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Fieldset is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'legend',
@@ -3548,15 +16095,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/Fieldset.svelte'
+		source: 'packages/smrt-ui/src/components/forms/Fieldset.svelte'
 	},
 	{
 		slug: 'file-picker',
 		name: 'FilePicker',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'FilePicker is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'files',
@@ -3621,15 +16170,18 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/FilePicker.svelte'
+		source: 'packages/smrt-ui/src/components/forms/FilePicker.svelte'
 	},
 	{
 		slug: 'form',
 		name: 'Form',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
-		summary: 'Form is part of the forms and controls component family.',
+		summary:
+			"Form — the Provider-free base `<form>` primitive. A thin, dependency-free wrapper around the native `<form>` element so domain components have a primitive to adopt instead of hand-rolling raw `<form>` markup (issue #1589). It forwards every native form attribute (including `onsubmit`) and renders its children — no Provider, no i18n, no spoken-input logic. For the rich, Provider-backed form with field registration and voice input, use `Form` from `@happyvertical/smrt-svelte/forms` instead. This one is the leaf-level building block; that one composes app state on top. `preventDefault` (default `true`) calls `event.preventDefault()` before invoking the consumer's `onsubmit`, so a click/Enter submit runs the handler without a full-page navigation — the near-universal SPA pattern. Pass `preventDefault={false}` to keep native submission (e.g. a GET/POST `action`).",
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'class',
@@ -3647,25 +16199,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'formId',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Stable form scope used by voice/chat/tutorial adapters.'
 			},
 			{
 				name: 'interactionRegistry',
 				code: 'ControlInteractionRegistry',
 				status: false,
-				description: ''
+				description: 'Supply a registry to coordinate multiple forms or inspect commands.'
 			},
 			{
 				name: 'oninteraction',
 				code: '(event: ControlInteractionEvent) => void',
 				status: false,
-				description: ''
+				description: 'Receives registry lifecycle and command events.'
 			},
 			{
 				name: 'stagedReview',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Render the built-in human review surface for staged changes.'
 			},
 			{
 				name: 'children',
@@ -3681,7 +16233,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'oninteraction',
 				code: '(event: ControlInteractionEvent) => void',
 				status: false,
-				description: ''
+				description: 'Receives registry lifecycle and command events.'
 			}
 		],
 		components: [],
@@ -3694,15 +16246,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/Form.svelte'
+		source: 'packages/smrt-ui/src/components/forms/Form.svelte'
 	},
 	{
 		slug: 'form-group',
 		name: 'FormGroup',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'FormGroup is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'label',
@@ -3738,7 +16292,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Agent/tutorial interaction metadata inherited by the wrapped control.'
 			},
 			{
 				name: 'children',
@@ -3760,15 +16314,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/FormGroup.svelte'
+		source: 'packages/smrt-ui/src/components/forms/FormGroup.svelte'
 	},
 	{
 		slug: 'input',
 		name: 'Input',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Input is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -3786,7 +16342,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Stable identity and sensitivity metadata for interaction adapters.'
 			}
 		],
 		sources: ["Omit<HTMLInputAttributes, 'class' | 'value'>"],
@@ -3802,15 +16358,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/Input.svelte'
+		source: 'packages/smrt-ui/src/components/forms/Input.svelte'
 	},
 	{
 		slug: 'input-group',
 		name: 'InputGroup',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'InputGroup is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'prefix',
@@ -3846,15 +16404,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/InputGroup.svelte'
+		source: 'packages/smrt-ui/src/components/forms/InputGroup.svelte'
 	},
 	{
 		slug: 'listbox',
 		name: 'Listbox',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Listbox is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'options',
@@ -3925,15 +16485,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/Listbox.svelte'
+		source: 'packages/smrt-ui/src/components/forms/Listbox.svelte'
 	},
 	{
 		slug: 'multi-select',
 		name: 'MultiSelect',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'MultiSelect is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'options',
@@ -4010,15 +16572,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/MultiSelect.svelte'
+		source: 'packages/smrt-ui/src/components/forms/MultiSelect.svelte'
 	},
 	{
 		slug: 'radio',
 		name: 'Radio',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Radio is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -4052,15 +16616,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/Radio.svelte'
+		source: 'packages/smrt-ui/src/components/forms/Radio.svelte'
 	},
 	{
 		slug: 'radio-group',
 		name: 'RadioGroup',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'RadioGroup is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -4149,15 +16715,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/RadioGroup.svelte'
+		source: 'packages/smrt-ui/src/components/forms/RadioGroup.svelte'
 	},
 	{
 		slug: 'range-slider',
 		name: 'RangeSlider',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'RangeSlider is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -4258,15 +16826,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/RangeSlider.svelte'
+		source: 'packages/smrt-ui/src/components/forms/RangeSlider.svelte'
 	},
 	{
 		slug: 'segmented-control',
 		name: 'SegmentedControl',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'SegmentedControl is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'options',
@@ -4343,15 +16913,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/SegmentedControl.svelte'
+		source: 'packages/smrt-ui/src/components/forms/SegmentedControl.svelte'
 	},
 	{
 		slug: 'select',
 		name: 'Select',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Select is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -4391,15 +16963,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/Select.svelte'
+		source: 'packages/smrt-ui/src/components/forms/Select.svelte'
 	},
 	{
 		slug: 'slider',
 		name: 'Slider',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Slider is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -4475,15 +17049,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/Slider.svelte'
+		source: 'packages/smrt-ui/src/components/forms/Slider.svelte'
 	},
 	{
 		slug: 'staged-control-review',
 		name: 'StagedControlReview',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'StagedControlReview is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'registry',
@@ -4525,15 +17101,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/StagedControlReview.svelte'
+		source: 'packages/smrt-ui/src/components/forms/StagedControlReview.svelte'
 	},
 	{
 		slug: 'switch',
 		name: 'Switch',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Switch is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'checked',
@@ -4585,15 +17163,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/Switch.svelte'
+		source: 'packages/smrt-ui/src/components/forms/Switch.svelte'
 	},
 	{
 		slug: 'tags-input',
 		name: 'TagsInput',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'TagsInput is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'values',
@@ -4676,15 +17256,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/TagsInput.svelte'
+		source: 'packages/smrt-ui/src/components/forms/TagsInput.svelte'
 	},
 	{
 		slug: 'textarea',
 		name: 'Textarea',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Textarea is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -4724,15 +17306,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/Textarea.svelte'
+		source: 'packages/smrt-ui/src/components/forms/Textarea.svelte'
 	},
 	{
 		slug: 'time-picker',
 		name: 'TimePicker',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'TimePicker is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -4772,75 +17356,78 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/TimePicker.svelte'
+		source: 'packages/smrt-ui/src/components/forms/TimePicker.svelte'
 	},
 	{
 		slug: 'toggle',
 		name: 'Toggle',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
-		summary: 'Toggle is part of the forms and controls component family.',
+		summary:
+			'SMRTToggle - An accessible toggle/switch component Features: - Native checkbox semantics for accessibility - Bindable checked state - Disabled state - Labels on either side - Size variants - Material 3 styling',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'checked',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the toggle is checked'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the toggle is disabled'
 			},
 			{
 				name: 'name',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Name attribute for form submission'
 			},
 			{
 				name: 'value',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Value attribute for form submission'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Label text'
 			},
 			{
 				name: 'labelPosition',
 				code: "'left' | 'right'",
 				status: false,
-				description: ''
+				description: 'Position of the label'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Size variant'
 			},
 			{
 				name: 'id',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ID for the input element'
 			},
 			{
 				name: 'ariaLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ARIA label for accessibility'
 			},
 			{
 				name: 'onchange',
 				code: '(checked: boolean) => void',
 				status: false,
-				description: ''
+				description: 'Change callback'
 			}
 		],
 		sources: [],
@@ -4850,7 +17437,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onchange',
 				code: '(checked: boolean) => void',
 				status: false,
-				description: ''
+				description: 'Change callback'
 			}
 		],
 		components: [],
@@ -4863,15 +17450,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/Toggle.svelte'
+		source: 'packages/smrt-ui/src/components/forms/Toggle.svelte'
 	},
 	{
 		slug: 'toggle-button',
 		name: 'ToggleButton',
-		family: 'forms',
+		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'ToggleButton is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'pressed',
@@ -4911,27 +17500,30 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/forms/ToggleButton.svelte'
+		source: 'packages/smrt-ui/src/components/forms/ToggleButton.svelte'
 	},
 	{
 		slug: 'trans',
 		name: 'Trans',
-		family: 'internationalization',
+		family: 'smrt-ui-i18n',
 		category: 'Internationalization',
 		importPath: '@happyvertical/smrt-ui/i18n',
-		summary: 'Trans is part of the internationalization component family.',
+		summary:
+			'`<Trans>` — the component form of `$t` (S13 #1418), for translating strings in element bodies. Equal first-class partner to `useI18n().t` for attributes.',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'key',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Message key, e.g. `ui.data_table.empty`.'
 			},
 			{
 				name: 'vars',
 				code: 'LanguageVariables',
 				status: false,
-				description: ''
+				description: 'Variables substituted into `{var}` placeholders.'
 			}
 		],
 		sources: [],
@@ -4943,15 +17535,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/i18n/Trans.svelte'
+		source: 'packages/smrt-ui/src/i18n/Trans.svelte'
 	},
 	{
 		slug: 'container',
 		name: 'Container',
-		family: 'layout',
+		family: 'smrt-ui-layout',
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary: 'Container is part of the layout component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'maxWidth',
@@ -4975,57 +17569,60 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/layout/Container.svelte'
+		source: 'packages/smrt-ui/src/components/layout/Container.svelte'
 	},
 	{
 		slug: 'empty-state',
 		name: 'EmptyState',
-		family: 'layout',
+		family: 'smrt-ui-layout',
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
-		summary: 'EmptyState is part of the layout component family.',
+		summary:
+			'EmptyState - Placeholder for empty lists/content refactored for Material 3 Provides a consistent empty state display with optional icon, description, and call-to-action button.',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'title',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Main title text'
 			},
 			{
 				name: 'description',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional description'
 			},
 			{
 				name: 'icon',
 				code: "'document' | 'folder' | 'users' | 'search' | 'inbox' | Snippet",
 				status: false,
-				description: ''
+				description: 'Icon slot or default icon name'
 			},
 			{
 				name: 'actionLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Action button label'
 			},
 			{
 				name: 'actionHref',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Action button href'
 			},
 			{
 				name: 'onaction',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Action button click handler'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Size variant'
 			}
 		],
 		sources: [],
@@ -5035,7 +17632,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onaction',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Action button click handler'
 			}
 		],
 		components: [],
@@ -5044,15 +17641,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/layout/EmptyState.svelte'
+		source: 'packages/smrt-ui/src/components/layout/EmptyState.svelte'
 	},
 	{
 		slug: 'footer',
 		name: 'Footer',
-		family: 'layout',
+		family: 'smrt-ui-layout',
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary: 'Footer is part of the layout component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'children',
@@ -5070,57 +17669,59 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/layout/Footer.svelte'
+		source: 'packages/smrt-ui/src/components/layout/Footer.svelte'
 	},
 	{
 		slug: 'grid',
 		name: 'Grid',
-		family: 'layout',
+		family: 'smrt-ui-layout',
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary: 'Grid is part of the layout component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'columns',
 				code: "number | 'auto' | ResponsiveColumns",
 				status: false,
-				description: ''
+				description: "Number of columns, 'auto' for auto-fill, or responsive object"
 			},
 			{
 				name: 'gap',
 				code: 'GapConfig',
 				status: false,
-				description: ''
+				description: 'Gap between items - size or { row, column }'
 			},
 			{
 				name: 'header',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Header snippet rendered above the grid'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Main grid content'
 			},
 			{
 				name: 'alignItems',
 				code: 'AlignItems',
 				status: false,
-				description: ''
+				description: 'Vertical alignment of grid items'
 			},
 			{
 				name: 'justifyItems',
 				code: 'JustifyItems',
 				status: false,
-				description: ''
+				description: 'Horizontal alignment of grid items'
 			},
 			{
 				name: 'autoFlow',
 				code: 'AutoFlow',
 				status: false,
-				description: ''
+				description: 'Grid auto-flow direction'
 			}
 		],
 		sources: ["Omit<HTMLAttributes<HTMLDivElement>, 'class'>"],
@@ -5132,15 +17733,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/layout/Grid.svelte'
+		source: 'packages/smrt-ui/src/components/layout/Grid.svelte'
 	},
 	{
 		slug: 'header',
 		name: 'Header',
-		family: 'layout',
+		family: 'smrt-ui-layout',
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary: 'Header is part of the layout component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'logo',
@@ -5164,15 +17767,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/layout/Header.svelte'
+		source: 'packages/smrt-ui/src/components/layout/Header.svelte'
 	},
 	{
 		slug: 'masthead',
 		name: 'Masthead',
-		family: 'layout',
+		family: 'smrt-ui-layout',
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary: 'Masthead is part of the layout component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'date',
@@ -5220,51 +17825,54 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/layout/Masthead.svelte'
+		source: 'packages/smrt-ui/src/components/layout/Masthead.svelte'
 	},
 	{
 		slug: 'page-header',
 		name: 'PageHeader',
-		family: 'layout',
+		family: 'smrt-ui-layout',
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
-		summary: 'PageHeader is part of the layout component family.',
+		summary:
+			'PageHeader - Standard page header with optional back navigation refactored for Material 3 Provides consistent page header layout with title, optional back link, and slot for action buttons.',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'title',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Page title'
 			},
 			{
 				name: 'subtitle',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional subtitle/description'
 			},
 			{
 				name: 'backHref',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Back navigation URL'
 			},
 			{
 				name: 'backLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Back link label'
 			},
 			{
 				name: 'actions',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Slot for action buttons'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Slot for additional content below title'
 			}
 		],
 		sources: [],
@@ -5276,63 +17884,67 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/layout/PageHeader.svelte'
+		source: 'packages/smrt-ui/src/components/layout/PageHeader.svelte'
 	},
 	{
 		slug: 'summary-card',
 		name: 'SummaryCard',
-		family: 'layout',
+		family: 'smrt-ui-layout',
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
-		summary: 'SummaryCard is part of the layout component family.',
+		summary:
+			'SummaryCard - Statistic/summary display card refactored for Material 3 Shows a label with a prominent value, optionally with a count badge and link functionality.',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'label',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Card label'
 			},
 			{
 				name: 'value',
 				code: 'string | number',
 				status: true,
-				description: ''
+				description: 'Primary value to display'
 			},
 			{
 				name: 'count',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Optional count badge'
 			},
 			{
 				name: 'highlight',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Highlight the card'
 			},
 			{
 				name: 'href',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Make card clickable with href'
 			},
 			{
 				name: 'icon',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional icon name, rendered via the {@link Icon} component.'
 			},
 			{
 				name: 'iconContent',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description:
+					"Optional custom icon content, rendered as a Svelte snippet. Use this escape hatch for bespoke icon markup. It replaces the former raw-SVG **string** support, removed in #1591: SummaryCard no longer renders any consumer-supplied value via `{@html}` (an XSS sink). `iconContent` is rendered as a snippet, so the trust boundary moves to the consumer — the snippet's contents are whatever the consumer authors. When both `iconContent` and `icon` are provided, `iconContent` wins."
 			},
 			{
 				name: 'variant',
 				code: "'default' | 'success' | 'warning' | 'danger'",
 				status: false,
-				description: ''
+				description: 'Value color variant'
 			}
 		],
 		sources: [],
@@ -5344,15 +17956,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/layout/SummaryCard.svelte'
+		source: 'packages/smrt-ui/src/components/layout/SummaryCard.svelte'
 	},
 	{
 		slug: 'membership-card',
 		name: 'MembershipCard',
-		family: 'membership-permissions',
+		family: 'smrt-ui-memberships',
 		category: 'Membership and permissions',
 		importPath: '@happyvertical/smrt-ui',
 		summary: 'MembershipCard is part of the membership and permissions component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'membership',
@@ -5407,15 +18021,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/memberships/MembershipCard.svelte'
+		source: 'packages/smrt-ui/src/components/memberships/MembershipCard.svelte'
 	},
 	{
 		slug: 'membership-list',
 		name: 'MembershipList',
-		family: 'membership-permissions',
+		family: 'smrt-ui-memberships',
 		category: 'Membership and permissions',
 		importPath: '@happyvertical/smrt-ui',
 		summary: 'MembershipList is part of the membership and permissions component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'memberships',
@@ -5476,51 +18092,190 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/memberships/MembershipList.svelte'
+		source: 'packages/smrt-ui/src/components/memberships/MembershipList.svelte'
+	},
+	{
+		slug: 'filter-chips',
+		name: 'FilterChips',
+		family: 'smrt-ui-nav',
+		category: 'Navigation',
+		importPath: '@happyvertical/smrt-ui',
+		summary: 'FilterChips is part of the navigation component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'options',
+				code: 'FilterOption[]',
+				status: true,
+				description: 'Available filter options'
+			},
+			{
+				name: 'selected',
+				code: 'string',
+				status: true,
+				description: 'Currently selected value'
+			},
+			{
+				name: 'onchange',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Called when selection changes'
+			},
+			{
+				name: 'size',
+				code: "'sm' | 'md'",
+				status: false,
+				description: 'Size variant'
+			},
+			{
+				name: 'showAll',
+				code: 'boolean',
+				status: false,
+				description: 'Show "All" option'
+			},
+			{
+				name: 'allLabel',
+				code: 'string',
+				status: false,
+				description: 'All option label'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(value: string) => void',
+				status: false,
+				description: 'Called when selection changes'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/nav/FilterChips.svelte'
+	},
+	{
+		slug: 'tabs',
+		name: 'Tabs',
+		family: 'smrt-ui-nav',
+		category: 'Navigation',
+		importPath: '@happyvertical/smrt-ui',
+		summary:
+			'Tabs - Tab navigation component refactored for Material 3 Provides tabbed navigation with optional counts and content slots. Accessibility: - Supports keyboard navigation with Arrow keys - Proper ARIA roles: tablist, tab, tabpanel - aria-selected indicates active tab - aria-controls links tab to panel',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'tabs',
+				code: 'Tab[]',
+				status: true,
+				description: 'Available tabs'
+			},
+			{
+				name: 'active',
+				code: 'string',
+				status: true,
+				description: 'Currently active tab id'
+			},
+			{
+				name: 'onchange',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Called when tab changes'
+			},
+			{
+				name: 'size',
+				code: "'sm' | 'md' | 'lg'",
+				status: false,
+				description: 'Size variant'
+			},
+			{
+				name: 'variant',
+				code: "'primary' | 'secondary'",
+				status: false,
+				description: 'Visual variant'
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description: 'Tab content slot'
+			},
+			{
+				name: 'aria-label',
+				code: 'string',
+				status: false,
+				description: 'Accessible label for the tablist'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Called when tab changes'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/nav/Tabs.svelte'
 	},
 	{
 		slug: 'permission-check',
 		name: 'PermissionCheck',
-		family: 'membership-permissions',
+		family: 'smrt-ui-permissions',
 		category: 'Membership and permissions',
 		importPath: '@happyvertical/smrt-ui',
 		summary: 'PermissionCheck is part of the membership and permissions component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'permission',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Single permission to check'
 			},
 			{
 				name: 'permissions',
 				code: 'string[]',
 				status: false,
-				description: ''
+				description: 'Multiple permissions to check'
 			},
 			{
 				name: 'userPermissions',
 				code: 'string[]',
 				status: true,
-				description: ''
+				description: "User's current permissions"
 			},
 			{
 				name: 'mode',
 				code: "'all' | 'any'",
 				status: false,
-				description: ''
+				description: "'all' requires all permissions, 'any' requires at least one"
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: true,
-				description: ''
+				description: 'Content to show when permission check passes'
 			},
 			{
 				name: 'fallback',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional fallback content when check fails'
 			}
 		],
 		sources: [],
@@ -5532,15 +18287,17 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/permissions/PermissionCheck.svelte'
+		source: 'packages/smrt-ui/src/components/permissions/PermissionCheck.svelte'
 	},
 	{
 		slug: 'role-badge',
 		name: 'RoleBadge',
-		family: 'membership-permissions',
+		family: 'smrt-ui-roles',
 		category: 'Membership and permissions',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'RoleBadge is part of the membership and permissions component family.',
+		summary: 'RoleBadge - Role label component refactored for Material 3',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'role',
@@ -5564,15 +18321,18 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/roles/RoleBadge.svelte'
+		source: 'packages/smrt-ui/src/components/roles/RoleBadge.svelte'
 	},
 	{
 		slug: 'role-selector',
 		name: 'RoleSelector',
-		family: 'membership-permissions',
+		family: 'smrt-ui-roles',
 		category: 'Membership and permissions',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'RoleSelector is part of the membership and permissions component family.',
+		summary:
+			'RoleSelector — a trigger button and a single-select listbox of roles. Implements keyboard support per the WAI-ARIA listbox pattern, mirroring the roving-focus approach in `ui/Dropdown.svelte`: the trigger opens on ArrowDown/ArrowUp/Enter/Space; the open list moves focus onto the selected (or first) option; ArrowUp/Down/Home/End move roving focus; Enter/Space pick the focused option; Escape closes and refocuses the trigger; Tab closes. Click-outside also dismisses.',
+		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'roles',
@@ -5627,171 +18387,41 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/components/roles/RoleSelector.svelte'
-	},
-	{
-		slug: 'filter-chips',
-		name: 'FilterChips',
-		family: 'navigation',
-		category: 'Navigation',
-		importPath: '@happyvertical/smrt-ui',
-		summary: 'FilterChips is part of the navigation component family.',
-		details: [
-			{
-				name: 'options',
-				code: 'FilterOption[]',
-				status: true,
-				description: ''
-			},
-			{
-				name: 'selected',
-				code: 'string',
-				status: true,
-				description: ''
-			},
-			{
-				name: 'onchange',
-				code: '(value: string) => void',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'size',
-				code: "'sm' | 'md'",
-				status: false,
-				description: ''
-			},
-			{
-				name: 'showAll',
-				code: 'boolean',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'allLabel',
-				code: 'string',
-				status: false,
-				description: ''
-			}
-		],
-		sources: [],
-		sections: [],
-		items: [
-			{
-				name: 'onchange',
-				code: '(value: string) => void',
-				status: false,
-				description: ''
-			}
-		],
-		components: [],
-		demo: null,
-		related: {
-			label: 'UI showcase',
-			href: '/ui'
-		},
-		source: 'src/components/nav/FilterChips.svelte'
-	},
-	{
-		slug: 'tabs',
-		name: 'Tabs',
-		family: 'navigation',
-		category: 'Navigation',
-		importPath: '@happyvertical/smrt-ui',
-		summary: 'Tabs is part of the navigation component family.',
-		details: [
-			{
-				name: 'tabs',
-				code: 'Tab[]',
-				status: true,
-				description: ''
-			},
-			{
-				name: 'active',
-				code: 'string',
-				status: true,
-				description: ''
-			},
-			{
-				name: 'onchange',
-				code: '(id: string) => void',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'size',
-				code: "'sm' | 'md' | 'lg'",
-				status: false,
-				description: ''
-			},
-			{
-				name: 'variant',
-				code: "'primary' | 'secondary'",
-				status: false,
-				description: ''
-			},
-			{
-				name: 'children',
-				code: 'Snippet',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'aria-label',
-				code: 'string',
-				status: false,
-				description: ''
-			}
-		],
-		sources: [],
-		sections: [],
-		items: [
-			{
-				name: 'onchange',
-				code: '(id: string) => void',
-				status: false,
-				description: ''
-			}
-		],
-		components: [],
-		demo: null,
-		related: {
-			label: 'UI showcase',
-			href: '/ui'
-		},
-		source: 'src/components/nav/Tabs.svelte'
+		source: 'packages/smrt-ui/src/components/roles/RoleSelector.svelte'
 	},
 	{
 		slug: 'color-scheme-toggle',
 		name: 'ColorSchemeToggle',
-		family: 'themes',
+		family: 'smrt-ui-themes',
 		category: 'Themes',
 		importPath: '@happyvertical/smrt-ui/themes',
 		summary: 'ColorSchemeToggle is part of the themes component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'showLabels',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show labels with icons'
 			},
 			{
 				name: 'variant',
 				code: "'switch' | 'buttons' | 'segmented'",
 				status: false,
-				description: ''
+				description: "Button variant: 'switch' | 'buttons' | 'segmented'"
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class'
 			},
 			{
 				name: 'ariaLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessible label'
 			}
 		],
 		sources: [],
@@ -5803,66 +18433,156 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/themes/components/ColorSchemeToggle.svelte'
+		source: 'packages/smrt-ui/src/themes/components/ColorSchemeToggle.svelte'
 	},
 	{
 		slug: 'theme-provider',
 		name: 'ThemeProvider',
-		family: 'themes',
+		family: 'smrt-ui-themes',
 		category: 'Themes',
 		importPath: '@happyvertical/smrt-ui/themes',
 		summary: 'ThemeProvider is part of the themes component family.',
+		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'preset',
 				code: 'ThemePreset',
 				status: false,
-				description: ''
+				description: 'Theme preset to use'
 			},
 			{
 				name: 'colorScheme',
 				code: 'ColorScheme',
 				status: false,
-				description: ''
+				description: 'Color scheme preference'
 			},
 			{
 				name: 'primaryColor',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Primary accent color override'
 			},
 			{
 				name: 'borderRadius',
 				code: "ThemeConfig['borderRadius']",
 				status: false,
-				description: ''
+				description: 'Border radius preference'
 			},
 			{
 				name: 'overrides',
 				code: 'Record<string, string>',
 				status: false,
-				description: ''
+				description: 'Custom CSS variable overrides'
 			},
 			{
 				name: 'paintSurface',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description:
+					"Paint the theme's background/color/font onto the wrapper. Set false when the host app owns its surface palette and only wants the CSS variables + scheme context — avoids specificity-fighting `.smrt-theme-root`."
 			},
 			{
 				name: 'persist',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Persist preferences to localStorage'
 			},
 			{
 				name: 'storageKey',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Storage key for persistence'
 			},
 			{
 				name: 'inlineVariables',
+				code: 'boolean',
+				status: false,
+				description:
+					"Force runtime generation of the full CSS variable set onto the wrapper's inline style (the legacy delivery path). Defaults to `true` for custom registered themes — they have no static stylesheet — and `false` for built-in presets, whose variables ship as static CSS (`themes/styles/<preset>.css`) selected by the `data-theme` / `data-color-scheme` attributes. Leave unset unless you cannot import the static stylesheet for a built-in preset."
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: true,
+				description: 'Content'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/themes/ThemeProvider.svelte'
+	},
+	{
+		slug: 'theme-switcher',
+		name: 'ThemeSwitcher',
+		family: 'smrt-ui-themes',
+		category: 'Themes',
+		importPath: '@happyvertical/smrt-ui/themes',
+		summary: 'ThemeSwitcher is part of the themes component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Custom label text'
+			},
+			{
+				name: 'showIcons',
+				code: 'boolean',
+				status: false,
+				description: 'Show icons for each theme'
+			},
+			{
+				name: 'variant',
+				code: "'select' | 'buttons' | 'segmented'",
+				status: false,
+				description: "Button variant: 'select' | 'buttons' | 'segmented'"
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'Additional CSS class'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/themes/components/ThemeSwitcher.svelte'
+	},
+	{
+		slug: 'accordion',
+		name: 'Accordion',
+		family: 'smrt-ui-ui',
+		category: 'Actions and display',
+		importPath: '@happyvertical/smrt-ui/ui',
+		summary: 'Accordion is part of the actions and display component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'value',
+				code: 'string | string[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'multiple',
 				code: 'boolean',
 				status: false,
 				description: ''
@@ -5870,44 +18590,12 @@ export const uiComponents: UiComponentReference[] = [
 			{
 				name: 'children',
 				code: 'Snippet',
-				status: true,
-				description: ''
-			}
-		],
-		sources: [],
-		sections: [],
-		items: [],
-		components: [],
-		demo: null,
-		related: {
-			label: 'UI showcase',
-			href: '/ui'
-		},
-		source: 'src/themes/ThemeProvider.svelte'
-	},
-	{
-		slug: 'theme-switcher',
-		name: 'ThemeSwitcher',
-		family: 'themes',
-		category: 'Themes',
-		importPath: '@happyvertical/smrt-ui/themes',
-		summary: 'ThemeSwitcher is part of the themes component family.',
-		details: [
-			{
-				name: 'label',
-				code: 'string',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'showIcons',
-				code: 'boolean',
-				status: false,
-				description: ''
-			},
-			{
-				name: 'variant',
-				code: "'select' | 'buttons' | 'segmented'",
+				name: 'onvaluechange',
+				code: '(value: string | string[]) => void',
 				status: false,
 				description: ''
 			},
@@ -5920,6 +18608,120 @@ export const uiComponents: UiComponentReference[] = [
 		],
 		sources: [],
 		sections: [],
+		items: [
+			{
+				name: 'onvaluechange',
+				code: '(value: string | string[]) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: {
+			id: 'feedback-overlays',
+			label: 'Feedback & Overlays',
+			href: '/playground'
+		},
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/ui/Accordion.svelte'
+	},
+	{
+		slug: 'accordion-item',
+		name: 'AccordionItem',
+		family: 'smrt-ui-ui',
+		category: 'Actions and display',
+		importPath: '@happyvertical/smrt-ui/ui',
+		summary: 'AccordionItem is part of the actions and display component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'value',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'title',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: {
+			id: 'feedback-overlays',
+			label: 'Feedback & Overlays',
+			href: '/playground'
+		},
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/ui/AccordionItem.svelte'
+	},
+	{
+		slug: 'avatar',
+		name: 'Avatar',
+		family: 'smrt-ui-ui',
+		category: 'Actions and display',
+		importPath: '@happyvertical/smrt-ui/ui',
+		summary:
+			'Avatar — user/entity image with initials fallback and optional presence dot. Renders the image when `src` is set, otherwise initials derived from `name`. `name` is always the accessible label (image alt / initials aria-label), so an Avatar is never an unlabelled graphic.',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'src',
+				code: 'string',
+				status: false,
+				description: 'Image URL. When absent, initials from `name` are shown.'
+			},
+			{
+				name: 'name',
+				code: 'string',
+				status: true,
+				description: 'Accessible name; also the image alt and initials fallback source.'
+			},
+			{
+				name: 'size',
+				code: 'AvatarSize',
+				status: false,
+				description: 'Size variant.'
+			},
+			{
+				name: 'status',
+				code: 'AvatarStatus',
+				status: false,
+				description: 'Optional presence indicator.'
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'Extra class on the root.'
+			}
+		],
+		sources: ["Omit<HTMLAttributes<HTMLSpanElement>, 'class'>"],
+		sections: [],
 		items: [],
 		components: [],
 		demo: null,
@@ -5927,9 +18729,1491 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'src/themes/components/ThemeSwitcher.svelte'
+		source: 'packages/smrt-ui/src/components/ui/Avatar.svelte'
+	},
+	{
+		slug: 'badge',
+		name: 'Badge',
+		family: 'smrt-ui-ui',
+		category: 'Actions and display',
+		importPath: '@happyvertical/smrt-ui/ui',
+		summary: 'Badge is part of the actions and display component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'variant',
+				code: 'BadgeVariant',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'size',
+				code: 'BadgeSize',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			}
+		],
+		sources: ["Omit<HTMLAttributes<HTMLSpanElement>, 'class'>"],
+		sections: [],
+		items: [],
+		components: [],
+		demo: {
+			id: 'base-controls',
+			label: 'Base Controls',
+			href: '/playground'
+		},
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/ui/Badge.svelte'
+	},
+	{
+		slug: 'button',
+		name: 'Button',
+		family: 'smrt-ui-ui',
+		category: 'Actions and display',
+		importPath: '@happyvertical/smrt-ui/ui',
+		summary:
+			'Button - Versatile button component Supports both button and link rendering. When href is provided, renders as an anchor tag. Otherwise renders as a button.',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'variant',
+				code: 'ButtonVariant',
+				status: false,
+				description: 'Visual variant'
+			},
+			{
+				name: 'size',
+				code: 'ButtonSize',
+				status: false,
+				description: 'Size variant'
+			},
+			{
+				name: 'href',
+				code: 'string',
+				status: false,
+				description: 'URL for link mode (renders as <a> tag)'
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description: 'Snippet for button content'
+			},
+			{
+				name: 'fullWidth',
+				code: 'boolean',
+				status: false,
+				description: 'Full width button'
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Loading state'
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description:
+					'Extra class(es) appended after the base `button {variant} {size}` styling. Lets callers adopt Button for custom-styled buttons without losing their own CSS (issue #1589) — the base button styling still applies.'
+			},
+			{
+				name: 'target',
+				code: "HTMLAnchorAttributes['target']",
+				status: false,
+				description:
+					'Anchor-mode attributes (link mode only, i.e. when `href` is set). The component already spreads these onto the rendered `<a>`; they are declared here so callers migrating an external `<a target="_blank" rel="...">` to Button (issue #1589) keep them type-checked. Ignored in button mode.'
+			},
+			{
+				name: 'rel',
+				code: "HTMLAnchorAttributes['rel']",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'download',
+				code: "HTMLAnchorAttributes['download']",
+				status: false,
+				description: ''
+			}
+		],
+		sources: ["Omit<HTMLButtonAttributes, 'class' | 'href'>"],
+		sections: [],
+		items: [],
+		components: [],
+		demo: {
+			id: 'base-controls',
+			label: 'Base Controls',
+			href: '/playground'
+		},
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/ui/Button.svelte'
+	},
+	{
+		slug: 'card',
+		name: 'Card',
+		family: 'smrt-ui-ui',
+		category: 'Actions and display',
+		importPath: '@happyvertical/smrt-ui/ui',
+		summary: 'Card is part of the actions and display component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'variant',
+				code: 'CardVariant',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'padding',
+				code: 'CardPadding',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'hoverable',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'header',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'footer',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			}
+		],
+		sources: ["Omit<HTMLAttributes<HTMLDivElement>, 'class'>"],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/ui/Card.svelte'
+	},
+	{
+		slug: 'chip',
+		name: 'Chip',
+		family: 'smrt-ui-ui',
+		category: 'Actions and display',
+		importPath: '@happyvertical/smrt-ui/ui',
+		summary:
+			'Chip — compact token, optionally selectable (toggle) and/or closeable. When `selectable`, the body is a `<button>` reflecting `selected` via `aria-pressed`. When `closeable`, a labelled remove `<button>` is appended. Both are native buttons, so keyboard activation is built in.',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: "Text label; also the close button's accessible name (`Remove <label>`)."
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description: 'Chip content; falls back to `label`.'
+			},
+			{
+				name: 'selectable',
+				code: 'boolean',
+				status: false,
+				description: 'Render the body as a toggle button reflecting `selected`.'
+			},
+			{
+				name: 'selected',
+				code: 'boolean',
+				status: false,
+				description: 'Selected state (only meaningful with `selectable`).'
+			},
+			{
+				name: 'closeable',
+				code: 'boolean',
+				status: false,
+				description: 'Append a remove (×) button.'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disable both buttons.'
+			},
+			{
+				name: 'size',
+				code: 'ChipSize',
+				status: false,
+				description: 'Size variant.'
+			},
+			{
+				name: 'onselect',
+				code: '() => void',
+				status: false,
+				description: 'Fired when a selectable chip body is activated.'
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: false,
+				description: 'Fired when the remove button is activated.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselect',
+				code: '() => void',
+				status: false,
+				description: 'Fired when a selectable chip body is activated.'
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: false,
+				description: 'Fired when the remove button is activated.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/ui/Chip.svelte'
+	},
+	{
+		slug: 'disclosure',
+		name: 'Disclosure',
+		family: 'smrt-ui-ui',
+		category: 'Actions and display',
+		importPath: '@happyvertical/smrt-ui/ui',
+		summary: 'Disclosure is part of the actions and display component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'title',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'open',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onopenchange',
+				code: '(open: boolean) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onopenchange',
+				code: '(open: boolean) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: {
+			id: 'feedback-overlays',
+			label: 'Feedback & Overlays',
+			href: '/playground'
+		},
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/ui/Disclosure.svelte'
+	},
+	{
+		slug: 'dropdown',
+		name: 'Dropdown',
+		family: 'smrt-ui-ui',
+		category: 'Actions and display',
+		importPath: '@happyvertical/smrt-ui/ui',
+		summary:
+			'Dropdown / Menu — a trigger button and a positioned menu list. Implements the WAI-ARIA menu-button pattern: trigger has `aria-haspopup="menu"` + `aria-expanded`; the list is `role="menu"` with `role="menuitem"` buttons under roving focus (ArrowUp/Down/Home/End), Enter/ Space to activate, Escape to close + refocus the trigger, and click-outside to dismiss. CSS-anchored via `placement` — no JS positioning dependency.',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Trigger button text (ignored when a `trigger` snippet is given).'
+			},
+			{
+				name: 'trigger',
+				code: 'Snippet',
+				status: false,
+				description: 'Custom trigger content.'
+			},
+			{
+				name: 'items',
+				code: 'MenuItem[]',
+				status: true,
+				description: 'Menu items.'
+			},
+			{
+				name: 'placement',
+				code: 'DropdownPlacement',
+				status: false,
+				description: 'Menu placement relative to the trigger.'
+			},
+			{
+				name: 'onselect',
+				code: '(id: string) => void',
+				status: false,
+				description: "Fired with the activated item's id."
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disable the trigger.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselect',
+				code: '(id: string) => void',
+				status: false,
+				description: "Fired with the activated item's id."
+			}
+		],
+		components: [],
+		demo: {
+			id: 'feedback-overlays',
+			label: 'Feedback & Overlays',
+			href: '/playground'
+		},
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/ui/Dropdown.svelte'
+	},
+	{
+		slug: 'menu',
+		name: 'Menu',
+		family: 'smrt-ui-ui',
+		category: 'Actions and display',
+		importPath: '@happyvertical/smrt-ui/ui',
+		summary:
+			'Dropdown / Menu — a trigger button and a positioned menu list. Implements the WAI-ARIA menu-button pattern: trigger has `aria-haspopup="menu"` + `aria-expanded`; the list is `role="menu"` with `role="menuitem"` buttons under roving focus (ArrowUp/Down/Home/End), Enter/ Space to activate, Escape to close + refocus the trigger, and click-outside to dismiss. CSS-anchored via `placement` — no JS positioning dependency.',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Trigger button text (ignored when a `trigger` snippet is given).'
+			},
+			{
+				name: 'trigger',
+				code: 'Snippet',
+				status: false,
+				description: 'Custom trigger content.'
+			},
+			{
+				name: 'items',
+				code: 'MenuItem[]',
+				status: true,
+				description: 'Menu items.'
+			},
+			{
+				name: 'placement',
+				code: 'DropdownPlacement',
+				status: false,
+				description: 'Menu placement relative to the trigger.'
+			},
+			{
+				name: 'onselect',
+				code: '(id: string) => void',
+				status: false,
+				description: "Fired with the activated item's id."
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disable the trigger.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselect',
+				code: '(id: string) => void',
+				status: false,
+				description: "Fired with the activated item's id."
+			}
+		],
+		components: [],
+		demo: {
+			id: 'feedback-overlays',
+			label: 'Feedback & Overlays',
+			href: '/playground'
+		},
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/ui/Dropdown.svelte'
+	},
+	{
+		slug: 'pagination',
+		name: 'Pagination',
+		family: 'smrt-ui-ui',
+		category: 'Actions and display',
+		importPath: '@happyvertical/smrt-ui/ui',
+		summary: 'Props for Pagination component',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'currentPage',
+				code: 'number',
+				status: true,
+				description: 'Current active page (1-based)'
+			},
+			{
+				name: 'totalPages',
+				code: 'number',
+				status: true,
+				description: 'Total number of pages'
+			},
+			{
+				name: 'baseUrl',
+				code: 'string',
+				status: false,
+				description: "Base URL for link mode (e.g., '/articles')"
+			},
+			{
+				name: 'onPageChange',
+				code: '(page: number) => void',
+				status: false,
+				description: 'When provided, renders buttons instead of links and calls this on page change'
+			},
+			{
+				name: 'aria-label',
+				code: 'string',
+				status: false,
+				description: 'Accessible label for pagination nav'
+			},
+			{
+				name: 'showFirstLast',
+				code: 'boolean',
+				status: false,
+				description: 'Show first/last page buttons'
+			},
+			{
+				name: 'maxVisible',
+				code: 'number',
+				status: false,
+				description: 'Maximum number of visible page numbers'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onPageChange',
+				code: '(page: number) => void',
+				status: false,
+				description: 'When provided, renders buttons instead of links and calls this on page change'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/ui/Pagination.svelte'
+	},
+	{
+		slug: 'popover',
+		name: 'Popover',
+		family: 'smrt-ui-ui',
+		category: 'Actions and display',
+		importPath: '@happyvertical/smrt-ui/ui',
+		summary: 'Popover is part of the actions and display component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'label',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'trigger',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'open',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'placement',
+				code: "'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'closeOnOutsideClick',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onopenchange',
+				code: '(open: boolean) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onopenchange',
+				code: '(open: boolean) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: {
+			id: 'feedback-overlays',
+			label: 'Feedback & Overlays',
+			href: '/playground'
+		},
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/ui/Popover.svelte'
+	},
+	{
+		slug: 'skeleton',
+		name: 'Skeleton',
+		family: 'smrt-ui-ui',
+		category: 'Actions and display',
+		importPath: '@happyvertical/smrt-ui/ui',
+		summary:
+			'Skeleton — shape-matching loading placeholder. Variants: `text` (one or more lines), `circle`, `rect`. The wrapper is a polite `role="status"` region with an sr-only label so assistive tech announces that content is loading; the shimmer honors `prefers-reduced-motion`.',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'variant',
+				code: 'SkeletonVariant',
+				status: false,
+				description: 'Placeholder shape.'
+			},
+			{
+				name: 'width',
+				code: 'string',
+				status: false,
+				description: "CSS width (e.g. '100%', '8rem')."
+			},
+			{
+				name: 'height',
+				code: 'string',
+				status: false,
+				description: "CSS height (e.g. '1rem', '48px')."
+			},
+			{
+				name: 'lines',
+				code: 'number',
+				status: false,
+				description: 'Number of lines for the `text` variant.'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Accessible loading label.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/ui/Skeleton.svelte'
+	},
+	{
+		slug: 'tooltip',
+		name: 'Tooltip',
+		family: 'smrt-ui-ui',
+		category: 'Actions and display',
+		importPath: '@happyvertical/smrt-ui/ui',
+		summary:
+			'Tooltip — anchored, delayed text bubble for a trigger. Shows on hover and keyboard focus, hides on leave / blur / Escape. The trigger is wired to the bubble via `aria-describedby` (always set; the bubble is in the DOM and revealed on open), and the bubble carries `role="tooltip"`. CSS-anchored via a `placement` prop — no JS positioning dependency.',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'text',
+				code: 'string',
+				status: true,
+				description: 'Tooltip text.'
+			},
+			{
+				name: 'placement',
+				code: 'TooltipPlacement',
+				status: false,
+				description: 'Placement relative to the trigger.'
+			},
+			{
+				name: 'delay',
+				code: 'number',
+				status: false,
+				description: 'Show delay in ms.'
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: true,
+				description: 'The trigger content.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/ui/Tooltip.svelte'
+	},
+	{
+		slug: 'tree',
+		name: 'Tree',
+		family: 'smrt-ui-ui',
+		category: 'Actions and display',
+		importPath: '@happyvertical/smrt-ui/ui',
+		summary: 'Tree is part of the actions and display component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'nodes',
+				code: 'TreeNode[]',
+				status: true,
+				description: 'Root nodes.'
+			},
+			{
+				name: 'selectedId',
+				code: 'string',
+				status: false,
+				description: 'Selected node id.'
+			},
+			{
+				name: 'expanded',
+				code: 'string[]',
+				status: false,
+				description: 'Initially expanded node ids.'
+			},
+			{
+				name: 'onselect',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Fired with the selected node id.'
+			},
+			{
+				name: 'aria-label',
+				code: 'string',
+				status: false,
+				description: 'Accessible label for the tree.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselect',
+				code: '(id: string) => void',
+				status: false,
+				description: 'Fired with the selected node id.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/components/ui/Tree.svelte'
+	},
+	{
+		slug: 'invite-user-modal',
+		name: 'InviteUserModal',
+		family: 'smrt-users-svelte',
+		category: 'Users · Components',
+		importPath: '@happyvertical/smrt-users/svelte',
+		summary: 'Modal for inviting new users',
+		summarySynthesized: false,
+		slot: {
+			id: 'invite-user-modal',
+			label: 'Invite User Modal',
+			icon: 'user-plus',
+			category: 'form'
+		},
+		details: [
+			{
+				name: 'open',
+				code: 'boolean',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'tenant',
+				code: 'Tenant',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'roles',
+				code: 'Role[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onsubmit',
+				code: '(data: { email: string; roleId: string; sendEmail: boolean; }) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsubmit',
+				code: '(data: { email: string; roleId: string; sendEmail: boolean; }) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onclose',
+				code: '() => void',
+				status: true,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/users/src/svelte/components/InviteUserModal.svelte'
+	},
+	{
+		slug: 'user-avatar',
+		name: 'UserAvatar',
+		family: 'smrt-users-svelte',
+		category: 'Users · Components',
+		importPath: '@happyvertical/smrt-users/svelte',
+		summary: 'User profile image or initials display',
+		summarySynthesized: false,
+		slot: {
+			id: 'user-avatar',
+			label: 'User Avatar',
+			icon: 'image',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'profile',
+				code: 'Profile',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'size',
+				code: "'sm' | 'md' | 'lg' | 'xl'",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'showName',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/users/src/svelte/components/UserAvatar.svelte'
+	},
+	{
+		slug: 'user-card',
+		name: 'UserCard',
+		family: 'smrt-users-svelte',
+		category: 'Users · Components',
+		importPath: '@happyvertical/smrt-users/svelte',
+		summary: 'UserCard - Compact user information display refactored for Material 3',
+		summarySynthesized: false,
+		slot: {
+			id: 'user-card',
+			label: 'User Card',
+			icon: 'user',
+			category: 'display'
+		},
+		details: [
+			{
+				name: 'user',
+				code: 'User',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'profile',
+				code: 'Profile',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'role',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'status',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onclick',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'selected',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onclick',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/users/src/svelte/components/UserCard.svelte'
+	},
+	{
+		slug: 'user-form',
+		name: 'UserForm',
+		family: 'smrt-users-svelte',
+		category: 'Users · Components',
+		importPath: '@happyvertical/smrt-users/svelte',
+		summary: 'Form for creating or editing users',
+		summarySynthesized: false,
+		slot: {
+			id: 'user-form',
+			label: 'User Form',
+			icon: 'edit',
+			category: 'form'
+		},
+		details: [
+			{
+				name: 'user',
+				code: 'User | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'profile',
+				code: 'Profile | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onsubmit',
+				code: '(data: { name: string; email: string; status: UserStatus; }) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'oncancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsubmit',
+				code: '(data: { name: string; email: string; status: UserStatus; }) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'oncancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/users/src/svelte/components/UserForm.svelte'
+	},
+	{
+		slug: 'user-list',
+		name: 'UserList',
+		family: 'smrt-users-svelte',
+		category: 'Users · Components',
+		importPath: '@happyvertical/smrt-users/svelte',
+		summary: 'List of users with selection support',
+		summarySynthesized: false,
+		slot: {
+			id: 'user-list',
+			label: 'User List',
+			icon: 'users',
+			category: 'list'
+		},
+		details: [
+			{
+				name: 'users',
+				code: 'UserWithProfile[]',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'selectedId',
+				code: 'string | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onselect',
+				code: '(user: User) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'emptyMessage',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'empty',
+				code: 'Snippet',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselect',
+				code: '(user: User) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/users/src/svelte/components/UserList.svelte'
+	},
+	{
+		slug: 'user-menu',
+		name: 'UserMenu',
+		family: 'smrt-users-svelte',
+		category: 'Users · Components',
+		importPath: '@happyvertical/smrt-users/svelte',
+		summary:
+			'UserMenu - User profile menu dropdown refactored for Material 3 Accessibility (WAI-ARIA menu-button pattern): - Proper ARIA attributes for menu state - Roving tabindex over the menu items - Arrow Up/Down, Home/End to move between items; Escape closes + refocuses the trigger; Tab closes; click-outside dismisses - Focus management (first item focused on open, trigger refocused on close)',
+		summarySynthesized: false,
+		slot: {
+			id: 'user-menu',
+			label: 'User Menu',
+			icon: 'menu',
+			category: 'action'
+		},
+		details: [
+			{
+				name: 'profile',
+				code: 'Profile',
+				status: false,
+				description: 'Full SMRT profile object'
+			},
+			{
+				name: 'user',
+				code: '{ name: string; email?: string; }',
+				status: false,
+				description: 'Simple user object (used when profile is not available)'
+			},
+			{
+				name: 'signoutUrl',
+				code: 'string',
+				status: false,
+				description: 'URL for sign out'
+			},
+			{
+				name: 'profileUrl',
+				code: 'string',
+				status: false,
+				description: 'URL for profile page'
+			},
+			{
+				name: 'settingsUrl',
+				code: 'string',
+				status: false,
+				description: 'URL for settings page'
+			},
+			{
+				name: 'aria-label',
+				code: 'string',
+				status: false,
+				description: 'Accessible label for the menu button'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/users/src/svelte/components/UserMenu.svelte'
 	}
 ];
+
+export interface UiModuleReference {
+	slug: string;
+	importPath: string;
+	displayName: string;
+	summary: string;
+	models: string[];
+	collections: string[];
+	uiDependencies: string[];
+	slots: number;
+}
+
+export const uiModules: UiModuleReference[] = [
+	{
+		slug: 'smrt-agents',
+		importPath: '@happyvertical/smrt-agents',
+		displayName: 'Agents',
+		summary: 'Agent framework for building autonomous actors',
+		models: ['Agent', 'AgentConfig', 'AgentSchedule', 'TenantAgent'],
+		collections: ['AgentConfigCollection', 'AgentScheduleCollection', 'TenantAgentCollection'],
+		uiDependencies: [],
+		slots: 5
+	},
+	{
+		slug: 'smrt-analytics',
+		importPath: '@happyvertical/smrt-analytics',
+		displayName: 'Analytics',
+		summary:
+			'Analytics integration models for GA4, Plausible, and Matomo with server-side event tracking and AI-powered reporting',
+		models: ['AnalyticsDataStream', 'AnalyticsEvent', 'AnalyticsProperty', 'AnalyticsReport'],
+		collections: [
+			'AnalyticsDataStreamCollection',
+			'AnalyticsEventCollection',
+			'AnalyticsPropertyCollection',
+			'AnalyticsReportCollection'
+		],
+		uiDependencies: [],
+		slots: 6
+	},
+	{
+		slug: 'smrt-assets',
+		importPath: '@happyvertical/smrt-assets',
+		displayName: 'Assets',
+		summary:
+			'Provider-agnostic asset management with versioning, metadata, folders, and associations',
+		models: ['Asset', 'AssetMetafield', 'AssetStatus', 'AssetType', 'Folder'],
+		collections: [
+			'AssetAssociationCollection',
+			'AssetCollection',
+			'AssetMetafieldCollection',
+			'AssetStatusCollection',
+			'AssetTypeCollection',
+			'FolderCollection'
+		],
+		uiDependencies: [],
+		slots: 7
+	},
+	{
+		slug: 'smrt-chat',
+		importPath: '@happyvertical/smrt-chat',
+		displayName: 'Chat',
+		summary: 'Real-time chat rooms, DMs, threads, and agent conversations',
+		models: [
+			'AgentSession',
+			'ChatMessage',
+			'ChatParticipant',
+			'ChatReaction',
+			'ChatRoom',
+			'ChatThread',
+			'VoiceSession'
+		],
+		collections: [
+			'AgentSessionCollection',
+			'ChatMessageCollection',
+			'ChatParticipantCollection',
+			'ChatReactionCollection',
+			'ChatRoomCollection',
+			'ChatThreadCollection',
+			'VoiceSessionCollection'
+		],
+		uiDependencies: [],
+		slots: 7
+	},
+	{
+		slug: 'smrt-commerce',
+		importPath: '@happyvertical/smrt-commerce',
+		displayName: 'Commerce',
+		summary: 'Commerce models: contracts, invoices, payments',
+		models: [
+			'Contract',
+			'ContractLineItem',
+			'Customer',
+			'Fulfillment',
+			'FulfillmentLineItem',
+			'Payment',
+			'Vendor'
+		],
+		collections: [
+			'ContractCollection',
+			'ContractLineItemCollection',
+			'CustomerCollection',
+			'FulfillmentCollection',
+			'FulfillmentLineItemCollection',
+			'PaymentCollection',
+			'VendorCollection'
+		],
+		uiDependencies: [],
+		slots: 6
+	},
+	{
+		slug: 'smrt-content',
+		importPath: '@happyvertical/smrt-content',
+		displayName: 'Content',
+		summary: 'Content processing: documents, web content, and media',
+		models: ['Article', 'Content', 'Document'],
+		collections: ['ArticleCollection', 'ContentCollection', 'DocumentCollection'],
+		uiDependencies: [],
+		slots: 3
+	},
+	{
+		slug: 'smrt-events',
+		importPath: '@happyvertical/smrt-events',
+		displayName: 'Events',
+		summary: 'Hierarchical event management with participant tracking',
+		models: ['Deadline', 'Event', 'EventParticipant', 'EventSeries', 'Meeting'],
+		collections: ['EventCollection', 'EventParticipantCollection', 'EventSeriesCollection'],
+		uiDependencies: [],
+		slots: 1
+	},
+	{
+		slug: 'smrt-images',
+		importPath: '@happyvertical/smrt-images',
+		displayName: 'Images',
+		summary:
+			'Image asset management with AI-powered categorization, search, editing, and metadata extraction',
+		models: ['Image'],
+		collections: ['ImageCollection'],
+		uiDependencies: [],
+		slots: 3
+	},
+	{
+		slug: 'smrt-jobs',
+		importPath: '@happyvertical/smrt-jobs',
+		displayName: 'Jobs',
+		summary: 'Background job processing with persistence and scheduling',
+		models: ['Job', 'JobQueue'],
+		collections: ['JobCollection', 'JobQueueCollection'],
+		uiDependencies: [],
+		slots: 6
+	},
+	{
+		slug: 'smrt-messages',
+		importPath: '@happyvertical/smrt-messages',
+		displayName: 'Messages',
+		summary: 'Unified multi-channel messaging: email, Slack, Twitter, and more',
+		models: [
+			'Account',
+			'Attachment',
+			'Email',
+			'EmailAccount',
+			'Message',
+			'MessagingEndpoint',
+			'PersonaMessageRoute',
+			'SlackAccount',
+			'SlackMessage',
+			'TelegramAccount',
+			'Tweet',
+			'TwitterAccount',
+			'ZulipAccount'
+		],
+		collections: [
+			'AccountCollection',
+			'AttachmentCollection',
+			'EmailAccountCollection',
+			'EmailCollection',
+			'MessageCollection',
+			'MessagingEndpointCollection',
+			'PersonaMessageRouteCollection'
+		],
+		uiDependencies: [],
+		slots: 9
+	},
+	{
+		slug: 'smrt-projects',
+		importPath: '@happyvertical/smrt-projects',
+		displayName: 'Projects',
+		summary:
+			'Provider-agnostic project management with managed-app request intake and time tracking',
+		models: [
+			'AssistanceRequest',
+			'AssistanceRequestEvent',
+			'Comment',
+			'DevelopmentRequest',
+			'DevelopmentRequestHistory',
+			'DevelopmentRequestWorkLink',
+			'Issue',
+			'Label',
+			'PreviewApproval',
+			'Project',
+			'ProjectDeliveryEvent',
+			'ProjectIntegration',
+			'ProjectIntegrationAudit',
+			'PullRequest',
+			'Repository',
+			'ServiceChargeSnapshot',
+			'ServiceCompensationSnapshot',
+			'ServiceTimeEntry'
+		],
+		collections: [
+			'AssistanceRequestCollection',
+			'AssistanceRequestEventCollection',
+			'CommentCollection',
+			'DevelopmentRequestCollection',
+			'DevelopmentRequestHistoryCollection',
+			'DevelopmentRequestWorkLinkCollection',
+			'IssueCollection',
+			'LabelCollection',
+			'PreviewApprovalCollection',
+			'ProjectCollection',
+			'ProjectDeliveryEventCollection',
+			'ProjectIntegrationAuditCollection',
+			'ProjectIntegrationCollection',
+			'PullRequestCollection',
+			'RepositoryCollection',
+			'ServiceChargeSnapshotCollection',
+			'ServiceCompensationSnapshotCollection',
+			'ServiceTimeEntryCollection'
+		],
+		uiDependencies: [],
+		slots: 16
+	},
+	{
+		slug: 'smrt-tenancy',
+		importPath: '@happyvertical/smrt-tenancy',
+		displayName: 'Tenancy',
+		summary: 'Multi-tenancy framework with automatic tenant isolation',
+		models: ['Tenant', 'TenantContext'],
+		collections: ['TenantCollection'],
+		uiDependencies: [],
+		slots: 2
+	},
+	{
+		slug: 'smrt-users',
+		importPath: '@happyvertical/smrt-users',
+		displayName: 'Users',
+		summary: 'Multi-tenant user management with roles and permissions',
+		models: ['Group', 'Permission', 'Role', 'Tenant', 'User'],
+		collections: [
+			'GroupCollection',
+			'PermissionCollection',
+			'RoleCollection',
+			'TenantCollection',
+			'UserCollection'
+		],
+		uiDependencies: [],
+		slots: 6
+	}
+];
+
+export function getUiModule(slug: string): UiModuleReference | undefined {
+	return uiModules.find((module) => module.slug === slug);
+}
+
+export interface UiCoverage {
+	describedProps: number;
+	totalProps: number;
+	authoredSummaries: number;
+	totalComponents: number;
+}
+
+/**
+ * Coverage of the published reference at generation time. Every described prop
+ * and authored summary comes from prose shipped inside a package.
+ */
+export const uiCoverage: UiCoverage = {
+	describedProps: 839,
+	totalProps: 1775,
+	authoredSummaries: 110,
+	totalComponents: 285
+};
 
 export const uiComponentGroups = [
 	...new Map(uiComponents.map((component) => [component.family, component.category] as const))

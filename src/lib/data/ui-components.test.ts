@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { getUiComponent, uiComponentGroups, uiComponents } from '$lib/data/ui-components.generated';
+import {
+	getUiComponent,
+	getUiModule,
+	uiComponentGroups,
+	uiComponents,
+	uiCoverage,
+	uiModules
+} from '$lib/data/ui-components.generated';
 
 describe('generated UI component reference', () => {
 	it('publishes unique stable destinations for every public export', () => {
@@ -9,9 +16,108 @@ describe('generated UI component reference', () => {
 
 		for (const component of uiComponents) {
 			expect(component.name).toBeTruthy();
-			expect(component.importPath).toMatch(/^@happyvertical\/smrt-ui/);
-			expect(component.source).toMatch(/^src\/.+\.svelte$/);
+			expect(component.importPath).toMatch(/^@happyvertical\/smrt-[a-z-]+/);
+			expect(component.source).toMatch(/^packages\/.+\.svelte$/);
 			expect(component.related.href).toBe('/ui');
+		}
+	});
+
+	it('publishes the prop prose the packages already ship', () => {
+		const described = uiComponents.flatMap((component) =>
+			component.details.filter((prop) => prop.description)
+		);
+		const props = uiComponents.flatMap((component) => component.details);
+
+		// Roughly half of smrt-ui's props carry JSDoc, and svelte-package preserves
+		// it into the shipped declarations. A collapse to zero means the generator
+		// stopped reading them, which is the defect this guards.
+		expect(described.length).toBeGreaterThan(props.length * 0.3);
+		expect(uiComponents.some((component) => !component.summarySynthesized)).toBe(true);
+
+		const cell = getUiComponent('data-table')?.details.find((prop) => prop.name === 'cell');
+		expect(cell?.description).toBe('Global cell renderer - takes precedence over column.cell');
+	});
+
+	it('marks a summary it had to synthesize', () => {
+		for (const component of uiComponents) {
+			const placeholder = `${component.name} is part of the ${component.category.toLowerCase()} component family.`;
+			expect(component.summarySynthesized).toBe(component.summary === placeholder);
+		}
+	});
+
+	it('takes authored slot prose from the packages that declare it', () => {
+		const withSlot = uiComponents.filter((component) => component.slot);
+		expect(withSlot.length).toBeGreaterThan(50);
+
+		// Every slot a package declares carries a written label and description, so
+		// a component matched to one must never fall back to the placeholder.
+		for (const component of withSlot) {
+			expect(component.slot?.label).toBeTruthy();
+			expect(component.summarySynthesized).toBe(false);
+		}
+	});
+
+	it('publishes what each module declares alongside its components', () => {
+		expect(uiModules.length).toBeGreaterThan(10);
+
+		const commerce = getUiModule('smrt-commerce');
+		expect(commerce?.displayName).toBe('Commerce');
+		expect(commerce?.models).toContain('Contract');
+		expect(commerce?.collections).toContain('PaymentCollection');
+	});
+
+	it('reports its own coverage from the records it publishes', () => {
+		const props = uiComponents.flatMap((component) => component.details);
+
+		expect(uiCoverage.totalComponents).toBe(uiComponents.length);
+		expect(uiCoverage.totalProps).toBe(props.length);
+		expect(uiCoverage.describedProps).toBe(props.filter((prop) => prop.description).length);
+		expect(uiCoverage.authoredSummaries).toBe(
+			uiComponents.filter((component) => !component.summarySynthesized).length
+		);
+	});
+
+	it('lists a callback event whose type is a named alias', () => {
+		// ObjectForm.onsubmit is typed ObjectFormSubmitHandler, not an inline
+		// arrow, and was omitted from the events contract while still counted as
+		// a prop — so the page reported the wrong number of callback events.
+		const form = getUiComponent('object-form');
+		expect(form?.items.map((event) => event.name)).toContain('onsubmit');
+
+		const editor = getUiComponent('content-editor');
+		expect(editor?.items.map((event) => event.name)).toContain('onAssistantContextChange');
+	});
+
+	it('does not mistake a non-callable prop for an event', () => {
+		// `onlineStatus` is a string union that merely starts with "on".
+		const avatar = getUiComponent('chat-avatar');
+		expect(avatar?.details.some((prop) => prop.name === 'onlineStatus')).toBe(true);
+		expect(avatar?.items.some((event) => event.name === 'onlineStatus')).toBe(false);
+	});
+
+	it('resolves props declared outside the component file', () => {
+		// ActionBar's props live in a sibling types module; guessing a local
+		// interface published it, and ten others, with an empty contract.
+		const actionBar = getUiComponent('action-bar');
+		expect(actionBar?.details.map((prop) => prop.name)).toEqual(
+			expect.arrayContaining(['selectedAssets', 'customActions'])
+		);
+
+		// A component may legitimately declare none, and that is the only one.
+		const empty = uiComponents.filter((component) => component.details.length === 0);
+		expect(empty.map((component) => component.slug)).toEqual(['shell-settings-panel']);
+	});
+
+	it('keeps every branch of a union props type', () => {
+		// ProjectBoard is `Base & (ReadOnly | Movable)`. Reading only the first
+		// branch dropped the two callbacks that make the board writable.
+		const board = getUiComponent('project-board');
+		const names = board?.details.map((prop) => prop.name) ?? [];
+		expect(names).toEqual(expect.arrayContaining(['onmove', 'onrefresh', 'projectId']));
+
+		// Conditionally present, so neither may be advertised as required.
+		for (const name of ['onmove', 'onrefresh']) {
+			expect(board?.details.find((prop) => prop.name === name)?.status).toBe(false);
 		}
 	});
 
