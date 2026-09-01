@@ -220,8 +220,8 @@
 			<p>
 				This is one record type, described once. The description says what the record stores, which
 				actions are available on the web and to agents, and which fields are required, read-only, or
-				secret. Everything on the right is generated from it: the storage, the forms, the web API,
-				the commands, the agent tools, and the permissions.
+				secret. The surfaces it selects are generated from it: the storage, the forms, the web API,
+				the agent tools, and the permissions.
 			</p>
 		</div>
 		<div class="model-grid">
