@@ -11,6 +11,7 @@ const base: Reference = {
 	importPath: '@happyvertical/smrt-ui/forms',
 	summary: 'SampleControl is part of the forms and controls component family.',
 	summarySynthesized: true,
+	slot: null,
 	details: [
 		{ name: 'value', code: 'string', status: false, description: '' },
 		{ name: 'label', code: 'string', status: true, description: 'Visible name for the control.' }

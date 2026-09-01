@@ -2,7 +2,7 @@
 
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { format, resolveConfig } from 'prettier';
 import ts from 'typescript';
 
@@ -85,6 +85,37 @@ function exportedEntries(packageDir, packageName) {
 		});
 	}
 	return entries;
+}
+
+/**
+ * The `SmrtModuleMeta` a domain package ships in `dist/ui.js`, or null.
+ *
+ * Every slot in it carries an authored label and description — prose a person
+ * wrote about the component, which no amount of reading declarations produces.
+ * The module is plain data and imports nothing, so loading it costs nothing and
+ * cannot drag a component tree into this script.
+ */
+async function moduleMetaFor(packageDir) {
+	const entry = join(packageDir, 'dist', 'ui.js');
+	if (!existsSync(entry)) return null;
+	try {
+		const loaded = await import(pathToFileURL(entry).href);
+		for (const value of Object.values(loaded)) {
+			if (value && typeof value === 'object' && 'displayName' in value) return value;
+		}
+	} catch {
+		// A package whose module metadata cannot be loaded simply contributes none.
+	}
+	return null;
+}
+
+/** Slot records keyed by the slug of the component they describe. */
+function slotsBySlug(meta) {
+	const slots = new Map();
+	for (const slot of Object.values(meta?.uiSlots ?? {})) {
+		if (slot?.id) slots.set(slot.id, slot);
+	}
+	return slots;
 }
 
 const exampleByComponent = new Map([
@@ -450,7 +481,7 @@ function sourcePathFor(declarationPath, group) {
 	return within(declarationPath);
 }
 
-function buildComponent(name, declarationPath, group) {
+function buildComponent(name, declarationPath, group, slot = null) {
 	if (!existsSync(declarationPath))
 		throw new Error(`Missing declaration for ${name}: ${declarationPath}`);
 	const interfaceName = propsInterface(declarationPath);
@@ -463,7 +494,10 @@ function buildComponent(name, declarationPath, group) {
 		(prop) => prop.name.startsWith('on') && /=>|EventHandler|Callback/.test(prop.type)
 	);
 	const exampleId = exampleByComponent.get(name);
-	const authoredSummary = componentSummary(declarationPath, interfaceName);
+	// A component's own file header first, then the description its module wrote
+	// for the slot it fills. Both are authored; only the placeholder is not.
+	const authoredSummary =
+		componentSummary(declarationPath, interfaceName) || (slot?.description ?? '');
 	const member = (prop) => ({
 		name: prop.name,
 		code: prop.type,
@@ -480,6 +514,9 @@ function buildComponent(name, declarationPath, group) {
 		summary:
 			authoredSummary || `${name} is part of the ${group.title.toLowerCase()} component family.`,
 		summarySynthesized: !authoredSummary,
+		slot: slot
+			? { id: slot.id, label: slot.label, icon: slot.icon ?? '', category: slot.category ?? '' }
+			: null,
 		details: props.map(member),
 		sources: inherits,
 		sections: props.filter((prop) => bindingSet.has(prop.name)).map(member),
@@ -493,7 +530,7 @@ function buildComponent(name, declarationPath, group) {
 	};
 }
 
-function render(components) {
+function render(components, modules) {
 	const serialized = JSON.stringify(components, null, '\t');
 	return `/**
  * Generated from the public declaration barrels shipped by
@@ -518,6 +555,8 @@ export interface UiComponentReference {
 	summary: string;
 	/** True when no package prose was found and \`summary\` is a generated placeholder. */
 	summarySynthesized: boolean;
+	/** The ModuleUIRegistry slot this component fills, when its package declares one. */
+	slot: { id: string; label: string; icon: string; category: string } | null;
 	details: UiComponentMember[];
 	sources: string[];
 	sections: UiComponentMember[];
@@ -531,6 +570,23 @@ export interface UiComponentReference {
 const SMRT_TREE = \`https://github.com/happyvertical/smrt/blob/v\${SMRT_VERSION}\`;
 
 export const uiComponents: UiComponentReference[] = ${serialized};
+
+export interface UiModuleReference {
+	slug: string;
+	importPath: string;
+	displayName: string;
+	summary: string;
+	models: string[];
+	collections: string[];
+	uiDependencies: string[];
+	slots: number;
+}
+
+export const uiModules: UiModuleReference[] = ${JSON.stringify(modules, null, '\t')};
+
+export function getUiModule(slug: string): UiModuleReference | undefined {
+	return uiModules.find((module) => module.slug === slug);
+}
 
 export const uiComponentGroups = [...new Map(
 	uiComponents.map((component) => [component.family, component.category] as const)
@@ -566,6 +622,7 @@ function sectionFor(packageDir, declarationPath) {
 const PACKAGE_ORDER = ['smrt-ui', 'smrt-svelte'];
 
 const discovered = [];
+const modules = [];
 for (const packageName of installedPackages().sort((a, b) => {
 	const rank = (name) => {
 		const index = PACKAGE_ORDER.indexOf(name);
@@ -577,16 +634,32 @@ for (const packageName of installedPackages().sort((a, b) => {
 	const manifest = JSON.parse(readFileSync(join(packageDir, 'package.json'), 'utf8'));
 	const repoDirectory = manifest.repository?.directory ?? `packages/${packageName}`;
 	const label = packageName === 'smrt-ui' ? null : titleCase(packageName.replace(/^smrt-/, ''));
+	const meta = await moduleMetaFor(packageDir);
+	const slots = slotsBySlug(meta);
+	if (meta) {
+		modules.push({
+			slug: packageName,
+			importPath: `@happyvertical/${packageName}`,
+			displayName: meta.displayName ?? titleCase(packageName.replace(/^smrt-/, '')),
+			summary: meta.description ?? '',
+			models: [...(meta.models ?? [])].sort(),
+			collections: [...(meta.collections ?? [])].sort(),
+			uiDependencies: [...(meta.uiDependencies ?? [])].sort(),
+			slots: [...slots.values()].length
+		});
+	}
 
 	for (const entry of exportedEntries(packageDir, `@happyvertical/${packageName}`)) {
 		for (const [name, declaration] of declarationsFromBarrel(entry.declaration)) {
 			if (!existsSync(declaration)) continue;
 			const section = sectionFor(packageDir, declaration);
+			const slot = slots.get(slugify(name)) ?? null;
 			const sectionTitle = DIRECTORY_TITLES.get(section) ?? titleCase(section);
 			discovered.push({
 				name,
 				declaration,
 				packageName,
+				slot,
 				group: {
 					id: slugify(`${packageName}-${section}`),
 					title: label ? `${label} · ${sectionTitle}` : sectionTitle,
@@ -634,7 +707,7 @@ const components = [...chosen.values()]
 		return { candidate, slug };
 	})
 	.map(({ candidate, slug }) => ({
-		...buildComponent(candidate.name, candidate.declaration, candidate.group),
+		...buildComponent(candidate.name, candidate.declaration, candidate.group, candidate.slot),
 		slug
 	}))
 	.sort((a, b) => a.family.localeCompare(b.family) || a.name.localeCompare(b.name));
@@ -646,7 +719,7 @@ if (duplicateSlugs.length)
 	throw new Error(`Duplicate component slugs: ${duplicateSlugs.join(', ')}`);
 
 const prettierConfig = (await resolveConfig(OUTPUT)) ?? {};
-const output = await format(render(components), { ...prettierConfig, filepath: OUTPUT });
+const output = await format(render(components, modules), { ...prettierConfig, filepath: OUTPUT });
 if (process.argv.includes('--check')) {
 	if (!existsSync(OUTPUT) || readFileSync(OUTPUT, 'utf8') !== output) {
 		console.error('UI component reference is stale. Run pnpm run generate:ui-reference.');

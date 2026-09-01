@@ -21,6 +21,8 @@ export interface UiComponentReference {
 	summary: string;
 	/** True when no package prose was found and `summary` is a generated placeholder. */
 	summarySynthesized: boolean;
+	/** The ModuleUIRegistry slot this component fills, when its package declares one. */
+	slot: { id: string; label: string; icon: string; category: string } | null;
 	details: UiComponentMember[];
 	sources: string[];
 	sections: UiComponentMember[];
@@ -42,6 +44,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-agents/svelte/admin',
 		summary: 'AgentAdminPanel is part of the agents · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'registry',
@@ -124,6 +127,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-agents/svelte/admin',
 		summary: 'AgentAdminTabs is part of the agents · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'registry',
@@ -198,8 +202,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-agents-svelte',
 		category: 'Agents · Components',
 		importPath: '@happyvertical/smrt-agents/svelte',
-		summary: 'AgentDashboard is part of the agents · components component family.',
-		summarySynthesized: true,
+		summary: 'Combined overview panel for agent schedules',
+		summarySynthesized: false,
+		slot: {
+			id: 'agent-dashboard',
+			label: 'Agent Dashboard',
+			icon: 'activity',
+			category: 'admin'
+		},
 		details: [
 			{
 				name: 'schedules',
@@ -322,8 +332,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-agents-svelte',
 		category: 'Agents · Components',
 		importPath: '@happyvertical/smrt-agents/svelte',
-		summary: 'AgentRunHistory is part of the agents · components component family.',
-		summarySynthesized: true,
+		summary: 'History of agent runs',
+		summarySynthesized: false,
+		slot: {
+			id: 'agent-run-history',
+			label: 'Agent Run History',
+			icon: 'clock',
+			category: 'list'
+		},
 		details: [
 			{
 				name: 'history',
@@ -374,8 +390,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-agents-svelte',
 		category: 'Agents · Components',
 		importPath: '@happyvertical/smrt-agents/svelte',
-		summary: 'AgentScheduleForm is part of the agents · components component family.',
-		summarySynthesized: true,
+		summary: 'Form for creating or editing agent schedules',
+		summarySynthesized: false,
+		slot: {
+			id: 'agent-schedule-form',
+			label: 'Agent Schedule Form',
+			icon: 'edit',
+			category: 'form'
+		},
 		details: [
 			{
 				name: 'initialData',
@@ -444,8 +466,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-agents-svelte',
 		category: 'Agents · Components',
 		importPath: '@happyvertical/smrt-agents/svelte',
-		summary: 'AgentScheduleList is part of the agents · components component family.',
-		summarySynthesized: true,
+		summary: 'List of scheduled agents',
+		summarySynthesized: false,
+		slot: {
+			id: 'agent-schedule-list',
+			label: 'Agent Schedule List',
+			icon: 'calendar',
+			category: 'list'
+		},
 		details: [
 			{
 				name: 'schedules',
@@ -540,6 +568,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-agents/svelte/admin',
 		summary: 'AgentSettingsForm is part of the agents · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'config',
@@ -592,6 +621,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-agents/svelte/admin',
 		summary: 'AgentSettingsShell is part of the agents · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'registry',
@@ -660,8 +690,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-agents-svelte',
 		category: 'Agents · Components',
 		importPath: '@happyvertical/smrt-agents/svelte',
-		summary: 'ScheduleStatusBadge is part of the agents · components component family.',
-		summarySynthesized: true,
+		summary: 'Status indicator for schedule states',
+		summarySynthesized: false,
+		slot: {
+			id: 'schedule-status-badge',
+			label: 'Schedule Status Badge',
+			icon: 'tag',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'status',
@@ -693,8 +729,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-analytics-svelte',
 		category: 'Analytics · Components',
 		importPath: '@happyvertical/smrt-analytics/svelte',
-		summary: 'AnalyticsSummary is part of the analytics · components component family.',
-		summarySynthesized: true,
+		summary: 'Summary cards for pageviews, users, and trend deltas across today/yesterday',
+		summarySynthesized: false,
+		slot: {
+			id: 'analytics-summary',
+			label: 'Analytics Summary',
+			icon: 'bar-chart-3',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'stats',
@@ -720,8 +762,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-analytics-svelte',
 		category: 'Analytics · Components',
 		importPath: '@happyvertical/smrt-analytics/svelte',
-		summary: 'EventsTable is part of the analytics · components component family.',
-		summarySynthesized: true,
+		summary: 'Tabular display of recent analytics events with filters',
+		summarySynthesized: false,
+		slot: {
+			id: 'events-table',
+			label: 'Events Table',
+			icon: 'list',
+			category: 'list'
+		},
 		details: [
 			{
 				name: 'events',
@@ -753,8 +801,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-analytics-svelte',
 		category: 'Analytics · Components',
 		importPath: '@happyvertical/smrt-analytics/svelte',
-		summary: 'PropertyInfo is part of the analytics · components component family.',
-		summarySynthesized: true,
+		summary: 'Display analytics property identifiers and configuration',
+		summarySynthesized: false,
+		slot: {
+			id: 'property-info',
+			label: 'Property Info',
+			icon: 'info',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'propertyId',
@@ -810,8 +864,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-analytics-svelte',
 		category: 'Analytics · Components',
 		importPath: '@happyvertical/smrt-analytics/svelte',
-		summary: 'PropertyStatusBadge is part of the analytics · components component family.',
-		summarySynthesized: true,
+		summary: 'Compact status indicator for an analytics property',
+		summarySynthesized: false,
+		slot: {
+			id: 'property-status-badge',
+			label: 'Property Status Badge',
+			icon: 'badge',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'status',
@@ -837,8 +897,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-analytics-svelte',
 		category: 'Analytics · Components',
 		importPath: '@happyvertical/smrt-analytics/svelte',
-		summary: 'StatCard is part of the analytics · components component family.',
-		summarySynthesized: true,
+		summary: 'Single-metric card with label, value, optional trend and subtitle',
+		summarySynthesized: false,
+		slot: {
+			id: 'stat-card',
+			label: 'Stat Card',
+			icon: 'trending-up',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'label',
@@ -888,8 +954,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-analytics-svelte',
 		category: 'Analytics · Components',
 		importPath: '@happyvertical/smrt-analytics/svelte',
-		summary: 'TrendBadge is part of the analytics · components component family.',
-		summarySynthesized: true,
+		summary: 'Up/down/flat trend indicator with percentage delta',
+		summarySynthesized: false,
+		slot: {
+			id: 'trend-badge',
+			label: 'Trend Badge',
+			icon: 'arrow-up-right',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'trend',
@@ -923,6 +995,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-assets/svelte',
 		summary: 'ActionBar is part of the assets · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [],
 		sources: [],
 		sections: [],
@@ -941,8 +1014,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-assets-svelte',
 		category: 'Assets · Components',
 		importPath: '@happyvertical/smrt-assets/svelte',
-		summary: 'AssetDetail is part of the assets · components component family.',
-		summarySynthesized: true,
+		summary: 'Detailed view of a single asset with metadata and preview',
+		summarySynthesized: false,
+		slot: {
+			id: 'asset-detail',
+			label: 'Asset Detail',
+			icon: 'file-text',
+			category: 'detail'
+		},
 		details: [
 			{
 				name: 'asset',
@@ -1077,8 +1156,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-assets-svelte',
 		category: 'Assets · Components',
 		importPath: '@happyvertical/smrt-assets/svelte',
-		summary: 'AssetGrid is part of the assets · components component family.',
-		summarySynthesized: true,
+		summary: 'Grid view of asset thumbnails with selection',
+		summarySynthesized: false,
+		slot: {
+			id: 'asset-grid',
+			label: 'Asset Grid',
+			icon: 'grid',
+			category: 'list'
+		},
 		details: [],
 		sources: [],
 		sections: [],
@@ -1097,8 +1182,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-assets-svelte',
 		category: 'Assets · Components',
 		importPath: '@happyvertical/smrt-assets/svelte',
-		summary: 'AssetList is part of the assets · components component family.',
-		summarySynthesized: true,
+		summary: 'Sortable list view of assets with metadata columns',
+		summarySynthesized: false,
+		slot: {
+			id: 'asset-list',
+			label: 'Asset List',
+			icon: 'list',
+			category: 'list'
+		},
 		details: [],
 		sources: [],
 		sections: [],
@@ -1117,8 +1208,15 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-assets-svelte',
 		category: 'Assets · Components',
 		importPath: '@happyvertical/smrt-assets/svelte',
-		summary: 'AssetManager is part of the assets · components component family.',
-		summarySynthesized: true,
+		summary:
+			'Combined asset management surface with toolbar, grid/list view, detail, and selection',
+		summarySynthesized: false,
+		slot: {
+			id: 'asset-manager',
+			label: 'Asset Manager',
+			icon: 'folder-image',
+			category: 'admin'
+		},
 		details: [],
 		sources: [],
 		sections: [],
@@ -1137,8 +1235,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-assets-svelte',
 		category: 'Assets · Components',
 		importPath: '@happyvertical/smrt-assets/svelte',
-		summary: 'AssetToolbar is part of the assets · components component family.',
-		summarySynthesized: true,
+		summary: 'Toolbar with view toggle, filters, sort, and upload action',
+		summarySynthesized: false,
+		slot: {
+			id: 'asset-toolbar',
+			label: 'Asset Toolbar',
+			icon: 'sliders',
+			category: 'action'
+		},
 		details: [],
 		sources: [],
 		sections: [],
@@ -1159,6 +1263,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-assets/svelte',
 		summary: 'CreateAssetModal is part of the assets · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'open',
@@ -1217,8 +1322,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary: 'AgentChat is part of the chat · components component family.',
-		summarySynthesized: true,
+		summary: 'Full agent conversation interface',
+		summarySynthesized: false,
+		slot: {
+			id: 'agent-chat',
+			label: 'Agent Chat',
+			icon: 'bot',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'session',
@@ -1301,6 +1412,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'AgentSelector is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'agents',
@@ -1341,6 +1453,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'AgentSessionPanel is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'sessions',
@@ -1399,6 +1512,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'Avatar is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -1442,8 +1556,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary: 'ChatLayout is part of the chat · components component family.',
-		summarySynthesized: true,
+		summary: 'Discord/Slack-style chat layout with sidebar',
+		summarySynthesized: false,
+		slot: {
+			id: 'chat-layout',
+			label: 'Chat Layout',
+			icon: 'message-square',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'rooms',
@@ -1514,6 +1634,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'ChatTab is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'tab',
@@ -1602,6 +1723,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'ChatTabList is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'tabs',
@@ -1652,8 +1774,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary: 'ChatTabs is part of the chat · components component family.',
-		summarySynthesized: true,
+		summary: 'Facebook-style expandable chat tabs',
+		summarySynthesized: false,
+		slot: {
+			id: 'chat-tabs',
+			label: 'Chat Tabs',
+			icon: 'columns',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'tabs',
@@ -1742,6 +1870,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'FileUpload is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'onupload',
@@ -1794,6 +1923,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'LinkPreview - URL preview card Compact card with thumbnail, title, and description.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'url',
@@ -1839,6 +1969,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'MemberList is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'participants',
@@ -1879,6 +2010,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'MentionAutocomplete is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'query',
@@ -1941,8 +2073,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary: 'MessageInput is part of the chat · components component family.',
-		summarySynthesized: true,
+		summary: 'Chat message input with attachments',
+		summarySynthesized: false,
+		slot: {
+			id: 'message-input',
+			label: 'Message Input',
+			icon: 'edit-2',
+			category: 'form'
+		},
 		details: [
 			{
 				name: 'onsend',
@@ -2007,6 +2145,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'MessageItem is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'message',
@@ -2087,8 +2226,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary: 'MessageList is part of the chat · components component family.',
-		summarySynthesized: true,
+		summary: 'Scrollable chat message feed',
+		summarySynthesized: false,
+		slot: {
+			id: 'message-list',
+			label: 'Message List',
+			icon: 'message-circle',
+			category: 'list'
+		},
 		details: [
 			{
 				name: 'messages',
@@ -2159,6 +2304,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'MiniChat is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'messages',
@@ -2211,6 +2357,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'ReactionPicker is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'onreact',
@@ -2251,6 +2398,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'ReadReceipts is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'readBy',
@@ -2284,6 +2432,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'RoomCreateDialog is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'isOpen',
@@ -2336,6 +2485,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'RoomHeader is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'room',
@@ -2392,8 +2542,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary: 'RoomList is part of the chat · components component family.',
-		summarySynthesized: true,
+		summary: 'Sidebar room navigation with unread badges',
+		summarySynthesized: false,
+		slot: {
+			id: 'room-list',
+			label: 'Room List',
+			icon: 'list',
+			category: 'list'
+		},
 		details: [
 			{
 				name: 'rooms',
@@ -2452,6 +2608,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'SearchMessages is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'isOpen',
@@ -2520,8 +2677,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary: 'ThreadPanel is part of the chat · components component family.',
-		summarySynthesized: true,
+		summary: 'Threaded conversation side panel',
+		summarySynthesized: false,
+		slot: {
+			id: 'thread-panel',
+			label: 'Thread Panel',
+			icon: 'git-branch',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'thread',
@@ -2586,6 +2749,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'ToolCallDisplay is part of the chat · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'toolCall',
@@ -2613,6 +2777,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary: 'UserPresence - Online/offline status indicator with optional label',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'status',
@@ -2646,6 +2811,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-commerce/svelte',
 		summary: 'Props for InvoiceActions component',
 		summarySynthesized: false,
+		slot: {
+			id: 'invoice-actions',
+			label: 'Invoice Actions',
+			icon: 'more-horizontal',
+			category: 'action'
+		},
 		details: [
 			{
 				name: 'status',
@@ -2758,6 +2929,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-commerce/svelte',
 		summary: 'Props for InvoiceCard component',
 		summarySynthesized: false,
+		slot: {
+			id: 'invoice-card',
+			label: 'Invoice Card',
+			icon: 'file-text',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'invoice',
@@ -2810,6 +2987,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-commerce/svelte',
 		summary: 'Props for InvoiceHeader component',
 		summarySynthesized: false,
+		slot: {
+			id: 'invoice-header',
+			label: 'Invoice Header',
+			icon: 'file-text',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'invoiceNumber',
@@ -2892,6 +3075,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-commerce/svelte',
 		summary: 'Props for InvoiceLineItems component',
 		summarySynthesized: false,
+		slot: {
+			id: 'invoice-line-items',
+			label: 'Invoice Line Items',
+			icon: 'list',
+			category: 'list'
+		},
 		details: [
 			{
 				name: 'items',
@@ -2980,6 +3169,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-commerce/svelte',
 		summary: 'Props for InvoiceTotals component',
 		summarySynthesized: false,
+		slot: {
+			id: 'invoice-totals',
+			label: 'Invoice Totals',
+			icon: 'calculator',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'subtotal',
@@ -3061,6 +3256,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-commerce/svelte',
 		summary: 'Props for UnbilledItems component',
 		summarySynthesized: false,
+		slot: {
+			id: 'unbilled-items',
+			label: 'Unbilled Items',
+			icon: 'clock',
+			category: 'list'
+		},
 		details: [
 			{
 				name: 'items',
@@ -3123,8 +3324,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-content-svelte',
 		category: 'Content · Components',
 		importPath: '@happyvertical/smrt-content/svelte',
-		summary: 'ArticleCard is part of the content · components component family.',
-		summarySynthesized: true,
+		summary: 'Article preview card with title, excerpt, and metadata',
+		summarySynthesized: false,
+		slot: {
+			id: 'article-card',
+			label: 'Article Card',
+			icon: 'file-text',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'article',
@@ -3174,8 +3381,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-content-svelte',
 		category: 'Content · Components',
 		importPath: '@happyvertical/smrt-content/svelte',
-		summary: 'ArticleList is part of the content · components component family.',
-		summarySynthesized: true,
+		summary: 'Grid or list of article cards',
+		summarySynthesized: false,
+		slot: {
+			id: 'article-list',
+			label: 'Article List',
+			icon: 'list',
+			category: 'list'
+		},
 		details: [
 			{
 				name: 'articles',
@@ -3239,6 +3452,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentAgentChat is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'apiBaseUrl',
@@ -3333,6 +3547,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentBodyEditor is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -3439,6 +3654,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentBodyRenderer is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'content',
@@ -3478,6 +3694,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentClaimAuditTool is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'apiBaseUrl',
@@ -3524,6 +3741,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentContributionForm is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'types',
@@ -3600,6 +3818,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentContributionInbox is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'contributions',
@@ -3694,6 +3913,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentContributionPortal is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'contributions',
@@ -3758,6 +3978,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentContributionsRoute is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'client',
@@ -3803,6 +4024,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentContributionTypeManager is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'types',
@@ -3855,6 +4077,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentContributorManager is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'contributors',
@@ -3907,6 +4130,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentCorrectionsTool is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'apiBaseUrl',
@@ -3959,6 +4183,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentEditor is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'apiBaseUrl',
@@ -4101,6 +4326,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentFactsRoute is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'client',
@@ -4153,6 +4379,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'ContentGovernanceAssignmentEditor is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'assignment',
@@ -4211,6 +4438,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentGovernanceManager is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'apiBaseUrl',
@@ -4257,6 +4485,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentGovernancePanel is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'apiBaseUrl',
@@ -4393,6 +4622,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentGovernancePolicyEditor is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'policy',
@@ -4445,6 +4675,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentGovernanceProfileEditor is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'profile',
@@ -4503,6 +4734,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentGovernanceRoute is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'client',
@@ -4548,6 +4780,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentGovernanceTool is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'section',
@@ -4612,6 +4845,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentImageBrowser is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'apiBaseUrl',
@@ -4718,6 +4952,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentImageChooser is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'body',
@@ -4770,6 +5005,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentList is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'apiBaseUrl',
@@ -4930,6 +5166,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentMetadataFields is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'data',
@@ -4970,6 +5207,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentReferencesPanel is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'referenceIds',
@@ -5023,6 +5261,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentReviewStatusTray is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'items',
@@ -5081,6 +5320,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentStatusFields is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'data',
@@ -5121,6 +5361,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentTitleField is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -5173,6 +5414,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentTransparencyReport is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'transparency',
@@ -5212,6 +5454,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentTransparencyTool is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'apiBaseUrl',
@@ -5258,6 +5501,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentVersionsTool is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'apiBaseUrl',
@@ -5304,6 +5548,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'ContentWorkspaceRoute is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'client',
@@ -5355,6 +5600,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'GovernedContentEditor is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'apiBaseUrl',
@@ -5509,6 +5755,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'Props for the Markdown component',
 		summarySynthesized: false,
+		slot: {
+			id: 'markdown',
+			label: 'Markdown',
+			icon: 'code',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'content',
@@ -5542,6 +5794,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary: 'PublishedArticleRoute is part of the content · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'data',
@@ -5579,8 +5832,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-events-svelte',
 		category: 'Events · Components',
 		importPath: '@happyvertical/smrt-events/svelte',
-		summary: 'MeetingView is part of the events · components component family.',
-		summarySynthesized: true,
+		summary: 'Full meeting details with documents and resources',
+		summarySynthesized: false,
+		slot: {
+			id: 'meeting-view',
+			label: 'Meeting View',
+			icon: 'calendar',
+			category: 'detail'
+		},
 		details: [
 			{
 				name: 'meeting',
@@ -5614,6 +5873,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-fields/svelte',
 		summary: 'AdvancedFields is part of the fields · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'title',
@@ -5659,6 +5919,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-fields/svelte',
 		summary: 'FieldPolicyControlPanel is part of the fields · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'page',
@@ -5710,6 +5971,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-fields/svelte',
 		summary: 'FieldPolicyEditor is part of the fields · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'state',
@@ -5786,6 +6048,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-fields/svelte',
 		summary: 'FieldPolicyGearButton is part of the fields · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [],
 		sources: [],
 		sections: [],
@@ -5806,6 +6069,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-fields/svelte',
 		summary: 'FieldPolicyGearProvider is part of the fields · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'objectRef',
@@ -5870,6 +6134,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'FieldPolicyProvider — the form-level entry point for policy-driven forms. Receives a resolved {@link ResolvedObjectFieldPolicy} **as props** (SSR `initialData` or a client fetch by the app). Owns mode state (`basic`/ `advanced`) and publishes the reactive context consumed by `PolicyField`, `ModeSwitch`, `AdvancedFields`, and `FormHelp`. No `smrt-web` import in the core primitive — an optional `./web` adapter can wire live invalidation for apps that want it; this component is policy-source agnostic. SSR seeding: props seed `$state` via `untrack()` so the first render reflects the request, with a client-only `$effect` resync — the same pattern as ThemeProvider (`smrt-ui/src/themes/ThemeProvider.svelte:53-70`).',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'policy',
@@ -5910,6 +6175,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-fields/svelte',
 		summary: 'FieldPolicySuggestionQueue is part of the fields · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'adapter',
@@ -5962,6 +6228,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-fields/svelte',
 		summary: 'FormHelp is part of the fields · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'objectDescription',
@@ -6002,6 +6269,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-fields/svelte',
 		summary: 'ModeSwitch is part of the fields · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'label',
@@ -6035,6 +6303,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-fields/svelte',
 		summary: 'ObjectForm is part of the fields · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'objectRef',
@@ -6156,6 +6425,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-fields/svelte',
 		summary: 'Provides one app-local generated ObjectForm source to descendant forms.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'source',
@@ -6190,6 +6460,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'PolicyField — layout-neutral wrapper around any input. Contributes: - Visibility by resolved tier × current mode (advanced fields hidden in basic mode) - Initial-value prefill from the resolved default (new records only — never clobbers loaded values) - Label rendering (the resolved label; when the policy has no label the label element is omitted rather than fabricated from the raw field name, and tooltip-density help falls back to a visible hint) - Help hint rendered from resolved help (manifest description → org/user override) - Required marker Label ↔ control association: the default wrapper renders `<label for={name}>`, so the wrapped control should carry an `id` equal to the field `name`. When the first wrapped control has a different `id`, the `for` attribute is re-pointed to it after mount; when it has no `id` at all, the wrapper assigns `id={name}` so the association is guaranteed. Headless escape hatch: pass a `render` snippet receiving `{visible, label, help, defaultValue, required, tier}` for fully custom rendering. Without a snippet, PolicyField wraps children in a label + help affordance and controls visibility. Graceful degradation: outside a FieldPolicyProvider, PolicyField renders its children verbatim (no visibility filtering, no label/help injection) so forms can adopt it incrementally.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -6275,8 +6546,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-images-svelte',
 		category: 'Images · Components',
 		importPath: '@happyvertical/smrt-images/svelte',
-		summary: 'AssetsGallery is part of the images · components component family.',
-		summarySynthesized: true,
+		summary: 'Grid gallery of image assets with filtering and selection',
+		summarySynthesized: false,
+		slot: {
+			id: 'assets-gallery',
+			label: 'Assets Gallery',
+			icon: 'images',
+			category: 'list'
+		},
 		details: [],
 		sources: [],
 		sections: [],
@@ -6295,8 +6572,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-images-svelte',
 		category: 'Images · Components',
 		importPath: '@happyvertical/smrt-images/svelte',
-		summary: 'ImageEditor is part of the images · components component family.',
-		summarySynthesized: true,
+		summary: 'Resize, crop, convert, and AI-edit an image with derivative tracking',
+		summarySynthesized: false,
+		slot: {
+			id: 'image-editor',
+			label: 'Image Editor',
+			icon: 'image',
+			category: 'form'
+		},
 		details: [],
 		sources: [],
 		sections: [],
@@ -6315,8 +6598,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-images-svelte',
 		category: 'Images · Components',
 		importPath: '@happyvertical/smrt-images/svelte',
-		summary: 'ImageUploader is part of the images · components component family.',
-		summarySynthesized: true,
+		summary: 'Upload images with metadata extraction and AI categorization',
+		summarySynthesized: false,
+		slot: {
+			id: 'image-uploader',
+			label: 'Image Uploader',
+			icon: 'upload',
+			category: 'form'
+		},
 		details: [],
 		sources: [],
 		sections: [],
@@ -6335,8 +6624,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-jobs-svelte',
 		category: 'Jobs · Components',
 		importPath: '@happyvertical/smrt-jobs/svelte',
-		summary: 'JobActions is part of the jobs · components component family.',
-		summarySynthesized: true,
+		summary: 'Action buttons for job operations',
+		summarySynthesized: false,
+		slot: {
+			id: 'job-actions',
+			label: 'Job Actions',
+			icon: 'more-horizontal',
+			category: 'action'
+		},
 		details: [
 			{
 				name: 'job',
@@ -6423,8 +6718,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-jobs-svelte',
 		category: 'Jobs · Components',
 		importPath: '@happyvertical/smrt-jobs/svelte',
-		summary: 'JobDashboard is part of the jobs · components component family.',
-		summarySynthesized: true,
+		summary: 'Combined overview panel for background jobs',
+		summarySynthesized: false,
+		slot: {
+			id: 'job-dashboard',
+			label: 'Job Dashboard',
+			icon: 'briefcase',
+			category: 'admin'
+		},
 		details: [
 			{
 				name: 'stats',
@@ -6535,8 +6836,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-jobs-svelte',
 		category: 'Jobs · Components',
 		importPath: '@happyvertical/smrt-jobs/svelte',
-		summary: 'JobDetail is part of the jobs · components component family.',
-		summarySynthesized: true,
+		summary: 'Detailed view of a single job',
+		summarySynthesized: false,
+		slot: {
+			id: 'job-detail',
+			label: 'Job Detail',
+			icon: 'file-text',
+			category: 'detail'
+		},
 		details: [
 			{
 				name: 'job',
@@ -6605,8 +6912,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-jobs-svelte',
 		category: 'Jobs · Components',
 		importPath: '@happyvertical/smrt-jobs/svelte',
-		summary: 'JobList is part of the jobs · components component family.',
-		summarySynthesized: true,
+		summary: 'Filterable, sortable list of background jobs',
+		summarySynthesized: false,
+		slot: {
+			id: 'job-list',
+			label: 'Job List',
+			icon: 'list',
+			category: 'list'
+		},
 		details: [
 			{
 				name: 'jobs',
@@ -6711,8 +7024,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-jobs-svelte',
 		category: 'Jobs · Components',
 		importPath: '@happyvertical/smrt-jobs/svelte',
-		summary: 'JobStats is part of the jobs · components component family.',
-		summarySynthesized: true,
+		summary: 'Statistics dashboard for job queues',
+		summarySynthesized: false,
+		slot: {
+			id: 'job-stats',
+			label: 'Job Stats',
+			icon: 'bar-chart',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'stats',
@@ -6756,8 +7075,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-jobs-svelte',
 		category: 'Jobs · Components',
 		importPath: '@happyvertical/smrt-jobs/svelte',
-		summary: 'JobStatusBadge is part of the jobs · components component family.',
-		summarySynthesized: true,
+		summary: 'Status indicator for job states',
+		summarySynthesized: false,
+		slot: {
+			id: 'job-status-badge',
+			label: 'Job Status Badge',
+			icon: 'tag',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'status',
@@ -6791,6 +7116,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary: 'AccountAvatar - Provider icon with fallback initials',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'providerType',
@@ -6830,6 +7156,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary: 'AccountCard is part of the messages · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'account',
@@ -6904,8 +7231,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'AccountList is part of the messages · components component family.',
-		summarySynthesized: true,
+		summary: 'Account management list with sync status',
+		summarySynthesized: false,
+		slot: {
+			id: 'account-list',
+			label: 'Account List',
+			icon: 'users',
+			category: 'list'
+		},
 		details: [
 			{
 				name: 'accounts',
@@ -6976,6 +7309,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary: 'AttachmentChip is part of the messages · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'attachment',
@@ -7016,6 +7350,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary: 'AttachmentUpload is part of the messages · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'attachments',
@@ -7072,8 +7407,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'ComposeForm is part of the messages · components component family.',
-		summarySynthesized: true,
+		summary: 'Full message compose form with type-adaptive fields',
+		summarySynthesized: false,
+		slot: {
+			id: 'compose-form',
+			label: 'Compose Form',
+			icon: 'edit',
+			category: 'action'
+		},
 		details: [
 			{
 				name: 'type',
@@ -7150,6 +7491,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary: 'EmailAccountManager is part of the messages · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'accounts',
@@ -7220,6 +7562,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary: 'EmailFilterManager is part of the messages · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'whitelist',
@@ -7308,6 +7651,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary: 'FolderNav is part of the messages · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'folders',
@@ -7360,6 +7704,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary: 'ForwardForm is part of the messages · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'originalMessage',
@@ -7410,8 +7755,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'MessageCard is part of the messages · components component family.',
-		summarySynthesized: true,
+		summary: 'Single message row with type-adaptive rendering',
+		summarySynthesized: false,
+		slot: {
+			id: 'message-card',
+			label: 'Message Card',
+			icon: 'mail',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'message',
@@ -7510,8 +7861,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'MessageDetail is part of the messages · components component family.',
-		summarySynthesized: true,
+		summary: 'Full message view with type-adaptive sections',
+		summarySynthesized: false,
+		slot: {
+			id: 'message-detail',
+			label: 'Message Detail',
+			icon: 'file-text',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'message',
@@ -7598,8 +7955,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'MessageFilters is part of the messages · components component family.',
-		summarySynthesized: true,
+		summary: 'Filter and sort controls for message lists',
+		summarySynthesized: false,
+		slot: {
+			id: 'message-filters',
+			label: 'Message Filters',
+			icon: 'filter',
+			category: 'action'
+		},
 		details: [
 			{
 				name: 'filters',
@@ -7668,8 +8031,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'MessageList is part of the messages · components component family.',
-		summarySynthesized: true,
+		summary: 'Unified message list with selection and filtering',
+		summarySynthesized: false,
+		slot: {
+			id: 'message-list',
+			label: 'Message List',
+			icon: 'list',
+			category: 'list'
+		},
 		details: [
 			{
 				name: 'messages',
@@ -7788,6 +8157,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary: 'MessageStatusIndicator is part of the messages · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'isRead',
@@ -7839,6 +8209,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary: 'MessageToolbar is part of the messages · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'selectedCount',
@@ -7915,6 +8286,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary: 'MessageTypeBadge is part of the messages · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'type',
@@ -7948,6 +8320,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary: 'MessagingSettingsPanel is part of the messages · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'personaId',
@@ -8048,6 +8421,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary: 'RecipientInput is part of the messages · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'label',
@@ -8098,8 +8472,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'ReplyForm is part of the messages · components component family.',
-		summarySynthesized: true,
+		summary: 'Inline reply form with quoted original',
+		summarySynthesized: false,
+		slot: {
+			id: 'reply-form',
+			label: 'Reply Form',
+			icon: 'reply',
+			category: 'action'
+		},
 		details: [
 			{
 				name: 'originalMessage',
@@ -8158,6 +8538,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary: 'SendStatusBadge is part of the messages · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'status',
@@ -8189,8 +8570,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'ThreadView is part of the messages · components component family.',
-		summarySynthesized: true,
+		summary: 'Conversation thread with collapsible messages',
+		summarySynthesized: false,
+		slot: {
+			id: 'thread-view',
+			label: 'Thread View',
+			icon: 'message-circle',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'messages',
@@ -8255,6 +8642,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-personas/svelte',
 		summary: 'DirectiveReviewQueue is part of the personas · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'proposals',
@@ -8313,6 +8701,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-playground/svelte',
 		summary: 'PlaygroundHost is part of the playground · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'modules',
@@ -8371,6 +8760,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-projects/svelte',
 		summary: 'Props for ApprovalActions component',
 		summarySynthesized: false,
+		slot: {
+			id: 'approval-actions',
+			label: 'Approval Actions',
+			icon: 'check',
+			category: 'action'
+		},
 		details: [
 			{
 				name: 'status',
@@ -8475,8 +8870,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-projects-svelte',
 		category: 'Projects · Components',
 		importPath: '@happyvertical/smrt-projects/svelte',
-		summary: 'AssistanceLauncher is part of the projects · components component family.',
-		summarySynthesized: true,
+		summary: 'Open a contextual support or development conversation',
+		summarySynthesized: false,
+		slot: {
+			id: 'assistance-launcher',
+			label: 'Assistance Launcher',
+			icon: 'message-circle',
+			category: 'form'
+		},
 		details: [
 			{
 				name: 'requesterId',
@@ -8535,6 +8936,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-projects/svelte',
 		summary: 'Props for BulkActions component',
 		summarySynthesized: false,
+		slot: {
+			id: 'bulk-actions',
+			label: 'Bulk Actions',
+			icon: 'select-all',
+			category: 'action'
+		},
 		details: [
 			{
 				name: 'selectedCount',
@@ -8627,8 +9034,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-projects-svelte',
 		category: 'Projects · Components',
 		importPath: '@happyvertical/smrt-projects/svelte',
-		summary: 'DeliveryStatus is part of the projects · components component family.',
-		summarySynthesized: true,
+		summary: 'Ordered timeline of delivery outcomes',
+		summarySynthesized: false,
+		slot: {
+			id: 'delivery-status',
+			label: 'Delivery Status',
+			icon: 'activity',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'events',
@@ -8654,8 +9067,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-projects-svelte',
 		category: 'Projects · Components',
 		importPath: '@happyvertical/smrt-projects/svelte',
-		summary: 'DevelopmentBoard is part of the projects · components component family.',
-		summarySynthesized: true,
+		summary: 'Visibility-filtered projection of connected delivery work',
+		summarySynthesized: false,
+		slot: {
+			id: 'development-board',
+			label: 'Development Board',
+			icon: 'columns',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'requests',
@@ -8700,8 +9119,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-projects-svelte',
 		category: 'Projects · Components',
 		importPath: '@happyvertical/smrt-projects/svelte',
-		summary: 'DevelopmentRequestDetail is part of the projects · components component family.',
-		summarySynthesized: true,
+		summary: 'Provider-neutral request detail and delivery timeline',
+		summarySynthesized: false,
+		slot: {
+			id: 'development-request-detail',
+			label: 'Development Request Detail',
+			icon: 'file-text',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'request',
@@ -8733,8 +9158,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-projects-svelte',
 		category: 'Projects · Components',
 		importPath: '@happyvertical/smrt-projects/svelte',
-		summary: 'DevelopmentRequestForm is part of the projects · components component family.',
-		summarySynthesized: true,
+		summary: 'Reusable managed-application request submission form',
+		summarySynthesized: false,
+		slot: {
+			id: 'development-request-form',
+			label: 'Development Request Form',
+			icon: 'send',
+			category: 'form'
+		},
 		details: [
 			{
 				name: 'onsubmit',
@@ -8773,8 +9204,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-projects-svelte',
 		category: 'Projects · Components',
 		importPath: '@happyvertical/smrt-projects/svelte',
-		summary: 'DevelopmentRequestList is part of the projects · components component family.',
-		summarySynthesized: true,
+		summary: 'Requester-facing list of managed development requests',
+		summarySynthesized: false,
+		slot: {
+			id: 'development-request-list',
+			label: 'Development Request List',
+			icon: 'list',
+			category: 'list'
+		},
 		details: [
 			{
 				name: 'requesterId',
@@ -8814,6 +9251,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-projects/svelte',
 		summary: 'Props for DurationDisplay component',
 		summarySynthesized: false,
+		slot: {
+			id: 'duration-display',
+			label: 'Duration Display',
+			icon: 'timer',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'hours',
@@ -8859,6 +9302,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-projects/svelte',
 		summary: 'PreviewApprovalPanel is part of the projects · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'preview',
@@ -8903,8 +9347,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-projects-svelte',
 		category: 'Projects · Components',
 		importPath: '@happyvertical/smrt-projects/svelte',
-		summary: 'ProjectBoard is part of the projects · components component family.',
-		summarySynthesized: true,
+		summary: 'Provider-backed project status board',
+		summarySynthesized: false,
+		slot: {
+			id: 'project-board',
+			label: 'Project Board',
+			icon: 'columns',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'projectId',
@@ -8963,6 +9413,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-projects/svelte',
 		summary: 'Props for RejectDialog component',
 		summarySynthesized: false,
+		slot: {
+			id: 'reject-dialog',
+			label: 'Reject Dialog',
+			icon: 'x-circle',
+			category: 'form'
+		},
 		details: [
 			{
 				name: 'open',
@@ -9055,8 +9511,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-projects-svelte',
 		category: 'Projects · Components',
 		importPath: '@happyvertical/smrt-projects/svelte',
-		summary: 'ServiceEvidenceList is part of the projects · components component family.',
-		summarySynthesized: true,
+		summary: 'Shared service duration, charge, and compensation evidence',
+		summarySynthesized: false,
+		slot: {
+			id: 'service-evidence-list',
+			label: 'Service Evidence List',
+			icon: 'receipt',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'entries',
@@ -9084,6 +9546,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-projects/svelte',
 		summary: 'Props for TimeEntryCard component',
 		summarySynthesized: false,
+		slot: {
+			id: 'time-entry-card',
+			label: 'Time Entry Card',
+			icon: 'clock',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'entry',
@@ -9166,6 +9634,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-projects/svelte',
 		summary: 'Props for TimeEntryList component',
 		summarySynthesized: false,
+		slot: {
+			id: 'time-entry-list',
+			label: 'Time Entry List',
+			icon: 'list',
+			category: 'list'
+		},
 		details: [
 			{
 				name: 'entries',
@@ -9242,6 +9716,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-projects/svelte',
 		summary: 'Props for TimeSummary component',
 		summarySynthesized: false,
+		slot: {
+			id: 'time-summary',
+			label: 'Time Summary',
+			icon: 'chart',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'totalHours',
@@ -9329,6 +9809,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/board',
 		summary: 'Board is part of the svelte · board component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [],
 		sources: [],
 		sections: [],
@@ -9349,6 +9830,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/browser-ai/svelte',
 		summary: 'AILoadingOverlay is part of the svelte · browser ai component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'message',
@@ -9407,6 +9889,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/browser-ai/svelte',
 		summary: 'CapabilityGate is part of the svelte · browser ai component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'requireSmrt',
@@ -9452,6 +9935,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/browser-ai/svelte',
 		summary: 'DownloadProgress is part of the svelte · browser ai component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'progress',
@@ -9497,6 +9981,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/browser-ai/svelte',
 		summary: 'Props for STTTest component',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'class',
@@ -9524,6 +10009,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/browser-ai/svelte',
 		summary: 'VoiceInput is part of the svelte · browser ai component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'onTranscription',
@@ -9582,6 +10068,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte',
 		summary: 'Provider is part of the svelte · components component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'mode',
@@ -9699,6 +10186,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/forms',
 		summary: 'AddressInput is part of the svelte · forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -9793,6 +10281,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/forms',
 		summary: 'CheckboxInput is part of the svelte · forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -9863,6 +10352,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/forms',
 		summary: 'DateRangeInput is part of the svelte · forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -9969,6 +10459,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/forms',
 		summary: 'DateTimeInput is part of the svelte · forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -10051,6 +10542,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/forms',
 		summary: 'FileUpload is part of the svelte · forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'accept',
@@ -10127,6 +10619,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/forms',
 		summary: 'Form is part of the svelte · forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'children',
@@ -10279,6 +10772,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/forms',
 		summary: 'FormMicButton is part of the svelte · forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'size',
@@ -10312,6 +10806,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/forms',
 		summary: 'MeasurementInput is part of the svelte · forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -10424,6 +10919,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/forms',
 		summary: 'MoneyInput is part of the svelte · forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -10524,6 +11020,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/forms',
 		summary: 'NumberInput is part of the svelte · forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -10618,6 +11115,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/forms',
 		summary: 'PhoneInput is part of the svelte · forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -10694,6 +11192,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/forms',
 		summary: 'SearchInput is part of the svelte · forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -10806,6 +11305,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/forms',
 		summary: 'SelectInput is part of the svelte · forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -10888,6 +11388,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/forms',
 		summary: 'TextareaInput is part of the svelte · forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -10976,6 +11477,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/forms',
 		summary: 'TextInput is part of the svelte · forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -11065,6 +11567,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			"ModulePanel - Shell component for rendering module UI slots Dynamically renders a module's registered UI component by looking up the component in the ModuleUIRegistry. Usage: 1. Import ModulePanel from '@happyvertical/smrt-svelte' 2. Import the module's svelte package to register components 3. Use ModulePanel with moduleName and slotId props",
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'moduleName',
@@ -11098,6 +11601,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/settings',
 		summary: 'SettingsCatalog is part of the svelte · settings component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'page',
@@ -11173,6 +11677,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary: 'ActivityBadge is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'edge',
@@ -11206,6 +11711,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary: 'ActivityItem is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'activity',
@@ -11233,6 +11739,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary: 'ActivityList is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'filter',
@@ -11272,6 +11779,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary: 'ActivityToasts is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'max',
@@ -11306,6 +11814,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary: 'AdminShell is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'title',
@@ -11459,6 +11968,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary: 'AppScopePanel is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'appName',
@@ -11522,6 +12032,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary: 'HotkeyInput is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -11574,6 +12085,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary: 'ShellCorner is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'side',
@@ -11607,6 +12119,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary: 'ShellDockTool is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'id',
@@ -11694,6 +12207,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary: 'ShellSettingsPanel is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [],
 		sources: [],
 		sections: [],
@@ -11714,6 +12228,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary: 'ShortcutsOverlay is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'onclose',
@@ -11748,6 +12263,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary: 'SystemScopePanel is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'panels',
@@ -11781,6 +12297,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary: 'SystemStatusChips is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'chips',
@@ -11808,6 +12325,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary: 'TenantNav is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'items',
@@ -11866,6 +12384,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace/legacy',
 		summary: 'ToolsDock is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'dock',
@@ -11906,6 +12425,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary: 'WorkspaceAccountMenu is part of the svelte · workspace component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'userName',
@@ -12006,6 +12526,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-tenancy/svelte',
 		summary: 'TenantCard - Tenant information and management refactored for Material 3',
 		summarySynthesized: false,
+		slot: {
+			id: 'tenant-card',
+			label: 'Tenant Card',
+			icon: 'building',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'tenant',
@@ -12086,8 +12612,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-tenancy-svelte',
 		category: 'Tenancy · Components',
 		importPath: '@happyvertical/smrt-tenancy/svelte',
-		summary: 'TenantSwitcher is part of the tenancy · components component family.',
-		summarySynthesized: true,
+		summary: 'Dropdown for switching between tenants',
+		summarySynthesized: false,
+		slot: {
+			id: 'tenant-switcher',
+			label: 'Tenant Switcher',
+			icon: 'switch',
+			category: 'form'
+		},
 		details: [
 			{
 				name: 'memberships',
@@ -12140,6 +12672,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/calendar',
 		summary: 'Calendar is part of the calendar component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'events',
@@ -12222,6 +12755,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/calendar',
 		summary: 'DayView is part of the calendar component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'date',
@@ -12281,6 +12815,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'MessageBubble — a single chat message, tokenised and a11y-clean. Two complementary forms share one styled container: - **Bare bubble** (the common case for a message list that renders its own author/time/reactions around each row): opt into the styling axes by passing `variant` and/or `own` (plus `content` or a `children` snippet). No header or labelled group is rendered — unless you also pass an `author` — so it nests cleanly inside an already-labelled message row without a redundant landmark. - **Self-contained card** (legacy form): pass `role` / `author` / `timestamp` (and optionally the `reactions` / `actions` snippets) without the styling axes. A header and a labelled `role="group"` (`<author|role> (<role>)`) are rendered so assistive tech can announce who sent each message; `author` falls back to a role label ("You" / "Assistant" / "System"). `variant` + `own` are the canonical styling axes. The legacy `role` prop sets the header\'s role label and derives `variant`/`own` when those are not given.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'variant',
@@ -12364,6 +12899,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/chat',
 		summary: 'ReactionPicker is part of the chat component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'emojis',
@@ -12424,6 +12960,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'TypingIndicator — animated "…is typing" affordance. Renders a visible label plus decorative animated dots (`aria-hidden`) inside a polite `role="status"` live region, so both sighted users and screen readers learn who is typing. Honors reduced-motion. Pass `names` to announce one or more typists ("Ada is typing", "Ada and Bob are typing", "Ada and 2 others are typing") — an empty list renders nothing. Or pass a single `name` / a full `label` override. The animated dots stand in for the trailing ellipsis, so the label text omits it.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -12463,6 +13000,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/data',
 		summary: 'CollectionList is part of the collections and tables component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'items',
@@ -12592,6 +13130,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/data',
 		summary: 'CollectionToolbar is part of the collections and tables component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'search',
@@ -12720,6 +13259,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/data',
 		summary: 'ContentList is part of the collections and tables component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'items',
@@ -12850,6 +13390,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'DataTable - A flexible, accessible data table component Features: - Sortable columns with custom sort functions - Row selection (single and multi-select) - Custom cell and header renderers via Snippets - Loading and empty states - Responsive with sticky header option - Material 3 styling with theme token support',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'data',
@@ -13245,6 +13786,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'ConfidenceBadge - Displays AI confidence level indicator Shows a visual indicator for confidence scores (0-100). Useful for OCR results, AI predictions, etc. Accessibility: Uses role="meter" with aria-valuenow for screen readers',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'confidence',
@@ -13297,6 +13839,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'CurrencyDisplay - Formats and displays monetary values Displays formatted currency with configurable unit. Use `unit="cents"` (default) when amount is in the currency\'s minor units, or `unit="dollars"` when it is already in major units. Accepts ISO 4217 currency codes, normalized by trimming whitespace and uppercasing before locale formatting. Unsupported codes render an accessible inline error instead of throwing during a collection render.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'amount',
@@ -13367,6 +13910,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'DateDisplay - Formats and displays dates Supports various format options and relative time display.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'date',
@@ -13425,6 +13969,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'Icon - SVG icon component Displays SVG icons from presets or custom paths. Accessibility: - Use aria-label for informative icons - Uses aria-hidden="true" by default (decorative)',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -13483,6 +14028,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'StatusBadge - Generic status indicator badge Provides pre-defined color schemes for common status domains (invoice, project, etc.) or allows custom styling via CSS variables.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'status',
@@ -13538,6 +14084,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Alert is part of the feedback and overlays component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'variant',
@@ -13612,6 +14159,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Props for ConfirmDialog component',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'open',
@@ -13704,6 +14252,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Drawer is part of the feedback and overlays component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'open',
@@ -13803,6 +14352,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'Loading Overlay Component A generic full-screen loading overlay for any async operation. Shows progress, completed items, and error states.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'show',
@@ -13883,6 +14433,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Meter is part of the feedback and overlays component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -13969,6 +14520,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'Modal - An accessible dialog component Features: - Native dialog element for accessibility - Backdrop click to close (optional) - Escape key to close - Focus trap - Multiple sizes - Custom header/footer via snippets - Material 3 styling',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'open',
@@ -14079,6 +14631,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Progress is part of the feedback and overlays component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -14152,6 +14705,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Props for ProgressBar component',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -14219,6 +14773,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Sheet is part of the feedback and overlays component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'open',
@@ -14317,6 +14872,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'Spinner is part of the feedback and overlays component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'label',
@@ -14360,6 +14916,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary: 'ToastViewport is part of the feedback and overlays component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'toaster',
@@ -14403,6 +14960,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Checkbox is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'checked',
@@ -14458,6 +15016,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Combobox is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'options',
@@ -14556,6 +15115,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'DatePicker is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -14605,6 +15165,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'ErrorSummary is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'errors',
@@ -14657,6 +15218,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Field is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'label',
@@ -14724,6 +15286,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Fieldset is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'legend',
@@ -14775,6 +15338,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'FilePicker is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'files',
@@ -14850,6 +15414,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			"Form — the Provider-free base `<form>` primitive. A thin, dependency-free wrapper around the native `<form>` element so domain components have a primitive to adopt instead of hand-rolling raw `<form>` markup (issue #1589). It forwards every native form attribute (including `onsubmit`) and renders its children — no Provider, no i18n, no spoken-input logic. For the rich, Provider-backed form with field registration and voice input, use `Form` from `@happyvertical/smrt-svelte/forms` instead. This one is the leaf-level building block; that one composes app state on top. `preventDefault` (default `true`) calls `event.preventDefault()` before invoking the consumer's `onsubmit`, so a click/Enter submit runs the handler without a full-page navigation — the near-universal SPA pattern. Pass `preventDefault={false}` to keep native submission (e.g. a GET/POST `action`).",
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'class',
@@ -14924,6 +15489,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'FormGroup is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'label',
@@ -14991,6 +15557,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Input is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -15034,6 +15601,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'InputGroup is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'prefix',
@@ -15079,6 +15647,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Listbox is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'options',
@@ -15159,6 +15728,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'MultiSelect is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'options',
@@ -15245,6 +15815,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Radio is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -15288,6 +15859,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'RadioGroup is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'name',
@@ -15386,6 +15958,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'RangeSlider is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -15496,6 +16069,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'SegmentedControl is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'options',
@@ -15582,6 +16156,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Select is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -15631,6 +16206,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Slider is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -15716,6 +16292,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'StagedControlReview is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'registry',
@@ -15767,6 +16344,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Switch is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'checked',
@@ -15828,6 +16406,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'TagsInput is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'values',
@@ -15920,6 +16499,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'Textarea is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -15969,6 +16549,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'TimePicker is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -16019,6 +16600,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'SMRTToggle - An accessible toggle/switch component Features: - Native checkbox semantics for accessibility - Bindable checked state - Disabled state - Labels on either side - Size variants - Material 3 styling',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'checked',
@@ -16111,6 +16693,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary: 'ToggleButton is part of the forms and controls component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'pressed',
@@ -16161,6 +16744,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'`<Trans>` — the component form of `$t` (S13 #1418), for translating strings in element bodies. Equal first-class partner to `useI18n().t` for attributes.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'key',
@@ -16194,6 +16778,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary: 'Container is part of the layout component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'maxWidth',
@@ -16228,6 +16813,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'EmptyState - Placeholder for empty lists/content refactored for Material 3 Provides a consistent empty state display with optional icon, description, and call-to-action button.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'title',
@@ -16298,6 +16884,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary: 'Footer is part of the layout component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'children',
@@ -16325,6 +16912,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary: 'Grid is part of the layout component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'columns',
@@ -16388,6 +16976,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary: 'Header is part of the layout component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'logo',
@@ -16421,6 +17010,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary: 'Masthead is part of the layout component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'date',
@@ -16479,6 +17069,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'PageHeader - Standard page header with optional back navigation refactored for Material 3 Provides consistent page header layout with title, optional back link, and slot for action buttons.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'title',
@@ -16537,6 +17128,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'SummaryCard - Statistic/summary display card refactored for Material 3 Shows a label with a prominent value, optionally with a count badge and link functionality.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'label',
@@ -16607,6 +17199,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui',
 		summary: 'MembershipCard is part of the membership and permissions component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'membership',
@@ -16671,6 +17264,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui',
 		summary: 'MembershipList is part of the membership and permissions component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'memberships',
@@ -16741,6 +17335,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui',
 		summary: 'FilterChips is part of the navigation component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'options',
@@ -16806,6 +17401,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'Tabs - Tab navigation component refactored for Material 3 Provides tabbed navigation with optional counts and content slots. Accessibility: - Supports keyboard navigation with Arrow keys - Proper ARIA roles: tablist, tab, tabpanel - aria-selected indicates active tab - aria-controls links tab to panel',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'tabs',
@@ -16876,6 +17472,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui',
 		summary: 'PermissionCheck is part of the membership and permissions component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'permission',
@@ -16933,6 +17530,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui',
 		summary: 'RoleBadge - Role label component refactored for Material 3',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'role',
@@ -16967,6 +17565,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'RoleSelector — a trigger button and a single-select listbox of roles. Implements keyboard support per the WAI-ARIA listbox pattern, mirroring the roving-focus approach in `ui/Dropdown.svelte`: the trigger opens on ArrowDown/ArrowUp/Enter/Space; the open list moves focus onto the selected (or first) option; ArrowUp/Down/Home/End move roving focus; Enter/Space pick the focused option; Escape closes and refocuses the trigger; Tab closes. Click-outside also dismisses.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'roles',
@@ -17031,6 +17630,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/themes',
 		summary: 'ColorSchemeToggle is part of the themes component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'showLabels',
@@ -17076,6 +17676,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/themes',
 		summary: 'ThemeProvider is part of the themes component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'preset',
@@ -17159,6 +17760,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/themes',
 		summary: 'ThemeSwitcher is part of the themes component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'label',
@@ -17204,6 +17806,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary: 'Accordion is part of the actions and display component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -17266,6 +17869,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary: 'AccordionItem is part of the actions and display component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'value',
@@ -17316,6 +17920,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'Avatar — user/entity image with initials fallback and optional presence dot. Renders the image when `src` is set, otherwise initials derived from `name`. `name` is always the accessible label (image alt / initials aria-label), so an Avatar is never an unlabelled graphic.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'src',
@@ -17367,6 +17972,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary: 'Badge is part of the actions and display component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'variant',
@@ -17411,6 +18017,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'Button - Versatile button component Supports both button and link rendering. When href is provided, renders as an anchor tag. Otherwise renders as a button.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'variant',
@@ -17498,6 +18105,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary: 'Card is part of the actions and display component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'variant',
@@ -17556,6 +18164,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'Chip — compact token, optionally selectable (toggle) and/or closeable. When `selectable`, the body is a `<button>` reflecting `selected` via `aria-pressed`. When `closeable`, a labelled remove `<button>` is appended. Both are native buttons, so keyboard activation is built in.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'label',
@@ -17644,6 +18253,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary: 'Disclosure is part of the actions and display component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'title',
@@ -17713,6 +18323,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'Dropdown / Menu — a trigger button and a positioned menu list. Implements the WAI-ARIA menu-button pattern: trigger has `aria-haspopup="menu"` + `aria-expanded`; the list is `role="menu"` with `role="menuitem"` buttons under roving focus (ArrowUp/Down/Home/End), Enter/ Space to activate, Escape to close + refocus the trigger, and click-outside to dismiss. CSS-anchored via `placement` — no JS positioning dependency.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'label',
@@ -17782,6 +18393,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'Dropdown / Menu — a trigger button and a positioned menu list. Implements the WAI-ARIA menu-button pattern: trigger has `aria-haspopup="menu"` + `aria-expanded`; the list is `role="menu"` with `role="menuitem"` buttons under roving focus (ArrowUp/Down/Home/End), Enter/ Space to activate, Escape to close + refocus the trigger, and click-outside to dismiss. CSS-anchored via `placement` — no JS positioning dependency.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'label',
@@ -17850,6 +18462,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary: 'Props for Pagination component',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'currentPage',
@@ -17920,6 +18533,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary: 'Popover is part of the actions and display component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'label',
@@ -18007,6 +18621,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'Skeleton — shape-matching loading placeholder. Variants: `text` (one or more lines), `circle`, `rect`. The wrapper is a polite `role="status"` region with an sr-only label so assistive tech announces that content is loading; the shimmer honors `prefers-reduced-motion`.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'variant',
@@ -18059,6 +18674,7 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'Tooltip — anchored, delayed text bubble for a trigger. Shows on hover and keyboard focus, hides on leave / blur / Escape. The trigger is wired to the bubble via `aria-describedby` (always set; the bubble is in the DOM and revealed on open), and the bubble carries `role="tooltip"`. CSS-anchored via a `placement` prop — no JS positioning dependency.',
 		summarySynthesized: false,
+		slot: null,
 		details: [
 			{
 				name: 'text',
@@ -18104,6 +18720,7 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary: 'Tree is part of the actions and display component family.',
 		summarySynthesized: true,
+		slot: null,
 		details: [
 			{
 				name: 'nodes',
@@ -18160,8 +18777,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-users-svelte',
 		category: 'Users · Components',
 		importPath: '@happyvertical/smrt-users/svelte',
-		summary: 'InviteUserModal is part of the users · components component family.',
-		summarySynthesized: true,
+		summary: 'Modal for inviting new users',
+		summarySynthesized: false,
+		slot: {
+			id: 'invite-user-modal',
+			label: 'Invite User Modal',
+			icon: 'user-plus',
+			category: 'form'
+		},
 		details: [
 			{
 				name: 'open',
@@ -18230,8 +18853,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-users-svelte',
 		category: 'Users · Components',
 		importPath: '@happyvertical/smrt-users/svelte',
-		summary: 'UserAvatar is part of the users · components component family.',
-		summarySynthesized: true,
+		summary: 'User profile image or initials display',
+		summarySynthesized: false,
+		slot: {
+			id: 'user-avatar',
+			label: 'User Avatar',
+			icon: 'image',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'profile',
@@ -18271,6 +18900,12 @@ export const uiComponents: UiComponentReference[] = [
 		importPath: '@happyvertical/smrt-users/svelte',
 		summary: 'UserCard - Compact user information display refactored for Material 3',
 		summarySynthesized: false,
+		slot: {
+			id: 'user-card',
+			label: 'User Card',
+			icon: 'user',
+			category: 'display'
+		},
 		details: [
 			{
 				name: 'user',
@@ -18333,8 +18968,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-users-svelte',
 		category: 'Users · Components',
 		importPath: '@happyvertical/smrt-users/svelte',
-		summary: 'UserForm is part of the users · components component family.',
-		summarySynthesized: true,
+		summary: 'Form for creating or editing users',
+		summarySynthesized: false,
+		slot: {
+			id: 'user-form',
+			label: 'User Form',
+			icon: 'edit',
+			category: 'form'
+		},
 		details: [
 			{
 				name: 'user',
@@ -18397,8 +19038,14 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-users-svelte',
 		category: 'Users · Components',
 		importPath: '@happyvertical/smrt-users/svelte',
-		summary: 'UserList is part of the users · components component family.',
-		summarySynthesized: true,
+		summary: 'List of users with selection support',
+		summarySynthesized: false,
+		slot: {
+			id: 'user-list',
+			label: 'User List',
+			icon: 'users',
+			category: 'list'
+		},
 		details: [
 			{
 				name: 'users',
@@ -18464,6 +19111,12 @@ export const uiComponents: UiComponentReference[] = [
 		summary:
 			'UserMenu - User profile menu dropdown refactored for Material 3 Accessibility (WAI-ARIA menu-button pattern): - Proper ARIA attributes for menu state - Roving tabindex over the menu items - Arrow Up/Down, Home/End to move between items; Escape closes + refocuses the trigger; Tab closes; click-outside dismisses - Focus management (first item focused on open, trigger refocused on close)',
 		summarySynthesized: false,
+		slot: {
+			id: 'user-menu',
+			label: 'User Menu',
+			icon: 'menu',
+			category: 'action'
+		},
 		details: [
 			{
 				name: 'profile',
@@ -18514,6 +19167,268 @@ export const uiComponents: UiComponentReference[] = [
 		source: 'packages/users/src/svelte/components/UserMenu.svelte'
 	}
 ];
+
+export interface UiModuleReference {
+	slug: string;
+	importPath: string;
+	displayName: string;
+	summary: string;
+	models: string[];
+	collections: string[];
+	uiDependencies: string[];
+	slots: number;
+}
+
+export const uiModules: UiModuleReference[] = [
+	{
+		slug: 'smrt-agents',
+		importPath: '@happyvertical/smrt-agents',
+		displayName: 'Agents',
+		summary: 'Agent framework for building autonomous actors',
+		models: ['Agent', 'AgentConfig', 'AgentSchedule', 'TenantAgent'],
+		collections: ['AgentConfigCollection', 'AgentScheduleCollection', 'TenantAgentCollection'],
+		uiDependencies: [],
+		slots: 5
+	},
+	{
+		slug: 'smrt-analytics',
+		importPath: '@happyvertical/smrt-analytics',
+		displayName: 'Analytics',
+		summary:
+			'Analytics integration models for GA4, Plausible, and Matomo with server-side event tracking and AI-powered reporting',
+		models: ['AnalyticsDataStream', 'AnalyticsEvent', 'AnalyticsProperty', 'AnalyticsReport'],
+		collections: [
+			'AnalyticsDataStreamCollection',
+			'AnalyticsEventCollection',
+			'AnalyticsPropertyCollection',
+			'AnalyticsReportCollection'
+		],
+		uiDependencies: [],
+		slots: 6
+	},
+	{
+		slug: 'smrt-assets',
+		importPath: '@happyvertical/smrt-assets',
+		displayName: 'Assets',
+		summary:
+			'Provider-agnostic asset management with versioning, metadata, folders, and associations',
+		models: ['Asset', 'AssetMetafield', 'AssetStatus', 'AssetType', 'Folder'],
+		collections: [
+			'AssetAssociationCollection',
+			'AssetCollection',
+			'AssetMetafieldCollection',
+			'AssetStatusCollection',
+			'AssetTypeCollection',
+			'FolderCollection'
+		],
+		uiDependencies: [],
+		slots: 7
+	},
+	{
+		slug: 'smrt-chat',
+		importPath: '@happyvertical/smrt-chat',
+		displayName: 'Chat',
+		summary: 'Real-time chat rooms, DMs, threads, and agent conversations',
+		models: [
+			'AgentSession',
+			'ChatMessage',
+			'ChatParticipant',
+			'ChatReaction',
+			'ChatRoom',
+			'ChatThread',
+			'VoiceSession'
+		],
+		collections: [
+			'AgentSessionCollection',
+			'ChatMessageCollection',
+			'ChatParticipantCollection',
+			'ChatReactionCollection',
+			'ChatRoomCollection',
+			'ChatThreadCollection',
+			'VoiceSessionCollection'
+		],
+		uiDependencies: [],
+		slots: 7
+	},
+	{
+		slug: 'smrt-commerce',
+		importPath: '@happyvertical/smrt-commerce',
+		displayName: 'Commerce',
+		summary: 'Commerce models: contracts, invoices, payments',
+		models: [
+			'Contract',
+			'ContractLineItem',
+			'Customer',
+			'Fulfillment',
+			'FulfillmentLineItem',
+			'Payment',
+			'Vendor'
+		],
+		collections: [
+			'ContractCollection',
+			'ContractLineItemCollection',
+			'CustomerCollection',
+			'FulfillmentCollection',
+			'FulfillmentLineItemCollection',
+			'PaymentCollection',
+			'VendorCollection'
+		],
+		uiDependencies: [],
+		slots: 6
+	},
+	{
+		slug: 'smrt-content',
+		importPath: '@happyvertical/smrt-content',
+		displayName: 'Content',
+		summary: 'Content processing: documents, web content, and media',
+		models: ['Article', 'Content', 'Document'],
+		collections: ['ArticleCollection', 'ContentCollection', 'DocumentCollection'],
+		uiDependencies: [],
+		slots: 3
+	},
+	{
+		slug: 'smrt-events',
+		importPath: '@happyvertical/smrt-events',
+		displayName: 'Events',
+		summary: 'Hierarchical event management with participant tracking',
+		models: ['Deadline', 'Event', 'EventParticipant', 'EventSeries', 'Meeting'],
+		collections: ['EventCollection', 'EventParticipantCollection', 'EventSeriesCollection'],
+		uiDependencies: [],
+		slots: 1
+	},
+	{
+		slug: 'smrt-images',
+		importPath: '@happyvertical/smrt-images',
+		displayName: 'Images',
+		summary:
+			'Image asset management with AI-powered categorization, search, editing, and metadata extraction',
+		models: ['Image'],
+		collections: ['ImageCollection'],
+		uiDependencies: [],
+		slots: 3
+	},
+	{
+		slug: 'smrt-jobs',
+		importPath: '@happyvertical/smrt-jobs',
+		displayName: 'Jobs',
+		summary: 'Background job processing with persistence and scheduling',
+		models: ['Job', 'JobQueue'],
+		collections: ['JobCollection', 'JobQueueCollection'],
+		uiDependencies: [],
+		slots: 6
+	},
+	{
+		slug: 'smrt-messages',
+		importPath: '@happyvertical/smrt-messages',
+		displayName: 'Messages',
+		summary: 'Unified multi-channel messaging: email, Slack, Twitter, and more',
+		models: [
+			'Account',
+			'Attachment',
+			'Email',
+			'EmailAccount',
+			'Message',
+			'MessagingEndpoint',
+			'PersonaMessageRoute',
+			'SlackAccount',
+			'SlackMessage',
+			'TelegramAccount',
+			'Tweet',
+			'TwitterAccount',
+			'ZulipAccount'
+		],
+		collections: [
+			'AccountCollection',
+			'AttachmentCollection',
+			'EmailAccountCollection',
+			'EmailCollection',
+			'MessageCollection',
+			'MessagingEndpointCollection',
+			'PersonaMessageRouteCollection'
+		],
+		uiDependencies: [],
+		slots: 9
+	},
+	{
+		slug: 'smrt-projects',
+		importPath: '@happyvertical/smrt-projects',
+		displayName: 'Projects',
+		summary:
+			'Provider-agnostic project management with managed-app request intake and time tracking',
+		models: [
+			'AssistanceRequest',
+			'AssistanceRequestEvent',
+			'Comment',
+			'DevelopmentRequest',
+			'DevelopmentRequestHistory',
+			'DevelopmentRequestWorkLink',
+			'Issue',
+			'Label',
+			'PreviewApproval',
+			'Project',
+			'ProjectDeliveryEvent',
+			'ProjectIntegration',
+			'ProjectIntegrationAudit',
+			'PullRequest',
+			'Repository',
+			'ServiceChargeSnapshot',
+			'ServiceCompensationSnapshot',
+			'ServiceTimeEntry'
+		],
+		collections: [
+			'AssistanceRequestCollection',
+			'AssistanceRequestEventCollection',
+			'CommentCollection',
+			'DevelopmentRequestCollection',
+			'DevelopmentRequestHistoryCollection',
+			'DevelopmentRequestWorkLinkCollection',
+			'IssueCollection',
+			'LabelCollection',
+			'PreviewApprovalCollection',
+			'ProjectCollection',
+			'ProjectDeliveryEventCollection',
+			'ProjectIntegrationAuditCollection',
+			'ProjectIntegrationCollection',
+			'PullRequestCollection',
+			'RepositoryCollection',
+			'ServiceChargeSnapshotCollection',
+			'ServiceCompensationSnapshotCollection',
+			'ServiceTimeEntryCollection'
+		],
+		uiDependencies: [],
+		slots: 16
+	},
+	{
+		slug: 'smrt-tenancy',
+		importPath: '@happyvertical/smrt-tenancy',
+		displayName: 'Tenancy',
+		summary: 'Multi-tenancy framework with automatic tenant isolation',
+		models: ['Tenant', 'TenantContext'],
+		collections: ['TenantCollection'],
+		uiDependencies: [],
+		slots: 2
+	},
+	{
+		slug: 'smrt-users',
+		importPath: '@happyvertical/smrt-users',
+		displayName: 'Users',
+		summary: 'Multi-tenant user management with roles and permissions',
+		models: ['Group', 'Permission', 'Role', 'Tenant', 'User'],
+		collections: [
+			'GroupCollection',
+			'PermissionCollection',
+			'RoleCollection',
+			'TenantCollection',
+			'UserCollection'
+		],
+		uiDependencies: [],
+		slots: 6
+	}
+];
+
+export function getUiModule(slug: string): UiModuleReference | undefined {
+	return uiModules.find((module) => module.slug === slug);
+}
 
 export const uiComponentGroups = [
 	...new Map(uiComponents.map((component) => [component.family, component.category] as const))

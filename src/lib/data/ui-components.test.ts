@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { getUiComponent, uiComponentGroups, uiComponents } from '$lib/data/ui-components.generated';
+import {
+	getUiComponent,
+	getUiModule,
+	uiComponentGroups,
+	uiComponents,
+	uiModules
+} from '$lib/data/ui-components.generated';
 
 describe('generated UI component reference', () => {
 	it('publishes unique stable destinations for every public export', () => {
@@ -36,6 +42,27 @@ describe('generated UI component reference', () => {
 			const placeholder = `${component.name} is part of the ${component.category.toLowerCase()} component family.`;
 			expect(component.summarySynthesized).toBe(component.summary === placeholder);
 		}
+	});
+
+	it('takes authored slot prose from the packages that declare it', () => {
+		const withSlot = uiComponents.filter((component) => component.slot);
+		expect(withSlot.length).toBeGreaterThan(50);
+
+		// Every slot a package declares carries a written label and description, so
+		// a component matched to one must never fall back to the placeholder.
+		for (const component of withSlot) {
+			expect(component.slot?.label).toBeTruthy();
+			expect(component.summarySynthesized).toBe(false);
+		}
+	});
+
+	it('publishes what each module declares alongside its components', () => {
+		expect(uiModules.length).toBeGreaterThan(10);
+
+		const commerce = getUiModule('smrt-commerce');
+		expect(commerce?.displayName).toBe('Commerce');
+		expect(commerce?.models).toContain('Contract');
+		expect(commerce?.collections).toContain('PaymentCollection');
 	});
 
 	it('puts DataTable under Components with its complete public contract', () => {

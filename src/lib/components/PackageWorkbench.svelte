@@ -16,7 +16,7 @@
 	import { getPlaygroundEntries, playgroundModules } from '$lib/data/playgrounds';
 	import { taskGuides } from '$lib/data/task-guides';
 	import { packageNeighbors } from '$lib/data/track';
-	import { uiComponents } from '$lib/data/ui-components.generated';
+	import { getUiModule, uiComponents } from '$lib/data/ui-components.generated';
 
 	type Tab = 'overview' | 'components' | 'playground' | 'rest' | 'mcp' | 'webmcp' | 'cli';
 
@@ -68,8 +68,15 @@
 		taskGuides.filter((guide) => guide.packages.includes(pkg.slug)).slice(0, 4)
 	);
 	const packageHref = $derived(`/reference/packages/${pkg.slug}`);
+	const module = $derived(getUiModule(pkg.slug));
+	// Keyed by package as well as name: six component names are published by two
+	// packages each (Form, Avatar, ContentList, FileUpload, MessageList,
+	// ReactionPicker), so a name alone would link to whichever was generated last.
 	const uiComponentHrefByName = new Map(
-		uiComponents.map((component) => [component.name, `/reference/components/${component.slug}`])
+		uiComponents.map((component) => [
+			`${component.importPath.split('/').slice(0, 2).join('/')}:${component.name}`,
+			`/reference/components/${component.slug}`
+		])
 	);
 	const sourceInstallCode =
 		'# Distributed from the s-m-r-t source tree\n# See the package README for Gradle/SPM setup';
@@ -107,7 +114,7 @@
 	}
 
 	function componentReferenceHref(component: string): string | undefined {
-		return pkg.slug === 'smrt-ui' ? uiComponentHrefByName.get(component) : undefined;
+		return uiComponentHrefByName.get(`@happyvertical/${pkg.slug}:${component}`);
 	}
 </script>
 
@@ -164,6 +171,41 @@
 	<div class="panel" id={`panel-${activeTab}`} role="tabpanel">
 		{#if activeTab === 'overview'}
 			<div class="overview-layout">
+				{#if module}
+					<aside class="module-facts">
+						<p class="kicker">Declared by the package</p>
+						<dl>
+							{#if module.uiDependencies.length}
+								<div>
+									<dt>Install alongside</dt>
+									<dd>
+										{#each module.uiDependencies as dependency (dependency)}
+											<span class="dep">{dependency}</span>
+										{/each}
+									</dd>
+								</div>
+							{/if}
+							{#if module.models.length}
+								<div>
+									<dt>Models</dt>
+									<dd>{module.models.join(', ')}</dd>
+								</div>
+							{/if}
+							{#if module.collections.length}
+								<div>
+									<dt>Collections</dt>
+									<dd>{module.collections.join(', ')}</dd>
+								</div>
+							{/if}
+							{#if module.slots}
+								<div>
+									<dt>Registry slots</dt>
+									<dd>{module.slots}</dd>
+								</div>
+							{/if}
+						</dl>
+					</aside>
+				{/if}
 				<div class="overview-grid">
 					<div class="overview-copy">
 						<p class="kicker">What it gives you</p>
@@ -684,6 +726,37 @@
 	.panel {
 		min-height: 460px;
 		padding: 44px 0;
+	}
+
+	.module-facts {
+		margin-bottom: 2rem;
+		padding: 1.25rem 1.5rem;
+		border: 1px solid var(--site-line);
+		border-radius: 4px;
+	}
+
+	.module-facts dl {
+		margin-top: 0.75rem;
+	}
+
+	.module-facts dt {
+		color: var(--site-muted);
+		font: 0.68rem var(--site-font-mono);
+	}
+
+	.module-facts dd {
+		margin-top: 0.2rem;
+		font-size: 0.8rem;
+		line-height: 1.6;
+	}
+
+	.module-facts .dep {
+		margin-right: 0.4rem;
+		font-family: var(--site-font-mono);
+	}
+
+	.module-facts div + div {
+		margin-top: 0.75rem;
 	}
 
 	.overview-layout {
