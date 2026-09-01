@@ -89,7 +89,9 @@ export function collectInstalled(root) {
 			}
 		);
 	} catch (cause) {
-		throw new Error(`\`smrt dev:knowledge-index --scope installed\` failed: ${cause.message}`);
+		throw new Error(`\`smrt dev:knowledge-index --scope installed\` failed: ${cause.message}`, {
+			cause
+		});
 	}
 
 	const jsonStart = stdout.indexOf('{');
@@ -105,7 +107,8 @@ export function collectInstalled(root) {
 		index = JSON.parse(stdout.slice(jsonStart));
 	} catch (cause) {
 		throw new Error(
-			`Could not parse \`smrt dev:knowledge-index\` output as JSON: ${cause.message}`
+			`Could not parse \`smrt dev:knowledge-index\` output as JSON: ${cause.message}`,
+			{ cause }
 		);
 	}
 

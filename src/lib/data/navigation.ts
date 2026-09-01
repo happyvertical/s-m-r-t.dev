@@ -17,14 +17,7 @@ export interface NavigationGroup {
 }
 
 export type DocumentationSectionId =
-	| 'why'
-	| 'framework'
-	| 'interaction'
-	| 'ui'
-	| 'modules'
-	| 'tooling'
-	| 'guides'
-	| 'reference';
+	'why' | 'framework' | 'interaction' | 'ui' | 'modules' | 'tooling' | 'guides' | 'reference';
 
 export interface DocumentationSection {
 	id: DocumentationSectionId;
