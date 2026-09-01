@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ReferenceFamilyBar from '$lib/components/ReferenceFamilyBar.svelte';
 	import SEO from '$lib/components/SEO.svelte';
-	import { uiComponentGroups, uiComponents } from '$lib/data/ui-components.generated';
+	import { uiComponentGroups, uiComponents, uiCoverage } from '$lib/data/ui-components.generated';
 	import { SMRT_VERSION } from '$lib/version';
 
 	let query = $state('');
@@ -23,7 +23,7 @@
 
 <SEO
 	title="s-m-r-t UI component reference"
-	description="Search every public smrt-ui component export and inspect its props, bindable state, callback events, import path, examples, and canonical source."
+	description="Search every public Svelte component export across the installed @happyvertical/smrt-* packages and inspect its props, bindable state, callback events, import path, examples, and canonical source."
 	url="https://s-m-r-t.dev/reference/components"
 />
 
@@ -34,9 +34,15 @@
 		<p>Generated Reference</p>
 		<h1>UI component reference</h1>
 		<span>
-			Search the public component exports in <code>@happyvertical/smrt-ui</code>. Each contract is
-			read from the declaration files in release {SMRT_VERSION}.
+			Search the public component exports across every installed <code>@happyvertical/smrt-*</code>
+			package. Each contract is read from the declaration files in release {SMRT_VERSION}.
 		</span>
+		<p class="coverage">
+			Every prop and type here is generated from the shipped declarations and is accurate.
+			{uiCoverage.describedProps} of {uiCoverage.totalProps} props and {uiCoverage.authoredSummaries}
+			of {uiCoverage.totalComponents} components also carry prose written in the package. The rest are
+			listed without description, and say so.
+		</p>
 	</header>
 
 	<section class="component-tools" aria-label="Filter UI components">
@@ -124,6 +130,14 @@
 		display: block;
 		margin-top: 1rem;
 		color: var(--site-muted);
+		line-height: 1.65;
+	}
+
+	.coverage {
+		margin-top: 1.25rem;
+		max-width: 46rem;
+		color: var(--site-muted);
+		font-size: 0.82rem;
 		line-height: 1.65;
 	}
 

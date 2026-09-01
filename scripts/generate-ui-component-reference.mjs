@@ -8,6 +8,7 @@ import ts from 'typescript';
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 const OUTPUT = join(ROOT, 'src', 'lib', 'data', 'ui-components.generated.ts');
+const COVERAGE_BASELINE = join(ROOT, 'scripts', 'ui-reference-coverage.json');
 
 const SCOPE_ROOT = join(ROOT, 'node_modules', '@happyvertical');
 
@@ -530,7 +531,7 @@ function buildComponent(name, declarationPath, group, slot = null) {
 	};
 }
 
-function render(components, modules) {
+function render(components, modules, coverage) {
 	const serialized = JSON.stringify(components, null, '\t');
 	return `/**
  * Generated from the public declaration barrels shipped by
@@ -587,6 +588,19 @@ export const uiModules: UiModuleReference[] = ${JSON.stringify(modules, null, '\
 export function getUiModule(slug: string): UiModuleReference | undefined {
 	return uiModules.find((module) => module.slug === slug);
 }
+
+export interface UiCoverage {
+	describedProps: number;
+	totalProps: number;
+	authoredSummaries: number;
+	totalComponents: number;
+}
+
+/**
+ * Coverage of the published reference at generation time. Every described prop
+ * and authored summary comes from prose shipped inside a package.
+ */
+export const uiCoverage: UiCoverage = ${JSON.stringify(coverage, null, '\t')};
 
 export const uiComponentGroups = [...new Map(
 	uiComponents.map((component) => [component.family, component.category] as const)
@@ -718,15 +732,69 @@ const duplicateSlugs = components
 if (duplicateSlugs.length)
 	throw new Error(`Duplicate component slugs: ${duplicateSlugs.join(', ')}`);
 
+/**
+ * How much of the published reference is actually explained, as opposed to
+ * merely listed. Both numbers come from prose the packages ship; neither is
+ * written here.
+ */
+function coverageOf(records) {
+	const props = records.flatMap((record) => record.details);
+	return {
+		describedProps: props.filter((prop) => prop.description).length,
+		totalProps: props.length,
+		authoredSummaries: records.filter((record) => !record.summarySynthesized).length,
+		totalComponents: records.length
+	};
+}
+
+const coverage = coverageOf(components);
+const ratios = (value) => ({
+	props: value.totalProps ? value.describedProps / value.totalProps : 0,
+	summaries: value.totalComponents ? value.authoredSummaries / value.totalComponents : 0
+});
+const percent = (value) => `${(value * 100).toFixed(1)}%`;
+
+const baseline = existsSync(COVERAGE_BASELINE)
+	? JSON.parse(readFileSync(COVERAGE_BASELINE, 'utf8'))
+	: null;
+const current = ratios(coverage);
+const previous = baseline ? ratios(baseline) : { props: 0, summaries: 0 };
+
 const prettierConfig = (await resolveConfig(OUTPUT)) ?? {};
-const output = await format(render(components, modules), { ...prettierConfig, filepath: OUTPUT });
+const output = await format(render(components, modules, coverage), { ...prettierConfig, filepath: OUTPUT });
+const summary =
+	`${components.length} exports; ` +
+	`${coverage.describedProps}/${coverage.totalProps} props described (${percent(current.props)}), ` +
+	`${coverage.authoredSummaries}/${coverage.totalComponents} summaries authored (${percent(current.summaries)})`;
+
 if (process.argv.includes('--check')) {
 	if (!existsSync(OUTPUT) || readFileSync(OUTPUT, 'utf8') !== output) {
 		console.error('UI component reference is stale. Run pnpm run generate:ui-reference.');
 		process.exit(1);
 	}
-	console.log(`UI component reference is current (${components.length} exports).`);
+
+	// A ratchet, not a gate. Being short of complete is the normal state and is
+	// reported by `uiCoverage`; going backwards is a regression, and a framework
+	// bump that adds undocumented components should say so on that pull request
+	// rather than surface a release later.
+	const dropped = [];
+	if (current.props < previous.props)
+		dropped.push(`props described ${percent(previous.props)} -> ${percent(current.props)}`);
+	if (current.summaries < previous.summaries)
+		dropped.push(`summaries authored ${percent(previous.summaries)} -> ${percent(current.summaries)}`);
+	if (dropped.length) {
+		console.error(`UI reference documentation coverage dropped: ${dropped.join('; ')}.`);
+		console.error(
+			'Restore the prose upstream, or record the drop deliberately by regenerating and ' +
+				`committing ${relative(ROOT, COVERAGE_BASELINE)}.`
+		);
+		process.exit(1);
+	}
+	console.log(`UI component reference is current (${summary}).`);
 } else {
 	writeFileSync(OUTPUT, output);
-	console.log(`Wrote ${relative(ROOT, OUTPUT)} with ${components.length} exports.`);
+	if (!baseline || current.props > previous.props || current.summaries > previous.summaries) {
+		writeFileSync(COVERAGE_BASELINE, `${JSON.stringify(coverage, null, '\t')}\n`);
+	}
+	console.log(`Wrote ${relative(ROOT, OUTPUT)} with ${summary}.`);
 }

@@ -83,6 +83,7 @@ const PROSE_PROPERTIES = new Set([
 ]);
 
 const NON_PROSE_PROPERTIES = new Set([
+	'authoredSummaries',
 	'base',
 	'boundary',
 	'browser',
@@ -97,6 +98,7 @@ const NON_PROSE_PROPERTIES = new Set([
 	'components',
 	'demo',
 	'decision',
+	'describedProps',
 	'difficulty',
 	'eager',
 	'entry',
@@ -155,6 +157,8 @@ const NON_PROSE_PROPERTIES = new Set([
 	'task',
 	'tags',
 	'topics',
+	'totalComponents',
+	'totalProps',
 	'uiDependencies',
 	'variant',
 	'version',

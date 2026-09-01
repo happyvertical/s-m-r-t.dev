@@ -19430,6 +19430,24 @@ export function getUiModule(slug: string): UiModuleReference | undefined {
 	return uiModules.find((module) => module.slug === slug);
 }
 
+export interface UiCoverage {
+	describedProps: number;
+	totalProps: number;
+	authoredSummaries: number;
+	totalComponents: number;
+}
+
+/**
+ * Coverage of the published reference at generation time. Every described prop
+ * and authored summary comes from prose shipped inside a package.
+ */
+export const uiCoverage: UiCoverage = {
+	describedProps: 784,
+	totalProps: 1691,
+	authoredSummaries: 110,
+	totalComponents: 285
+};
+
 export const uiComponentGroups = [
 	...new Map(uiComponents.map((component) => [component.family, component.category] as const))
 ].map(([id, title]) => ({ id, title }));

@@ -4,6 +4,7 @@ import {
 	getUiModule,
 	uiComponentGroups,
 	uiComponents,
+	uiCoverage,
 	uiModules
 } from '$lib/data/ui-components.generated';
 
@@ -63,6 +64,17 @@ describe('generated UI component reference', () => {
 		expect(commerce?.displayName).toBe('Commerce');
 		expect(commerce?.models).toContain('Contract');
 		expect(commerce?.collections).toContain('PaymentCollection');
+	});
+
+	it('reports its own coverage from the records it publishes', () => {
+		const props = uiComponents.flatMap((component) => component.details);
+
+		expect(uiCoverage.totalComponents).toBe(uiComponents.length);
+		expect(uiCoverage.totalProps).toBe(props.length);
+		expect(uiCoverage.describedProps).toBe(props.filter((prop) => prop.description).length);
+		expect(uiCoverage.authoredSummaries).toBe(
+			uiComponents.filter((component) => !component.summarySynthesized).length
+		);
 	});
 
 	it('puts DataTable under Components with its complete public contract', () => {
