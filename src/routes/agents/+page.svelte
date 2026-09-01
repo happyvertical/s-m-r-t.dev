@@ -172,9 +172,8 @@
 			<a href="/tooling">
 				<strong>Tooling</strong>
 				<span
-					>The hosted and local MCP surfaces, and the coding-agent tools — a different audience.
-					This page is about agents that use a running application. The tools that help agents build
-					one live in Tooling.</span
+					>The hosted and local MCP surfaces, and the coding-agent tools — a different audience. The
+					tools that help agents build one live in Tooling.</span
 				>
 			</a>
 			<a href="/reference">
@@ -541,6 +540,7 @@
 
 	.boundaries a {
 		display: grid;
+		align-content: start;
 		gap: 0.35rem;
 		padding: 1rem;
 		border: 1px solid var(--site-line-strong);
@@ -579,8 +579,14 @@
 			grid-template-columns: 1fr;
 		}
 
-		.plane-connectors {
+		.plane-connectors,
+		.plane-connector-single {
 			display: none;
+		}
+
+		.two-plane-diagram {
+			display: grid;
+			gap: 0.75rem;
 		}
 	}
 
