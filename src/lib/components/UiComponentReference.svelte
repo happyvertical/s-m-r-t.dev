@@ -12,9 +12,19 @@
 	let { component }: { component: UiComponentReference } = $props();
 	const importCode = $derived(`import { ${component.name} } from '${component.importPath}';`);
 
-	function memberDescription(member: UiComponentMember): string {
-		return member.description || 'See the canonical source for details.';
-	}
+	/**
+	 * The generator synthesizes a placeholder summary for every component whose
+	 * package ships no description of its own. Detect that exact shape so the
+	 * page reports the gap rather than printing a sentence that reads as
+	 * authored documentation. Replace this test with the generator's own flag
+	 * once the reference records which summaries are synthesized.
+	 */
+	const SYNTHESIZED_SUMMARY = /^.+ is part of the .+ component family\.$/;
+
+	const summaryAuthored = $derived(!SYNTHESIZED_SUMMARY.test(component.summary));
+	const describedProps = $derived(
+		component.details.filter((prop: UiComponentMember) => prop.description).length
+	);
 </script>
 
 <SEO
@@ -30,7 +40,14 @@
 		<a href="/reference/components">← All UI components</a>
 		<p>{component.category}</p>
 		<h1>{component.name}</h1>
-		<span>{component.summary}</span>
+		{#if summaryAuthored}
+			<span>{component.summary}</span>
+		{:else}
+			<span class="unwritten">
+				No summary has been written for {component.name}. Everything below is generated from the
+				declaration shipped in {SMRT_VERSION} and describes the real contract.
+			</span>
+		{/if}
 	</header>
 
 	<section class="contract-summary">
@@ -46,6 +63,12 @@
 			<div>
 				<dt>Props</dt>
 				<dd>{component.details.length}</dd>
+			</div>
+			<div>
+				<dt>Props described</dt>
+				<dd class:none={describedProps === 0}>
+					{describedProps} of {component.details.length}
+				</dd>
 			</div>
 			<div>
 				<dt>Bindable state</dt>
@@ -82,7 +105,9 @@
 						<span role="cell"><code>{prop.name}</code></span><span role="cell"
 							><code>{prop.code}</code></span
 						><span role="cell">{prop.status ? 'Yes' : 'No'}</span><span role="cell"
-							>{memberDescription(prop)}</span
+							>{#if prop.description}{prop.description}{:else}<span class="unwritten"
+									>Not described</span
+								>{/if}</span
 						>
 					</div>
 				{/each}
@@ -225,6 +250,27 @@
 
 	dt {
 		color: var(--site-muted);
+	}
+
+	dd.none {
+		color: var(--site-muted);
+	}
+
+	/*
+	 * Absent prose reads as absent. A muted, monospaced marker cannot be mistaken
+	 * for a written description the way a fallback sentence can.
+	 */
+	.unwritten {
+		color: var(--site-muted);
+		font-family: var(--site-font-mono);
+		font-size: 0.92em;
+	}
+
+	header .unwritten {
+		display: block;
+		margin-top: 1rem;
+		font-size: 0.8rem;
+		line-height: 1.65;
 	}
 
 	.inherits,
