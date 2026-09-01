@@ -1,5 +1,4 @@
 import { packages, type PackageCategory, type SmrtPackage } from '$lib/data/packages';
-import sitePackageJson from '../../../package.json';
 
 /**
  * The five-layer application stack. Canonical short names and one-line
@@ -29,7 +28,7 @@ const BUILDING_BLOCK_CATEGORIES = new Set<PackageCategory>([
 /**
  * Coding-agent and CI tooling that happens to sit in the `Agents & runtime` /
  * `Web & UI` categories but isn't a person- or application-agent-facing
- * surface, so it doesn't belong under "Agents with limits" or "Screens and
+ * surface, so it doesn't belong under "Agents included" or "Screens and
  * controls" — it's covered by the Tooling documentation section instead
  * (`tooling.ts` groups `smrt-cli`, `smrt-vitest`, and `smrt-template-*` the
  * same way). Kept as an explicit slug carve-out, the same pattern as
@@ -44,26 +43,10 @@ const DEV_TOOLING_SLUGS = new Set([
 	'smrt-template-site-static-json'
 ]);
 
-/**
- * Packages actually installed by this site (`package.json` dependencies and
- * devDependencies), as opposed to published-but-not-depended-on packages that
- * are documented in the catalog. Read from the manifest rather than
- * maintained as a second list, so it cannot drift from what `pnpm install`
- * actually resolves.
- */
-const installedPackageNames = new Set(
-	Object.keys({
-		...(sitePackageJson.dependencies ?? {}),
-		...(sitePackageJson.devDependencies ?? {})
-	})
-);
-
 export interface LayerChip {
 	slug: string;
 	/** Package name without the `smrt-` prefix, e.g. `core`. */
 	shortName: string;
-	/** True when this site itself depends on the package (rendered solid). */
-	installed: boolean;
 }
 
 export interface AppLayer {
@@ -82,8 +65,7 @@ export interface AppLayer {
 function chipsFor(layerPackages: SmrtPackage[]): LayerChip[] {
 	return layerPackages.map((pkg) => ({
 		slug: pkg.slug,
-		shortName: pkg.slug.replace(/^smrt-/, ''),
-		installed: installedPackageNames.has(pkg.name)
+		shortName: pkg.slug.replace(/^smrt-/, '')
 	}));
 }
 
@@ -92,7 +74,7 @@ const foundationsPackages = packages.filter(
 );
 const whoCanDoWhatPackages = packages.filter((pkg) => WHO_CAN_DO_WHAT_SLUGS.has(pkg.slug));
 const buildingBlockPackages = packages.filter((pkg) => BUILDING_BLOCK_CATEGORIES.has(pkg.category));
-const agentsWithLimitsPackages = packages.filter(
+const agentsIncludedPackages = packages.filter(
 	(pkg) => pkg.category === 'Agents & runtime' && !DEV_TOOLING_SLUGS.has(pkg.slug)
 );
 const screensAndControlsPackages = packages.filter(
@@ -112,7 +94,7 @@ export const unlayeredPackageCount =
 	foundationsPackages.length -
 	whoCanDoWhatPackages.length -
 	buildingBlockPackages.length -
-	agentsWithLimitsPackages.length -
+	agentsIncludedPackages.length -
 	screensAndControlsPackages.length;
 
 /**
@@ -165,7 +147,7 @@ export const appLayers: AppLayer[] = [
 		index: 2,
 		name: 'Who can do what',
 		heroLine:
-			'accounts, sign-in, roles, and separate workspaces. Every request is checked against the person or agent who asked.',
+			'accounts, sign-in, and roles. Every request is checked against the person or agent who asked.',
 		scopeCopy:
 			'Accounts, roles, and sign-in. What a person may do also caps what their agents may do.',
 		packages: whoCanDoWhatPackages,
@@ -186,15 +168,15 @@ export const appLayers: AppLayer[] = [
 		chips: chipsFor(buildingBlockPackages)
 	},
 	{
-		id: 'agents-with-limits',
+		id: 'agents-included',
 		index: 4,
-		name: 'Agents with limits',
+		name: 'Agents included',
 		heroLine:
-			'software agents get their own identity and a fixed list of allowed actions. An agent never has more power than the person it works for.',
+			'an application comes with agents of its own: they follow written instructions, run on schedules, talk in chat, and learn from feedback. Outside agents can connect on the same terms, with their own identity and fixed lists of allowed actions — and an agent never has more power than the person it works for.',
 		scopeCopy:
-			'Agents with their own identity and fixed lists of allowed actions; chat; long-running tasks. Making tools visible to outside agents is a choice each application makes, never a default.',
-		packages: agentsWithLimitsPackages,
-		chips: chipsFor(agentsWithLimitsPackages)
+			'An application comes with agents of its own: they follow written instructions, run on schedules, talk in chat, and learn from feedback. An agent can propose changes to its own instructions — nothing changes until a person approves. Outside agents can connect on the same terms, with their own identity and fixed lists of allowed actions; an agent never has more power than the person it works for. Making tools visible to outside agents is a choice each application makes, never a default.',
+		packages: agentsIncludedPackages,
+		chips: chipsFor(agentsIncludedPackages)
 	},
 	{
 		id: 'screens-and-controls',
