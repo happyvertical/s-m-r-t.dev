@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/svelte';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { tick } from 'svelte';
-import { documentationSections } from '$lib/data/navigation';
+import { docsNavigation, documentationSections } from '$lib/data/navigation';
 import { createDocsShellState } from '$lib/shell';
 import Harness from './DocsPanelSections.test.svelte';
 
@@ -84,5 +84,56 @@ describe('docs panel section map', () => {
 		await fireEvent.click(link);
 
 		expect(shell.panels.top).toBe('collapsed');
+	});
+
+	/**
+	 * The band marked "current" comes from `documentationSectionForPathname`,
+	 * which resolves a pathname to a section by *route family* (e.g. every
+	 * `/starters/*` route is part of the Guides route family). The band an
+	 * item actually renders in comes from `docs-panel.ts`'s join against
+	 * `docsNavigation`, which assigns each page to exactly one *canonical
+	 * nav group* (e.g. the starter links are canonically Home group pages,
+	 * introduced from the homepage). These two classifications usually
+	 * agree, but where they do not — a docsNavigation item's own pathname
+	 * resolves to a different section than the band that actually lists it
+	 * — the item can fall outside its (non-current) band's key-page limit
+	 * with nothing to extend it, so the page a reader is actually on gets no
+	 * link and no aria-current anywhere in the panel. This asserts the
+	 * invariant that must hold regardless of that classification mismatch:
+	 * every page reachable in docsNavigation gets a link with the correct
+	 * aria-current when it is the current page, whether or not its own band
+	 * is the one carrying the "you are here" treatment.
+	 */
+	it('shows a matching aria-current link for every page reachable in docsNavigation', async () => {
+		const shell = createDocsShellState();
+		shell.expandPanel('top');
+		const { rerender } = render(Harness, { props: { pathname: '/', hash: '', shell } });
+		await tick();
+		await new Promise((resolve) => setTimeout(resolve, 0));
+
+		const allItems = docsNavigation.flatMap((group) => group.items);
+		const failures: string[] = [];
+
+		for (const item of allItems) {
+			const url = new URL(item.href, 'https://s-m-r-t.dev');
+			await rerender({ pathname: url.pathname, hash: url.hash, shell });
+
+			const nav = screen.getByRole('navigation', { name: 'Documentation section map' });
+			const links = within(nav).getAllByRole('link');
+			const match = links.find((link) => link.getAttribute('href') === item.href);
+			const expectedCurrent = url.hash ? 'location' : 'page';
+
+			if (!match) {
+				failures.push(`${item.href} ("${item.label}"): no link rendered`);
+			} else if (match.getAttribute('aria-current') !== expectedCurrent) {
+				failures.push(
+					`${item.href} ("${item.label}"): expected aria-current="${expectedCurrent}", got ${
+						match.getAttribute('aria-current') ?? 'null'
+					}`
+				);
+			}
+		}
+
+		expect(failures, `\n${failures.join('\n')}`).toEqual([]);
 	});
 });

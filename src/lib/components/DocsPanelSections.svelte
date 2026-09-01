@@ -43,8 +43,20 @@
 				<ul class="band-pages">
 					<!-- The first item is the section landing the band head already links
 					     to, so key pages start at position 1. Filtered inline (not via a
-					     sliced @const) so check:copy can trace the copy to `section`. -->
-					{#each section.items.filter((entry, position) => position > 0 && position <= keyPageLimit) as item (item.href)}
+					     sliced @const) so check:copy can trace the copy to `section`.
+
+					     A docsNavigation item's own href can resolve `current` (via
+					     documentationSectionForPathname) to a *different* section than
+					     the band that actually lists it — e.g. the starter guides are
+					     Home-group pages by canonical ownership, but resolve to the
+					     Guides route family — or an item can simply sit past position
+					     `keyPageLimit` in a long band. Either way, without the active-item
+					     check below, the page the reader is actually on can be absent
+					     from every band, with no link and no aria-current anywhere in the
+					     panel. Keeping the active item visible regardless of position
+					     guarantees every docsNavigation-reachable page always has a
+					     matching link when it is current. -->
+					{#each section.items.filter((entry, position) => position > 0 && (position <= keyPageLimit || isNavigationItemActive(entry.href, pathname, hash))) as item (item.href)}
 						<li>
 							<a
 								href={item.href}
