@@ -104,36 +104,47 @@ describe('docs panel section map', () => {
 	 * aria-current when it is the current page, whether or not its own band
 	 * is the one carrying the "you are here" treatment.
 	 */
-	it('shows a matching aria-current link for every page reachable in docsNavigation', async () => {
-		const shell = createDocsShellState();
-		shell.expandPanel('top');
-		const { rerender } = render(Harness, { props: { pathname: '/', hash: '', shell } });
-		await tick();
-		await new Promise((resolve) => setTimeout(resolve, 0));
+	// One render plus 64 rerenders (one per docsNavigation item) took ~1.5s
+	// locally but over 7s on CI's slower/shared runner, past vitest's default
+	// 5000ms test timeout. The assertions are cheap; the render count is what
+	// is large, so this test below gets explicit headroom instead of trimming
+	// its coverage.
+	const PAGE_COVERAGE_TIMEOUT_MS = 20000;
 
-		const allItems = docsNavigation.flatMap((group) => group.items);
-		const failures: string[] = [];
+	it(
+		'shows a matching aria-current link for every page reachable in docsNavigation',
+		async () => {
+			const shell = createDocsShellState();
+			shell.expandPanel('top');
+			const { rerender } = render(Harness, { props: { pathname: '/', hash: '', shell } });
+			await tick();
+			await new Promise((resolve) => setTimeout(resolve, 0));
 
-		for (const item of allItems) {
-			const url = new URL(item.href, 'https://s-m-r-t.dev');
-			await rerender({ pathname: url.pathname, hash: url.hash, shell });
+			const allItems = docsNavigation.flatMap((group) => group.items);
+			const failures: string[] = [];
 
-			const nav = screen.getByRole('navigation', { name: 'Documentation section map' });
-			const links = within(nav).getAllByRole('link');
-			const match = links.find((link) => link.getAttribute('href') === item.href);
-			const expectedCurrent = url.hash ? 'location' : 'page';
+			for (const item of allItems) {
+				const url = new URL(item.href, 'https://s-m-r-t.dev');
+				await rerender({ pathname: url.pathname, hash: url.hash, shell });
 
-			if (!match) {
-				failures.push(`${item.href} ("${item.label}"): no link rendered`);
-			} else if (match.getAttribute('aria-current') !== expectedCurrent) {
-				failures.push(
-					`${item.href} ("${item.label}"): expected aria-current="${expectedCurrent}", got ${
-						match.getAttribute('aria-current') ?? 'null'
-					}`
-				);
+				const nav = screen.getByRole('navigation', { name: 'Documentation section map' });
+				const links = within(nav).getAllByRole('link');
+				const match = links.find((link) => link.getAttribute('href') === item.href);
+				const expectedCurrent = url.hash ? 'location' : 'page';
+
+				if (!match) {
+					failures.push(`${item.href} ("${item.label}"): no link rendered`);
+				} else if (match.getAttribute('aria-current') !== expectedCurrent) {
+					failures.push(
+						`${item.href} ("${item.label}"): expected aria-current="${expectedCurrent}", got ${
+							match.getAttribute('aria-current') ?? 'null'
+						}`
+					);
+				}
 			}
-		}
 
-		expect(failures, `\n${failures.join('\n')}`).toEqual([]);
-	});
+			expect(failures, `\n${failures.join('\n')}`).toEqual([]);
+		},
+		PAGE_COVERAGE_TIMEOUT_MS
+	);
 });
