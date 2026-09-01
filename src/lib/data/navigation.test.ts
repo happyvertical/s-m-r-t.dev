@@ -86,6 +86,32 @@ describe('contextual navigation', () => {
 		expect(isNavigationItemActive('/#what-you-get', '/', '#how-it-works')).toBe(false);
 	});
 
+	it('marks exactly one /agents "On this page" anchor active for the current topic', () => {
+		const section = documentationSections.find((candidate) => candidate.id === 'agents');
+		const onThisPage = section?.groups.find((group) => group.label === 'On this page');
+		expect(onThisPage).toBeTruthy();
+		expect(onThisPage!.items.length).toBeGreaterThan(1);
+
+		for (const target of onThisPage!.items) {
+			const hash = new URL(target.href, 'https://s-m-r-t.dev').hash;
+			const activeHrefs = onThisPage!.items
+				.filter((item) => isNavigationItemActive(item.href, '/agents', hash))
+				.map((item) => item.href);
+
+			expect(activeHrefs).toEqual([target.href]);
+		}
+	});
+
+	it('keeps prefix matching for section overview and nested-page links', () => {
+		// Long-standing pattern: a hash-less overview link (e.g. /tooling) stays
+		// active on its own page and on every nested page under it, alongside the
+		// exact-match link for that nested page. Same-page hash anchors must not
+		// change this.
+		expect(isNavigationItemActive('/tooling', '/tooling/dev-mcp', '')).toBe(true);
+		expect(isNavigationItemActive('/tooling/dev-mcp', '/tooling/dev-mcp', '')).toBe(true);
+		expect(isNavigationItemActive('/tooling', '/tooling', '#anything')).toBe(true);
+	});
+
 	it('gives every task guide a family link and a non-Guides contextual link', () => {
 		const guidesSection = documentationSections.find((section) => section.id === 'guides');
 		const guideFamilyHrefs = new Set(

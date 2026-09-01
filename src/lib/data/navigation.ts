@@ -508,6 +508,13 @@ export function isNavigationItemActive(href: string, pathname: string, hash = ''
 	if (url.pathname === '/') {
 		return pathname === '/' && (url.hash ? url.hash === hash : hash === '');
 	}
+	// A same-page anchor (e.g. /agents#topic) only owns the current location when
+	// its hash matches; without this, every anchor sharing that pathname would
+	// match at once. A plain page link (no hash) keeps the prefix match below,
+	// which also covers a section overview link staying active on its nested pages.
+	if (url.hash && pathname === url.pathname) {
+		return url.hash === hash;
+	}
 	return pathname === url.pathname || pathname.startsWith(`${url.pathname}/`);
 }
 
