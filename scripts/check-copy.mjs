@@ -1352,7 +1352,6 @@ export function extractSveltePassages(source, filename) {
 		activeAllowedDynamicNames = allowedDynamicNames
 	) {
 		if (!node || typeof node !== 'object') return;
-		let isContentElement = false;
 		if (node.type === 'RawMustacheTag' && !insideContentElement) {
 			const text = normalizeText(nodeText(node, activeBindings));
 			if (text) passages.push({ file: filename, line: lineNumber(source, node.start), text });
@@ -1411,7 +1410,7 @@ export function extractSveltePassages(source, filename) {
 		) {
 			if (EXCLUDED_ELEMENTS.has(node.name)) return;
 
-			isContentElement =
+			const isContentElement =
 				CONTENT_ELEMENTS.has(node.name) || hasDirectVisibleText(node, activeBindings);
 			const shouldAggregate = isContentElement && !insideContentElement;
 			if (shouldAggregate) {
