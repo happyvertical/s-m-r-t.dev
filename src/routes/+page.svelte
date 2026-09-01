@@ -153,7 +153,7 @@
 
 <SEO
 	title="The s-m-r-t application stack"
-	description="A TypeScript stack in five layers, released together at one version: foundations, identity and roles, ready-made building blocks, agents with limits, and screens and controls — for people and software agents."
+	description="A TypeScript stack in five layers, released together at one version: foundations, identity and roles, ready-made building blocks, agents included, and screens and controls — for people and software agents."
 	url="https://s-m-r-t.dev"
 />
 
@@ -314,8 +314,8 @@
 				<h2 id="scope-heading">Five layers, one release</h2>
 			</div>
 			<p>
-				This is what each layer contains. Every package releases together, at the same version. The
-				full catalog describes each one; the packages this site installs directly are marked.
+				This is what each layer contains. Every package releases together, at the same version. Each
+				package name below links to its page in the catalog.
 			</p>
 		</div>
 
@@ -339,7 +339,7 @@
 					</p>
 					<ul class="layer-chips">
 						{#each layer.chips as chip (chip.slug)}
-							<li class:installed={chip.installed}>{chip.shortName}</li>
+							<li><a href={`/packages/${chip.slug}`}>{chip.shortName}</a></li>
 						{/each}
 					</ul>
 					<a class="layer-catalog-link" href="/packages"
@@ -943,18 +943,20 @@
 		list-style: none;
 	}
 
-	.layer-chips li {
+	.layer-chips a {
+		display: inline-flex;
 		padding: 0.25rem 0.55rem;
 		border: 1px solid var(--site-line-strong);
 		border-radius: 999px;
 		color: var(--site-muted);
 		font: 0.63rem var(--site-font-mono);
+		text-decoration: none;
 	}
 
-	.layer-chips li.installed {
+	.layer-chips a:hover,
+	.layer-chips a:focus-visible {
 		border-color: var(--site-accent-strong);
-		background: var(--site-accent-strong);
-		color: var(--smrt-color-on-primary, #fff);
+		color: var(--site-ink);
 	}
 
 	.layer-catalog-link {

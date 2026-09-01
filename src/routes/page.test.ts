@@ -60,6 +60,23 @@ describe('documentation home page', () => {
 		);
 	});
 
+	it('renders every layer chip as a same-tab link into the package catalog', () => {
+		const { container } = render(Page);
+		const bands = [...container.querySelectorAll('.layer-band')];
+
+		expect(bands).toHaveLength(appLayers.length);
+		bands.forEach((band, index) => {
+			const layer = appLayers[index];
+			const chipLinks = [...band.querySelectorAll('.layer-chips a')];
+
+			expect(chipLinks).toHaveLength(layer.chips.length);
+			chipLinks.forEach((link, chipIndex) => {
+				expect(link.getAttribute('href')).toBe(`/packages/${layer.chips[chipIndex].slug}`);
+				expect(link.getAttribute('target')).toBeNull();
+			});
+		});
+	});
+
 	it('anchors every hero mini-map band to the full scope map', () => {
 		const { container } = render(Page);
 
