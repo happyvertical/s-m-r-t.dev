@@ -376,6 +376,78 @@ function collectProps(file, name, seen = new Set()) {
 	const inherits = [];
 	const imports = importsIn(source, file);
 
+	const pushMembers = (members) => {
+		for (const member of members) {
+			if (!ts.isPropertySignature(member) && !ts.isMethodSignature(member)) continue;
+			const propName = member.name?.getText(source).replace(/^['"]|['"]$/g, '');
+			if (!propName) continue;
+			props.push({
+				name: propName,
+				type: ts.isMethodSignature(member)
+					? member
+							.getText(source)
+							.replace(/^[^(]+/, '')
+							.replace(/;$/, '')
+					: typeText(member.type, source),
+				required: !member.questionToken,
+				doc: jsDocText(member)
+			});
+		}
+	};
+
+	const pushReference = (name) => {
+		const imported = imports.get(name);
+		if (imported) {
+			const inherited = collectProps(imported.file, imported.name, seen);
+			props.push(...inherited.props);
+			inherits.push(...inherited.inherits);
+			return true;
+		}
+		if (interfaceIn(file, name)) {
+			const inherited = collectProps(file, name, seen);
+			props.push(...inherited.props);
+			inherits.push(...inherited.inherits);
+			return true;
+		}
+		return false;
+	};
+
+	// `export type Props = Base & { ... }` is as common as an interface, and
+	// reading only interfaces published those components with an empty contract.
+	if (ts.isTypeAliasDeclaration(declaration)) {
+		const fromType = (node) => {
+			if (ts.isTypeLiteralNode(node)) return pushMembers(node.members);
+			if (ts.isIntersectionTypeNode(node)) return node.types.forEach(fromType);
+			if (ts.isParenthesizedTypeNode(node)) return fromType(node.type);
+			if (ts.isTypeReferenceNode(node)) {
+				const refName = node.typeName.getText(source);
+				if (!pushReference(refName)) inherits.push(typeText(node, source));
+				return;
+			}
+			// `Base & (ReadOnly | Movable)` describes one component with two legal
+			// shapes. Publishing only the first branch dropped real callbacks, so
+			// take every branch and mark them optional: which apply depends on how
+			// the component is used. A `never` member is the branch that forbids
+			// the prop, so the other branch's real type wins.
+			if (ts.isUnionTypeNode(node)) {
+				const before = props.length;
+				node.types.forEach(fromType);
+				for (let index = before; index < props.length; index += 1) {
+					props[index] = { ...props[index], required: false };
+				}
+				const merged = new Map();
+				for (const prop of props.splice(before)) {
+					const held = merged.get(prop.name);
+					if (!held || held.type === 'never') merged.set(prop.name, prop);
+				}
+				props.push(...merged.values());
+				return;
+			}
+			inherits.push(typeText(node, source));
+		};
+		fromType(declaration.type);
+	}
+
 	if (ts.isInterfaceDeclaration(declaration)) {
 		for (const heritage of declaration.heritageClauses ?? []) {
 			for (const type of heritage.types) {
@@ -396,22 +468,7 @@ function collectProps(file, name, seen = new Set()) {
 			}
 		}
 
-		for (const member of declaration.members) {
-			if (!ts.isPropertySignature(member) && !ts.isMethodSignature(member)) continue;
-			const propName = member.name?.getText(source).replace(/^['"]|['"]$/g, '');
-			if (!propName) continue;
-			props.push({
-				name: propName,
-				type: ts.isMethodSignature(member)
-					? member
-							.getText(source)
-							.replace(/^[^(]+/, '')
-							.replace(/;$/, '')
-					: typeText(member.type, source),
-				required: !member.questionToken,
-				doc: jsDocText(member)
-			});
-		}
+		pushMembers(declaration.members);
 	}
 
 	return {
@@ -462,19 +519,77 @@ function typeText2(node, source) {
 	return node ? node.getText(source).replace(/\s+/g, ' ').trim() : 'unknown';
 }
 
-function propsInterface(file) {
+/**
+ * The declaration that actually describes a component's props, as
+ * `{ file, name }`.
+ *
+ * `declare const X: import('svelte').Component<Props, ...>` names the real type
+ * wherever it was declared, so read that first and follow it through imports.
+ * Guessing a local interface by name published an empty contract for every
+ * component whose props live in a sibling `types.ts`.
+ */
+function propsDeclaration(file) {
 	const source = ts.createSourceFile(
 		file,
 		readFileSync(file, 'utf8'),
 		ts.ScriptTarget.Latest,
 		true
 	);
-	const names = source.statements
-		.filter(ts.isInterfaceDeclaration)
+
+	// Read the component's own declaration, not the first `Component<...>` found
+	// anywhere: a props type or snippet elsewhere in the file also mentions one,
+	// and taking that emptied the contract for DataTable and its siblings.
+	//   declare const X: Component<Props, ...>
+	//   declare const X: import('svelte').Component<Props, ...>
+	let declared = null;
+	for (const statement of source.statements) {
+		if (!ts.isVariableStatement(statement)) continue;
+		for (const variable of statement.declarationList.declarations) {
+			const node = variable.type;
+			if (!node) continue;
+			const namesComponent =
+				(ts.isTypeReferenceNode(node) && node.typeName.getText(source).endsWith('Component')) ||
+				(ts.isImportTypeNode(node) && node.qualifier?.getText(source).endsWith('Component'));
+			if (!namesComponent) continue;
+			const argument = node.typeArguments?.[0];
+			if (argument && ts.isTypeReferenceNode(argument)) {
+				declared = argument.typeName.getText(source);
+			}
+		}
+		if (declared) break;
+	}
+
+	// A generic component compiles to the `$$IsomorphicComponent` shape instead,
+	// where the props type is the `props` member of `$$render`'s return type.
+	if (!declared) {
+		const render = source.statements.find(
+			(statement) => ts.isFunctionDeclaration(statement) && statement.name?.text === '$$render'
+		);
+		const returned = render?.type;
+		if (returned && ts.isTypeLiteralNode(returned)) {
+			const member = returned.members.find(
+				(entry) => ts.isPropertySignature(entry) && entry.name?.getText(source) === 'props'
+			);
+			if (member?.type && ts.isTypeReferenceNode(member.type)) {
+				declared = member.type.typeName.getText(source);
+			}
+		}
+	}
+
+	const local = source.statements
+		.filter(
+			(statement) => ts.isInterfaceDeclaration(statement) || ts.isTypeAliasDeclaration(statement)
+		)
 		.map((statement) => statement.name.text);
-	return names.includes('Props')
+	const fallback = local.includes('Props')
 		? 'Props'
-		: (names.find((name) => /Props$/.test(name)) ?? names.find((name) => /Properties$/.test(name)));
+		: (local.find((name) => /Props$/.test(name)) ?? local.find((name) => /Properties$/.test(name)));
+
+	const target = declared ?? fallback;
+	if (!target) return null;
+	if (local.includes(target)) return { file, name: target };
+	const imported = importsIn(source, file).get(target);
+	return imported ? { file: imported.file, name: imported.name } : null;
 }
 
 function bindingsIn(file) {
@@ -527,9 +642,9 @@ function sourcePathFor(declarationPath, group) {
 function buildComponent(name, declarationPath, group, slot = null) {
 	if (!existsSync(declarationPath))
 		throw new Error(`Missing declaration for ${name}: ${declarationPath}`);
-	const interfaceName = propsInterface(declarationPath);
-	const { props, inherits } = interfaceName
-		? collectProps(declarationPath, interfaceName)
+	const declared = propsDeclaration(declarationPath);
+	const { props, inherits } = declared
+		? collectProps(declared.file, declared.name)
 		: { props: [], inherits: [] };
 	const bindingNames = bindingsIn(declarationPath);
 	const bindingSet = new Set(bindingNames);
@@ -542,7 +657,7 @@ function buildComponent(name, declarationPath, group, slot = null) {
 	// A component's own file header first, then the description its module wrote
 	// for the slot it fills. Both are authored; only the placeholder is not.
 	const authoredSummary =
-		componentSummary(declarationPath, interfaceName) || (slot?.description ?? '');
+		componentSummary(declarationPath, declared?.name) || (slot?.description ?? '');
 	const member = (prop) => ({
 		name: prop.name,
 		code: prop.type,
@@ -834,8 +949,9 @@ if (process.argv.includes('--check')) {
 	if (dropped.length) {
 		console.error(`UI reference documentation coverage dropped: ${dropped.join('; ')}.`);
 		console.error(
-			'Restore the prose upstream, or record the drop deliberately by regenerating and ' +
-				`committing ${relative(ROOT, COVERAGE_BASELINE)}.`
+			'Restore the prose upstream, or accept the drop deliberately with ' +
+				`\`pnpm run generate:ui-reference -- --accept-coverage-drop\` and commit ` +
+				`${relative(ROOT, COVERAGE_BASELINE)} with the reason.`
 		);
 		process.exit(1);
 	}
@@ -845,7 +961,8 @@ if (process.argv.includes('--check')) {
 	// Each metric ratchets on its own. Raising the whole baseline whenever either
 	// one improved would quietly bake in a drop in the other, which is exactly
 	// the regression --check exists to catch.
-	if (!baseline) {
+	if (!baseline || process.argv.includes('--accept-coverage-drop')) {
+		// The only path that may lower the baseline, and it has to be asked for.
 		writeFileSync(COVERAGE_BASELINE, `${JSON.stringify(coverage, null, '\t')}\n`);
 	} else {
 		const raised = { ...baseline };

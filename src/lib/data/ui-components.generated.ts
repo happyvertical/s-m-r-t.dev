@@ -996,10 +996,72 @@ export const uiComponents: UiComponentReference[] = [
 		summary: 'ActionBar is part of the assets · components component family.',
 		summarySynthesized: true,
 		slot: null,
-		details: [],
+		details: [
+			{
+				name: 'selectedAssets',
+				code: 'PersistedAsset[]',
+				status: true,
+				description: 'Currently selected assets'
+			},
+			{
+				name: 'customActions',
+				code: 'AssetAction[]',
+				status: false,
+				description: 'Custom actions from the consumer'
+			},
+			{
+				name: 'onClearSelection',
+				code: '() => void',
+				status: true,
+				description: 'Callback to clear selection'
+			},
+			{
+				name: 'onclearselection',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onDelete',
+				code: '(assets: PersistedAsset[]) => void | Promise<void>',
+				status: true,
+				description: 'Callback for delete action'
+			},
+			{
+				name: 'ondelete',
+				code: '(assets: PersistedAsset[]) => void | Promise<void>',
+				status: false,
+				description: ''
+			}
+		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onClearSelection',
+				code: '() => void',
+				status: true,
+				description: 'Callback to clear selection'
+			},
+			{
+				name: 'onclearselection',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onDelete',
+				code: '(assets: PersistedAsset[]) => void | Promise<void>',
+				status: true,
+				description: 'Callback for delete action'
+			},
+			{
+				name: 'ondelete',
+				code: '(assets: PersistedAsset[]) => void | Promise<void>',
+				status: false,
+				description: ''
+			}
+		],
 		components: [],
 		demo: null,
 		related: {
@@ -1164,10 +1226,73 @@ export const uiComponents: UiComponentReference[] = [
 			icon: 'grid',
 			category: 'list'
 		},
-		details: [],
+		details: [
+			{
+				name: 'assets',
+				code: 'PersistedAsset[]',
+				status: true,
+				description: 'Assets to display'
+			},
+			{
+				name: 'selectedIds',
+				code: 'Set<string>',
+				status: true,
+				description: 'Currently selected asset IDs'
+			},
+			{
+				name: 'onSelectionChange',
+				code: '(ids: Set<string>) => void',
+				status: true,
+				description: 'Callback when selection changes'
+			},
+			{
+				name: 'onAssetClick',
+				code: '(asset: PersistedAsset) => void',
+				status: true,
+				description: 'Callback when an asset is clicked for detail view'
+			},
+			{
+				name: 'onAssetDblClick',
+				code: '(asset: PersistedAsset) => void',
+				status: false,
+				description: 'Callback when an asset is double-clicked'
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Whether the grid is loading'
+			},
+			{
+				name: 'mode',
+				code: 'AssetManagerMode',
+				status: false,
+				description:
+					'Operating mode — drives the per-card action label ("Open" in manage mode, "Select" in pick mode, where a card click toggles selection).'
+			}
+		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onSelectionChange',
+				code: '(ids: Set<string>) => void',
+				status: true,
+				description: 'Callback when selection changes'
+			},
+			{
+				name: 'onAssetClick',
+				code: '(asset: PersistedAsset) => void',
+				status: true,
+				description: 'Callback when an asset is clicked for detail view'
+			},
+			{
+				name: 'onAssetDblClick',
+				code: '(asset: PersistedAsset) => void',
+				status: false,
+				description: 'Callback when an asset is double-clicked'
+			}
+		],
 		components: [],
 		demo: null,
 		related: {
@@ -1190,10 +1315,72 @@ export const uiComponents: UiComponentReference[] = [
 			icon: 'list',
 			category: 'list'
 		},
-		details: [],
+		details: [
+			{
+				name: 'assets',
+				code: 'PersistedAsset[]',
+				status: true,
+				description: 'Assets to display'
+			},
+			{
+				name: 'selectedIds',
+				code: 'Set<string>',
+				status: true,
+				description: 'Currently selected asset IDs'
+			},
+			{
+				name: 'sort',
+				code: 'AssetSort',
+				status: true,
+				description: 'Current sort state'
+			},
+			{
+				name: 'onSelectionChange',
+				code: '(ids: Set<string>) => void',
+				status: true,
+				description: 'Callback when selection changes'
+			},
+			{
+				name: 'onAssetClick',
+				code: '(asset: PersistedAsset) => void',
+				status: true,
+				description: 'Callback when an asset is clicked for detail view'
+			},
+			{
+				name: 'onSortChange',
+				code: '(sort: AssetSort) => void',
+				status: true,
+				description: 'Callback when sort changes'
+			},
+			{
+				name: 'loading',
+				code: 'boolean',
+				status: false,
+				description: 'Whether the list is loading'
+			}
+		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onSelectionChange',
+				code: '(ids: Set<string>) => void',
+				status: true,
+				description: 'Callback when selection changes'
+			},
+			{
+				name: 'onAssetClick',
+				code: '(asset: PersistedAsset) => void',
+				status: true,
+				description: 'Callback when an asset is clicked for detail view'
+			},
+			{
+				name: 'onSortChange',
+				code: '(sort: AssetSort) => void',
+				status: true,
+				description: 'Callback when sort changes'
+			}
+		],
 		components: [],
 		demo: null,
 		related: {
@@ -1217,10 +1404,151 @@ export const uiComponents: UiComponentReference[] = [
 			icon: 'folder-image',
 			category: 'admin'
 		},
-		details: [],
+		details: [
+			{
+				name: 'tenantId',
+				code: 'string',
+				status: false,
+				description: 'Tenant ID to scope assets to'
+			},
+			{
+				name: 'dbFilters',
+				code: 'AssetDbFilters',
+				status: false,
+				description: 'Arbitrary database-level query filters forwarded to AssetCollection'
+			},
+			{
+				name: 'mode',
+				code: 'AssetManagerMode',
+				status: false,
+				description: 'Operating mode'
+			},
+			{
+				name: 'accept',
+				code: 'string',
+				status: false,
+				description: "MIME type filter (e.g., 'image/*' to only show images)"
+			},
+			{
+				name: 'customActions',
+				code: 'AssetAction[]',
+				status: false,
+				description: 'Custom actions added to the action bar'
+			},
+			{
+				name: 'uploader',
+				code: 'Snippet<[AssetManagerUploaderProps]>',
+				status: false,
+				description:
+					'Optional custom uploader snippet (e.g., to inject ImageUploader from smrt-images)'
+			},
+			{
+				name: 'onSelect',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: 'Callback when assets are selected (useful in pick mode)'
+			},
+			{
+				name: 'onselect',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onConfirm',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: 'Callback when an asset is double-clicked or "confirmed" in pick mode'
+			},
+			{
+				name: 'onconfirm',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'initialView',
+				code: 'AssetViewMode',
+				status: false,
+				description: 'Initial view mode'
+			},
+			{
+				name: 'showFolders',
+				code: 'boolean',
+				status: false,
+				description: 'Whether to show folder navigation'
+			},
+			{
+				name: 'onSave',
+				code: '(asset: PersistedAsset, updates: Record<string, unknown>) => void | Promise<void>',
+				status: false,
+				description:
+					'Persist an asset edit from the detail drawer. Consumer-supplied — when omitted, edits apply to local state only (preview/demo). Awaited; a rejection surfaces an error and skips the local update.'
+			},
+			{
+				name: 'onCreate',
+				code: '(data: AssetCreateData) => void | Promise<void>',
+				status: false,
+				description:
+					'Persist a newly created asset. Consumer-supplied; awaited. A rejection propagates to the create modal, which surfaces it and keeps the form.'
+			},
+			{
+				name: 'onDelete',
+				code: '(assets: PersistedAsset[]) => void | Promise<void>',
+				status: false,
+				description:
+					'Persist asset deletion. Consumer-supplied — when omitted, deletion applies to local state only. Awaited; a rejection surfaces an error and skips the local removal.'
+			}
+		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onSelect',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: 'Callback when assets are selected (useful in pick mode)'
+			},
+			{
+				name: 'onselect',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onConfirm',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: 'Callback when an asset is double-clicked or "confirmed" in pick mode'
+			},
+			{
+				name: 'onconfirm',
+				code: '(assets: PersistedAsset[]) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(asset: PersistedAsset, updates: Record<string, unknown>) => void | Promise<void>',
+				status: false,
+				description:
+					'Persist an asset edit from the detail drawer. Consumer-supplied — when omitted, edits apply to local state only (preview/demo). Awaited; a rejection surfaces an error and skips the local update.'
+			},
+			{
+				name: 'onCreate',
+				code: '(data: AssetCreateData) => void | Promise<void>',
+				status: false,
+				description:
+					'Persist a newly created asset. Consumer-supplied; awaited. A rejection propagates to the create modal, which surfaces it and keeps the form.'
+			},
+			{
+				name: 'onDelete',
+				code: '(assets: PersistedAsset[]) => void | Promise<void>',
+				status: false,
+				description:
+					'Persist asset deletion. Consumer-supplied — when omitted, deletion applies to local state only. Awaited; a rejection surfaces an error and skips the local removal.'
+			}
+		],
 		components: [],
 		demo: null,
 		related: {
@@ -1243,10 +1571,126 @@ export const uiComponents: UiComponentReference[] = [
 			icon: 'sliders',
 			category: 'action'
 		},
-		details: [],
+		details: [
+			{
+				name: 'view',
+				code: 'AssetViewMode',
+				status: true,
+				description: 'Current view mode'
+			},
+			{
+				name: 'filters',
+				code: 'AssetFilters',
+				status: true,
+				description: 'Current filters'
+			},
+			{
+				name: 'sort',
+				code: 'AssetSort',
+				status: true,
+				description: 'Current sort'
+			},
+			{
+				name: 'onViewChange',
+				code: '(view: AssetViewMode) => void',
+				status: true,
+				description: 'Callback when view changes'
+			},
+			{
+				name: 'onviewchange',
+				code: '(view: AssetViewMode) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onFilterChange',
+				code: '(filters: AssetFilters) => void',
+				status: true,
+				description: 'Callback when filters change'
+			},
+			{
+				name: 'onfilterchange',
+				code: '(filters: AssetFilters) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSortChange',
+				code: '(sort: AssetSort) => void',
+				status: true,
+				description: 'Callback when sort changes'
+			},
+			{
+				name: 'onsortchange',
+				code: '(sort: AssetSort) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onUpload',
+				code: '() => void',
+				status: true,
+				description: 'Callback when upload is requested'
+			},
+			{
+				name: 'onupload',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onViewChange',
+				code: '(view: AssetViewMode) => void',
+				status: true,
+				description: 'Callback when view changes'
+			},
+			{
+				name: 'onviewchange',
+				code: '(view: AssetViewMode) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onFilterChange',
+				code: '(filters: AssetFilters) => void',
+				status: true,
+				description: 'Callback when filters change'
+			},
+			{
+				name: 'onfilterchange',
+				code: '(filters: AssetFilters) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSortChange',
+				code: '(sort: AssetSort) => void',
+				status: true,
+				description: 'Callback when sort changes'
+			},
+			{
+				name: 'onsortchange',
+				code: '(sort: AssetSort) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onUpload',
+				code: '() => void',
+				status: true,
+				description: 'Callback when upload is requested'
+			},
+			{
+				name: 'onupload',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
 		components: [],
 		demo: null,
 		related: {
@@ -5934,8 +6378,20 @@ export const uiComponents: UiComponentReference[] = [
 		slot: null,
 		details: [
 			{
-				name: 'page',
-				code: 'FieldPolicySettingsCatalogPage',
+				name: 'data',
+				code: 'FieldPolicySettingsCatalogData',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'adapter',
+				code: 'FieldPolicyControlPanelAdapter',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'catalog',
+				code: 'Component<FieldPolicyCatalogComponentProps>',
 				status: true,
 				description: ''
 			},
@@ -5946,27 +6402,46 @@ export const uiComponents: UiComponentReference[] = [
 				description: ''
 			},
 			{
-				name: 'detail',
-				code: 'Snippet<[{ item: FieldPolicyDetailItem; }]>',
-				status: true,
-				description: ''
-			},
-			{
-				name: 'preservedParams',
-				code: 'Record<string, string>',
+				name: 'permissions',
+				code: 'readonly string[]',
 				status: false,
 				description: ''
 			},
 			{
-				name: 'searchPlaceholder',
+				name: 'heading',
 				code: 'string',
 				status: false,
 				description: ''
+			},
+			{
+				name: 'onchanged',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'confirmAction',
+				code: '(message: string) => boolean | Promise<boolean>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'suggestionAdapter',
+				code: 'FieldPolicySuggestionAdapter',
+				status: false,
+				description: 'Optional reviewed-suggestion queue transport.'
 			}
 		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onchanged',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
 		components: [''],
 		demo: null,
 		related: {
@@ -6061,7 +6536,20 @@ export const uiComponents: UiComponentReference[] = [
 		summary: 'FieldPolicyGearButton is part of the fields · components component family.',
 		summarySynthesized: true,
 		slot: null,
-		details: [],
+		details: [
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
 		sources: [],
 		sections: [],
 		items: [],
@@ -6573,10 +7061,42 @@ export const uiComponents: UiComponentReference[] = [
 			icon: 'images',
 			category: 'list'
 		},
-		details: [],
+		details: [
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'client',
+				code: 'ImagesGalleryClient',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSelect',
+				code: '(image: ImageLike) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'enableDragToEditor',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onSelect',
+				code: '(image: ImageLike) => void',
+				status: false,
+				description: ''
+			}
+		],
 		components: [],
 		demo: null,
 		related: {
@@ -6599,10 +7119,54 @@ export const uiComponents: UiComponentReference[] = [
 			icon: 'image',
 			category: 'form'
 		},
-		details: [],
+		details: [
+			{
+				name: 'image',
+				code: 'ImageLike | null',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'client',
+				code: 'ImageEditorClient',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSave',
+				code: '(image: ImageLike) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onSave',
+				code: '(image: ImageLike) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
 		components: [],
 		demo: null,
 		related: {
@@ -6625,10 +7189,66 @@ export const uiComponents: UiComponentReference[] = [
 			icon: 'upload',
 			category: 'form'
 		},
-		details: [],
+		details: [
+			{
+				name: 'apiBaseUrl',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'editorClient',
+				code: 'ImageEditorClient',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'galleryClient',
+				code: 'ImagesGalleryClient',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onSelect',
+				code: '(image: ImageLike | File | string) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'allowedTabs',
+				code: "('gallery' | 'upload' | 'camera' | 'external')[]",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'enableDragToEditor',
+				code: 'boolean',
+				status: false,
+				description: ''
+			}
+		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onSelect',
+				code: '(image: ImageLike | File | string) => void',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onCancel',
+				code: '() => void',
+				status: false,
+				description: ''
+			}
+		],
 		components: [],
 		demo: null,
 		related: {
@@ -9366,7 +9986,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-projects-svelte',
 		category: 'Projects · Components',
 		importPath: '@happyvertical/smrt-projects/svelte',
-		summary: 'Provider-backed project status board',
+		summary: 'A controlled project board is movable only with an authoritative refresh.',
 		summarySynthesized: false,
 		slot: {
 			id: 'project-board',
@@ -9404,6 +10024,19 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'string',
 				status: false,
 				description: ''
+			},
+			{
+				name: 'onmove',
+				code: '(intent: ProjectBoardMoveIntent) => void | Promise<void>',
+				status: false,
+				description:
+					'Browser-safe mutation boundary. Its consumer attaches authorization in a server action before it calls ProjectBoardService.'
+			},
+			{
+				name: 'onrefresh',
+				code: '() => void | Promise<void>',
+				status: false,
+				description: 'Required reconciliation of controlled cards after every move attempt.'
 			}
 		],
 		sources: [],
@@ -9414,6 +10047,19 @@ export const uiComponents: UiComponentReference[] = [
 				code: '(item: ProjectItem) => void',
 				status: false,
 				description: ''
+			},
+			{
+				name: 'onmove',
+				code: '(intent: ProjectBoardMoveIntent) => void | Promise<void>',
+				status: false,
+				description:
+					'Browser-safe mutation boundary. Its consumer attaches authorization in a server action before it calls ProjectBoardService.'
+			},
+			{
+				name: 'onrefresh',
+				code: '() => void | Promise<void>',
+				status: false,
+				description: 'Required reconciliation of controlled cards after every move attempt.'
 			}
 		],
 		components: [],
@@ -9829,10 +10475,112 @@ export const uiComponents: UiComponentReference[] = [
 		summary: 'Board is part of the svelte · board component family.',
 		summarySynthesized: true,
 		slot: null,
-		details: [],
+		details: [
+			{
+				name: 'columns',
+				code: 'readonly Column[]',
+				status: true,
+				description: 'Ordered lanes. The Board does not impose statuses or workflow names.'
+			},
+			{
+				name: 'cards',
+				code: 'readonly Card[]',
+				status: false,
+				description: 'Authoritative controlled cards. Omit to use `defaultCards`.'
+			},
+			{
+				name: 'defaultCards',
+				code: 'readonly Card[]',
+				status: false,
+				description: 'Initial cards for an uncontrolled Board.'
+			},
+			{
+				name: 'getCardColumnId',
+				code: '(card: Card) => string',
+				status: true,
+				description: 'Resolves the lane containing a card.'
+			},
+			{
+				name: 'setCardColumnId',
+				code: '(card: Card, columnId: string) => Card',
+				status: true,
+				description: 'Returns a copy of a card assigned to `columnId`; keeps Board domain-free.'
+			},
+			{
+				name: 'getCardLabel',
+				code: '(card: Card) => string',
+				status: true,
+				description: 'Accessible text announced while a card is moved.'
+			},
+			{
+				name: 'card',
+				code: 'Snippet<[BoardCardSnippetProps<Card, Column>]>',
+				status: true,
+				description: 'Required visual content for each card.'
+			},
+			{
+				name: 'columnHeader',
+				code: 'Snippet<[BoardColumnHeaderSnippetProps<Column>]>',
+				status: false,
+				description: 'Optional lane-header content, rendered beside the built-in count.'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Accessible name for the board.'
+			},
+			{
+				name: 'collapsible',
+				code: 'boolean',
+				status: false,
+				description: 'Makes lane headers collapse their card lists.'
+			},
+			{
+				name: 'allowSameColumnReorder',
+				code: 'boolean',
+				status: false,
+				description:
+					'Whether cards may be repositioned within their current lane. Defaults to `true`; set `false` for adapters whose persistence layer only supports column/status transitions.'
+			},
+			{
+				name: 'optimistic',
+				code: 'boolean',
+				status: false,
+				description:
+					'In controlled mode, retain the locally reordered presentation until the owner supplies a new `cards` array. The owner remains authoritative.'
+			},
+			{
+				name: 'onselect',
+				code: '(card: Card) => void',
+				status: false,
+				description: 'Called when a card is activated without starting a move.'
+			},
+			{
+				name: 'onmove',
+				code: '(intent: BoardMoveIntent<Card, Column>) => void | Promise<void>',
+				status: false,
+				description:
+					'Receives a typed move intent. It may persist asynchronously; a rejection restores the existing presentation and is announced to assistive tech.'
+			}
+		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onselect',
+				code: '(card: Card) => void',
+				status: false,
+				description: 'Called when a card is activated without starting a move.'
+			},
+			{
+				name: 'onmove',
+				code: '(intent: BoardMoveIntent<Card, Column>) => void | Promise<void>',
+				status: false,
+				description:
+					'Receives a typed move intent. It may persist asynchronously; a rejection restores the existing presentation and is announced to assistive tech.'
+			}
+		],
 		components: [''],
 		demo: null,
 		related: {
@@ -19461,8 +20209,8 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 784,
-	totalProps: 1691,
+	describedProps: 839,
+	totalProps: 1775,
 	authoredSummaries: 110,
 	totalComponents: 285
 };

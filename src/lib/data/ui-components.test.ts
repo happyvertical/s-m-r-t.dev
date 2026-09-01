@@ -95,6 +95,32 @@ describe('generated UI component reference', () => {
 		expect(avatar?.items.some((event) => event.name === 'onlineStatus')).toBe(false);
 	});
 
+	it('resolves props declared outside the component file', () => {
+		// ActionBar's props live in a sibling types module; guessing a local
+		// interface published it, and ten others, with an empty contract.
+		const actionBar = getUiComponent('action-bar');
+		expect(actionBar?.details.map((prop) => prop.name)).toEqual(
+			expect.arrayContaining(['selectedAssets', 'customActions'])
+		);
+
+		// A component may legitimately declare none, and that is the only one.
+		const empty = uiComponents.filter((component) => component.details.length === 0);
+		expect(empty.map((component) => component.slug)).toEqual(['shell-settings-panel']);
+	});
+
+	it('keeps every branch of a union props type', () => {
+		// ProjectBoard is `Base & (ReadOnly | Movable)`. Reading only the first
+		// branch dropped the two callbacks that make the board writable.
+		const board = getUiComponent('project-board');
+		const names = board?.details.map((prop) => prop.name) ?? [];
+		expect(names).toEqual(expect.arrayContaining(['onmove', 'onrefresh', 'projectId']));
+
+		// Conditionally present, so neither may be advertised as required.
+		for (const name of ['onmove', 'onrefresh']) {
+			expect(board?.details.find((prop) => prop.name === name)?.status).toBe(false);
+		}
+	});
+
 	it('puts DataTable under Components with its complete public contract', () => {
 		const table = getUiComponent('data-table');
 		expect(table).toMatchObject({
