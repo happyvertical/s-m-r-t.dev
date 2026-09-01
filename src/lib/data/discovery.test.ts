@@ -8,22 +8,23 @@ const llms = readFileSync('static/llms.txt', 'utf8');
 
 describe('Why s-m-r-t discovery surfaces', () => {
 	it('uses the canonical homepage in navigation, search, and the sitemap', async () => {
-		const why = docsNavigation
-			.flatMap((group) => group.items)
-			.filter((item) => item.label === 'Why s-m-r-t?');
+		const why = docsNavigation.flatMap((group) => group.items).filter((item) => item.href === '/');
 
 		expect(why).toHaveLength(1);
-		expect(why[0]?.href).toBe('/');
-		expect(searchDocs('why s-m-r-t')[0]).toMatchObject({
-			label: 'Why s-m-r-t?',
+		expect(why[0]?.label).toBe('Home');
+		expect(why[0]?.keywords).toEqual(
+			expect.arrayContaining(['SAADL', 'Software as Agentic Domain Logic'])
+		);
+		expect(searchDocs('home')[0]).toMatchObject({
+			label: 'Home',
 			href: '/',
 			kind: 'page'
 		});
-		expect(searchDocs('why smrt')[0]).toMatchObject({
-			label: 'Why s-m-r-t?',
-			href: '/',
-			kind: 'page'
-		});
+		// The visible nav label moved from "Why s-m-r-t?" to "Home", but the old
+		// queries stay discoverable via keywords so a returning visitor's habit
+		// still works.
+		expect(searchDocs('why s-m-r-t')[0]).toMatchObject({ label: 'Home', href: '/' });
+		expect(searchDocs('why smrt')[0]).toMatchObject({ label: 'Home', href: '/' });
 
 		const sitemapXml = await (await sitemap({} as never)).text();
 		expect(sitemapXml).toContain('<loc>https://s-m-r-t.dev</loc>');

@@ -155,17 +155,23 @@ const indexed = searchEntries.map((entry) => ({
  *
  * A title hit always beats a body hit, so typing a heading verbatim surfaces
  * that heading rather than every page that mentions it in passing.
+ *
+ * A keyword that exactly equals the whole query is treated the same way: it
+ * is how a former title (or a spelling variant) keeps resolving a page after
+ * a rename, without the loose per-word keyword match below letting an
+ * unrelated page that merely mentions one of those words outrank it.
  */
 function rank(candidate: (typeof indexed)[number], query: string, tokens: string[]): number | null {
 	if (!tokens.every((token) => candidate.haystack.includes(token))) return null;
 
 	if (candidate.normalizedLabel === query) return 0;
-	if (candidate.normalizedLabel.startsWith(query)) return 1;
-	if (candidate.normalizedLabel.includes(query)) return 2;
-	if (tokens.every((token) => candidate.normalizedLabel.includes(token))) return 3;
-	if ((candidate.entry.breadcrumb ?? '').toLowerCase().includes(query)) return 4;
-	if ((candidate.entry.description ?? '').toLowerCase().includes(query)) return 5;
-	return 6;
+	if ((candidate.entry.keywords ?? []).some((keyword) => keyword.toLowerCase() === query)) return 1;
+	if (candidate.normalizedLabel.startsWith(query)) return 2;
+	if (candidate.normalizedLabel.includes(query)) return 3;
+	if (tokens.every((token) => candidate.normalizedLabel.includes(token))) return 4;
+	if ((candidate.entry.breadcrumb ?? '').toLowerCase().includes(query)) return 5;
+	if ((candidate.entry.description ?? '').toLowerCase().includes(query)) return 6;
+	return 7;
 }
 
 export function searchDocs(query: string, limit = 12): SearchEntry[] {

@@ -4,7 +4,7 @@
 
 ## Canonical technical documentation
 
-- https://s-m-r-t.dev/ — Why s-m-r-t and the framework overview
+- https://s-m-r-t.dev/ — the s-m-r-t application stack: its five layers, the package scope map, and a source-linked evidence table
 - https://s-m-r-t.dev/reference/saadl — Software as Agentic Domain Logic and human/agent parity
 - https://s-m-r-t.dev/capabilities/agent-legible-applications — manifests, control descriptions, MCP/WebMCP schemas, and bounded runtime awareness
 - https://s-m-r-t.dev/capabilities/agent-assisted-forms — stable control identities, validation, staged changes, and confirmation
