@@ -529,8 +529,8 @@ export function isNavigationGroupActive(
 /**
  * Complete page registration for search and the linear reading track.
  *
- * The shell does not render this list. Its application panel renders only the
- * groups for the active section from `documentationSections`.
+ * `docs-panel.ts` also joins this list with `documentationSections` to
+ * derive the application panel's whole-site section map.
  */
 export const docsNavigation: NavigationGroup[] = [
 	{

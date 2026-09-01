@@ -4,7 +4,7 @@
 	import { AdminShell } from '@happyvertical/smrt-svelte/workspace';
 	import { onMount } from 'svelte';
 	import AppTheme from '$lib/components/AppTheme.svelte';
-	import ContextualNavigation from '$lib/components/ContextualNavigation.svelte';
+	import DocsPanelSections from '$lib/components/DocsPanelSections.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import { createShellScrollMemory } from '$lib/scroll';
@@ -78,7 +78,7 @@
 		{/snippet}
 
 		{#snippet appPanel()}
-			<ContextualNavigation {pathname} {hash} />
+			<DocsPanelSections {pathname} {hash} />
 		{/snippet}
 
 		<div class="site-content">
