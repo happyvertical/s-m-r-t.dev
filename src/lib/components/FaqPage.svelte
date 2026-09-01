@@ -104,6 +104,10 @@
 					q: 'Is this site itself built with s-m-r-t?',
 					a: 'Yes. s-m-r-t.dev runs on the same released @happyvertical/smrt-* packages it documents — the component playground, the agent-aware form demo, and the data table on this site are the actual packages, not mockups.',
 					link: { label: 'Component playground', href: '/playground' }
+				},
+				{
+					q: 'Why is it spelled s-m-r-t?',
+					a: "I can't help myself. As I was planning a framework for software that develops and runs itself, a certain scene from The Simpsons was prominently in mind."
 				}
 			]
 		}
