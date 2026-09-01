@@ -46,6 +46,11 @@
 			href: '/framework'
 		},
 		{
+			label: 'Agents',
+			body: 'Where agents connect, what they may do, and whose authority they carry.',
+			href: '/agents'
+		},
+		{
 			label: 'Interaction',
 			body: 'Natural language, shared control, proposals, confirmations, and refusals.',
 			href: '/interaction'

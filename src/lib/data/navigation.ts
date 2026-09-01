@@ -1,3 +1,4 @@
+import { agentsTopics } from '$lib/data/agents';
 import { capabilityGuides, foundationGuides } from '$lib/data/guides';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
@@ -17,7 +18,15 @@ export interface NavigationGroup {
 }
 
 export type DocumentationSectionId =
-	'why' | 'framework' | 'interaction' | 'ui' | 'modules' | 'tooling' | 'guides' | 'reference';
+	| 'why'
+	| 'framework'
+	| 'agents'
+	| 'interaction'
+	| 'ui'
+	| 'modules'
+	| 'tooling'
+	| 'guides'
+	| 'reference';
 
 export interface DocumentationSection {
 	id: DocumentationSectionId;
@@ -66,8 +75,7 @@ const referenceItems: NavigationItem[] = referenceGuides.map((guide) => ({
 const interactionCapabilitySlugs = new Set([
 	'agent-legible-applications',
 	'agent-assisted-forms',
-	'learning-agents',
-	'webmcp'
+	'learning-agents'
 ]);
 const uiCapabilitySlugs = new Set([
 	'application-shell',
@@ -75,17 +83,28 @@ const uiCapabilitySlugs = new Set([
 	'policy-aware-forms',
 	'field-policy-operations'
 ]);
+/**
+ * The WebMCP deep-dive lives under Agents, not Interaction: it is the
+ * protocol-level mechanics behind the tool surfaces `/agents` maps, not a
+ * moment-to-moment interaction concept. The URL is unchanged
+ * (`/capabilities/webmcp`) — only which primary section claims it moves.
+ */
+const agentsCapabilitySlugs = new Set(['webmcp']);
 
 const frameworkCapabilityItems = capabilityItems.filter(
 	(item) =>
 		!interactionCapabilitySlugs.has(item.href.split('/').at(-1) ?? '') &&
-		!uiCapabilitySlugs.has(item.href.split('/').at(-1) ?? '')
+		!uiCapabilitySlugs.has(item.href.split('/').at(-1) ?? '') &&
+		!agentsCapabilitySlugs.has(item.href.split('/').at(-1) ?? '')
 );
 const interactionCapabilityItems = capabilityItems.filter((item) =>
 	interactionCapabilitySlugs.has(item.href.split('/').at(-1) ?? '')
 );
 const uiCapabilityItems = capabilityItems.filter((item) =>
 	uiCapabilitySlugs.has(item.href.split('/').at(-1) ?? '')
+);
+const agentsCapabilityItems = capabilityItems.filter((item) =>
+	agentsCapabilitySlugs.has(item.href.split('/').at(-1) ?? '')
 );
 
 const itemByHref = (items: NavigationItem[], href: string): NavigationItem => {
@@ -126,6 +145,14 @@ const sectionOverviewItems = new Map<DocumentationSectionId, NavigationItem>([
 			label: 'Framework overview',
 			href: '/framework',
 			description: 'See how the application model connects framework mechanisms and interfaces.'
+		}
+	],
+	[
+		'agents',
+		{
+			label: 'Agents overview',
+			href: '/agents',
+			description: 'See where agents connect, what they may do, and whose authority they carry.'
 		}
 	],
 	[
@@ -250,6 +277,34 @@ export const documentationSections: DocumentationSection[] = [
 					{ label: 'Generated interfaces', href: '/reference/interfaces' },
 					{ label: 'Authorization model', href: '/reference/authorization' },
 					sectionOverviewItem('reference')
+				]
+			}
+		]
+	},
+	{
+		id: 'agents',
+		label: 'Agents',
+		title: 'Agents',
+		href: '/agents',
+		description: 'See where agents connect, what they may do, and whose authority they carry.',
+		groups: [
+			{
+				label: 'On this page',
+				items: agentsTopics.map((topic) => ({
+					label: topic.navTitle,
+					href: `/agents#${topic.slug}`
+				}))
+			},
+			{
+				label: 'Deep dives',
+				items: [...agentsCapabilityItems, { label: 'Application MCP', href: '/tooling/app-mcp' }]
+			},
+			{
+				label: 'Related reference',
+				items: [
+					{ label: 'Authorization model', href: '/reference/authorization' },
+					{ label: 'Security defaults', href: '/reference/security' },
+					{ label: 'Generated interfaces', href: '/reference/interfaces' }
 				]
 			}
 		]
@@ -387,6 +442,7 @@ export const documentationSections: DocumentationSection[] = [
 export const primaryNavigation: PrimaryNavigationItem[] = [
 	{ label: 'Home', href: '/', section: 'why' },
 	{ label: 'Framework', href: '/framework', section: 'framework' },
+	{ label: 'Agents', href: '/agents', section: 'agents' },
 	{ label: 'Interaction', href: '/interaction', section: 'interaction' },
 	{ label: 'UI', href: '/ui', section: 'ui' },
 	{ label: 'Modules', href: '/modules', section: 'modules' },
@@ -406,6 +462,7 @@ export function documentationSectionForPathname(pathname: string): Documentation
 	if (pathname === '/framework' || pathname.startsWith('/foundations')) {
 		return getDocumentationSection('framework');
 	}
+	if (pathname === '/agents') return getDocumentationSection('agents');
 	if (pathname === '/interaction') return getDocumentationSection('interaction');
 	if (pathname === '/ui' || pathname === '/themes' || pathname.startsWith('/packages/smrt-ui')) {
 		return getDocumentationSection('ui');
@@ -423,6 +480,7 @@ export function documentationSectionForPathname(pathname: string): Documentation
 	}
 	if (pathname === '/capabilities' || pathname.startsWith('/capabilities/')) {
 		const slug = pathname.split('/')[2] ?? '';
+		if (agentsCapabilitySlugs.has(slug)) return getDocumentationSection('agents');
 		if (interactionCapabilitySlugs.has(slug)) return getDocumentationSection('interaction');
 		if (uiCapabilitySlugs.has(slug)) return getDocumentationSection('ui');
 		return getDocumentationSection('framework');
@@ -489,6 +547,10 @@ export const docsNavigation: NavigationGroup[] = [
 			{ label: 'Capabilities overview', href: '/capabilities' },
 			...frameworkCapabilityItems
 		]
+	},
+	{
+		label: 'Agents',
+		items: [sectionOverviewItem('agents'), ...agentsCapabilityItems]
 	},
 	{
 		label: 'Interaction',

@@ -10,10 +10,11 @@ import {
 } from './navigation';
 
 describe('primary navigation', () => {
-	it('uses the approved eight destinations in order', () => {
+	it('uses the approved nine destinations in order', () => {
 		expect(primaryNavigation.map((item) => item.label)).toEqual([
 			'Home',
 			'Framework',
+			'Agents',
 			'Interaction',
 			'UI',
 			'Modules',
@@ -31,6 +32,8 @@ describe('primary navigation', () => {
 		expect(active('/foundations/objects-and-collections').map((item) => item.label)).toEqual([
 			'Framework'
 		]);
+		expect(active('/agents').map((item) => item.label)).toEqual(['Agents']);
+		expect(active('/capabilities/webmcp').map((item) => item.label)).toEqual(['Agents']);
 		expect(active('/capabilities/agent-assisted-forms').map((item) => item.label)).toEqual([
 			'Interaction'
 		]);
@@ -45,6 +48,8 @@ describe('contextual navigation', () => {
 	it('resolves every route family to one section', () => {
 		expect(documentationSectionForPathname('/').id).toBe('why');
 		expect(documentationSectionForPathname('/framework').id).toBe('framework');
+		expect(documentationSectionForPathname('/agents').id).toBe('agents');
+		expect(documentationSectionForPathname('/capabilities/webmcp').id).toBe('agents');
 		expect(documentationSectionForPathname('/interaction').id).toBe('interaction');
 		expect(documentationSectionForPathname('/ui').id).toBe('ui');
 		expect(documentationSectionForPathname('/modules').id).toBe('modules');

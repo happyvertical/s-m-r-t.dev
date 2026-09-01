@@ -12,7 +12,10 @@
  * automatically.
  */
 import { toAnchorId } from '$lib/data/anchors';
+import { agentsTopics } from '$lib/data/agents';
+import { frameworkTopics, type FrameworkTopic } from '$lib/data/framework';
 import { capabilityGuides, foundationGuides, type Guide } from '$lib/data/guides';
+import { interactionContent } from '$lib/data/interaction';
 import { docsNavigation, searchItems } from '$lib/data/navigation';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
@@ -76,6 +79,59 @@ const sectionEntries: SearchEntry[] = guideTracks.flatMap(({ base, label, guides
 	)
 );
 
+/**
+ * The single-route landing pages: `/framework`, `/interaction`, and `/agents`
+ * each render several topics on one page rather than one route per topic, so
+ * — unlike `guideTracks`, where every guide already has its own page entry —
+ * neither the topics nor their subsections get a palette entry unless this
+ * track builds one. Framework's 22 topics and Interaction's 5 concepts had
+ * none before this track existed.
+ */
+const landingTracks: {
+	base: string;
+	label: string;
+	topics: readonly (FrameworkTopic | Guide)[];
+}[] = [
+	{ base: '/framework', label: 'Framework', topics: frameworkTopics },
+	{ base: '/interaction', label: 'Interaction', topics: interactionContent.guides },
+	{ base: '/agents', label: 'Agents', topics: agentsTopics }
+];
+
+/**
+ * `FrameworkTopic` and `Guide` differ only in their body field —
+ * `content: GuideSection[]` for `FrameworkTopic`, `sections: GuideSection[]`
+ * for `Guide` — so this narrows on `content` to read subsections generically.
+ * `FrameworkTopic.svelte` writes a real anchor id per content item
+ * (`id={slug}-${toAnchorId(item.title)}`); `Guide`-shaped tracks (Interaction)
+ * render their inner headings without ids, so they get topic-level entries
+ * only — honest rather than a deep link the page cannot honor.
+ */
+const landingEntries: SearchEntry[] = landingTracks.flatMap(({ base, label, topics }) =>
+	topics.flatMap((topic) => {
+		const topicEntry: SearchEntry = {
+			label: topic.navTitle ?? topic.title,
+			href: `${base}#${topic.slug}`,
+			breadcrumb: label,
+			description: 'summary' in topic ? topic.summary : topic.lede,
+			keywords: topic.packages,
+			kind: 'section'
+		};
+
+		if (!('content' in topic)) return [topicEntry];
+
+		const subsectionEntries: SearchEntry[] = topic.content.map((item) => ({
+			label: item.title,
+			href: `${base}#${topic.slug}-${toAnchorId(item.title)}`,
+			breadcrumb: `${label} · ${topic.navTitle ?? topic.title}`,
+			description: item.intro,
+			keywords: [...topic.packages, ...(item.points ?? [])],
+			kind: 'section' as const
+		}));
+
+		return [topicEntry, ...subsectionEntries];
+	})
+);
+
 const packageEntries: SearchEntry[] = packages.flatMap((pkg) => {
 	const componentsHref = `/packages/${pkg.slug}?tab=components`;
 	const entries: SearchEntry[] = [];
@@ -131,6 +187,7 @@ function dedupe(entries: SearchEntry[]): SearchEntry[] {
 export const searchEntries: SearchEntry[] = dedupe([
 	...pageEntries,
 	...sectionEntries,
+	...landingEntries,
 	...packageEntries
 ]);
 
