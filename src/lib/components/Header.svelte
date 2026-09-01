@@ -173,7 +173,70 @@
 		width: 30px;
 		height: 30px;
 		object-fit: contain;
+		/* Static ember glow: the resting state, and the reduced-motion fallback. */
+		filter: drop-shadow(0 0 2px rgba(255, 211, 61, 0.28))
+			drop-shadow(0 0 5px rgba(240, 91, 43, 0.3)) drop-shadow(0 1px 8px rgba(201, 56, 30, 0.22));
 	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.brand img {
+			animation: brand-ember 3.6s ease-in-out infinite;
+		}
+	}
+
+	/*
+	 * Ember flicker for the brand mark. Three drop-shadow layers in the mark's
+	 * own palette — yellow core (#ffd33d), orange body (#f05b2b), deep-red
+	 * falloff (#c9381e) — drift through irregular keyframe stops so each layer
+	 * peaks out of phase. Radii stay under 10px and opacities under 0.4 to keep
+	 * it at "ember" volume; the 0% and 100% frames match the static filter above
+	 * so the loop has no seam and reduced-motion users see the same resting glow.
+	 */
+	@keyframes brand-ember {
+		0%,
+		100% {
+			filter: drop-shadow(0 0 2px rgba(255, 211, 61, 0.28))
+				drop-shadow(0 0 5px rgba(240, 91, 43, 0.3)) drop-shadow(0 1px 8px rgba(201, 56, 30, 0.22));
+		}
+		26% {
+			filter: drop-shadow(0 0 3px rgba(255, 211, 61, 0.34))
+				drop-shadow(0 0 6px rgba(240, 91, 43, 0.24)) drop-shadow(0 1px 9px rgba(201, 56, 30, 0.26));
+		}
+		43% {
+			filter: drop-shadow(0 0 2px rgba(255, 211, 61, 0.22))
+				drop-shadow(0 0 4px rgba(240, 91, 43, 0.34)) drop-shadow(0 1px 7px rgba(201, 56, 30, 0.18));
+		}
+		62% {
+			filter: drop-shadow(0 0 3px rgba(255, 211, 61, 0.38))
+				drop-shadow(0 0 7px rgba(240, 91, 43, 0.28)) drop-shadow(0 2px 9px rgba(201, 56, 30, 0.3));
+		}
+		81% {
+			filter: drop-shadow(0 0 2px rgba(255, 211, 61, 0.25))
+				drop-shadow(0 0 5px rgba(240, 91, 43, 0.22)) drop-shadow(0 1px 7px rgba(201, 56, 30, 0.2));
+		}
+	}
+
+	/*
+	 * VARIANT B — steady warm breathe. A genuinely different direction: no
+	 * flicker, just one slow inhale/exhale of the same palette, for tastes that
+	 * find any flicker too busy in a persistent header. To try it, replace
+	 * `brand-ember 3.6s` with `brand-breathe 5.5s` in the animation shorthand
+	 * above and uncomment this keyframes block.
+	 *
+	 * @keyframes brand-breathe {
+	 * 	0%,
+	 * 	100% {
+	 * 		filter: drop-shadow(0 0 2px rgba(255, 211, 61, 0.24))
+	 * 			drop-shadow(0 0 4px rgba(240, 91, 43, 0.26))
+	 * 			drop-shadow(0 1px 7px rgba(201, 56, 30, 0.18));
+	 * 	}
+	 * 	50% {
+	 * 		filter: drop-shadow(0 0 3px rgba(255, 211, 61, 0.34))
+	 * 			drop-shadow(0 0 6px rgba(240, 91, 43, 0.32))
+	 * 			drop-shadow(0 1px 9px rgba(201, 56, 30, 0.26));
+	 * 	}
+	 * }
+	 */
 
 	.brand span {
 		font-family: var(--site-font-mono);

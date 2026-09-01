@@ -109,7 +109,7 @@
 
 <style>
 	.tooling-index {
-		width: min(940px, calc(100% - 48px));
+		width: min(70rem, calc(100% - 3rem));
 		margin: 0 auto;
 		padding: 54px 0 86px;
 	}
@@ -257,7 +257,7 @@
 	}
 	@media (max-width: 700px) {
 		.tooling-index {
-			width: min(100% - 28px, 940px);
+			width: min(100% - 1.75rem, 70rem);
 			padding-top: 36px;
 		}
 		.audience-grid {

@@ -17,7 +17,19 @@
     fill="url(#heat)"
     d="M64 45c-2 15-14 22-13 38-5-4-8-9-9-15-7 10-8 20-4 30 5 12 14 20 26 23 13-3 23-12 27-25 3-11 0-20-8-29 0 7-2 12-6 16 1-16-5-27-13-38Z"
   />
-  <g fill="none" stroke="#0d100d" stroke-linecap="round" stroke-linejoin="round">
+  <!--
+    The glasses render as two stacked stroke groups: a pale warm casing under
+    a dark warm-charcoal stroke. The casing keeps the dark strokes legible
+    where they leave the flame body (temple tips, lower rims) on dark
+    backgrounds, and reads as a rim light against the flame on light ones.
+  -->
+  <g fill="none" stroke="#ffe3ae" stroke-opacity="0.85" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke-width="14" d="M7 63c12-4 27-5 43-1M78 62c16-4 31-3 43 1"/>
+    <rect x="12" y="58" width="46" height="35" rx="13" stroke-width="14"/>
+    <rect x="70" y="58" width="46" height="35" rx="13" stroke-width="14"/>
+    <path stroke-width="13" d="M57 66c5-4 9-4 14 0"/>
+  </g>
+  <g fill="none" stroke="#33221b" stroke-linecap="round" stroke-linejoin="round">
     <path stroke-width="8" d="M7 63c12-4 27-5 43-1M78 62c16-4 31-3 43 1"/>
     <rect x="12" y="58" width="46" height="35" rx="13" stroke-width="8"/>
     <rect x="70" y="58" width="46" height="35" rx="13" stroke-width="8"/>
