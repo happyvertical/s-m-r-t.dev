@@ -77,6 +77,24 @@ describe('generated UI component reference', () => {
 		);
 	});
 
+	it('lists a callback event whose type is a named alias', () => {
+		// ObjectForm.onsubmit is typed ObjectFormSubmitHandler, not an inline
+		// arrow, and was omitted from the events contract while still counted as
+		// a prop — so the page reported the wrong number of callback events.
+		const form = getUiComponent('object-form');
+		expect(form?.items.map((event) => event.name)).toContain('onsubmit');
+
+		const editor = getUiComponent('content-editor');
+		expect(editor?.items.map((event) => event.name)).toContain('onAssistantContextChange');
+	});
+
+	it('does not mistake a non-callable prop for an event', () => {
+		// `onlineStatus` is a string union that merely starts with "on".
+		const avatar = getUiComponent('chat-avatar');
+		expect(avatar?.details.some((prop) => prop.name === 'onlineStatus')).toBe(true);
+		expect(avatar?.items.some((event) => event.name === 'onlineStatus')).toBe(false);
+	});
+
 	it('puts DataTable under Components with its complete public contract', () => {
 		const table = getUiComponent('data-table');
 		expect(table).toMatchObject({

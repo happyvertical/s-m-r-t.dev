@@ -4286,6 +4286,12 @@ export const uiComponents: UiComponentReference[] = [
 		sections: [],
 		items: [
 			{
+				name: 'onAssistantContextChange',
+				code: 'ContentEditorAssistantContextChange',
+				status: false,
+				description: ''
+			},
+			{
 				name: 'onChange',
 				code: '(data: ContentEditorSnapshot) => void',
 				status: false,
@@ -5727,6 +5733,12 @@ export const uiComponents: UiComponentReference[] = [
 		sections: [],
 		items: [
 			{
+				name: 'onAssistantContextChange',
+				code: 'ContentEditorAssistantContextChange',
+				status: false,
+				description: ''
+			},
+			{
 				name: 'onSave',
 				code: '(data: GovernedContentEditorSaveData) => void',
 				status: true,
@@ -6408,7 +6420,14 @@ export const uiComponents: UiComponentReference[] = [
 				description: 'Mutable create/edit record. Bind this prop to retain values in the host.'
 			}
 		],
-		items: [],
+		items: [
+			{
+				name: 'onsubmit',
+				code: 'ObjectFormSubmitHandler',
+				status: false,
+				description: 'Return true only after the host has persisted this record successfully.'
+			}
+		],
 		components: ['value'],
 		demo: null,
 		related: {

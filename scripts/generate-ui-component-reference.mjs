@@ -420,6 +420,48 @@ function collectProps(file, name, seen = new Set()) {
 	};
 }
 
+/**
+ * Whether a prop's declared type is callable, following one level of named
+ * alias. `onsubmit?: ObjectFormSubmitHandler` is as much a callback event as
+ * `onchange?: (value: string) => void`, and matching only the inline arrow shape
+ * dropped it from the events contract while the page still counted it as a prop.
+ */
+function isCallableType(typeText, file, seen = new Set()) {
+	if (/=>/.test(typeText)) return true;
+	const named = typeText.match(/^([A-Za-z_$][\w$]*)(?:<.*>)?$/);
+	if (!named) return false;
+	const name = named[1];
+	const key = `${file}:${name}`;
+	if (seen.has(key)) return false;
+	seen.add(key);
+
+	const source = ts.createSourceFile(
+		file,
+		readFileSync(file, 'utf8'),
+		ts.ScriptTarget.Latest,
+		true
+	);
+	const alias = source.statements.find(
+		(statement) => ts.isTypeAliasDeclaration(statement) && statement.name.text === name
+	);
+	if (alias) {
+		if (ts.isFunctionTypeNode(alias.type)) return true;
+		return isCallableType(typeText2(alias.type, source), file, seen);
+	}
+	// An interface with only a call signature is callable too.
+	const iface = source.statements.find(
+		(statement) => ts.isInterfaceDeclaration(statement) && statement.name.text === name
+	);
+	if (iface) return iface.members.some((member) => ts.isCallSignatureDeclaration(member));
+
+	const imported = importsIn(source, file).get(name);
+	return imported ? isCallableType(imported.name, imported.file, seen) : false;
+}
+
+function typeText2(node, source) {
+	return node ? node.getText(source).replace(/\s+/g, ' ').trim() : 'unknown';
+}
+
 function propsInterface(file) {
 	const source = ts.createSourceFile(
 		file,
@@ -492,7 +534,9 @@ function buildComponent(name, declarationPath, group, slot = null) {
 	const bindingNames = bindingsIn(declarationPath);
 	const bindingSet = new Set(bindingNames);
 	const eventProps = props.filter(
-		(prop) => prop.name.startsWith('on') && /=>|EventHandler|Callback/.test(prop.type)
+		(prop) =>
+			prop.name.startsWith('on') &&
+			(/=>|EventHandler|Callback/.test(prop.type) || isCallableType(prop.type, declarationPath))
 	);
 	const exampleId = exampleByComponent.get(name);
 	// A component's own file header first, then the description its module wrote
@@ -761,7 +805,10 @@ const current = ratios(coverage);
 const previous = baseline ? ratios(baseline) : { props: 0, summaries: 0 };
 
 const prettierConfig = (await resolveConfig(OUTPUT)) ?? {};
-const output = await format(render(components, modules, coverage), { ...prettierConfig, filepath: OUTPUT });
+const output = await format(render(components, modules, coverage), {
+	...prettierConfig,
+	filepath: OUTPUT
+});
 const summary =
 	`${components.length} exports; ` +
 	`${coverage.describedProps}/${coverage.totalProps} props described (${percent(current.props)}), ` +
@@ -781,7 +828,9 @@ if (process.argv.includes('--check')) {
 	if (current.props < previous.props)
 		dropped.push(`props described ${percent(previous.props)} -> ${percent(current.props)}`);
 	if (current.summaries < previous.summaries)
-		dropped.push(`summaries authored ${percent(previous.summaries)} -> ${percent(current.summaries)}`);
+		dropped.push(
+			`summaries authored ${percent(previous.summaries)} -> ${percent(current.summaries)}`
+		);
 	if (dropped.length) {
 		console.error(`UI reference documentation coverage dropped: ${dropped.join('; ')}.`);
 		console.error(
@@ -793,8 +842,24 @@ if (process.argv.includes('--check')) {
 	console.log(`UI component reference is current (${summary}).`);
 } else {
 	writeFileSync(OUTPUT, output);
-	if (!baseline || current.props > previous.props || current.summaries > previous.summaries) {
+	// Each metric ratchets on its own. Raising the whole baseline whenever either
+	// one improved would quietly bake in a drop in the other, which is exactly
+	// the regression --check exists to catch.
+	if (!baseline) {
 		writeFileSync(COVERAGE_BASELINE, `${JSON.stringify(coverage, null, '\t')}\n`);
+	} else {
+		const raised = { ...baseline };
+		if (current.props > previous.props) {
+			raised.describedProps = coverage.describedProps;
+			raised.totalProps = coverage.totalProps;
+		}
+		if (current.summaries > previous.summaries) {
+			raised.authoredSummaries = coverage.authoredSummaries;
+			raised.totalComponents = coverage.totalComponents;
+		}
+		if (JSON.stringify(raised) !== JSON.stringify(baseline)) {
+			writeFileSync(COVERAGE_BASELINE, `${JSON.stringify(raised, null, '\t')}\n`);
+		}
 	}
 	console.log(`Wrote ${relative(ROOT, OUTPUT)} with ${summary}.`);
 }
