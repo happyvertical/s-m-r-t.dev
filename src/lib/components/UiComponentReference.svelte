@@ -13,6 +13,13 @@
 	const importCode = $derived(`import { ${component.name} } from '${component.importPath}';`);
 
 	const summaryAuthored = $derived(!component.summarySynthesized);
+	// The owning package, not the subpath: `@happyvertical/smrt-ui/forms` is
+	// published by `@happyvertical/smrt-ui`. Both keys are classified as
+	// non-prose, which keeps this object auditable by the copy checker.
+	const pkg = $derived.by(() => {
+		const importPath = component.importPath.split('/').slice(0, 2).join('/');
+		return { importPath, slug: importPath.replace('@happyvertical/', '') };
+	});
 	const describedProps = $derived(
 		component.details.filter((prop: UiComponentMember) => prop.description).length
 	);
@@ -148,8 +155,8 @@
 				<strong>{component.related.label}</strong>
 				<span>Read the curated UI story for mechanism and usage guidance.</span>
 			</a>
-			<a href="/reference/packages/smrt-ui?tab=components">
-				<strong>smrt-ui package reference</strong>
+			<a href="/reference/packages/{pkg.slug}?tab=components">
+				<strong>{pkg.slug} package reference</strong>
 				<span>See package status, version, limitations, and all public subpaths.</span>
 			</a>
 		</div>
@@ -157,7 +164,7 @@
 
 	<footer>
 		<p>
-			Generated from the declaration contract shipped in <code>@happyvertical/smrt-ui</code>.
+			Generated from the declaration contract shipped in <code>{pkg.importPath}</code>.
 			<a href={uiComponentSource(component)} target="_blank" rel="noreferrer"
 				>Open the canonical source ↗</a
 			>

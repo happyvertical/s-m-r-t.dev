@@ -1,99 +1,91 @@
 #!/usr/bin/env node
 
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { format, resolveConfig } from 'prettier';
 import ts from 'typescript';
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
-const PACKAGE_ROOT = join(ROOT, 'node_modules', '@happyvertical', 'smrt-ui');
 const OUTPUT = join(ROOT, 'src', 'lib', 'data', 'ui-components.generated.ts');
 
-const groups = [
-	{
-		id: 'forms',
-		title: 'Forms and controls',
-		importPath: '@happyvertical/smrt-ui/forms',
-		barrels: ['dist/components/forms/index.d.ts']
-	},
-	{
-		id: 'actions-display',
-		title: 'Actions and display',
-		importPath: '@happyvertical/smrt-ui/ui',
-		barrels: ['dist/components/ui/index.d.ts']
-	},
-	{
-		id: 'feedback-overlays',
-		title: 'Feedback and overlays',
-		importPath: '@happyvertical/smrt-ui/feedback',
-		barrels: ['dist/components/feedback/index.d.ts']
-	},
-	{
-		id: 'collections-tables',
-		title: 'Collections and tables',
-		importPath: '@happyvertical/smrt-ui/data',
-		barrels: ['dist/components/data/index.d.ts']
-	},
-	{
-		id: 'layout',
-		title: 'Layout',
-		importPath: '@happyvertical/smrt-ui/layout',
-		barrels: ['dist/components/layout/index.d.ts']
-	},
-	{
-		id: 'navigation',
-		title: 'Navigation',
-		importPath: '@happyvertical/smrt-ui',
-		barrels: ['dist/components/nav/index.d.ts']
-	},
-	{
-		id: 'display-status',
-		title: 'Display and status',
-		importPath: '@happyvertical/smrt-ui',
-		barrels: ['dist/components/display/index.d.ts']
-	},
-	{
-		id: 'calendar',
-		title: 'Calendar',
-		importPath: '@happyvertical/smrt-ui/calendar',
-		barrels: ['dist/components/calendar/index.d.ts']
-	},
-	{
-		id: 'chat',
-		title: 'Chat',
-		importPath: '@happyvertical/smrt-ui/chat',
-		barrels: ['dist/components/chat/index.d.ts']
-	},
-	{
-		id: 'internationalization',
-		title: 'Internationalization',
-		importPath: '@happyvertical/smrt-ui/i18n',
-		barrels: ['dist/i18n/index.d.ts']
-	},
-	{
-		id: 'membership-permissions',
-		title: 'Membership and permissions',
-		importPath: '@happyvertical/smrt-ui',
-		components: [
-			['MembershipCard', 'dist/components/memberships/MembershipCard.svelte.d.ts'],
-			['MembershipList', 'dist/components/memberships/MembershipList.svelte.d.ts'],
-			['PermissionCheck', 'dist/components/permissions/PermissionCheck.svelte.d.ts'],
-			['RoleBadge', 'dist/components/roles/RoleBadge.svelte.d.ts'],
-			['RoleSelector', 'dist/components/roles/RoleSelector.svelte.d.ts']
-		]
-	},
-	{
-		id: 'themes',
-		title: 'Themes',
-		importPath: '@happyvertical/smrt-ui/themes',
-		components: [
-			['ThemeProvider', 'dist/themes/ThemeProvider.svelte.d.ts'],
-			['ColorSchemeToggle', 'dist/themes/components/ColorSchemeToggle.svelte.d.ts'],
-			['ThemeSwitcher', 'dist/themes/components/ThemeSwitcher.svelte.d.ts']
-		]
+const SCOPE_ROOT = join(ROOT, 'node_modules', '@happyvertical');
+
+/**
+ * Human titles for the declaration directories the packages ship. The directory
+ * is the semantic axis a package already groups its components by, so deriving
+ * sections from it keeps the reference readable without a hand-maintained table
+ * that goes stale the moment a package adds a subpath.
+ */
+const DIRECTORY_TITLES = new Map([
+	['forms', 'Forms and controls'],
+	['ui', 'Actions and display'],
+	['feedback', 'Feedback and overlays'],
+	['data', 'Collections and tables'],
+	['layout', 'Layout'],
+	['nav', 'Navigation'],
+	['display', 'Display and status'],
+	['calendar', 'Calendar'],
+	['chat', 'Chat'],
+	['i18n', 'Internationalization'],
+	['memberships', 'Membership and permissions'],
+	['permissions', 'Membership and permissions'],
+	['roles', 'Membership and permissions'],
+	['themes', 'Themes'],
+	['components', 'Components'],
+	['svelte', 'Components'],
+	['admin', 'Admin surfaces'],
+	['workspace', 'Workspace'],
+	['settings', 'Settings'],
+	['board', 'Board']
+]);
+
+/**
+ * Named in smrt-svelte's `dist/` but exported by no subpath, and its package doc
+ * says not to document them as available API (happyvertical/smrt#2286). Exports
+ * discovery excludes them already; the assertion keeps it that way.
+ */
+const UNEXPORTED = ['WorkspaceShell', 'RoleShell', 'NavTree', 'Breadcrumbs'];
+
+function titleCase(value) {
+	return value
+		.split(/[-_]/)
+		.filter(Boolean)
+		.map((word) => word[0].toUpperCase() + word.slice(1))
+		.join(' ');
+}
+
+/** Every installed `@happyvertical/smrt-*` package, in a stable order. */
+function installedPackages() {
+	if (!existsSync(SCOPE_ROOT)) return [];
+	return readdirSync(SCOPE_ROOT)
+		.filter((name) => name.startsWith('smrt-'))
+		.filter((name) => existsSync(join(SCOPE_ROOT, name, 'package.json')))
+		.sort();
+}
+
+/**
+ * The declaration entry points a package actually exposes, paired with the
+ * import path a consumer writes to reach them. Wildcard subpaths are skipped:
+ * they name no single module to read.
+ */
+function exportedEntries(packageDir, packageName) {
+	const manifest = JSON.parse(readFileSync(join(packageDir, 'package.json'), 'utf8'));
+	const entries = [];
+	for (const [subpath, value] of Object.entries(manifest.exports ?? {})) {
+		if (subpath.includes('*')) continue;
+		const target =
+			typeof value === 'string' ? value : (value?.types ?? value?.svelte ?? value?.import);
+		if (typeof target !== 'string') continue;
+		const declaration = join(packageDir, target.replace(/\.js$/, '.d.ts'));
+		if (!existsSync(declaration)) continue;
+		entries.push({
+			declaration,
+			importPath: subpath === '.' ? packageName : `${packageName}/${subpath.slice(2)}`
+		});
 	}
-];
+	return entries;
+}
 
 const exampleByComponent = new Map([
 	['Form', 'base-controls'],
@@ -159,7 +151,29 @@ function slugify(name) {
 		.toLowerCase();
 }
 
-function declarationsFromBarrel(barrelPath) {
+function svelteDeclarationFor(fromFile, specifier) {
+	return `${resolve(dirname(fromFile), specifier.replace(/\.js$/, ''))}.d.ts`;
+}
+
+/**
+ * Every Svelte component a declaration barrel exposes, as `[exportedName, path]`.
+ *
+ * Packages use two shapes to publish a component, and reading only the first
+ * silently loses whole packages: content, messages, projects, fields, agents,
+ * assets, analytics, jobs, users, images and tenancy all use the second.
+ *
+ *   export { default as Foo } from './Foo.svelte';   // re-export
+ *   import Foo from './Foo.svelte'; export { Foo };  // import, then export
+ *
+ * `export * from './x'` is followed wholesale. A named re-export through a
+ * non-Svelte module is followed too, then filtered to the names it actually
+ * lists, so a component reachable only through some other subpath is not
+ * published here under an import path that would not resolve.
+ */
+function declarationsFromBarrel(barrelPath, seen = new Set()) {
+	if (!existsSync(barrelPath) || seen.has(barrelPath)) return [];
+	seen.add(barrelPath);
+
 	const source = ts.createSourceFile(
 		barrelPath,
 		readFileSync(barrelPath, 'utf8'),
@@ -167,17 +181,58 @@ function declarationsFromBarrel(barrelPath) {
 		true
 	);
 	const declarations = [];
+	const importedComponents = new Map();
 
 	for (const statement of source.statements) {
-		if (!ts.isExportDeclaration(statement) || !statement.moduleSpecifier) continue;
+		if (!ts.isImportDeclaration(statement)) continue;
+		if (!statement.importClause?.name) continue;
 		if (!ts.isStringLiteral(statement.moduleSpecifier)) continue;
-		if (!statement.moduleSpecifier.text.endsWith('.svelte')) continue;
-		if (!statement.exportClause || !ts.isNamedExports(statement.exportClause)) continue;
-		const declaration = resolve(dirname(barrelPath), `${statement.moduleSpecifier.text}.d.ts`);
-		for (const element of statement.exportClause.elements) {
-			if (element.propertyName?.text === 'default') {
-				declarations.push([element.name.text, declaration]);
+		if (!/\.svelte(\.js)?$/.test(statement.moduleSpecifier.text)) continue;
+		importedComponents.set(
+			statement.importClause.name.text,
+			svelteDeclarationFor(barrelPath, statement.moduleSpecifier.text)
+		);
+	}
+
+	for (const statement of source.statements) {
+		if (!ts.isExportDeclaration(statement)) continue;
+		const specifier =
+			statement.moduleSpecifier && ts.isStringLiteral(statement.moduleSpecifier)
+				? statement.moduleSpecifier.text
+				: null;
+		const fromSvelte = specifier ? /\.svelte(\.js)?$/.test(specifier) : false;
+
+		if (!statement.exportClause) {
+			if (!specifier) continue;
+			const next = resolveDeclarationModule(barrelPath, specifier);
+			if (next) declarations.push(...declarationsFromBarrel(next, seen));
+			continue;
+		}
+		if (!ts.isNamedExports(statement.exportClause)) continue;
+
+		const elements = statement.exportClause.elements;
+		if (fromSvelte) {
+			for (const element of elements) {
+				if ((element.propertyName ?? element.name).text !== 'default') continue;
+				declarations.push([element.name.text, svelteDeclarationFor(barrelPath, specifier)]);
 			}
+			continue;
+		}
+		if (!specifier) {
+			for (const element of elements) {
+				const local = (element.propertyName ?? element.name).text;
+				const declaration = importedComponents.get(local);
+				if (declaration) declarations.push([element.name.text, declaration]);
+			}
+			continue;
+		}
+
+		const next = resolveDeclarationModule(barrelPath, specifier);
+		if (!next) continue;
+		const reachable = new Map(declarationsFromBarrel(next, new Set(seen)));
+		for (const element of elements) {
+			const local = (element.propertyName ?? element.name).text;
+			if (reachable.has(local)) declarations.push([element.name.text, reachable.get(local)]);
 		}
 	}
 
@@ -381,18 +436,18 @@ function bindingsIn(file) {
 	return [...bindings];
 }
 
-function sourcePathFor(declarationPath) {
+/** Path to a component's real source, relative to the smrt monorepo root. */
+function sourcePathFor(declarationPath, group) {
+	const within = (target) =>
+		`${group.repoDirectory}/${relative(group.packageDir, target).replaceAll('\\', '/')}`;
 	const mapPath = `${declarationPath}.map`;
 	if (existsSync(mapPath)) {
 		const map = JSON.parse(readFileSync(mapPath, 'utf8'));
 		const source = map.sources?.[0];
-		if (source) {
-			return relative(PACKAGE_ROOT, resolve(dirname(mapPath), source))
-				.replaceAll('\\', '/')
-				.replace(/\.svelte\.ts$/, '.svelte');
-		}
+		if (source)
+			return within(resolve(dirname(mapPath), source)).replace(/\.svelte\.ts$/, '.svelte');
 	}
-	return relative(PACKAGE_ROOT, declarationPath).replaceAll('\\', '/');
+	return within(declarationPath);
 }
 
 function buildComponent(name, declarationPath, group) {
@@ -434,7 +489,7 @@ function buildComponent(name, declarationPath, group) {
 			? { id: exampleId, label: exampleLabels[exampleId], href: `/playground` }
 			: null,
 		related: { label: 'UI showcase', href: '/ui' },
-		source: sourcePathFor(declarationPath)
+		source: sourcePathFor(declarationPath, group)
 	};
 }
 
@@ -473,7 +528,7 @@ export interface UiComponentReference {
 	source: string;
 }
 
-const SMRT_TREE = \`https://github.com/happyvertical/smrt/blob/v\${SMRT_VERSION}/packages/smrt-ui\`;
+const SMRT_TREE = \`https://github.com/happyvertical/smrt/blob/v\${SMRT_VERSION}\`;
 
 export const uiComponents: UiComponentReference[] = ${serialized};
 
@@ -491,20 +546,97 @@ export function uiComponentSource(component: UiComponentReference): string {
 `;
 }
 
-if (!existsSync(PACKAGE_ROOT)) {
+if (!existsSync(SCOPE_ROOT)) {
 	throw new Error('Install dependencies before generating the UI component reference.');
 }
 
-const components = groups
-	.flatMap((group) => {
-		const declarations = [
-			...(group.barrels ?? []).flatMap((barrel) =>
-				declarationsFromBarrel(join(PACKAGE_ROOT, barrel))
-			),
-			...(group.components ?? []).map(([name, path]) => [name, join(PACKAGE_ROOT, path)])
-		];
-		return declarations.map(([name, path]) => buildComponent(name, path, group));
+/**
+ * The section a component belongs to, taken from the directory its declaration
+ * ships in. `components` is a container, not a subject, so step past it.
+ */
+function sectionFor(packageDir, declarationPath) {
+	const segments = relative(packageDir, declarationPath).replaceAll('\\', '/').split('/');
+	const afterDist = segments[0] === 'dist' ? segments.slice(1) : segments;
+	const directories = afterDist.slice(0, -1);
+	return directories.find((segment) => segment !== 'components') ?? directories[0] ?? 'components';
+}
+
+// smrt-ui and smrt-svelte are the framework's own component surfaces and keep
+// unprefixed sections and slugs; every other package is labelled by name.
+const PACKAGE_ORDER = ['smrt-ui', 'smrt-svelte'];
+
+const discovered = [];
+for (const packageName of installedPackages().sort((a, b) => {
+	const rank = (name) => {
+		const index = PACKAGE_ORDER.indexOf(name);
+		return index === -1 ? PACKAGE_ORDER.length : index;
+	};
+	return rank(a) - rank(b) || a.localeCompare(b);
+})) {
+	const packageDir = join(SCOPE_ROOT, packageName);
+	const manifest = JSON.parse(readFileSync(join(packageDir, 'package.json'), 'utf8'));
+	const repoDirectory = manifest.repository?.directory ?? `packages/${packageName}`;
+	const label = packageName === 'smrt-ui' ? null : titleCase(packageName.replace(/^smrt-/, ''));
+
+	for (const entry of exportedEntries(packageDir, `@happyvertical/${packageName}`)) {
+		for (const [name, declaration] of declarationsFromBarrel(entry.declaration)) {
+			if (!existsSync(declaration)) continue;
+			const section = sectionFor(packageDir, declaration);
+			const sectionTitle = DIRECTORY_TITLES.get(section) ?? titleCase(section);
+			discovered.push({
+				name,
+				declaration,
+				packageName,
+				group: {
+					id: slugify(`${packageName}-${section}`),
+					title: label ? `${label} · ${sectionTitle}` : sectionTitle,
+					importPath: entry.importPath,
+					packageDir,
+					repoDirectory
+				}
+			});
+		}
+	}
+}
+
+// One record per component. A component re-exported from both the package root
+// and a narrower subpath is published under the narrower one, which is the
+// import a consumer should write.
+const chosen = new Map();
+for (const candidate of discovered) {
+	const key = `${candidate.packageName}:${candidate.name}`;
+	const held = chosen.get(key);
+	if (!held || candidate.group.importPath.length > held.group.importPath.length) {
+		chosen.set(key, candidate);
+	}
+}
+
+const unexported = UNEXPORTED.filter((name) =>
+	[...chosen.values()].some((candidate) => candidate.name === name)
+);
+if (unexported.length)
+	throw new Error(
+		`Published components that no subpath exports: ${unexported.join(', ')}. ` +
+			'See happyvertical/smrt#2286.'
+	);
+
+// Existing component URLs are a contract, so the first claimant of a slug keeps
+// it and a later package qualifies its own. PACKAGE_ORDER puts smrt-ui first,
+// which is what holds today's 85 published paths stable.
+const claimed = new Set();
+const components = [...chosen.values()]
+	.map((candidate) => {
+		const bare = slugify(candidate.name);
+		const slug = claimed.has(bare)
+			? `${candidate.packageName.replace(/^smrt-/, '')}-${bare}`
+			: bare;
+		claimed.add(slug);
+		return { candidate, slug };
 	})
+	.map(({ candidate, slug }) => ({
+		...buildComponent(candidate.name, candidate.declaration, candidate.group),
+		slug
+	}))
 	.sort((a, b) => a.family.localeCompare(b.family) || a.name.localeCompare(b.name));
 
 const duplicateSlugs = components
