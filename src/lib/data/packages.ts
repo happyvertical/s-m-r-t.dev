@@ -468,6 +468,13 @@ const smrtSvelteComponentGroups: PackageComponentGroup[] = [
 		components: ['liveCollection', 'activityFeed', 'useUpdateAvailable']
 	},
 	{
+		title: 'Page agent tools',
+		description:
+			"Declare a component-owned browser tool, or bind a declared view intent to a mounted control or data view, for the component's lifetime.",
+		importPath: '@happyvertical/smrt-svelte',
+		components: ['useWebMcpTool', 'useViewIntent']
+	},
+	{
 		title: 'Server-side helpers',
 		description:
 			'Build a translated message snapshot on the server so the first render is already in the right language.',
@@ -1038,7 +1045,8 @@ export const packages: SmrtPackage[] = [
 				'SvelteKit hydration seeding',
 				'SSE live updates with polling fallback',
 				'Durable IndexedDB outbox and version-aware persistence',
-				'WebMCP data-plane tools'
+				'WebMCP data-plane tools',
+				'Policy-governed bespoke tools and a dependency-free view-intent entry'
 			]
 		}
 	),

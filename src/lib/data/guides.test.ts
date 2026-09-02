@@ -37,7 +37,9 @@ describe('WebMCP guide correction stays fixed', () => {
 
 		expect(code).toContain('webMcpToolDefinitions');
 		expect(code).not.toContain('collectionDefinitions');
-		expect(code).not.toContain('readOnly');
+		// Word-bounded: the superseded filter read `tool.readOnly`; the bespoke
+		// tool sample legitimately declares its effect with `readOnlyHint`.
+		expect(code).not.toMatch(/\breadOnly\b/);
 	});
 
 	it('carries pinnedVersion, related, and sources — the fields it previously had none of', () => {

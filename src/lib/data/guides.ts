@@ -680,9 +680,77 @@ dispose();`
 });`
 			},
 			{
+				title: "A component's own tool follows the same policy",
+				intro:
+					"useWebMcpTool registers one hand-written tool for a component's lifetime and routes it through smrt-web's registerWebMcpBespokeTool, so the same fail-closed classification filters it. A spec with no annotations, or whose annotations leave its effect undeclared, classifies destructive, non-idempotent, and open-world. It is excluded unless the policy allows destructive. The policy is the nearest Provider's webmcp.effects. The hook's own effects option applies only when no Provider ancestor declares a policy. An explicit Provider policy always wins, even a narrower one.",
+				points: [
+					"namespace and maxTools never apply to a bespoke tool. The author already chose a stable name, and one tool never counts against a generated set's budget.",
+					'The generated Form webmcp tool declares itself write-class, never destructive. It falls back to a read and write policy only when no ancestor Provider declares webmcp.effects.',
+					"On a browser without WebMCP, or when policy excludes the tool's effect, the call is a no-op and its disposer is inert."
+				],
+				filename: 'OrderTable.svelte',
+				lang: 'svelte',
+				code: `<script lang="ts">
+  import { useWebMcpTool } from '@happyvertical/smrt-svelte';
+
+  let { rows } = $props();
+
+  // readOnlyHint declares a read effect. Leave annotations out and the
+  // tool classifies destructive and is excluded under the read-only default.
+  useWebMcpTool(() => ({
+    name: 'orders_visible_count',
+    description: 'How many orders the table currently shows',
+    inputSchema: { type: 'object', properties: {} },
+    annotations: { readOnlyHint: true },
+    execute: async () => String(rows.length)
+  }));
+</script>`
+			},
+			{
+				title: 'Declare an interaction as data',
+				intro:
+					'defineIntent, from the dependency-free @happyvertical/smrt-web/intents entry, declares a component-owned interaction in a .ts sidecar as plain data. The declaration names an id, a description, an optional capability, and a target: one browser registry — control or dataSurface — and what the intent does there. Call it at module scope with one object literal of literal values: no spreads, identifiers, conditionals, or computed keys. That static form is what a scanner reads without evaluating the module; anything computed keeps using useWebMcpTool.',
+				points: [
+					'Ids are lowercase and dot-namespaced with at least two segments. The WebMCP tool name is the id with . and - replaced by _. An id resolving into the reserved smrt_ui_ prefix is rejected. So is a second id that derives a tool name an already declared intent derives.',
+					'capability resolves through the same fail-closed rule as every other declaration: omitted entirely, an intent classifies destructive, non-idempotent, and open-world.',
+					"The no-REST invariant: the declaration has no execute, fetch, url, route, endpoint, or method field and no field of function type. defineIntent rejects unknown keys and non-JSON values at runtime, and the tool's execute is constructed from target — no author-supplied callable ever runs."
+				],
+				filename: 'OrderTable.intents.ts',
+				code: `import { defineIntent } from '@happyvertical/smrt-web/intents';
+
+export const nextPageIntent = defineIntent({
+  id: 'orders.next_page',
+  description: 'Advance the orders table by one page',
+  capability: { effect: 'read', idempotent: false, openWorld: false },
+  target: { registry: 'dataSurface', controlId: 'next-page', kind: 'table' }
+});`
+			},
+			{
+				title: 'Bind it to what is mounted',
+				intro:
+					"useViewIntent binds a declared intent to this component's mounted registry identity for exactly the component's lifetime. The identity is formId and controlId for a control intent, or surfaceId and kind for a data-surface one, with an optional subject for record-qualified identity. Registries come from the nearest Provider's WebMCP UI context or an explicit controlRegistry or dataSurfaceRegistry override; with neither, the binding is a silent no-op. Registration goes through registerWebMcpBespokeTool, so the intent inherits the policy above. Execution dispatches exactly one registry command as source: 'agent'. Staged review, the trusted local-gesture requirement, sensitivity, and writability apply unchanged, and there is no path to REST.",
+				points: [
+					"An identity whose shape does not match the intent's declared target, or that contradicts an identity the declaration pinned, throws. That is an author error, not an environment difference.",
+					'The compiler is imported from the /intents entry, so binding an intent never pulls the client-data engine into the page.',
+					"The six fixed smrt_ui_ tools are unchanged; intents sit above them. A derived name can still collide with a generated model tool or, under a custom UI prefix, with a fixed UI tool. Keep an intent's first id segment out of your model names, or give the generated set a namespace."
+				],
+				filename: 'OrderTable.svelte',
+				lang: 'svelte',
+				code: `<script lang="ts">
+  import { useViewIntent } from '@happyvertical/smrt-svelte';
+  import { nextPageIntent } from './OrderTable.intents';
+
+  // The identity shape must match the declared target registry:
+  // { surfaceId, kind } for a data-surface intent.
+  useViewIntent(nextPageIntent, {
+    identity: { surfaceId: 'orders', kind: 'table' }
+  });
+</script>`
+			},
+			{
 				title: 'The page session is the security boundary',
 				intro:
-					'WebMCP execution reuses the generated REST fetchers as the authenticated page user. REST authentication, tenant gates, writable-field rules, sensitive-field policy, and operation permissions are enforced in their existing server boundary rather than copied into browser tool code. The exposure policy above is a capability choice, not an authorization boundary.',
+					"A generated model tool executes over the generated REST fetchers as the authenticated page user. A declared interaction has no path to REST at all, and a component tool runs only the code its author wrote. If that code calls the application's routes, the same server checks apply; if it does not, there is no server round-trip to fail closed. REST authentication, tenant gates, writable-field rules, sensitive-field policy, and operation permissions are enforced in their existing server boundary rather than copied into browser tool code. The exposure policy above is a capability choice, not an authorization boundary.",
 				links: [
 					{ label: 'Exposure is not authorization', href: '/agents#exposure-is-not-authorization' }
 				]
@@ -691,12 +759,18 @@ dispose();`
 		related: [
 			{ label: 'Agents overview', href: '/agents' },
 			{ label: 'One vocabulary, four projections', href: '/agents#one-vocabulary' },
+			{ label: 'State, not the screen', href: '/agents#state-not-screen' },
 			{ label: 'UI overview', href: '/ui' }
 		],
 		sources: [
 			{
 				label: 'smrt-web package instructions',
 				href: `${SMRT_TREE}/packages/smrt-web/AGENTS.md`,
+				external: true
+			},
+			{
+				label: 'smrt-svelte package instructions',
+				href: `${SMRT_TREE}/packages/smrt-svelte/AGENTS.md`,
 				external: true
 			},
 			{
