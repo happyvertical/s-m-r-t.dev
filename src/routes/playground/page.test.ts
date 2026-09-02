@@ -55,6 +55,21 @@ describe('playground page', () => {
 		).toBeTruthy();
 	});
 
+	it('opens a non-site package entry from its generic slug (job-dashboard)', async () => {
+		page.url.search = '?entry=job-dashboard';
+		render(Page);
+
+		expect(await screen.findByRole('heading', { name: 'Job Dashboard', level: 2 })).toBeTruthy();
+	});
+
+	it('shows an inline notice instead of silently falling back for an unknown slug', async () => {
+		page.url.search = '?entry=not-a-real-entry';
+		render(Page);
+
+		expect(await screen.findByText(/No playground entry named/)).toBeTruthy();
+		expect(screen.getByText('not-a-real-entry')).toBeTruthy();
+	});
+
 	it('updates one mounted host during query-only client navigation in both directions', async () => {
 		const { container } = render(Page);
 		const mountedHost = container.querySelector('.playground-shell');
