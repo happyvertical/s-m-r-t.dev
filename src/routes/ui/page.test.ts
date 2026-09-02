@@ -1,5 +1,6 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
+import { uiStories } from '$lib/data/ui-stories';
 import Page from './+page.svelte';
 import ShellStateHarness from './ShellStateHarness.test.svelte';
 
@@ -15,8 +16,12 @@ describe('/ui', () => {
 				name: 'Interfaces for people. Contracts for agents.'
 			})
 		).toBeTruthy();
-		expect(screen.getByRole('navigation', { name: 'UI story index' })).toBeTruthy();
-		expect(container.querySelectorAll('article')).toHaveLength(8);
+		expect(screen.getByRole('navigation', { name: 'Interaction stories index' })).toBeTruthy();
+		expect(screen.getByRole('navigation', { name: 'Batteries included index' })).toBeTruthy();
+		expect(container.querySelectorAll('article')).toHaveLength(uiStories.length);
+		expect(container.querySelectorAll('.contract-grid.compact')).toHaveLength(
+			uiStories.filter((story) => story.group === 'battery').length
+		);
 		expect(container.querySelector('.smrt-admin-shell')).toBeNull();
 		expect(screen.getByRole('heading', { level: 3, name: 'Active ShellState' })).toBeTruthy();
 		expect(screen.getByRole('link', { name: /read the interaction contract/i })).toBeTruthy();
