@@ -379,17 +379,29 @@ describe('copy checker', () => {
 		expect(passages.map((item) => item.text)).toEqual(['Same.', 'Same.']);
 	});
 
-	it('keeps interpolated data copy in the project passages', async () => {
-		const { passages } = await extractProjectPassages();
-		expect(passages).toEqual(
-			expect.arrayContaining([
-				expect.objectContaining({
-					file: 'src/lib/data/guides.ts',
-					text: expect.stringContaining('current tooling reference is pinned')
-				})
-			])
-		);
-	});
+	// This is the only whole-project scan in this suite: extractProjectPassages()
+	// walks every copy source with no fixture root. Its corpus scales with the
+	// generated component reference (1,719 described props at 0.44.0) plus
+	// batteries stories, and CI's shared runner has measured over 5000ms against
+	// vitest's default test timeout even though this ran in ~2s locally. Give it
+	// explicit headroom rather than trimming the scan.
+	const PROJECT_SCAN_TIMEOUT_MS = 20000;
+
+	it(
+		'keeps interpolated data copy in the project passages',
+		async () => {
+			const { passages } = await extractProjectPassages();
+			expect(passages).toEqual(
+				expect.arrayContaining([
+					expect.objectContaining({
+						file: 'src/lib/data/guides.ts',
+						text: expect.stringContaining('current tooling reference is pinned')
+					})
+				])
+			);
+		},
+		PROJECT_SCAN_TIMEOUT_MS
+	);
 
 	it('rejects an unclassified data-copy property', () => {
 		const passages = extractTypeScriptPassages(
