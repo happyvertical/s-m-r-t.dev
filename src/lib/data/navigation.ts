@@ -1,5 +1,6 @@
 import { agentsTopics } from '$lib/data/agents';
 import { capabilityGuides, foundationGuides } from '$lib/data/guides';
+import { applicationModuleClusters } from '$lib/data/modules';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
 import { taskGuides } from '$lib/data/task-guides';
@@ -70,6 +71,19 @@ const referenceItems: NavigationItem[] = referenceGuides.map((guide) => ({
 	href: `/reference/${guide.slug}`,
 	description: guide.plainEnglish,
 	keywords: guide.packages
+}));
+/**
+ * Module clusters, not the 23 individual `/packages/<slug>` pages, are the
+ * "key pages" registered here: `/modules#<cluster-id>` is a real, stable
+ * anchor (`ModuleCluster.svelte` sets `id={guide.id}`), the same shape as the
+ * homepage's `/#how-it-works` and `/agents#<topic>` entries. Packages already
+ * have their own `searchItems` entries below — registering all 23 here too
+ * would duplicate search results.
+ */
+const moduleClusterItems: NavigationItem[] = applicationModuleClusters.map((cluster) => ({
+	label: cluster.title,
+	href: `/modules#${cluster.id}`,
+	description: cluster.summary
 }));
 
 const interactionCapabilitySlugs = new Set([
@@ -360,6 +374,7 @@ export const documentationSections: DocumentationSection[] = [
 		href: '/modules',
 		description: 'Find substantial application parts by the outcome they provide.',
 		groups: [
+			{ label: 'Module clusters', items: moduleClusterItems },
 			{
 				label: 'Browse',
 				items: [
@@ -564,7 +579,10 @@ export const docsNavigation: NavigationGroup[] = [
 		items: [sectionOverviewItem('interaction'), ...interactionCapabilityItems]
 	},
 	{ label: 'UI', items: [sectionOverviewItem('ui'), ...uiCapabilityItems] },
-	{ label: 'Application modules', items: [sectionOverviewItem('modules')] },
+	{
+		label: 'Application modules',
+		items: [sectionOverviewItem('modules'), ...moduleClusterItems]
+	},
 	{ label: 'Tooling', items: [sectionOverviewItem('tooling'), ...toolingItems] },
 	{ label: 'Guides', items: [sectionOverviewItem('guides'), ...taskItems] },
 	{

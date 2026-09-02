@@ -102,6 +102,22 @@ describe('contextual navigation', () => {
 		}
 	});
 
+	it('marks exactly one /modules cluster anchor active for the current cluster', () => {
+		const section = documentationSections.find((candidate) => candidate.id === 'modules');
+		const clusters = section?.groups.find((group) => group.label === 'Module clusters');
+		expect(clusters).toBeTruthy();
+		expect(clusters!.items.length).toBeGreaterThan(1);
+
+		for (const target of clusters!.items) {
+			const hash = new URL(target.href, 'https://s-m-r-t.dev').hash;
+			const activeHrefs = clusters!.items
+				.filter((item) => isNavigationItemActive(item.href, '/modules', hash))
+				.map((item) => item.href);
+
+			expect(activeHrefs).toEqual([target.href]);
+		}
+	});
+
 	it('keeps prefix matching for section overview and nested-page links', () => {
 		// Long-standing pattern: a hash-less overview link (e.g. /tooling) stays
 		// active on its own page and on every nested page under it, alongside the
