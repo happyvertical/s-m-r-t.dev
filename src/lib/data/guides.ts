@@ -750,7 +750,7 @@ export const nextPageIntent = defineIntent({
 			{
 				title: 'The page session is the security boundary',
 				intro:
-					'A generated model tool executes over the generated REST fetchers as the authenticated page user. A declared interaction has no path to REST at all, and a component tool runs only the code its author wrote. REST authentication, tenant gates, writable-field rules, sensitive-field policy, and operation permissions are enforced in their existing server boundary rather than copied into browser tool code. The exposure policy above is a capability choice, not an authorization boundary.',
+					"A generated model tool executes over the generated REST fetchers as the authenticated page user. A declared interaction has no path to REST at all, and a component tool runs only the code its author wrote. If that code calls the application's routes, the same server checks apply; if it does not, there is no server round-trip to fail closed. REST authentication, tenant gates, writable-field rules, sensitive-field policy, and operation permissions are enforced in their existing server boundary rather than copied into browser tool code. The exposure policy above is a capability choice, not an authorization boundary.",
 				links: [
 					{ label: 'Exposure is not authorization', href: '/agents#exposure-is-not-authorization' }
 				]
