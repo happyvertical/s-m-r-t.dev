@@ -26,3 +26,14 @@ describe('package status', () => {
 		}
 	});
 });
+
+describe('retired MCP tier and plane terminology (#197)', () => {
+	it('never reintroduces the Tier 1/2 or development/runtime plane taxonomy Tooling retired', () => {
+		const packageText = JSON.stringify(packages);
+
+		expect(packageText).not.toMatch(/\bTier[\s-]?[12]\b/i);
+		expect(packageText).not.toMatch(/development plane/i);
+		expect(packageText).not.toMatch(/runtime plane/i);
+		expect(packageText).not.toMatch(/data-plane/i);
+	});
+});

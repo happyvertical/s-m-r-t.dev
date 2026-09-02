@@ -743,7 +743,7 @@ export class Article extends SmrtObject {
 			{
 				title: 'Generate the local stdio server',
 				intro:
-					'The generated stdio server is the Tier 1 surface for an agent running on the same machine as the application. It reads its database credentials from the environment and has no per-request principal, which is exactly why it stays local.',
+					'The generated stdio server is the generated local MCP surface for an application agent running on the same machine as the application. It reads its database credentials from the environment and has no per-request principal, which is exactly why it stays local.',
 				callout: {
 					variant: 'note',
 					title: 'Choose the output language by extension',
@@ -1008,13 +1008,13 @@ export const POST = mountMcpRoute(mcpServer);
 				],
 				links: [
 					{ label: 'Tooling reference: app MCP', href: '/tooling/app-mcp' },
-					{ label: 'The development plane: smrt-dev-mcp', href: '/tooling/dev-mcp' }
+					{ label: 'Development MCP: smrt-dev-mcp', href: '/tooling/dev-mcp' }
 				]
 			},
 			{
-				title: 'Keep the two planes apart',
+				title: 'Keep the surfaces apart',
 				intro:
-					'It is worth restating which server does what, because the failure mode of confusing them is an agent with the wrong authority. The development server reads your workspace and cannot touch application data. The generated and application servers operate on data and know nothing about your repository layout.',
+					'It is worth restating which surface does what, because the failure mode of confusing them is an agent with the wrong authority. The Development MCP server reads your workspace and cannot touch application data. Generated local MCP and hosted application MCP are servers that operate on data. WebMCP is not a separate server; it registers tools in the browser page and calls the generated REST surface as the signed-in user. None of the three application-facing surfaces know anything about your repository layout.',
 				links: [
 					{ label: 'Choose a surface', href: '/tooling' },
 					{ label: 'Capability: WebMCP in the browser', href: '/capabilities/webmcp' },

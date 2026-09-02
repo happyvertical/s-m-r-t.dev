@@ -135,6 +135,7 @@ pnpm build`,
 					'The CLI discovers project and installed-package manifests. It can inspect objects, generate interfaces, scaffold playground files, run diagnostics, and operate the configured development database. Generated object commands use the action lists in the model manifest.',
 				points: [
 					'Use introspect, objects, schema, status, and doctor to inspect the project.',
+					"doctor's agent-surface section reports the application's agent-addressable model tools and declared view intents from build artifacts alone. It starts no server and mounts no route.",
 					'Use generate-types, generate-routes, generate-register, and generate-mcp for explicit generation tasks.',
 					'Use playground init, playground list, and playground dev for component and package previews.',
 					'Use the knowledge command family when the output is evidence for a coding agent.'
@@ -299,8 +300,9 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 			{
 				title: 'Generated artifacts and their discovery order',
 				intro:
-					'A package or app can publish its own scoped smrt-knowledge.json. Discovery prefers a local .smrt/smrt-knowledge.json, then dist/smrt-knowledge.json, then source manifest artifacts, before falling back to raw manifest and documentation scanning. The runtime manifest.json stays focused on object registration; smrt-knowledge.json is the artifact intended for developers and agents.',
+					"A package or app can publish its own scoped smrt-knowledge.json. Discovery prefers a local .smrt/smrt-knowledge.json, then dist/smrt-knowledge.json, then source manifest artifacts, before falling back to raw manifest and documentation scanning. The runtime manifest.json stays focused on object registration; smrt-knowledge.json is the artifact intended for developers and agents. doctor's agent-surface report reads this same artifact in this same order, so it names the same missing-build case: run the app build first if it has nothing to report.",
 				links: [
+					{ label: 'CLI and local workflow', href: '/tooling/development-workflow' },
 					{ label: 'Reference: generated interfaces', href: '/reference/interfaces' },
 					{ label: 'Reference: decorators', href: '/reference/decorators' }
 				]
