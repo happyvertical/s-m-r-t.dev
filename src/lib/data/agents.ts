@@ -455,8 +455,8 @@ export class Report extends SmrtObject {
   import { webMcpToolDefinitions } from '@happyvertical/smrt-virt-web';
   import { Provider } from '@happyvertical/smrt-svelte';
 
-  // Keep the optional data-plane runtime out of browsers that do not expose
-  // WebMCP. SSR remains safe because the feature check is document-guarded.
+  // Keep the optional WebMCP registration out of browsers that do not expose
+  // it. SSR remains safe because the feature check is document-guarded.
   const webmcp = $derived(
     typeof document !== 'undefined' && 'modelContext' in document
       ? {

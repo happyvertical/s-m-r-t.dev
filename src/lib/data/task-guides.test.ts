@@ -104,3 +104,14 @@ describe('guide library', () => {
 		]);
 	});
 });
+
+describe('retired MCP tier and plane terminology (#197)', () => {
+	it('never reintroduces the Tier 1/2 or development/runtime plane taxonomy Tooling retired', () => {
+		const taskGuideText = JSON.stringify(taskGuides);
+
+		expect(taskGuideText).not.toMatch(/\bTier[\s-]?[12]\b/i);
+		expect(taskGuideText).not.toMatch(/development plane/i);
+		expect(taskGuideText).not.toMatch(/runtime plane/i);
+		expect(taskGuideText).not.toMatch(/\bplanes?\b/i);
+	});
+});

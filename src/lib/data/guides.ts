@@ -413,7 +413,7 @@ export const capabilityGuides: Guide[] = [
 				intro:
 					'Describing an environment or control does not grant permission to operate it. Development metadata remains separate from live data operations, and runtime calls still resolve through the application principal, tenant scope, field policy, and explicit confirmation rules.',
 				points: [
-					'The development MCP understands code and, when connected, bounded capability metadata; Tier 1 application MCP performs permitted data operations.',
+					'The development MCP understands code and, when connected, bounded capability metadata; generated local MCP, hosted application MCP, and WebMCP perform permitted data operations.',
 					'Secret values stay out of control descriptions and generated outputs.',
 					'An application can expose a narrow tool set even when its model supports more operations internally.'
 				]
