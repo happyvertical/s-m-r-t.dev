@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { uiStories } from '$lib/data/ui-stories';
+	import { uiStories, uiStoryGroups } from '$lib/data/ui-stories';
 	import AgentAwareFormDemo from '$lib/ui-showcase/AgentAwareFormDemo.svelte';
 	import UILiveShellState from '$lib/ui-showcase/UILiveShellState.svelte';
 	import UIShowcaseDataTable from '$lib/ui-showcase/UIShowcaseDataTable.svelte';
@@ -49,11 +49,13 @@
 	<section class="orientation" aria-labelledby="orientation-title">
 		<div>
 			<p class="section-kicker">How to use this page</p>
-			<h2 id="orientation-title">Eight stories, one boundary</h2>
+			<h2 id="orientation-title">Two kinds of story, one boundary</h2>
 		</div>
 		<p>
-			Each story names what a person sees, what an agent can discover and operate, where
-			confirmation occurs, and how the component refuses unsafe work.
+			An interaction story names what a person sees, what an agent can discover and operate, where
+			confirmation occurs, and how the component refuses unsafe work. A batteries-included story
+			names what a consumer gets from the installed package, how the capability is turned on, and
+			the boundary it enforces.
 		</p>
 		<p>
 			This page curates the system. Package pages remain the API reference, and the Playground holds
@@ -61,108 +63,132 @@
 		</p>
 	</section>
 
-	<nav class="story-index" aria-label="UI story index">
-		{#each uiStories as story, index (story.id)}
-			<a href={`#${story.id}`}>
-				<span>{String(index + 1).padStart(2, '0')}</span>
-				{story.title}
-			</a>
-		{/each}
-	</nav>
+	{#each uiStoryGroups as group (group.id)}
+		{@const groupStories = uiStories.filter((story) => story.group === group.id)}
+		{@const offset = uiStories.findIndex((story) => story.group === group.id)}
+		<section class="story-group" aria-labelledby={`group-${group.id}`}>
+			<header class="group-heading">
+				<p class="section-kicker">{group.kicker}</p>
+				<h2 id={`group-${group.id}`}>{group.title}</h2>
+				<p>{group.intro}</p>
+			</header>
 
-	<div class="stories">
-		{#each uiStories as story, index (story.id)}
-			<article id={story.id} class:featured={story.id === 'data-table-and-collections'}>
-				<div class="story-heading">
-					<div class="story-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</div>
-					<div>
-						<p class="section-kicker">{story.eyebrow}</p>
-						<h2>{story.title}</h2>
-						<p class="story-lede">{story.lede}</p>
-					</div>
-				</div>
+			<nav class="story-index" aria-label={`${group.kicker} index`}>
+				{#each groupStories as story, index (story.id)}
+					<a href={`#${story.id}`}>
+						<span>{String(offset + index + 1).padStart(2, '0')}</span>
+						{story.title}
+					</a>
+				{/each}
+			</nav>
 
-				<div class="story-intro">
-					<p>{story.description}</p>
-					<div>
-						<p class="micro-label">Released surfaces</p>
-						<ul class="component-list" aria-label={`${story.title} components`}>
-							{#each story.components as component (component)}
-								<li><code>{`${component}`}</code></li>
-							{/each}
-						</ul>
-					</div>
-				</div>
+			<div class="stories">
+				{#each groupStories as story, index (story.id)}
+					<article id={story.id} class:featured={story.id === 'data-table-and-collections'}>
+						<div class="story-heading">
+							<div class="story-number" aria-hidden="true">
+								{String(offset + index + 1).padStart(2, '0')}
+							</div>
+							<div>
+								<p class="section-kicker">{story.eyebrow}</p>
+								<h2>{story.title}</h2>
+								<p class="story-lede">{story.lede}</p>
+							</div>
+						</div>
 
-				{#if story.id === 'agent-addressable-components'}
-					<AgentAwareFormDemo />
-				{:else if story.id === 'data-table-and-collections'}
-					<UIShowcaseDataTable />
-				{:else if story.id === 'application-shell'}
-					<UILiveShellState />
-				{/if}
+						<div class="story-intro">
+							<p>{story.description}</p>
+							<div>
+								<p class="micro-label">Released surfaces</p>
+								<ul class="component-list" aria-label={`${story.title} components`}>
+									{#each story.components as component (component)}
+										<li><code>{`${component}`}</code></li>
+									{/each}
+								</ul>
+							</div>
+						</div>
 
-				<div class="contract-grid">
-					{#each story.points as point (point.kind)}
-						<section class:failure={point.kind === 'failure'}>
-							<p class="contract-label">
-								{#if point.kind === 'person'}
-									Person sees
-								{:else if point.kind === 'discover'}
-									Agent discovers
-								{:else if point.kind === 'operate'}
-									Agent operates
-								{:else if point.kind === 'confirm'}
-									Confirmation boundary
-								{:else}
-									Failure behavior
-								{/if}
-							</p>
-							<p>{point.body}</p>
-						</section>
-					{/each}
-				</div>
+						{#if story.id === 'agent-addressable-components'}
+							<AgentAwareFormDemo />
+						{:else if story.id === 'data-table-and-collections'}
+							<UIShowcaseDataTable />
+						{:else if story.id === 'application-shell'}
+							<UILiveShellState />
+						{/if}
 
-				<div class="story-details">
-					<div>
-						<p class="micro-label">What this story proves</p>
-						<ul class="highlight-list">
-							{#each story.highlights as highlight (highlight)}
-								<li>{highlight}</li>
-							{/each}
-						</ul>
-					</div>
-
-					<div>
-						<p class="micro-label">Explore the implementation</p>
-						<div class="resource-list">
-							{#each story.links as link (`${link.kind}-${link.href}`)}
-								<a
-									class:gap-link={link.kind === 'gap'}
-									href={link.href}
-									target={link.external ? '_blank' : undefined}
-									rel={link.external ? 'noreferrer' : undefined}
-								>
-									<span>
-										<small>
-											{link.kind === 'playground'
-												? 'Playground'
-												: link.kind === 'reference'
-													? 'Reference'
-													: 'Missing preview'}
-										</small>
-										<strong>{link.label}</strong>
-										{#if link.note}<span>{link.note}</span>{/if}
-									</span>
-									<span aria-hidden="true">{link.external ? '↗' : '→'}</span>
-								</a>
+						<div class="contract-grid" class:compact={story.group === 'battery'}>
+							{#each story.points as point (point.kind)}
+								<section class:failure={point.kind === 'failure' || point.kind === 'boundary'}>
+									<p class="contract-label">
+										{#if point.kind === 'person'}
+											Person sees
+										{:else if point.kind === 'discover'}
+											Agent discovers
+										{:else if point.kind === 'operate'}
+											Agent operates
+										{:else if point.kind === 'confirm'}
+											Confirmation boundary
+										{:else if point.kind === 'gets'}
+											What ships
+										{:else if point.kind === 'wiring'}
+											How it is turned on
+										{:else if point.kind === 'boundary'}
+											Boundary it enforces
+										{:else}
+											Failure behavior
+										{/if}
+									</p>
+									<p>{point.body}</p>
+								</section>
 							{/each}
 						</div>
-					</div>
-				</div>
-			</article>
-		{/each}
-	</div>
+
+						<div class="story-details">
+							<div>
+								<p class="micro-label">
+									{story.group === 'battery'
+										? 'What the package includes'
+										: 'What this story proves'}
+								</p>
+								<ul class="highlight-list">
+									{#each story.highlights as highlight (highlight)}
+										<li>{highlight}</li>
+									{/each}
+								</ul>
+							</div>
+
+							<div>
+								<p class="micro-label">Explore the implementation</p>
+								<div class="resource-list">
+									{#each story.links as link (`${link.kind}-${link.href}`)}
+										<a
+											class:gap-link={link.kind === 'gap'}
+											href={link.href}
+											target={link.external ? '_blank' : undefined}
+											rel={link.external ? 'noreferrer' : undefined}
+										>
+											<span>
+												<small>
+													{link.kind === 'playground'
+														? 'Playground'
+														: link.kind === 'reference'
+															? 'Reference'
+															: 'Missing preview'}
+												</small>
+												<strong>{link.label}</strong>
+												{#if link.note}<span>{link.note}</span>{/if}
+											</span>
+											<span aria-hidden="true">{link.external ? '↗' : '→'}</span>
+										</a>
+									{/each}
+								</div>
+							</div>
+						</div>
+					</article>
+				{/each}
+			</div>
+		</section>
+	{/each}
 
 	<section class="closing" aria-labelledby="closing-title">
 		<p class="section-kicker">Implementation rule</p>
@@ -319,6 +345,30 @@
 		line-height: 1.65;
 	}
 
+	.story-group {
+		padding-top: clamp(1.5rem, 4vw, 3rem);
+	}
+
+	.group-heading {
+		display: grid;
+		gap: 0.35rem;
+		max-width: 54rem;
+		padding-bottom: 0.5rem;
+	}
+
+	.group-heading h2 {
+		margin: 0.35rem 0 0;
+		font-size: clamp(1.35rem, 3vw, 2.1rem);
+		line-height: 1.1;
+		letter-spacing: -0.03em;
+	}
+
+	.group-heading > p:not(.section-kicker) {
+		margin: 0.25rem 0 0;
+		color: var(--showcase-muted);
+		line-height: 1.6;
+	}
+
 	.story-index {
 		display: grid;
 		grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -434,6 +484,10 @@
 		background: var(--showcase-border);
 		border: 1px solid var(--showcase-border);
 		border-radius: 0.8rem;
+	}
+
+	.contract-grid.compact {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
 	}
 
 	.contract-grid section {
