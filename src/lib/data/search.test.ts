@@ -3,6 +3,8 @@ import { agentsTopics } from '$lib/data/agents';
 import { frameworkTopics } from '$lib/data/framework';
 import { guidePages } from '$lib/data/guide-families';
 import { interactionContent } from '$lib/data/interaction';
+import { applicationModuleClusters } from '$lib/data/modules';
+import { docsNavigation } from '$lib/data/navigation';
 import { searchDocs, searchEntries } from '$lib/data/search';
 
 describe('search index', () => {
@@ -121,6 +123,41 @@ describe('search index', () => {
 			const [first] = searchDocs('Where agents connect');
 			expect(first.kind).toBe('section');
 			expect(first.href).toBe('/agents#where-agents-connect');
+		});
+	});
+
+	describe('module clusters', () => {
+		it('gives every module cluster a page entry at its /modules anchor', () => {
+			for (const cluster of applicationModuleClusters) {
+				const entry = searchEntries.find(
+					(candidate) => candidate.kind === 'page' && candidate.href === `/modules#${cluster.id}`
+				);
+				expect(entry?.label, `missing entry for /modules#${cluster.id}`).toBe(cluster.title);
+			}
+		});
+
+		it('resolves a cluster title through search without duplicating its packages entries', () => {
+			const cluster = applicationModuleClusters[0];
+			const results = searchDocs(cluster.title);
+			expect(results.some((entry) => entry.href === `/modules#${cluster.id}`)).toBe(true);
+
+			// searchEntries is deduped by kind:href:label, so asserting against it
+			// cannot detect a duplicate *source* registration — a second
+			// docsNavigation item with the same href and label collapses before
+			// this test could see it. Assert directly against docsNavigation
+			// instead: no group (in particular "Application modules") may
+			// register an individual package's own href. Registering all 23
+			// packages there — instead of the 8 cluster anchors this diff adds —
+			// is exactly the duplication acceptance criterion #5 rules out.
+			const navigationHrefs = new Set(
+				docsNavigation.flatMap((group) => group.items.map((item) => item.href))
+			);
+			for (const pkg of cluster.packages) {
+				expect(
+					navigationHrefs.has(`/packages/${pkg.slug}`),
+					`docsNavigation should not register /packages/${pkg.slug} directly`
+				).toBe(false);
+			}
 		});
 	});
 });
