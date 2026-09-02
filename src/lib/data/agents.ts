@@ -267,7 +267,7 @@ export class Report extends SmrtObject {
 		eyebrow: 'Agents 03',
 		title: 'Showing a tool grants nothing',
 		summary:
-			'An exposure policy chooses which tools a page offers, and offering none of it is the default: registration without a policy exposes reads only. Whether any call succeeds is decided at the authenticated route it runs through — never by the fact that a tool was visible.',
+			'An exposure policy chooses which tools a page offers, and offering none of it is the default: registration without a policy exposes reads only. Whether a call to the application succeeds is decided at the authenticated route it runs through — never by the fact that a tool was visible.',
 		plainEnglish:
 			"The list of tools an agent can see is a table of contents, not a set of keys. Every call still signs in, still lands in one tenant, and still passes the same permission and field checks as the person's own request.",
 		pinnedVersion: SMRT_VERSION,
@@ -308,9 +308,13 @@ export class Report extends SmrtObject {
 				}
 			},
 			{
-				title: 'A mistake fails closed at the server',
+				title: 'Where a mistake fails closed',
 				intro:
-					"Suppose a page offers a tool it should not have. The call still arrives at an authenticated route as the signed-in person, in that person's tenant, against that person's permissions and the record's field rules. A tool the person could not use fails there — the same way, and in the same place, it would fail for the person."
+					"Suppose a page offers a tool it should not have. What happens next depends on the source. A generated model tool still arrives at an authenticated route as the signed-in person, in that person's tenant, under that person's permissions and field rules. A tool the person could not use fails there, the same way it would fail for the person.",
+				points: [
+					"A component tool runs whatever its component wrote, in the browser. If that code calls the application's routes, the same server checks apply. If it does not, there is no server round-trip to fail closed; the exposure policy is what bounds it.",
+					"A declared interaction never calls the application's routes. It dispatches one registry command marked as an agent's, so its boundary is the registry's own rules: staged review and a person's own confirming gesture."
+				]
 			}
 		],
 		sources: [
@@ -341,7 +345,7 @@ export class Report extends SmrtObject {
 			{
 				title: "The browser plane: the person's own authority",
 				intro:
-					"A tool registered in the page executes over the application's web routes as the signed-in user — the same session, tenant, and permissions the person already has. Persona allow-lists and agent-class ceilings do not participate on this plane. There is nothing for them to bound, because a page tool holds no identity of its own."
+					"A generated tool registered in the page executes over the application's web routes as the signed-in user — the same session, tenant, and permissions the person already has. Persona allow-lists and agent-class ceilings do not participate on this plane. There is nothing for them to bound, because a page tool holds no identity of its own."
 			},
 			{
 				title: 'The server plane: three limits at once',
