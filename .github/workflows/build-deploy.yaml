@@ -102,6 +102,26 @@ jobs:
     if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && inputs.environment == 'staging')
     runs-on: ubuntu-latest
     environment: staging
+    # Job-level, not workflow-level: the shared mutable resource is the
+    # havesmrt-staging S3 bucket, not the workflow, and `build` also runs on
+    # pull requests — grouping the whole workflow would queue unrelated PR
+    # builds behind each other and behind main deploys.
+    #
+    # #218: PRs #215 and #217 merged three seconds apart, their `aws s3 sync`
+    # calls interleaved, and the run that finished last (the newer commit)
+    # still lost individual files to the older run's sync — per-file
+    # last-writer-wins across two overlapping syncs served a stale /faq page.
+    # Serializing runs against this bucket prevents that interleave.
+    #
+    # `cancel-in-progress: false` on purpose: a running sync must never be
+    # killed mid-bucket, which would leave it partially written. A group
+    # holds one running run plus one pending run; a third push replaces the
+    # pending one rather than queuing behind it, so a middle commit's deploy
+    # can be skipped. That's fine here — the newest queued run always deploys
+    # the latest main, which is the desired end state.
+    concurrency:
+      group: deploy-staging
+      cancel-in-progress: false
 
     steps:
       - name: Checkout
@@ -146,6 +166,15 @@ jobs:
       inputs.environment == 'production'))
     runs-on: ubuntu-latest
     environment: production
+    # See the deploy-staging job for the full #218 rationale (job-level group
+    # keyed on the S3 bucket, `cancel-in-progress: false` never kills a
+    # running sync, a middle commit's deploy can be skipped because the
+    # newest queued run always ships the latest main). This group is scoped
+    # to the production bucket only, so staging and production deploys still
+    # proceed independently of each other.
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
 
     steps:
       - name: Checkout
