@@ -1012,9 +1012,9 @@ export const POST = mountMcpRoute(mcpServer);
 				]
 			},
 			{
-				title: 'Keep the servers apart',
+				title: 'Keep the surfaces apart',
 				intro:
-					'It is worth restating which server does what, because the failure mode of confusing them is an agent with the wrong authority. The Development MCP server reads your workspace and cannot touch application data. Generated local MCP, hosted application MCP, and WebMCP operate on data and know nothing about your repository layout.',
+					'It is worth restating which surface does what, because the failure mode of confusing them is an agent with the wrong authority. The Development MCP server reads your workspace and cannot touch application data. Generated local MCP and hosted application MCP are servers that operate on data. WebMCP is not a separate server; it registers tools in the browser page and calls the generated REST surface as the signed-in user. None of the three application-facing surfaces know anything about your repository layout.',
 				links: [
 					{ label: 'Choose a surface', href: '/tooling' },
 					{ label: 'Capability: WebMCP in the browser', href: '/capabilities/webmcp' },
