@@ -70,3 +70,83 @@ export const playgroundEntryTitles: Record<string, string[]> = {
 export function getPlaygroundEntries(slug: string) {
 	return playgroundEntryTitles[slug] ?? [];
 }
+
+export interface ResolvedPlaygroundSlug {
+	/** `${module.packageName}:${entry.id}`, the id `<PlaygroundHost selectedEntryId>` expects. */
+	qualifiedId: string;
+	packageName: string;
+	entryId: string;
+	entryTitle: string;
+}
+
+/**
+ * Slug scheme for `/playground?entry=<slug>` deep links.
+ *
+ * Every playground entry's own `id` is already a short, kebab-case
+ * identifier chosen by its owning package (e.g. `job-dashboard`,
+ * `agent-aware-form`), so that `id` is the canonical public slug whenever it
+ * is unique across the whole `playgroundModules` registry.
+ *
+ * When two or more modules ship an entry with the same `id` (e.g.
+ * `message-list` exists in both `smrt-chat` and `smrt-messages`), the bare
+ * id is ambiguous and is deliberately *not* registered as a slug. Instead
+ * every entry sharing that id gets a package-qualified slug of the form
+ * `<package-short-name>-<entry-id>`, where the short name is the package's
+ * name with any `@scope/` prefix stripped (`smrt-chat-message-list`,
+ * `smrt-messages-message-list`). Prefixing only happens where it's needed
+ * to disambiguate, so today's unprefixed links (`agent-aware-form`,
+ * `job-dashboard`, ...) stay stable.
+ *
+ * `agent-aware-form` (the site's own demo, deep-linked from the homepage,
+ * /ui, and /agents) resolves through this same generic path — its id is
+ * unique across the registry, so no special case is needed.
+ */
+function packageShortName(packageName: string): string {
+	return packageName.replace(/^@[^/]+\//, '');
+}
+
+function buildPlaygroundSlugIndex(
+	modules: SmrtPlaygroundModule[]
+): Map<string, ResolvedPlaygroundSlug> {
+	const byEntryId = new Map<string, ResolvedPlaygroundSlug[]>();
+	for (const module of modules) {
+		for (const entry of module.entries) {
+			const resolved: ResolvedPlaygroundSlug = {
+				qualifiedId: `${module.packageName}:${entry.id}`,
+				packageName: module.packageName,
+				entryId: entry.id,
+				entryTitle: entry.title
+			};
+			const existing = byEntryId.get(entry.id);
+			if (existing) {
+				existing.push(resolved);
+			} else {
+				byEntryId.set(entry.id, [resolved]);
+			}
+		}
+	}
+
+	const index = new Map<string, ResolvedPlaygroundSlug>();
+	for (const [entryId, resolvedEntries] of byEntryId) {
+		if (resolvedEntries.length === 1) {
+			index.set(entryId, resolvedEntries[0]);
+			continue;
+		}
+		for (const resolved of resolvedEntries) {
+			index.set(`${packageShortName(resolved.packageName)}-${entryId}`, resolved);
+		}
+	}
+	return index;
+}
+
+export const playgroundSlugIndex = buildPlaygroundSlugIndex(playgroundModules);
+
+/** Resolve a `/playground?entry=<slug>` slug to its module/entry, or `null` if unknown. */
+export function resolvePlaygroundSlug(slug: string): ResolvedPlaygroundSlug | null {
+	return playgroundSlugIndex.get(slug) ?? null;
+}
+
+/** Every valid `/playground?entry=<slug>` slug, sorted, for discovery/debugging. */
+export function listPlaygroundSlugs(): string[] {
+	return Array.from(playgroundSlugIndex.keys()).sort();
+}
