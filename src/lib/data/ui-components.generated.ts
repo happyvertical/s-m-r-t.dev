@@ -239,37 +239,37 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onEnable',
 				code: '(schedule: AgentScheduleData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when a schedule is enabled.'
 			},
 			{
 				name: 'onDisable',
 				code: '(schedule: AgentScheduleData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when a schedule is disabled.'
 			},
 			{
 				name: 'onDelete',
 				code: '(schedule: AgentScheduleData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when a schedule is deleted.'
 			},
 			{
 				name: 'onRunNow',
 				code: '(schedule: AgentScheduleData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when a schedule is run immediately.'
 			},
 			{
 				name: 'onCreateSchedule',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user clicks to create a new schedule.'
 			},
 			{
 				name: 'onHistoryEntryClick',
 				code: '(entry: AgentRunHistoryEntry) => void',
 				status: false,
-				description: ''
+				description: 'Fired when a run history entry is clicked.'
 			}
 		],
 		sources: [],
@@ -285,37 +285,37 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onEnable',
 				code: '(schedule: AgentScheduleData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when a schedule is enabled.'
 			},
 			{
 				name: 'onDisable',
 				code: '(schedule: AgentScheduleData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when a schedule is disabled.'
 			},
 			{
 				name: 'onDelete',
 				code: '(schedule: AgentScheduleData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when a schedule is deleted.'
 			},
 			{
 				name: 'onRunNow',
 				code: '(schedule: AgentScheduleData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when a schedule is run immediately.'
 			},
 			{
 				name: 'onCreateSchedule',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user clicks to create a new schedule.'
 			},
 			{
 				name: 'onHistoryEntryClick',
 				code: '(entry: AgentRunHistoryEntry) => void',
 				status: false,
-				description: ''
+				description: 'Fired when a run history entry is clicked.'
 			}
 		],
 		components: [],
@@ -574,25 +574,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'config',
 				code: 'Record<string, unknown>',
 				status: true,
-				description: ''
+				description: 'Current configuration values.'
 			},
 			{
 				name: 'schema',
 				code: 'AgentSettingsSchema',
 				status: true,
-				description: ''
+				description: 'Schema defining the form fields and their constraints.'
 			},
 			{
 				name: 'onSave',
 				code: '(config: Record<string, unknown>) => Promise<void>',
 				status: false,
-				description: ''
+				description: 'Fired when the user submits the form with updated values.'
 			},
 			{
 				name: 'readonly',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disables all inputs and hides the save button when true.'
 			}
 		],
 		sources: [],
@@ -602,7 +602,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onSave',
 				code: '(config: Record<string, unknown>) => Promise<void>',
 				status: false,
-				description: ''
+				description: 'Fired when the user submits the form with updated values.'
 			}
 		],
 		components: [],
@@ -703,13 +703,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'status',
 				code: 'ScheduleStatus',
 				status: true,
-				description: ''
+				description: 'The schedule status to display.'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md'",
 				status: false,
-				description: ''
+				description: 'Badge size.'
 			}
 		],
 		sources: [],
@@ -742,7 +742,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'stats',
 				code: 'PropertyStatsWithTrend | null',
 				status: true,
-				description: ''
+				description: 'Analytics data including pageview and user counts with trend comparison.'
 			}
 		],
 		sources: [],
@@ -775,13 +775,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'events',
 				code: 'EventRow[]',
 				status: true,
-				description: ''
+				description: 'Array of event records to display in the table.'
 			},
 			{
 				name: 'maxRows',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Maximum number of events to show; excess events are truncated.'
 			}
 		],
 		sources: [],
@@ -814,37 +814,37 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'propertyId',
 				code: 'string | null',
 				status: true,
-				description: ''
+				description: 'Identifier for the analytics property; empty state is shown if null.'
 			},
 			{
 				name: 'measurementId',
 				code: 'string | null',
 				status: true,
-				description: ''
+				description: 'Tracking ID or measurement identifier for the analytics platform.'
 			},
 			{
 				name: 'provider',
 				code: 'string | null',
 				status: true,
-				description: ''
+				description: "Analytics provider type (e.g., 'ga4', 'plausible', 'matomo')."
 			},
 			{
 				name: 'status',
 				code: "'active' | 'inactive' | 'pending'",
 				status: true,
-				description: ''
+				description: 'Current status of the property connection.'
 			},
 			{
 				name: 'lastSyncAt',
 				code: 'string | null',
 				status: true,
-				description: ''
+				description: 'ISO timestamp of the most recent data synchronization.'
 			},
 			{
 				name: 'siteDomain',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Website domain associated with the analytics property.'
 			}
 		],
 		sources: [],
@@ -877,7 +877,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'status',
 				code: "'active' | 'inactive' | 'pending'",
 				status: true,
-				description: ''
+				description: 'Connection status of the analytics property.'
 			}
 		],
 		sources: [],
@@ -910,31 +910,32 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'label',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Descriptive label displayed at the top of the card.'
 			},
 			{
 				name: 'value',
 				code: 'number | string',
 				status: true,
-				description: ''
+				description: 'Numeric value or text displayed prominently.'
 			},
 			{
 				name: 'trend',
 				code: "'up' | 'down' | 'flat'",
 				status: false,
-				description: ''
+				description: 'Direction indicator: up, down, or flat growth.'
 			},
 			{
 				name: 'trendPercent',
 				code: 'number | null',
 				status: false,
-				description: ''
+				description:
+					"Percent change; null is a zero baseline shown as 'new', undefined hides the badge."
 			},
 			{
 				name: 'subtitle',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Secondary text displayed below the value.'
 			}
 		],
 		sources: [],
@@ -967,13 +968,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'trend',
 				code: "'up' | 'down' | 'flat'",
 				status: true,
-				description: ''
+				description: 'Direction of change: up, down, or flat.'
 			},
 			{
 				name: 'percent',
 				code: 'number | null',
 				status: true,
-				description: ''
+				description: "Percent change; null means a zero baseline, shown as 'new' rather than 0%."
 			}
 		],
 		sources: [],
@@ -1107,7 +1108,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onclose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the detail view is closed.'
 			},
 			{
 				name: 'onSave',
@@ -1119,7 +1120,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onsave',
 				code: '(asset: PersistedAsset, updates: AssetDetailUpdates) => void | Promise<void>',
 				status: false,
-				description: ''
+				description: 'Fired when the user saves metadata changes.'
 			},
 			{
 				name: 'onDelete',
@@ -1131,7 +1132,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'ondelete',
 				code: '(asset: PersistedAsset) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user deletes the asset.'
 			},
 			{
 				name: 'onEdit',
@@ -1143,7 +1144,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onedit',
 				code: '(asset: PersistedAsset) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user clicks to edit the image.'
 			},
 			{
 				name: 'contentReferences',
@@ -1165,7 +1166,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onclose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the detail view is closed.'
 			},
 			{
 				name: 'onSave',
@@ -1177,7 +1178,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onsave',
 				code: '(asset: PersistedAsset, updates: AssetDetailUpdates) => void | Promise<void>',
 				status: false,
-				description: ''
+				description: 'Fired when the user saves metadata changes.'
 			},
 			{
 				name: 'onDelete',
@@ -1189,7 +1190,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'ondelete',
 				code: '(asset: PersistedAsset) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user deletes the asset.'
 			},
 			{
 				name: 'onEdit',
@@ -1201,7 +1202,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onedit',
 				code: '(asset: PersistedAsset) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user clicks to edit the image.'
 			}
 		],
 		components: [],
@@ -3902,61 +3903,61 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for API requests to fetch and update chat sessions.'
 			},
 			{
 				name: 'assistantContext',
 				code: 'ContentEditorAssistantContext | null',
 				status: false,
-				description: ''
+				description: 'Context object from the parent editor containing content and editor state.'
 			},
 			{
 				name: 'contentId',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Identifier of the content being discussed in the chat.'
 			},
 			{
 				name: 'currentEditorState',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Current markdown or structured state of the content editor.'
 			},
 			{
 				name: 'currentReferenceIds',
 				code: 'string[]',
 				status: false,
-				description: ''
+				description: 'List of reference or link identifiers mentioned in the content.'
 			},
 			{
 				name: 'formFields',
 				code: 'Record<string, string>',
 				status: false,
-				description: ''
+				description: 'Current form field values to include in AI context.'
 			},
 			{
 				name: 'currentProfileId',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Identifier of the profile owner or collaborator in the chat.'
 			},
 			{
 				name: 'assistantFieldAllowList',
 				code: 'ContentEditorAssistantFieldUpdateAllowList',
 				status: false,
-				description: ''
+				description: 'Policy object defining which fields the assistant can modify.'
 			},
 			{
 				name: 'onapplyfields',
 				code: '(fields: Record<string, string>) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the assistant recommends field updates in its response.'
 			},
 			{
 				name: 'onclose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user closes the chat interface.'
 			}
 		],
 		sources: [],
@@ -3966,13 +3967,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onapplyfields',
 				code: '(fields: Record<string, string>) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the assistant recommends field updates in its response.'
 			},
 			{
 				name: 'onclose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user closes the chat interface.'
 			}
 		],
 		components: [],
@@ -3997,55 +3998,55 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'value',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'The body content string being edited, in HTML or the configured format.'
 			},
 			{
 				name: 'format',
 				code: 'ContentBodyFormat | null',
 				status: false,
-				description: ''
+				description: 'Format of the body content: HTML, Markdown, or auto-detected.'
 			},
 			{
 				name: 'placeholder',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Placeholder text shown when the editor is empty.'
 			},
 			{
 				name: 'selectedImageIndex',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Index of the currently selected image in the body, or -1 for none.'
 			},
 			{
 				name: 'onChange',
 				code: '(change: ContentBodyEditorChange) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the body content or embedded images change.'
 			},
 			{
 				name: 'onOpenImageChooser',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user clicks to open the image chooser.'
 			},
 			{
 				name: 'onSelectImage',
 				code: '(index: number) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user selects an image within the body.'
 			},
 			{
 				name: 'onUseImageAsThumbnail',
 				code: '(assetId: string) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user sets an image as the content thumbnail.'
 			},
 			{
 				name: 'onResolveImage',
 				code: '(selected: ImageLike | File | string) => Promise<unknown> | unknown',
 				status: false,
-				description: ''
+				description: 'Resolves an image file, asset, or ID to a persisted image URL or object.'
 			}
 		],
 		sources: [],
@@ -4055,31 +4056,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onChange',
 				code: '(change: ContentBodyEditorChange) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the body content or embedded images change.'
 			},
 			{
 				name: 'onOpenImageChooser',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user clicks to open the image chooser.'
 			},
 			{
 				name: 'onSelectImage',
 				code: '(index: number) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user selects an image within the body.'
 			},
 			{
 				name: 'onUseImageAsThumbnail',
 				code: '(assetId: string) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user sets an image as the content thumbnail.'
 			},
 			{
 				name: 'onResolveImage',
 				code: '(selected: ImageLike | File | string) => Promise<unknown> | unknown',
 				status: false,
-				description: ''
+				description: 'Resolves an image file, asset, or ID to a persisted image URL or object.'
 			}
 		],
 		components: [],
@@ -4104,19 +4105,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'content',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'The body content to render as HTML or Markdown.'
 			},
 			{
 				name: 'format',
 				code: 'ContentBodyFormat | null',
 				status: false,
-				description: ''
+				description: 'Format of the content: HTML, Markdown, or auto-detected if null.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the rendered container.'
 			}
 		],
 		sources: [],
@@ -4144,19 +4145,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for API requests to fetch fact audit data.'
 			},
 			{
 				name: 'contentId',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Identifier of the content to audit for factual claims.'
 			},
 			{
 				name: 'onFactAuditChange',
 				code: '(state: FactAuditStateData | null) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the fact audit state changes or is loaded.'
 			}
 		],
 		sources: [],
@@ -4166,7 +4167,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onFactAuditChange',
 				code: '(state: FactAuditStateData | null) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the fact audit state changes or is loaded.'
 			}
 		],
 		components: [],
@@ -4191,43 +4192,43 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'types',
 				code: 'ContentContributionTypeData[]',
 				status: false,
-				description: ''
+				description: 'Available contribution types the user can select from.'
 			},
 			{
 				name: 'initial',
 				code: 'Partial<ContentContributionData>',
 				status: false,
-				description: ''
+				description: 'Initial form values to populate the fields.'
 			},
 			{
 				name: 'showContributorFields',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show email and name fields for the contributor.'
 			},
 			{
 				name: 'submitLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Text label for the submit button.'
 			},
 			{
 				name: 'action',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'URL for form submission if not using onSubmit callback.'
 			},
 			{
 				name: 'onSubmit',
 				code: '(payload: ContentContributionFormSubmitData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user submits the form with valid data.'
 			},
 			{
 				name: 'onCancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user cancels the form.'
 			}
 		],
 		sources: [],
@@ -4237,13 +4238,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onSubmit',
 				code: '(payload: ContentContributionFormSubmitData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user submits the form with valid data.'
 			},
 			{
 				name: 'onCancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user cancels the form.'
 			}
 		],
 		components: [],
@@ -4268,49 +4269,49 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'contributions',
 				code: 'ContentContributionData[]',
 				status: false,
-				description: ''
+				description: 'List of contributions pending review.'
 			},
 			{
 				name: 'selectedId',
 				code: 'string | null',
 				status: false,
-				description: ''
+				description: 'ID of the contribution currently selected for review.'
 			},
 			{
 				name: 'emptyMessage',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Message shown when the contributions list is empty.'
 			},
 			{
 				name: 'workflowFormAction',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'URL for workflow form submission to handle approve/reject server-side.'
 			},
 			{
 				name: 'onSelect',
 				code: '(contribution: ContentContributionData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user selects a contribution from the list.'
 			},
 			{
 				name: 'onApprove',
 				code: "(contribution: ContentContributionData, options: { targetStatus: 'draft' | 'review'; note: string; }) => void",
 				status: false,
-				description: ''
+				description: 'Fired when the user approves a contribution and optionally promotes it.'
 			},
 			{
 				name: 'onRequestChanges',
 				code: '(contribution: ContentContributionData, options: { note: string; }) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user requests changes to a contribution.'
 			},
 			{
 				name: 'onReject',
 				code: '(contribution: ContentContributionData, options: { note: string; }) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user rejects a contribution.'
 			}
 		],
 		sources: [],
@@ -4320,25 +4321,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onSelect',
 				code: '(contribution: ContentContributionData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user selects a contribution from the list.'
 			},
 			{
 				name: 'onApprove',
 				code: "(contribution: ContentContributionData, options: { targetStatus: 'draft' | 'review'; note: string; }) => void",
 				status: false,
-				description: ''
+				description: 'Fired when the user approves a contribution and optionally promotes it.'
 			},
 			{
 				name: 'onRequestChanges',
 				code: '(contribution: ContentContributionData, options: { note: string; }) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user requests changes to a contribution.'
 			},
 			{
 				name: 'onReject',
 				code: '(contribution: ContentContributionData, options: { note: string; }) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user rejects a contribution.'
 			}
 		],
 		components: [],
@@ -4363,31 +4364,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'contributions',
 				code: 'ContentContributionData[]',
 				status: false,
-				description: ''
+				description: 'List of contributions submitted by the user.'
 			},
 			{
 				name: 'selectedId',
 				code: 'string | null',
 				status: false,
-				description: ''
+				description: 'ID of the contribution currently displayed for detail viewing.'
 			},
 			{
 				name: 'emptyMessage',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Message shown when the contributions list is empty.'
 			},
 			{
 				name: 'onSelect',
 				code: '(contribution: ContentContributionData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user selects a contribution from the list.'
 			},
 			{
 				name: 'onWithdraw',
 				code: '(contribution: ContentContributionData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user withdraws a pending contribution.'
 			}
 		],
 		sources: [],
@@ -4397,13 +4398,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onSelect',
 				code: '(contribution: ContentContributionData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user selects a contribution from the list.'
 			},
 			{
 				name: 'onWithdraw',
 				code: '(contribution: ContentContributionData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user withdraws a pending contribution.'
 			}
 		],
 		components: [],
@@ -4428,25 +4429,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'client',
 				code: 'ReturnType<typeof createClient>',
 				status: false,
-				description: ''
+				description: 'Pre-initialized API client; creates a new one if omitted.'
 			},
 			{
 				name: 'navigation',
 				code: 'ContentRouteNavigationItem[]',
 				status: false,
-				description: ''
+				description: 'Navigation items shown in the sidebar.'
 			},
 			{
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for content API requests.'
 			},
 			{
 				name: 'embedded',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the route is embedded in a parent application.'
 			}
 		],
 		sources: [],
@@ -4474,19 +4475,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'types',
 				code: 'ContentContributionTypeData[]',
 				status: false,
-				description: ''
+				description: 'Available contribution types to edit and configure.'
 			},
 			{
 				name: 'onSave',
 				code: '(type: Partial<ContentContributionTypeData>) => void',
 				status: true,
-				description: ''
+				description: 'Fired when the user saves changes to a contribution type.'
 			},
 			{
 				name: 'onDelete',
 				code: '(type: ContentContributionTypeData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user deletes a contribution type.'
 			}
 		],
 		sources: [],
@@ -4496,13 +4497,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onSave',
 				code: '(type: Partial<ContentContributionTypeData>) => void',
 				status: true,
-				description: ''
+				description: 'Fired when the user saves changes to a contribution type.'
 			},
 			{
 				name: 'onDelete',
 				code: '(type: ContentContributionTypeData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user deletes a contribution type.'
 			}
 		],
 		components: [],
@@ -4527,19 +4528,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'contributors',
 				code: 'ContentContributorData[]',
 				status: false,
-				description: ''
+				description: 'List of approved contributors and their trust levels.'
 			},
 			{
 				name: 'onSave',
 				code: '(contributor: Partial<ContentContributorData>) => void',
 				status: true,
-				description: ''
+				description: 'Fired when the user saves a new or edited contributor.'
 			},
 			{
 				name: 'onDelete',
 				code: '(contributor: ContentContributorData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user removes a contributor.'
 			}
 		],
 		sources: [],
@@ -4549,13 +4550,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onSave',
 				code: '(contributor: Partial<ContentContributorData>) => void',
 				status: true,
-				description: ''
+				description: 'Fired when the user saves a new or edited contributor.'
 			},
 			{
 				name: 'onDelete',
 				code: '(contributor: ContentContributorData) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user removes a contributor.'
 			}
 		],
 		components: [],
@@ -4580,25 +4581,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for API requests to fetch and create corrections.'
 			},
 			{
 				name: 'contentId',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Identifier of the content being corrected.'
 			},
 			{
 				name: 'defaultRelationship',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Relationship type used to filter which related facts are loaded.'
 			},
 			{
 				name: 'onCorrectionsChange',
 				code: '(corrections: ContentCorrectionData[]) => void',
 				status: false,
-				description: ''
+				description: 'Fired when corrections are loaded or a new correction is created.'
 			}
 		],
 		sources: [],
@@ -4608,7 +4609,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onCorrectionsChange',
 				code: '(corrections: ContentCorrectionData[]) => void',
 				status: false,
-				description: ''
+				description: 'Fired when corrections are loaded or a new correction is created.'
 			}
 		],
 		components: [],
@@ -4633,97 +4634,97 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for API requests to load and save content.'
 			},
 			{
 				name: 'content',
 				code: 'ContentData | null',
 				status: false,
-				description: ''
+				description: 'The content object being edited, or null for new content.'
 			},
 			{
 				name: 'contentId',
 				code: 'string',
 				status: false,
-				description: ''
+				description: "Identifier of the content, or 'new' if creating."
 			},
 			{
 				name: 'factAudit',
 				code: 'FactAuditStateData | null',
 				status: false,
-				description: ''
+				description: 'Current fact audit state including claims and their support status.'
 			},
 			{
 				name: 'saveDisabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disable the save button and submission.'
 			},
 			{
 				name: 'saveNotice',
 				code: 'string | null',
 				status: false,
-				description: ''
+				description: 'Message displayed below the save button.'
 			},
 			{
 				name: 'agentChatEnabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Enable the AI chat sidebar and assistant features.'
 			},
 			{
 				name: 'agentChatNotice',
 				code: 'string | null',
 				status: false,
-				description: ''
+				description: 'Message displayed to explain why AI chat is unavailable.'
 			},
 			{
 				name: 'hideActions',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Hide the save and cancel action buttons.'
 			},
 			{
 				name: 'hideChat',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Hide the AI chat sidebar completely.'
 			},
 			{
 				name: 'assistantFieldAllowList',
 				code: 'ContentEditorAssistantFieldUpdateAllowList',
 				status: false,
-				description: ''
+				description: 'Policy object defining which fields the assistant can modify.'
 			},
 			{
 				name: 'onAssistantContextChange',
 				code: 'ContentEditorAssistantContextChange',
 				status: false,
-				description: ''
+				description: 'Fired when the assistant context changes (for session tracking).'
 			},
 			{
 				name: 'onChange',
 				code: '(data: ContentEditorSnapshot) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user edits content, with the current editor snapshot.'
 			},
 			{
 				name: 'onFactAuditChange',
 				code: '(state: FactAuditStateData | null) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the fact audit state changes or is loaded.'
 			},
 			{
 				name: 'onSave',
 				code: '(data: ContentEditorSavePayload) => void',
 				status: true,
-				description: ''
+				description: 'Fired when the user submits the editor with the saved payload.'
 			},
 			{
 				name: 'onCancel',
 				code: '() => void',
 				status: true,
-				description: ''
+				description: 'Fired when the user cancels editing without saving.'
 			}
 		],
 		sources: [],
@@ -4733,31 +4734,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onAssistantContextChange',
 				code: 'ContentEditorAssistantContextChange',
 				status: false,
-				description: ''
+				description: 'Fired when the assistant context changes (for session tracking).'
 			},
 			{
 				name: 'onChange',
 				code: '(data: ContentEditorSnapshot) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user edits content, with the current editor snapshot.'
 			},
 			{
 				name: 'onFactAuditChange',
 				code: '(state: FactAuditStateData | null) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the fact audit state changes or is loaded.'
 			},
 			{
 				name: 'onSave',
 				code: '(data: ContentEditorSavePayload) => void',
 				status: true,
-				description: ''
+				description: 'Fired when the user submits the editor with the saved payload.'
 			},
 			{
 				name: 'onCancel',
 				code: '() => void',
 				status: true,
-				description: ''
+				description: 'Fired when the user cancels editing without saving.'
 			}
 		],
 		components: [],
@@ -4782,31 +4783,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'client',
 				code: 'ReturnType<typeof createClient>',
 				status: false,
-				description: ''
+				description: 'Pre-initialized API client; creates a new one if omitted.'
 			},
 			{
 				name: 'navigation',
 				code: 'ContentRouteNavigationItem[]',
 				status: false,
-				description: ''
+				description: 'Navigation items shown in the sidebar.'
 			},
 			{
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for fact API requests.'
 			},
 			{
 				name: 'createHref',
 				code: 'string | null',
 				status: false,
-				description: ''
+				description: 'URL to navigate to when creating a new fact.'
 			},
 			{
 				name: 'embedded',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the route is embedded in a parent application.'
 			}
 		],
 		sources: [],
@@ -4835,25 +4836,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'assignment',
 				code: 'Partial<ContentGovernanceAssignmentData>',
 				status: false,
-				description: ''
+				description: 'The governance assignment to edit, or an empty object for new.'
 			},
 			{
 				name: 'profiles',
 				code: 'ContentGovernanceProfileData[]',
 				status: false,
-				description: ''
+				description: 'Available governance profiles to assign for publication and corrections.'
 			},
 			{
 				name: 'onSave',
 				code: '(assignment: Partial<ContentGovernanceAssignmentData>) => void',
 				status: true,
-				description: ''
+				description: 'Fired when the user saves the assignment configuration.'
 			},
 			{
 				name: 'onCancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user cancels editing.'
 			}
 		],
 		sources: [],
@@ -4863,13 +4864,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onSave',
 				code: '(assignment: Partial<ContentGovernanceAssignmentData>) => void',
 				status: true,
-				description: ''
+				description: 'Fired when the user saves the assignment configuration.'
 			},
 			{
 				name: 'onCancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user cancels editing.'
 			}
 		],
 		components: [],
@@ -4894,19 +4895,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for API requests to load and save governance definitions.'
 			},
 			{
 				name: 'client',
 				code: 'ContentGovernanceManagerClient',
 				status: false,
-				description: ''
+				description: 'Custom client instance for governance operations, or auto-created if omitted.'
 			},
 			{
 				name: 'onChange',
 				code: '(definitions: ContentGovernanceDefinitionsData | null) => void',
 				status: false,
-				description: ''
+				description: 'Fired when governance policies or profiles are loaded or changed.'
 			}
 		],
 		sources: [],
@@ -4916,7 +4917,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onChange',
 				code: '(definitions: ContentGovernanceDefinitionsData | null) => void',
 				status: false,
-				description: ''
+				description: 'Fired when governance policies or profiles are loaded or changed.'
 			}
 		],
 		components: [],
@@ -4941,97 +4942,97 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for API requests to load facts, reviews, and governance state.'
 			},
 			{
 				name: 'contentId',
 				code: 'string',
 				status: false,
-				description: ''
+				description: "Identifier of the content, or 'new' if creating."
 			},
 			{
 				name: 'draftType',
 				code: 'string | null',
 				status: false,
-				description: ''
+				description: 'Type of the draft content (e.g., article, post).'
 			},
 			{
 				name: 'draftVariant',
 				code: 'string | null',
 				status: false,
-				description: ''
+				description: 'Variant of the draft content within its type.'
 			},
 			{
 				name: 'selectedFactIds',
 				code: 'string[]',
 				status: false,
-				description: ''
+				description: 'IDs of facts currently linked to the content.'
 			},
 			{
 				name: 'selectedFacts',
 				code: 'FactData[]',
 				status: false,
-				description: ''
+				description: 'Fact objects corresponding to selectedFactIds.'
 			},
 			{
 				name: 'defaultRelationship',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Default relationship type when adding facts (e.g., supports, contradicts).'
 			},
 			{
 				name: 'reviewProfileKey',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Key of the profile used to render reviews and requirements.'
 			},
 			{
 				name: 'customReviewLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Label for the custom review workflow button.'
 			},
 			{
 				name: 'customReviewInstructions',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Instructions or guidance shown for custom review.'
 			},
 			{
 				name: 'customReviewPolicyKey',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Policy key used for custom review submissions.'
 			},
 			{
 				name: 'showFactCatalog',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show the searchable fact catalog browser in the panel.'
 			},
 			{
 				name: 'onFactsChange',
 				code: '(factIds: string[], facts: FactData[]) => void',
 				status: false,
-				description: ''
+				description: 'Fired when facts are linked or unlinked from the content.'
 			},
 			{
 				name: 'onGovernanceStateChange',
 				code: '(state: ContentGovernanceStateData | null) => void',
 				status: false,
-				description: ''
+				description: 'Fired when governance state is loaded or changes.'
 			},
 			{
 				name: 'onFactAuditChange',
 				code: '(state: FactAuditStateData | null) => void',
 				status: false,
-				description: ''
+				description: 'Fired when fact audit state is loaded or changes.'
 			},
 			{
 				name: 'hiddenSections',
 				code: 'ContentGovernancePanelSection[]',
 				status: false,
-				description: ''
+				description: 'Panel sections to hide from the user interface.'
 			}
 		],
 		sources: [],
@@ -5041,19 +5042,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onFactsChange',
 				code: '(factIds: string[], facts: FactData[]) => void',
 				status: false,
-				description: ''
+				description: 'Fired when facts are linked or unlinked from the content.'
 			},
 			{
 				name: 'onGovernanceStateChange',
 				code: '(state: ContentGovernanceStateData | null) => void',
 				status: false,
-				description: ''
+				description: 'Fired when governance state is loaded or changes.'
 			},
 			{
 				name: 'onFactAuditChange',
 				code: '(state: FactAuditStateData | null) => void',
 				status: false,
-				description: ''
+				description: 'Fired when fact audit state is loaded or changes.'
 			}
 		],
 		components: [],
@@ -5078,19 +5079,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'policy',
 				code: 'Partial<ContentReviewPolicyData>',
 				status: false,
-				description: ''
+				description: 'The review policy to edit, or an empty object for new.'
 			},
 			{
 				name: 'onSave',
 				code: '(policy: Partial<ContentReviewPolicyData>) => void',
 				status: true,
-				description: ''
+				description: 'Fired when the user saves the policy configuration.'
 			},
 			{
 				name: 'onCancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user cancels editing.'
 			}
 		],
 		sources: [],
@@ -5100,13 +5101,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onSave',
 				code: '(policy: Partial<ContentReviewPolicyData>) => void',
 				status: true,
-				description: ''
+				description: 'Fired when the user saves the policy configuration.'
 			},
 			{
 				name: 'onCancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user cancels editing.'
 			}
 		],
 		components: [],
@@ -5131,25 +5132,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'profile',
 				code: 'Partial<ContentGovernanceProfileData>',
 				status: false,
-				description: ''
+				description: 'The governance profile to edit, or an empty object for new.'
 			},
 			{
 				name: 'policies',
 				code: 'ContentReviewPolicyData[]',
 				status: false,
-				description: ''
+				description: 'Available review policies to include in profile requirements.'
 			},
 			{
 				name: 'onSave',
 				code: '(profile: Partial<ContentGovernanceProfileData>) => void',
 				status: true,
-				description: ''
+				description: 'Fired when the user saves the profile configuration.'
 			},
 			{
 				name: 'onCancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user cancels editing.'
 			}
 		],
 		sources: [],
@@ -5159,13 +5160,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onSave',
 				code: '(profile: Partial<ContentGovernanceProfileData>) => void',
 				status: true,
-				description: ''
+				description: 'Fired when the user saves the profile configuration.'
 			},
 			{
 				name: 'onCancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user cancels editing.'
 			}
 		],
 		components: [],
@@ -5190,25 +5191,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'client',
 				code: 'ContentGovernanceManagerClient',
 				status: false,
-				description: ''
+				description: 'Pre-initialized governance client; creates a new one if omitted.'
 			},
 			{
 				name: 'navigation',
 				code: 'ContentRouteNavigationItem[]',
 				status: false,
-				description: ''
+				description: 'Navigation items shown in the sidebar.'
 			},
 			{
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for governance API requests.'
 			},
 			{
 				name: 'embedded',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the route is embedded in a parent application.'
 			}
 		],
 		sources: [],
@@ -5236,31 +5237,32 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'section',
 				code: 'ContentGovernanceToolSection',
 				status: true,
-				description: ''
+				description:
+					'The governance tool section to display (claimAudit, corrections, versions, or transparency).'
 			},
 			{
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for API requests to fetch governance data.'
 			},
 			{
 				name: 'contentId',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Identifier of the content being governed.'
 			},
 			{
 				name: 'onGovernanceStateChange',
 				code: '(state: ContentGovernanceStateData | null) => void',
 				status: false,
-				description: ''
+				description: 'Fired when governance state changes (e.g., from transparency tool).'
 			},
 			{
 				name: 'onFactAuditChange',
 				code: '(state: FactAuditStateData | null) => void',
 				status: false,
-				description: ''
+				description: 'Fired when fact audit state changes (e.g., from claim audit tool).'
 			}
 		],
 		sources: [],
@@ -5270,13 +5272,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onGovernanceStateChange',
 				code: '(state: ContentGovernanceStateData | null) => void',
 				status: false,
-				description: ''
+				description: 'Fired when governance state changes (e.g., from transparency tool).'
 			},
 			{
 				name: 'onFactAuditChange',
 				code: '(state: FactAuditStateData | null) => void',
 				status: false,
-				description: ''
+				description: 'Fired when fact audit state changes (e.g., from claim audit tool).'
 			}
 		],
 		components: [],
@@ -5301,61 +5303,61 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for asset upload and retrieval API requests.'
 			},
 			{
 				name: 'assets',
 				code: 'ContentEditorAsset[]',
 				status: false,
-				description: ''
+				description: 'List of assets to display in the browser grid.'
 			},
 			{
 				name: 'thumbnailAssetId',
 				code: 'string | null',
 				status: false,
-				description: ''
+				description: 'ID of the asset currently marked as the thumbnail.'
 			},
 			{
 				name: 'addButtonLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Label text displayed on the button to open the image uploader.'
 			},
 			{
 				name: 'selectActionLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Label text displayed on buttons to select an asset for use.'
 			},
 			{
 				name: 'showUploaderInitially',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to display the image uploader panel on initial render.'
 			},
 			{
 				name: 'onSelectImage',
 				code: '(image: ImageLike | File | string) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when a new image is selected through the uploader.'
 			},
 			{
 				name: 'onUseAsset',
 				code: '(asset: ContentEditorAsset) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when an existing asset is selected from the grid.'
 			},
 			{
 				name: 'onRemoveAsset',
 				code: '(assetId: string) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when an asset is deleted from the collection.'
 			},
 			{
 				name: 'onUseAsThumbnail',
 				code: '(assetId: string) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when an asset is designated as the thumbnail.'
 			}
 		],
 		sources: [],
@@ -5365,25 +5367,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onSelectImage',
 				code: '(image: ImageLike | File | string) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when a new image is selected through the uploader.'
 			},
 			{
 				name: 'onUseAsset',
 				code: '(asset: ContentEditorAsset) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when an existing asset is selected from the grid.'
 			},
 			{
 				name: 'onRemoveAsset',
 				code: '(assetId: string) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when an asset is deleted from the collection.'
 			},
 			{
 				name: 'onUseAsThumbnail',
 				code: '(assetId: string) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when an asset is designated as the thumbnail.'
 			}
 		],
 		components: [],
@@ -5408,25 +5410,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'body',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Content body text from which images are extracted.'
 			},
 			{
 				name: 'format',
 				code: 'ContentBodyFormat | null',
 				status: false,
-				description: ''
+				description: 'Format of the body content for correct image extraction.'
 			},
 			{
 				name: 'selectedIndex',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Index of the currently selected image within the body.'
 			},
 			{
 				name: 'onSelect',
 				code: '(index: number) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the user selects an image by index.'
 			}
 		],
 		sources: [],
@@ -5436,7 +5438,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onSelect',
 				code: '(index: number) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the user selects an image by index.'
 			}
 		],
 		components: [],
@@ -5461,7 +5463,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for content API requests.'
 			},
 			{
 				name: 'contents',
@@ -5474,43 +5476,43 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'type',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Filter content by this type; no filtering applied when omitted.'
 			},
 			{
 				name: 'defaultViewMode',
 				code: 'ContentListViewMode',
 				status: false,
-				description: ''
+				description: 'Initial view layout mode for the content list.'
 			},
 			{
 				name: 'onEdit',
 				code: '(content: ContentData) => void',
 				status: true,
-				description: ''
+				description: 'Invoked when the user requests to edit a content item.'
 			},
 			{
 				name: 'onDelete',
 				code: '(content: ContentData) => void',
 				status: true,
-				description: ''
+				description: 'Invoked when the user requests to delete a content item.'
 			},
 			{
 				name: 'onAdd',
 				code: '() => void',
 				status: true,
-				description: ''
+				description: 'Invoked when the user requests to create new content.'
 			},
 			{
 				name: 'controls',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional UI controls rendered above the content list.'
 			},
 			{
 				name: 'getViewHref',
 				code: '(content: ContentData) => string | null',
 				status: false,
-				description: ''
+				description: 'Returns a URL to view the published content; null hides the view link.'
 			},
 			{
 				name: 'loading',
@@ -5575,19 +5577,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onEdit',
 				code: '(content: ContentData) => void',
 				status: true,
-				description: ''
+				description: 'Invoked when the user requests to edit a content item.'
 			},
 			{
 				name: 'onDelete',
 				code: '(content: ContentData) => void',
 				status: true,
-				description: ''
+				description: 'Invoked when the user requests to delete a content item.'
 			},
 			{
 				name: 'onAdd',
 				code: '() => void',
 				status: true,
-				description: ''
+				description: 'Invoked when the user requests to create new content.'
 			},
 			{
 				name: 'onRetry',
@@ -5622,13 +5624,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'data',
 				code: 'ContentMetadataFieldData',
 				status: true,
-				description: ''
+				description: 'Current metadata field values.'
 			},
 			{
 				name: 'onChange',
 				code: '(change: Record<string, unknown>) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the user modifies any metadata field.'
 			}
 		],
 		sources: [],
@@ -5638,7 +5640,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onChange',
 				code: '(change: Record<string, unknown>) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the user modifies any metadata field.'
 			}
 		],
 		components: [],
@@ -5663,19 +5665,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'referenceIds',
 				code: 'string[]',
 				status: false,
-				description: ''
+				description: 'IDs of referenced content items.'
 			},
 			{
 				name: 'references',
 				code: 'ContentEditorReference[]',
 				status: false,
-				description: ''
+				description: 'Resolved reference objects with metadata for display.'
 			},
 			{
 				name: 'onReferenceIdsChange',
 				code: '(referenceIds: string[]) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the user adds or removes a reference.'
 			},
 			{
 				name: 'children',
@@ -5692,7 +5694,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onReferenceIdsChange',
 				code: '(referenceIds: string[]) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the user adds or removes a reference.'
 			}
 		],
 		components: [],
@@ -5717,31 +5719,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'items',
 				code: 'ContentReviewStatusTrayItem[]',
 				status: false,
-				description: ''
+				description: 'Review status items to display in the tray.'
 			},
 			{
 				name: 'activeId',
 				code: 'string | null',
 				status: false,
-				description: ''
+				description: 'ID of the currently selected status item.'
 			},
 			{
 				name: 'open',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the tray dropdown menu is displayed.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Label text shown when the tray is collapsed.'
 			},
 			{
 				name: 'onSelect',
 				code: '(item: ContentReviewStatusTrayItem) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the user selects a status item.'
 			}
 		],
 		sources: [],
@@ -5751,7 +5753,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onSelect',
 				code: '(item: ContentReviewStatusTrayItem) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the user selects a status item.'
 			}
 		],
 		components: [],
@@ -5776,13 +5778,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'data',
 				code: 'ContentStatusFieldData',
 				status: true,
-				description: ''
+				description: 'Current status field values.'
 			},
 			{
 				name: 'onChange',
 				code: '(change: Record<string, unknown>) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the user modifies any status field.'
 			}
 		],
 		sources: [],
@@ -5792,7 +5794,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onChange',
 				code: '(change: Record<string, unknown>) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the user modifies any status field.'
 			}
 		],
 		components: [],
@@ -5817,25 +5819,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'value',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Current title text value.'
 			},
 			{
 				name: 'placeholder',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Placeholder text shown when the field is empty.'
 			},
 			{
 				name: 'required',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the title field must be filled before submission.'
 			},
 			{
 				name: 'onChange',
 				code: '(value: string) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the user modifies the title text.'
 			}
 		],
 		sources: [],
@@ -5845,7 +5847,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onChange',
 				code: '(value: string) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the user modifies the title text.'
 			}
 		],
 		components: [],
@@ -5870,19 +5872,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'transparency',
 				code: 'ContentTransparencyData | null',
 				status: false,
-				description: ''
+				description: 'Transparency report data including facts and references.'
 			},
 			{
 				name: 'title',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Title displayed at the top of the report.'
 			},
 			{
 				name: 'emptyCopy',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Message displayed when no transparency data is available.'
 			}
 		],
 		sources: [],
@@ -5910,19 +5912,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for content API requests.'
 			},
 			{
 				name: 'contentId',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'ID of the content item to analyze for transparency.'
 			},
 			{
 				name: 'onGovernanceStateChange',
 				code: '(state: ContentGovernanceStateData | null) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the governance state of the content changes.'
 			}
 		],
 		sources: [],
@@ -5932,7 +5934,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onGovernanceStateChange',
 				code: '(state: ContentGovernanceStateData | null) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the governance state of the content changes.'
 			}
 		],
 		components: [],
@@ -5957,19 +5959,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for content API requests.'
 			},
 			{
 				name: 'contentId',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'ID of the content item to retrieve versions for.'
 			},
 			{
 				name: 'onVersionsChange',
 				code: '(versions: ContentVersionData[]) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the versions list changes.'
 			}
 		],
 		sources: [],
@@ -5979,7 +5981,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onVersionsChange',
 				code: '(versions: ContentVersionData[]) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the versions list changes.'
 			}
 		],
 		components: [],
@@ -6004,31 +6006,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'client',
 				code: 'ReturnType<typeof createClient>',
 				status: false,
-				description: ''
+				description: 'Pre-initialized API client; creates a new one if omitted.'
 			},
 			{
 				name: 'navigation',
 				code: 'ContentRouteNavigationItem[]',
 				status: false,
-				description: ''
+				description: 'Navigation items shown in the sidebar.'
 			},
 			{
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for content API requests.'
 			},
 			{
 				name: 'getPublishedHref',
 				code: '(content: ContentData) => string | null',
 				status: false,
-				description: ''
+				description: 'Returns a URL to view published content; null hides the view link.'
 			},
 			{
 				name: 'embedded',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the route is embedded in a parent application.'
 			}
 		],
 		sources: [],
@@ -6056,121 +6058,121 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'apiBaseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL for content and governance API requests.'
 			},
 			{
 				name: 'content',
 				code: 'ContentData',
 				status: false,
-				description: ''
+				description: 'Existing content to edit; omit to create new content.'
 			},
 			{
 				name: 'contentId',
 				code: 'string',
 				status: false,
-				description: ''
+				description: "ID of the content being edited; defaults to 'new'."
 			},
 			{
 				name: 'defaultRelationship',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Default relationship type for new facts added to the content.'
 			},
 			{
 				name: 'reviewProfileKey',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Key for the publication review profile to enforce.'
 			},
 			{
 				name: 'customReviewLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Label shown for custom review workflow submissions.'
 			},
 			{
 				name: 'customReviewInstructions',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Instructions shown for custom review workflow submissions.'
 			},
 			{
 				name: 'customReviewPolicyKey',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Policy key applied to custom review submissions.'
 			},
 			{
 				name: 'enforcePublishReadiness',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to require publication readiness before saving.'
 			},
 			{
 				name: 'saveDisabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to disable the save button.'
 			},
 			{
 				name: 'saveNotice',
 				code: 'string | null',
 				status: false,
-				description: ''
+				description: 'Message displayed when save is disabled or unavailable.'
 			},
 			{
 				name: 'agentChatEnabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the agent chat assistant panel is available.'
 			},
 			{
 				name: 'agentChatNotice',
 				code: 'string | null',
 				status: false,
-				description: ''
+				description: 'Message displayed when agent chat is unavailable.'
 			},
 			{
 				name: 'hideActions',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to hide the save and cancel action buttons.'
 			},
 			{
 				name: 'hideChat',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to hide the agent chat panel.'
 			},
 			{
 				name: 'showFactCatalog',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to display the fact catalog panel.'
 			},
 			{
 				name: 'showGovernancePanel',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to display the governance status panel.'
 			},
 			{
 				name: 'onAssistantContextChange',
 				code: 'ContentEditorAssistantContextChange',
 				status: false,
-				description: ''
+				description: 'Invoked when the assistant context changes during editing.'
 			},
 			{
 				name: 'onSave',
 				code: '(data: GovernedContentEditorSaveData) => void',
 				status: true,
-				description: ''
+				description: 'Invoked when the user saves the content.'
 			},
 			{
 				name: 'onCancel',
 				code: '() => void',
 				status: true,
-				description: ''
+				description: 'Invoked when the user cancels editing.'
 			}
 		],
 		sources: [],
@@ -6180,19 +6182,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onAssistantContextChange',
 				code: 'ContentEditorAssistantContextChange',
 				status: false,
-				description: ''
+				description: 'Invoked when the assistant context changes during editing.'
 			},
 			{
 				name: 'onSave',
 				code: '(data: GovernedContentEditorSaveData) => void',
 				status: true,
-				description: ''
+				description: 'Invoked when the user saves the content.'
 			},
 			{
 				name: 'onCancel',
 				code: '() => void',
 				status: true,
-				description: ''
+				description: 'Invoked when the user cancels editing.'
 			}
 		],
 		components: [],
@@ -6256,19 +6258,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'data',
 				code: 'PublishedContentArticleRouteData',
 				status: true,
-				description: ''
+				description: 'Published article data including content and metadata.'
 			},
 			{
 				name: 'backHref',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'URL to navigate to when the user clicks the back link.'
 			},
 			{
 				name: 'backLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Text shown on the back navigation link.'
 			}
 		],
 		sources: [],
@@ -6301,13 +6303,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'meeting',
 				code: 'Meeting',
 				status: true,
-				description: ''
+				description: 'The meeting to display.'
 			},
 			{
 				name: 'calendarUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'URL to navigate to when clicking the back link.'
 			}
 		],
 		sources: [],
@@ -6464,43 +6466,43 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'state',
 				code: 'FieldPolicyEditorState',
 				status: true,
-				description: ''
+				description: 'Current editor state including policy rows, capabilities, and field metadata.'
 			},
 			{
 				name: 'adapter',
 				code: 'FieldPolicyEditorAdapter',
 				status: true,
-				description: ''
+				description: 'Transport and mutation handler for policy row operations.'
 			},
 			{
 				name: 'fields',
 				code: 'Readonly<Record<string, ObjectFormFieldDefinition>>',
 				status: true,
-				description: ''
+				description: 'Field definitions for the object being edited.'
 			},
 			{
 				name: 'inputRegistry',
 				code: 'FieldInputRegistry',
 				status: false,
-				description: ''
+				description: 'Optional registry of custom field input components.'
 			},
 			{
 				name: 'organizationScope',
 				code: 'FieldPolicyOrganizationScope',
 				status: false,
-				description: ''
+				description: "Scope level for organization defaults (e.g., 'tenant')."
 			},
 			{
 				name: 'onclose',
 				code: '() => void',
 				status: true,
-				description: ''
+				description: 'Callback invoked when the editor dialog closes.'
 			},
 			{
 				name: 'onmutated',
 				code: '() => Promise<void>',
 				status: true,
-				description: ''
+				description: 'Async callback invoked after policy mutations are saved.'
 			}
 		],
 		sources: [],
@@ -6510,13 +6512,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onclose',
 				code: '() => void',
 				status: true,
-				description: ''
+				description: 'Callback invoked when the editor dialog closes.'
 			},
 			{
 				name: 'onmutated',
 				code: '() => Promise<void>',
 				status: true,
-				description: ''
+				description: 'Async callback invoked after policy mutations are saved.'
 			}
 		],
 		components: [''],
@@ -6575,25 +6577,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'objectRef',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Identifier for the object whose field policies are being managed.'
 			},
 			{
 				name: 'fields',
 				code: 'Readonly<Record<string, ObjectFormFieldDefinition>>',
 				status: true,
-				description: ''
+				description: 'Field definitions for the object being edited.'
 			},
 			{
 				name: 'adapter',
 				code: 'FieldPolicyEditorAdapter',
 				status: true,
-				description: ''
+				description: 'Transport and mutation handler for field policy operations.'
 			},
 			{
 				name: 'inputRegistry',
 				code: 'FieldInputRegistry',
 				status: false,
-				description: ''
+				description: 'Optional registry of custom field input components.'
 			},
 			{
 				name: 'organizationScope',
@@ -6681,25 +6683,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'adapter',
 				code: 'FieldPolicySuggestionAdapter',
 				status: true,
-				description: ''
+				description: 'Transport for loading and reviewing suggestions.'
 			},
 			{
 				name: 'objectRefs',
 				code: 'readonly string[]',
 				status: false,
-				description: ''
+				description: 'Optional list of object identifiers to filter suggestions.'
 			},
 			{
 				name: 'heading',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Section heading for the suggestion queue.'
 			},
 			{
 				name: 'onchanged',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback invoked after a suggestion is approved or dismissed.'
 			}
 		],
 		sources: [],
@@ -6709,7 +6711,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onchanged',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback invoked after a suggestion is approved or dismissed.'
 			}
 		],
 		components: [],
@@ -6809,7 +6811,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'objectRef',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Identifier for the object being edited.'
 			},
 			{
 				name: 'fields',
@@ -6847,13 +6849,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Blocks form input and submission.'
 			},
 			{
 				name: 'showModeSwitch',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows the mode toggle between basic and advanced fields.'
 			},
 			{
 				name: 'showPolicyGear',
@@ -6865,7 +6867,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'inputRegistry',
 				code: 'FieldInputRegistry',
 				status: false,
-				description: ''
+				description: 'Optional registry of custom field input components.'
 			},
 			{
 				name: 'renderers',
@@ -6890,7 +6892,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class forwarded to the form element.'
 			},
 			{
 				name: 'onsubmit',
@@ -6938,7 +6940,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'source',
 				code: 'ObjectFormSource',
 				status: true,
-				description: ''
+				description: 'Transport for loading object form definitions.'
 			},
 			{
 				name: 'children',
@@ -7727,13 +7729,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'status',
 				code: 'JobStatus',
 				status: true,
-				description: ''
+				description: 'The job status to display.'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md'",
 				status: false,
-				description: ''
+				description: 'Badge size.'
 			}
 		],
 		sources: [],
@@ -7761,19 +7763,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'providerType',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Email provider type such as Gmail, IMAP, or Slack.'
 			},
 			{
 				name: 'name',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Account or user name, displayed as title and used to generate initials.'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Visual size of the avatar: small, medium, or large.'
 			}
 		],
 		sources: [],
@@ -7801,31 +7803,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'account',
 				code: 'AccountData',
 				status: true,
-				description: ''
+				description: 'Account data to display with its status and sync history.'
 			},
 			{
 				name: 'onsync',
 				code: '(account: AccountData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks the sync button to refresh the account.'
 			},
 			{
 				name: 'onactivate',
 				code: '(account: AccountData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks the activate button to enable the account.'
 			},
 			{
 				name: 'ondeactivate',
 				code: '(account: AccountData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks the deactivate button to disable the account.'
 			},
 			{
 				name: 'onremove',
 				code: '(account: AccountData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks the remove button to delete the account.'
 			}
 		],
 		sources: [],
@@ -7835,25 +7837,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onsync',
 				code: '(account: AccountData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks the sync button to refresh the account.'
 			},
 			{
 				name: 'onactivate',
 				code: '(account: AccountData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks the activate button to enable the account.'
 			},
 			{
 				name: 'ondeactivate',
 				code: '(account: AccountData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks the deactivate button to disable the account.'
 			},
 			{
 				name: 'onremove',
 				code: '(account: AccountData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks the remove button to delete the account.'
 			}
 		],
 		components: [],
@@ -7883,31 +7885,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'accounts',
 				code: 'AccountData[]',
 				status: true,
-				description: ''
+				description: 'Array of accounts to display in the list.'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows a loading indicator while accounts are being fetched.'
 			},
 			{
 				name: 'onaccountclick',
 				code: '(account: AccountData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks on an account card to view details.'
 			},
 			{
 				name: 'onsync',
 				code: '(account: AccountData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user requests to sync an account.'
 			},
 			{
 				name: 'onremove',
 				code: '(account: AccountData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user requests to remove an account.'
 			}
 		],
 		sources: [],
@@ -7917,19 +7919,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onaccountclick',
 				code: '(account: AccountData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks on an account card to view details.'
 			},
 			{
 				name: 'onsync',
 				code: '(account: AccountData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user requests to sync an account.'
 			},
 			{
 				name: 'onremove',
 				code: '(account: AccountData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user requests to remove an account.'
 			}
 		],
 		components: [],
@@ -7954,13 +7956,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'attachment',
 				code: 'AttachmentData',
 				status: true,
-				description: ''
+				description: 'File attachment to display with icon, name, and size.'
 			},
 			{
 				name: 'onclick',
 				code: '(attachment: AttachmentData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks on the attachment chip.'
 			}
 		],
 		sources: [],
@@ -7970,7 +7972,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onclick',
 				code: '(attachment: AttachmentData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks on the attachment chip.'
 			}
 		],
 		components: [],
@@ -7995,25 +7997,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'attachments',
 				code: 'AttachmentData[]',
 				status: true,
-				description: ''
+				description: 'Array of already attached files to display.'
 			},
 			{
 				name: 'onattach',
 				code: '(files: File[]) => void',
 				status: false,
-				description: ''
+				description: 'Called when user drops or selects files to attach.'
 			},
 			{
 				name: 'onremove',
 				code: '(index: number) => void',
 				status: false,
-				description: ''
+				description: 'Called when user removes an attachment by its index.'
 			},
 			{
 				name: 'maxSize',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Maximum file size in bytes; files exceeding this are rejected.'
 			}
 		],
 		sources: [],
@@ -8023,13 +8025,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onattach',
 				code: '(files: File[]) => void',
 				status: false,
-				description: ''
+				description: 'Called when user drops or selects files to attach.'
 			},
 			{
 				name: 'onremove',
 				code: '(index: number) => void',
 				status: false,
-				description: ''
+				description: 'Called when user removes an attachment by its index.'
 			}
 		],
 		components: [],
@@ -8059,37 +8061,37 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'type',
 				code: "'email' | 'slack' | 'tweet'",
 				status: false,
-				description: ''
+				description: 'Message type to compose: email, Slack message, or tweet.'
 			},
 			{
 				name: 'accounts',
 				code: 'AccountData[]',
 				status: false,
-				description: ''
+				description: 'Available accounts to select as sender.'
 			},
 			{
 				name: 'initialState',
 				code: 'Partial<ComposeState>',
 				status: false,
-				description: ''
+				description: 'Pre-fill the form with these values.'
 			},
 			{
 				name: 'onsend',
 				code: '(state: ComposeState) => void',
 				status: false,
-				description: ''
+				description: 'Called when user sends the message.'
 			},
 			{
 				name: 'onsavedraft',
 				code: '(state: ComposeState) => void',
 				status: false,
-				description: ''
+				description: 'Called when user saves the draft.'
 			},
 			{
 				name: 'ondiscard',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when user discards the compose.'
 			}
 		],
 		sources: [],
@@ -8099,19 +8101,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onsend',
 				code: '(state: ComposeState) => void',
 				status: false,
-				description: ''
+				description: 'Called when user sends the message.'
 			},
 			{
 				name: 'onsavedraft',
 				code: '(state: ComposeState) => void',
 				status: false,
-				description: ''
+				description: 'Called when user saves the draft.'
 			},
 			{
 				name: 'ondiscard',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when user discards the compose.'
 			}
 		],
 		components: [],
@@ -8136,31 +8138,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'accounts',
 				code: 'EmailAccountData[]',
 				status: true,
-				description: ''
+				description: 'Array of email accounts to display and manage.'
 			},
 			{
 				name: 'readonly',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disables editing and deletion when true; view-only mode.'
 			},
 			{
 				name: 'onsave',
 				code: '(data: Partial<EmailAccountData>, id?: string) => Promise<void>',
 				status: false,
-				description: ''
+				description: "Called when user saves an account's settings."
 			},
 			{
 				name: 'ondelete',
 				code: '(account: EmailAccountData) => Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called when user deletes an account.'
 			},
 			{
 				name: 'ontest',
 				code: '(account: EmailAccountData) => Promise<{ success: boolean; error?: string; }>',
 				status: false,
-				description: ''
+				description: 'Called when user tests account credentials.'
 			}
 		],
 		sources: [],
@@ -8170,19 +8172,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onsave',
 				code: '(data: Partial<EmailAccountData>, id?: string) => Promise<void>',
 				status: false,
-				description: ''
+				description: "Called when user saves an account's settings."
 			},
 			{
 				name: 'ondelete',
 				code: '(account: EmailAccountData) => Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called when user deletes an account.'
 			},
 			{
 				name: 'ontest',
 				code: '(account: EmailAccountData) => Promise<{ success: boolean; error?: string; }>',
 				status: false,
-				description: ''
+				description: 'Called when user tests account credentials.'
 			}
 		],
 		components: [],
@@ -8207,43 +8209,43 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'whitelist',
 				code: 'WhitelistEntry[]',
 				status: true,
-				description: ''
+				description: 'Array of allowed email addresses, domains, or patterns.'
 			},
 			{
 				name: 'blacklist',
 				code: 'BlacklistEntry[]',
 				status: true,
-				description: ''
+				description: 'Array of blocked email addresses, domains, or patterns.'
 			},
 			{
 				name: 'readonly',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disables editing and deletion when true; view-only mode.'
 			},
 			{
 				name: 'onaddwhitelist',
 				code: "(data: Omit<WhitelistEntry, 'id'>) => Promise<void>",
 				status: false,
-				description: ''
+				description: 'Called when user adds an address to the whitelist.'
 			},
 			{
 				name: 'onremovewhitelist',
 				code: '(entry: WhitelistEntry) => Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called when user removes an address from the whitelist.'
 			},
 			{
 				name: 'onaddblacklist',
 				code: "(data: Omit<BlacklistEntry, 'id'>) => Promise<void>",
 				status: false,
-				description: ''
+				description: 'Called when user adds an address to the blacklist.'
 			},
 			{
 				name: 'onremoveblacklist',
 				code: '(entry: BlacklistEntry) => Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called when user removes an address from the blacklist.'
 			}
 		],
 		sources: [],
@@ -8253,25 +8255,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onaddwhitelist',
 				code: "(data: Omit<WhitelistEntry, 'id'>) => Promise<void>",
 				status: false,
-				description: ''
+				description: 'Called when user adds an address to the whitelist.'
 			},
 			{
 				name: 'onremovewhitelist',
 				code: '(entry: WhitelistEntry) => Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called when user removes an address from the whitelist.'
 			},
 			{
 				name: 'onaddblacklist',
 				code: "(data: Omit<BlacklistEntry, 'id'>) => Promise<void>",
 				status: false,
-				description: ''
+				description: 'Called when user adds an address to the blacklist.'
 			},
 			{
 				name: 'onremoveblacklist',
 				code: '(entry: BlacklistEntry) => Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called when user removes an address from the blacklist.'
 			}
 		],
 		components: [],
@@ -8296,25 +8298,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'folders',
 				code: 'FolderData[]',
 				status: true,
-				description: ''
+				description: 'Array of folders and labels to display in the sidebar.'
 			},
 			{
 				name: 'activeFolderId',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ID of the currently selected folder to highlight.'
 			},
 			{
 				name: 'showCounts',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows unread message count badges on folders.'
 			},
 			{
 				name: 'onfolderclick',
 				code: '(folder: FolderData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks on a folder.'
 			}
 		],
 		sources: [],
@@ -8324,7 +8326,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onfolderclick',
 				code: '(folder: FolderData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks on a folder.'
 			}
 		],
 		components: [],
@@ -8349,19 +8351,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'originalMessage',
 				code: 'MessageData',
 				status: true,
-				description: ''
+				description: 'Message to forward to recipients.'
 			},
 			{
 				name: 'onsend',
 				code: '(to: RecipientEntry[], body: string) => void',
 				status: false,
-				description: ''
+				description: 'Called when user sends the forward.'
 			},
 			{
 				name: 'oncancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when user cancels the forward.'
 			}
 		],
 		sources: [],
@@ -8371,13 +8373,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onsend',
 				code: '(to: RecipientEntry[], body: string) => void',
 				status: false,
-				description: ''
+				description: 'Called when user sends the forward.'
 			},
 			{
 				name: 'oncancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when user cancels the forward.'
 			}
 		],
 		components: [],
@@ -8407,61 +8409,61 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'message',
 				code: 'MessageData',
 				status: true,
-				description: ''
+				description: 'Message data to render as a list row.'
 			},
 			{
 				name: 'selected',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Highlights the row to show it is currently selected.'
 			},
 			{
 				name: 'compact',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Uses condensed layout to fit more messages on screen.'
 			},
 			{
 				name: 'showAccount',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: "Shows the sender's account information on the row."
 			},
 			{
 				name: 'showType',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows the message type badge (email, Slack, etc.).'
 			},
 			{
 				name: 'onclick',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks on the message row.'
 			},
 			{
 				name: 'onselect',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user selects the message with checkbox.'
 			},
 			{
 				name: 'onflag',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when the user flags or unflags the message.'
 			},
 			{
 				name: 'account',
 				code: 'AccountData',
 				status: false,
-				description: ''
+				description: 'Account data for display if showAccount is true.'
 			},
 			{
 				name: 'typeContent',
 				code: 'Snippet<[{ message: MessageData; }]>',
 				status: false,
-				description: ''
+				description: 'Custom snippet to render type-specific content.'
 			}
 		],
 		sources: [],
@@ -8471,19 +8473,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onclick',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks on the message row.'
 			},
 			{
 				name: 'onselect',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user selects the message with checkbox.'
 			},
 			{
 				name: 'onflag',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when the user flags or unflags the message.'
 			}
 		],
 		components: [],
@@ -8513,49 +8515,49 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'message',
 				code: 'MessageData',
 				status: true,
-				description: ''
+				description: 'Message to display in full detail view.'
 			},
 			{
 				name: 'attachments',
 				code: 'AttachmentData[]',
 				status: false,
-				description: ''
+				description: 'Attachments associated with the message.'
 			},
 			{
 				name: 'account',
 				code: 'AccountData',
 				status: false,
-				description: ''
+				description: 'Account that received the message.'
 			},
 			{
 				name: 'showHtml',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Reads the body from the HTML source, stripped of tags and shown as text.'
 			},
 			{
 				name: 'onreply',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks the reply button.'
 			},
 			{
 				name: 'onforward',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks the forward button.'
 			},
 			{
 				name: 'ondelete',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks the delete button.'
 			},
 			{
 				name: 'typeDetail',
 				code: 'Snippet<[{ message: MessageData; }]>',
 				status: false,
-				description: ''
+				description: 'Custom snippet to render type-specific details.'
 			}
 		],
 		sources: [],
@@ -8565,19 +8567,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onreply',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks the reply button.'
 			},
 			{
 				name: 'onforward',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks the forward button.'
 			},
 			{
 				name: 'ondelete',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks the delete button.'
 			}
 		],
 		components: [],
@@ -8607,37 +8609,37 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'filters',
 				code: 'MessageFilterState',
 				status: false,
-				description: ''
+				description: 'Current filter state to display and edit.'
 			},
 			{
 				name: 'sort',
 				code: 'MessageSort',
 				status: false,
-				description: ''
+				description: 'Current sort field and direction.'
 			},
 			{
 				name: 'accounts',
 				code: 'AccountData[]',
 				status: false,
-				description: ''
+				description: 'Accounts available for filtering.'
 			},
 			{
 				name: 'availableTypes',
 				code: 'MessageType[]',
 				status: false,
-				description: ''
+				description: 'Message types available for filtering.'
 			},
 			{
 				name: 'onfilterchange',
 				code: '(filters: MessageFilterState) => void',
 				status: false,
-				description: ''
+				description: 'Called when user changes any filter.'
 			},
 			{
 				name: 'onsearch',
 				code: '(query: string) => void',
 				status: false,
-				description: ''
+				description: 'Called when user enters a search query.'
 			}
 		],
 		sources: [],
@@ -8647,13 +8649,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onfilterchange',
 				code: '(filters: MessageFilterState) => void',
 				status: false,
-				description: ''
+				description: 'Called when user changes any filter.'
 			},
 			{
 				name: 'onsearch',
 				code: '(query: string) => void',
 				status: false,
-				description: ''
+				description: 'Called when user enters a search query.'
 			}
 		],
 		components: [],
@@ -8683,79 +8685,79 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'messages',
 				code: 'MessageData[]',
 				status: true,
-				description: ''
+				description: 'Array of messages to render in the list.'
 			},
 			{
 				name: 'selected',
 				code: 'Set<string>',
 				status: false,
-				description: ''
+				description: 'Set of currently selected message IDs.'
 			},
 			{
 				name: 'activeMessageId',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ID of the currently active or open message.'
 			},
 			{
 				name: 'accounts',
 				code: 'AccountData[]',
 				status: false,
-				description: ''
+				description: 'Accounts for matching senders to display information.'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows a loading indicator while fetching messages.'
 			},
 			{
 				name: 'emptyMessage',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Text to display when the list is empty.'
 			},
 			{
 				name: 'onmessageclick',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks on a message to open it.'
 			},
 			{
 				name: 'onselect',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user selects a message with checkbox.'
 			},
 			{
 				name: 'onflag',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when the user flags or unflags a message.'
 			},
 			{
 				name: 'showType',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows the message type badge on each row.'
 			},
 			{
 				name: 'showAccount',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: "Shows the sender's account on each row."
 			},
 			{
 				name: 'compact',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Uses condensed layout for compact display.'
 			},
 			{
 				name: 'card',
 				code: 'Snippet<[{ message: MessageData; }]>',
 				status: false,
-				description: ''
+				description: 'Custom snippet to render message cards.'
 			}
 		],
 		sources: [],
@@ -8765,19 +8767,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onmessageclick',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks on a message to open it.'
 			},
 			{
 				name: 'onselect',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user selects a message with checkbox.'
 			},
 			{
 				name: 'onflag',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when the user flags or unflags a message.'
 			}
 		],
 		components: [],
@@ -8802,31 +8804,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'isRead',
 				code: 'boolean',
 				status: true,
-				description: ''
+				description: 'Shows unread indicator dot when false.'
 			},
 			{
 				name: 'isFlagged',
 				code: 'boolean',
 				status: true,
-				description: ''
+				description: 'Shows flag icon when true.'
 			},
 			{
 				name: 'hasAttachments',
 				code: 'boolean',
 				status: true,
-				description: ''
+				description: 'Shows attachment icon when true.'
 			},
 			{
 				name: 'isAnswered',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows reply icon when the message has been answered.'
 			},
 			{
 				name: 'isDraft',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows draft indicator when message has not been sent.'
 			}
 		],
 		sources: [],
@@ -8854,37 +8856,37 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'selectedCount',
 				code: 'number',
 				status: true,
-				description: ''
+				description: 'Number of messages currently selected.'
 			},
 			{
 				name: 'totalCount',
 				code: 'number',
 				status: true,
-				description: ''
+				description: 'Total number of messages in the list.'
 			},
 			{
 				name: 'onaction',
 				code: '(action: BulkAction) => void',
 				status: false,
-				description: ''
+				description: 'Called when user performs a bulk action.'
 			},
 			{
 				name: 'onselectall',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks select all.'
 			},
 			{
 				name: 'onclearselection',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when user clears the selection.'
 			},
 			{
 				name: 'extraActions',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Snippet for rendering additional action buttons.'
 			}
 		],
 		sources: [],
@@ -8894,19 +8896,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onaction',
 				code: '(action: BulkAction) => void',
 				status: false,
-				description: ''
+				description: 'Called when user performs a bulk action.'
 			},
 			{
 				name: 'onselectall',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks select all.'
 			},
 			{
 				name: 'onclearselection',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when user clears the selection.'
 			}
 		],
 		components: [],
@@ -8931,13 +8933,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'type',
 				code: 'MessageType',
 				status: true,
-				description: ''
+				description: 'Message type to display as a labeled badge.'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md'",
 				status: false,
-				description: ''
+				description: 'Visual size of the badge: small or medium.'
 			}
 		],
 		sources: [],
@@ -8965,7 +8967,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'personaId',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Persona ID to configure messaging settings for.'
 			},
 			{
 				name: 'profileId',
@@ -8977,49 +8979,49 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'providers',
 				code: 'PublicProvider[]',
 				status: true,
-				description: ''
+				description: 'Available messaging providers to choose from.'
 			},
 			{
 				name: 'accounts',
 				code: 'MessagingAccountView[]',
 				status: true,
-				description: ''
+				description: 'Configured messaging accounts to display and manage.'
 			},
 			{
 				name: 'endpoints',
 				code: 'MessagingEndpointView[]',
 				status: true,
-				description: ''
+				description: 'Configured message endpoints for sending.'
 			},
 			{
 				name: 'routes',
 				code: 'PersonaMessageRoute[]',
 				status: true,
-				description: ''
+				description: 'Configured routing rules mapping message types to endpoints.'
 			},
 			{
 				name: 'onSaveAccount',
 				code: '(input: MessagingAccountInput) => Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called when user saves account settings.'
 			},
 			{
 				name: 'onSaveEndpoint',
 				code: '(input: MessagingEndpointInput) => Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called when user saves endpoint settings.'
 			},
 			{
 				name: 'onSaveRoute',
 				code: '(input: PersonaMessageRouteInput) => Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called when user saves message route settings.'
 			},
 			{
 				name: 'readonly',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disables editing when true; view-only mode.'
 			}
 		],
 		sources: [],
@@ -9029,19 +9031,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onSaveAccount',
 				code: '(input: MessagingAccountInput) => Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called when user saves account settings.'
 			},
 			{
 				name: 'onSaveEndpoint',
 				code: '(input: MessagingEndpointInput) => Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called when user saves endpoint settings.'
 			},
 			{
 				name: 'onSaveRoute',
 				code: '(input: PersonaMessageRouteInput) => Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called when user saves message route settings.'
 			}
 		],
 		components: [],
@@ -9066,25 +9068,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Field label such as To, Cc, or Bcc.'
 			},
 			{
 				name: 'recipients',
 				code: 'RecipientEntry[]',
 				status: true,
-				description: ''
+				description: 'Array of email recipients or addresses.'
 			},
 			{
 				name: 'onchange',
 				code: '(recipients: RecipientEntry[]) => void',
 				status: false,
-				description: ''
+				description: 'Called when user adds or removes a recipient.'
 			},
 			{
 				name: 'placeholder',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Placeholder text for the recipient input field.'
 			}
 		],
 		sources: [],
@@ -9094,7 +9096,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onchange',
 				code: '(recipients: RecipientEntry[]) => void',
 				status: false,
-				description: ''
+				description: 'Called when user adds or removes a recipient.'
 			}
 		],
 		components: [],
@@ -9124,25 +9126,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'originalMessage',
 				code: 'MessageData',
 				status: true,
-				description: ''
+				description: 'Message to reply to, shown as quoted text.'
 			},
 			{
 				name: 'replyAll',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Reply to all recipients when true; reply to sender only when false.'
 			},
 			{
 				name: 'onsend',
 				code: '(body: string) => void',
 				status: false,
-				description: ''
+				description: 'Called when user sends the reply.'
 			},
 			{
 				name: 'oncancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when user cancels the reply.'
 			}
 		],
 		sources: [],
@@ -9152,13 +9154,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onsend',
 				code: '(body: string) => void',
 				status: false,
-				description: ''
+				description: 'Called when user sends the reply.'
 			},
 			{
 				name: 'oncancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when user cancels the reply.'
 			}
 		],
 		components: [],
@@ -9183,13 +9185,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'status',
 				code: "'draft' | 'pending' | 'sending' | 'sent' | 'failed' | 'scheduled'",
 				status: true,
-				description: ''
+				description: 'Send status to display: draft, pending, sending, sent, failed, or scheduled.'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md'",
 				status: false,
-				description: ''
+				description: 'Visual size of the badge: small or medium.'
 			}
 		],
 		sources: [],
@@ -9222,31 +9224,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'messages',
 				code: 'MessageData[]',
 				status: true,
-				description: ''
+				description: 'Messages in the thread to display.'
 			},
 			{
 				name: 'activeMessageId',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ID of the currently active or expanded message.'
 			},
 			{
 				name: 'initialCollapsed',
 				code: 'Set<string>',
 				status: false,
-				description: ''
+				description: 'Set of message IDs to start in collapsed state.'
 			},
 			{
 				name: 'onmessageclick',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks on a message to expand it.'
 			},
 			{
 				name: 'onreply',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks reply on a message.'
 			}
 		],
 		sources: [],
@@ -9256,13 +9258,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onmessageclick',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks on a message to expand it.'
 			},
 			{
 				name: 'onreply',
 				code: '(message: MessageData) => void',
 				status: false,
-				description: ''
+				description: 'Called when user clicks reply on a message.'
 			}
 		],
 		components: [],
@@ -9346,25 +9348,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'modules',
 				code: 'SmrtPlaygroundModule[]',
 				status: false,
-				description: ''
+				description: 'Playground modules containing entries to display.'
 			},
 			{
 				name: 'title',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Main heading text.'
 			},
 			{
 				name: 'subtitle',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Subtitle or description text.'
 			},
 			{
 				name: 'embedded',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Enables embedded mode which affects UI presentation.'
 			},
 			{
 				name: 'selectedEntryId',
@@ -9377,7 +9379,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'hideEntryList',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Hides the entry list when true.'
 			}
 		],
 		sources: [],
@@ -9410,55 +9412,55 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'status',
 				code: 'ApprovalStatus',
 				status: true,
-				description: ''
+				description: 'Current approval workflow status.'
 			},
 			{
 				name: 'onsubmit',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when submitting a draft for approval.'
 			},
 			{
 				name: 'onapprove',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when approving a submitted item.'
 			},
 			{
 				name: 'onreject',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when rejecting a submitted item.'
 			},
 			{
 				name: 'onedit',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when editing a draft or rejected item.'
 			},
 			{
 				name: 'ondelete',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when deleting a draft item.'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disables buttons and shows loading indicators during processing.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Blocks all button interactions.'
 			},
 			{
 				name: 'layout',
 				code: "'horizontal' | 'vertical'",
 				status: false,
-				description: ''
+				description: 'Arranges buttons horizontally or vertically.'
 			}
 		],
 		sources: [],
@@ -9468,31 +9470,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onsubmit',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when submitting a draft for approval.'
 			},
 			{
 				name: 'onapprove',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when approving a submitted item.'
 			},
 			{
 				name: 'onreject',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when rejecting a submitted item.'
 			},
 			{
 				name: 'onedit',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when editing a draft or rejected item.'
 			},
 			{
 				name: 'ondelete',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when deleting a draft item.'
 			}
 		],
 		components: [],
@@ -9522,31 +9524,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'requesterId',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Identifier of the user submitting the assistance request.'
 			},
 			{
 				name: 'applicationContext',
 				code: 'Record<string, unknown>',
 				status: false,
-				description: ''
+				description: 'Additional context data about the application.'
 			},
 			{
 				name: 'evidence',
 				code: 'DevelopmentRequestEvidence[]',
 				status: false,
-				description: ''
+				description: 'Evidence supporting the assistance request.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Blocks interaction with the form controls.'
 			},
 			{
 				name: 'onsubmit',
 				code: '(value: ManagedAssistanceRequestInput) => void | Promise<void>',
 				status: false,
-				description: ''
+				description: 'Invoked when the user submits the form.'
 			}
 		],
 		sources: [],
@@ -9556,7 +9558,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onsubmit',
 				code: '(value: ManagedAssistanceRequestInput) => void | Promise<void>',
 				status: false,
-				description: ''
+				description: 'Invoked when the user submits the form.'
 			}
 		],
 		components: [],
@@ -9586,43 +9588,43 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'selectedCount',
 				code: 'number',
 				status: true,
-				description: ''
+				description: 'Number of selected items. Component is hidden when count is zero.'
 			},
 			{
 				name: 'onapprove',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when approving all selected items.'
 			},
 			{
 				name: 'onreject',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when rejecting all selected items.'
 			},
 			{
 				name: 'ondelete',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when deleting all selected items.'
 			},
 			{
 				name: 'onexport',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when exporting selected items.'
 			},
 			{
 				name: 'onclear',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when clearing all selections.'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disables all action buttons during processing.'
 			}
 		],
 		sources: [],
@@ -9632,31 +9634,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onapprove',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when approving all selected items.'
 			},
 			{
 				name: 'onreject',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when rejecting all selected items.'
 			},
 			{
 				name: 'ondelete',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when deleting all selected items.'
 			},
 			{
 				name: 'onexport',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when exporting selected items.'
 			},
 			{
 				name: 'onclear',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when clearing all selections.'
 			}
 		],
 		components: [],
@@ -9686,7 +9688,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'events',
 				code: 'DeliveryEventView[]',
 				status: false,
-				description: ''
+				description: 'Timeline of delivery status events.'
 			}
 		],
 		sources: [],
@@ -9719,19 +9721,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'requests',
 				code: 'DevelopmentRequestView[]',
 				status: false,
-				description: ''
+				description: 'Development requests to display as board cards.'
 			},
 			{
 				name: 'columns',
 				code: 'string[]',
 				status: false,
-				description: ''
+				description: 'Column identifiers corresponding to request statuses.'
 			},
 			{
 				name: 'onselect',
 				code: '(request: DevelopmentRequestView) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the user selects a request card.'
 			}
 		],
 		sources: [],
@@ -9741,7 +9743,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onselect',
 				code: '(request: DevelopmentRequestView) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the user selects a request card.'
 			}
 		],
 		components: [],
@@ -9771,13 +9773,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'request',
 				code: 'DevelopmentRequestView',
 				status: true,
-				description: ''
+				description: 'Development request to display.'
 			},
 			{
 				name: 'events',
 				code: 'DeliveryEventView[]',
 				status: false,
-				description: ''
+				description: 'Timeline of delivery status events.'
 			}
 		],
 		sources: [],
@@ -9810,13 +9812,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onsubmit',
 				code: '(request: DevelopmentRequestSubmission) => void | Promise<void>',
 				status: true,
-				description: ''
+				description: 'Invoked when the user submits the development request form.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Blocks all form controls.'
 			}
 		],
 		sources: [],
@@ -9826,7 +9828,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onsubmit',
 				code: '(request: DevelopmentRequestSubmission) => void | Promise<void>',
 				status: true,
-				description: ''
+				description: 'Invoked when the user submits the development request form.'
 			}
 		],
 		components: [],
@@ -9856,19 +9858,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'requesterId',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Filters requests to show only those from a specific requester.'
 			},
 			{
 				name: 'requests',
 				code: 'DevelopmentRequestListItem[]',
 				status: true,
-				description: ''
+				description: 'Development requests to display in the list.'
 			},
 			{
 				name: 'emptyMessage',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Message shown when no requests match the filter.'
 			}
 		],
 		sources: [],
@@ -9901,25 +9903,26 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'hours',
 				code: 'number',
 				status: true,
-				description: ''
+				description: 'Duration in hours to display.'
 			},
 			{
 				name: 'format',
 				code: "'decimal' | 'hhmm'",
 				status: false,
-				description: ''
+				description: 'Format duration as decimal (8.5) or hours:minutes (8:30).'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Sets the font size of the duration display.'
 			},
 			{
 				name: 'showLabel',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description:
+					'Renders the `h` unit after a `decimal` value; set `false` for a bare number, such as in a column whose header already names the unit. An `hhmm` value spells its own unit in the `8:30` shape and never appends a separate one, so this prop does not affect that format.'
 			}
 		],
 		sources: [],
@@ -9947,19 +9950,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'preview',
 				code: 'PreviewApprovalView',
 				status: true,
-				description: ''
+				description: 'Preview item awaiting approval decision.'
 			},
 			{
 				name: 'busy',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disables approval buttons during processing.'
 			},
 			{
 				name: 'ondecide',
 				code: '(approved: boolean) => void | Promise<void>',
 				status: false,
-				description: ''
+				description: 'Invoked when the user approves or rejects the preview.'
 			}
 		],
 		sources: [],
@@ -9969,7 +9972,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'ondecide',
 				code: '(approved: boolean) => void | Promise<void>',
 				status: false,
-				description: ''
+				description: 'Invoked when the user approves or rejects the preview.'
 			}
 		],
 		components: [],
@@ -10089,61 +10092,61 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'open',
 				code: 'boolean',
 				status: true,
-				description: ''
+				description: 'Controls whether the dialog is displayed.'
 			},
 			{
 				name: 'title',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Dialog heading text.'
 			},
 			{
 				name: 'message',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Instructions displayed above the reason input.'
 			},
 			{
 				name: 'confirmLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Label for the confirm button.'
 			},
 			{
 				name: 'cancelLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Label for the cancel button.'
 			},
 			{
 				name: 'placeholder',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Placeholder text for the reason textarea.'
 			},
 			{
 				name: 'required',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Requires the user to enter a reason before confirming.'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disables the dialog controls during processing.'
 			},
 			{
 				name: 'onconfirm',
 				code: '(reason: string) => void',
 				status: true,
-				description: ''
+				description: 'Invoked when the user confirms the rejection with a reason.'
 			},
 			{
 				name: 'oncancel',
 				code: '() => void',
 				status: true,
-				description: ''
+				description: 'Invoked when the user cancels or closes the dialog.'
 			}
 		],
 		sources: [],
@@ -10153,13 +10156,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onconfirm',
 				code: '(reason: string) => void',
 				status: true,
-				description: ''
+				description: 'Invoked when the user confirms the rejection with a reason.'
 			},
 			{
 				name: 'oncancel',
 				code: '() => void',
 				status: true,
-				description: ''
+				description: 'Invoked when the user cancels or closes the dialog.'
 			}
 		],
 		components: [],
@@ -10189,7 +10192,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'entries',
 				code: 'ServiceEvidenceView[]',
 				status: false,
-				description: ''
+				description: 'Service evidence entries showing participant charge and compensation details.'
 			}
 		],
 		sources: [],
@@ -10222,49 +10225,49 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'entry',
 				code: 'TimeEntry',
 				status: true,
-				description: ''
+				description: 'Time entry data to display.'
 			},
 			{
 				name: 'href',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'URL to navigate to when the card is clicked.'
 			},
 			{
 				name: 'onclick',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the card content is clicked.'
 			},
 			{
 				name: 'selectable',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows a checkbox for selecting the entry.'
 			},
 			{
 				name: 'selected',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Indicates whether the entry is selected.'
 			},
 			{
 				name: 'onselect',
 				code: '(id: string, selected: boolean) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the selection checkbox is toggled.'
 			},
 			{
 				name: 'currency',
 				code: 'Currency',
 				status: false,
-				description: ''
+				description: 'Currency code for formatting hourly rates and amounts.'
 			},
 			{
 				name: 'actions',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Renders action buttons on the right side of the card.'
 			}
 		],
 		sources: [],
@@ -10274,13 +10277,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onclick',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the card content is clicked.'
 			},
 			{
 				name: 'onselect',
 				code: '(id: string, selected: boolean) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the selection checkbox is toggled.'
 			}
 		],
 		components: [],
@@ -10310,43 +10313,43 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'entries',
 				code: 'TimeEntry[]',
 				status: true,
-				description: ''
+				description: 'Time entries to display in the list.'
 			},
 			{
 				name: 'selectable',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows checkboxes for selecting entries.'
 			},
 			{
 				name: 'selectedIds',
 				code: 'string[]',
 				status: false,
-				description: ''
+				description: 'Identifiers of currently selected entries.'
 			},
 			{
 				name: 'onselectionchange',
 				code: '(ids: string[]) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the selection changes.'
 			},
 			{
 				name: 'emptyMessage',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Message shown when the entries list is empty.'
 			},
 			{
 				name: 'baseHref',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL to construct entry detail links.'
 			},
 			{
 				name: 'currency',
 				code: 'Currency',
 				status: false,
-				description: ''
+				description: 'Currency code for formatting amounts.'
 			},
 			{
 				name: 'canSelect',
@@ -10362,7 +10365,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onselectionchange',
 				code: '(ids: string[]) => void',
 				status: false,
-				description: ''
+				description: 'Invoked when the selection changes.'
 			}
 		],
 		components: [],
@@ -10392,67 +10395,67 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'totalHours',
 				code: 'number',
 				status: true,
-				description: ''
+				description: 'Total hours across all time entries.'
 			},
 			{
 				name: 'totalAmount',
 				code: 'number',
 				status: true,
-				description: ''
+				description: 'Total charged or invoiced amount.'
 			},
 			{
 				name: 'pendingHours',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Hours awaiting approval.'
 			},
 			{
 				name: 'pendingAmount',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Amount awaiting approval.'
 			},
 			{
 				name: 'approvedHours',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Hours that have been approved.'
 			},
 			{
 				name: 'approvedAmount',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Amount that has been approved.'
 			},
 			{
 				name: 'entryCount',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Number of time entries included in the summary.'
 			},
 			{
 				name: 'currency',
 				code: 'Currency',
 				status: false,
-				description: ''
+				description: 'Currency code for formatting amounts.'
 			},
 			{
 				name: 'showPending',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows the pending hours and amount card when there are pending items.'
 			},
 			{
 				name: 'showApproved',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows the approved hours and amount card when there are approved items.'
 			},
 			{
 				name: 'layout',
 				code: "'horizontal' | 'grid'",
 				status: false,
-				description: ''
+				description: 'Arranges summary cards in a grid or flexbox layout.'
 			}
 		],
 		sources: [],
@@ -11470,13 +11473,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'interactionRegistry',
 				code: 'ControlInteractionRegistry',
 				status: false,
-				description: ''
+				description: 'Registry for form control interactions and staged edits.'
 			},
 			{
 				name: 'oninteraction',
 				code: '(event: ControlInteractionEvent) => void',
 				status: false,
-				description: ''
+				description: 'Called when a form control interaction event occurs.'
 			},
 			{
 				name: 'stagedReview',
@@ -11488,19 +11491,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'id',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'HTML id attribute for the form element.'
 			},
 			{
 				name: 'name',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'HTML name attribute for the form element.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS classes to apply to the form element.'
 			}
 		],
 		sources: [],
@@ -11516,7 +11519,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'oninteraction',
 				code: '(event: ControlInteractionEvent) => void',
 				status: false,
-				description: ''
+				description: 'Called when a form control interaction event occurs.'
 			}
 		],
 		components: [],
@@ -12374,55 +12377,55 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'page',
 				code: 'SettingsCatalogPage<T, D>',
 				status: true,
-				description: ''
+				description: 'Paginated catalog data with items, current page, and totals.'
 			},
 			{
 				name: 'baseUrl',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Base URL for navigation and search links.'
 			},
 			{
 				name: 'detail',
 				code: 'Snippet<[{ item: D; }]>',
 				status: true,
-				description: ''
+				description: 'Render snippet for the detail pane, receives the selected item.'
 			},
 			{
 				name: 'searchPlaceholder',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Placeholder text for the search input field.'
 			},
 			{
 				name: 'searchLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Label for the search input field.'
 			},
 			{
 				name: 'resultsLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Label for the results list navigation.'
 			},
 			{
 				name: 'emptyLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Text shown when there are no search results.'
 			},
 			{
 				name: 'selectionLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Text shown when no item is selected.'
 			},
 			{
 				name: 'preservedParams',
 				code: 'Record<string, string>',
 				status: false,
-				description: ''
+				description: 'URL search parameters to preserve across pagination.'
 			}
 		],
 		sources: [],
@@ -12450,13 +12453,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'edge',
 				code: 'PanelEdge',
 				status: true,
-				description: ''
+				description: 'Which panel edge to fetch activity status from.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessibility label for the activity badge.'
 			}
 		],
 		sources: [],
@@ -12484,7 +12487,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'activity',
 				code: 'ShellActivity',
 				status: true,
-				description: ''
+				description: 'Activity object with status, label, message, progress, and cancel handler.'
 			}
 		],
 		sources: [],
@@ -12512,19 +12515,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'filter',
 				code: 'ShellActivityFilter',
 				status: false,
-				description: ''
+				description: 'Criteria to filter activities.'
 			},
 			{
 				name: 'hideWhenEmpty',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Hide the list entirely when no activities match the filter.'
 			},
 			{
 				name: 'emptyLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Text shown when no activities are available.'
 			}
 		],
 		sources: [],
@@ -12552,7 +12555,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'max',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Maximum number of simultaneous activity toasts to display.'
 			},
 			{
 				name: 'notify',
@@ -12623,91 +12626,91 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'state',
 				code: 'ShellState',
 				status: false,
-				description: ''
+				description: 'Pre-configured shell state. Creates one from config if omitted.'
 			},
 			{
 				name: 'appBar',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Content for the top app bar.'
 			},
 			{
 				name: 'appPanel',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Content for the main app panel.'
 			},
 			{
 				name: 'tenantRail',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Content for the left tenant rail.'
 			},
 			{
 				name: 'tenantPanel',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Content for the left tenant panel.'
 			},
 			{
 				name: 'tenantFooter',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Content for the tenant panel footer.'
 			},
 			{
 				name: 'focusRail',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Content for the right focus rail.'
 			},
 			{
 				name: 'focusPanel',
 				code: 'Snippet<[{ tool: ShellFocusTool | null; }]>',
 				status: false,
-				description: ''
+				description: 'Content for the right focus panel, receives the active tool.'
 			},
 			{
 				name: 'systemBar',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Content for the system bar.'
 			},
 			{
 				name: 'systemPanel',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Content for the system panel.'
 			},
 			{
 				name: 'topLeftCorner',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Content for the top-left corner.'
 			},
 			{
 				name: 'topRightCorner',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Content for the top-right corner.'
 			},
 			{
 				name: 'bottomLeftCorner',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Content for the bottom-left corner.'
 			},
 			{
 				name: 'bottomRightCorner',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Content for the bottom-right corner.'
 			},
 			{
 				name: 'shortcutsOverlay',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Content for the keyboard shortcuts overlay.'
 			},
 			{
 				name: 'children',
@@ -12741,43 +12744,43 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'appName',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Application name displayed at the top of the panel.'
 			},
 			{
 				name: 'tenantName',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Current tenant name shown below the app name.'
 			},
 			{
 				name: 'environment',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Environment badge text (staging, production, etc).'
 			},
 			{
 				name: 'search',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Custom search content section.'
 			},
 			{
 				name: 'docs',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Custom documentation content section.'
 			},
 			{
 				name: 'switcher',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Custom switcher content section.'
 			},
 			{
 				name: 'showSettings',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show or hide the settings panel.'
 			}
 		],
 		sources: [],
@@ -12805,25 +12808,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'value',
 				code: 'ShellHotkeyBinding | null',
 				status: false,
-				description: ''
+				description: 'Current hotkey binding displayed in the button.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Blocks keyboard input capture and disables the button.'
 			},
 			{
 				name: 'conflictsWith',
 				code: 'string | null',
 				status: false,
-				description: ''
+				description: 'Other hotkey or action this binding conflicts with, shown as an error.'
 			},
 			{
 				name: 'oncapture',
 				code: '(binding: ShellHotkeyBinding | null) => void',
 				status: false,
-				description: ''
+				description: 'Called when user captures a new hotkey, or null if cleared.'
 			}
 		],
 		sources: [],
@@ -12833,7 +12836,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'oncapture',
 				code: '(binding: ShellHotkeyBinding | null) => void',
 				status: false,
-				description: ''
+				description: 'Called when user captures a new hotkey, or null if cleared.'
 			}
 		],
 		components: [],
@@ -12858,7 +12861,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'side',
 				code: "'left' | 'right'",
 				status: true,
-				description: ''
+				description: 'Which side of the shell layout this corner occupies.'
 			},
 			{
 				name: 'children',
@@ -13001,7 +13004,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onclose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when the user closes the shortcuts overlay.'
 			}
 		],
 		sources: [],
@@ -13011,7 +13014,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onclose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when the user closes the shortcuts overlay.'
 			}
 		],
 		components: [],
@@ -13036,13 +13039,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'panels',
 				code: 'ShellSystemPanel[]',
 				status: true,
-				description: ''
+				description: 'Array of system panel sections, each with a label and list of items.'
 			},
 			{
 				name: 'showActivities',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Show or hide the running activities section at the bottom.'
 			}
 		],
 		sources: [],
@@ -13070,7 +13073,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'chips',
 				code: 'ShellStatusChip[]',
 				status: true,
-				description: ''
+				description: 'Array of status chips with label, value, tone, and optional link.'
 			}
 		],
 		sources: [],
@@ -13098,31 +13101,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'items',
 				code: 'ShellNavItem[]',
 				status: true,
-				description: ''
+				description: 'Navigation items with href, label, icon, and optional children.'
 			},
 			{
 				name: 'currentHref',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Current URL to highlight the active navigation link.'
 			},
 			{
 				name: 'iconComponent',
 				code: 'Component<{ name: string; size?: number; }>',
 				status: false,
-				description: ''
+				description: 'Component used to render icon names as SVG or custom icons.'
 			},
 			{
 				name: 'collapsed',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Hide labels and show only icons in a compact layout.'
 			},
 			{
 				name: 'onNavigate',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when the user clicks a navigation link.'
 			}
 		],
 		sources: [],
@@ -13132,7 +13135,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onNavigate',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when the user clicks a navigation link.'
 			}
 		],
 		components: [''],
@@ -13198,67 +13201,67 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'userName',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Username or identifier displayed in the account menu.'
 			},
 			{
 				name: 'userLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Custom display name for the user, falls back to userName.'
 			},
 			{
 				name: 'avatarUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: "URL for the user's avatar image."
 			},
 			{
 				name: 'tenantLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Custom display name for the current tenant.'
 			},
 			{
 				name: 'roleLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: "User's role or permission level."
 			},
 			{
 				name: 'tenants',
 				code: 'WorkspaceAccountTenant[]',
 				status: false,
-				description: ''
+				description: 'List of available tenants to switch between.'
 			},
 			{
 				name: 'currentTenantId',
 				code: 'string | null',
 				status: false,
-				description: ''
+				description: 'ID of the currently selected tenant.'
 			},
 			{
 				name: 'placement',
 				code: 'DropdownPlacement',
 				status: false,
-				description: ''
+				description: 'Where the dropdown menu appears relative to the trigger button.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Disables the account menu button.'
 			},
 			{
 				name: 'onTenantSelect',
 				code: '(tenantId: string) => void',
 				status: false,
-				description: ''
+				description: 'Called when the user selects a different tenant.'
 			},
 			{
 				name: 'onSignOut',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when the user clicks sign out.'
 			}
 		],
 		sources: [],
@@ -13268,13 +13271,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onTenantSelect',
 				code: '(tenantId: string) => void',
 				status: false,
-				description: ''
+				description: 'Called when the user selects a different tenant.'
 			},
 			{
 				name: 'onSignOut',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Called when the user clicks sign out.'
 			}
 		],
 		components: [],
@@ -13304,43 +13307,43 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'tenant',
 				code: 'Tenant',
 				status: true,
-				description: ''
+				description: 'The tenant to display.'
 			},
 			{
 				name: 'memberCount',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Number of members in the tenant.'
 			},
 			{
 				name: 'onclick',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the card is clicked.'
 			},
 			{
 				name: 'selected',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Highlights the card when true.'
 			},
 			{
 				name: 'actions',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows edit and delete buttons when true.'
 			},
 			{
 				name: 'onedit',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user clicks the edit button.'
 			},
 			{
 				name: 'ondelete',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user clicks the delete button.'
 			}
 		],
 		sources: [],
@@ -13350,19 +13353,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onclick',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the card is clicked.'
 			},
 			{
 				name: 'onedit',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user clicks the edit button.'
 			},
 			{
 				name: 'ondelete',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user clicks the delete button.'
 			}
 		],
 		components: [],
@@ -13392,25 +13395,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'memberships',
 				code: 'Membership[]',
 				status: true,
-				description: ''
+				description: "User's tenant memberships."
 			},
 			{
 				name: 'tenants',
 				code: 'Map<string, Tenant>',
 				status: true,
-				description: ''
+				description: 'Map of tenant IDs to tenant objects.'
 			},
 			{
 				name: 'currentTenantId',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'ID of the currently selected tenant.'
 			},
 			{
 				name: 'onchange',
 				code: '(tenantId: string) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user selects a different tenant.'
 			}
 		],
 		sources: [],
@@ -13420,7 +13423,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onchange',
 				code: '(tenantId: string) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the user selects a different tenant.'
 			}
 		],
 		components: [],
@@ -13445,25 +13448,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'events',
 				code: 'DayEventsData[] | null',
 				status: false,
-				description: ''
+				description: 'Events data to display on calendar dates, or null to show no events.'
 			},
 			{
 				name: 'year',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Initial year to display when the calendar first loads.'
 			},
 			{
 				name: 'month',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Initial month to display (zero-indexed, where 0 is January).'
 			},
 			{
 				name: 'baseUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Base URL path for constructing day-specific links.'
 			},
 			{
 				name: 'onMonthNavigate',
@@ -13528,25 +13531,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'date',
 				code: 'Date',
 				status: true,
-				description: ''
+				description: 'Date to display events for in this view.'
 			},
 			{
 				name: 'events',
 				code: 'DayEventDetail[] | null',
 				status: false,
-				description: ''
+				description: 'Events occurring on the specified date, or null if none exist.'
 			},
 			{
 				name: 'forecast',
 				code: 'DayForecast | null',
 				status: false,
-				description: ''
+				description: 'Weather forecast data for the date, or null if unavailable.'
 			},
 			{
 				name: 'calendarUrl',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'URL for the back link to return to calendar view.'
 			},
 			{
 				name: 'onEventClick',
@@ -13773,85 +13776,85 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'items',
 				code: 'T[]',
 				status: true,
-				description: ''
+				description: 'Array of items to display in the list or grid.'
 			},
 			{
 				name: 'itemKey',
 				code: 'keyof T | ((item: T) => string | number)',
 				status: false,
-				description: ''
+				description: 'Field name or function to uniquely identify each item.'
 			},
 			{
 				name: 'title',
 				code: 'keyof T | ((item: T) => string)',
 				status: false,
-				description: ''
+				description: 'Field name or function to extract the title text for each item.'
 			},
 			{
 				name: 'description',
 				code: 'keyof T | ((item: T) => string | undefined)',
 				status: false,
-				description: ''
+				description: 'Field name or function to extract the description text for each item.'
 			},
 			{
 				name: 'layout',
 				code: "'list' | 'grid'",
 				status: false,
-				description: ''
+				description: 'Display layout: list (single column) or grid (multiple columns).'
 			},
 			{
 				name: 'selectable',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to show checkboxes for selecting multiple items.'
 			},
 			{
 				name: 'selected',
 				code: 'Set<string | number>',
 				status: false,
-				description: ''
+				description: 'Set of currently selected item keys (bindable).'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to show a loading spinner instead of the collection.'
 			},
 			{
 				name: 'item',
 				code: 'Snippet<[{ item: T; index: number; selected: boolean; }]>',
 				status: false,
-				description: ''
+				description: "Custom snippet to render each item's content."
 			},
 			{
 				name: 'actions',
 				code: 'Snippet<[{ item: T; index: number; }]>',
 				status: false,
-				description: ''
+				description: 'Custom snippet to render action buttons for each item.'
 			},
 			{
 				name: 'empty',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Custom snippet to render when there are no items.'
 			},
 			{
 				name: 'onselectionchange',
 				code: '(selected: Set<string | number>) => void',
 				status: false,
-				description: ''
+				description: 'Callback when the selection set changes.'
 			},
 			{
 				name: 'onitemclick',
 				code: '(item: T, index: number) => void',
 				status: false,
-				description: ''
+				description: 'Callback when an item is clicked.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the collection container.'
 			}
 		],
 		sources: [],
@@ -13860,7 +13863,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'selected',
 				code: 'Set<string | number>',
 				status: false,
-				description: ''
+				description: 'Set of currently selected item keys (bindable).'
 			}
 		],
 		items: [
@@ -13868,13 +13871,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onselectionchange',
 				code: '(selected: Set<string | number>) => void',
 				status: false,
-				description: ''
+				description: 'Callback when the selection set changes.'
 			},
 			{
 				name: 'onitemclick',
 				code: '(item: T, index: number) => void',
 				status: false,
-				description: ''
+				description: 'Callback when an item is clicked.'
 			}
 		],
 		components: ['selected'],
@@ -13903,73 +13906,73 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'search',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Current search query string (bindable).'
 			},
 			{
 				name: 'searchLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Label for the search input field.'
 			},
 			{
 				name: 'searchPlaceholder',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Placeholder text shown in the search input when empty.'
 			},
 			{
 				name: 'view',
 				code: "'list' | 'grid' | 'table'",
 				status: false,
-				description: ''
+				description: 'Currently active view mode: list, grid, or table.'
 			},
 			{
 				name: 'views',
 				code: "Array<'list' | 'grid' | 'table'>",
 				status: false,
-				description: ''
+				description: 'Available view modes to choose from.'
 			},
 			{
 				name: 'resultCount',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Total number of results in the current collection.'
 			},
 			{
 				name: 'selectedCount',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Number of items currently selected.'
 			},
 			{
 				name: 'filters',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Snippet to render filter controls in the toolbar.'
 			},
 			{
 				name: 'actions',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Snippet to render action buttons in the toolbar.'
 			},
 			{
 				name: 'bulkActions',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Snippet to render bulk action buttons (shown when items are selected).'
 			},
 			{
 				name: 'onsearchchange',
 				code: '(value: string) => void',
 				status: false,
-				description: ''
+				description: 'Callback when the user types in the search field.'
 			},
 			{
 				name: 'onviewchange',
 				code: "(view: 'list' | 'grid' | 'table') => void",
 				status: false,
-				description: ''
+				description: 'Callback when the view mode is changed.'
 			},
 			{
 				name: 'controller',
@@ -13987,7 +13990,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the toolbar container.'
 			}
 		],
 		sources: [],
@@ -13997,13 +14000,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onsearchchange',
 				code: '(value: string) => void',
 				status: false,
-				description: ''
+				description: 'Callback when the user types in the search field.'
 			},
 			{
 				name: 'onviewchange',
 				code: "(view: 'list' | 'grid' | 'table') => void",
 				status: false,
-				description: ''
+				description: 'Callback when the view mode is changed.'
 			}
 		],
 		components: [],
@@ -14032,85 +14035,85 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'items',
 				code: 'T[]',
 				status: true,
-				description: ''
+				description: 'Array of items to display in the list or grid.'
 			},
 			{
 				name: 'itemKey',
 				code: 'keyof T | ((item: T) => string | number)',
 				status: false,
-				description: ''
+				description: 'Field name or function to uniquely identify each item.'
 			},
 			{
 				name: 'title',
 				code: 'keyof T | ((item: T) => string)',
 				status: false,
-				description: ''
+				description: 'Field name or function to extract the title text for each item.'
 			},
 			{
 				name: 'description',
 				code: 'keyof T | ((item: T) => string | undefined)',
 				status: false,
-				description: ''
+				description: 'Field name or function to extract the description text for each item.'
 			},
 			{
 				name: 'layout',
 				code: "'list' | 'grid'",
 				status: false,
-				description: ''
+				description: 'Display layout: list (single column) or grid (multiple columns).'
 			},
 			{
 				name: 'selectable',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to show checkboxes for selecting multiple items.'
 			},
 			{
 				name: 'selected',
 				code: 'Set<string | number>',
 				status: false,
-				description: ''
+				description: 'Set of currently selected item keys (bindable).'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to show a loading spinner instead of the collection.'
 			},
 			{
 				name: 'item',
 				code: 'Snippet<[{ item: T; index: number; selected: boolean; }]>',
 				status: false,
-				description: ''
+				description: "Custom snippet to render each item's content."
 			},
 			{
 				name: 'actions',
 				code: 'Snippet<[{ item: T; index: number; }]>',
 				status: false,
-				description: ''
+				description: 'Custom snippet to render action buttons for each item.'
 			},
 			{
 				name: 'empty',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Custom snippet to render when there are no items.'
 			},
 			{
 				name: 'onselectionchange',
 				code: '(selected: Set<string | number>) => void',
 				status: false,
-				description: ''
+				description: 'Callback when the selection set changes.'
 			},
 			{
 				name: 'onitemclick',
 				code: '(item: T, index: number) => void',
 				status: false,
-				description: ''
+				description: 'Callback when an item is clicked.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the collection container.'
 			}
 		],
 		sources: [],
@@ -14119,7 +14122,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'selected',
 				code: 'Set<string | number>',
 				status: false,
-				description: ''
+				description: 'Set of currently selected item keys (bindable).'
 			}
 		],
 		items: [
@@ -14127,13 +14130,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onselectionchange',
 				code: '(selected: Set<string | number>) => void',
 				status: false,
-				description: ''
+				description: 'Callback when the selection set changes.'
 			},
 			{
 				name: 'onitemclick',
 				code: '(item: T, index: number) => void',
 				status: false,
-				description: ''
+				description: 'Callback when an item is clicked.'
 			}
 		],
 		components: ['selected'],
@@ -14857,43 +14860,43 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'variant',
 				code: "'info' | 'success' | 'warning' | 'error'",
 				status: false,
-				description: ''
+				description: 'Alert type that controls styling and ARIA role.'
 			},
 			{
 				name: 'title',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional heading text displayed above the message.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Main message content shown in the alert body.'
 			},
 			{
 				name: 'action',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional snippet to render an action button or link.'
 			},
 			{
 				name: 'dismissible',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether a close button appears to dismiss the alert.'
 			},
 			{
 				name: 'ondismiss',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when the user clicks the dismiss button.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the alert container.'
 			}
 		],
 		sources: [],
@@ -14903,7 +14906,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'ondismiss',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when the user clicks the dismiss button.'
 			}
 		],
 		components: [],
@@ -15025,67 +15028,67 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'open',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the drawer is open (bindable).'
 			},
 			{
 				name: 'title',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Title displayed in the drawer header.'
 			},
 			{
 				name: 'side',
 				code: "'start' | 'end'",
 				status: false,
-				description: ''
+				description: 'Side of screen where drawer slides from (start or end).'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg' | 'xl'",
 				status: false,
-				description: ''
+				description: 'Drawer width size: sm, md, lg, or xl.'
 			},
 			{
 				name: 'showClose',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether a close button appears in the header.'
 			},
 			{
 				name: 'closeOnBackdrop',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether clicking the backdrop closes the drawer.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Main content rendered inside the drawer body.'
 			},
 			{
 				name: 'header',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional custom snippet for the drawer header.'
 			},
 			{
 				name: 'footer',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional custom snippet for the drawer footer.'
 			},
 			{
 				name: 'onclose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when the drawer is closed.'
 			},
 			{
 				name: 'ariaLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessibility label for the drawer dialog.'
 			}
 		],
 		sources: [],
@@ -15095,7 +15098,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onclose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when the drawer is closed.'
 			}
 		],
 		components: [],
@@ -15206,61 +15209,61 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'value',
 				code: 'number',
 				status: true,
-				description: ''
+				description: 'Current meter value to display.'
 			},
 			{
 				name: 'min',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Minimum value on the meter scale.'
 			},
 			{
 				name: 'max',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Maximum value on the meter scale.'
 			},
 			{
 				name: 'low',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Threshold where value transitions from low to normal.'
 			},
 			{
 				name: 'high',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Threshold where value transitions to high.'
 			},
 			{
 				name: 'optimum',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Ideal target value that optimizes the meter display.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Text label displayed above the meter gauge.'
 			},
 			{
 				name: 'showValue',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to display the numeric value in the header.'
 			},
 			{
 				name: 'formatValue',
 				code: '(value: number) => string',
 				status: false,
-				description: ''
+				description: 'Function to format the displayed numeric value.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the meter container.'
 			}
 		],
 		sources: [],
@@ -15404,49 +15407,49 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'value',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Current progress value, or undefined to show indeterminate state.'
 			},
 			{
 				name: 'min',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Minimum progress value (start point).'
 			},
 			{
 				name: 'max',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Maximum progress value (completion point).'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessibility label describing the progress.'
 			},
 			{
 				name: 'variant',
 				code: "'linear' | 'circular'",
 				status: false,
-				description: ''
+				description: 'Display variant: linear progress bar or circular ring.'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Size of the progress indicator: sm, md, or lg.'
 			},
 			{
 				name: 'showValue',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to display the percentage value.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the progress container.'
 			}
 		],
 		sources: [],
@@ -15546,67 +15549,67 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'open',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the drawer is open (bindable).'
 			},
 			{
 				name: 'title',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Title displayed in the drawer header.'
 			},
 			{
 				name: 'side',
 				code: "'start' | 'end'",
 				status: false,
-				description: ''
+				description: 'Side of screen where drawer slides from (start or end).'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg' | 'xl'",
 				status: false,
-				description: ''
+				description: 'Drawer width size: sm, md, lg, or xl.'
 			},
 			{
 				name: 'showClose',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether a close button appears in the header.'
 			},
 			{
 				name: 'closeOnBackdrop',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether clicking the backdrop closes the drawer.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Main content rendered inside the drawer body.'
 			},
 			{
 				name: 'header',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional custom snippet for the drawer header.'
 			},
 			{
 				name: 'footer',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional custom snippet for the drawer footer.'
 			},
 			{
 				name: 'onclose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when the drawer is closed.'
 			},
 			{
 				name: 'ariaLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessibility label for the drawer dialog.'
 			}
 		],
 		sources: [],
@@ -15616,7 +15619,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onclose',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback when the drawer is closed.'
 			}
 		],
 		components: [],
@@ -15645,19 +15648,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Accessibility label for screen readers.'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Spinner size: sm (small), md (medium), or lg (large).'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the spinner container.'
 			}
 		],
 		sources: [],
@@ -15689,19 +15692,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'toaster',
 				code: 'Toaster',
 				status: false,
-				description: ''
+				description: 'Toaster instance that manages the toast queue.'
 			},
 			{
 				name: 'position',
 				code: "'top-start' | 'top-end' | 'bottom-start' | 'bottom-end'",
 				status: false,
-				description: ''
+				description: 'Screen corner where toasts appear.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the viewport container.'
 			}
 		],
 		sources: [],
@@ -15733,31 +15736,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'checked',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the checkbox is checked (bindable).'
 			},
 			{
 				name: 'indeterminate',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the checkbox shows indeterminate state.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Text label displayed next to the checkbox.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the checkbox container.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Interaction options or false to disable all.'
 			}
 		],
 		sources: ["Omit<HTMLInputAttributes, 'type' | 'class' | 'checked'>"],
@@ -15789,67 +15792,67 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'options',
 				code: 'ControlOption[]',
 				status: true,
-				description: ''
+				description: 'Array of options to select from.'
 			},
 			{
 				name: 'value',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Currently selected option value (bindable).'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Label for the combobox control.'
 			},
 			{
 				name: 'name',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'HTML form field name.'
 			},
 			{
 				name: 'placeholder',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Placeholder text shown when value is empty.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the control is disabled.'
 			},
 			{
 				name: 'required',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the control is required.'
 			},
 			{
 				name: 'allowCustom',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether users can enter values not in the options list.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Interaction options or false to disable all.'
 			},
 			{
 				name: 'onvaluechange',
 				code: '(value: string) => void',
 				status: false,
-				description: ''
+				description: 'Callback when the selected value changes.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the combobox container.'
 			}
 		],
 		sources: [],
@@ -15859,7 +15862,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onvaluechange',
 				code: '(value: string) => void',
 				status: false,
-				description: ''
+				description: 'Callback when the selected value changes.'
 			}
 		],
 		components: [],
@@ -15888,25 +15891,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'value',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Selected date value as a string (bindable).'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Label for the date picker control.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the picker container.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Interaction options or false to disable all.'
 			}
 		],
 		sources: ["Omit<HTMLInputAttributes, 'type' | 'value' | 'class'>"],
@@ -15938,25 +15941,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'errors',
 				code: 'FormError[]',
 				status: true,
-				description: ''
+				description: 'Array of form validation errors to display.'
 			},
 			{
 				name: 'title',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Heading text displayed above the error list.'
 			},
 			{
 				name: 'onselect',
 				code: '(controlId: string) => void',
 				status: false,
-				description: ''
+				description: 'Callback when an error is selected or clicked.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the error summary.'
 			}
 		],
 		sources: [],
@@ -15966,7 +15969,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onselect',
 				code: '(controlId: string) => void',
 				status: false,
-				description: ''
+				description: 'Callback when an error is selected or clicked.'
 			}
 		],
 		components: [],
@@ -15991,31 +15994,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'label',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Text label displayed for the form field.'
 			},
 			{
 				name: 'id',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional ID for the input inside the group.'
 			},
 			{
 				name: 'error',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional error message shown in alert color.'
 			},
 			{
 				name: 'hint',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional help text displayed below the control.'
 			},
 			{
 				name: 'required',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the form control is required.'
 			},
 			{
 				name: 'interaction',
@@ -16027,7 +16030,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'children',
 				code: 'Snippet',
 				status: true,
-				description: ''
+				description: 'Form control (input, checkbox, etc.) inside the group.'
 			}
 		],
 		sources: [],
@@ -16059,31 +16062,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'legend',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Legend text that labels the fieldset.'
 			},
 			{
 				name: 'description',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional description text displayed below the legend.'
 			},
 			{
 				name: 'error',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional error message displayed in alert color.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the fieldset.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: true,
-				description: ''
+				description: 'Form controls and content inside the fieldset.'
 			}
 		],
 		sources: ["Omit<HTMLFieldsetAttributes, 'class'>"],
@@ -16111,43 +16114,43 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'files',
 				code: 'File[]',
 				status: false,
-				description: ''
+				description: 'Selected files array (bindable).'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Label text for the file input button.'
 			},
 			{
 				name: 'description',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Description text shown in the drop area.'
 			},
 			{
 				name: 'dropzone',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to enable drag-and-drop file handling.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the file picker.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Interaction options or false to disable all.'
 			},
 			{
 				name: 'onchangefiles',
 				code: '(files: File[]) => void',
 				status: false,
-				description: ''
+				description: 'Callback when files are selected or changed.'
 			}
 		],
 		sources: ["Omit<HTMLInputAttributes, 'type' | 'class' | 'value' | 'files'>"],
@@ -16157,7 +16160,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onchangefiles',
 				code: '(files: File[]) => void',
 				status: false,
-				description: ''
+				description: 'Callback when files are selected or changed.'
 			}
 		],
 		components: [],
@@ -16187,13 +16190,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the form element.'
 			},
 			{
 				name: 'preventDefault',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether to prevent default form submission behavior.'
 			},
 			{
 				name: 'formId',
@@ -16223,7 +16226,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'children',
 				code: 'Snippet',
 				status: true,
-				description: ''
+				description: 'Form controls and content inside the form.'
 			}
 		],
 		sources: ["Omit<HTMLFormAttributes, 'class'>"],
@@ -16262,31 +16265,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'label',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Text label displayed for the form field.'
 			},
 			{
 				name: 'id',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional ID for the input inside the group.'
 			},
 			{
 				name: 'error',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional error message shown in alert color.'
 			},
 			{
 				name: 'hint',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Optional help text displayed below the control.'
 			},
 			{
 				name: 'required',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the form control is required.'
 			},
 			{
 				name: 'interaction',
@@ -16298,7 +16301,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'children',
 				code: 'Snippet',
 				status: true,
-				description: ''
+				description: 'Form control (input, checkbox, etc.) inside the group.'
 			}
 		],
 		sources: [],
@@ -16330,13 +16333,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'value',
 				code: 'string | number',
 				status: false,
-				description: ''
+				description: 'Input value as string or number (bindable).'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the input element.'
 			},
 			{
 				name: 'interaction',
@@ -16374,25 +16377,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'prefix',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional snippet to render as a left adornment.'
 			},
 			{
 				name: 'suffix',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional snippet to render as a right adornment.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: true,
-				description: ''
+				description: 'Input control or custom content inside the group.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the input group.'
 			}
 		],
 		sources: [],
@@ -16420,49 +16423,49 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'options',
 				code: 'ControlOption[]',
 				status: true,
-				description: ''
+				description: 'Array of options to select from.'
 			},
 			{
 				name: 'value',
 				code: 'string | number',
 				status: false,
-				description: ''
+				description: 'Currently selected option value (bindable).'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Accessibility label for the listbox.'
 			},
 			{
 				name: 'name',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'HTML form field name.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the listbox is disabled.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Interaction options or false to disable all.'
 			},
 			{
 				name: 'onvaluechange',
 				code: '(value: string | number) => void',
 				status: false,
-				description: ''
+				description: 'Callback when the selected value changes.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the listbox container.'
 			}
 		],
 		sources: [],
@@ -16472,7 +16475,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onvaluechange',
 				code: '(value: string | number) => void',
 				status: false,
-				description: ''
+				description: 'Callback when the selected value changes.'
 			}
 		],
 		components: [],
@@ -16501,55 +16504,55 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'options',
 				code: 'ControlOption[]',
 				status: true,
-				description: ''
+				description: 'Array of options to select from.'
 			},
 			{
 				name: 'values',
 				code: 'Array<string | number>',
 				status: false,
-				description: ''
+				description: 'Currently selected option values (bindable).'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Label for the multi-select control.'
 			},
 			{
 				name: 'name',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'HTML form field name.'
 			},
 			{
 				name: 'placeholder',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Placeholder text shown when no items selected.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the multi-select is disabled.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Interaction options or false to disable all.'
 			},
 			{
 				name: 'onvalueschange',
 				code: '(values: Array<string | number>) => void',
 				status: false,
-				description: ''
+				description: 'Callback when the selected values change.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'CSS class to apply to the control container.'
 			}
 		],
 		sources: [],
@@ -16559,7 +16562,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onvalueschange',
 				code: '(values: Array<string | number>) => void',
 				status: false,
-				description: ''
+				description: 'Callback when the selected values change.'
 			}
 		],
 		components: [],
@@ -16588,19 +16591,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'value',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Value for this radio button option.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Text label displayed next to the radio button.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the radio button is disabled.'
 			}
 		],
 		sources: ["Omit<HTMLInputAttributes, 'type' | 'name' | 'checked' | 'value'>"],
@@ -16632,67 +16635,67 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'name',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Identifier for this radio group and its form field.'
 			},
 			{
 				name: 'value',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'The currently selected option value.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Legend text displayed above the radio options.'
 			},
 			{
 				name: 'description',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Explanatory text shown below the label.'
 			},
 			{
 				name: 'error',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Validation error message to display.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Blocks interaction and submission of this control.'
 			},
 			{
 				name: 'required',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Makes selecting an option mandatory for validation.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Registers this control for agent interaction; omit or pass false to exclude.'
 			},
 			{
 				name: 'onvaluechange',
 				code: '(value: string) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the selected option value changes.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: true,
-				description: ''
+				description: 'The RadioOption components to display.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class names.'
 			}
 		],
 		sources: [],
@@ -16702,7 +16705,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onvaluechange',
 				code: '(value: string) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the selected option value changes.'
 			}
 		],
 		components: [],
@@ -16731,79 +16734,79 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'value',
 				code: 'RangeSliderValue',
 				status: false,
-				description: ''
+				description: 'The current minimum and maximum values of the range.'
 			},
 			{
 				name: 'min',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Minimum allowed value.'
 			},
 			{
 				name: 'max',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Maximum allowed value.'
 			},
 			{
 				name: 'step',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Increment step for slider and number inputs.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Header label displayed above the range slider.'
 			},
 			{
 				name: 'minLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Label for the minimum value input field.'
 			},
 			{
 				name: 'maxLabel',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Label for the maximum value input field.'
 			},
 			{
 				name: 'unit',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Unit suffix displayed after the range values.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Blocks interaction and submission of this control.'
 			},
 			{
 				name: 'name',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Form field name for minimum and maximum inputs.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Registers this control for agent interaction; omit or pass false to exclude.'
 			},
 			{
 				name: 'onvaluechange',
 				code: '(value: RangeSliderValue) => void',
 				status: false,
-				description: ''
+				description: 'Fired when either the minimum or maximum value changes.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class names.'
 			}
 		],
 		sources: [],
@@ -16813,7 +16816,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onvaluechange',
 				code: '(value: RangeSliderValue) => void',
 				status: false,
-				description: ''
+				description: 'Fired when either the minimum or maximum value changes.'
 			}
 		],
 		components: [],
@@ -16842,55 +16845,55 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'options',
 				code: 'SegmentedControlOption[]',
 				status: true,
-				description: ''
+				description: 'The available segments and their values.'
 			},
 			{
 				name: 'value',
 				code: 'string | number',
 				status: false,
-				description: ''
+				description: 'The currently selected option value.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Accessibility label for the control.'
 			},
 			{
 				name: 'name',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Form field identifier.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Blocks interaction and submission of this control.'
 			},
 			{
 				name: 'fullWidth',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Makes the control stretch to full container width.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Registers this control for agent interaction; omit or pass false to exclude.'
 			},
 			{
 				name: 'onvaluechange',
 				code: '(value: string | number) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the selected segment changes.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class names.'
 			}
 		],
 		sources: [],
@@ -16900,7 +16903,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onvaluechange',
 				code: '(value: string | number) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the selected segment changes.'
 			}
 		],
 		components: [],
@@ -16929,25 +16932,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'value',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'The currently selected option value.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class names.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Registers this control for agent interaction; omit or pass false to exclude.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: true,
-				description: ''
+				description: 'The option and optgroup elements.'
 			}
 		],
 		sources: ["Omit<HTMLSelectAttributes, 'class' | 'value'>"],
@@ -16979,61 +16982,61 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'value',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'The current slider value.'
 			},
 			{
 				name: 'min',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Minimum allowed value.'
 			},
 			{
 				name: 'max',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Maximum allowed value.'
 			},
 			{
 				name: 'step',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Increment step for the slider.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Header label displayed above the slider.'
 			},
 			{
 				name: 'unit',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Unit suffix appended to the displayed value.'
 			},
 			{
 				name: 'showInput',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows an editable number input alongside the slider.'
 			},
 			{
 				name: 'formatValue',
 				code: '(value: number) => string',
 				status: false,
-				description: ''
+				description: 'Formats the value for display in the output element.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class names.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Registers this control for agent interaction; omit or pass false to exclude.'
 			}
 		],
 		sources: ["Omit<HTMLInputAttributes, 'type' | 'class' | 'value' | 'min' | 'max' | 'step'>"],
@@ -17065,31 +17068,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'registry',
 				code: 'ControlInteractionRegistry',
 				status: true,
-				description: ''
+				description: 'The control interaction registry tracking staged changes.'
 			},
 			{
 				name: 'formId',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Identifier for the form being reviewed.'
 			},
 			{
 				name: 'formElement',
 				code: 'HTMLFormElement | null',
 				status: false,
-				description: ''
+				description: 'Form element containing the controls; enables auto-refresh on field changes.'
 			},
 			{
 				name: 'summary',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows the review summary and list of staged changes.'
 			},
 			{
 				name: 'labels',
 				code: 'Partial<StagedControlReviewLabels>',
 				status: false,
-				description: ''
+				description: 'Customized text labels for the review interface.'
 			}
 		],
 		sources: [],
@@ -17117,37 +17120,37 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'checked',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the switch is checked.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Text displayed next to the switch.'
 			},
 			{
 				name: 'labelPosition',
 				code: "'left' | 'right'",
 				status: false,
-				description: ''
+				description: 'Position of the label relative to the switch.'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Visual size of the switch control.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class names.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Registers this control for agent interaction; omit or pass false to exclude.'
 			}
 		],
 		sources: ["Omit<HTMLInputAttributes, 'type' | 'class' | 'checked' | 'role' | 'size'>"],
@@ -17179,61 +17182,61 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'values',
 				code: 'string[]',
 				status: false,
-				description: ''
+				description: 'The array of tag strings currently in the input.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Label displayed above the tags input.'
 			},
 			{
 				name: 'name',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Form field name for the hidden tag inputs.'
 			},
 			{
 				name: 'placeholder',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Placeholder text for the input field.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Blocks adding or removing tags.'
 			},
 			{
 				name: 'maxTags',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Maximum number of tags allowed in the input.'
 			},
 			{
 				name: 'allowDuplicates',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Allows the same tag value to be added multiple times.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Registers this control for agent interaction; omit or pass false to exclude.'
 			},
 			{
 				name: 'onvalueschange',
 				code: '(values: string[]) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the tag array is modified.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class names.'
 			}
 		],
 		sources: [],
@@ -17243,7 +17246,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onvalueschange',
 				code: '(values: string[]) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the tag array is modified.'
 			}
 		],
 		components: [],
@@ -17272,25 +17275,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'value',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'The text content of the textarea.'
 			},
 			{
 				name: 'rows',
 				code: 'number',
 				status: false,
-				description: ''
+				description: 'Number of visible text rows.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class names.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Registers this control for agent interaction; omit or pass false to exclude.'
 			}
 		],
 		sources: ["Omit<HTMLTextareaAttributes, 'class' | 'value'>"],
@@ -17322,25 +17325,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'value',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'The selected time value in HH:mm format.'
 			},
 			{
 				name: 'label',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Label displayed above the time input.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class names.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Registers this control for agent interaction; omit or pass false to exclude.'
 			}
 		],
 		sources: ["Omit<HTMLInputAttributes, 'type' | 'value' | 'class'>"],
@@ -17466,25 +17469,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'pressed',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the button is in pressed state.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class names.'
 			},
 			{
 				name: 'interaction',
 				code: 'ControlInteractionOptions | false',
 				status: false,
-				description: ''
+				description: 'Registers this control for agent interaction; omit or pass false to exclude.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'The button content.'
 			}
 		],
 		sources: ["Omit<HTMLButtonAttributes, 'class'>"],
@@ -17551,13 +17554,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'maxWidth',
 				code: 'MaxWidth',
 				status: false,
-				description: ''
+				description: 'Maximum width constraint for the container.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'The container content.'
 			}
 		],
 		sources: ["Omit<HTMLAttributes<HTMLDivElement>, 'class'>"],
@@ -17657,7 +17660,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Links or content displayed in the footer.'
 			}
 		],
 		sources: [],
@@ -17749,13 +17752,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'logo',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Site logo or title content.'
 			},
 			{
 				name: 'nav',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Navigation links content.'
 			}
 		],
 		sources: [],
@@ -17783,37 +17786,37 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'date',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Formatted date string displayed in the masthead.'
 			},
 			{
 				name: 'dateHref',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'URL for the date link; omit to make it non-interactive.'
 			},
 			{
 				name: 'location',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Location text displayed in the masthead.'
 			},
 			{
 				name: 'locationHref',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'URL for the location link.'
 			},
 			{
 				name: 'nav',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Navigation links displayed on desktop.'
 			},
 			{
 				name: 'mobileNav',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Navigation links displayed on mobile; falls back to nav if omitted.'
 			}
 		],
 		sources: [],
@@ -17972,31 +17975,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'membership',
 				code: 'Membership',
 				status: true,
-				description: ''
+				description: 'The membership record to display.'
 			},
 			{
 				name: 'tenant',
 				code: 'Tenant',
 				status: true,
-				description: ''
+				description: 'The tenant associated with this membership.'
 			},
 			{
 				name: 'role',
 				code: 'Role',
 				status: true,
-				description: ''
+				description: 'The role assigned in this membership.'
 			},
 			{
 				name: 'onremove',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the remove button is clicked.'
 			},
 			{
 				name: 'onchangerole',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the change role button is clicked.'
 			}
 		],
 		sources: [],
@@ -18006,13 +18009,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onremove',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the remove button is clicked.'
 			},
 			{
 				name: 'onchangerole',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Fired when the change role button is clicked.'
 			}
 		],
 		components: [],
@@ -18037,37 +18040,37 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'memberships',
 				code: 'MembershipWithContext[]',
 				status: true,
-				description: ''
+				description: 'Array of memberships with associated tenant and role data.'
 			},
 			{
 				name: 'onremove',
 				code: '(membership: Membership) => void',
 				status: false,
-				description: ''
+				description: 'Fired when a membership is removed, passed the membership object.'
 			},
 			{
 				name: 'onchangerole',
 				code: '(membership: Membership) => void',
 				status: false,
-				description: ''
+				description: 'Fired when a membership role changes, passed the membership object.'
 			},
 			{
 				name: 'emptyMessage',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Message displayed when the memberships array is empty.'
 			},
 			{
 				name: 'empty',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Custom empty state content; replaces emptyMessage when provided.'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows the loading spinner and hides membership cards.'
 			}
 		],
 		sources: [],
@@ -18077,13 +18080,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onremove',
 				code: '(membership: Membership) => void',
 				status: false,
-				description: ''
+				description: 'Fired when a membership is removed, passed the membership object.'
 			},
 			{
 				name: 'onchangerole',
 				code: '(membership: Membership) => void',
 				status: false,
-				description: ''
+				description: 'Fired when a membership role changes, passed the membership object.'
 			}
 		],
 		components: [],
@@ -18303,13 +18306,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'role',
 				code: 'Role',
 				status: true,
-				description: ''
+				description: 'The role object whose name is displayed.'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg'",
 				status: false,
-				description: ''
+				description: 'Visual size of the badge.'
 			}
 		],
 		sources: [],
@@ -18338,37 +18341,37 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'roles',
 				code: 'Role[]',
 				status: true,
-				description: ''
+				description: 'The available roles to choose from.'
 			},
 			{
 				name: 'value',
 				code: 'string | null',
 				status: false,
-				description: ''
+				description: 'The currently selected role ID.'
 			},
 			{
 				name: 'onchange',
 				code: '(roleId: string) => void',
 				status: true,
-				description: ''
+				description: 'Fired when a role is selected, passed the role ID.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Blocks opening the role list.'
 			},
 			{
 				name: 'placeholder',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Placeholder text shown when no role is selected.'
 			},
 			{
 				name: 'showDescription',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows role descriptions in the dropdown options.'
 			}
 		],
 		sources: [],
@@ -18378,7 +18381,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onchange',
 				code: '(roleId: string) => void',
 				status: true,
-				description: ''
+				description: 'Fired when a role is selected, passed the role ID.'
 			}
 		],
 		components: [],
@@ -18579,31 +18582,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'value',
 				code: 'string | string[]',
 				status: false,
-				description: ''
+				description: 'The currently open item identifier(s); array if multiple is true.'
 			},
 			{
 				name: 'multiple',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Allows multiple items to be open simultaneously.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'The AccordionItem components.'
 			},
 			{
 				name: 'onvaluechange',
 				code: '(value: string | string[]) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the open/closed state of an item changes.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class names.'
 			}
 		],
 		sources: [],
@@ -18613,7 +18616,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onvaluechange',
 				code: '(value: string | string[]) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the open/closed state of an item changes.'
 			}
 		],
 		components: [],
@@ -18642,25 +18645,25 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'value',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Unique identifier for this accordion item.'
 			},
 			{
 				name: 'title',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Header text displayed in the item button.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Blocks opening and closing this item.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'The content shown when the item is open.'
 			}
 		],
 		sources: [],
@@ -18745,19 +18748,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'variant',
 				code: 'BadgeVariant',
 				status: false,
-				description: ''
+				description: 'Visual variant for color and styling.'
 			},
 			{
 				name: 'size',
 				code: 'BadgeSize',
 				status: false,
-				description: ''
+				description: 'Size of the badge.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'The badge content.'
 			}
 		],
 		sources: ["Omit<HTMLAttributes<HTMLSpanElement>, 'class'>"],
@@ -18840,13 +18843,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'rel',
 				code: "HTMLAnchorAttributes['rel']",
 				status: false,
-				description: ''
+				description: 'Specifies the relationship between the button link and the target URL.'
 			},
 			{
 				name: 'download',
 				code: "HTMLAnchorAttributes['download']",
 				status: false,
-				description: ''
+				description: 'Prompts download of the linked resource instead of navigating to it.'
 			}
 		],
 		sources: ["Omit<HTMLButtonAttributes, 'class' | 'href'>"],
@@ -18878,37 +18881,37 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'variant',
 				code: 'CardVariant',
 				status: false,
-				description: ''
+				description: 'Visual variant affecting borders and shadows.'
 			},
 			{
 				name: 'padding',
 				code: 'CardPadding',
 				status: false,
-				description: ''
+				description: 'Interior padding size for the card content.'
 			},
 			{
 				name: 'hoverable',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Adds hover effects including elevation and lift.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'The main card content.'
 			},
 			{
 				name: 'header',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional header content displayed at the top.'
 			},
 			{
 				name: 'footer',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional footer content displayed at the bottom.'
 			}
 		],
 		sources: ["Omit<HTMLAttributes<HTMLDivElement>, 'class'>"],
@@ -19026,37 +19029,37 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'title',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Header text for the disclosure control.'
 			},
 			{
 				name: 'open',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the disclosure content is visible.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Blocks opening the disclosure.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'The content shown when the disclosure is open.'
 			},
 			{
 				name: 'onopenchange',
 				code: '(open: boolean) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the open state changes.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class names.'
 			}
 		],
 		sources: [],
@@ -19066,7 +19069,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onopenchange',
 				code: '(open: boolean) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the open state changes.'
 			}
 		],
 		components: [],
@@ -19306,55 +19309,55 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'label',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'Accessibility label and default trigger text for the popover.'
 			},
 			{
 				name: 'trigger',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Content rendered inside the trigger button in place of the label text.'
 			},
 			{
 				name: 'children',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'The popover content.'
 			},
 			{
 				name: 'open',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Whether the popover is visible.'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Blocks opening the popover.'
 			},
 			{
 				name: 'placement',
 				code: "'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
 				status: false,
-				description: ''
+				description: 'Position of the popover relative to the trigger.'
 			},
 			{
 				name: 'closeOnOutsideClick',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Closes the popover when clicking outside of it.'
 			},
 			{
 				name: 'onopenchange',
 				code: '(open: boolean) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the open state changes.'
 			},
 			{
 				name: 'class',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Additional CSS class names.'
 			}
 		],
 		sources: [],
@@ -19364,7 +19367,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onopenchange',
 				code: '(open: boolean) => void',
 				status: false,
-				description: ''
+				description: 'Fired when the open state changes.'
 			}
 		],
 		components: [],
@@ -19557,37 +19560,38 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'open',
 				code: 'boolean',
 				status: true,
-				description: ''
+				description: 'Controls whether the invitation modal is visible.'
 			},
 			{
 				name: 'tenant',
 				code: 'Tenant',
 				status: true,
-				description: ''
+				description: 'Tenant context for the invitation.'
 			},
 			{
 				name: 'roles',
 				code: 'Role[]',
 				status: true,
-				description: ''
+				description: 'Available roles that can be assigned to the invited user.'
 			},
 			{
 				name: 'onsubmit',
 				code: '(data: { email: string; roleId: string; sendEmail: boolean; }) => void',
 				status: true,
-				description: ''
+				description:
+					'Callback invoked with email, role, and send preference when form is submitted.'
 			},
 			{
 				name: 'onclose',
 				code: '() => void',
 				status: true,
-				description: ''
+				description: 'Callback invoked to close the invitation modal.'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Blocks form submission while invitation is being processed.'
 			}
 		],
 		sources: [],
@@ -19597,13 +19601,14 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onsubmit',
 				code: '(data: { email: string; roleId: string; sendEmail: boolean; }) => void',
 				status: true,
-				description: ''
+				description:
+					'Callback invoked with email, role, and send preference when form is submitted.'
 			},
 			{
 				name: 'onclose',
 				code: '() => void',
 				status: true,
-				description: ''
+				description: 'Callback invoked to close the invitation modal.'
 			}
 		],
 		components: [],
@@ -19633,19 +19638,19 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'profile',
 				code: 'Profile',
 				status: true,
-				description: ''
+				description: 'User profile containing name and avatar details.'
 			},
 			{
 				name: 'size',
 				code: "'sm' | 'md' | 'lg' | 'xl'",
 				status: false,
-				description: ''
+				description: 'Avatar size: sm, md, lg, or xl.'
 			},
 			{
 				name: 'showName',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: "Displays the user's name next to the avatar."
 			}
 		],
 		sources: [],
@@ -19678,37 +19683,37 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'user',
 				code: 'User',
 				status: true,
-				description: ''
+				description: 'User account containing email and identification.'
 			},
 			{
 				name: 'profile',
 				code: 'Profile',
 				status: true,
-				description: ''
+				description: 'User profile containing name and avatar data.'
 			},
 			{
 				name: 'role',
 				code: 'string',
 				status: false,
-				description: ''
+				description: "User's role or position title."
 			},
 			{
 				name: 'status',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'User status (active, pending, suspended, or inactive).'
 			},
 			{
 				name: 'onclick',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback invoked when the card is clicked.'
 			},
 			{
 				name: 'selected',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Indicates whether the card is in a selected state.'
 			}
 		],
 		sources: [],
@@ -19718,7 +19723,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onclick',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback invoked when the card is clicked.'
 			}
 		],
 		components: [],
@@ -19748,31 +19753,31 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'user',
 				code: 'User | null',
 				status: false,
-				description: ''
+				description: 'Optional user account for editing; null creates a new user.'
 			},
 			{
 				name: 'profile',
 				code: 'Profile | null',
 				status: false,
-				description: ''
+				description: 'Optional user profile for editing.'
 			},
 			{
 				name: 'onsubmit',
 				code: '(data: { name: string; email: string; status: UserStatus; }) => void',
 				status: true,
-				description: ''
+				description: 'Callback invoked with name, email, and status when form is submitted.'
 			},
 			{
 				name: 'oncancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback invoked when the form is canceled.'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Blocks form input while user changes are being processed.'
 			}
 		],
 		sources: [],
@@ -19782,13 +19787,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onsubmit',
 				code: '(data: { name: string; email: string; status: UserStatus; }) => void',
 				status: true,
-				description: ''
+				description: 'Callback invoked with name, email, and status when form is submitted.'
 			},
 			{
 				name: 'oncancel',
 				code: '() => void',
 				status: false,
-				description: ''
+				description: 'Callback invoked when the form is canceled.'
 			}
 		],
 		components: [],
@@ -19818,37 +19823,37 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'users',
 				code: 'UserWithProfile[]',
 				status: true,
-				description: ''
+				description: 'Array of users with profiles to display.'
 			},
 			{
 				name: 'selectedId',
 				code: 'string | null',
 				status: false,
-				description: ''
+				description: 'ID of the currently selected user.'
 			},
 			{
 				name: 'onselect',
 				code: '(user: User) => void',
 				status: false,
-				description: ''
+				description: 'Callback invoked with the user when a user is selected.'
 			},
 			{
 				name: 'emptyMessage',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Message displayed when the user list is empty.'
 			},
 			{
 				name: 'empty',
 				code: 'Snippet',
 				status: false,
-				description: ''
+				description: 'Optional snippet to render a custom empty state.'
 			},
 			{
 				name: 'loading',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description: 'Shows a loading spinner while users are being fetched.'
 			}
 		],
 		sources: [],
@@ -19858,7 +19863,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onselect',
 				code: '(user: User) => void',
 				status: false,
-				description: ''
+				description: 'Callback invoked with the user when a user is selected.'
 			}
 		],
 		components: [],
@@ -20209,7 +20214,7 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 839,
+	describedProps: 1719,
 	totalProps: 1775,
 	authoredSummaries: 110,
 	totalComponents: 285

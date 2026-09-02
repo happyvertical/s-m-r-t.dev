@@ -9,78 +9,78 @@ importers:
   .:
     dependencies:
       '@happyvertical/smrt-agents':
-        specifier: 0.43.10
-        version: 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-analytics':
-        specifier: 0.43.10
-        version: 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-assets':
-        specifier: 0.43.10
-        version: 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-chat':
-        specifier: 0.43.10
-        version: 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-commerce':
-        specifier: 0.43.10
-        version: 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-content':
-        specifier: 0.43.10
-        version: 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@types/node@26.2.0)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(jimp@1.6.1)(sharp@0.35.3(@types/node@26.2.0))(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@types/node@26.2.0)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(jimp@1.6.1)(sharp@0.35.3(@types/node@26.2.0))(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-events':
-        specifier: 0.43.10
-        version: 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-fields':
-        specifier: 0.43.10
-        version: 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-images':
-        specifier: 0.43.10
-        version: 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-jobs':
-        specifier: 0.43.10
-        version: 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-ledgers':
-        specifier: 0.43.10
-        version: 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-messages':
-        specifier: 0.43.10
-        version: 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-personas':
-        specifier: 0.43.10
-        version: 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-playground':
-        specifier: 0.43.10
-        version: 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))
+        specifier: 0.44.0
+        version: 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))
       '@happyvertical/smrt-profiles':
-        specifier: 0.43.10
-        version: 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-projects':
-        specifier: 0.43.10
-        version: 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-reports':
-        specifier: 0.43.10
-        version: 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-svelte':
-        specifier: 0.43.10
-        version: 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-tenancy':
-        specifier: 0.43.10
-        version: 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-ui':
-        specifier: 0.43.10
-        version: 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+        specifier: 0.44.0
+        version: 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
       '@happyvertical/smrt-users':
-        specifier: 0.43.10
-        version: 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-web':
-        specifier: 0.43.10
-        version: 0.43.10(typescript@5.9.3)
+        specifier: 0.44.0
+        version: 0.44.0(typescript@5.9.3)
     devDependencies:
       '@eslint/js':
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.9.1(jiti@2.7.0))
       '@happyvertical/smrt-cli':
-        specifier: 0.43.10
-        version: 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.44.0
+        version: 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))(ws@8.21.3)(zod@4.3.6)
       '@sveltejs/adapter-auto':
         specifier: ^7.0.1
         version: 7.0.1(@sveltejs/kit@2.50.1(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0)))(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0)))
@@ -1109,63 +1109,63 @@ packages:
     resolution: {integrity: sha512-8S6VW0+CumIyFydLqXLarnbbIJYCo2/V0QlcCtXs4ICQfUNIMF9rgsUfPIXh/6xvguR5N9+7wGganWENNkVaRw==}
     hasBin: true
 
-  '@happyvertical/smrt-agents@0.43.10':
-    resolution: {integrity: sha512-4qNnEzvPW9KBv+ZjVkw3hFkw4JvKgN8UeapIY+KRy91haKFpXY5cAMqeYQEWdbWJ9qYp5InyJGfkCWIRHMAkDg==}
+  '@happyvertical/smrt-agents@0.44.0':
+    resolution: {integrity: sha512-c24/GkickYXmzNdU8Rc4+6Qtx2T4Xu7ViDe/cagDvjUe1pjvDci6IOFfZCjFFkiCfXk1plIxKIg0ssso+YMR4g==}
     peerDependencies:
       svelte: ^5.56.4
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-analytics@0.43.10':
-    resolution: {integrity: sha512-YGyEyMvr86DC7mHV3EldpRPWZG965SzQRFv9SFgfyNOeOsH2MHzzILwQ42OEH7TfMgiZEdnGlbxRULdPP47z+g==}
+  '@happyvertical/smrt-analytics@0.44.0':
+    resolution: {integrity: sha512-jxZOEAsBlUMZmY33L/CYoKq20GWAe98FPTr0zlp+ql4pMWGpC0rJUr5sSRULMol8gODER0fz/Uy9uBVcWSAZiA==}
     peerDependencies:
       svelte: ^5.56.4
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-assets@0.43.10':
-    resolution: {integrity: sha512-L6mFLB12YUO3NcQR0W9yC0YaHgQrTZQy95A3bipPuD7ye8qXXB3lwlYf5oqJqNpTBxV4bCtUAwKYTDHPd8rgCg==}
+  '@happyvertical/smrt-assets@0.44.0':
+    resolution: {integrity: sha512-9Oc6pdE4qdjLRBmk5kLgVxdCu5F8xOtQTiE9TaFiLZF/AVits6+nPb7N6HI6VsekpuIm0MOoaYbeGz1EIcfEEw==}
     peerDependencies:
       svelte: ^5.56.4
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-chat@0.43.10':
-    resolution: {integrity: sha512-ARmKJP98/S4uVaRiezRxYI0fHcQ79DimQctcpcBWCWkQHeahM4u758CtHuj7uIeP5zLxKVpqwmiuwAwzFjax/A==}
+  '@happyvertical/smrt-chat@0.44.0':
+    resolution: {integrity: sha512-FY6U3yjMTQ7JgUYPeTPX34GZLo0m/0WnMaK4GdpaGDuER1A9O/H/VlQPV/C0oW8ZADo/XE65A+GSAwtmVsAiag==}
     peerDependencies:
       svelte: ^5.56.4
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-cli@0.43.10':
-    resolution: {integrity: sha512-XZ1qTkNvq+CY873sUI7CxIcpdjPviOGh2xSGr02czIKYZabFJT2U6lNKCI5U/OBLo7OEE5qDFl5SlzoP0hcCpw==}
+  '@happyvertical/smrt-cli@0.44.0':
+    resolution: {integrity: sha512-Qy5mUjQuQLWou6ExYphKvyyENmfdWFmI4YpTVG8ibDz3HBRNpCAbsh1Yk619kBHPmZh3YbmviUXsYecRk4+Sqw==}
     hasBin: true
 
-  '@happyvertical/smrt-commerce@0.43.10':
-    resolution: {integrity: sha512-mrvN/mWzHBBoBIumK6ueFfv12X1B3tqPChhwpKRi2ddG6vBdiPrZIfVR3wR1IEVPyOzLNLmEShh32Dm4Rpz/bg==}
+  '@happyvertical/smrt-commerce@0.44.0':
+    resolution: {integrity: sha512-mSkfPKEE0cL5RL8d5tGcBnyfVkwCBRd+piOXtFUy7XLnm3WFTgd9RVGoVbc02j+xah1OkmYwvyXht0NzxWKsqw==}
     peerDependencies:
       svelte: ^5.56.4
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-config@0.43.10':
-    resolution: {integrity: sha512-jJd6idgmeGrEAtu8Hx78jB09skcFbN3lvIRVGnDxJMHUxemcy7ASze4ucuDYlzt4Osm6IwUG15zM3GkxdiwI6w==}
+  '@happyvertical/smrt-config@0.44.0':
+    resolution: {integrity: sha512-XdHbTHXfe+T2i+kVPNKNH4sIuJSqgpOBguuhsmZfhvqVzI8UD0mRj4j4EzXuKJ8IRuh42cBe2c5J+Gje92r3Hw==}
 
-  '@happyvertical/smrt-content@0.43.10':
-    resolution: {integrity: sha512-Y6CGDKLYzT9TTIrfKuZFNMl9FQOY6mky9K9sVPdFbOd3C5CReVof4TN27KoacVS6shIf1WWWrl3hD7RYjZRFqw==}
+  '@happyvertical/smrt-content@0.44.0':
+    resolution: {integrity: sha512-C+6VoC1CEYct4eJAo4Ydh5/vcZJQk7ZYh+QqWwTZyx3xQqu2zbn7h/2Q3AN0mb5SxVcWKLcHeAwhzrz+r+/ZmA==}
     peerDependencies:
       svelte: ^5.56.4
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-core@0.43.10':
-    resolution: {integrity: sha512-hbn9WeyhlEqUyakYvGwzHip94kiBiNEI9977v6eM946Q0QKuybFD0uee6qcq/6r/8rjhOlVnINzpJhXCybrN7A==}
+  '@happyvertical/smrt-core@0.44.0':
+    resolution: {integrity: sha512-YdKwW4h+wswPC/2lW+MtPEGSxk8b3IpV6oafA5aMKBAGZOF5BwAOlUGA4ITdgNIDOx22ahdatHOJPZxiLAqphg==}
     engines: {node: '>=24.18.0'}
     hasBin: true
     peerDependencies:
@@ -1177,53 +1177,53 @@ packages:
       '@xenova/transformers':
         optional: true
 
-  '@happyvertical/smrt-dev-mcp@0.43.10':
-    resolution: {integrity: sha512-YVJ3ATjwotM9bXMrebfy9iQfw6H8b+MAAuYlvvS6uf/rso+GkYRFOdMzeRo7ujx/EsW5D304vvacLr8NqNmaGw==}
+  '@happyvertical/smrt-dev-mcp@0.44.0':
+    resolution: {integrity: sha512-h4ip3JyUqM0YiVxmPNLBxTDMa3y73GdyvAwN4B+18KN6pGMl01oFUBxkOD8zYueVv12J8fl42jwMS6UvuEa3mw==}
     hasBin: true
 
-  '@happyvertical/smrt-events@0.43.10':
-    resolution: {integrity: sha512-5yBKqJgJNZt909Wz11hmYPVbRD2GcIW+HDziXVi2tM9QvxgLtyV87kQzCqDFnE1e9WWPKnxrJcYS//xvLsBqFg==}
+  '@happyvertical/smrt-events@0.44.0':
+    resolution: {integrity: sha512-IWRRPfj1e3l3nl3YaIHwAUzG0RgVfLOJpafq93eH44VWiu1btKvxCG4qzn/jkb3aWbfyuTR5bhSIXC5IyWgu2A==}
     peerDependencies:
       svelte: ^5.56.4
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-facts@0.43.10':
-    resolution: {integrity: sha512-YaJbA+YBHOmRso/lhhR57RlNJjmlG2B/A0PcdObTiMaPKXXvH0zI96H0yObL5arDe2vR+H84lGnVCnNzAa1+1A==}
+  '@happyvertical/smrt-facts@0.44.0':
+    resolution: {integrity: sha512-BQBivh1ogzj29q4fTdnDZ4+95QT2BdE/scprpsWNL980wy6Pv08EYWrksdqQMXXTEIi6SrdICiCCH2iY55Y/Qg==}
 
-  '@happyvertical/smrt-features@0.43.10':
-    resolution: {integrity: sha512-m/94oPRvoGJxDx+DXazTnDlX8plL8WpPCqTLGR9J/OF8Xri1RCe/OLgCFZMaemv7ScjgzKfFUkSPQk5v8fVgOA==}
+  '@happyvertical/smrt-features@0.44.0':
+    resolution: {integrity: sha512-sB/YAZbiMiKk8a1ckNcILdd54saiEnWQxbSa3hGPk4w2GTUFeZqO+1SHB/SRH6OkNDxYh5AeqkhgfjRzDkw+mw==}
 
-  '@happyvertical/smrt-fields@0.43.10':
-    resolution: {integrity: sha512-Z1sPUR1Ai6XYrTWpad7eScD8UdxlpsCL3cyTDHA/0cdEbEEb18re3EhFeYiDeAfwfMjRJNrdfjO9kcvmZe3+EA==}
+  '@happyvertical/smrt-fields@0.44.0':
+    resolution: {integrity: sha512-SHXkpSGX80Tq5AYe57ec22RJ99nwpPXGBFGcmZlteJHon4TunHuqWw4JtkAKfXdcjq24dmwnfku6YvJ5nQ8qng==}
     peerDependencies:
       svelte: ^5.56.4
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-images@0.43.10':
-    resolution: {integrity: sha512-UKEYz6kVVDvXIdWbiNyFUatURUCRdZUxdfTUuyKSsPUk0NNuWvfVvFjkJ6R0Odc7Qmdemjl2GvdCrmvfCaYzEw==}
+  '@happyvertical/smrt-images@0.44.0':
+    resolution: {integrity: sha512-GiZQstRK/AeqG6OmQeJkxLMwwr2I9O+zE4Gj0UHsRgQGixVncqei2RKTfFaCc5zATB7xOtiXEBHuVFb7jL4GTA==}
     peerDependencies:
       svelte: ^5.56.4
 
-  '@happyvertical/smrt-jobs@0.43.10':
-    resolution: {integrity: sha512-d/nmlpyhcAFYxccAaDgGFh06haJzjjzFkHX7V4e07esHL0Q1M179n5/eMW0mbQwS4VA6/HMxdP7ivXG9JkewAg==}
+  '@happyvertical/smrt-jobs@0.44.0':
+    resolution: {integrity: sha512-Oqu01w7OU7jZyF4fnL7JeF4kZ4frnL7zsCdvCHVsU5Femcf70be/vyKiZT1mV7YonZ5HTN/ZVWCfhIJguy3lIw==}
     peerDependencies:
       svelte: ^5.56.4
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-languages@0.43.10':
-    resolution: {integrity: sha512-HiSaJHCceUOcyp9Ue4pRbrwZdvYNoSkD5L9vP+I0/eqYDCFAWlPqxH/8yhoyvQysope42y2DouFIEXnjWUE7Ww==}
+  '@happyvertical/smrt-languages@0.44.0':
+    resolution: {integrity: sha512-/YWMvsFcI27dW7GnwKybTbXAsHZtFB1arBAmUbPJqCG5r1UwZXu+IvjiR8Vdu82AGnjZ1P08J/MaP/X6UkOGdg==}
 
-  '@happyvertical/smrt-ledgers@0.43.10':
-    resolution: {integrity: sha512-kslxw5Z1QgGocHx9Hy7PujtT8GWzIofD0/Y/UE6WVIykku76k0VY0SllSHqxkG1EO7XHHJ2M4dtJNw7BmIQELA==}
+  '@happyvertical/smrt-ledgers@0.44.0':
+    resolution: {integrity: sha512-+G+HXGjxQ4C9B5HQh6QjCiiBWs6wHVLsF9U6sOqWTfmPzuT80kfMRcG0M2Wx3fMArWeq72O1UBArL/0XZaMoxw==}
 
-  '@happyvertical/smrt-messages@0.43.10':
-    resolution: {integrity: sha512-e1uS2TnMQTGRXq9pc2KRkoo7Uih/LazghPn87OXOU5oTskWKcuQYti2TdGci4c08lwiMRtbCkaZ4RwUBjp8xag==}
+  '@happyvertical/smrt-messages@0.44.0':
+    resolution: {integrity: sha512-gp8I5Nvczs44/crV6Kr+ANkUECC3ZkiTSYgxxT2sn6dezTJtf0+oWr/RKGFxmwL8PMIQ/DxTtZXU6evd/REQYw==}
     peerDependencies:
       '@happyvertical/encryption': '*'
       svelte: ^5.56.4
@@ -1233,19 +1233,19 @@ packages:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-mobile-contract@0.43.10':
-    resolution: {integrity: sha512-iX824OWQ2Nkb4M5X6RFoLs7fO93eKYoA+w05Q9r63dIJ0TQflHrAkbuyOhGUDNIZ/0PAXwfqsWhbnwC/K8F/jg==}
+  '@happyvertical/smrt-mobile-contract@0.44.0':
+    resolution: {integrity: sha512-EX4Z7Ra7FRy8HjhzBlQNp++0JXwDJ+j5mvdPaok5wS6b3h2E8wxfjnyyzFs53T5jV6SRSAGDMAA8YZVf2w/CZg==}
 
-  '@happyvertical/smrt-personas@0.43.10':
-    resolution: {integrity: sha512-DCv+pxF4TtxR3mXjX50ePQumBdYFKdAgiga4vIj3i/MnQdvKEG8Z7GMtn8ZS/mp2ibpcOGoPbYNMqthQq7RWpw==}
+  '@happyvertical/smrt-personas@0.44.0':
+    resolution: {integrity: sha512-gntX97ZXJb8u8FMBt94LPwYceDtYfK3q3WTsxLzNbaseyL1QLd4rnZaVH5Pt6j9vJDu2CSHHWNDQig+I9P1Org==}
     peerDependencies:
       svelte: ^5.56.4
 
-  '@happyvertical/smrt-places@0.43.10':
-    resolution: {integrity: sha512-jkcnWpQXQ9B0S1z8MDikbZ0VH+CcmQTVcS2caivd1bnxNWOddqvudkuF+R8htexhPCf6A5rIA+EPuEoJdcWwkA==}
+  '@happyvertical/smrt-places@0.44.0':
+    resolution: {integrity: sha512-qkLtt56QQ9/pbHeUoie5mXY2fDLSOKgEsZfaIAWvOJaYwL+ufDIIzIMS7YgQqq6Dzx018uYQTrSj3ZDyoCibew==}
 
-  '@happyvertical/smrt-playground@0.43.10':
-    resolution: {integrity: sha512-8FHJloWpYeBU/cKnTexr3hPYWhqBVaitm0u8dxzXZzG/rBEMnaTlp/eQ+tbXmzHayS6tYPKC0SY9EkV9sawwtg==}
+  '@happyvertical/smrt-playground@0.44.0':
+    resolution: {integrity: sha512-fuPTUTDolEQPsBcsPwwrVfqQ8yxfs2heMsMHd9529r3TEgMTwZ4fn1w4hZrsD55ddrvbOO5PWCeBvLki0tF7Cg==}
     peerDependencies:
       svelte: ^5.56.4
       vite: ^7.0.0 || ^8.0.0
@@ -1255,40 +1255,40 @@ packages:
       vite:
         optional: true
 
-  '@happyvertical/smrt-profiles@0.43.10':
-    resolution: {integrity: sha512-OJSLFQ44kCuVKdFdq6WfvXP5xwPuzpYWe42EtLVrw9b8XI+poT6oD3iTBMF7jpwE7Y66sDsxAxGe5AsjXzMUvg==}
+  '@happyvertical/smrt-profiles@0.44.0':
+    resolution: {integrity: sha512-uH4n19q49ppGg5MpCZtkKcJ3UmNujJDPo2RvxQRgcTL1RpBjcmZ0B+xbmoPVEkVWHGKN9w2QKMEW5tGYwXgyLQ==}
 
-  '@happyvertical/smrt-projects@0.43.10':
-    resolution: {integrity: sha512-0SpZcDmyqLvtaIaH32Rtq44TjWrVSHwyZ74RTN+hJ+eXSzvBBCAfld6CAqaUe9qdAllWNNW8O4uMgFuEtj+80g==}
+  '@happyvertical/smrt-projects@0.44.0':
+    resolution: {integrity: sha512-yVtwI3CbYzeyJyX0rfHtWvkMqS1/RkaF6jhIU+5rSyGy5YgxggIwM2s2lTNO6LUhCzt9sRQYpVpqxaH0l2ssmA==}
     peerDependencies:
       svelte: ^5.56.4
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-prompts@0.43.10':
-    resolution: {integrity: sha512-yzPC+tL4hRBXlXhhYtxPaL1I3nkFf0RM3NH/UxmAIeQ2ev5cx1XwH09So+bv+/KxkNUpobfXwc/Qb921OTNO6w==}
+  '@happyvertical/smrt-prompts@0.44.0':
+    resolution: {integrity: sha512-ijhmytF2vpDQA+FcpTqHWEjvwtyg2Qmzc3s2dJow8vyVjr4Sgz9970t1G5tR/iIkWHABU7MHtuZw9phYMlgIxg==}
 
-  '@happyvertical/smrt-reports@0.43.10':
-    resolution: {integrity: sha512-UNSqUPE8tqBNjtU64X2QR5lmQkPVN3DXtlYYcqagEP9ISFI76TSsl9w0pRjVXKxvpW6z2V6QyrhmAg+eKtqE/w==}
+  '@happyvertical/smrt-reports@0.44.0':
+    resolution: {integrity: sha512-Unc9+2p1uoSruj+XBlNhvGMVqwJHK2gpy/vUmGMQ58PJtmglAUv1/VvD0cmTb/k/MwvBb9DKPYgRLxO4P29xgw==}
 
-  '@happyvertical/smrt-scanner@0.43.10':
-    resolution: {integrity: sha512-uwP2bX9LbNpjKYESMMLZnOZ/SS2tY1uz0OPDjwiwkY8nU+BjtT+KLc0AmRARW7C5r6YPVOZtyyVCcgTfrev81g==}
+  '@happyvertical/smrt-scanner@0.44.0':
+    resolution: {integrity: sha512-vCws6s1Hhj/5vga/ZpSTUFlCdcPfjYrxRN+foRAYSYqtPbuDIyNLLwhoSQVjIUDRYfwrbO46o+bllY9HoexRpg==}
     hasBin: true
 
-  '@happyvertical/smrt-secrets@0.43.10':
-    resolution: {integrity: sha512-YntxC2joPiHVOvTfikAqMXEX/XUvJJ9czFret7dp02rV/FgYDDOi5A+KRtz5J0pX1molca6HR+Sq7OiDFnAJ0w==}
+  '@happyvertical/smrt-secrets@0.44.0':
+    resolution: {integrity: sha512-EzvakpOCkwB2dVfC+TvQbcJB0BqHNN0NEtfkyZAIS8pVYD8q1zFJRyaiB4RU4UkwwXw6k8PAkd4BrycVI+oLfQ==}
 
-  '@happyvertical/smrt-subscriptions@0.43.10':
-    resolution: {integrity: sha512-cXZoybxr83Evx1JTI+ehaFwmsOVQPSJi41m6fMISaSHLUv43MWtoMbJZx5vrFLR3JaW1CqOBWK2X2qei942Fdg==}
+  '@happyvertical/smrt-subscriptions@0.44.0':
+    resolution: {integrity: sha512-J2SPw08+vchuQetlQx4cW4twYY0i5T6Zdo6pUW+aJaXfVf28tbl4LZ1tYOPYbRaGjk2FCeTW/Y65+JfRmIwgAA==}
     peerDependencies:
       svelte: ^5.56.4
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-svelte@0.43.10':
-    resolution: {integrity: sha512-tIQL3mc+ifQYdtalbXuh+33xxyR0xKlHy1Fn7pqnVRo2rL0gPlngxzSQ7yr9KfoFf5TmQhrXtFJlUaBp9B0LCw==}
+  '@happyvertical/smrt-svelte@0.44.0':
+    resolution: {integrity: sha512-N8PLeWZHRGv1m9Ziobudwq1LDbkBadPeCvv6PthisvEReyFNf0Mb07ZsO1g3V7K/RLq8NpUI9QB0b7q7FhQ34g==}
     peerDependencies:
       '@huggingface/transformers': '>=3.8.1'
       '@mlc-ai/web-llm': '>=0.2.84'
@@ -1308,38 +1308,38 @@ packages:
       chrono-node:
         optional: true
 
-  '@happyvertical/smrt-tags@0.43.10':
-    resolution: {integrity: sha512-fSYVElBglB25eSHFo45yXu4neTOelGEKz/sRJ1mCnIGFUus1WJ3QRvhxdehNHJW8ss/b3RMGXhQZwH9DfzvY5Q==}
+  '@happyvertical/smrt-tags@0.44.0':
+    resolution: {integrity: sha512-XUNhcp/ovlIc5M8O2FU6achzLmYFjmfero+aCLQGNMvMa6ObytHoG+jqRG7UutMfxP1MS8oRpprp7cYUvSiaiw==}
 
-  '@happyvertical/smrt-tenancy@0.43.10':
-    resolution: {integrity: sha512-AQI6IoMJNB+FXVWrm6hfUYVlP2X8d64MQLC8HHXsTH83oHxqzCrcfQb6+qbaljTC5YhlW3HAiw7lGHYMP+qzLw==}
+  '@happyvertical/smrt-tenancy@0.44.0':
+    resolution: {integrity: sha512-DNcRVf+6/1gLSZCoUjSrojsuOTtatMOsb5gPweCzvrrcD7NSvvBL6/o+v0Sa2RjkJ9laRnutkKQBH3RTyqkWFA==}
     peerDependencies:
       svelte: ^5.56.4
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-types@0.43.10':
-    resolution: {integrity: sha512-ADK6gwDbGWJBuWPFC8BnZfHGGEm9vprM7YTQKbsLy9IzGu7SGWzsTJlpCNCvLe5Bo1hNaq2ynDsvTihumN2/iw==}
+  '@happyvertical/smrt-types@0.44.0':
+    resolution: {integrity: sha512-3sZvcXx/Dvyi/ykfRo+mscoCKiMV7sU32xgk2w7o3lBsHwz7rMSkVjwMzU7OqbLHy/TNdIxeOTXQrfCzZoFJfQ==}
 
-  '@happyvertical/smrt-ui@0.43.10':
-    resolution: {integrity: sha512-uarQNzCivWpF/7bRLk0tt3UeytUeFTl3qOCkKcdstGd2IzXrQDiNMuZO2T2i0vvpcQ5Ix2SSYVmW7duyJ6U+/A==}
+  '@happyvertical/smrt-ui@0.44.0':
+    resolution: {integrity: sha512-sVfiHFZcUVcEtEL215YQkRCttm5afpUXdgLJYSwOKJlEv+OnCyoSctlYTD7Y6LhTmnD9xiDRffiks+UQzV1Wdw==}
     peerDependencies:
       svelte: ^5.56.4
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-users@0.43.10':
-    resolution: {integrity: sha512-LnLhkenW4qHSgobmrA6zejUTpi1vdKZNfDA8x817zTrwB9YwYuDPWCPKBhzpo+sLZVg/dBC4cCoAYFo0VLKIFA==}
+  '@happyvertical/smrt-users@0.44.0':
+    resolution: {integrity: sha512-uIDPFpqsMJcKGCyEffmqxrFBSurQJ+Igy1su6Nz8WKL4eWxHv9fkclw21oGNcSQchO3Q2eNZeHFkgbuVbBXtkw==}
     peerDependencies:
       svelte: ^5.56.4
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-web@0.43.10':
-    resolution: {integrity: sha512-n8i88+PP0CzxhY2hmm3Q+qMXZgeGIEfrsZ/u0pWOVrgaKKXEaDkqwycUoJGNp1sO5eShcHI2Fx3uVfAb1ZLA5Q==}
+  '@happyvertical/smrt-web@0.44.0':
+    resolution: {integrity: sha512-VTHYB8qdIMV80h+unpJc1ftLUPDt/vFLaL4CXTqV4mvqAuGMpjzrpBh1+Dc+CZjvOPocXhavSng+za6xMGr0IA==}
 
   '@happyvertical/spider@1.1.13':
     resolution: {integrity: sha512-mu3HpvszT3K/4eusiZHxCI5oYCVqofE59f6rGIc4WBuyqFiqHQcGAfVsgeVSXbAD5pHPVhuRUB5abrOVO8nAaQ==}
@@ -8263,18 +8263,18 @@ snapshots:
       - pg-native
       - utf-8-validate
 
-  '@happyvertical/smrt-agents@0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-agents@0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.89.4(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.89.4
-      '@happyvertical/smrt-config': 0.43.10(typescript@5.9.3)
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-reports': 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-secrets': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.43.10
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
-      '@happyvertical/smrt-users': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-config': 0.44.0(typescript@5.9.3)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-reports': 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-secrets': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.44.0
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-users': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/utils': 0.89.4
     optionalDependencies:
       svelte: 5.57.0(@typescript-eslint/types@8.69.0)
@@ -8298,13 +8298,13 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-analytics@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-analytics@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.43.10
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.44.0
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
     optionalDependencies:
       svelte: 5.57.0(@typescript-eslint/types@8.69.0)
     transitivePeerDependencies:
@@ -8323,16 +8323,16 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-assets@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-assets@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.89.4(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.89.4
       '@happyvertical/logger': 0.89.4
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tags': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.43.10
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tags': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.44.0
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.89.4
       '@happyvertical/utils': 0.89.4
     optionalDependencies:
@@ -8353,16 +8353,16 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-chat@0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-chat@0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.89.4(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-agents': 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-personas': 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.43.10
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
-      '@happyvertical/smrt-users': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-agents': 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-personas': 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.44.0
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-users': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.89.4
     optionalDependencies:
       svelte: 5.57.0(@typescript-eslint/types@8.69.0)
@@ -8388,17 +8388,17 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-cli@0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-cli@0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.89.4(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.89.4
       '@happyvertical/logger': 0.89.4
-      '@happyvertical/smrt-agents': 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-config': 0.43.10(typescript@5.9.3)
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-dev-mcp': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-playground': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))
-      '@happyvertical/smrt-types': 0.43.10
+      '@happyvertical/smrt-agents': 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-config': 0.44.0(typescript@5.9.3)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-dev-mcp': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-playground': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))
+      '@happyvertical/smrt-types': 0.44.0
       '@happyvertical/sql': 0.89.4
       '@happyvertical/utils': 0.89.4
       acorn: 8.18.0
@@ -8426,13 +8426,13 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-commerce@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-commerce@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-ledgers': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.43.10
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-ledgers': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.44.0
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
     optionalDependencies:
       svelte: 5.57.0(@typescript-eslint/types@8.69.0)
     transitivePeerDependencies:
@@ -8451,15 +8451,15 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-config@0.43.10(typescript@5.9.3)':
+  '@happyvertical/smrt-config@0.44.0(typescript@5.9.3)':
     dependencies:
-      '@happyvertical/smrt-types': 0.43.10
+      '@happyvertical/smrt-types': 0.44.0
       cosmiconfig: 9.0.2(typescript@5.9.3)
       jiti: 2.7.0
     transitivePeerDependencies:
       - typescript
 
-  '@happyvertical/smrt-content@0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@types/node@26.2.0)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(jimp@1.6.1)(sharp@0.35.3(@types/node@26.2.0))(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-content@0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@types/node@26.2.0)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(jimp@1.6.1)(sharp@0.35.3(@types/node@26.2.0))(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.89.4(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/documents': 0.89.4(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@types/node@26.2.0)(ws@8.21.3)(zod@4.3.6)
@@ -8469,18 +8469,18 @@ snapshots:
       '@happyvertical/logger': 0.89.4
       '@happyvertical/ocr': 0.61.6(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/pdf': 0.65.9(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-agents': 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-assets': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-chat': 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-facts': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-images': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-messages': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-profiles': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.43.10
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-agents': 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-assets': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-chat': 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-facts': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-images': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-messages': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-profiles': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.44.0
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
       '@happyvertical/spider': 1.1.13(@opentelemetry/api@1.9.0)(@types/node@26.2.0)
       '@happyvertical/sql': 0.89.4
       '@happyvertical/utils': 0.89.4
@@ -8521,15 +8521,15 @@ snapshots:
       - yauzl
       - zod
 
-  '@happyvertical/smrt-core@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-core@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.89.4(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.89.4
       '@happyvertical/json': 0.89.4
       '@happyvertical/logger': 0.89.4
-      '@happyvertical/smrt-config': 0.43.10(typescript@5.9.3)
-      '@happyvertical/smrt-scanner': 0.43.10
-      '@happyvertical/smrt-types': 0.43.10
+      '@happyvertical/smrt-config': 0.44.0(typescript@5.9.3)
+      '@happyvertical/smrt-scanner': 0.44.0
+      '@happyvertical/smrt-types': 0.44.0
       '@happyvertical/sql': 0.89.4
       '@happyvertical/utils': 0.89.4
       '@oxc-project/runtime': 0.138.0
@@ -8557,11 +8557,11 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-dev-mcp@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-dev-mcp@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-scanner': 0.43.10
-      '@happyvertical/smrt-types': 0.43.10
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-scanner': 0.44.0
+      '@happyvertical/smrt-types': 0.44.0
       '@modelcontextprotocol/server': 2.0.0
     transitivePeerDependencies:
       - '@huggingface/transformers'
@@ -8579,18 +8579,18 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-events@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-events@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.89.4(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.89.4
       '@happyvertical/logger': 0.89.4
-      '@happyvertical/smrt-assets': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-places': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-profiles': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.43.10
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-assets': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-places': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-profiles': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.44.0
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.89.4
       '@happyvertical/utils': 0.89.4
     optionalDependencies:
@@ -8614,14 +8614,14 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-facts@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-facts@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.89.4(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.89.4
       '@happyvertical/logger': 0.89.4
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.89.4
       '@happyvertical/utils': 0.89.4
     transitivePeerDependencies:
@@ -8641,9 +8641,9 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-features@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-features@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
     transitivePeerDependencies:
       - '@huggingface/transformers'
       - '@modelcontextprotocol/sdk'
@@ -8660,12 +8660,12 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-fields@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-fields@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
-      '@happyvertical/smrt-users': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-users': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.89.4
     optionalDependencies:
       svelte: 5.57.0(@typescript-eslint/types@8.69.0)
@@ -8685,16 +8685,16 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-images@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-images@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.89.4(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/images': 0.89.4(jimp@1.6.1)(sharp@0.35.3(@types/node@26.2.0))
-      '@happyvertical/smrt-assets': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.43.10
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-assets': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.44.0
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
       '@happyvertical/utils': 0.89.4
       jimp: 1.6.1
       sharp: 0.35.3(@types/node@26.2.0)
@@ -8716,15 +8716,15 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-jobs@0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-jobs@0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/jobs': 0.89.4(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(bull@4.16.5)(bullmq@5.76.6)
       '@happyvertical/logger': 0.89.4
-      '@happyvertical/smrt-config': 0.43.10(typescript@5.9.3)
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.43.10
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-config': 0.44.0(typescript@5.9.3)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.44.0
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.89.4
       '@happyvertical/utils': 0.89.4
     optionalDependencies:
@@ -8749,16 +8749,16 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-languages@0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-languages@0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.89.4(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/logger': 0.89.4
-      '@happyvertical/smrt-config': 0.43.10(typescript@5.9.3)
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-features': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-jobs': 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-config': 0.44.0(typescript@5.9.3)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-features': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-jobs': 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.89.4
     transitivePeerDependencies:
       - '@aws-sdk/client-sqs'
@@ -8781,11 +8781,11 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-ledgers@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-ledgers@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
     transitivePeerDependencies:
       - '@huggingface/transformers'
       - '@modelcontextprotocol/sdk'
@@ -8803,18 +8803,18 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-messages@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-messages@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/email': 0.89.4
       '@happyvertical/files': 0.89.4
       '@happyvertical/logger': 0.89.4
       '@happyvertical/messages': 0.89.4
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-secrets': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.43.10
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
-      '@happyvertical/smrt-users': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-secrets': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.44.0
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-users': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.89.4
       '@happyvertical/utils': 0.89.4
     optionalDependencies:
@@ -8836,17 +8836,17 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-mobile-contract@0.43.10': {}
+  '@happyvertical/smrt-mobile-contract@0.44.0': {}
 
-  '@happyvertical/smrt-personas@0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-personas@0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-agents': 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-messages': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
-      '@happyvertical/smrt-users': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-agents': 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-messages': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-users': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.89.4
       svelte: 5.57.0(@typescript-eslint/types@8.69.0)
     transitivePeerDependencies:
@@ -8871,16 +8871,16 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-places@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-places@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.89.4(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/cache': 0.89.4(@opentelemetry/api@1.9.0)
       '@happyvertical/files': 0.89.4
       '@happyvertical/geo': 0.89.4(@opentelemetry/api@1.9.0)
       '@happyvertical/logger': 0.89.4
-      '@happyvertical/smrt-assets': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-assets': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.89.4
       '@happyvertical/utils': 0.89.4
     transitivePeerDependencies:
@@ -8903,24 +8903,24 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-playground@0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))':
+  '@happyvertical/smrt-playground@0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))':
     dependencies:
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
       fast-glob: 3.3.3
       tsx: 4.23.12
     optionalDependencies:
       svelte: 5.57.0(@typescript-eslint/types@8.69.0)
       vite: 7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0)
 
-  '@happyvertical/smrt-profiles@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-profiles@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.89.4(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.89.4
       '@happyvertical/logger': 0.89.4
-      '@happyvertical/smrt-assets': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-assets': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.89.4
       '@happyvertical/utils': 0.89.4
       '@noble/curves': 1.9.7
@@ -8942,20 +8942,20 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-projects@0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-projects@0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.89.4(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/logger': 0.89.4
       '@happyvertical/projects': 0.89.4(typescript@5.9.3)
       '@happyvertical/repos': 0.89.4(typescript@5.9.3)
-      '@happyvertical/smrt-config': 0.43.10(typescript@5.9.3)
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-subscriptions': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-svelte': 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.43.10
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-config': 0.44.0(typescript@5.9.3)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-subscriptions': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-svelte': 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.44.0
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.89.4
       '@happyvertical/utils': 0.89.4
     optionalDependencies:
@@ -8983,11 +8983,11 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-prompts@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-prompts@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-config': 0.43.10(typescript@5.9.3)
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-config': 0.44.0(typescript@5.9.3)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.89.4
     transitivePeerDependencies:
       - '@huggingface/transformers'
@@ -9006,12 +9006,12 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-reports@0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-reports@0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-jobs': 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.43.10
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-jobs': 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.44.0
       '@happyvertical/sql': 0.89.4
     transitivePeerDependencies:
       - '@aws-sdk/client-sqs'
@@ -9034,19 +9034,19 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-scanner@0.43.10':
+  '@happyvertical/smrt-scanner@0.44.0':
     dependencies:
       fast-glob: 3.3.3
       minimatch: 10.2.5
       oxc-parser: 0.138.0
       oxc-resolver: 11.24.2
 
-  '@happyvertical/smrt-secrets@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-secrets@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/logger': 0.89.4
       '@happyvertical/secrets': 0.89.4
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.89.4
       '@happyvertical/utils': 0.89.4
     transitivePeerDependencies:
@@ -9066,11 +9066,11 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-subscriptions@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-subscriptions@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.89.4
     optionalDependencies:
       svelte: 5.57.0(@typescript-eslint/types@8.69.0)
@@ -9090,13 +9090,13 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-svelte@0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-svelte@0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/logger': 0.89.4
-      '@happyvertical/smrt-languages': 0.43.10(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.43.10
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
-      '@happyvertical/smrt-web': 0.43.10(typescript@5.9.3)
+      '@happyvertical/smrt-languages': 0.44.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.44.0
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-web': 0.44.0(typescript@5.9.3)
       '@tanstack/db': 0.6.17(typescript@5.9.3)
       '@tanstack/svelte-db': 0.1.94(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)
       esm-env: 1.2.2
@@ -9122,13 +9122,13 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-tags@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-tags@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.89.4(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.89.4
       '@happyvertical/logger': 0.89.4
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.89.4
       '@happyvertical/utils': 0.89.4
     transitivePeerDependencies:
@@ -9148,12 +9148,12 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-tenancy@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-tenancy@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/logger': 0.89.4
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.43.10
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.44.0
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.89.4
       '@happyvertical/utils': 0.89.4
     optionalDependencies:
@@ -9174,25 +9174,25 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-types@0.43.10': {}
+  '@happyvertical/smrt-types@0.44.0': {}
 
-  '@happyvertical/smrt-ui@0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))':
+  '@happyvertical/smrt-ui@0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))':
     dependencies:
-      '@happyvertical/smrt-types': 0.43.10
+      '@happyvertical/smrt-types': 0.44.0
       esm-env: 1.2.2
     optionalDependencies:
       svelte: 5.57.0(@typescript-eslint/types@8.69.0)
 
-  '@happyvertical/smrt-users@0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-users@0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/logger': 0.89.4
-      '@happyvertical/smrt-config': 0.43.10(typescript@5.9.3)
-      '@happyvertical/smrt-core': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-mobile-contract': 0.43.10
-      '@happyvertical/smrt-profiles': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.43.10(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.43.10
-      '@happyvertical/smrt-ui': 0.43.10(svelte@5.57.0(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-config': 0.44.0(typescript@5.9.3)
+      '@happyvertical/smrt-core': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-mobile-contract': 0.44.0
+      '@happyvertical/smrt-profiles': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.44.0(@huggingface/transformers@3.8.1)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.0(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.44.0
+      '@happyvertical/smrt-ui': 0.44.0(svelte@5.57.0(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.89.4
       jose: 6.2.10
     optionalDependencies:
@@ -9213,7 +9213,7 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-web@0.43.10(typescript@5.9.3)':
+  '@happyvertical/smrt-web@0.44.0(typescript@5.9.3)':
     dependencies:
       '@tanstack/db': 0.6.17(typescript@5.9.3)
       '@tanstack/query-core': 5.101.4
