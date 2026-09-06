@@ -53,7 +53,7 @@ export const referenceFamilies: ReferenceFamily[] = [
 		label: 'Collections and relationships',
 		href: '/reference/collections',
 		description: 'Look up query, loading, relationship, and projection contracts.',
-		keywords: ['collections', 'relationships', 'queries', 'projections']
+		keywords: ['collections', 'relationships', 'profiles', 'queries', 'projections']
 	},
 	{
 		id: 'interfaces',
@@ -108,6 +108,7 @@ const guideFamily = new Map<string, string>([
 	['decorators', 'decorators'],
 	['collections', 'collections'],
 	['relationships', 'collections'],
+	['profile-relationships', 'collections'],
 	['field-naming', 'collections'],
 	['interfaces', 'interfaces'],
 	['security', 'authorization'],

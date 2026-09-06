@@ -1,4 +1,5 @@
 import type { Guide } from '$lib/data/guides';
+import { SMRT_VERSION } from '$lib/version';
 
 /**
  * Released s-m-r-t version the pinned reference pages were verified against. It
@@ -9,6 +10,9 @@ import type { Guide } from '$lib/data/guides';
 const REFERENCE_PINNED_VERSION = '0.42.4';
 
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${REFERENCE_PINNED_VERSION}`;
+
+/** Pages verified against the installed release rather than the audit anchor above. */
+const INSTALLED_TREE = `https://github.com/happyvertical/smrt/blob/v${SMRT_VERSION}`;
 
 export const referenceGuides: Guide[] = [
 	{
@@ -922,7 +926,117 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				links: [{ label: 'Collections and list()', href: '/reference/collections' }]
 			}
 		],
-		related: [{ label: 'Collections and list()', href: '/reference/collections' }]
+		related: [
+			{ label: 'Collections and list()', href: '/reference/collections' },
+			{ label: 'Profile relationships', href: '/reference/profile-relationships' }
+		]
+	},
+	{
+		slug: 'profile-relationships',
+		navTitle: 'Profile relationships',
+		eyebrow: 'Reference',
+		title: 'Typed relationships between profiles',
+		lede: 'A ProfileRelationship is one directed row from one profile to another with a required type. A reciprocal type can write the inverse row for you, a third profile can give the pair context, and terms date it.',
+		plainEnglish:
+			'Two people, two organizations, or a person and an organization can be linked with a named meaning such as supplier or partner. The link is a record you can read from either side, date, and remove.',
+		packages: ['smrt-profiles', 'smrt-tenancy'],
+		pinnedVersion: SMRT_VERSION,
+		sources: [
+			{ label: 'smrt-profiles AGENTS.md', href: `${INSTALLED_TREE}/packages/profiles/AGENTS.md` },
+			{
+				label: 'ProfileRelationship.ts',
+				href: `${INSTALLED_TREE}/packages/profiles/src/models/ProfileRelationship.ts`
+			},
+			{
+				label: 'ProfileRelationshipType.ts',
+				href: `${INSTALLED_TREE}/packages/profiles/src/models/ProfileRelationshipType.ts`
+			},
+			{
+				label: 'ProfileRelationshipTerm.ts',
+				href: `${INSTALLED_TREE}/packages/profiles/src/models/ProfileRelationshipTerm.ts`
+			},
+			{ label: 'Profile.ts', href: `${INSTALLED_TREE}/packages/profiles/src/models/Profile.ts` }
+		],
+		sections: [
+			{
+				title: 'One row, one direction',
+				intro:
+					'ProfileRelationship stores fromProfileId, toProfileId, and typeId as required foreign keys. Direction is part of the row: a supplier link from a mill to a shop is not one from the shop to the mill. The generated surfaces are REST list, get, create, and delete, MCP list and get, and the CLI.',
+				points: [
+					'fromProfileId and toProfileId reference Profile, so any subtype works: Person, Organization, or Bot.',
+					'typeId references ProfileRelationshipType and must resolve; addRelationship throws when the slug has no type row.',
+					'contextProfileId is an optional third Profile reference, and terms is a oneToMany to ProfileRelationshipTerm.',
+					'tenantId is nullable with optional scope. Under an active tenant context the row belongs to that tenant; with no context it stays global.'
+				]
+			},
+			{
+				title: 'Types decide whether the inverse exists',
+				intro:
+					'A ProfileRelationshipType has a slug, a name, and a reciprocal flag that defaults to true. Nothing seeds type rows; create them with getOrCreateBySlug. When addRelationship saves a row for a reciprocal type, it looks up a handler by slug and runs it. The default handlers cover friend, spouse, partner, colleague, and sibling, and each calls addRelationship in the other direction. A reciprocal type with no handler writes one row only.',
+				points: [
+					'addRelationship checks exists(from, to, type) first, so repeating the call writes nothing and runs no handler.',
+					'registerReciprocalHandler(slug, handler) adds or replaces a handler. The handler receives the from profile, the to profile, and the optional context profile.',
+					'removeRelationship deletes the forward rows and, for a reciprocal type, the inverse rows of the same type, whether or not a handler exists. A handler that wrote a different type leaves that row for you to remove.',
+					'Type rows carry no tenant column. Use the collection getBySlug for lookups; the static ProfileRelationshipType.getBySlug returns null.'
+				],
+				filename: 'relationship-types.ts',
+				code: `import {\n  ProfileRelationshipType,\n  ProfileRelationshipTypeCollection\n} from '@happyvertical/smrt-profiles';\n\nconst types = await ProfileRelationshipTypeCollection.create({ db });\n\n// Directional: the mill supplies the shop; the shop does not supply the mill.\nawait types.getOrCreateBySlug('supplier', { name: 'Supplier', reciprocal: false });\n\n// Reciprocal with a shipped handler: adding one side adds the other.\nawait types.getOrCreateBySlug('partner', { name: 'Partner' });\n\n// Reciprocal with your own handler: the inverse is a different type.\nawait types.getOrCreateBySlug('client', { name: 'Client' });\nProfileRelationshipType.registerReciprocalHandler('client', async (from, to, context) => {\n  await to.addRelationship(from, 'supplier', context);\n});`
+			},
+			{
+				title: 'Read from either side',
+				intro:
+					'Profile.getRelationships takes typeSlug and direction. The from direction returns rows this profile wrote, to returns rows that point at it, and all returns both. getRelatedProfiles returns the profiles on the other end of every row in both directions, once each.',
+				points: [
+					'getRelationshipsFrom() and getRelationshipsTo() are the generated oneToMany accessors; they return raw rows with no slug filter.',
+					'ProfileRelationshipCollection has getFromProfile, getToProfile, getForProfile, and exists, each taking an optional type id rather than a slug.',
+					'ProfileCollection.getRelationshipNetwork(profileId, { maxDepth }) walks related profiles breadth first and returns a Map from profile id to depth, starting with the seed profile at 0. The default depth is 2, and every type counts.',
+					'ProfileRelationship.getTypeSlug() loads the type and returns its slug, or an empty string when the type is missing.',
+					'A typeSlug that matches no type row is not an error: getRelationships passes an undefined type id and returns every relationship, and getRelatedProfiles inherits that.'
+				],
+				filename: 'read-relationships.ts',
+				code: `import { ProfileCollection } from '@happyvertical/smrt-profiles';\n\nconst profiles = await ProfileCollection.create({ db });\nconst shop = await profiles.get('edmonton-shop');\nif (!shop?.id) throw new Error('missing organization');\n\n// Rows that point at the shop with the supplier type.\nconst supplierRows = await shop.getRelationships({ typeSlug: 'supplier', direction: 'to' });\n\n// The organizations on the other end of every partner row, once each.\nconst partners = await shop.getRelatedProfiles('partner');\n\n// The shop at depth 0 plus every profile within two hops, by any type.\nconst network = await profiles.getRelationshipNetwork(shop.id, { maxDepth: 2 });`
+			},
+			{
+				title: 'Context names a third profile',
+				intro:
+					'The third argument to addRelationship is a context profile, stored as contextProfileId. The default friend, partner, and colleague handlers carry it to the inverse row; the spouse and sibling handlers drop it. No shipped query filters by context, so read the field from the rows you get back.',
+				filename: 'context.ts',
+				code: `// Two people are colleagues in the context of one organization.\nawait alice.addRelationship(bob, 'colleague', acme);\n\nconst [row] = await alice.getRelationships({ typeSlug: 'colleague', direction: 'from' });\nrow.contextProfileId; // acme.id`
+			},
+			{
+				title: 'Terms date a relationship',
+				intro:
+					'A ProfileRelationshipTerm belongs to one relationship through relationshipId and records startedAt and an optional endedAt. A term is active when it has no end date or its end date is in the future. Terms carry no tenant column; they follow their relationship.',
+				points: [
+					'relationship.addTerm(startedAt, endedAt?) requires a saved relationship and throws without an id.',
+					'relationship.endCurrentTerm(endedAt) ends the first active term, and getActiveTerm() returns it or null.',
+					'term.end() defaults to now, and getDurationDays() measures to the end date, or to now while the term is open.',
+					'ProfileRelationshipTermCollection adds getByRelationship, getActiveTerm, and getHistoricalTerms for ended terms.'
+				],
+				filename: 'terms.ts',
+				code: `const [row] = await mill.getRelationships({ typeSlug: 'supplier', direction: 'from' });\n\nawait row.addTerm(new Date('2025-01-01'));\nconst active = await row.getActiveTerm(); // the open term\n\nawait row.endCurrentTerm(new Date('2025-12-31'));\nconst history = await row.getTerms(); // one ended term`
+			},
+			{
+				title: 'What is not there',
+				intro:
+					'Relationships are between profiles, not tenants. Tenant in smrt-users has a name, a status, a description, the hierarchy fields, and the two cascade flags; it has no profile field. The only shipped link between the two packages is User.profileId. A relationship row carries one tenantId. A tenant-to-tenant partnership is therefore a pattern an application builds, for example one Organization profile per tenant, not a shipped feature. Permission resolution never reads a relationship, so relating two profiles changes nothing about who can see what.',
+				callout: {
+					variant: 'note',
+					title: 'Verified by absence',
+					body: 'These limits come from the shipped type declarations rather than from prose: no Tenant field references a Profile, and no permission layer references ProfileRelationship.'
+				},
+				links: [
+					{ label: 'Authorization model', href: '/reference/authorization' },
+					{ label: 'Decide where data belongs', href: '/foundations/tenants' }
+				]
+			}
+		],
+		related: [
+			{ label: 'Relationship loading', href: '/reference/relationships' },
+			{ label: 'Decide where data belongs', href: '/foundations/tenants' },
+			{ label: 'Authorization model', href: '/reference/authorization' },
+			{ label: 'smrt-profiles', href: '/packages/smrt-profiles' }
+		]
 	},
 	{
 		slug: 'field-naming',

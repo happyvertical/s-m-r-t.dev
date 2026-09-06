@@ -639,7 +639,22 @@ export const packages: SmrtPackage[] = [
 			highlights: [
 				'Profiles remain separate from authentication records',
 				'Reciprocal and directional relationship types',
-				'Time-bounded relationship terms and contextual third parties'
+				'Time-bounded relationship terms and contextual third parties',
+				'Organization-to-organization links on the same Profile rows'
+			],
+			details: [
+				{
+					title: 'Relate two organizations',
+					body: 'Organization is a Profile subtype, so an organization relates to another the way a person does. Create a supplier type with getOrCreateBySlug, then call addRelationship on the mill with the shop and the supplier slug. A directional type writes that one row. A reciprocal type with a handler also writes the inverse, and the shipped handlers are friend, spouse, partner, colleague, and sibling. Read the link from either side with getRelationships, date it with addTerm, and name a third profile as its context.',
+					href: '/reference/profile-relationships',
+					linkLabel: 'Profile relationships'
+				},
+				{
+					title: 'A relationship is not a tenant link and not a permission',
+					body: 'ProfileRelationship carries one tenantId, and the Tenant record in smrt-users has no profile field. A tenant-to-tenant partnership is something an application builds on top, for example one Organization profile per tenant. Permission resolution never reads a relationship, so relating two profiles changes nothing about access.',
+					href: '/foundations/tenants',
+					linkLabel: 'Decide where data belongs'
+				}
 			],
 			exampleResource: 'profiles'
 		}

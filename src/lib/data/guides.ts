@@ -151,8 +151,26 @@ export const foundationGuides: Guide[] = [
 				points: [
 					'Parent and child tenants describe organization: company, division, branch, or network member.',
 					'A membership gives one user access to one tenant through one role.',
-					'A profile relationship describes business meaning: supplier, client, partner, or representative.'
+					'A profile relationship describes business meaning: supplier, client, partner, or representative. It links two profiles, not two tenants.'
 				]
+			},
+			{
+				title: 'Relate profiles, and let organizations be profiles',
+				intro:
+					'A profile relationship is one row from one profile to another with a named type. Organization, Person, and Bot are all Profile subtypes, so two organizations relate the same way two people do. The type is a record you create, and it is either reciprocal or directional. A relationship can also name a third profile as its context, and it can carry dated terms.',
+				points: [
+					'The framework ships inverse handlers for friend, spouse, partner, colleague, and sibling. Adding one side of those adds the other side for you.',
+					'Supplier, client, and representative are types your application defines. Nothing seeds them, and a type without a handler writes only the side you asked for.',
+					'A term dates a relationship: add one when it starts, end it when it stops, and read the active one later.'
+				],
+				filename: 'org-to-org.ts',
+				code: `import {\n  ProfileCollection,\n  ProfileRelationshipTypeCollection\n} from '@happyvertical/smrt-profiles';\n\nconst types = await ProfileRelationshipTypeCollection.create({ db });\nawait types.getOrCreateBySlug('supplier', { name: 'Supplier', reciprocal: false });\n\nconst profiles = await ProfileCollection.create({ db });\nconst mill = await profiles.get('northern-mill');\nconst shop = await profiles.get('edmonton-shop');\nif (!mill || !shop) throw new Error('missing organization');\n\n// One directional row: the mill supplies the shop. No inverse is written.\nawait mill.addRelationship(shop, 'supplier');\n\n// Read it from the shop's side.\nconst suppliers = await shop.getRelationships({ typeSlug: 'supplier', direction: 'to' });`,
+				links: [{ label: 'Profile relationships', href: '/reference/profile-relationships' }]
+			},
+			{
+				title: 'What a relationship does not do',
+				intro:
+					'A relationship records meaning, not authority: permission resolution reads the tenant cascade, the membership role, group roles, and overrides. A relationship is not one of those inputs, so nothing widens access just because two profiles are related. Tenant-to-tenant partnership is not a shipped feature either. The Tenant record has no profile field, and a relationship row carries one tenant id, not two. An application can give each tenant an organization profile and relate those profiles, but it writes and reads that link itself.'
 			},
 			{
 				title: 'Make inheritance a choice',
@@ -164,8 +182,13 @@ export const foundationGuides: Guide[] = [
 			{
 				title: 'Put tenant scope on the model',
 				intro:
-					'Required scope means every row belongs to a tenant. Optional scope allows shared rows and tenant rows. Global models remain outside tenant filtering. The request session establishes the authorized tenant context.'
+					'Required scope means every row belongs to a tenant. Optional scope allows shared rows and tenant rows. Global models remain outside tenant filtering. The request session establishes the authorized tenant context. A profile relationship uses optional scope: it takes the active tenant when there is one and stays global when there is none.'
 			}
+		],
+		related: [
+			{ label: 'Profile relationships', href: '/reference/profile-relationships' },
+			{ label: 'Add people and accounts', href: '/foundations/users-and-profiles' },
+			{ label: 'smrt-profiles', href: '/packages/smrt-profiles' }
 		]
 	},
 	{
