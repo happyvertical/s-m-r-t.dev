@@ -924,7 +924,7 @@ export const packages: SmrtPackage[] = [
 			],
 			details: [
 				{
-					title: 'The Tier 2 development plane',
+					title: 'The Development MCP server',
 					body: 'The server reads source, manifests, and authored documentation from a workspace on disk. It never writes files, never executes generated code, and calls no model provider: review and architecture tools return deterministic findings plus a reusable prompt bundle.',
 					href: '/tooling/dev-mcp',
 					linkLabel: 'smrt-dev-mcp'
@@ -1038,7 +1038,7 @@ export const packages: SmrtPackage[] = [
 				'SvelteKit hydration seeding',
 				'SSE live updates with polling fallback',
 				'Durable IndexedDB outbox and version-aware persistence',
-				'WebMCP data-plane tools'
+				'WebMCP tools'
 			]
 		}
 	),

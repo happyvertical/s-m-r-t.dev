@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { capabilityGuides } from '$lib/data/guides';
+import { capabilityGuides, foundationGuides } from '$lib/data/guides';
 import { SMRT_VERSION } from '$lib/version';
 
 /**
@@ -63,5 +63,15 @@ describe('WebMCP guide correction stays fixed', () => {
 		expect(webmcpTabSample).toContain('webMcpToolDefinitions');
 		expect(webmcpTabSample).not.toContain('collectionDefinitions');
 		expect(webmcpTabSample).not.toContain('readOnly');
+	});
+});
+
+describe('retired MCP tier and plane terminology (#197)', () => {
+	it('never reintroduces the Tier 1/2 or development/runtime plane taxonomy Tooling retired', () => {
+		const guideText = JSON.stringify([...foundationGuides, ...capabilityGuides]);
+
+		expect(guideText).not.toMatch(/\bTier[\s-]?[12]\b/i);
+		expect(guideText).not.toMatch(/development plane/i);
+		expect(guideText).not.toMatch(/runtime plane/i);
 	});
 });

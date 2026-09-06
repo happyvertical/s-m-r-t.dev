@@ -68,6 +68,18 @@ describe('Tooling information architecture', () => {
 		}
 	});
 
+	it("names doctor's agent-surface report and what it reads (#244)", () => {
+		const text = guideText('development-workflow');
+
+		expect(text).toMatch(/agent-surface/);
+		expect(text).toMatch(/agent-addressable model tools and declared view intents/);
+		expect(text).toMatch(/build artifacts alone/);
+		expect(text).not.toMatch(/playbooks?/i);
+
+		const knowledgeText = guideText('knowledge');
+		expect(knowledgeText).toMatch(/agent-surface report reads this same artifact/);
+	});
+
 	it('keeps coding-agent evidence separate from application-agent authority', () => {
 		expect(guideText('knowledge')).toMatch(/selected source and diagnostics/);
 		expect(guideText('knowledge')).toMatch(/does not prove that a caller has authority/);
