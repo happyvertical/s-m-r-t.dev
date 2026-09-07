@@ -88,8 +88,9 @@ merge, because a hash comparison is not qualified to reject prose.
 
 ## Legacy redirects are a contract
 
-`src/routes/docs/[...legacy]/`, `src/routes/components/[...legacy]/`, and
-`src/routes/modules/[slug]/` prerender 301 redirects for URLs the site used to serve.
+`src/routes/docs/[...legacy]/`, `src/routes/components/[...legacy]/`,
+`src/routes/modules/[slug]/`, `src/routes/packages/[slug]/`, `src/routes/packages/`,
+and `src/routes/faq/` prerender 301 redirects for URLs the site used to serve.
 The site is static, so a path with no prerendered redirect is a hard 404 in
 production — **removing an entry silently breaks a live URL.**
 Nothing on the site links to these paths, so a dropped entry produces no build

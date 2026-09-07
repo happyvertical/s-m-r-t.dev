@@ -23,11 +23,9 @@ const staticRoutes = [
 	{ path: '/foundations', priority: '0.9', changefreq: 'monthly' },
 	{ path: '/capabilities', priority: '0.9', changefreq: 'weekly' },
 	{ path: '/guides', priority: '0.9', changefreq: 'monthly' },
-	{ path: '/packages', priority: '0.9', changefreq: 'weekly' },
 	{ path: '/playground', priority: '0.9', changefreq: 'weekly' },
 	{ path: '/tooling', priority: '0.85', changefreq: 'monthly' },
-	{ path: '/reference', priority: '0.8', changefreq: 'monthly' },
-	{ path: '/faq', priority: '0.6', changefreq: 'monthly' }
+	{ path: '/reference', priority: '0.8', changefreq: 'monthly' }
 ];
 
 function entry(path: string, priority: string, changefreq: string): string {
@@ -42,10 +40,8 @@ export const GET: RequestHandler = () => {
 		...taskGuides.map((guide) => entry(`/guides/${guide.slug}`, '0.85', 'monthly')),
 		...toolingGuides.map((guide) => entry(`/tooling/${guide.slug}`, '0.8', 'monthly')),
 		...referenceGuides.map((guide) => entry(`/reference/${guide.slug}`, '0.75', 'monthly')),
-		...packages.map((pkg) => entry(`/packages/${pkg.slug}`, '0.75', 'monthly')),
-		// Reference is the canonical Reference base (D6): additive here — the
-		// legacy `/packages*` and `/faq` entries above are removed once those
-		// routes become redirects (S3).
+		// /packages* and /faq are redirects to these Reference URLs (S3) and are
+		// intentionally absent here — a sitemap must not list a redirecting URL.
 		entry('/reference/api', '0.8', 'monthly'),
 		entry('/reference/faq', '0.6', 'monthly'),
 		entry('/reference/packages', '0.9', 'weekly'),

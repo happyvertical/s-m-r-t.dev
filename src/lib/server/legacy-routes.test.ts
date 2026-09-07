@@ -5,6 +5,7 @@ import { entries as componentEntries } from '../../routes/components/[...legacy]
 import { entries as docsEntries } from '../../routes/docs/[...legacy]/+page.server';
 import { entries as moduleEntries } from '../../routes/modules/[slug]/+page.server';
 import { entries as foundationEntries } from '../../routes/foundations/[slug]/+page';
+import { entries as packageEntries } from '../../routes/packages/[slug]/+page.server';
 
 const RESTORE_DONT_RENUMBER =
 	'A prerendered redirect is a live URL. If this count dropped, restore the removed ' +
@@ -72,5 +73,39 @@ describe('legacy static routes', () => {
 		expect(slugs).toEqual(
 			expect.arrayContaining(['app-model', 'identity-access', 'generated-surfaces'])
 		);
+	});
+
+	it('prerenders every legacy /packages/<slug> page as a redirect to Reference (62 pages: 61 slugs + the index)', async () => {
+		const paths = (await packageEntries()).map(({ slug }) => slug);
+
+		// /packages/[slug] mirrors packages.ts exactly, with no hand-written
+		// extras — /packages itself (the +62nd page in this family) is a
+		// separate, non-parametrized redirect route with nothing to enumerate.
+		expect(paths, RESTORE_DONT_RENUMBER).toHaveLength(61);
+		expect(paths).toHaveLength(packages.length);
+		expect(new Set(paths).size).toBe(paths.length);
+	});
+
+	it('redirects the legacy /packages and /faq singular pages to Reference', async () => {
+		const { load: packagesLoad } = await import('../../routes/packages/+page.server');
+		const { load: faqLoad } = await import('../../routes/faq/+page.server');
+
+		const redirectTarget = (load: () => never) => {
+			try {
+				load();
+			} catch (response) {
+				return response as { status: number; location: string };
+			}
+			throw new Error('expected a redirect');
+		};
+
+		expect(redirectTarget(packagesLoad as () => never)).toMatchObject({
+			status: 301,
+			location: '/reference/packages'
+		});
+		expect(redirectTarget(faqLoad as () => never)).toMatchObject({
+			status: 301,
+			location: '/reference/faq'
+		});
 	});
 });
