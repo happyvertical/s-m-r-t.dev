@@ -1,0 +1,179 @@
+<!doctype html>
+<!--
+  Source card for static/og-image.png (the site-wide og:image that
+  src/lib/components/SEO.svelte sets on every page). Nothing builds this file.
+  To regenerate the PNG: open it in Chrome as a file:// URL, emulate a
+  1200x630 viewport at device pixel ratio 1, wait for document.fonts.ready,
+  and screenshot the viewport to static/og-image.png. Confirm with
+  `sips -g pixelWidth -g pixelHeight static/og-image.png` (1200 x 630).
+
+  Tokens are the smrt theme's dark scheme, which the site renders by default
+  (data-theme="smrt", --smrt-color-* from @happyvertical/smrt-ui). The mark is
+  src/lib/assets/smrt-mark.svg inlined; its ember glow is the resting filter
+  from Header.svelte's .brand img, scaled to the larger mark. Fonts are the
+  theme's self-hosted Inter (resolved from node_modules, so run pnpm install
+  first) and the site's ui-monospace stack for the wordmark, as
+  Header.svelte's .brand span uses.
+-->
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>og-image source card</title>
+		<style>
+			@font-face {
+				font-family: 'Inter';
+				font-style: normal;
+				font-weight: 100 900;
+				src: url('../node_modules/@happyvertical/smrt-ui/dist/themes/fonts/inter-latin.woff2')
+					format('woff2');
+			}
+			:root {
+				--bg: #0b0c0e;
+				--surface: #121417;
+				--ink: #c9cdd3;
+				--muted: #9aa3af;
+				--accent: #ff7a1a;
+				--line: #23272e;
+				--font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+				--font-mono: ui-monospace, 'SF Mono', Monaco, 'Cascadia Code', Consolas, monospace;
+			}
+			html,
+			body {
+				margin: 0;
+				background: var(--bg);
+			}
+			.card {
+				position: relative;
+				width: 1200px;
+				height: 630px;
+				overflow: hidden;
+				box-sizing: border-box;
+				padding: 84px 96px 80px;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				color: var(--ink);
+				font-family: var(--font-sans);
+				background:
+					radial-gradient(640px 420px at 12% 8%, rgba(240, 91, 43, 0.14), transparent 70%),
+					var(--bg);
+			}
+			.brand {
+				display: flex;
+				align-items: center;
+				gap: 20px;
+			}
+			.brand svg {
+				width: 80px;
+				height: 80px;
+				filter: drop-shadow(0 0 4px rgba(255, 211, 61, 0.28))
+					drop-shadow(0 0 12px rgba(240, 91, 43, 0.3))
+					drop-shadow(0 3px 20px rgba(201, 56, 30, 0.22));
+			}
+			.brand span {
+				font-family: var(--font-mono);
+				font-size: 44px;
+				font-weight: 800;
+				letter-spacing: -0.045em;
+			}
+			h1 {
+				margin: 0;
+				white-space: nowrap;
+				font-size: 74px;
+				font-weight: 680;
+				letter-spacing: -0.045em;
+				line-height: 1.05;
+			}
+			/*
+   * One quiet line: the five layer names from src/lib/data/layers.ts in their
+   * canonical order. At 40px (the floor that survives thumbnailing) they do
+   * not fit one row, so the breaks are set by hand — a name never splits and
+   * a separator never strands at a row end.
+   */
+			.layers {
+				margin: 0;
+				padding-top: 28px;
+				border-top: 1px solid var(--line);
+				display: grid;
+				row-gap: 8px;
+				color: var(--muted);
+				font-size: 40px;
+				font-weight: 400;
+				letter-spacing: -0.01em;
+				line-height: 1.2;
+			}
+			.layers .row {
+				white-space: nowrap;
+			}
+			.layers .sep {
+				color: var(--accent);
+				padding: 0 0.3em;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="card">
+			<div class="brand">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-hidden="true">
+					<defs>
+						<linearGradient
+							id="flame"
+							x1="26"
+							y1="16"
+							x2="101"
+							y2="112"
+							gradientUnits="userSpaceOnUse"
+						>
+							<stop stop-color="#f05b2b" />
+							<stop offset="1" stop-color="#c9381e" />
+						</linearGradient>
+						<linearGradient
+							id="heat"
+							x1="51"
+							y1="49"
+							x2="72"
+							y2="111"
+							gradientUnits="userSpaceOnUse"
+						>
+							<stop stop-color="#ffd33d" />
+							<stop offset="1" stop-color="#f2a817" />
+						</linearGradient>
+					</defs>
+					<path
+						fill="url(#flame)"
+						d="M64 5c-3 18-15 26-13 43-9-5-13-13-13-22C20 43 15 62 22 82c7 22 23 37 42 41 22-4 39-21 43-43 3-17-3-32-18-45 2 11 0 18-6 25C84 36 75 19 64 5Z"
+					/>
+					<path
+						fill="url(#heat)"
+						d="M64 45c-2 15-14 22-13 38-5-4-8-9-9-15-7 10-8 20-4 30 5 12 14 20 26 23 13-3 23-12 27-25 3-11 0-20-8-29 0 7-2 12-6 16 1-16-5-27-13-38Z"
+					/>
+					<g
+						fill="none"
+						stroke="#ffe3ae"
+						stroke-opacity="0.85"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path stroke-width="14" d="M7 63c12-4 27-5 43-1M78 62c16-4 31-3 43 1" />
+						<rect x="12" y="58" width="46" height="35" rx="13" stroke-width="14" />
+						<rect x="70" y="58" width="46" height="35" rx="13" stroke-width="14" />
+						<path stroke-width="13" d="M57 66c5-4 9-4 14 0" />
+					</g>
+					<g fill="none" stroke="#33221b" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke-width="8" d="M7 63c12-4 27-5 43-1M78 62c16-4 31-3 43 1" />
+						<rect x="12" y="58" width="46" height="35" rx="13" stroke-width="8" />
+						<rect x="70" y="58" width="46" height="35" rx="13" stroke-width="8" />
+						<path stroke-width="7" d="M57 66c5-4 9-4 14 0" />
+					</g>
+				</svg>
+				<span>s-m-r-t</span>
+			</div>
+			<h1>The s-m-r-t application stack</h1>
+			<p class="layers">
+				<span class="row">Foundations<span class="sep">·</span>Who can do what</span>
+				<span class="row">Ready-made building blocks<span class="sep">·</span>Agents included</span>
+				<span class="row">Screens and controls</span>
+			</p>
+		</div>
+	</body>
+</html>
