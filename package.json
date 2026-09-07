@@ -17,6 +17,7 @@
 		"check:copy": "node scripts/check-copy.mjs",
 		"check:ui-reference": "node scripts/generate-ui-component-reference.mjs --check",
 		"check:templates": "node scripts/check-svelte-templates.js",
+		"check:links": "node scripts/check-links.mjs",
 		"audit:data": "node scripts/check-data-freshness.mjs",
 		"generate:ui-reference": "node scripts/generate-ui-component-reference.mjs",
 		"check:smrt": "node scripts/update-smrt.mjs --check",
