@@ -3,6 +3,7 @@ import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
 import { taskGuides } from '$lib/data/task-guides';
 import { toolingGuides } from '$lib/data/tooling';
+import { uiComponents } from '$lib/data/ui-components.generated';
 import type { RequestHandler } from './$types';
 
 export const prerender = true;
@@ -41,7 +42,18 @@ export const GET: RequestHandler = () => {
 		...taskGuides.map((guide) => entry(`/guides/${guide.slug}`, '0.85', 'monthly')),
 		...toolingGuides.map((guide) => entry(`/tooling/${guide.slug}`, '0.8', 'monthly')),
 		...referenceGuides.map((guide) => entry(`/reference/${guide.slug}`, '0.75', 'monthly')),
-		...packages.map((pkg) => entry(`/packages/${pkg.slug}`, '0.75', 'monthly'))
+		...packages.map((pkg) => entry(`/packages/${pkg.slug}`, '0.75', 'monthly')),
+		// Reference is the canonical Reference base (D6): additive here — the
+		// legacy `/packages*` and `/faq` entries above are removed once those
+		// routes become redirects (S3).
+		entry('/reference/api', '0.8', 'monthly'),
+		entry('/reference/faq', '0.6', 'monthly'),
+		entry('/reference/packages', '0.9', 'weekly'),
+		...packages.map((pkg) => entry(`/reference/packages/${pkg.slug}`, '0.75', 'monthly')),
+		entry('/reference/components', '0.5', 'weekly'),
+		...uiComponents.map((component) =>
+			entry(`/reference/components/${component.slug}`, '0.5', 'monthly')
+		)
 	];
 
 	return new Response(

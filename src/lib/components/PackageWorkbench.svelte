@@ -7,12 +7,7 @@
 	import ReferenceFamilyBar from '$lib/components/ReferenceFamilyBar.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { toAnchorId } from '$lib/data/anchors';
-	import {
-		packageCategories,
-		packageStatusLabels,
-		packages,
-		type SmrtPackage
-	} from '$lib/data/packages';
+	import { packageStatusLabels, type SmrtPackage } from '$lib/data/packages';
 	import { getPlaygroundEntries, playgroundModules } from '$lib/data/playgrounds';
 	import { taskGuides } from '$lib/data/task-guides';
 	import { packageNeighbors } from '$lib/data/track';
@@ -25,7 +20,7 @@
 		backHref?: string;
 	}
 
-	let { pkg, backHref = '/packages' }: Props = $props();
+	let { pkg, backHref = '/reference/packages' }: Props = $props();
 	let activeTab = $state<Tab>('overview');
 	const tabs: { id: Tab; label: string }[] = [
 		{ id: 'overview', label: 'Overview' },
@@ -43,27 +38,7 @@
 		playgroundModules.filter((module) => module.packageName === pkg.name)
 	);
 	const packagePlaygroundEntries = $derived(getPlaygroundEntries(pkg.slug));
-	const referencePackageTrack = packageCategories.flatMap((category) =>
-		packages
-			.filter((entry) => entry.category === category)
-			.map((entry) => ({
-				label: entry.name,
-				href: `/reference/packages/${entry.slug}`,
-				caption: category
-			}))
-	);
-	const neighbors = $derived.by(() => {
-		if (backHref === '/packages') return packageNeighbors(pkg.slug);
-		const index = referencePackageTrack.findIndex(
-			(entry) => entry.href === `/reference/packages/${pkg.slug}`
-		);
-		if (index === -1) return null;
-		return {
-			track: 'Package catalog',
-			prev: referencePackageTrack[index - 1],
-			next: referencePackageTrack[index + 1]
-		};
-	});
+	const neighbors = $derived(packageNeighbors(pkg.slug));
 	const relatedGuides = $derived(
 		taskGuides.filter((guide) => guide.packages.includes(pkg.slug)).slice(0, 4)
 	);

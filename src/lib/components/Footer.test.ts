@@ -11,7 +11,9 @@ describe('footer', () => {
 		const navigation = screen.getByRole('navigation', { name: 'Footer navigation' });
 
 		expect(screen.getByText(`Framework documentation · ${SMRT_VERSION}`)).toBeTruthy();
-		expect(within(navigation).getByRole('link', { name: 'FAQ' }).getAttribute('href')).toBe('/faq');
+		expect(within(navigation).getByRole('link', { name: 'FAQ' }).getAttribute('href')).toBe(
+			'/reference/faq'
+		);
 		expect(
 			within(navigation)
 				.getByRole('link', { name: /GitHub/ })

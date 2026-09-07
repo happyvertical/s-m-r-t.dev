@@ -74,7 +74,7 @@ describe('package track', () => {
 	});
 
 	it('links neighbouring packages', () => {
-		const neighbors = packageNeighbors(packageTrack[1].href.replace('/packages/', ''));
+		const neighbors = packageNeighbors(packageTrack[1].href.replace('/reference/packages/', ''));
 		expect(neighbors?.prev?.href).toBe(packageTrack[0].href);
 		expect(neighbors?.next?.href).toBe(packageTrack[2].href);
 	});

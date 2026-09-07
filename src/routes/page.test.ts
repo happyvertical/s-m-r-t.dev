@@ -71,7 +71,9 @@ describe('documentation home page', () => {
 
 			expect(chipLinks).toHaveLength(layer.chips.length);
 			chipLinks.forEach((link, chipIndex) => {
-				expect(link.getAttribute('href')).toBe(`/packages/${layer.chips[chipIndex].slug}`);
+				expect(link.getAttribute('href')).toBe(
+					`/reference/packages/${layer.chips[chipIndex].slug}`
+				);
 				expect(link.getAttribute('target')).toBeNull();
 			});
 		});
@@ -171,7 +173,7 @@ describe('documentation home page', () => {
 				href: tile.getAttribute('href')
 			}))
 		).toEqual([
-			{ count: String(packages.length), label: 'documented packages', href: '/packages' },
+			{ count: String(packages.length), label: 'documented packages', href: '/reference/packages' },
 			{
 				count: String(uiComponents.length),
 				label: 'documented components',

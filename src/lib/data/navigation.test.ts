@@ -39,6 +39,9 @@ describe('primary navigation', () => {
 		]);
 		expect(active('/capabilities/application-shell').map((item) => item.label)).toEqual(['UI']);
 		expect(active('/packages/smrt-content').map((item) => item.label)).toEqual(['Reference']);
+		// A6: the canonical `/reference/packages/smrt-ui` belongs to Reference,
+		// not UI — only the `/ui` overview page itself owns the UI section now.
+		expect(active('/reference/packages/smrt-ui').map((item) => item.label)).toEqual(['Reference']);
 		expect(active('/playground').map((item) => item.label)).toEqual(['Playground']);
 		expect(active('/guides/testing-your-app')).toEqual([]);
 	});

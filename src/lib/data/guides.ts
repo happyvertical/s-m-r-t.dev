@@ -188,7 +188,7 @@ export const foundationGuides: Guide[] = [
 		related: [
 			{ label: 'Profile relationships', href: '/reference/profile-relationships' },
 			{ label: 'Add people and accounts', href: '/foundations/users-and-profiles' },
-			{ label: 'smrt-profiles', href: '/packages/smrt-profiles' }
+			{ label: 'smrt-profiles', href: '/reference/packages/smrt-profiles' }
 		]
 	},
 	{
@@ -1077,7 +1077,7 @@ export const nextPageIntent = defineIntent({
 			{ label: 'How resolution works', href: '/capabilities/field-policies' },
 			{ label: 'Operate field policies', href: '/capabilities/field-policy-operations' },
 			{ label: 'Field policy API', href: '/reference/field-policies' },
-			{ label: 'smrt-fields package', href: '/packages/smrt-fields' }
+			{ label: 'smrt-fields package', href: '/reference/packages/smrt-fields' }
 		]
 	},
 	{

@@ -104,5 +104,5 @@ export const entries = () => legacyEntries.map((legacy) => ({ legacy }));
 export const load: PageServerLoad = ({ params }) => {
 	const section = params.legacy?.split('/')[0] ?? '';
 	const pkg = packageBySection[section] ?? 'smrt-svelte';
-	redirect(301, `/packages/${pkg}`);
+	redirect(301, `/reference/packages/${pkg}`);
 };

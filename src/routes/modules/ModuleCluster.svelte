@@ -52,14 +52,14 @@
 				<ul class="package-list">
 					{#each guide.packages as pkg (pkg.slug)}
 						<li>
-							<a href={`/packages/${pkg.slug}`}>
+							<a href={`/reference/packages/${pkg.slug}`}>
 								<strong>@happyvertical/{pkg.slug}</strong>
 								<span>{pkg.status}</span>
 							</a>
 						</li>
 					{/each}
 				</ul>
-				<a class="reference-link" href="/packages">Complete Package Reference →</a>
+				<a class="reference-link" href="/reference/packages">Complete Package Reference →</a>
 			</section>
 
 			<section>
@@ -68,7 +68,7 @@
 					<ul class="evidence-list">
 						{#each guide.demo as slug (slug)}
 							<li>
-								<a href={`/packages/${slug}?tab=playground`}>
+								<a href={`/reference/packages/${slug}?tab=playground`}>
 									<strong>@happyvertical/{slug}</strong>
 									<span>{getPlaygroundEntries(slug).join(' · ')}</span>
 								</a>

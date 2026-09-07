@@ -78,7 +78,7 @@
 				<strong>Packages</strong>
 				<nav aria-label={`${topic.navTitle} packages`}>
 					{#each topic.packages as pkg (pkg)}
-						<a href={`/packages/${pkg}`}>@happyvertical/{pkg}</a>
+						<a href={`/reference/packages/${pkg}`}>@happyvertical/{pkg}</a>
 					{/each}
 				</nav>
 			</div>

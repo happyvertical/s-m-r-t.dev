@@ -84,7 +84,10 @@ const interactionGuides: Guide[] = [
 			}
 		],
 		related: [
-			{ label: 'UI implementation: rich forms and browser AI', href: '/packages/smrt-svelte' },
+			{
+				label: 'UI implementation: rich forms and browser AI',
+				href: '/reference/packages/smrt-svelte'
+			},
 			{
 				label: 'Framework mechanism: agent-legible applications',
 				href: '/capabilities/agent-legible-applications'
@@ -155,7 +158,7 @@ const interactionGuides: Guide[] = [
 		related: [
 			{
 				label: 'UI implementation: smrt-ui form controls',
-				href: '/packages/smrt-ui?tab=components'
+				href: '/reference/packages/smrt-ui?tab=components'
 			},
 			{
 				label: 'Framework mechanism: agent-legible applications',
@@ -311,7 +314,7 @@ const interactionGuides: Guide[] = [
 			}
 		],
 		related: [
-			{ label: 'UI implementation: smrt-ui form registry', href: '/packages/smrt-ui' },
+			{ label: 'UI implementation: smrt-ui form registry', href: '/reference/packages/smrt-ui' },
 			{
 				label: 'Framework mechanism: agent-assisted forms',
 				href: '/capabilities/agent-assisted-forms'
@@ -384,7 +387,7 @@ const interactionGuides: Guide[] = [
 			}
 		],
 		related: [
-			{ label: 'UI implementation: consent-aware controls', href: '/packages/smrt-ui' },
+			{ label: 'UI implementation: consent-aware controls', href: '/reference/packages/smrt-ui' },
 			{
 				label: 'Framework mechanism: awareness is not authority',
 				href: '/capabilities/agent-legible-applications#awareness-is-not-authority'

@@ -3,6 +3,7 @@ import { capabilityGuides, foundationGuides } from '$lib/data/guides';
 import { applicationModuleClusters } from '$lib/data/modules';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
+import { referenceFamilies } from '$lib/data/reference-families';
 import { taskGuides } from '$lib/data/task-guides';
 import { toolingGuides } from '$lib/data/tooling';
 
@@ -72,6 +73,20 @@ const referenceItems: NavigationItem[] = referenceGuides.map((guide) => ({
 	description: guide.plainEnglish,
 	keywords: guide.packages
 }));
+/**
+ * The four canonical Reference hubs (D7) — API, Packages, Components, FAQ —
+ * lead the Reference group ahead of the detail entries below. Filtered from
+ * `referenceFamilies`, not hand-duplicated, so a family's label/href only
+ * ever has one source of truth; `referenceFamilies`' own order already puts
+ * these four first among themselves, so the filter needs no re-sort.
+ * `DocsPanelSections.svelte` renders only the first several items per
+ * section, so a hub sitting after all 17 `referenceItems` was invisible
+ * outside its own page.
+ */
+const referenceHubIds = new Set(['api', 'packages', 'components', 'faq']);
+const referenceHubItems: NavigationItem[] = referenceFamilies
+	.filter((family) => referenceHubIds.has(family.id))
+	.map((family) => ({ label: family.label, href: family.href }));
 /**
  * Module clusters, not the 23 individual `/packages/<slug>` pages, are the
  * "key pages" registered here: `/modules#<cluster-id>` is a real, stable
@@ -352,7 +367,7 @@ export const documentationSections: DocumentationSection[] = [
 			{
 				label: 'Components and shell',
 				items: [
-					{ label: 'Foundation components', href: '/packages/smrt-ui?tab=components' },
+					{ label: 'Foundation components', href: '/reference/packages/smrt-ui?tab=components' },
 					...uiCapabilityItems,
 					{ label: 'Working playground', href: '/playground' }
 				]
@@ -361,7 +376,7 @@ export const documentationSections: DocumentationSection[] = [
 				label: 'Related material',
 				items: [
 					{ label: 'Field policy API', href: '/reference/field-policies' },
-					{ label: 'Package reference', href: '/packages' },
+					{ label: 'Package Reference', href: '/reference/packages' },
 					sectionOverviewItem('guides')
 				]
 			}
@@ -378,7 +393,7 @@ export const documentationSections: DocumentationSection[] = [
 			{
 				label: 'Browse',
 				items: [
-					{ label: 'Package reference', href: '/packages' },
+					{ label: 'Package Reference', href: '/reference/packages' },
 					{ label: 'Working playground', href: '/playground' }
 				]
 			},
@@ -440,13 +455,13 @@ export const documentationSections: DocumentationSection[] = [
 		groups: [
 			{
 				label: 'Reference families',
-				items: [...referenceItems, { label: 'FAQ', href: '/faq' }]
+				items: [...referenceItems, { label: 'FAQ', href: '/reference/faq' }]
 			},
 			{
 				label: 'Generated inventories',
 				items: [
-					{ label: 'Package reference', href: '/packages' },
-					{ label: 'UI component reference', href: '/packages/smrt-ui?tab=components' }
+					{ label: 'Package Reference', href: '/reference/packages' },
+					{ label: 'UI Component Reference', href: '/reference/components' }
 				]
 			},
 			{ label: 'Related guides', items: [sectionOverviewItem('guides')] }
@@ -479,9 +494,7 @@ export function documentationSectionForPathname(pathname: string): Documentation
 	}
 	if (pathname === '/agents') return getDocumentationSection('agents');
 	if (pathname === '/interaction') return getDocumentationSection('interaction');
-	if (pathname === '/ui' || pathname === '/themes' || pathname.startsWith('/packages/smrt-ui')) {
-		return getDocumentationSection('ui');
-	}
+	if (pathname === '/ui') return getDocumentationSection('ui');
 	if (pathname === '/modules') return getDocumentationSection('modules');
 	if (
 		pathname === '/guides' ||
@@ -587,13 +600,7 @@ export const docsNavigation: NavigationGroup[] = [
 	{ label: 'Guides', items: [sectionOverviewItem('guides'), ...taskItems] },
 	{
 		label: 'Reference',
-		items: [
-			sectionOverviewItem('reference'),
-			...referenceItems,
-			{ label: 'Package reference', href: '/packages' },
-			{ label: 'UI component reference', href: '/packages/smrt-ui?tab=components' },
-			{ label: 'FAQ', href: '/faq' }
-		]
+		items: [sectionOverviewItem('reference'), ...referenceHubItems, ...referenceItems]
 	}
 ];
 
@@ -601,7 +608,7 @@ export const searchItems: NavigationItem[] = [
 	...docsNavigation.flatMap((group) => group.items),
 	...packages.map((pkg) => ({
 		label: pkg.name,
-		href: `/packages/${pkg.slug}`,
+		href: `/reference/packages/${pkg.slug}`,
 		description: pkg.summary,
 		keywords: [pkg.category, pkg.kind, ...pkg.components]
 	}))

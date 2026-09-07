@@ -21,6 +21,19 @@ import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
 import { taskGuides } from '$lib/data/task-guides';
 import { toolingGuides } from '$lib/data/tooling';
+import { uiComponents } from '$lib/data/ui-components.generated';
+
+/**
+ * Keyed by package as well as name — six component names are published by
+ * two packages each — so a name alone would resolve to whichever was
+ * generated last. Mirrors `PackageWorkbench.svelte`'s `uiComponentHrefByName`.
+ */
+const uiComponentSlugByPackageAndName = new Map(
+	uiComponents.map((component) => [
+		`${component.importPath.split('/').slice(0, 2).join('/')}:${component.name}`,
+		component.slug
+	])
+);
 
 export type SearchKind = 'page' | 'section' | 'component';
 
@@ -60,7 +73,8 @@ const pageEntries: SearchEntry[] = searchItems.map((item) => ({
 	label: item.label,
 	href: item.href,
 	breadcrumb:
-		groupByHref.get(item.href) ?? (item.href.startsWith('/packages/') ? 'Packages' : undefined),
+		groupByHref.get(item.href) ??
+		(item.href.startsWith('/reference/packages/') ? 'Packages' : undefined),
 	description: item.description,
 	keywords: item.keywords,
 	kind: 'page'
@@ -133,7 +147,12 @@ const landingEntries: SearchEntry[] = landingTracks.flatMap(({ base, label, topi
 );
 
 const packageEntries: SearchEntry[] = packages.flatMap((pkg) => {
-	const componentsHref = `/packages/${pkg.slug}?tab=components`;
+	const componentsHref = `/reference/packages/${pkg.slug}?tab=components`;
+	/** A single component's own generated contract page, when one exists. */
+	const componentHref = (component: string): string =>
+		uiComponentSlugByPackageAndName.get(`@happyvertical/${pkg.slug}:${component}`) !== undefined
+			? `/reference/components/${uiComponentSlugByPackageAndName.get(`@happyvertical/${pkg.slug}:${component}`)}`
+			: componentsHref;
 	const entries: SearchEntry[] = [];
 
 	for (const group of pkg.componentGroups) {
@@ -149,7 +168,7 @@ const packageEntries: SearchEntry[] = packages.flatMap((pkg) => {
 		for (const component of group.components) {
 			entries.push({
 				label: component,
-				href: componentsHref,
+				href: componentHref(component),
 				breadcrumb: `${pkg.name} · ${group.title}`,
 				description: `Exported from ${group.importPath}`,
 				keywords: [group.importPath, pkg.category],
@@ -162,7 +181,7 @@ const packageEntries: SearchEntry[] = packages.flatMap((pkg) => {
 		for (const component of pkg.components) {
 			entries.push({
 				label: component,
-				href: componentsHref,
+				href: componentHref(component),
 				breadcrumb: `${pkg.name} · Components`,
 				description: `Exported from ${pkg.componentImport ?? pkg.name}`,
 				keywords: [pkg.category],

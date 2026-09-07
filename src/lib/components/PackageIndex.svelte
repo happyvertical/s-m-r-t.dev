@@ -11,7 +11,7 @@
 	import { getPlaygroundEntries } from '$lib/data/playgrounds';
 	import { SMRT_VERSION } from '$lib/version';
 
-	let { backHref = '/packages' }: { backHref?: string } = $props();
+	let { backHref = '/reference/packages' }: { backHref?: string } = $props();
 
 	let query = $state('');
 	let activeCategory = $state<'All' | PackageCategory>('All');

@@ -3,4 +3,4 @@
 	let { data } = $props();
 </script>
 
-<PackageWorkbench pkg={data.pkg} />
+<PackageWorkbench pkg={data.pkg} backHref="/packages" />
