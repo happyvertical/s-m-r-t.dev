@@ -6,20 +6,20 @@ const packageWorkbench = readFileSync('src/lib/components/PackageWorkbench.svelt
 const referenceIndex = readFileSync('src/routes/reference/+page.svelte', 'utf8');
 
 describe('Reference-owned discovery contracts', () => {
-	it('defaults package back-links to the canonical Reference base, with the legacy /packages route opting back in', () => {
+	it('defaults package back-links to the canonical Reference base — /packages is a redirect, not a second home', () => {
 		expect(packageIndex).toContain("backHref = '/reference/packages'");
 		expect(packageWorkbench).toContain("backHref = '/reference/packages'");
-		expect(readFileSync('src/routes/packages/+page.svelte', 'utf8')).toContain(
-			'backHref="/packages"'
-		);
-		expect(readFileSync('src/routes/packages/[slug]/+page.svelte', 'utf8')).toContain(
-			'backHref="/packages"'
-		);
 		expect(readFileSync('src/routes/reference/packages/+page.svelte', 'utf8')).toContain(
 			'<PackageIndex />'
 		);
 		expect(readFileSync('src/routes/reference/packages/[slug]/+page.svelte', 'utf8')).toContain(
 			'<PackageWorkbench pkg={data.pkg} />'
+		);
+		expect(readFileSync('src/routes/packages/+page.server.ts', 'utf8')).toContain(
+			"redirect(301, '/reference/packages')"
+		);
+		expect(readFileSync('src/routes/packages/[slug]/+page.server.ts', 'utf8')).toContain(
+			'redirect(301, `/reference/packages/${params.slug}`)'
 		);
 	});
 
