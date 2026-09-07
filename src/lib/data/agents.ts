@@ -152,7 +152,7 @@ export const agentsTopics: FrameworkTopic[] = [
 				points: [
 					'Generated model tools carry the same names, descriptions, and input rules as the rest of the application.',
 					'The six UI tools list, inspect, and operate form controls and data views.',
-					'A component tool is removed when its component leaves the page.',
+					'A component tool answers to the same exposure policy as the generated tools, and it is removed when its component leaves the page.',
 					'All three run as the signed-in page user. No page tool carries an account of its own.'
 				]
 			},
@@ -267,7 +267,7 @@ export class Report extends SmrtObject {
 		eyebrow: 'Agents 03',
 		title: 'Showing a tool grants nothing',
 		summary:
-			'An exposure policy chooses which tools a page offers, and offering none of it is the default: registration without a policy exposes reads only. Whether any call succeeds is decided at the authenticated route it runs through — never by the fact that a tool was visible.',
+			'An exposure policy chooses which tools a page offers, and offering none of it is the default: registration without a policy exposes reads only. Whether a call to the application succeeds is decided at the authenticated route it runs through — never by the fact that a tool was visible.',
 		plainEnglish:
 			"The list of tools an agent can see is a table of contents, not a set of keys. Every call still signs in, still lands in one tenant, and still passes the same permission and field checks as the person's own request.",
 		pinnedVersion: SMRT_VERSION,
@@ -288,6 +288,16 @@ export class Report extends SmrtObject {
 }`
 			},
 			{
+				title: "A component's own tool follows the same rule",
+				intro:
+					"A component can declare a tool of its own while it is mounted. That tool goes through the same policy as the generated set. One that does not declare its effect counts as destructive, the same fail-closed reading an undeclared custom action gets. Under the read-only default it is left out. The policy on the page's Provider always wins over anything the component says for itself, even when the Provider's policy is narrower.",
+				points: [
+					"The name prefix and the tool cap apply only to the generated set. A component tool keeps the name its author chose and is never counted against a generated set's budget.",
+					'The tool a rich form opts into declares itself a write, never destructive. It falls back to allowing reads and writes for itself only when no Provider above it states a policy.',
+					"On a browser without the interface, or under a policy that excludes the tool's effect, registering it does nothing."
+				]
+			},
+			{
 				title: 'Selection and permission are different questions',
 				intro:
 					'The exposure policy answers one question: which tools does this page offer. It does not answer whether a call succeeds. The package contract says so in its own words: this capability policy is not authorization — the authenticated REST surface remains the auth, tenant, field-write, and sensitive-data boundary.',
@@ -298,9 +308,13 @@ export class Report extends SmrtObject {
 				}
 			},
 			{
-				title: 'A mistake fails closed at the server',
+				title: 'Where a mistake fails closed',
 				intro:
-					"Suppose a page offers a tool it should not have. The call still arrives at an authenticated route as the signed-in person, in that person's tenant, against that person's permissions and the record's field rules. A tool the person could not use fails there — the same way, and in the same place, it would fail for the person."
+					"Suppose a page offers a tool it should not have. What happens next depends on the source. A generated model tool still arrives at an authenticated route as the signed-in person, in that person's tenant, under that person's permissions and field rules. A tool the person could not use fails there, the same way it would fail for the person.",
+				points: [
+					"A component tool runs whatever its component wrote, in the browser. If that code calls the application's routes, the same server checks apply. If it does not, there is no server round-trip to fail closed; the exposure policy is what bounds it.",
+					"A declared interaction never calls the application's routes. It dispatches one registry command marked as an agent's, so its boundary is the registry's own rules: staged review and a person's own confirming gesture."
+				]
 			}
 		],
 		sources: [
@@ -331,7 +345,7 @@ export class Report extends SmrtObject {
 			{
 				title: "The browser plane: the person's own authority",
 				intro:
-					"A tool registered in the page executes over the application's web routes as the signed-in user — the same session, tenant, and permissions the person already has. Persona allow-lists and agent-class ceilings do not participate on this plane. There is nothing for them to bound, because a page tool holds no identity of its own."
+					"A generated tool registered in the page executes over the application's web routes as the signed-in user — the same session, tenant, and permissions the person already has. Persona allow-lists and agent-class ceilings do not participate on this plane. There is nothing for them to bound, because a page tool holds no identity of its own."
 			},
 			{
 				title: 'The server plane: three limits at once',
@@ -382,14 +396,14 @@ export class Report extends SmrtObject {
 		plainEnglish:
 			'A page agent does not scan pixels or press buttons. It reads a live index of what is on the page, proposes a value beside the current one, and shows its work. The person applies it or throws it away.',
 		pinnedVersion: SMRT_VERSION,
-		packages: ['smrt-ui', 'smrt-svelte'],
+		packages: ['smrt-ui', 'smrt-svelte', 'smrt-web'],
 		content: [
 			{
 				title: 'Controls carry their own description',
 				intro:
 					'Every registered control has a stable identity and a published meaning: kind, label, options, constraints, unit, sensitivity, and current state. A data view registers its columns the same way. The six fixed UI tools read these registries at call time; they do not inspect or simulate the screen.',
 				points: [
-					'The tool set does not change as components mount and unmount — the answers do.',
+					'The six tools do not change as components mount and unmount — the answers do.',
 					'Secret values are never serialized into a tool response.',
 					'Tool responses are marked as untrusted content for the agent reading them.'
 				]
@@ -402,6 +416,23 @@ export class Report extends SmrtObject {
 					'The review surface is a released component, StagedControlReview — not custom code each application writes.',
 					'Apply, clear, and undo stay on the human side of the line.',
 					'A protected field refuses staging outright. The refusal is part of the demo below.'
+				]
+			},
+			{
+				title: 'A component can declare an interaction as data',
+				intro:
+					"A component can also declare one interaction of its own as data with no code in it, such as advancing a table one page. The declaration holds an id, a description, an effect it may declare, and which registered control or data view it addresses. Bound to that control or view while the component is on the page, it becomes a page tool like any other. Running it dispatches one registry command marked as an agent's, so the staged review and the person's own gesture above apply unchanged.",
+				points: [
+					"The declaration has no place for a function, a URL, or a route. What runs is built from the target it names, and it never calls the application's routes.",
+					"A declared interaction follows the page's exposure policy like every other page tool, and one that does not declare its effect counts as destructive.",
+					"A declared interaction needs registries to dispatch to: the Provider's mounted-UI registries, or ones handed to the component directly. With neither, binding it registers nothing.",
+					'The six fixed UI tools are unchanged. A declared interaction sits above them and cannot claim their reserved prefix.'
+				],
+				links: [
+					{
+						label: 'Declare and bind an interaction',
+						href: '/capabilities/webmcp#declare-an-interaction-as-data'
+					}
 				]
 			},
 			{
@@ -419,6 +450,11 @@ export class Report extends SmrtObject {
 			{
 				label: 'smrt-svelte package instructions',
 				href: `${SMRT_TREE}/packages/smrt-svelte/AGENTS.md`,
+				external: true
+			},
+			{
+				label: 'smrt-web package instructions',
+				href: `${SMRT_TREE}/packages/smrt-web/AGENTS.md`,
 				external: true
 			}
 		]
@@ -443,7 +479,7 @@ export class Report extends SmrtObject {
 			{
 				title: 'One ladder of decisions',
 				intro:
-					'Each row is a separate decision with its own quiet default. No earlier row implies a later one.'
+					"Each row is a separate decision with its own quiet default. No earlier row implies a later one. A component's own tool adds no row. The exposure policy on the second row governs it too, and a component tool that declares no effect counts as destructive."
 			},
 			{
 				title: "The starter's choice, in full",
