@@ -10,7 +10,8 @@
  *
  *   1. broken internal links (an `<a href>` that resolves to nothing built)
  *   2. redirect chains (a redirect page whose target is itself a redirect)
- *   3. pages whose canonical URL is not their own URL
+ *   3. pages whose canonical URL is not their own URL, including a missing
+ *      `<link rel="canonical">` altogether (reported as "no canonical")
  *   4. sitemap.xml URLs that don't resolve to a built, non-redirect page
  *   5. non-redirect pages missing from sitemap.xml
  *
@@ -120,11 +121,17 @@ async function main() {
 			}
 		}
 
-		// 3. canonical == own URL
+		// 3. canonical == own URL (and every content page must emit one at all)
 		if (!page.isRedirect) {
 			const canonicalMatch = page.html.match(/<link rel="canonical" href="([^"]+)"/);
 			const expected = `${SITE_ORIGIN}${ownPath === '/' ? '' : ownPath}`;
-			if (canonicalMatch && canonicalMatch[1] !== expected) {
+			if (!canonicalMatch) {
+				if (CANONICAL_ALLOWLIST.test(ownPath)) {
+					canonicalAllowlisted.push(ownPath);
+				} else {
+					canonicalMismatches.push({ path: ownPath, canonical: 'no canonical', expected });
+				}
+			} else if (canonicalMatch[1] !== expected) {
 				if (CANONICAL_ALLOWLIST.test(ownPath)) {
 					canonicalAllowlisted.push(ownPath);
 				} else {
