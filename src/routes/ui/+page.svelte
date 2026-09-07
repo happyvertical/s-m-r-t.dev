@@ -3,15 +3,14 @@
 	import AgentAwareFormDemo from '$lib/ui-showcase/AgentAwareFormDemo.svelte';
 	import UILiveShellState from '$lib/ui-showcase/UILiveShellState.svelte';
 	import UIShowcaseDataTable from '$lib/ui-showcase/UIShowcaseDataTable.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 </script>
 
-<svelte:head>
-	<title>UI showcase | s-m-r-t</title>
-	<meta
-		name="description"
-		content="Explore the SMRT component system through human and agent interaction stories, released examples, and explicit failure boundaries."
-	/>
-</svelte:head>
+<SEO
+	title="UI showcase"
+	description="Explore the SMRT component system through human and agent interaction stories, released examples, and explicit failure boundaries."
+	url="https://s-m-r-t.dev/ui"
+/>
 
 <div class="ui-showcase">
 	<header class="hero">
