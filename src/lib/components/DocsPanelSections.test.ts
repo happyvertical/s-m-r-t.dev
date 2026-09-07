@@ -73,6 +73,43 @@ describe('docs panel section map', () => {
 		);
 	});
 
+	/**
+	 * The four canonical Reference hubs (D7: API, Packages, Components, FAQ)
+	 * must be reachable from the panel's Reference band regardless of which
+	 * page it is rendered from. The band renders only its first several items
+	 * (more when Reference is the current section, fewer otherwise), so a hub
+	 * sitting behind all 17 reference detail entries would never appear
+	 * outside its own page — this asserts it from both the current-section
+	 * case (`/reference`, generous limit) and a non-Reference page
+	 * (`/framework`, tight limit), since the tighter limit is the one a
+	 * hand-authored ordering fix is most likely to leave broken.
+	 */
+	it.each([['/reference'], ['/framework']])(
+		'lists all four Reference hubs in the Reference band from %s',
+		async (pathname) => {
+			await renderExpanded({ pathname });
+			const nav = screen.getByRole('navigation', { name: 'Documentation section map' });
+			const headings = within(nav).getAllByRole('heading', { level: 3 });
+			const referenceHeading = headings.find((heading) =>
+				heading.textContent?.includes('Reference')
+			);
+			expect(referenceHeading).toBeTruthy();
+			const band = (referenceHeading as HTMLElement).closest('section') as HTMLElement;
+			const hrefs = within(band)
+				.getAllByRole('link')
+				.map((link) => link.getAttribute('href'));
+
+			expect(hrefs).toEqual(
+				expect.arrayContaining([
+					'/reference/api',
+					'/reference/packages',
+					'/reference/components',
+					'/reference/faq'
+				])
+			);
+		}
+	);
+
 	it('closes the panel when a link is clicked', async () => {
 		const shell = await renderExpanded({ pathname: '/framework' });
 		expect(shell.panels.top).toBe('expanded');

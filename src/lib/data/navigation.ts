@@ -3,6 +3,7 @@ import { capabilityGuides, foundationGuides } from '$lib/data/guides';
 import { applicationModuleClusters } from '$lib/data/modules';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
+import { referenceFamilies } from '$lib/data/reference-families';
 import { taskGuides } from '$lib/data/task-guides';
 import { toolingGuides } from '$lib/data/tooling';
 
@@ -72,6 +73,20 @@ const referenceItems: NavigationItem[] = referenceGuides.map((guide) => ({
 	description: guide.plainEnglish,
 	keywords: guide.packages
 }));
+/**
+ * The four canonical Reference hubs (D7) — API, Packages, Components, FAQ —
+ * lead the Reference group ahead of the detail entries below. Filtered from
+ * `referenceFamilies`, not hand-duplicated, so a family's label/href only
+ * ever has one source of truth; `referenceFamilies`' own order already puts
+ * these four first among themselves, so the filter needs no re-sort.
+ * `DocsPanelSections.svelte` renders only the first several items per
+ * section, so a hub sitting after all 17 `referenceItems` was invisible
+ * outside its own page.
+ */
+const referenceHubIds = new Set(['api', 'packages', 'components', 'faq']);
+const referenceHubItems: NavigationItem[] = referenceFamilies
+	.filter((family) => referenceHubIds.has(family.id))
+	.map((family) => ({ label: family.label, href: family.href }));
 /**
  * Module clusters, not the 23 individual `/packages/<slug>` pages, are the
  * "key pages" registered here: `/modules#<cluster-id>` is a real, stable
@@ -585,14 +600,7 @@ export const docsNavigation: NavigationGroup[] = [
 	{ label: 'Guides', items: [sectionOverviewItem('guides'), ...taskItems] },
 	{
 		label: 'Reference',
-		items: [
-			sectionOverviewItem('reference'),
-			...referenceItems,
-			{ label: 'API Reference', href: '/reference/api' },
-			{ label: 'Package Reference', href: '/reference/packages' },
-			{ label: 'UI Component Reference', href: '/reference/components' },
-			{ label: 'FAQ', href: '/reference/faq' }
-		]
+		items: [sectionOverviewItem('reference'), ...referenceHubItems, ...referenceItems]
 	}
 ];
 
