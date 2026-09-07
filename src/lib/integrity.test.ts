@@ -27,6 +27,7 @@ import { packages } from '$lib/data/packages';
 import { entries as componentEntries } from '../routes/components/[...legacy]/+page.server';
 import { entries as docsEntries } from '../routes/docs/[...legacy]/+page.server';
 import { entries as moduleEntries } from '../routes/modules/[slug]/+page.server';
+import { entries as packageEntries } from '../routes/packages/[slug]/+page.server';
 
 type LoadFn = (_event: { params: Record<string, string> }) => unknown;
 type EntriesFn = () => Array<Record<string, string>> | Promise<Array<Record<string, string>>>;
@@ -134,6 +135,7 @@ describe('emitted-route inventory (#187 S4)', () => {
 		const componentCount = (await componentEntries()).length;
 		const docsCount = (await docsEntries()).length;
 		const moduleCount = (await moduleEntries()).length;
+		const packageCount = (await packageEntries()).length;
 		// The 3 /foundations/* aliases (guarded in legacy-routes.test.ts) plus an
 		// EXPLICIT, hand-maintained list of the small single-file static redirects
 		// below — they aren't dynamic-entries families, so they aren't guarded
@@ -146,7 +148,15 @@ describe('emitted-route inventory (#187 S4)', () => {
 		// belongs in legacy-routes.test.ts instead, the way the foundations
 		// aliases were added — do not just widen this list or number.
 		const foundationAliasCount = 3;
-		const knownSingleRedirectRoutes = ['/components', '/docs', '/sdk', '/saadl', '/themes'];
+		const knownSingleRedirectRoutes = [
+			'/components',
+			'/docs',
+			'/sdk',
+			'/saadl',
+			'/themes',
+			'/packages',
+			'/faq'
+		];
 		for (const path of knownSingleRedirectRoutes) {
 			expect(
 				routesByPath.get(path)?.isRedirect,
@@ -158,12 +168,17 @@ describe('emitted-route inventory (#187 S4)', () => {
 		expect(
 			redirectRoutes.length,
 			'A new redirect-shaped route appeared that is not one of the guarded families ' +
-				'(components, docs, modules, foundations aliases) or a known single-file static ' +
-				'redirect. If it is a real new family, add it to legacy-routes.test.ts the way the ' +
-				'foundations aliases were added; if it is a new single-file redirect, add it to ' +
+				'(components, docs, modules, packages, foundations aliases) or a known single-file ' +
+				'static redirect. If it is a real new family, add it to legacy-routes.test.ts the way ' +
+				'the foundations aliases were added; if it is a new single-file redirect, add it to ' +
 				'`knownSingleRedirectRoutes` above. Do not just widen this expectation.'
 		).toBe(
-			componentCount + docsCount + moduleCount + foundationAliasCount + staticSingleRedirectCount
+			componentCount +
+				docsCount +
+				moduleCount +
+				packageCount +
+				foundationAliasCount +
+				staticSingleRedirectCount
 		);
 	});
 

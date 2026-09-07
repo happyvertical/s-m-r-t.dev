@@ -18,30 +18,22 @@
  * Wired as `pnpm run check:links` and into the `build` job in
  * `.github/workflows/build-deploy.yaml`, right after `vite build`.
  *
- * --- Dated allowlist (2026-09-06, #187 S1/S4 vs S3) ---
+ * --- Allowlists (#187) ---
  *
- * Check 3 fails today, by design, against one family that #187's own plan
- * (D1/D2) already pointed elsewhere but has not yet redirected:
+ * Both allowlists below are empty (match nothing) rather than removed
+ * outright, keeping checks 3 and 5's allowlisted-count reporting intact at
+ * zero.
  *
- *   - CANONICAL_ALLOWLIST: `/packages`, every `/packages/<slug>` (61), and
- *     `/faq` — their canonical tag already points at `/reference/packages*`
- *     or `/reference/faq` (PackageWorkbench.svelte, PackageIndex.svelte,
- *     FaqPage.svelte), but the pages themselves are still live content, not
- *     redirects, so their own URL and canonical intentionally disagree until
- *     Agent B's S3 (PR 2, #187) turns `/packages*` and `/faq` into
- *     prerendered redirects to `/reference/...`. That is 62 paths total
- *     (1 index + 61 slugs) plus `/faq` = 63.
- *
- * This is NOT a skipped assertion — every other page is checked right now,
- * so this guard is live immediately and only this one named, dated exception
- * is carved out. S3 (Agent B) is the party that empties this allowlist: once
- * `/packages*` and `/faq` are real redirects, no built page matches the
- * pattern and it becomes dead code — delete it then, do not widen it.
+ * CANONICAL_ALLOWLIST previously carved out `/packages`, every
+ * `/packages/<slug>` (61), and `/faq` (63 paths) pending Agent B's S3 (PR 2,
+ * #187) turning them into prerendered redirects to `/reference/...`. S3 has
+ * now done that, so those paths are redirects, not content pages, and no
+ * longer match check 3 (a redirect page has no canonical tag of its own to
+ * disagree with) — the allowlist is emptied.
  *
  * SITEMAP_ALLOWLIST previously carved out `/reference/*` (350 paths) pending
  * Agent B's S2 (PR 1, #187) adding them to the sitemap. S2 has now added
- * them, so the allowlist is emptied (matches nothing) rather than removed
- * outright, keeping check 5's allowlisted-count reporting intact at zero.
+ * them, so the allowlist is emptied.
  */
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -52,9 +44,8 @@ const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 
 const BUILD_DIR = path.join(PROJECT_ROOT, 'build');
 const SITE_ORIGIN = 'https://s-m-r-t.dev';
 
-// See the dated allowlist note above. Pattern-based because both families are
-// enumerable by shape, not by a hand-maintained list of exact slugs.
-const CANONICAL_ALLOWLIST = /^\/(packages(\/[^/]+)?|faq)$/;
+// See the allowlist note above. Both are empty: no allowlists remain.
+const CANONICAL_ALLOWLIST = /(?!)/; // #187 S3: /packages* and /faq are now redirects; nothing to allow.
 const SITEMAP_ALLOWLIST = /(?!)/; // #187 S2: /reference/* is now in the sitemap; nothing to allow.
 
 function htmlFileToPath(file) {
