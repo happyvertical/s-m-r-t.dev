@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { packages } from '$lib/data/packages';
+import { foundationGuides } from '$lib/data/guides';
 import { entries as componentEntries } from '../../routes/components/[...legacy]/+page.server';
 import { entries as docsEntries } from '../../routes/docs/[...legacy]/+page.server';
 import { entries as moduleEntries } from '../../routes/modules/[slug]/+page.server';
+import { entries as foundationEntries } from '../../routes/foundations/[slug]/+page';
 
 const RESTORE_DONT_RENUMBER =
 	'A prerendered redirect is a live URL. If this count dropped, restore the removed ' +
@@ -55,5 +57,20 @@ describe('legacy static routes', () => {
 		]);
 		expect(paths, RESTORE_DONT_RENUMBER).toHaveLength(packages.length + 3);
 		expect(new Set(paths).size).toBe(paths.length);
+	});
+
+	it('prerenders every /foundations alias redirect', async () => {
+		const slugs = (await foundationEntries())
+			.map(({ slug }) => slug)
+			.filter((slug) => !foundationGuides.some((guide) => guide.slug === slug));
+
+		// These three slugs are old foundation-guide names that were renamed. They
+		// exist only as hand-written aliases in foundations/[slug]/+page.ts, so a
+		// cleanup there would silently 404 a live URL rather than fail a build.
+		expect(slugs, RESTORE_DONT_RENUMBER).toHaveLength(3);
+		expect(new Set(slugs).size).toBe(slugs.length);
+		expect(slugs).toEqual(
+			expect.arrayContaining(['app-model', 'identity-access', 'generated-surfaces'])
+		);
 	});
 });

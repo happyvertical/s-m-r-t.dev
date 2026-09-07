@@ -2,11 +2,11 @@ import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 const destinations: Record<string, string> = {
-	'getting-started': '/',
-	'how-it-works': '/foundations',
+	'getting-started': '/starters',
+	'how-it-works': '/framework',
 	objects: '/foundations/objects-and-collections',
 	collections: '/capabilities/collections',
-	agents: '/capabilities/learning-agents',
+	agents: '/agents',
 	'agents/dispatch': '/packages/smrt-agents',
 	'components/feedback/confirm-dialog': '/packages/smrt-ui',
 	'components/feedback/progress-bar': '/packages/smrt-ui',
@@ -17,9 +17,9 @@ const destinations: Record<string, string> = {
 	'concepts/context-memory': '/reference/ai-and-retrieval',
 	'concepts/semantic-search': '/reference/ai-and-retrieval',
 	'concepts/testing': '/reference/testing',
-	'guides/multi-tenant-lifecycle': '/foundations/tenants',
-	'guides/expose-app-via-mcp': '/foundations/interfaces',
-	'guides/add-semantic-search': '/reference/ai-and-retrieval'
+	'guides/multi-tenant-lifecycle': '/guides/multi-tenant-lifecycle',
+	'guides/expose-app-via-mcp': '/guides/expose-your-app-over-mcp',
+	'guides/add-semantic-search': '/guides/semantic-search'
 };
 
 export const prerender = true;
