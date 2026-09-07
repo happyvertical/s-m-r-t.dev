@@ -12,7 +12,7 @@
 			: 'The runtime hit an unexpected edge.'}
 	</h1>
 	<span>{page.error?.message ?? 'Try the package index or return to the starting point.'}</span>
-	<div><a href="/">Home</a><a href="/packages">Packages →</a></div>
+	<div><a href="/">Home</a><a href="/reference/packages">Packages →</a></div>
 </main>
 
 <style>

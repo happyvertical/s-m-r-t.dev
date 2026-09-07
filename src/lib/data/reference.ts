@@ -1035,7 +1035,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{ label: 'Relationship loading', href: '/reference/relationships' },
 			{ label: 'Decide where data belongs', href: '/foundations/tenants' },
 			{ label: 'Authorization model', href: '/reference/authorization' },
-			{ label: 'smrt-profiles', href: '/packages/smrt-profiles' }
+			{ label: 'smrt-profiles', href: '/reference/packages/smrt-profiles' }
 		]
 	},
 	{

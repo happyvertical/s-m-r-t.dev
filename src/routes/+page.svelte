@@ -115,14 +115,19 @@
 			title: 'Working with records',
 			body: 'Tables and forms for finding, reading, and changing records: search, filters, sorting, saved views, and changes a person reviews before they apply. The table below is one of these tools, running here — everything about its current view fits in a link that can be saved or shared.',
 			includes: 'DataTable, forms with staged review',
-			includesLinks: [{ label: 'smrt-ui components', href: '/packages/smrt-ui?tab=components' }]
+			includesLinks: [
+				{ label: 'smrt-ui components', href: '/reference/packages/smrt-ui?tab=components' }
+			]
 		},
 		{
 			title: 'Content management',
 			body: 'Writing, reviewing, and publishing: drafts, versions, review policies, corrections, and held submissions from outside contributors.',
 			includes: 'the content list with saved views, the governance screens',
 			includesLinks: [
-				{ label: 'smrt-content components', href: '/packages/smrt-content?tab=components' }
+				{
+					label: 'smrt-content components',
+					href: '/reference/packages/smrt-content?tab=components'
+				}
 			]
 		},
 		{
@@ -130,8 +135,8 @@
 			body: 'Numbers kept current: reports declared once and refreshed on a schedule, with saved views and exports; visitor analytics from common providers alongside.',
 			includes: 'report tables and saved views',
 			includesLinks: [
-				{ label: 'smrt-reports', href: '/packages/smrt-reports' },
-				{ label: 'smrt-analytics', href: '/packages/smrt-analytics?tab=components' }
+				{ label: 'smrt-reports', href: '/reference/packages/smrt-reports' },
+				{ label: 'smrt-analytics', href: '/reference/packages/smrt-analytics?tab=components' }
 			]
 		},
 		{
@@ -139,8 +144,8 @@
 			body: "Chat rooms and threads where people and agents talk, with each agent's allowed tools set by the application. Voice input where the device supports it.",
 			includes: 'chat layouts, agent sessions, voice input',
 			includesLinks: [
-				{ label: 'smrt-chat', href: '/packages/smrt-chat?tab=components' },
-				{ label: 'smrt-svelte', href: '/packages/smrt-svelte?tab=components' }
+				{ label: 'smrt-chat', href: '/reference/packages/smrt-chat?tab=components' },
+				{ label: 'smrt-svelte', href: '/reference/packages/smrt-svelte?tab=components' }
 			]
 		}
 	];
@@ -344,10 +349,10 @@
 					</p>
 					<ul class="layer-chips">
 						{#each layer.chips as chip (chip.slug)}
-							<li><a href={`/packages/${chip.slug}`}>{chip.shortName}</a></li>
+							<li><a href={`/reference/packages/${chip.slug}`}>{chip.shortName}</a></li>
 						{/each}
 					</ul>
-					<a class="layer-catalog-link" href="/packages"
+					<a class="layer-catalog-link" href="/reference/packages"
 						>Browse in the catalog <span aria-hidden="true">→</span></a
 					>
 				</div>
@@ -359,7 +364,7 @@
 			packages. The rest is native mobile — source-only and unpublished — plus the command-line, testing,
 			and project-scaffold packages: see <a href="/tooling">Tooling</a>, the
 			<a href="/capabilities/mobile">Mobile capability page</a>, and the
-			<a href="/packages">full catalog</a>.
+			<a href="/reference/packages">full catalog</a>.
 		</p>
 
 		<nav class="scope-feature-links" aria-label="Documentation destinations">
@@ -372,7 +377,7 @@
 		</nav>
 
 		<div class="inventory-strip">
-			<a href="/packages">
+			<a href="/reference/packages">
 				<strong>{packageCount}</strong>
 				<span>documented packages</span>
 			</a>

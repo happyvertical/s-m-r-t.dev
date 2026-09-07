@@ -39,10 +39,10 @@ describe('search index', () => {
 		expect(first.href).toBe('/reference/ai-and-retrieval#retrieval-is-not-authority');
 	});
 
-	it('finds a component by name and opens the package Components tab', () => {
+	it('finds a component by name and opens its generated contract page', () => {
 		const [first] = searchDocs('Combobox');
 		expect(first.label).toBe('Combobox');
-		expect(first.href).toContain('?tab=components');
+		expect(first.href).toMatch(/^\/reference\/components\//);
 	});
 
 	it('matches on multiple words in any order', () => {
@@ -154,8 +154,8 @@ describe('search index', () => {
 			);
 			for (const pkg of cluster.packages) {
 				expect(
-					navigationHrefs.has(`/packages/${pkg.slug}`),
-					`docsNavigation should not register /packages/${pkg.slug} directly`
+					navigationHrefs.has(`/reference/packages/${pkg.slug}`),
+					`docsNavigation should not register /reference/packages/${pkg.slug} directly`
 				).toBe(false);
 			}
 		});

@@ -95,7 +95,7 @@
 			<h2>Modules explain outcomes. Reference keeps the complete inventory.</h2>
 		</div>
 		<nav aria-label="Related documentation">
-			<a href="/packages">Open Package Reference <span>→</span></a>
+			<a href="/reference/packages">Open Package Reference <span>→</span></a>
 			<a href="/guides">Browse implementation Guides <span>→</span></a>
 			<a href="/ui">Explore the shared UI system <span>→</span></a>
 		</nav>

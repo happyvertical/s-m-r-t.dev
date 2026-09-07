@@ -182,7 +182,7 @@ export const uiStories: UIStory[] = [
 			{
 				kind: 'reference',
 				label: 'smrt-ui data reference',
-				href: '/packages/smrt-ui?tab=components'
+				href: '/reference/packages/smrt-ui?tab=components'
 			}
 		]
 	},
@@ -244,7 +244,7 @@ export const uiStories: UIStory[] = [
 			{
 				kind: 'reference',
 				label: 'smrt-svelte form reference',
-				href: '/packages/smrt-svelte?tab=components'
+				href: '/reference/packages/smrt-svelte?tab=components'
 			},
 			{
 				kind: 'reference',
@@ -303,7 +303,7 @@ export const uiStories: UIStory[] = [
 			{
 				kind: 'reference',
 				label: 'smrt-chat component reference',
-				href: '/packages/smrt-chat?tab=components'
+				href: '/reference/packages/smrt-chat?tab=components'
 			},
 			{
 				kind: 'gap',
@@ -371,7 +371,7 @@ export const uiStories: UIStory[] = [
 			{
 				kind: 'reference',
 				label: 'smrt-svelte shell reference',
-				href: '/packages/smrt-svelte?tab=components'
+				href: '/reference/packages/smrt-svelte?tab=components'
 			},
 			{
 				kind: 'gap',
@@ -439,7 +439,7 @@ export const uiStories: UIStory[] = [
 			{
 				kind: 'reference',
 				label: 'smrt-svelte browser-AI reference',
-				href: '/packages/smrt-svelte?tab=components'
+				href: '/reference/packages/smrt-svelte?tab=components'
 			}
 		]
 	},
@@ -500,7 +500,7 @@ export const uiStories: UIStory[] = [
 			{
 				kind: 'reference',
 				label: 'smrt-ui feedback reference',
-				href: '/packages/smrt-ui?tab=components'
+				href: '/reference/packages/smrt-ui?tab=components'
 			}
 		]
 	},
@@ -567,7 +567,7 @@ export const uiStories: UIStory[] = [
 			{
 				kind: 'reference',
 				label: 'smrt-ui theme reference',
-				href: '/packages/smrt-ui?tab=components'
+				href: '/reference/packages/smrt-ui?tab=components'
 			}
 		]
 	},
@@ -677,7 +677,7 @@ export const uiStories: UIStory[] = [
 			{
 				kind: 'reference',
 				label: 'smrt-content component reference',
-				href: '/packages/smrt-content?tab=components'
+				href: '/reference/packages/smrt-content?tab=components'
 			},
 			{
 				kind: 'playground',
@@ -737,7 +737,7 @@ export const uiStories: UIStory[] = [
 			{
 				kind: 'reference',
 				label: 'smrt-ui registry reference',
-				href: '/packages/smrt-ui?tab=components'
+				href: '/reference/packages/smrt-ui?tab=components'
 			},
 			{
 				kind: 'playground',
@@ -789,7 +789,7 @@ export const uiStories: UIStory[] = [
 			{
 				kind: 'reference',
 				label: 'smrt-svelte i18n reference',
-				href: '/packages/smrt-svelte?tab=components'
+				href: '/reference/packages/smrt-svelte?tab=components'
 			}
 		]
 	},
@@ -844,7 +844,7 @@ export const uiStories: UIStory[] = [
 			{
 				kind: 'reference',
 				label: 'smrt-agents component reference',
-				href: '/packages/smrt-agents?tab=components'
+				href: '/reference/packages/smrt-agents?tab=components'
 			},
 			{
 				kind: 'playground',
@@ -901,7 +901,7 @@ export const uiStories: UIStory[] = [
 			{
 				kind: 'reference',
 				label: 'smrt-users package reference',
-				href: '/packages/smrt-users'
+				href: '/reference/packages/smrt-users'
 			},
 			{
 				kind: 'playground',

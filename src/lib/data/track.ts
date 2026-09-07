@@ -47,7 +47,7 @@ export const docsTrack: TrackStep[] = docsNavigation.flatMap((group) =>
 export const packageTrack: TrackStep[] = packageCategories.flatMap((category) =>
 	packages
 		.filter((pkg) => pkg.category === category)
-		.map((pkg) => ({ label: pkg.name, href: `/packages/${pkg.slug}`, caption: category }))
+		.map((pkg) => ({ label: pkg.name, href: `/reference/packages/${pkg.slug}`, caption: category }))
 );
 
 function neighborsIn(track: TrackStep[], href: string, label: string): TrackNeighbors | null {
@@ -64,5 +64,5 @@ export function trackNeighbors(pathname: string): TrackNeighbors | null {
 
 /** Neighbours for a package page, walking the catalog in category order. */
 export function packageNeighbors(slug: string): TrackNeighbors | null {
-	return neighborsIn(packageTrack, `/packages/${slug}`, 'Package catalog');
+	return neighborsIn(packageTrack, `/reference/packages/${slug}`, 'Package catalog');
 }

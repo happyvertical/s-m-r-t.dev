@@ -111,12 +111,12 @@ export interface LayerNoun {
 
 export const buildingBlockNouns: LayerNoun[] = [
 	{ label: 'articles', href: '/modules#content-and-media' },
-	{ label: 'files', href: '/packages/smrt-assets' },
-	{ label: 'images', href: '/packages/smrt-images' },
+	{ label: 'files', href: '/reference/packages/smrt-assets' },
+	{ label: 'images', href: '/reference/packages/smrt-images' },
 	{ label: 'events', href: '/modules#domain-knowledge' },
 	{ label: 'invoices', href: '/modules#commerce-and-operations' },
 	{ label: 'projects', href: '/modules#support-and-projects' },
-	{ label: 'messages', href: '/packages/smrt-messages' },
+	{ label: 'messages', href: '/reference/packages/smrt-messages' },
 	{ label: 'reports', href: '/modules#analytics-and-growth' }
 ];
 

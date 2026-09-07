@@ -27,7 +27,7 @@ describe('application modules page', () => {
 		for (const cluster of applicationModuleClusters) {
 			for (const pkg of cluster.packages) {
 				expect(
-					container.querySelector(`a[href="/packages/${pkg.slug}"]`),
+					container.querySelector(`a[href="/reference/packages/${pkg.slug}"]`),
 					`${pkg.slug} is missing its Package Reference link`
 				).toBeTruthy();
 			}

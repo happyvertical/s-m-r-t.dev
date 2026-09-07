@@ -511,7 +511,7 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 				],
 				links: [
 					{ label: 'The commands behind these tools', href: '/tooling/knowledge' },
-					{ label: 'Package reference', href: '/packages/smrt-dev-mcp' }
+					{ label: 'Package reference', href: '/reference/packages/smrt-dev-mcp' }
 				]
 			},
 			{
@@ -589,7 +589,7 @@ export const mcpServer = createMcpAppServer({
 import { mcpServer } from '$lib/server/mcp';
 
 export const POST = mountMcpRoute(mcpServer);`,
-				links: [{ label: 'Package reference', href: '/packages/smrt-app-mcp' }]
+				links: [{ label: 'Package reference', href: '/reference/packages/smrt-app-mcp' }]
 			},
 			{
 				title: 'Opt long-running actions into durable tasks',

@@ -101,8 +101,8 @@
 			<a href="/guides/testing-your-app">testing guide</a> or the
 			<a href="/guides/expose-your-app-over-mcp">application MCP guide</a> for a complete procedure.
 			Package pages for
-			<a href="/packages/smrt-app-mcp">smrt-app-mcp</a>
-			and <a href="/packages/smrt-dev-mcp">smrt-dev-mcp</a> hold the per-package detail.
+			<a href="/reference/packages/smrt-app-mcp">smrt-app-mcp</a>
+			and <a href="/reference/packages/smrt-dev-mcp">smrt-dev-mcp</a> hold the per-package detail.
 		</p>
 	</aside>
 </article>

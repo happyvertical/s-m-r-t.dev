@@ -352,7 +352,7 @@ export const documentationSections: DocumentationSection[] = [
 			{
 				label: 'Components and shell',
 				items: [
-					{ label: 'Foundation components', href: '/packages/smrt-ui?tab=components' },
+					{ label: 'Foundation components', href: '/reference/packages/smrt-ui?tab=components' },
 					...uiCapabilityItems,
 					{ label: 'Working playground', href: '/playground' }
 				]
@@ -361,7 +361,7 @@ export const documentationSections: DocumentationSection[] = [
 				label: 'Related material',
 				items: [
 					{ label: 'Field policy API', href: '/reference/field-policies' },
-					{ label: 'Package reference', href: '/packages' },
+					{ label: 'Package Reference', href: '/reference/packages' },
 					sectionOverviewItem('guides')
 				]
 			}
@@ -378,7 +378,7 @@ export const documentationSections: DocumentationSection[] = [
 			{
 				label: 'Browse',
 				items: [
-					{ label: 'Package reference', href: '/packages' },
+					{ label: 'Package Reference', href: '/reference/packages' },
 					{ label: 'Working playground', href: '/playground' }
 				]
 			},
@@ -440,13 +440,13 @@ export const documentationSections: DocumentationSection[] = [
 		groups: [
 			{
 				label: 'Reference families',
-				items: [...referenceItems, { label: 'FAQ', href: '/faq' }]
+				items: [...referenceItems, { label: 'FAQ', href: '/reference/faq' }]
 			},
 			{
 				label: 'Generated inventories',
 				items: [
-					{ label: 'Package reference', href: '/packages' },
-					{ label: 'UI component reference', href: '/packages/smrt-ui?tab=components' }
+					{ label: 'Package Reference', href: '/reference/packages' },
+					{ label: 'UI Component Reference', href: '/reference/components' }
 				]
 			},
 			{ label: 'Related guides', items: [sectionOverviewItem('guides')] }
@@ -479,9 +479,7 @@ export function documentationSectionForPathname(pathname: string): Documentation
 	}
 	if (pathname === '/agents') return getDocumentationSection('agents');
 	if (pathname === '/interaction') return getDocumentationSection('interaction');
-	if (pathname === '/ui' || pathname === '/themes' || pathname.startsWith('/packages/smrt-ui')) {
-		return getDocumentationSection('ui');
-	}
+	if (pathname === '/ui') return getDocumentationSection('ui');
 	if (pathname === '/modules') return getDocumentationSection('modules');
 	if (
 		pathname === '/guides' ||
@@ -590,9 +588,10 @@ export const docsNavigation: NavigationGroup[] = [
 		items: [
 			sectionOverviewItem('reference'),
 			...referenceItems,
-			{ label: 'Package reference', href: '/packages' },
-			{ label: 'UI component reference', href: '/packages/smrt-ui?tab=components' },
-			{ label: 'FAQ', href: '/faq' }
+			{ label: 'API Reference', href: '/reference/api' },
+			{ label: 'Package Reference', href: '/reference/packages' },
+			{ label: 'UI Component Reference', href: '/reference/components' },
+			{ label: 'FAQ', href: '/reference/faq' }
 		]
 	}
 ];
@@ -601,7 +600,7 @@ export const searchItems: NavigationItem[] = [
 	...docsNavigation.flatMap((group) => group.items),
 	...packages.map((pkg) => ({
 		label: pkg.name,
-		href: `/packages/${pkg.slug}`,
+		href: `/reference/packages/${pkg.slug}`,
 		description: pkg.summary,
 		keywords: [pkg.category, pkg.kind, ...pkg.components]
 	}))
