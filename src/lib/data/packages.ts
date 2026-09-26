@@ -606,6 +606,14 @@ export const packages: SmrtPackage[] = [
 			components: usersComponentGroups.flatMap((group) => group.components),
 			details: [
 				{
+					title: 'Keep signup approval separate from login',
+					body: 'AccessRequestService records a pre-User request for access. An approval flow can graduate that request into the user, membership, and tenant records it authorizes. MagicLinkService instead issues a single-use MagicLinkToken for email login; it is a login credential, not a waitlist approval.'
+				},
+				{
+					title: 'Role inheritance is a separate opt-in',
+					body: 'Tenant cascade and role inheritance answer different questions. A Role with inheritsToDescendants lets a membership resolve from the nearest flagged ancestor; a direct membership row still takes precedence and the result records inheritedFromTenantId. Seed or update roles with inheritsToDescendants deliberately—turning on tenant cascade alone does not enable this path.'
+				},
+				{
 					title: 'OIDC login against your identity provider',
 					body: 'Declare providers under packages.users.auth.oidc. Mount createOidcLoginHandler and createOidcCallbackHandler from the /sveltekit subpath. Each login creates an independent state, nonce, and PKCE verifier, and the challenge method is always S256. The callback checks state, the RFC 9207 authorization-response issuer, and provider errors. It also checks the JWKS-signed ID token and nonce before it reads claims. When the ID token omits email, the callback uses the UserInfo endpoint.',
 					href: '/foundations/users-and-profiles',
