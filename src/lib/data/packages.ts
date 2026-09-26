@@ -1386,7 +1386,19 @@ export const packages: SmrtPackage[] = [
 		'Business & operations',
 		'smrt-ledgers',
 		'Double-entry accounting, journal lifecycle, balance enforcement, and traceable entries.',
-		{ exampleResource: 'journal-entries' }
+		{
+			details: [
+				{
+					title: 'Journal entries must balance',
+					body: 'Accounts have debit- or credit-normal types. A Journal moves from draft to posted or voided, and each JournalEntry is debit-XOR-credit. BALANCE_EPSILON is 0.01. This catches arithmetic imbalance, but a mixed-unit journal can still balance numerically without being semantically valid; keep integer-minor-unit commerce values consistent.'
+				},
+				{
+					title: 'Summaries keep sensitive prompt variables out',
+					body: 'Journal.summarize() uses the smrtLedgers.journal.summarize prompt-registry entry and excludes PII-conscious variables before invoking a provider.'
+				}
+			],
+			exampleResource: 'journal-entries'
+		}
 	),
 	definePackage(
 		'Business & operations',
