@@ -1088,6 +1088,14 @@ export const packages: SmrtPackage[] = [
 			components: smrtSvelteComponentGroups.flatMap((group) => group.components),
 			details: [
 				{
+					title: 'The UI and Svelte layers share i18n deliberately',
+					body: 'smrt-ui owns defineMessages, useI18n, Trans, and template rendering in the browser. smrt-svelte builds the server snapshot with buildI18nSnapshot and passes it through Provider. Put canonical themes under src/themes; src/theme is a legacy alias during migration.'
+				},
+				{
+					title: 'Gate dock tools and page actions at the boundary',
+					body: 'ToolDef.gates and composeDockAvailability decide whether an AdminShell dock tool is available before it is shown or invoked. The use:permission action makes the same permission decision in a component; applications can choose hide-only behavior without treating visibility as authorization. The web subpath also adapts live activity feeds and exposes updateAvailable.'
+				},
+				{
 					title: 'Navigation the manifest already describes',
 					body: 'tenantNavFromManifest turns a manifest into ordered navigation sections. It drops collections, internal and test classes, and items without a REST list route. It also drops single-table-inheritance subtypes that share a parent collection because the polymorphic endpoint already includes them. Pass permittedResources to filter the resources that a role can see. The filter checks the inheritance chain, so a permitted subtype keeps its applicable base link. Sorted output prevents manifest changes from reordering the sidebar.',
 					href: '/capabilities/application-shell',
