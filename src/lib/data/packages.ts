@@ -1281,6 +1281,16 @@ export const packages: SmrtPackage[] = [
 		{
 			components: ['AssetsGallery', 'ImageEditor', 'ImageUploader'],
 			componentImport: '@happyvertical/smrt-images/svelte',
+			details: [
+				{
+					title: 'AI metadata and derivation retain provenance',
+					body: 'ImageCategorizer produces tags, descriptions, confidence, and subjects. generateAltText uses the prompt registry, a PII-safe allowlist, and tenant overrides. ImageDeriver links parentId and AssetAssociation records; UpstreamManager preserves external-provider provenance, while ImageMetadataExtractor reads dimensions, format, and EXIF.'
+				},
+				{
+					title: 'Collection helpers filter loaded records',
+					body: 'ImageCollection can select aspect ratio, landscape, portrait, square, high-resolution, or missing-alt-text images. These helpers filter in memory, so they belong after a bounded database query rather than as a substitute for a large server-side search.'
+				}
+			],
 			exampleResource: 'images'
 		}
 	),
