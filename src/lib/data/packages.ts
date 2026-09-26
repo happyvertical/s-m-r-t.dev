@@ -1301,6 +1301,16 @@ export const packages: SmrtPackage[] = [
 		{
 			components: ['AccountList', 'MessageList', 'MessageDetail', 'ComposeForm'],
 			componentImport: '@happyvertical/smrt-messages/svelte',
+			details: [
+				{
+					title: 'Channels and accounts are polymorphic',
+					body: 'Message has Email, Tweet, and SlackMessage subtypes; Account has Email, Twitter, Slack, Zulip, and Telegram subtypes. Import a provider from smrt-messages/providers/email, slack, twitter, or all when needed. The root import remains free of provider SDK weight, and credentialSecretId points to write-only smrt-secrets storage.'
+				},
+				{
+					title: 'Persona routes are wired by a trusted caller',
+					body: 'MessagingEndpoint, PersonaMessageRoute, and PersonaMessagingService operate behind messages.send and messages.manage-routes. createPersonaMessagingTool fixes personaId in trusted wiring so an agent-provided argument cannot choose a different persona.'
+				}
+			],
 			exampleResource: 'messages'
 		}
 	),
