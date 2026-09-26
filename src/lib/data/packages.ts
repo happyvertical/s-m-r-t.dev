@@ -1539,6 +1539,16 @@ export const packages: SmrtPackage[] = [
 				'BulkActions'
 			],
 			componentImport: '@happyvertical/smrt-projects/svelte',
+			details: [
+				{
+					title: 'Managed delivery uses durable handoffs',
+					body: 'ProjectIntegration holds credential grants for ManagedProjectClient. DevelopmentRequest and WorkLink carry requested work; ProjectDeliveryEvent replays idempotently; PreviewApproval records the approval boundary; AssistanceRequest and AssistanceEvent retain escalation evidence.'
+				},
+				{
+					title: 'Service billing and repository sync retain correction paths',
+					body: 'ServiceTimeEntry pairs immutable work evidence with ServiceChargeSnapshot and CompensationSnapshot, with a correction chain and SubscriptionServiceCommercialResolver. Repository, issue, and pull-request sync supports GitHub, GitLab, Bitbucket, and Azure. incorporateFeedback can preview or roll back Living Spec changes, while Project.analyzeHealth evaluates the synchronized project.'
+				}
+			],
 			exampleResource: 'projects'
 		}
 	),
