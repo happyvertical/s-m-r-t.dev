@@ -1351,6 +1351,16 @@ export const packages: SmrtPackage[] = [
 				'UnbilledItems'
 			],
 			componentImport: '@happyvertical/smrt-commerce/svelte',
+			details: [
+				{
+					title: 'One contract hierarchy supports commercial lifecycle',
+					body: 'channelId distinguishes Estimate, Order, Lease, Agreement, PurchaseOrder, WholesaleOrder, ProductionOrder, Cart, and LicenseSale in one table. LicenseSale snapshots rights immutably and revoke() is its explicit transition. Store money as integer minor units; preflightCommerceMoneyMinorUnits and migrateCommerceMoneyToMinorUnits handle the commerce migration.'
+				},
+				{
+					title: 'Invoices, payments, and payouts retain evidence',
+					body: 'recognizeRevenue posts accounts-receivable journal evidence. PaymentAllocation and Invoice.updatePaymentStatus connect settlement to the invoice. PaymentIntent locks a multi-rail price behind an idempotency key, while PaymentInstrument identifies the selected rail. Vendor payouts move from pending to sent, confirmed, or failed.'
+				}
+			],
 			exampleResource: 'invoices'
 		}
 	),
