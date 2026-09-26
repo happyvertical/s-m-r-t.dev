@@ -1138,6 +1138,12 @@ export const packages: SmrtPackage[] = [
 				'Durable IndexedDB outbox and version-aware persistence',
 				'WebMCP tools',
 				'Policy-governed bespoke tools and a dependency-free view-intent entry'
+			],
+			details: [
+				{
+					title: 'Offline writes and read persistence solve different problems',
+					body: 'OfflineOutboxConfig keeps a durable IndexedDB write queue, with Web Locks leader election, exponential backoff, sync-apply-only replay, and onConflict and onSyncStateChange callbacks. persistCollection is the separate read cache: it rehydrates through SQLite-WASM or OPFS, writes back, and invalidates when the manifest hash changes.'
+				}
 			]
 		}
 	),
