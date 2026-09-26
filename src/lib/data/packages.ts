@@ -667,6 +667,14 @@ export const packages: SmrtPackage[] = [
 			],
 			details: [
 				{
+					title: 'Attach identities without exposing credentials',
+					body: 'Profiles can carry OIDC and Nostr identities, one-time magic-link records, and API keys. Nostr keypairs are encrypted; API-key material is SHA-256 hashed and shown only at creation. resolveIdentity and the createProfileFromOidc and createProfileFromNostr helpers keep canonical-person and email reservation checks in one place.'
+				},
+				{
+					title: 'Keep extensible metadata and audit evidence controlled',
+					body: 'ProfileMetafield supplies the validation schema for ProfileMetadata, whose collection supports add, get, batchGet, and batchUpdate. ProfileAsset is the owned-asset join. AuditLog records action, resource type, source, and optional on-behalf-of identity; a super-admin bypass is an explicit policy choice, never an implicit shortcut.'
+				},
+				{
 					title: 'Relate two organizations',
 					body: 'Organization is a Profile subtype, so an organization relates to another the way a person does. Create a supplier type with getOrCreateBySlug, then call addRelationship on the mill with the shop and the supplier slug. A directional type writes that one row. A reciprocal type with a handler also writes the inverse, and the shipped handlers are friend, spouse, partner, colleague, and sibling. Read the link from either side with getRelationships, date it with addTerm, and name a third profile as its context.',
 					href: '/reference/profile-relationships',
