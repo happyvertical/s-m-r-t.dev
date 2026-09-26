@@ -1249,6 +1249,16 @@ export const packages: SmrtPackage[] = [
 				'CreateAssetModal'
 			],
 			componentImport: '@happyvertical/smrt-assets/svelte',
+			details: [
+				{
+					title: 'Version and derive assets through the runtime',
+					body: 'createNewVersion maintains primaryVersionId and findVersions history. AssetRuntime exposes createAssetRuntime, storeSourceAsset, storeDerivedAsset, linkDerivation, and setExtractionStatus. ASSET_ROLES, ASSET_METADATA_KEYS, and ASSET_EXTRACTION_STATUS give integrations a shared vocabulary; AssetAssociation records polymorphic provenance.'
+				},
+				{
+					title: 'Serving has explicit response semantics',
+					body: 'serveAsset and resolveAssetForServing choose 403, 404, redirect 302, or upstream failure 502 based on access and availability. remoteMode chooses proxy or redirect. FolderCollection uses SmrtHierarchical getTree and getPath; load a planned subtree rather than recursively resolving each node to avoid an N+1 query pattern.'
+				}
+			],
 			exampleResource: 'assets'
 		}
 	),
