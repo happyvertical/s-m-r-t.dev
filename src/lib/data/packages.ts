@@ -1159,7 +1159,13 @@ export const packages: SmrtPackage[] = [
 				'Clearly labeled mock and live modes with package overview pages'
 			],
 			components: ['PlaygroundHost'],
-			componentImport: '@happyvertical/smrt-playground/svelte'
+			componentImport: '@happyvertical/smrt-playground/svelte',
+			details: [
+				{
+					title: 'Each package owns its preview module',
+					body: 'A package publishes ./playground as a SmrtPlaygroundModule with packageName, entries, and load. The host discovers metadata and lazy-loads the selected entry, so a package can evolve its own demonstration without copying it into a central catalog. Use smrt playground init, list, and dev to scaffold, inspect, and run that contract.'
+				}
+			]
 		}
 	),
 	definePackage(
