@@ -574,6 +574,14 @@ export const packages: SmrtPackage[] = [
 			],
 			details: [
 				{
+					title: 'Directory changes can notify other systems',
+					body: 'The tenancy interceptor emits directory.<class>.created, updated, and deleted through dispatchBus after save or delete for configured directoryClasses. It is an event hook for directory projections, not a replacement for the request tenant context.'
+				},
+				{
+					title: 'Adapters establish the context for their host',
+					body: 'SvelteKit is one adapter. Express applications use createExpressMiddleware and enterTenantContext. CLI work uses createCliContext: run keeps a caller context, runWithTenant selects one tenant, runAsSystem is cross-tenant by explicit system authority, and runAsSuperAdmin is the more privileged explicit path.'
+				},
+				{
 					title: 'Scope covers each read path',
 					body: 'Tenant context applies to list and get calls, slug lookups, model hydration, vector search, and collection memory. Required models fail closed without a tenant context; system and super-admin contexts are the explicit cross-tenant paths.'
 				}
