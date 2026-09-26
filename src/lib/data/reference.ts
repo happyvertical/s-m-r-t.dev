@@ -717,9 +717,168 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			}
 		],
 		related: [
+			{ label: 'Decision adoption across packages', href: '/reference/decision-adoption' },
 			{ label: 'Learning agents', href: '/capabilities/learning-agents' },
 			{ label: 'Collections and list()', href: '/reference/collections' },
 			{ label: 'Model your application', href: '/foundations/objects-and-collections' }
+		]
+	},
+	{
+		slug: 'decision-adoption',
+		navTitle: 'Decision adoption',
+		eyebrow: 'Reference',
+		title: 'Adopt optional typed decisions by package',
+		lede: 'Optional typed decisions select from declared outcomes. They keep generation, application policy, and human work as separate application behavior.',
+		plainEnglish:
+			'A decision route answers a narrow question from selected inputs. It does not replace a generated answer, permission check, or human handoff.',
+		packages: [
+			'smrt-core',
+			'smrt-projects',
+			'smrt-facts',
+			'smrt-analytics',
+			'smrt-images',
+			'smrt-support'
+		],
+		sources: [
+			{
+				label: 'Decision routing epic',
+				href: 'https://github.com/happyvertical/smrt/issues/3158'
+			},
+			{
+				label: 'Shared decision routing',
+				href: 'https://github.com/happyvertical/smrt/issues/3159'
+			},
+			{
+				label: 'Project sentiment classification',
+				href: 'https://github.com/happyvertical/smrt/issues/3160'
+			},
+			{
+				label: 'Fact reconciliation',
+				href: 'https://github.com/happyvertical/smrt/issues/3161'
+			},
+			{
+				label: 'Analytics trend assessment',
+				href: 'https://github.com/happyvertical/smrt/issues/3162'
+			},
+			{
+				label: 'Support triage',
+				href: 'https://github.com/happyvertical/smrt/issues/3163'
+			},
+			{
+				label: 'Issue label suggestions',
+				href: 'https://github.com/happyvertical/smrt/issues/3164'
+			},
+			{
+				label: 'Image categorization',
+				href: 'https://github.com/happyvertical/smrt/issues/3165'
+			},
+			{
+				label: 'Claim-support research',
+				href: 'https://github.com/happyvertical/smrt/issues/3166'
+			}
+		],
+		sections: [
+			{
+				title: 'Check availability before you adopt a package route',
+				intro:
+					'The decision epic and its package work are under review. The site release does not contain these routes, and the playground does not demonstrate them.',
+				points: [
+					'Use the linked epic and package issues to track the implementation. Check the released package declarations before you configure a route.',
+					'Keep release versions in package data. Do not copy a version number into application code or documentation.',
+					'Claim-support work is research. It has no production replacement until a labeled evaluation supports a separate implementation decision.'
+				],
+				callout: {
+					variant: 'warning',
+					title: 'Provider confidence is not measured quality',
+					body: 'A provider probability describes one decision response. It does not measure task quality. Labeled evaluations remain pending.'
+				}
+			},
+			{
+				title: 'Configure one server-only decision seam',
+				intro:
+					'The shared route accepts a decision client or server configuration. Provider choice, default model, prompt overrides, stop signals, and deadlines stay inside that server boundary.',
+				points: [
+					'Keep provider keys on the server. Do not place a decision key in public or browser configuration.',
+					'An application can select a provider and model at the framework, tenant, project, or request level. The narrowest declared choice takes precedence.',
+					'Pass only the state and offered outcomes that the package needs. Record provider provenance and reported usage with detailed decision results when the package exposes them.',
+					'Use a stop signal or deadline to end a request. A timeout, transport error, malformed response, or invalid offered value is a configured failure.'
+				],
+				links: [
+					{
+						label: 'Shared decision configuration and evaluate()',
+						href: '/reference/ai-and-retrieval'
+					}
+				]
+			},
+			{
+				title: 'Keep generation and tools on their existing routes',
+				intro:
+					'Decisions select declared values. Generation still writes open text, and registered tools require the generative route so the model can use those tools.',
+				points: [
+					'No decision configuration preserves the existing package behavior and public result shape.',
+					'An uncertainty fallback is an explicit generative tie-break. It does not convert provider or validation failures into a successful result.',
+					'Decision readiness predicates help a package select a route. They do not grant access, authorize an operation, or form a merge gate.',
+					'Generated REST, CLI, MCP, and WebMCP surfaces remain application-owned. A decision route does not expose a new transport.'
+				]
+			},
+			{
+				title: 'Classify projects and facts conservatively',
+				intro:
+					'Projects can select positive, negative, or neutral sentiment. Facts can select a conservative merge or branch outcome when incoming evidence is ambiguous.',
+				points: [
+					'Sentiment keeps ambiguity and configured errors visible. Do not replace ambiguity with a neutral label.',
+					'Fact reconciliation preserves low-confidence outcomes. It branches when the merge decision lacks the required confidence, so a decision cannot silently merge facts.',
+					'Both routes use selected record state and declared options. They do not expose an arbitrary project or tenant data set to a provider.'
+				]
+			},
+			{
+				title: 'Assess analytics with complete context',
+				intro:
+					'Analytics evaluates selected metrics as a semantic predicate. Deterministic calculations remain the source for values that the application can calculate directly.',
+				points: [
+					'Document the direction and comparison period with each assessment.',
+					'An incomplete period or insufficient data produces its explicit state. Do not present either state as a positive or negative trend.',
+					'Use a generative uncertainty fallback only when the route declares one. Preserve the deterministic calculation and selected metric inputs.'
+				]
+			},
+			{
+				title: 'Triage support without replacing human control',
+				intro:
+					'Support can classify plan severity, sensitivity, and an optional allowed category vocabulary. It still uses generation for an answer and existing policy for a case action.',
+				points: [
+					'An empty category vocabulary preserves free-category generation. A nonempty vocabulary limits selected categories to its offered values.',
+					'An injected application boundary remains authoritative. Decision routing does not bypass human-entered triage, policy gates, append-only audit, or human handoff.',
+					'Configured provider and validation failures record a failed classification and use the existing handoff path. A tie or conservative sensitivity result also requires handoff.',
+					'Triage confidence is audit-only and is not a calibrated quality measure or an answer confidence threshold.'
+				]
+			},
+			{
+				title: 'Select only from offered labels and image metadata',
+				intro:
+					'Projects can suggest several issue labels from an optional repository vocabulary. Images can select tags and subjects from separate curated vocabularies.',
+				points: [
+					'Label selection can return many offered labels, no label, or an uncertain result. It never returns a label outside the supplied vocabulary.',
+					'An absent vocabulary keeps legacy generation. An explicit empty vocabulary selects no values and does not call the decision provider.',
+					'Image metadata selection uses the name, description, MIME type, and dimensions. The existing buffer parameter is unused and does not provide pixel or vision understanding.',
+					'Generated image descriptions and alt text remain generative output. Keep decision probabilities separate from the existing generated-category confidence.',
+					'Resolver and provider failures propagate. Do not turn them into an empty successful selection.'
+				]
+			},
+			{
+				title: 'Keep claim support in research until evidence is ready',
+				intro:
+					'Claim-support research tests a hybrid that preserves support status, matched evidence IDs, rationale, contradiction handling, uncertainty, and fallback behavior.',
+				points: [
+					'The research uses candidate-scoped evidence. Unsupported evidence in that set does not mean a claim is universally false.',
+					'A production change needs live labeled evaluation, attribution evidence, rationale evidence, and a migration for mixed evidence consumers.',
+					'Generation continues to extract claims and sources. Publication and governance policy stay unchanged.'
+				]
+			}
+		],
+		related: [
+			{ label: 'AI methods and detailed decisions', href: '/reference/ai-and-retrieval' },
+			{ label: 'Authorization model', href: '/reference/authorization' },
+			{ label: 'Agents overview', href: '/agents' }
 		]
 	},
 	{
