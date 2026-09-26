@@ -829,6 +829,14 @@ export const packages: SmrtPackage[] = [
 			],
 			details: [
 				{
+					title: 'Dispatch and discovery are explicit contracts',
+					body: 'DispatchBus emits and handles inter-agent messages, with matching dispatch CLI commands. An interest declared with interesting() discovers qualifying objects through its filter instead of relying on an unbounded scan.'
+				},
+				{
+					title: 'Run tools as a bounded principal',
+					body: 'executeAsPrincipal creates a PrincipalRun and checks assertToolAllowed and assertOperation before work proceeds. This is agent execution authority, distinct from smrt-users assertOperationPermission. A data surface can expose data.discover, data.inspect, and data.query through createDataSurfaceTools; report surfaces separately expose reports.query, refresh, drilldown, and export.'
+				},
+				{
 					title: 'The host owns the process, not the agent',
 					body: 'Signal handling is optional. An agent with manageProcessSignals set to true installs SIGTERM and SIGINT handlers. These handlers shut down and exit. The default false value registers nothing, which is suitable for a server or job runner. Do not enable this option for multiple agents unless the host coordinates shutdown. The first handler to finish exits the process.'
 				},
