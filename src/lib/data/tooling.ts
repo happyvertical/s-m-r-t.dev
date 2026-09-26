@@ -4,7 +4,7 @@ import type { Guide } from '$lib/data/guides';
  * Released s-m-r-t version every claim in this section was verified against.
  * When this moves, re-read the canonical sources listed on each page.
  */
-export const TOOLING_PINNED_VERSION = '0.42.4';
+export const TOOLING_PINNED_VERSION = '0.51.30';
 
 /** Canonical upstream tree for the release above. */
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${TOOLING_PINNED_VERSION}`;
@@ -395,18 +395,19 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 				]
 			},
 			{
-				title: 'Runtime awareness is a separate, optional bridge',
+				title: 'Choose the runtime plane that fits the question',
 				intro:
-					'The released development server does not connect to a running application or inspect its live ObjectRegistry. A future or application-provided connection can expose bounded runtime capability metadata beside the declared workspace view. Callers must discover that bridge before they use it.',
+					'smrt-dev-mcp has three read-only runtime planes. The normal stdio server reads declared workspace evidence. The Level 1 diagnostics inspect selected framework tables in a development database. Level 2 boots a confined registry over loopback HTTP. Level 3 runs inside a SvelteKit development server and reads that app\'s live registry.',
 				points: [
-					'Without a runtime bridge, the server remains fully useful and deterministic from source, manifests, generated knowledge, and installed package contracts.',
-					'A runtime bridge should label observed facts separately from declared facts and expose capability metadata rather than application records or credentials.',
-					'Live data operations remain on an application-agent surface and still resolve through principals, tenants, and policy.'
+					'Level 1 returns migration, job, schedule, dispatch, change, and registry-drift diagnostics. It never returns payloads, agent configuration, dispatch metadata, database paths, or driver error details.',
+					'Level 2 exposes runtime-registry, runtime-object, runtime-schema-diff, and the six Level 1 diagnostics through a positive, loopback-only catalog. It boots once from project manifests and does not import application code.',
+					'Level 3 adds registry-live inside the app. It is available only in SvelteKit development mode and shares the app root and configured database.',
+					'None of these planes mounts generated CRUD, custom actions, do(), or an application-agent data surface.'
 				],
 				links: [
 					{
-						label: 'Upstream: optional read-only runtime diagnostics',
-						href: 'https://github.com/happyvertical/smrt/issues/1824'
+						label: 'Development MCP runtime reference',
+						href: `${SMRT_TREE}/packages/smrt-dev-mcp/README.md`
 					},
 					{
 						label: 'Upstream: live runtime bridge',
@@ -441,16 +442,42 @@ command = "node"
 args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.js"]`
 			},
 			{
-				title: 'Fifteen tools in six groups',
+				title: 'Use the current tool names',
 				intro:
 					'Tool names are stable strings. Generation and introspection cover the code. The knowledge tools mirror the CLI commands. The context builders return prompt bundles for any model.',
 				points: [
 					'Generation and introspection: generate-smrt-class, introspect-project, review-smrt-project.',
-					'Knowledge reflection: reflect-knowledge, reflect-domain-knowledge.',
-					'Freshness: check-knowledge-freshness, check-domain-knowledge.',
-					'Review context: build-review-context, build-domain-review-context, smrt-review.',
-					'Architecture context: build-architecture-context, build-domain-architecture-context, smrt-architecture.',
+					'Freshness: check-knowledge-freshness and the current knowledge index.',
+					'build-context takes task: "review" or task: "architecture". It replaces the separate review and architecture builders.',
+					'smrt-review and smrt-architecture remain compatibility names for one minor release and report a deprecated-tool diagnostic.',
 					'Bundled skills: list-agent-skills, get-agent-skill.'
+				]
+			},
+			{
+				title: 'Run the confined runtime host when a registry must boot',
+				intro:
+					'The Level 2 HTTP host boots manifests in one confined process. It does not import project code. Use it for a sanitized registry snapshot, one object\'s fields and generated DDL, or a read-only schema comparison.',
+				filename: 'terminal',
+				lang: 'bash',
+				code: `SMRT_DEV_MCP_TOKEN=local-dev-token smrt-dev-mcp --http --port 3939 --project .`,
+				points: [
+					'The host binds loopback only and requires a bearer token on every request. It uses stateless Streamable HTTP and does not issue MCP session ids.',
+					'Its catalog contains runtime-registry, runtime-object, runtime-schema-diff, and the six Level 1 tools. Restart it after rebuilding manifests.'
+				]
+			},
+			{
+				title: 'Mount the in-app development plane only in SvelteKit development',
+				intro:
+					'Level 3 uses the app\'s live ObjectRegistry, so it sees Vite SSR HMR registrations without restarting. Install smrt-dev-mcp as a development dependency and enable the generated route explicitly.',
+				filename: 'vite.config.ts',
+				lang: 'ts',
+				code: `smrtPlugin({
+  svelteKit: { enabled: true, devPlaneRoute: { enabled: true } }
+});`,
+				points: [
+					'GET /api/_dev lists the JSON catalog, GET or POST /api/_dev/<tool> invokes a tool, and POST /api/_dev/mcp serves MCP.',
+					'The route is 404 outside development mode and 503 until SMRT_DEV_MCP_TOKEN is set. It accepts only loopback Host and Origin requests with that bearer token.',
+					'Use smrt dev:runtime <tool> with --url or SMRT_DEV_PLANE_URL to call the in-app route; without a URL it uses the Level 2 boot locally.'
 				]
 			},
 			{
@@ -499,15 +526,16 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 				]
 			},
 			{
-				title: 'A downstream review workflow',
+				title: 'An agent workflow from source to runtime evidence',
 				intro:
 					'The tools compose into a repeatable loop. Deterministic context comes first, the model reads the actual diff, and the checker runs again after the edits land.',
 				points: [
 					'Run the downstream build or dev server so the domain artifact exists.',
-					'Call reflect-domain-knowledge to confirm package and SDK coverage.',
-					'Call build-domain-review-context or smrt-review with the changed files, scope, and optional package.',
+					'Call introspect-project to establish the declared object and package view.',
+					'Call check-knowledge-freshness before and after edits.',
+					'Call build-context with task review or task architecture and the changed files, scope, and optional package.',
 					'Send the returned prompt bundle to the model of your choice.',
-					'Re-run check-domain-knowledge after the edits.'
+					'Use runtime-object or runtime-schema-diff only when declared evidence needs a bounded development-runtime check.'
 				],
 				links: [
 					{ label: 'The commands behind these tools', href: '/tooling/knowledge' },
