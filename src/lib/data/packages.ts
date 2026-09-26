@@ -1441,6 +1441,16 @@ export const packages: SmrtPackage[] = [
 		{
 			components: ['AnalyticsSummary', 'EventsTable', 'PropertyInfo', 'StatCard', 'TrendBadge'],
 			componentImport: '@happyvertical/smrt-analytics/svelte',
+			details: [
+				{
+					title: 'Analytics has tenant-scoped source models',
+					body: 'AnalyticsProperty, AnalyticsDataStream, AnalyticsEvent, and AnalyticsReport hold the property, incoming stream, events, and report state in the tenant boundary.'
+				},
+				{
+					title: 'AI reporting receives a controlled result payload',
+					body: 'analyzePerformance, analyzeResults, and hasPositiveTrends use the prompt registry. The resultData forwarding contract excludes PII-conscious values, so callers must not persist or add sensitive data merely to make it available to an AI provider.'
+				}
+			],
 			exampleResource: 'analytics-events'
 		}
 	),
