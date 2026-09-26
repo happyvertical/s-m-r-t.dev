@@ -397,7 +397,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 			{
 				title: 'Choose the runtime path that fits the question',
 				intro:
-					'smrt-dev-mcp has three read-only runtime paths. The normal stdio server reads declared workspace evidence. The Level 1 diagnostics inspect selected framework tables in a development database. Level 2 boots a confined registry over loopback HTTP. Level 3 runs inside a SvelteKit development server and reads that app\'s live registry.',
+					"smrt-dev-mcp has three read-only runtime paths. The normal stdio server reads declared workspace evidence. The Level 1 diagnostics inspect selected framework tables in a development database. Level 2 boots a confined registry over loopback HTTP. Level 3 runs inside a SvelteKit development server and reads that app's live registry.",
 				points: [
 					'Level 1 returns migration, job, schedule, dispatch, change, and registry-drift diagnostics. It never returns payloads, agent configuration, dispatch metadata, database paths, or driver error details.',
 					'Level 2 exposes runtime-registry, runtime-object, runtime-schema-diff, and the six Level 1 diagnostics through a positive, loopback-only catalog. It boots once from project manifests and does not import application code.',
@@ -456,7 +456,7 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 			{
 				title: 'Run the confined runtime host when a registry must boot',
 				intro:
-					'The Level 2 HTTP host boots manifests in one confined process. It does not import project code. Use it for a sanitized registry snapshot, one object\'s fields and generated DDL, or a read-only schema comparison.',
+					"The Level 2 HTTP host boots manifests in one confined process. It does not import project code. Use it for a sanitized registry snapshot, one object's fields and generated DDL, or a read-only schema comparison.",
 				filename: 'terminal',
 				lang: 'bash',
 				code: `SMRT_DEV_MCP_TOKEN=local-dev-token smrt-dev-mcp --http --port 3939 --project .`,
@@ -468,7 +468,7 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 			{
 				title: 'Mount the in-app runtime path only in SvelteKit development',
 				intro:
-					'Level 3 uses the app\'s live ObjectRegistry, so it sees Vite SSR HMR registrations without restarting. Install smrt-dev-mcp as a development dependency and enable the generated route explicitly.',
+					"Level 3 uses the app's live ObjectRegistry, so it sees Vite SSR HMR registrations without restarting. Install smrt-dev-mcp as a development dependency and enable the generated route explicitly.",
 				filename: 'vite.config.ts',
 				lang: 'ts',
 				code: `smrtPlugin({
