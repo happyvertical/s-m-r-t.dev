@@ -1421,6 +1421,16 @@ export const packages: SmrtPackage[] = [
 				'Incremental refresh with watermarks and affected-group recomputation',
 				'Durable scheduled refresh through smrt-jobs'
 			],
+			details: [
+				{
+					title: 'The adapter is the exposure boundary',
+					body: 'buildReportAdapterDescriptor and queryReportMaterializedRows bind tenant context, projection, paging, filters, and facets before rows cross an application boundary. The adapter redacts fields that the caller is not allowed to expose.'
+				},
+				{
+					title: 'Refresh, views, exports, and schedules retain their state',
+					body: 'getReportLifecycle describes availability; previewReportRefresh and applyReportRefresh run through an action host. Saved views revalidate policy and migrate from v0 to v1. Exports bind to a snapshot fingerprint and page offset worker contract. SmrtReportSchedule supports cron, durable enqueue, and onChange interception.'
+				}
+			],
 			exampleResource: 'reports'
 		}
 	),
