@@ -1178,7 +1178,15 @@ export const packages: SmrtPackage[] = [
 		'Web & UI',
 		'smrt-cli',
 		'The framework developer CLI for manifests, database migrations, testing, introspection, and generated resources.',
-		{ kind: 'tooling' }
+		{
+			kind: 'tooling',
+			details: [
+				{
+					title: 'Operate production schema changes deliberately',
+					body: 'db:migrate --postgres-safe orders dependencies, uses concurrent-index mode, applies lock and statement timeouts, and probes orphan foreign keys. doctor --db and db:status --parity compare the live schema. db:rollback executes only a reconstructible down migration or refuses; --mark-only changes migration bookkeeping without changing schema. db:prune supports dry-run and skip controls for retention work. SQLite type changes rebuild the table.'
+				}
+			]
+		}
 	),
 	definePackage(
 		'Web & UI',
