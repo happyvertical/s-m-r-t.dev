@@ -953,6 +953,16 @@ export const packages: SmrtPackage[] = [
 				'MiniChat'
 			],
 			componentImport: '@happyvertical/smrt-chat/svelte',
+			details: [
+				{
+					title: 'Chat is a closed service facade',
+					body: 'ChatService keeps its collections and agent-reply bridge private, so callers use the supported conversation operations instead of bypassing membership or lifecycle checks. allowedTools is fail-closed: an absent or empty allowlist grants no agent tool access.'
+				},
+				{
+					title: 'The tool loop and streams have bounded entry points',
+					body: 'runToolLoop and runPersonaConversationTurn use the manifest tool catalog with DEFAULT_MAX_STEPS. runChatConversationStream and createChatStreamHandler provide token SSE through SmrtChatBackend. Voice sessions use createVoiceChatSession and handleVoiceGatewayTurn; validate their tenant, actor, persona, and conversation binding because a gateway bearer token is not user authentication. captureChatFeedback records thumbs and can feed learning reinforcement.'
+				}
+			],
 			exampleResource: 'messages'
 		}
 	),
