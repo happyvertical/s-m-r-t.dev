@@ -1582,6 +1582,16 @@ export const packages: SmrtPackage[] = [
 		{
 			components: ['MeetingView'],
 			componentImport: '@happyvertical/smrt-events/svelte',
+			details: [
+				{
+					title: 'Events can nest without a depth ceiling',
+					body: 'SmrtHierarchical supplies getParent, getChildren, getAncestors, getDescendants, getHierarchy, and moveTo. Load the needed tree shape rather than recursively resolving every relation. EventSeries defines daily, weekly, monthly, or yearly recurrence; EventType carries a custom-field JSON schema.'
+				},
+				{
+					title: 'Participants and assets carry presentation detail',
+					body: 'EventParticipant records role, placement, grouping, and conflictColumns; numeric placement can serve both layout and ordering. EventAsset is the owned-asset join with getAssets, addAsset, and removeAsset.'
+				}
+			],
 			exampleResource: 'events'
 		}
 	),
