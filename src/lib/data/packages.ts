@@ -1222,6 +1222,16 @@ export const packages: SmrtPackage[] = [
 				'Markdown'
 			],
 			componentImport: '@happyvertical/smrt-content/svelte',
+			details: [
+				{
+					title: 'Editorial governance makes stale review visible',
+					body: 'Policies, profiles, and assignments resolve through resolveGovernance. runReviewAction checks its review fingerprint before it can move a piece through the publish-readiness gate. Contributions progress from submitted to approved, rejected, or withdrawn, then promoted, with trust level, revisions, and attachments retained.'
+				},
+				{
+					title: 'Published work keeps its correction history',
+					body: 'issueCorrectionAction and ContentVersion preserve freeze-on-publish semantics. Published transparency differs from preview transparency. References may pin targetVersion and getReferenceDrift detects when a target moves. ContentFeedSource can parse and sync RSS or Atom feeds; thumbnails can be headline cards, static maps, or AI-generated, and ContentAgentChat scopes editor sessions to tenant and content.'
+				}
+			],
 			exampleResource: 'articles'
 		}
 	),
