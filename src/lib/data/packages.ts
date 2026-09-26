@@ -914,6 +914,14 @@ export const packages: SmrtPackage[] = [
 			],
 			details: [
 				{
+					title: 'Build a job before you enqueue it',
+					body: 'The fluent builder composes delay(), priority(), retries(), queue(), and timeout() before enqueue(); bg() is the short form for background work. Delivery is at least once. timeoutBehavior chooses fail, warn, or kill, so idempotency belongs in the job method.'
+				},
+				{
+					title: 'Schedules use local wall-clock time',
+					body: 'ScheduleRunner fires forward once: cron matching uses local time, is not timezone-aware, and does not backfill missed runs. Worker liveness uses a process-global live set, an off-loop ticker, and lease recovery. ForgeDeliveryCollection and ForgeProjectionRuntime provide durable projections and dead-letter replay.'
+				},
+				{
 					title: 'Say which methods a job may call',
 					body: 'A persisted job row names an object type and a method, so the runner must know which methods are reachable. Mark a method with the backgroundEligible decorator. For non-decorator code, call markBackgroundEligible. These operations add an allowlist to the class. A class that marks nothing keeps the default behavior. After one method is marked, the runner refuses every method outside the list.'
 				},
