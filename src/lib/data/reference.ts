@@ -1241,7 +1241,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 					'@happyvertical/smrt-fields first appeared in the 0.40.5x line and is not part of 0.39.x. The package pins smrt-core, smrt-tenancy, smrt-ui, and smrt-users to its exact version. Install it at the same version as the other s-m-r-t packages. A mismatch installs a second object registry, and policy resolution stops recognizing your objects.',
 				points: [
 					'smrt-users is a required runtime dependency, not an optional one: the permission catalog and operation guard back every write and gear action.',
-					'The usage-learning loop is not in any published release yet.'
+					'The usage-learning loop is available in the released smrt-fields package.'
 				]
 			}
 		],
