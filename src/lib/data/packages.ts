@@ -879,6 +879,16 @@ export const packages: SmrtPackage[] = [
 				'Feedback-driven directive proposals with a human approval gate'
 			],
 			components: ['DirectiveReviewQueue'],
+			details: [
+				{
+					title: 'Resolution walks the context hierarchy',
+					body: 'PersonaResolver.resolve selects an exact context before a type-scoped or tenant-wide persona, then uses priority and name for a stable tie-break. It walks ancestors and intersects the persona ceiling with TenantAgent, so a closer or broader record cannot silently widen the agent tool ceiling.'
+				},
+				{
+					title: 'Learning signals propose; people approve',
+					body: 'Feedback accepts accept, reject, correction, rating, outcome, and metric signals and deduplicates them by fingerprint. reinforceFromFeedback can strengthen memory, while ReflectionRunner creates a DirectiveProposal. DirectiveApprovalService remains permission-gated. Durable instances use personaInstanceKey, agentOptionsForPersona, and schedulePersonaInstance; upgradeSingletonToDefaultPersona preserves an existing singleton path.'
+				}
+			],
 			componentImport: '@happyvertical/smrt-personas/svelte',
 			exampleResource: 'agent-personas'
 		}
