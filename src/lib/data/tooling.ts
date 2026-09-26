@@ -395,14 +395,14 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 				]
 			},
 			{
-				title: 'Choose the runtime plane that fits the question',
+				title: 'Choose the runtime path that fits the question',
 				intro:
-					'smrt-dev-mcp has three read-only runtime planes. The normal stdio server reads declared workspace evidence. The Level 1 diagnostics inspect selected framework tables in a development database. Level 2 boots a confined registry over loopback HTTP. Level 3 runs inside a SvelteKit development server and reads that app\'s live registry.',
+					'smrt-dev-mcp has three read-only runtime paths. The normal stdio server reads declared workspace evidence. The Level 1 diagnostics inspect selected framework tables in a development database. Level 2 boots a confined registry over loopback HTTP. Level 3 runs inside a SvelteKit development server and reads that app\'s live registry.',
 				points: [
 					'Level 1 returns migration, job, schedule, dispatch, change, and registry-drift diagnostics. It never returns payloads, agent configuration, dispatch metadata, database paths, or driver error details.',
 					'Level 2 exposes runtime-registry, runtime-object, runtime-schema-diff, and the six Level 1 diagnostics through a positive, loopback-only catalog. It boots once from project manifests and does not import application code.',
 					'Level 3 adds registry-live inside the app. It is available only in SvelteKit development mode and shares the app root and configured database.',
-					'None of these planes mounts generated CRUD, custom actions, do(), or an application-agent data surface.'
+					'None of these paths mounts generated CRUD, custom actions, do(), or an application-agent data surface.'
 				],
 				links: [
 					{
@@ -466,7 +466,7 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 				]
 			},
 			{
-				title: 'Mount the in-app development plane only in SvelteKit development',
+				title: 'Mount the in-app runtime path only in SvelteKit development',
 				intro:
 					'Level 3 uses the app\'s live ObjectRegistry, so it sees Vite SSR HMR registrations without restarting. Install smrt-dev-mcp as a development dependency and enable the generated route explicitly.',
 				filename: 'vite.config.ts',
