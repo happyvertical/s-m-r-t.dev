@@ -1038,6 +1038,14 @@ export const packages: SmrtPackage[] = [
 			components: smrtUiComponentGroups.flatMap((group) => group.components),
 			details: [
 				{
+					title: 'Collections are a composed working surface',
+					body: 'CollectionToolbar, CollectionList, ContentList, and DataTable work together for search, selection, filtering, pagination, and presentation. DataTable preserves stable row identity through local transforms and can expose serializable controller state when the application owns sorting, paging, or filtering.'
+				},
+				{
+					title: 'Use canonical tokens and aliases intentionally',
+					body: 'Themes use Material 3 names as canonical tokens and retain additive aliases for migration: spacing and radius aliases such as extra-small and sm, plus motion aliases from short1 through long4. Aliases preserve older consumers; new design work should name the canonical semantic token.'
+				},
+				{
 					title: 'A shared component standard',
 					body: 'Foundation controls use native semantics, stable server-safe IDs, and Svelte 5 bindable state. They have visible focus and validation states, reduced-motion rules, semantic design tokens, and focused accessibility tests.'
 				},
