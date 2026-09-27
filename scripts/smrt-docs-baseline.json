@@ -2,95 +2,95 @@
 	"description": "What src/lib/data/*.ts was last verified against. Regenerate with `pnpm run audit:data -- --update` after re-reading the changed packages.",
 	"packages": {
 		"@happyvertical/smrt-agents": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "1be81e2d00875d09ab8846c9a0c66ec00d5e9d00777cd1aa5167a7b366c234ad"
 		},
 		"@happyvertical/smrt-analytics": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "baaeb44320f95dc5dc86925318e791369681ad80acfbb82a0f667f2aed0e511c"
 		},
 		"@happyvertical/smrt-assets": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "7d3a64dc7e114069e8a2357253360dcaa94550ed3662148e1b9146bf9cd30b79"
 		},
 		"@happyvertical/smrt-chat": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "e76478900c3e8a013895d69d5a544b4a9280bcda18e3b69104da27938da2706e"
 		},
 		"@happyvertical/smrt-cli": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "a6d98194cdef0eb15af1791cceea93cb42123a9e343a2bf6ce44b9b45fec8b5a"
 		},
 		"@happyvertical/smrt-commerce": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "05a98db8f3cc2137b030cbcbaedb112880f42613574cea68f6aebe03b7adcc3b"
 		},
 		"@happyvertical/smrt-content": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "f1162b24cd46ce87bae102e2a20de9bc15fdd8a0abb951f05bbf846bd61af3a3"
 		},
 		"@happyvertical/smrt-events": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "c020c54c72cc890a8fccc8d784f0fde9edde4b62df91a038b401de97c2ce47cf"
 		},
 		"@happyvertical/smrt-fields": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "2ae956af14e1cb9f0ccf62c1b3c4ccc8d913e0df00d8a51e388bb04cbb3a8841"
 		},
 		"@happyvertical/smrt-images": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "b0cf63bd78f00cc1729ea7f1425291f8e23ab5591161cbbf0d08f4b16ace07fd"
 		},
 		"@happyvertical/smrt-jobs": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "7870bffefb854829e1b4b14220a3bc02b9dc7f454256a57282b92bcf8da9ddcc"
 		},
 		"@happyvertical/smrt-ledgers": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "ae2190496d153852ff73d18f871a829303927e1c65053b5325b02c0d9f470bfe"
 		},
 		"@happyvertical/smrt-messages": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "ceb0ee5313abe0316f7b4dbfc0ec8c94e3ec0e10826851145d4da91b6b764f38"
 		},
 		"@happyvertical/smrt-personas": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "fe6c54f7d6c724b76906629eeb7bd17a332faad631179771acea73db1e159733"
 		},
 		"@happyvertical/smrt-playground": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "4a45ebba78027a71483e3ec5ce445c34a86197a4f6bddf59a02802a6f05574d6"
 		},
 		"@happyvertical/smrt-profiles": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "a6646a088f8c421b5556f945946db6f83d3a23d77b34c40bb02b726af30b4bd2"
 		},
 		"@happyvertical/smrt-projects": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "1642532c0c1bf16fb07b0184326f76f9fb3b142cb111e39f8e763c2d08be40d3"
 		},
 		"@happyvertical/smrt-reports": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "c4cb7fa4c5b144ba48f382d3ecbf74b76dd1361e843a7f2747e7e035719910da"
 		},
 		"@happyvertical/smrt-svelte": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "22fa45838ff3e206c6109ec2435d40844ae8afcf27893488c61b55342c623ed1"
 		},
 		"@happyvertical/smrt-tenancy": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "7aaa00d7fb58fd1d31bafcbeeea9aace247a00c1332ad943e101023617b9aa93"
 		},
 		"@happyvertical/smrt-ui": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "3e6ab7f21da836b51f51f8f29ddc6a65802f6c6a0e99a37db3c298f0f21f5d6d"
 		},
 		"@happyvertical/smrt-users": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "d7f1bb57f7bbbc1b750ab87c33592a53622236d17f49f8c04b15c4745b5c2ab2"
 		},
 		"@happyvertical/smrt-web": {
-			"version": "0.51.30",
+			"version": "0.51.31",
 			"agentsMd": "6ae5842f5b68cebbbee68b060b9f8674ba719cc67ea0e1bcd84e555a45610618"
 		}
 	}
