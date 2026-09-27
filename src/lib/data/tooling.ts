@@ -354,7 +354,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 		title: 'The development MCP server',
 		lede: '@happyvertical/smrt-dev-mcp gives a coding agent the same deterministic workspace and installed-package knowledge as the CLI. It also provides class generation, project introspection, and portable review and architecture bundles.',
 		plainEnglish:
-			'This read-only server helps a coding agent understand your codebase. It returns generated source as output but never writes it. It cannot touch your running application, its data, or its users.',
+			'The default read-only stdio server helps a coding agent understand your codebase. It returns generated source as output but never writes it. The Level 1 and Level 3 runtime paths have their own scoped access to framework tables or the live application registry.',
 		packages: ['smrt-dev-mcp', 'smrt-scanner', 'smrt-core'],
 		pinnedVersion: TOOLING_PINNED_VERSION,
 		sources: [
@@ -365,7 +365,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 			{
 				title: 'It inspects the workspace, not the running application',
 				intro:
-					'smrt-dev-mcp is the Development MCP server. It reads source, manifests, and authored documentation from a workspace on disk. It is read-only, never writes files, never executes generated code, and has no access to your application database, principals, or tenants. Live data operations belong to generated local MCP, hosted application MCP, or WebMCP.',
+					'The default smrt-dev-mcp stdio server reads source, manifests, and authored documentation from a workspace on disk. It is read-only, never writes files, never executes generated code, and has no access to your application database, principals, or tenants. Level 1 and Level 3 are separate runtime paths; live data operations belong to generated local MCP, hosted application MCP, or WebMCP.',
 				points: [
 					'Application-agent surfaces are generated from your @smrt() objects and perform live data operations.',
 					'Development MCP provides code generation output and project analysis for a coding agent.',
