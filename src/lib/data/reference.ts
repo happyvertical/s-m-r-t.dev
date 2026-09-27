@@ -435,13 +435,17 @@ export const referenceGuides: Guide[] = [
 			{
 				label: 'core/src/collection.ts',
 				href: `${SMRT_TREE}/packages/core/src/collection.ts`
+			},
+			{
+				label: 'TypeSafe decision-model change',
+				href: 'https://github.com/happyvertical/smrt/pull/3154'
 			}
 		],
 		sections: [
 			{
 				title: 'Three model-backed methods on every object',
 				intro:
-					'is(criteria), do(instructions), and describe() each resolve the AI client configured for the object, build a prompt from the record, and call it once. is() constrains the reply to a JSON object with a boolean result property and returns that boolean. do() returns the raw text reply. describe() asks for a short description of the record. All three raise when no AI client is configured.',
+					'Without smrt.decisions, is(criteria), do(instructions), and describe() each resolve the AI client configured for the object, build a prompt from the record, and call it once. is() constrains the reply to a JSON object with a boolean result property and returns that boolean. do() returns the raw text reply. describe() asks for a short description of the record. All three raise when no AI client is configured.',
 				points: [
 					'Methods listed in @smrt({ ai: { callable } }) are offered to the model as tools during all three calls.',
 					'is() throws when the reply is not parseable JSON, and resolves to undefined when the parsed result is not a boolean. Treat a malformed reply as an error path.',
@@ -479,6 +483,84 @@ const blurb = await article.describe({ maxTokens: 50 });`
 					'includeData: false omits the content body, for callers that already curate the relevant fields into the instruction text.',
 					'maxDataLength overrides the 100,000-character truncation budget; truncation appends a visible marker so the model knows the data was cut.',
 					'Those two keys are consumed by the method, and model, temperature, maxTokens, and the rest are forwarded to the AI client. The method sets responseFormat and tools itself, so a caller cannot override them.'
+				]
+			},
+			{
+				title: 'Configure an optional typed decision model',
+				intro:
+					'Use a decision model when you need a predicate result with provider probability and provenance. Add it under smrt.decisions. This configuration does not change the generative AI client used by do() or describe().',
+				points: [
+					'Keep TYPESAFE_API_KEY on the server. Do not use a public or browser environment prefix for this credential.',
+					'type selects the provider API adapter. defaultModel selects the TypeSafe decision model. The threshold is inclusive, so a probability equal to it is true.',
+					'uncertaintyFallback is opt-in. At the shown threshold and band, the inclusive 0.45–0.55 range uses the generative client for a tie-break. A confident false remains false.'
+				],
+				filename: 'smrt.config.ts',
+				code: `import { defineConfig } from '@happyvertical/smrt-config';
+
+export default defineConfig({
+  smrt: {
+    // Generation remains a separate client for do() and describe().
+    ai: { type: 'openai', apiKey: process.env.OPENAI_API_KEY },
+    decisions: {
+      type: 'typesafe',
+      apiKey: process.env.TYPESAFE_API_KEY,
+      defaultModel: 'jev-latest',
+      threshold: 0.5,
+      uncertaintyFallback: { band: 0.05 }
+    }
+  }
+});`,
+				callout: {
+					variant: 'version-added',
+					title: 'Available in the installed framework',
+					body: 'The installed framework includes this optional feature. The site playground does not run this example.'
+				},
+				links: [
+					{
+						label: 'TypeSafe decision-model change',
+						href: 'https://github.com/happyvertical/smrt/pull/3154',
+						external: true
+					},
+					{
+						label: 'SDK TypeSafe provider change',
+						href: 'https://github.com/happyvertical/sdk/pull/1286',
+						external: true
+					}
+				]
+			},
+			{
+				title: 'Use evaluate for detailed results',
+				intro:
+					'evaluate(criteria) is a separate method for callers that need the selected route and detailed decision metadata. With a configured decision client and no registered tools, is(criteria) uses that route and still returns only the final boolean. Without decision configuration, existing is(criteria) calls keep their generative behavior and return value.',
+				points: [
+					'A decision route returns probability, provenance, and provider token usage when the provider reports it.',
+					'A generative route returns route: generative with the final boolean. It does not attach a decision probability.',
+					'After an uncertainty tie-break, fallback is generative and initialDecision contains the original probability, provenance, and usage.'
+				],
+				filename: 'src/lib/server/article-review.ts',
+				code: `// This object has no registered AI tools, so a configured decision client can run.
+const evaluation = await articleWithoutTools.evaluate(
+  'is appropriate for a general audience',
+  { model: 'jev-latest', generativeModel: 'your-generative-model' }
+);
+
+if (evaluation.route === 'decision') {
+  console.log(evaluation.result, evaluation.probability, evaluation.provenance);
+}
+
+if (evaluation.fallback === 'generative') {
+  // The final result is generative. Read decision metadata here.
+  console.log(evaluation.initialDecision?.probability);
+}`
+			},
+			{
+				title: 'Understand routes and failures',
+				intro:
+					'Typed decisions do not support registered AI tools. When an object has registered tools, evaluate() uses the generative route so the tools remain available. The model option selects the decision model; generativeModel selects the model for a generative route.',
+				points: [
+					'Only an explicit uncertainty tie-break uses the generative fallback. Transport, authentication, malformed-provider, and invalid decision-result failures reject instead of returning false or falling back.',
+					'Without a decision client, evaluate() uses the generative client and requires a strict boolean result. It rejects malformed output.',
+					'evaluate() is an object method. Generated REST, CLI, MCP, and WebMCP transports do not expose it automatically.'
 				]
 			},
 			{
