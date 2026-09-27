@@ -1950,6 +1950,254 @@ export const uiComponents: UiComponentReference[] = [
 		source: 'packages/chat/src/svelte/components/agent/AgentSessionPanel.svelte'
 	},
 	{
+		slug: 'assistant-composer',
+		name: 'AssistantComposer',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'AssistantComposer is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'onsend',
+				code: '(content: string, attachments: AssistantAttachmentRef[]) => void | Promise<void>',
+				status: true,
+				description:
+					'Called with the trimmed message text and any staged attachments when the user sends — via Enter or the Send button. May return a Promise (or reject/throw): the draft text and staged attachments are kept until it settles, cleared only on success (#2904 review finding 4) — a rejection restores them and shows an inline error.'
+			},
+			{
+				name: 'onupload',
+				code: '(files: FileList) => Promise<AssistantAttachmentRef[]>',
+				status: true,
+				description:
+					'Called with the picked/dropped files; resolves to the uploaded attachment refs to stage as removable chips above the input.'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disables the composer (e.g. no active thread yet).'
+			},
+			{
+				name: 'placeholder',
+				code: 'string',
+				status: false,
+				description: 'Placeholder text for the empty textarea.'
+			},
+			{
+				name: 'value',
+				code: 'string',
+				status: false,
+				description:
+					'The draft text (#2991). Bindable: a host can seed it with a prompt for the user to edit, and read back what they typed. Setting it never sends. Cleared after `onsend` resolves.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsend',
+				code: '(content: string, attachments: AssistantAttachmentRef[]) => void | Promise<void>',
+				status: true,
+				description:
+					'Called with the trimmed message text and any staged attachments when the user sends — via Enter or the Send button. May return a Promise (or reject/throw): the draft text and staged attachments are kept until it settles, cleared only on success (#2904 review finding 4) — a rejection restores them and shows an inline error.'
+			},
+			{
+				name: 'onupload',
+				code: '(files: FileList) => Promise<AssistantAttachmentRef[]>',
+				status: true,
+				description:
+					'Called with the picked/dropped files; resolves to the uploaded attachment refs to stage as removable chips above the input.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/assistant/AssistantComposer.svelte'
+	},
+	{
+		slug: 'assistant-dock',
+		name: 'AssistantDock',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'AssistantDock is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'transport',
+				code: 'AssistantTransport',
+				status: true,
+				description: 'Thread/message I/O backend; see `./assistant-transport.js`.'
+			},
+			{
+				name: 'registry',
+				code: 'DataSurfaceRegistry',
+				status: true,
+				description:
+					"The host shell's `DataSurfaceRegistry` instance — the dock discovers currently-mounted surfaces from this and fails closed when none are registered."
+			},
+			{
+				name: 'actionClient',
+				code: 'AssistantActionClient',
+				status: false,
+				description:
+					'Client-side seam to a server-hosted `DataSurfaceActionAdapter`; required to preview/apply proposed actions, optional for plain chat.'
+			},
+			{
+				name: 'surfaces',
+				code: 'DataSurfaceIdentity[]',
+				status: false,
+				description:
+					'Explicit surface narrowing filter (#2904 review finding 1; narrowed against the live registry per Copilot PR #2919 jAwr0): when set, the dock scopes discovery AND the preview/apply mount gate to the INTERSECTION of this list and `registry.list()` — an identity present here but not genuinely registered is never mounted. `registry` is still required (both for that intersection and for `syncRegistry`\'s swap handling). Documented in `docs/assistant-dock.md` "Tenant scoping"; previously only reachable by constructing `createAssistantDockController` directly, which this component itself does not expose.'
+			},
+			{
+				name: 'visible',
+				code: 'boolean',
+				status: false,
+				description: 'Whether the dock is currently visible; polling pauses while false.'
+			},
+			{
+				name: 'toolCall',
+				code: 'Snippet<[AssistantMessage]>',
+				status: false,
+				description:
+					"Renders a message's own `toolCallData` (#2988), inside that message's bubble below its text. Called only for messages whose `toolCallData` is set. Without it the dock renders no tool-call region at all: the payload is host-defined, so the dock never stringifies it or injects it as HTML. Render it with ordinary Svelte markup in the host's own snippet."
+			},
+			{
+				name: 'oncontroller',
+				code: '(controller: AssistantDockController) => void',
+				status: false,
+				description:
+					"Hands the host this dock's own controller once, on mount (#2989), so it can propose an action with `controller.previewAction(request)`. The proposal renders with Confirm/Reject like any other; everything else (apply, the idempotency key, mount checks) stays with the dock."
+			},
+			{
+				name: 'onactionapplied',
+				code: '(request: DataSurfaceActionRequest, result: DataSurfaceActionResult) => void',
+				status: false,
+				description:
+					'Called after the server accepts an apply (#2989). See `AssistantDockControllerOptions.onActionApplied`.'
+			},
+			{
+				name: 'onactionsettled',
+				code: '(request: DataSurfaceActionRequest, outcome: AssistantActionOutcome) => void',
+				status: false,
+				description:
+					'Called each time a proposed action reaches an outcome (#2991): applied, rejected (by the server or the user), or unknown. See `AssistantDockControllerOptions.onActionSettled`.'
+			},
+			{
+				name: 'initialDraft',
+				code: 'string',
+				status: false,
+				description:
+					'Initial composer draft (#2991), for example a prompt computed for the item being edited. Read once, on mount; the user edits and sends it. It is never sent on their behalf. To replace it later, call `controller.setDraft(text)` from `oncontroller`.'
+			},
+			{
+				name: 'composerPlaceholder',
+				code: 'string',
+				status: false,
+				description:
+					"Placeholder for the composer's empty textarea (#2991). Defaults to the composer's own placeholder."
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'oncontroller',
+				code: '(controller: AssistantDockController) => void',
+				status: false,
+				description:
+					"Hands the host this dock's own controller once, on mount (#2989), so it can propose an action with `controller.previewAction(request)`. The proposal renders with Confirm/Reject like any other; everything else (apply, the idempotency key, mount checks) stays with the dock."
+			},
+			{
+				name: 'onactionapplied',
+				code: '(request: DataSurfaceActionRequest, result: DataSurfaceActionResult) => void',
+				status: false,
+				description:
+					'Called after the server accepts an apply (#2989). See `AssistantDockControllerOptions.onActionApplied`.'
+			},
+			{
+				name: 'onactionsettled',
+				code: '(request: DataSurfaceActionRequest, outcome: AssistantActionOutcome) => void',
+				status: false,
+				description:
+					'Called each time a proposed action reaches an outcome (#2991): applied, rejected (by the server or the user), or unknown. See `AssistantDockControllerOptions.onActionSettled`.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/assistant/AssistantDock.svelte'
+	},
+	{
+		slug: 'assistant-thread-list',
+		name: 'AssistantThreadList',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'AssistantThreadList is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'threads',
+				code: 'AssistantThreadSummary[]',
+				status: true,
+				description: 'Threads to list, most-recent-first order left to the caller.'
+			},
+			{
+				name: 'activeThreadId',
+				code: 'string | null',
+				status: false,
+				description: 'The currently open thread id, highlighted and `aria-current`.'
+			},
+			{
+				name: 'onselect',
+				code: '(threadId: string) => void',
+				status: true,
+				description: "Fired with a thread's id when the user clicks its row."
+			},
+			{
+				name: 'oncreate',
+				code: '() => void',
+				status: false,
+				description: 'Shown as a "+ New conversation" row when present; fired on click.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onselect',
+				code: '(threadId: string) => void',
+				status: true,
+				description: "Fired with a thread's id when the user clicks its row."
+			},
+			{
+				name: 'oncreate',
+				code: '() => void',
+				status: false,
+				description: 'Shown as a "+ New conversation" row when present; fired on click.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/assistant/AssistantThreadList.svelte'
+	},
+	{
 		slug: 'chat-avatar',
 		name: 'Avatar',
 		family: 'smrt-chat-svelte',
@@ -2795,6 +3043,66 @@ export const uiComponents: UiComponentReference[] = [
 		source: 'packages/chat/src/svelte/components/tabs/MiniChat.svelte'
 	},
 	{
+		slug: 'model-picker',
+		name: 'ModelPicker',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'ModelPicker is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'models',
+				code: 'ModelOption[]',
+				status: false,
+				description: 'Full candidate model catalog; defaults to `DEFAULT_MODEL_OPTIONS`.'
+			},
+			{
+				name: 'allowedModelIds',
+				code: 'string[]',
+				status: false,
+				description: 'Allow-list of model ids; empty/omitted means all `models` are offered.'
+			},
+			{
+				name: 'value',
+				code: 'string',
+				status: true,
+				description: 'The selected model id; bindable.'
+			},
+			{
+				name: 'onchange',
+				code: '(modelId: string) => void',
+				status: false,
+				description: 'Fired with the newly selected model id.'
+			},
+			{
+				name: 'ariaLabel',
+				code: 'string',
+				status: false,
+				description:
+					'Accessible name for the underlying `<select>` (#2904 review, cycle-3 second final F2 — the control previously had no aria-label, id, or wrapping `FormGroup`, so axe/screen readers saw an unnamed combobox). Defaults to an i18n\'d "Model" label; override when a host embeds this picker somewhere the generic default isn\'t descriptive enough.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(modelId: string) => void',
+				status: false,
+				description: 'Fired with the newly selected model id.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/shared/ModelPicker.svelte'
+	},
+	{
 		slug: 'chat-reaction-picker',
 		name: 'ReactionPicker',
 		family: 'smrt-chat-svelte',
@@ -3192,8 +3500,9 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary: 'ToolCallDisplay is part of the chat · components component family.',
-		summarySynthesized: true,
+		summary:
+			'ToolCallDisplay - Inline tool call/result display Collapsible card showing tool name, arguments (as JSON), status indicator, and result/error. Color-coded by status (pending, running, success, error).',
+		summarySynthesized: false,
 		slot: null,
 		details: [
 			{
@@ -3201,11 +3510,45 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'ToolCallDisplayData',
 				status: true,
 				description: 'Tool call data'
+			},
+			{
+				name: 'actionResult',
+				code: 'DataSurfaceActionResult',
+				status: false,
+				description:
+					'Data-surface action preview/apply outcome (#2904, AssistantDock). Additive: when present, the body renders a preview/applied/failed panel for the action alongside the generic tool-call rendering above; existing callers that never pass this prop see no change.'
+			},
+			{
+				name: 'onconfirmaction',
+				code: '() => void',
+				status: false,
+				description:
+					"Fired by the Confirm button, shown only while `actionResult.phase === 'preview' && actionResult.ok`."
+			},
+			{
+				name: 'onrejectaction',
+				code: '() => void',
+				status: false,
+				description: 'Fired by the Reject button, shown alongside `onconfirmaction`.'
 			}
 		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onconfirmaction',
+				code: '() => void',
+				status: false,
+				description:
+					"Fired by the Confirm button, shown only while `actionResult.phase === 'preview' && actionResult.ok`."
+			},
+			{
+				name: 'onrejectaction',
+				code: '() => void',
+				status: false,
+				description: 'Fired by the Reject button, shown alongside `onconfirmaction`.'
+			}
+		],
 		components: [],
 		demo: null,
 		related: {
@@ -5536,7 +5879,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'dataSurface',
 				code: 'ContentListDataSurface',
 				status: false,
-				description: 'Opt-in agent addressability. Non-table presentations land with #2456.'
+				description: 'Opt-in agent addressability shared by every list presentation.'
 			},
 			{
 				name: 'query',
@@ -5568,6 +5911,18 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'ContentListWorkflowBinding',
 				status: false,
 				description: 'Opt-in, authenticated preview/apply client for bulk workflows (#2453).'
+			},
+			{
+				name: 'lifecycle',
+				code: 'ContentListLifecycleBinding',
+				status: false,
+				description: 'Opt-in, server-authoritative trash/restore/permanent-delete lifecycle.'
+			},
+			{
+				name: 'lifecycleMode',
+				code: "'active' | 'trash'",
+				status: false,
+				description: 'Locks the status query to deleted content and exposes trash actions.'
 			}
 		],
 		sources: [],
@@ -10742,6 +11097,65 @@ export const uiComponents: UiComponentReference[] = [
 			href: '/ui'
 		},
 		source: 'packages/smrt-svelte/src/browser-ai/svelte/components/DownloadProgress.svelte'
+	},
+	{
+		slug: 'model-status-control',
+		name: 'ModelStatusControl',
+		family: 'smrt-svelte-browser-ai',
+		category: 'Svelte · Browser Ai',
+		importPath: '@happyvertical/smrt-svelte/browser-ai/svelte',
+		summary: 'ModelStatusControl is part of the svelte · browser ai component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'backend',
+				code: 'InferenceBackend',
+				status: true,
+				description: 'The backend whose model lifecycle this control presents.'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Human label for the model, e.g. "On-device model".'
+			},
+			{
+				name: 'allowUnload',
+				code: 'boolean',
+				status: false,
+				description: 'Offer a release action once the model is ready.'
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'Extra class(es) for layout in a host.'
+			},
+			{
+				name: 'onerror',
+				code: '(error: Error) => void',
+				status: false,
+				description: 'Called when a load or unload rejects (also rendered inline).'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onerror',
+				code: '(error: Error) => void',
+				status: false,
+				description: 'Called when a load or unload rejects (also rendered inline).'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/browser-ai/svelte/components/ModelStatusControl.svelte'
 	},
 	{
 		slug: 'stt-test',
@@ -20214,10 +20628,10 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 1719,
-	totalProps: 1775,
-	authoredSummaries: 110,
-	totalComponents: 285
+	describedProps: 1754,
+	totalProps: 1810,
+	authoredSummaries: 111,
+	totalComponents: 290
 };
 
 export const uiComponentGroups = [

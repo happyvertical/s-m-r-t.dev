@@ -70,9 +70,9 @@ jobs:
           # pnpm store path on the self-hosted runners this workflow used to run
           # on ("Some specified paths were not resolved"), which fails the step.
           #
-          # No `registry-url`/`scope` either: the `@happyvertical/*` packages are
-          # public on npmjs and the project `.npmrc` pins that registry, so the
-          # install needs no authentication.
+          # No `registry-url`/`scope` either: the project `.npmrc` selects the
+          # public primary registry for `@happyvertical/*`, so the install needs
+          # no authentication.
 
       - name: Install dependencies
         working-directory: s-m-r-t.dev
