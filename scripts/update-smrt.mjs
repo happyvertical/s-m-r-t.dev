@@ -13,7 +13,7 @@
  * of failure, at the cost of needing this script (or Renovate) to move forward.
  *
  * Registry: resolved from npm config for the `@happyvertical` scope, which the
- * project `.npmrc` points at public npmjs. No authentication is required; the
+ * project `.npmrc` points at the primary HappyVertical registry. No authentication is required; the
  * packages are public. Pass nothing and it does the right thing.
  *
  * Run with `--help` for flags; `USAGE` below is the one copy.
@@ -25,7 +25,7 @@ import { join } from 'node:path';
 
 const SCOPE = '@happyvertical';
 const SCOPE_PREFIX = `${SCOPE}/smrt-`;
-const DEFAULT_REGISTRY = 'https://registry.npmjs.org';
+const DEFAULT_REGISTRY = 'https://npm.happyvertical.com';
 const LOCAL_SPEC = /^(file:|link:|workspace:)/;
 
 const USAGE = `update-smrt — pin every @happyvertical/smrt-* dependency and refresh the lockfile.

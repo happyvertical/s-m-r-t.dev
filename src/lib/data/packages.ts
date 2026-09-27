@@ -574,6 +574,14 @@ export const packages: SmrtPackage[] = [
 			],
 			details: [
 				{
+					title: 'Directory changes can notify other systems',
+					body: 'The tenancy interceptor emits directory.<class>.created, updated, and deleted through dispatchBus after save or delete for configured directoryClasses. It is an event hook for directory projections, not a replacement for the request tenant context.'
+				},
+				{
+					title: 'Adapters establish the context for their host',
+					body: 'SvelteKit is one adapter. Express applications use createExpressMiddleware and enterTenantContext. CLI work uses createCliContext: run keeps a caller context, runWithTenant selects one tenant, runAsSystem is cross-tenant by explicit system authority, and runAsSuperAdmin is the more privileged explicit path.'
+				},
+				{
 					title: 'Scope covers each read path',
 					body: 'Tenant context applies to list and get calls, slug lookups, model hydration, vector search, and collection memory. Required models fail closed without a tenant context; system and super-admin contexts are the explicit cross-tenant paths.'
 				}
@@ -597,6 +605,14 @@ export const packages: SmrtPackage[] = [
 			componentGroups: usersComponentGroups,
 			components: usersComponentGroups.flatMap((group) => group.components),
 			details: [
+				{
+					title: 'Keep signup approval separate from login',
+					body: 'AccessRequestService records a pre-User request for access. An approval flow can graduate that request into the user, membership, and tenant records it authorizes. MagicLinkService instead issues a single-use MagicLinkToken for email login; it is a login credential, not a waitlist approval.'
+				},
+				{
+					title: 'Role inheritance is a separate opt-in',
+					body: 'Tenant cascade and role inheritance answer different questions. A Role with inheritsToDescendants lets a membership resolve from the nearest flagged ancestor; a direct membership row still takes precedence and the result records inheritedFromTenantId. Seed or update roles with inheritsToDescendants deliberately—turning on tenant cascade alone does not enable this path.'
+				},
 				{
 					title: 'OIDC login against your identity provider',
 					body: 'Declare providers under packages.users.auth.oidc. Mount createOidcLoginHandler and createOidcCallbackHandler from the /sveltekit subpath. Each login creates an independent state, nonce, and PKCE verifier, and the challenge method is always S256. The callback checks state, the RFC 9207 authorization-response issuer, and provider errors. It also checks the JWKS-signed ID token and nonce before it reads claims. When the ID token omits email, the callback uses the UserInfo endpoint.',
@@ -650,6 +666,14 @@ export const packages: SmrtPackage[] = [
 				'Organization-to-organization links on the same Profile rows'
 			],
 			details: [
+				{
+					title: 'Attach identities without exposing credentials',
+					body: 'Profiles can carry OIDC and Nostr identities, one-time magic-link records, and API keys. Nostr keypairs are encrypted; API-key material is SHA-256 hashed and shown only at creation. resolveIdentity and the createProfileFromOidc and createProfileFromNostr helpers keep canonical-person and email reservation checks in one place.'
+				},
+				{
+					title: 'Keep extensible metadata and audit evidence controlled',
+					body: 'ProfileMetafield supplies the validation schema for ProfileMetadata, whose collection supports add, get, batchGet, and batchUpdate. ProfileAsset is the owned-asset join. AuditLog records action, resource type, source, and optional on-behalf-of identity; a super-admin bypass is an explicit policy choice, never an implicit shortcut.'
+				},
 				{
 					title: 'Relate two organizations',
 					body: 'Organization is a Profile subtype, so an organization relates to another the way a person does. Create a supplier type with getOrCreateBySlug, then call addRelationship on the mill with the shop and the supplier slug. A directional type writes that one row. A reciprocal type with a handler also writes the inverse, and the shipped handlers are friend, spouse, partner, colleague, and sibling. Read the link from either side with getRelationships, date it with addTerm, and name a third profile as its context.',
@@ -805,6 +829,14 @@ export const packages: SmrtPackage[] = [
 			],
 			details: [
 				{
+					title: 'Dispatch and discovery are explicit contracts',
+					body: 'DispatchBus emits and handles inter-agent messages, with matching dispatch CLI commands. An interest declared with interesting() discovers qualifying objects through its filter instead of relying on an unbounded scan.'
+				},
+				{
+					title: 'Run tools as a bounded principal',
+					body: 'executeAsPrincipal creates a PrincipalRun and checks assertToolAllowed and assertOperation before work proceeds. This is agent execution authority, distinct from smrt-users assertOperationPermission. A data surface can expose data.discover, data.inspect, and data.query through createDataSurfaceTools; report surfaces separately expose reports.query, refresh, drilldown, and export.'
+				},
+				{
 					title: 'The host owns the process, not the agent',
 					body: 'Signal handling is optional. An agent with manageProcessSignals set to true installs SIGTERM and SIGINT handlers. These handlers shut down and exit. The default false value registers nothing, which is suitable for a server or job runner. Do not enable this option for multiple agents unless the host coordinates shutdown. The first handler to finish exits the process.'
 				},
@@ -847,6 +879,16 @@ export const packages: SmrtPackage[] = [
 				'Feedback-driven directive proposals with a human approval gate'
 			],
 			components: ['DirectiveReviewQueue'],
+			details: [
+				{
+					title: 'Resolution walks the context hierarchy',
+					body: 'PersonaResolver.resolve selects an exact context before a type-scoped or tenant-wide persona, then uses priority and name for a stable tie-break. It walks ancestors and intersects the persona ceiling with TenantAgent, so a closer or broader record cannot silently widen the agent tool ceiling.'
+				},
+				{
+					title: 'Learning signals propose; people approve',
+					body: 'Feedback accepts accept, reject, correction, rating, outcome, and metric signals and deduplicates them by fingerprint. reinforceFromFeedback can strengthen memory, while ReflectionRunner creates a DirectiveProposal. DirectiveApprovalService remains permission-gated. Durable instances use personaInstanceKey, agentOptionsForPersona, and schedulePersonaInstance; upgradeSingletonToDefaultPersona preserves an existing singleton path.'
+				}
+			],
 			componentImport: '@happyvertical/smrt-personas/svelte',
 			exampleResource: 'agent-personas'
 		}
@@ -871,6 +913,14 @@ export const packages: SmrtPackage[] = [
 				'JobActions'
 			],
 			details: [
+				{
+					title: 'Build a job before you enqueue it',
+					body: 'The fluent builder composes delay(), priority(), retries(), queue(), and timeout() before enqueue(); bg() is the short form for background work. Delivery is at least once. timeoutBehavior chooses fail, warn, or kill, so idempotency belongs in the job method.'
+				},
+				{
+					title: 'Schedules use local wall-clock time',
+					body: 'ScheduleRunner fires forward once: cron matching uses local time, is not timezone-aware, and does not backfill missed runs. Worker liveness uses a process-global live set, an off-loop ticker, and lease recovery. ForgeDeliveryCollection and ForgeProjectionRuntime provide durable projections and dead-letter replay.'
+				},
 				{
 					title: 'Say which methods a job may call',
 					body: 'A persisted job row names an object type and a method, so the runner must know which methods are reachable. Mark a method with the backgroundEligible decorator. For non-decorator code, call markBackgroundEligible. These operations add an allowlist to the class. A class that marks nothing keeps the default behavior. After one method is marked, the runner refuses every method outside the list.'
@@ -903,6 +953,16 @@ export const packages: SmrtPackage[] = [
 				'MiniChat'
 			],
 			componentImport: '@happyvertical/smrt-chat/svelte',
+			details: [
+				{
+					title: 'Chat is a closed service facade',
+					body: 'ChatService keeps its collections and agent-reply bridge private, so callers use the supported conversation operations instead of bypassing membership or lifecycle checks. allowedTools is fail-closed: an absent or empty allowlist grants no agent tool access.'
+				},
+				{
+					title: 'The tool loop and streams have bounded entry points',
+					body: 'runToolLoop and runPersonaConversationTurn use the manifest tool catalog with DEFAULT_MAX_STEPS. runChatConversationStream and createChatStreamHandler provide token SSE through SmrtChatBackend. Voice sessions use createVoiceChatSession and handleVoiceGatewayTurn; validate their tenant, actor, persona, and conversation binding because a gateway bearer token is not user authentication. captureChatFeedback records thumbs and can feed learning reinforcement.'
+				}
+			],
 			exampleResource: 'messages'
 		}
 	),
@@ -978,6 +1038,14 @@ export const packages: SmrtPackage[] = [
 			components: smrtUiComponentGroups.flatMap((group) => group.components),
 			details: [
 				{
+					title: 'Collections are a composed working surface',
+					body: 'CollectionToolbar, CollectionList, ContentList, and DataTable work together for search, selection, filtering, pagination, and presentation. DataTable preserves stable row identity through local transforms and can expose serializable controller state when the application owns sorting, paging, or filtering.'
+				},
+				{
+					title: 'Use canonical tokens and aliases intentionally',
+					body: 'Themes use Material 3 names as canonical tokens and retain additive aliases for migration: spacing and radius aliases such as extra-small and sm, plus motion aliases from short1 through long4. Aliases preserve older consumers; new design work should name the canonical semantic token.'
+				},
+				{
 					title: 'A shared component standard',
 					body: 'Foundation controls use native semantics, stable server-safe IDs, and Svelte 5 bindable state. They have visible focus and validation states, reduced-motion rules, semantic design tokens, and focused accessibility tests.'
 				},
@@ -1019,6 +1087,14 @@ export const packages: SmrtPackage[] = [
 			componentGroups: smrtSvelteComponentGroups,
 			components: smrtSvelteComponentGroups.flatMap((group) => group.components),
 			details: [
+				{
+					title: 'The UI and Svelte layers share i18n deliberately',
+					body: 'smrt-ui owns defineMessages, useI18n, Trans, and template rendering in the browser. smrt-svelte builds the server snapshot with buildI18nSnapshot and passes it through Provider. Put canonical themes under src/themes; src/theme is a legacy alias during migration.'
+				},
+				{
+					title: 'Gate dock tools and page actions at the boundary',
+					body: 'ToolDef.gates and composeDockAvailability decide whether an AdminShell dock tool is available before it is shown or invoked. The use:permission action makes the same permission decision in a component; applications can choose hide-only behavior without treating visibility as authorization. The web subpath also adapts live activity feeds and exposes updateAvailable.'
+				},
 				{
 					title: 'Navigation the manifest already describes',
 					body: 'tenantNavFromManifest turns a manifest into ordered navigation sections. It drops collections, internal and test classes, and items without a REST list route. It also drops single-table-inheritance subtypes that share a parent collection because the polymorphic endpoint already includes them. Pass permittedResources to filter the resources that a role can see. The filter checks the inheritance chain, so a permitted subtype keeps its applicable base link. Sorted output prevents manifest changes from reordering the sidebar.',
@@ -1062,6 +1138,12 @@ export const packages: SmrtPackage[] = [
 				'Durable IndexedDB outbox and version-aware persistence',
 				'WebMCP tools',
 				'Policy-governed bespoke tools and a dependency-free view-intent entry'
+			],
+			details: [
+				{
+					title: 'Offline writes and read persistence solve different problems',
+					body: 'OfflineOutboxConfig keeps a durable IndexedDB write queue, with Web Locks leader election, exponential backoff, sync-apply-only replay, and onConflict and onSyncStateChange callbacks. persistCollection is the separate read cache: it rehydrates through SQLite-WASM or OPFS, writes back, and invalidates when the manifest hash changes.'
+				}
 			]
 		}
 	),
@@ -1077,7 +1159,13 @@ export const packages: SmrtPackage[] = [
 				'Clearly labeled mock and live modes with package overview pages'
 			],
 			components: ['PlaygroundHost'],
-			componentImport: '@happyvertical/smrt-playground/svelte'
+			componentImport: '@happyvertical/smrt-playground/svelte',
+			details: [
+				{
+					title: 'Each package owns its preview module',
+					body: 'A package publishes ./playground as a SmrtPlaygroundModule with packageName, entries, and load. The host discovers metadata and lazy-loads the selected entry, so a package can evolve its own demonstration without copying it into a central catalog. Use smrt playground init, list, and dev to scaffold, inspect, and run that contract.'
+				}
+			]
 		}
 	),
 	definePackage(
@@ -1090,7 +1178,15 @@ export const packages: SmrtPackage[] = [
 		'Web & UI',
 		'smrt-cli',
 		'The framework developer CLI for manifests, database migrations, testing, introspection, and generated resources.',
-		{ kind: 'tooling' }
+		{
+			kind: 'tooling',
+			details: [
+				{
+					title: 'Operate production schema changes deliberately',
+					body: 'db:migrate --postgres-safe orders dependencies, uses concurrent-index mode, applies lock and statement timeouts, and probes orphan foreign keys. doctor --db and db:status --parity compare the live schema. db:rollback executes only a reconstructible down migration or refuses; --mark-only changes migration bookkeeping without changing schema. db:prune supports dry-run and skip controls for retention work. SQLite type changes rebuild the table.'
+				}
+			]
+		}
 	),
 	definePackage(
 		'Web & UI',
@@ -1126,6 +1222,16 @@ export const packages: SmrtPackage[] = [
 				'Markdown'
 			],
 			componentImport: '@happyvertical/smrt-content/svelte',
+			details: [
+				{
+					title: 'Editorial governance makes stale review visible',
+					body: 'Policies, profiles, and assignments resolve through resolveGovernance. runReviewAction checks its review fingerprint before it can move a piece through the publish-readiness gate. Contributions progress from submitted to approved, rejected, or withdrawn, then promoted, with trust level, revisions, and attachments retained.'
+				},
+				{
+					title: 'Published work keeps its correction history',
+					body: 'issueCorrectionAction and ContentVersion preserve freeze-on-publish semantics. Published transparency differs from preview transparency. References may pin targetVersion and getReferenceDrift detects when a target moves. ContentFeedSource can parse and sync RSS or Atom feeds; thumbnails can be headline cards, static maps, or AI-generated, and ContentAgentChat scopes editor sessions to tenant and content.'
+				}
+			],
 			exampleResource: 'articles'
 		}
 	),
@@ -1143,6 +1249,16 @@ export const packages: SmrtPackage[] = [
 				'CreateAssetModal'
 			],
 			componentImport: '@happyvertical/smrt-assets/svelte',
+			details: [
+				{
+					title: 'Version and derive assets through the runtime',
+					body: 'createNewVersion maintains primaryVersionId and findVersions history. AssetRuntime exposes createAssetRuntime, storeSourceAsset, storeDerivedAsset, linkDerivation, and setExtractionStatus. ASSET_ROLES, ASSET_METADATA_KEYS, and ASSET_EXTRACTION_STATUS give integrations a shared vocabulary; AssetAssociation records polymorphic provenance.'
+				},
+				{
+					title: 'Serving has explicit response semantics',
+					body: 'serveAsset and resolveAssetForServing choose 403, 404, redirect 302, or upstream failure 502 based on access and availability. remoteMode chooses proxy or redirect. FolderCollection uses SmrtHierarchical getTree and getPath; load a planned subtree rather than recursively resolving each node to avoid an N+1 query pattern.'
+				}
+			],
 			exampleResource: 'assets'
 		}
 	),
@@ -1165,6 +1281,16 @@ export const packages: SmrtPackage[] = [
 		{
 			components: ['AssetsGallery', 'ImageEditor', 'ImageUploader'],
 			componentImport: '@happyvertical/smrt-images/svelte',
+			details: [
+				{
+					title: 'AI metadata and derivation retain provenance',
+					body: 'ImageCategorizer produces tags, descriptions, confidence, and subjects. generateAltText uses the prompt registry, a PII-safe allowlist, and tenant overrides. ImageDeriver links parentId and AssetAssociation records; UpstreamManager preserves external-provider provenance, while ImageMetadataExtractor reads dimensions, format, and EXIF.'
+				},
+				{
+					title: 'Collection helpers filter loaded records',
+					body: 'ImageCollection can select aspect ratio, landscape, portrait, square, high-resolution, or missing-alt-text images. These helpers filter in memory, so they belong after a bounded database query rather than as a substitute for a large server-side search.'
+				}
+			],
 			exampleResource: 'images'
 		}
 	),
@@ -1175,6 +1301,16 @@ export const packages: SmrtPackage[] = [
 		{
 			components: ['AccountList', 'MessageList', 'MessageDetail', 'ComposeForm'],
 			componentImport: '@happyvertical/smrt-messages/svelte',
+			details: [
+				{
+					title: 'Channels and accounts are polymorphic',
+					body: 'Message has Email, Tweet, and SlackMessage subtypes; Account has Email, Twitter, Slack, Zulip, and Telegram subtypes. Import a provider from smrt-messages/providers/email, slack, twitter, or all when needed. The root import remains free of provider SDK weight, and credentialSecretId points to write-only smrt-secrets storage.'
+				},
+				{
+					title: 'Persona routes are wired by a trusted caller',
+					body: 'MessagingEndpoint, PersonaMessageRoute, and PersonaMessagingService operate behind messages.send and messages.manage-routes. createPersonaMessagingTool fixes personaId in trusted wiring so an agent-provided argument cannot choose a different persona.'
+				}
+			],
 			exampleResource: 'messages'
 		}
 	),
@@ -1215,6 +1351,16 @@ export const packages: SmrtPackage[] = [
 				'UnbilledItems'
 			],
 			componentImport: '@happyvertical/smrt-commerce/svelte',
+			details: [
+				{
+					title: 'One contract hierarchy supports commercial lifecycle',
+					body: 'channelId distinguishes Estimate, Order, Lease, Agreement, PurchaseOrder, WholesaleOrder, ProductionOrder, Cart, and LicenseSale in one table. LicenseSale snapshots rights immutably and revoke() is its explicit transition. Store money as integer minor units; preflightCommerceMoneyMinorUnits and migrateCommerceMoneyToMinorUnits handle the commerce migration.'
+				},
+				{
+					title: 'Invoices, payments, and payouts retain evidence',
+					body: 'recognizeRevenue posts accounts-receivable journal evidence. PaymentAllocation and Invoice.updatePaymentStatus connect settlement to the invoice. PaymentIntent locks a multi-rail price behind an idempotency key, while PaymentInstrument identifies the selected rail. Vendor payouts move from pending to sent, confirmed, or failed.'
+				}
+			],
 			exampleResource: 'invoices'
 		}
 	),
@@ -1240,7 +1386,19 @@ export const packages: SmrtPackage[] = [
 		'Business & operations',
 		'smrt-ledgers',
 		'Double-entry accounting, journal lifecycle, balance enforcement, and traceable entries.',
-		{ exampleResource: 'journal-entries' }
+		{
+			details: [
+				{
+					title: 'Journal entries must balance',
+					body: 'Accounts have debit- or credit-normal types. A Journal moves from draft to posted or voided, and each JournalEntry is debit-XOR-credit. BALANCE_EPSILON is 0.01. This catches arithmetic imbalance, but a mixed-unit journal can still balance numerically without being semantically valid; keep integer-minor-unit commerce values consistent.'
+				},
+				{
+					title: 'Summaries keep sensitive prompt variables out',
+					body: 'Journal.summarize() uses the smrtLedgers.journal.summarize prompt-registry entry and excludes PII-conscious variables before invoking a provider.'
+				}
+			],
+			exampleResource: 'journal-entries'
+		}
 	),
 	definePackage(
 		'Business & operations',
@@ -1263,6 +1421,16 @@ export const packages: SmrtPackage[] = [
 				'Incremental refresh with watermarks and affected-group recomputation',
 				'Durable scheduled refresh through smrt-jobs'
 			],
+			details: [
+				{
+					title: 'The adapter is the exposure boundary',
+					body: 'buildReportAdapterDescriptor and queryReportMaterializedRows bind tenant context, projection, paging, filters, and facets before rows cross an application boundary. The adapter redacts fields that the caller is not allowed to expose.'
+				},
+				{
+					title: 'Refresh, views, exports, and schedules retain their state',
+					body: 'getReportLifecycle describes availability; previewReportRefresh and applyReportRefresh run through an action host. Saved views revalidate policy and migrate from v0 to v1. Exports bind to a snapshot fingerprint and page offset worker contract. SmrtReportSchedule supports cron, durable enqueue, and onChange interception.'
+				}
+			],
 			exampleResource: 'reports'
 		}
 	),
@@ -1273,6 +1441,16 @@ export const packages: SmrtPackage[] = [
 		{
 			components: ['AnalyticsSummary', 'EventsTable', 'PropertyInfo', 'StatCard', 'TrendBadge'],
 			componentImport: '@happyvertical/smrt-analytics/svelte',
+			details: [
+				{
+					title: 'Analytics has tenant-scoped source models',
+					body: 'AnalyticsProperty, AnalyticsDataStream, AnalyticsEvent, and AnalyticsReport hold the property, incoming stream, events, and report state in the tenant boundary.'
+				},
+				{
+					title: 'AI reporting receives a controlled result payload',
+					body: 'analyzePerformance, analyzeResults, and hasPositiveTrends use the prompt registry. The resultData forwarding contract excludes PII-conscious values, so callers must not persist or add sensitive data merely to make it available to an AI provider.'
+				}
+			],
 			exampleResource: 'analytics-events'
 		}
 	),
@@ -1361,6 +1539,16 @@ export const packages: SmrtPackage[] = [
 				'BulkActions'
 			],
 			componentImport: '@happyvertical/smrt-projects/svelte',
+			details: [
+				{
+					title: 'Managed delivery uses durable handoffs',
+					body: 'ProjectIntegration holds credential grants for ManagedProjectClient. DevelopmentRequest and WorkLink carry requested work; ProjectDeliveryEvent replays idempotently; PreviewApproval records the approval boundary; AssistanceRequest and AssistanceEvent retain escalation evidence.'
+				},
+				{
+					title: 'Service billing and repository sync retain correction paths',
+					body: 'ServiceTimeEntry pairs immutable work evidence with ServiceChargeSnapshot and CompensationSnapshot, with a correction chain and SubscriptionServiceCommercialResolver. Repository, issue, and pull-request sync supports GitHub, GitLab, Bitbucket, and Azure. incorporateFeedback can preview or roll back Living Spec changes, while Project.analyzeHealth evaluates the synchronized project.'
+				}
+			],
 			exampleResource: 'projects'
 		}
 	),
@@ -1394,6 +1582,16 @@ export const packages: SmrtPackage[] = [
 		{
 			components: ['MeetingView'],
 			componentImport: '@happyvertical/smrt-events/svelte',
+			details: [
+				{
+					title: 'Events can nest without a depth ceiling',
+					body: 'SmrtHierarchical supplies getParent, getChildren, getAncestors, getDescendants, getHierarchy, and moveTo. Load the needed tree shape rather than recursively resolving every relation. EventSeries defines daily, weekly, monthly, or yearly recurrence; EventType carries a custom-field JSON schema.'
+				},
+				{
+					title: 'Participants and assets carry presentation detail',
+					body: 'EventParticipant records role, placement, grouping, and conflictColumns; numeric placement can serve both layout and ordering. EventAsset is the owned-asset join with getAssets, addAsset, and removeAsset.'
+				}
+			],
 			exampleResource: 'events'
 		}
 	),

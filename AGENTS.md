@@ -98,8 +98,9 @@ and says what to do when one drops.
 
 ## Dependency policy
 
-All 23 `@happyvertical/smrt-*` packages are public on npmjs and released in
-lockstep; the project `.npmrc` pins that registry, so installs need no auth.
+All 23 `@happyvertical/smrt-*` packages are public on the primary HappyVertical
+registry and released in lockstep; the project `.npmrc` pins that registry, so
+installs need no auth. The npmjs mirror can lag the released line.
 
 **They are pinned to exact versions, not caret ranges.** `smrt-fields` pins its own
 smrt siblings exactly, so mixing exact and caret ranges lets pnpm install duplicate
