@@ -512,8 +512,8 @@ export default defineConfig({
 });`,
 				callout: {
 					variant: 'version-added',
-					title: 'Check the framework release before use',
-					body: 'This site is built with an earlier framework release. The TypeSafe decision feature is merged upstream and needs a later release that contains the linked change. The site playground does not run this example.'
+					title: 'Available in the installed framework',
+					body: 'The installed framework includes this optional feature. The site playground does not run this example.'
 				},
 				links: [
 					{
