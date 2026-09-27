@@ -5,7 +5,7 @@ import type { Guide } from '$lib/data/guides';
  * Move this pin only after the installed control, form, chat, and voice surfaces
  * have been checked again.
  */
-export const INTERACTION_PINNED_VERSION = '0.51.30';
+export const INTERACTION_PINNED_VERSION = '0.51.31';
 
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${INTERACTION_PINNED_VERSION}`;
 
