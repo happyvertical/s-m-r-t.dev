@@ -739,6 +739,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			'smrt-images',
 			'smrt-support'
 		],
+		pinnedVersion: REFERENCE_PINNED_VERSION,
 		sources: [
 			{
 				label: 'Decision routing epic',
@@ -781,9 +782,9 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: 'Check availability before you adopt a package route',
 				intro:
-					'The decision epic and its package work are under review. The site release does not contain these routes, and the playground does not demonstrate them.',
+					'The shared decision change and the released package changes are merged on the framework main branch. The site release pinned here predates those routes, and the playground does not run these examples.',
 				points: [
-					'Use the linked epic and package issues to track the implementation. Check the released package declarations before you configure a route.',
+					'Use the linked epic and package issues to track package publication. Issue-label suggestions also remain pending in the linked issue; do not configure any route until its package release is available.',
 					'Keep release versions in package data. Do not copy a version number into application code or documentation.',
 					'Claim-support work is research. It has no production replacement until a labeled evaluation supports a separate implementation decision.'
 				],
@@ -853,12 +854,12 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				]
 			},
 			{
-				title: 'Select only from offered labels and image metadata',
+				title: 'Use image metadata and track pending label suggestions',
 				intro:
-					'Projects can suggest several issue labels from an optional repository vocabulary. Images can select tags and subjects from separate curated vocabularies.',
+					'Images can select tags and subjects from separate curated vocabularies. Project issue-label suggestions are pending and will select only from an optional repository vocabulary when released.',
 				points: [
-					'Label selection can return many offered labels, no label, or an uncertain result. It never returns a label outside the supplied vocabulary.',
-					'An absent vocabulary keeps legacy generation. An explicit empty vocabulary selects no values and does not call the decision provider.',
+					'When the issue-label route is released, selection can return many offered labels, no label, or an uncertain result. It will never return a label outside the supplied vocabulary.',
+					'For that pending route, an absent vocabulary will keep legacy generation. An explicit empty vocabulary will select no values and will not call the decision provider.',
 					'Image metadata selection uses the name, description, MIME type, and dimensions. The existing buffer parameter is unused and does not provide pixel or vision understanding.',
 					'Generated image descriptions and alt text remain generative output. Keep decision probabilities separate from the existing generated-category confidence.',
 					'Resolver and provider failures propagate. Do not turn them into an empty successful selection.'
