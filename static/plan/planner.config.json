@@ -1,8 +1,0 @@
-{
-	"inference": {
-		"mode": "byo",
-		"byo": {
-			"presets": ["ollama", "openrouter", "openai", "custom"]
-		}
-	}
-}

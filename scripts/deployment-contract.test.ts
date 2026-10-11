@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { validateCookbook } from '@happyvertical/smrt-core/cookbook';
 import { libraryCookbooks } from '@happyvertical/smrt-planner/core';
+import { hostedPlannerConfig } from './planner-config.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const schema = JSON.parse(
@@ -14,21 +15,47 @@ const schema = JSON.parse(
 	)
 ) as { $id: string };
 const source = readFileSync(join(root, 'infra/modules/havesmrt/url-rewrite.js'), 'utf8');
-const context: { handler?: (_event: { request: { uri: string } }) => { uri: string } } = {};
+type Request = {
+	uri: string;
+	querystring?: Record<string, { value: string; multiValue?: { value: string }[] }>;
+};
+type Result =
+	| Request
+	| {
+			statusCode: number;
+			headers: { location: { value: string } };
+	  };
+const context: { handler?: (_event: { request: Request }) => Result } = {};
 runInNewContext(source, context);
 
 function rewrite(uri: string): string {
-	return context.handler!({ request: { uri } }).uri;
+	return (context.handler!({ request: { uri } }) as Request).uri;
 }
 
 describe('CloudFront request routing', () => {
 	it.each([
-		['/plan', '/plan/index.html'],
 		['/plan/', '/plan/index.html'],
-		['/plan/ai', '/plan/ai/index.html'],
-		['/plan/m/products/Product/', '/plan/m/products/Product/index.html']
-	])('serves planner pages from their prerendered directories', (request, expected) => {
+		['/plan/ai', '/plan/404.html'],
+		['/plan/m/products/Product/', '/plan/404.html']
+	])('serves planner pages through the package-owned fallback', (request, expected) => {
 		expect(rewrite(request)).toBe(expected);
+	});
+
+	it('redirects the bare planner prefix and preserves every query value', () => {
+		const response = context.handler!({
+			request: {
+				uri: '/plan',
+				querystring: {
+					tab: { value: 'cookbooks' },
+					filter: { value: 'bread & cakes' },
+					tag: { value: 'ignored', multiValue: [{ value: 'one' }, { value: 'two' }] }
+				}
+			}
+		}) as Extract<Result, { statusCode: number }>;
+		expect(response.statusCode).toBe(308);
+		expect(response.headers.location.value).toBe(
+			'/plan/?tab=cookbooks&filter=bread%20%26%20cakes&tag=one&tag=two'
+		);
 	});
 
 	it.each([
@@ -47,6 +74,22 @@ describe('CloudFront request routing', () => {
 });
 
 describe('published planner artifacts', () => {
+	it('uses explicit, credential-free hosted inference choices', () => {
+		expect(hostedPlannerConfig).toEqual({
+			inference: {
+				mode: 'byo',
+				alternatives: ['browser'],
+				credentialPersistence: 'memory',
+				byo: {
+					presets: ['ollama', 'openrouter', 'openai', 'custom']
+				}
+			}
+		});
+		expect(JSON.stringify(hostedPlannerConfig)).not.toMatch(
+			/"(?:api[-_]?key|key|token|authorization|secret|password)"/i
+		);
+	});
+
 	it('uses the canonical public schema URL and validates every library cookbook', () => {
 		expect(schema.$id).toBe('https://s-m-r-t.dev/schemas/cookbook/v1.json');
 		for (const entry of libraryCookbooks) {

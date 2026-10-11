@@ -47,4 +47,4 @@ minimumReleaseAgeExclude:
   - '@happyvertical/smrt-ui@0.55.12'
   - '@happyvertical/smrt-users@0.55.12'
   - '@happyvertical/smrt-web@0.55.12'
-  - '@happyvertical/smrt-planner@0.0.1'
+  - '@happyvertical/smrt-planner@0.0.2'

@@ -7,19 +7,31 @@ const plannerPreviewRoutes = {
 	configurePreviewServer(server: {
 		middlewares: {
 			use: (
-				_handler: (_request: { url?: string }, _response: unknown, _next: () => void) => void
+				_handler: (
+					_request: { url?: string },
+					_response: {
+						writeHead: (_status: number, _headers: Record<string, string>) => void;
+						end: () => void;
+					},
+					_next: () => void
+				) => void
 			) => void;
 		};
 	}) {
-		server.middlewares.use((request, _response, next) => {
+		server.middlewares.use((request, response, next) => {
 			const url = new URL(request.url ?? '/', 'http://preview.local');
 			if (url.pathname === '/plan') {
+				response.writeHead(308, { location: `/plan/${url.search}` });
+				response.end();
+				return;
+			}
+			if (url.pathname === '/plan/') {
 				url.pathname = '/plan/index.html';
 			} else if (
 				url.pathname.startsWith('/plan/') &&
 				!url.pathname.split('/').pop()?.includes('.')
 			) {
-				url.pathname += url.pathname.endsWith('/') ? 'index.html' : '/index.html';
+				url.pathname = '/plan/404.html';
 			}
 			request.url = `${url.pathname}${url.search}`;
 			next();

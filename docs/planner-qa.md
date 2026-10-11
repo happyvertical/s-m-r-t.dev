@@ -18,9 +18,14 @@ pnpm preview --host 127.0.0.1 --port 4183
 Open `http://127.0.0.1:4183/plan/`. The preview uses the same assembled
 `build/` directory uploaded by the deployment workflow.
 
+`/plan/` is the canonical directory URL. Requests to `/plan` receive a 308
+redirect to `/plan/`, preserving the query string so the packaged app resolves
+all relative assets below its mount point.
+
 ## Owner acceptance checklist
 
-- Open `/plan/`, then reload supported nested pages including `/plan/ai/`,
+- Open `/plan?tab=cookbooks` and confirm it redirects to
+  `/plan/?tab=cookbooks`. Then reload supported nested pages including `/plan/ai/`,
   `/plan/cookbook/`, and one model page. Use back and forward. Confirm the
   address stays below `/plan/`.
 - Open ordinary documentation before and after Planner navigation. Confirm a
