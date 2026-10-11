@@ -34,6 +34,12 @@ describe('update-smrt --check', () => {
 		).toContain('coherent at 0.40.63 (2 packages)');
 	});
 
+	it('ignores independently versioned planner releases', () => {
+		expect(
+			check({ '@happyvertical/smrt-core': '0.55.12', '@happyvertical/smrt-planner': '0.0.1' })
+		).toContain('coherent at 0.55.12 (1 packages)');
+	});
+
 	it('rejects ranged versions', () => {
 		expect(() =>
 			check({

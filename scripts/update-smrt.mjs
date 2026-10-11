@@ -25,6 +25,7 @@ import { join } from 'node:path';
 
 const SCOPE = '@happyvertical';
 const SCOPE_PREFIX = `${SCOPE}/smrt-`;
+const INDEPENDENT_PACKAGES = new Set(['@happyvertical/smrt-planner']);
 const DEFAULT_REGISTRY = 'https://npm.happyvertical.com';
 const LOCAL_SPEC = /^(file:|link:|workspace:)/;
 
@@ -135,7 +136,7 @@ for (const field of ['dependencies', 'devDependencies']) {
 	const deps = pkg[field];
 	if (!deps) continue;
 	for (const [name, spec] of Object.entries(deps)) {
-		if (!name.startsWith(SCOPE_PREFIX)) continue;
+		if (!name.startsWith(SCOPE_PREFIX) || INDEPENDENT_PACKAGES.has(name)) continue;
 		if (LOCAL_SPEC.test(spec)) {
 			if (checkOnly) {
 				targets.push({ name, field, current: spec });
