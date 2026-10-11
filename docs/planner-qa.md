@@ -26,9 +26,17 @@ Open `http://127.0.0.1:4183/plan/`. The preview uses the same assembled
 - Open ordinary documentation before and after Planner navigation. Confirm a
   deliberately missing Planner asset and a missing documentation route still
   return 404.
-- Start with no assistant. Choose a cookbook, edit recipes, layout, and
-  settings, validate the plan, and export it. Confirm manual planning remains
-  usable after an inference connection fails.
+- Start with no assistant and choose a cookbook. In **Layout**, rename a
+  navigation section, hide another section, and move an entry with the keyboard
+  controls. Confirm the surrounding Planner AppShell updates immediately; an
+  export-only change or a disconnected preview does not pass.
+- Reload the same Planner URL. Confirm the renamed, hidden, and moved shell
+  entries persist. Export the cookbook and confirm its `layout` records those
+  exact edits. Use **Reset to defaults** and the Export tab's **Reset** action,
+  then confirm the Planner and its shell remain reachable so an edit cannot
+  strand the visitor.
+- Edit recipes and settings, validate the plan, and export it. Confirm manual
+  planning remains usable after an inference connection fails.
 - Confirm BYO is the initial inference choice. WebLLM must start only after
   selecting it and explicitly starting its model download. A failed BYO
   request must not switch providers or start WebLLM.
