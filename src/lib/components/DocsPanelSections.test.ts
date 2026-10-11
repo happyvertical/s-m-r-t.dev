@@ -27,7 +27,7 @@ afterEach(() => {
 });
 
 async function renderExpanded(props: { pathname?: string; hash?: string }) {
-	const shell = createDocsShellState();
+	const shell = createDocsShellState({ persist: false });
 	shell.expandPanel('top');
 	render(Harness, { props: { ...props, shell } });
 	// AdminShell hydrates panel visibility from localStorage asynchronously on
@@ -151,7 +151,7 @@ describe('docs panel section map', () => {
 	it(
 		'shows a matching aria-current link for every page reachable in docsNavigation',
 		async () => {
-			const shell = createDocsShellState();
+			const shell = createDocsShellState({ persist: false });
 			shell.expandPanel('top');
 			const { rerender } = render(Harness, { props: { pathname: '/', hash: '', shell } });
 			await tick();

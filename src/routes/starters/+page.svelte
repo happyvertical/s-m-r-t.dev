@@ -19,8 +19,23 @@
 	</header>
 
 	<section class="choice-list">
+		<a href="/plan/">
+			<div><span>01</span><small>Shape the application</small></div>
+			<h2>Interactive planner</h2>
+			<p>
+				Choose cookbooks, recipes, features, layout, and settings before you create a project.
+				Planning and export work without an assistant.
+			</p>
+			<ul>
+				<li>Start from a ready-made cookbook or an empty plan</li>
+				<li>Use your own supported model only when you choose</li>
+				<li>Export a validated cookbook for the s-m-r-t CLI</li>
+			</ul>
+			<strong>Open the Planner →</strong>
+		</a>
+
 		<a href="/starters/ground-up">
-			<div><span>01</span><small>Learn each layer</small></div>
+			<div><span>02</span><small>Learn each layer</small></div>
 			<h2>Basic SvelteKit template</h2>
 			<p>
 				One example object, SQLite, current tenant/session boundaries, an AdminShell, and generated
@@ -35,7 +50,7 @@
 		</a>
 
 		<a href="/starters/saas">
-			<div><span>02</span><small>Begin production-shaped</small></div>
+			<div><span>03</span><small>Begin production-shaped</small></div>
 			<h2>s-m-r-t SaaS starter</h2>
 			<p>
 				A reference monorepo with onboarding, tenant administration, subscriptions, jobs, MCP,
@@ -100,7 +115,7 @@
 
 	.choice-list {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: repeat(3, 1fr);
 		gap: 16px;
 	}
 

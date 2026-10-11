@@ -3,9 +3,9 @@
 	import { createDocsShellState } from '$lib/shell';
 	import UILiveShellState from '$lib/ui-showcase/UILiveShellState.svelte';
 
-	const shell = createDocsShellState();
+	const shell = createDocsShellState({ persist: false });
 </script>
 
-<AdminShell state={shell}>
+<AdminShell state={shell} edgeToggles={{ top: true }}>
 	<UILiveShellState />
 </AdminShell>

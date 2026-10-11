@@ -43,6 +43,7 @@ import { glob } from 'glob';
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BUILD_DIR = path.join(PROJECT_ROOT, 'build');
 const SITE_ORIGIN = 'https://s-m-r-t.dev';
+const EMBEDDED_APP_ROOTS = ['/plan'];
 
 // See the allowlist note above. Both are empty: no allowlists remain.
 const CANONICAL_ALLOWLIST = /(?!)/; // #187 S3: /packages* and /faq are now redirects; nothing to allow.
@@ -51,7 +52,14 @@ const SITEMAP_ALLOWLIST = /(?!)/; // #187 S2: /reference/* is now in the sitemap
 function htmlFileToPath(file) {
 	const relative = path.relative(BUILD_DIR, file).split(path.sep).join('/');
 	if (relative === 'index.html') return '/';
+	if (relative.startsWith('plan/') && relative.endsWith('/index.html')) {
+		return `/${relative.slice(0, -'/index.html'.length)}`;
+	}
 	return `/${relative.replace(/\.html$/, '')}`;
+}
+
+function isEmbeddedAppPath(pathname) {
+	return EMBEDDED_APP_ROOTS.some((root) => pathname === root || pathname.startsWith(`${root}/`));
 }
 
 function stripQueryAndHash(href) {
@@ -113,7 +121,7 @@ async function main() {
 		}
 
 		// 3. canonical == own URL (and every content page must emit one at all)
-		if (!page.isRedirect) {
+		if (!page.isRedirect && !isEmbeddedAppPath(ownPath)) {
 			const canonicalMatch = page.html.match(/<link rel="canonical" href="([^"]+)"/);
 			const expected = `${SITE_ORIGIN}${ownPath === '/' ? '' : ownPath}`;
 			if (!canonicalMatch) {
@@ -148,6 +156,7 @@ async function main() {
 	const sitemapAllowlisted = [];
 	for (const [ownPath, page] of pages) {
 		if (page.isRedirect) continue;
+		if (isEmbeddedAppPath(ownPath)) continue;
 		if (sitemapSet.has(ownPath)) continue;
 		if (SITEMAP_ALLOWLIST.test(ownPath)) {
 			sitemapAllowlisted.push(ownPath);

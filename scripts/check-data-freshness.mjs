@@ -116,6 +116,7 @@ export function collectInstalled(root) {
 	const packages = new Map();
 	for (const pkg of index.packages ?? []) {
 		if (typeof pkg.name !== 'string' || !pkg.name.startsWith(`${SCOPE}/${PREFIX}`)) continue;
+		if (pkg.name === '@happyvertical/smrt-planner') continue;
 		if (typeof pkg.version !== 'string') continue;
 		packages.set(pkg.name, {
 			version: pkg.version,

@@ -61,6 +61,7 @@ function installedPackages() {
 	if (!existsSync(SCOPE_ROOT)) return [];
 	return readdirSync(SCOPE_ROOT)
 		.filter((name) => name.startsWith('smrt-'))
+		.filter((name) => name !== 'smrt-planner')
 		.filter((name) => existsSync(join(SCOPE_ROOT, name, 'package.json')))
 		.sort();
 }

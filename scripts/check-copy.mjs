@@ -220,6 +220,7 @@ const COMPONENT_NON_COPY_ATTRIBUTES = new Set([
 	'code',
 	'colorScheme',
 	'compact',
+	'edgeToggles',
 	'filename',
 	'guide',
 	'hash',

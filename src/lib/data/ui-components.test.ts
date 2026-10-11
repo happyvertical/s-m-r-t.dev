@@ -105,7 +105,11 @@ describe('generated UI component reference', () => {
 
 		// A component may legitimately declare none, and that is the only one.
 		const empty = uiComponents.filter((component) => component.details.length === 0);
-		expect(empty.map((component) => component.slug)).toEqual(['shell-settings-panel']);
+		expect(empty.map((component) => component.slug)).toEqual([
+			'mailbox-demo',
+			'shell-settings-page',
+			'shell-settings-panel'
+		]);
 	});
 
 	it('keeps every branch of a union props type', () => {

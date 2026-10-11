@@ -27,6 +27,3 @@ vite.config.ts.timestamp-*
 *.log
 *.log
 infra/.terraform/
-
-# Local dev overrides
-pnpm-workspace.yaml

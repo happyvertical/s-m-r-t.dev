@@ -138,6 +138,14 @@ describe('documentation home page', () => {
 		}
 	});
 
+	it('links the public planner from the start paths', () => {
+		render(Page);
+
+		expect(screen.getByRole('link', { name: /plan your application/i }).getAttribute('href')).toBe(
+			'/plan/'
+		);
+	});
+
 	it('runs the agent-aware form demo live inside the how-it-works section', () => {
 		const { container } = render(Page);
 		const section = container.querySelector('#how-it-works');

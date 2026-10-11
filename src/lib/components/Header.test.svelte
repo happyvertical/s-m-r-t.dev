@@ -5,11 +5,11 @@
 	import { createDocsShellState } from '$lib/shell';
 
 	let { pathname = '/' }: { pathname?: string } = $props();
-	const shell = createDocsShellState();
+	const shell = createDocsShellState({ persist: false });
 </script>
 
 <AppTheme>
-	<AdminShell state={shell}>
+	<AdminShell state={shell} edgeToggles={{ top: true }}>
 		{#snippet appBar()}
 			<Header {pathname} />
 		{/snippet}

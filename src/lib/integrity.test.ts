@@ -118,6 +118,7 @@ for (const dir of allDirs) {
 }
 
 const routesByPath = new Map(routes.map((route) => [route.path, route]));
+const embeddedAppPaths = new Set(['/plan']);
 const contentRoutes = routes.filter((route) => !route.isRedirect);
 const redirectRoutes = routes.filter((route) => route.isRedirect);
 
@@ -252,8 +253,9 @@ describe('href literals resolve to an emitted route (#187 S4)', () => {
 		for (const { file, hrefs } of hrefsByFile) {
 			for (const href of hrefs) {
 				const target = stripQueryAndHash(href);
+				const embeddedTarget = target.length > 1 ? target.replace(/\/$/, '') : target;
 				expect(
-					routesByPath.has(target),
+					routesByPath.has(target) || embeddedAppPaths.has(embeddedTarget),
 					`${file}: href "${href}" does not resolve to any route in ` +
 						`src/routes (checked "${target}").`
 				).toBe(true);

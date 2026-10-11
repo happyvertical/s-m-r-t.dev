@@ -14,9 +14,9 @@ export const docsShellConfig: ShellPanelDefaults = {
 	bottom: false
 };
 
-export function createDocsShellState() {
+export function createDocsShellState({ persist = true }: { persist?: boolean } = {}) {
 	return createShellState({
 		config: docsShellConfig,
-		storageKey: 'smrt-docs-shell'
+		storageKey: persist ? 'smrt-docs-shell' : undefined
 	});
 }

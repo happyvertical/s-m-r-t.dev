@@ -525,7 +525,8 @@
 			</p>
 		</div>
 		<nav aria-label="Guide and start paths">
-			<a class="primary-link" href="/guides">Browse Guides <span>→</span></a>
+			<a class="primary-link" href="/plan/">Plan your application <span>→</span></a>
+			<a href="/guides">Browse Guides <span>→</span></a>
 			<a href="/starters/ground-up">Build a basic SvelteKit application <span>→</span></a>
 			<a href="/playground">Inspect the Playground <span>→</span></a>
 		</nav>
