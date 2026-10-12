@@ -88,11 +88,11 @@ const referenceHubItems: NavigationItem[] = referenceFamilies
 	.filter((family) => referenceHubIds.has(family.id))
 	.map((family) => ({ label: family.label, href: family.href }));
 /**
- * Module clusters, not the 23 individual `/packages/<slug>` pages, are the
+ * Module clusters, not the individual `/packages/<slug>` pages, are the
  * "key pages" registered here: `/modules#<cluster-id>` is a real, stable
  * anchor (`ModuleCluster.svelte` sets `id={guide.id}`), the same shape as the
  * homepage's `/#how-it-works` and `/agents#<topic>` entries. Packages already
- * have their own `searchItems` entries below — registering all 23 here too
+ * have their own `searchItems` entries below — registering every one of them here too
  * would duplicate search results.
  */
 const moduleClusterItems: NavigationItem[] = applicationModuleClusters.map((cluster) => ({

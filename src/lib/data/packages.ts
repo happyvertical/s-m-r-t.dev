@@ -57,6 +57,11 @@ export interface SmrtPackage {
 	playgroundNote?: string;
 	version: string;
 	status?: PackageStatus;
+	/**
+	 * Source repository URL for a package that lives outside the smrt monorepo.
+	 * The renderer prefers it over the monorepo `tree/v<version>/packages/<dir>` link.
+	 */
+	repository?: string;
 	/** Admonition shown above the tabs, for packages that need a caveat up front. */
 	notice?: GuideCallout;
 }
@@ -88,6 +93,7 @@ type PackageOptions = Partial<
 		| 'surfaceNote'
 		| 'playgroundNote'
 		| 'status'
+		| 'repository'
 		| 'notice'
 	>
 >;
@@ -628,6 +634,7 @@ function definePackage(
 		playgroundNote: options.playgroundNote,
 		version: OWN_VERSION_LINES[slug] ?? SMRT_VERSION,
 		status: options.status ?? 'stable',
+		repository: options.repository,
 		notice: options.notice
 	};
 }
@@ -1680,7 +1687,6 @@ export const packages: SmrtPackage[] = [
 		'smrt-reports',
 		'Materialized aggregate read models with incremental refresh, schedules, and tenant fan-out, plus runtime reports compiled per principal from a stored spec.',
 		{
-			status: 'new',
 			highlights: [
 				'Decorated groupings, measures, and time buckets',
 				'Incremental refresh with watermarks and affected-group recomputation',
@@ -1739,7 +1745,6 @@ export const packages: SmrtPackage[] = [
 		'smrt-marketing',
 		'Cross-channel campaigns, immutable performance snapshots, and computed budget pacing.',
 		{
-			status: 'new',
 			highlights: [
 				'Campaigns and channels share one budget and one reporting shape',
 				'Ingested metric snapshots are deduplicated and never edited in place',
@@ -1773,7 +1778,6 @@ export const packages: SmrtPackage[] = [
 		'smrt-sales',
 		'Provider-neutral agreement execution, CRM, referral intake and attribution, and a neutral commissions core.',
 		{
-			status: 'new',
 			highlights: [
 				'Subpath modules — agreements, crm, referrals, commissions — keep consumers scoped',
 				'Referral attribution records its exceptions and conflicts instead of guessing',
@@ -1835,7 +1839,6 @@ export const packages: SmrtPackage[] = [
 		'smrt-support',
 		'Channel-neutral support cases with lifecycle, routing, service targets, escalation, and auditable service time.',
 		{
-			status: 'new',
 			highlights: [
 				'Chat and email land in one tenant-scoped case, idempotent on replay',
 				'Writes go through service facades so lifecycle and audit evidence cannot be bypassed',
@@ -1957,7 +1960,7 @@ export const packages: SmrtPackage[] = [
 		'Mobile',
 		'smrt-mobile-contract',
 		'Manifest and allowlist code generation into mobile contracts and Kotlin or Swift DTOs.',
-		{ kind: 'tooling', status: 'new' }
+		{ kind: 'tooling' }
 	),
 	definePackage(
 		'Mobile',
@@ -2218,6 +2221,7 @@ export const packages: SmrtPackage[] = [
 		{
 			kind: 'tooling',
 			status: 'new',
+			repository: 'https://github.com/happyvertical/smrt-planner',
 			components: ['Planner'],
 			componentImport: '@happyvertical/smrt-planner',
 			highlights: [

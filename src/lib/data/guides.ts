@@ -873,9 +873,11 @@ export const nextPageIntent = defineIntent({
 
   let { data, children } = $props();
 
+  const settingsHref = '/settings';
+
   const nav: ShellNavItem[] = [
     { href: '/', label: 'Items', description: 'The example s-m-r-t object' },
-    { href: '/settings', label: 'Settings', description: 'Workspace layout and shortcuts' }
+    { href: settingsHref, label: 'Settings', description: 'Workspace layout and shortcuts' }
   ];
 
   const webmcp = $derived(
@@ -891,7 +893,7 @@ export const nextPageIntent = defineIntent({
   {nav}
   currentHref={page.url.pathname}
   runtimeDiagnostics={data.session.authenticated}
-  settingsHref="/settings"
+  {settingsHref}
 >
   {@render children()}
 </AppShell>`,

@@ -113,7 +113,8 @@
 		</div>
 		<a
 			class="source-link"
-			href={`https://github.com/happyvertical/smrt/tree/v${pkg.version}/packages/${sourceDirectory}`}
+			href={pkg.repository ??
+				`https://github.com/happyvertical/smrt/tree/v${pkg.version}/packages/${sourceDirectory}`}
 			target="_blank"
 			rel="noreferrer"
 		>

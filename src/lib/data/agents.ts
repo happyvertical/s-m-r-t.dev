@@ -496,9 +496,11 @@ export class Report extends SmrtObject {
 
   let { data, children } = $props();
 
+  const settingsHref = '/settings';
+
   const nav: ShellNavItem[] = [
     { href: '/', label: 'Items', description: 'The example s-m-r-t object' },
-    { href: '/settings', label: 'Settings', description: 'Workspace layout and shortcuts' },
+    { href: settingsHref, label: 'Settings', description: 'Workspace layout and shortcuts' },
   ];
 
   // Keep the optional WebMCP registration out of browsers that do not expose
@@ -516,7 +518,7 @@ export class Report extends SmrtObject {
   {nav}
   currentHref={page.url.pathname}
   runtimeDiagnostics={data.session.authenticated}
-  settingsHref="/settings"
+  {settingsHref}
 >
   {@render children()}
 </AppShell>`

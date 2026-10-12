@@ -145,6 +145,7 @@ const NON_PROSE_PROPERTIES = new Set([
 	'relatedModules',
 	'relatedReference',
 	'relatedUi',
+	'repository',
 	'score',
 	'section',
 	'sections',
