@@ -170,7 +170,7 @@
 <article class="homepage">
 	<header class="hero">
 		<div class="hero-copy">
-			<h1>The s-m-r-t application stack</h1>
+			<h1 class="visually-hidden">The s-m-r-t application stack</h1>
 			<p class="lede">
 				s-m-r-t is a framework and library for creating software that blurs the line between
 				application and agent. It is better demonstrated than explained: the cookbook planner here is
@@ -556,20 +556,28 @@
 		padding-bottom: clamp(4rem, 9vw, 7rem);
 	}
 
-	h1 {
-		max-width: 38rem;
-		font-size: clamp(2.2rem, 4.5vw, 3.4rem);
-		font-weight: 680;
-		letter-spacing: -0.045em;
-		line-height: 1.05;
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		clip-path: inset(50%);
+		white-space: nowrap;
+		border: 0;
 	}
 
 	.hero-copy .lede {
-		margin-top: 1.1rem;
-		max-width: 40rem;
+		margin-top: 0;
+		max-width: 34em;
 		color: var(--site-ink);
-		font-size: 1.02rem;
-		line-height: 1.6;
+		font-size: clamp(1.45rem, 2.4vw, 1.8rem);
+		font-weight: 400;
+		letter-spacing: -0.015em;
+		line-height: 1.4;
+		text-wrap: pretty;
 	}
 
 	.hero-actions {
@@ -577,7 +585,7 @@
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 0.5rem 1.5rem;
-		margin-top: 1.1rem;
+		margin-top: 1.6rem;
 	}
 
 	.hero-actions .text-link {
