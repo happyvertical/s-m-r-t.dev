@@ -20,12 +20,20 @@
 	// of its own header beside the brand.
 	const backLink = { href: '/', label: 'Back to documentation' };
 
-	// Bring-your-own inference: the visitor's own OpenAI-compatible endpoint
-	// (Ollama, OpenRouter, OpenAI or a custom address) with their own key, held
-	// in memory for the tab only — the policy the planner documents for a
-	// public host. The site runs no model and has no server endpoint, so no
-	// `host` mode. Nothing here is a secret or an address.
-	const inference: PlannerInference = { mode: 'byo', credentialPersistence: 'memory' };
+	// On-device inference first: the AI page offers to download a small model
+	// (WebLLM) into the visitor's browser, so nothing leaves their device and
+	// no key is needed. Bringing their own OpenAI-compatible endpoint stays as
+	// the deliberate alternative, narrowed to a local Ollama or an address they
+	// type; any key is held in memory for the tab only, the policy the planner
+	// documents for a public host. The site runs no model and has no server
+	// endpoint, so no `host` mode. The browser model list is the package's.
+	// Nothing here is a secret or an address.
+	const inference: PlannerInference = {
+		mode: 'browser',
+		alternatives: ['byo'],
+		byo: { presets: ['ollama', 'custom'] },
+		credentialPersistence: 'memory'
+	};
 
 	onMount(() => {
 		let cancelled = false;
