@@ -10,6 +10,7 @@
 	import { SMRT_VERSION } from '$lib/version';
 
 	let { component }: { component: UiComponentReference } = $props();
+	const sourceHref = $derived(uiComponentSource(component));
 	const importCode = $derived(`import { ${component.name} } from '${component.importPath}';`);
 
 	const summaryAuthored = $derived(!component.summarySynthesized);
@@ -165,9 +166,9 @@
 	<footer>
 		<p>
 			Generated from the declaration contract shipped in <code>{pkg.importPath}</code>.
-			<a href={uiComponentSource(component)} target="_blank" rel="noreferrer"
-				>Open the canonical source ↗</a
-			>
+			{#if sourceHref}
+				<a href={sourceHref} target="_blank" rel="noreferrer">Open the canonical source ↗</a>
+			{/if}
 		</p>
 	</footer>
 </article>

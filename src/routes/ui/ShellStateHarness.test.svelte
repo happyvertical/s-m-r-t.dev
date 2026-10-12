@@ -6,6 +6,6 @@
 	const shell = createDocsShellState();
 </script>
 
-<AdminShell state={shell}>
+<AdminShell state={shell} edgeToggles={{ top: true }}>
 	<UILiveShellState />
 </AdminShell>

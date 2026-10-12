@@ -13,7 +13,7 @@ describe('GuideLibraryMetadata', () => {
 		expect(screen.getByText('Beginner')).toBeTruthy();
 		expect(
 			screen.getByText(
-				'The development server shows a working application with one example object.'
+				'The application runs on loopback and opens owner onboarding, with one example object behind it.'
 			)
 		).toBeTruthy();
 		expect(

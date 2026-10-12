@@ -17,7 +17,13 @@ describe('generated UI component reference', () => {
 		for (const component of uiComponents) {
 			expect(component.name).toBeTruthy();
 			expect(component.importPath).toMatch(/^@happyvertical\/smrt-[a-z-]+/);
-			expect(component.source).toMatch(/^packages\/.+\.svelte$/);
+			// smrt-planner lives in its own repository, so it has no path in the
+			// monorepo tree and publishes no source link.
+			if (component.importPath.startsWith('@happyvertical/smrt-planner')) {
+				expect(component.source).toBeNull();
+			} else {
+				expect(component.source).toMatch(/^packages\/.+\.svelte$/);
+			}
 			expect(component.related.href).toBe('/ui');
 		}
 	});
@@ -103,9 +109,19 @@ describe('generated UI component reference', () => {
 			expect.arrayContaining(['selectedAssets', 'customActions'])
 		);
 
-		// A component may legitimately declare none, and that is the only one.
+		// The planner's props sit in `./types.ts`, named by its source extension.
+		expect(getUiComponent('planner')?.details.map((prop) => prop.name)).toEqual(
+			expect.arrayContaining(['controller'])
+		);
+
+		// A component may legitimately declare none (`Record<string, never>`).
+		// Those are the only ones.
 		const empty = uiComponents.filter((component) => component.details.length === 0);
-		expect(empty.map((component) => component.slug)).toEqual(['shell-settings-panel']);
+		expect(empty.map((component) => component.slug).sort()).toEqual([
+			'mailbox-demo',
+			'shell-settings-page',
+			'shell-settings-panel'
+		]);
 	});
 
 	it('keeps every branch of a union props type', () => {

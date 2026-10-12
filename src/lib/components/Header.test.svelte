@@ -9,7 +9,7 @@
 </script>
 
 <AppTheme>
-	<AdminShell state={shell}>
+	<AdminShell state={shell} edgeToggles={{ top: true }}>
 		{#snippet appBar()}
 			<Header {pathname} />
 		{/snippet}

@@ -30,7 +30,8 @@ export interface UiComponentReference {
 	components: string[];
 	demo: { id: string; label: string; href: string } | null;
 	related: { label: string; href: string };
-	source: string;
+	/** Null for a package outside the smrt monorepo, which has no canonical source link. */
+	source: string | null;
 }
 
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${SMRT_VERSION}`;
@@ -13644,17 +13645,77 @@ export const uiComponents: UiComponentReference[] = [
 		summary: 'Planner is part of the planner · planner component family.',
 		summarySynthesized: true,
 		slot: null,
-		details: [],
+		details: [
+			{
+				name: 'controller',
+				code: 'PlannerController',
+				status: false,
+				description:
+					"The commands to drive the planner with and the snapshot to read. Defaults to the app's own. A controller made with `createPlannerController` works too; the planner follows its `focus` tab."
+			},
+			{
+				name: 'basePath',
+				code: 'string',
+				status: false,
+				description:
+					"Where the planner's own pages are served from (`''`, `'/planner'`). Only links to planner pages use it; the component needs no router of its own."
+			},
+			{
+				name: 'inference',
+				code: 'PlannerInference',
+				status: false,
+				description: "A model for the planner's assistant; see `createPlannerAssistant`."
+			},
+			{
+				name: 'layout',
+				code: "'own' | 'shell'",
+				status: false,
+				description:
+					"`'own'` (the default) edits the menu layout on a headless controller built from the cookbook. `'shell'` edits the nearest smrt-svelte `AppShell`'s, as the static app does (it also holds panel and slot placements)."
+			},
+			{
+				name: 'persistence',
+				code: "'self' | 'host'",
+				status: false,
+				description:
+					"`'self'` (the default) reads the saved cookbook from this browser on mount and saves changes. `'host'` leaves both to the host (the static app's layout does them)."
+			},
+			{
+				name: 'themeControls',
+				code: 'boolean',
+				status: false,
+				description: 'Show the theme preset and light/dark controls (they need a theme provider).'
+			},
+			{
+				name: 'tabs',
+				code: 'readonly PlannerTabId[]',
+				status: false,
+				description: 'Tabs to show, in order; defaults to all.'
+			},
+			{
+				name: 'onready',
+				code: '(handle: PlannerHandle) => void',
+				status: false,
+				description: ''
+			}
+		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onready',
+				code: '(handle: PlannerHandle) => void',
+				status: false,
+				description: ''
+			}
+		],
 		components: [],
 		demo: null,
 		related: {
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'packages/smrt-planner/dist/planner/Planner.svelte.d.ts'
+		source: null
 	},
 	{
 		slug: 'playground-host',
@@ -29341,8 +29402,8 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2682,
-	totalProps: 2786,
+	describedProps: 2689,
+	totalProps: 2794,
 	authoredSummaries: 149,
 	totalComponents: 385
 };
@@ -29355,6 +29416,6 @@ export function getUiComponent(slug: string): UiComponentReference | undefined {
 	return uiComponents.find((component) => component.slug === slug);
 }
 
-export function uiComponentSource(component: UiComponentReference): string {
-	return `${SMRT_TREE}/${component.source}`;
+export function uiComponentSource(component: UiComponentReference): string | null {
+	return component.source ? `${SMRT_TREE}/${component.source}` : null;
 }

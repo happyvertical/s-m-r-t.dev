@@ -36,7 +36,10 @@ describe('committed baseline', () => {
 		for (const [name, entry] of Object.entries(installed)) {
 			expect(name).toMatch(/^@happyvertical\/smrt-/);
 			expect(entry.version).toMatch(/^\d+\.\d+\.\d+/);
-			expect(entry.agentsMd).toMatch(/^[0-9a-f]{64}$/);
+			// `null` is a real state, not a defect: a package that ships no
+			// AGENTS.md (today, smrt-planner, which has its own repo and release
+			// line) has nothing to hash. The audit types it `string | null`.
+			if (entry.agentsMd !== null) expect(entry.agentsMd).toMatch(/^[0-9a-f]{64}$/);
 		}
 	}, 30_000);
 
