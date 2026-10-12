@@ -7,11 +7,25 @@
 	// record workspace (list, create and edit form over sample rows) per model
 	// and a Help page per recipe, routed by URL fragment so it needs nothing
 	// from this host's router. It reads browser storage and the DOM, so it
-	// loads after mount; the prerender ships this intro without it.
+	// loads after mount; the prerender ships the status line.
 	type PlannerModule = typeof import('@happyvertical/smrt-planner');
+	type PlannerInference = NonNullable<
+		import('@happyvertical/smrt-planner').PlannerProps['inference']
+	>;
 
 	let Planner = $state.raw<PlannerModule['Planner'] | null>(null);
 	let loadError = $state<string | null>(null);
+
+	// The way back to the documentation, rendered by the planner at the start
+	// of its own header beside the brand.
+	const backLink = { href: '/', label: 'Back to documentation' };
+
+	// Bring-your-own inference: the visitor's own OpenAI-compatible endpoint
+	// (Ollama, OpenRouter, OpenAI or a custom address) with their own key, held
+	// in memory for the tab only — the policy the planner documents for a
+	// public host. The site runs no model and has no server endpoint, so no
+	// `host` mode. Nothing here is a secret or an address.
+	const inference: PlannerInference = { mode: 'byo', credentialPersistence: 'memory' };
 
 	onMount(() => {
 		let cancelled = false;
@@ -36,20 +50,7 @@
 />
 
 <div class="planner-page">
-	<nav class="planner-page__bar" aria-label="Site">
-		<a href="/">← Documentation</a>
-	</nav>
-	<header>
-		<p>App planner</p>
-		<h1>Plan an application from recipes</h1>
-		<span>
-			Add recipes such as Customers, Sales or Purchases, or whole packages. The application shell
-			below is the framework's own. A navigation section per recipe appears in it as you add one,
-			each with its own page, list view, form and help. The Layout tab edits the shell in place.
-			Recipes, options and layout are kept in this browser.
-		</span>
-	</header>
-
+	<h1 class="planner-page__title">s-m-r-t app planner</h1>
 	<section class="planner-host" aria-label="Planner">
 		{#if Planner}
 			<!--
@@ -61,7 +62,7 @@
 				cookbook engine fails to `structuredClone` it. Nothing here can unwrap
 				that proxy; the fix is the store's.
 			-->
-			<Planner basePath="/planner" persistence="self" themeControls />
+			<Planner basePath="/planner" persistence="self" themeControls {inference} {backLink} />
 		{:else if loadError}
 			<p class="planner-status" role="alert">The planner could not load: {loadError}</p>
 		{:else}
@@ -71,66 +72,28 @@
 </div>
 
 <style>
+	/* The planner is the page: its shell sizes itself to the viewport and
+	   only its own regions scroll, so the page never does. */
 	.planner-page {
-		min-height: 100svh;
+		height: 100svh;
+		overflow: hidden;
 		background: var(--site-paper);
 		color: var(--site-ink);
 	}
-	.planner-page__bar,
-	header {
-		width: min(70rem, calc(100% - 3rem));
-		margin: 0 auto;
-	}
-	.planner-page__bar {
-		padding-top: 1.25rem;
-	}
-	.planner-page__bar a {
-		color: var(--site-muted);
-		font-size: 0.875rem;
-		text-decoration: none;
-	}
-	header {
-		padding: 54px 0 34px;
-	}
-	header > * {
-		max-width: 760px;
-	}
-	header > p {
-		color: var(--site-accent-strong);
-		font: 700 0.66rem var(--site-font-mono);
-		text-transform: uppercase;
-	}
-	h1 {
-		margin-top: 11px;
-		font-size: clamp(2.15rem, 5vw, 3.25rem);
-		letter-spacing: -0.04em;
-		line-height: 1.08;
-	}
-	header > span {
-		display: block;
-		margin-top: 17px;
-		color: var(--site-muted);
-		font-size: 0.94rem;
-		line-height: 1.65;
+	.planner-page__title {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
 	}
 	.planner-host {
-		min-height: 100svh;
-		border-top: 1px solid var(--site-line);
+		height: 100%;
+		overflow: hidden;
 	}
 	.planner-status {
-		width: min(70rem, calc(100% - 3rem));
-		margin: 0 auto;
-		padding-top: 30px;
+		padding: 1.5rem 1rem;
 		color: var(--site-muted);
-	}
-	@media (max-width: 760px) {
-		.planner-page__bar,
-		header,
-		.planner-status {
-			width: calc(100% - 2rem);
-		}
-		header {
-			padding-top: 32px;
-		}
 	}
 </style>

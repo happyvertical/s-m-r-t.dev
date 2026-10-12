@@ -218,6 +218,7 @@ const COPY_ATTRIBUTES = new Set([
 const COMPONENT_NON_COPY_ATTRIBUTES = new Set([
 	'article',
 	'backHref',
+	'backLink',
 	'catalog',
 	'class',
 	'code',
@@ -229,6 +230,7 @@ const COMPONENT_NON_COPY_ATTRIBUTES = new Set([
 	'entryPath',
 	'environment',
 	'homeHref',
+	'inference',
 	'layout',
 	'layoutEditing',
 	'oncookbookchange',
