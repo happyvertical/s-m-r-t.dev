@@ -126,7 +126,15 @@ and this section grows with every defect. Record one in the **upstream issue**
 why it is deliberate), plus a **repo issue** where a fix makes something here due.
 Then one line below.
 
-None currently tracked.
+- smrt-planner 0.0.2: after a reload of a plan whose cookbook has a saved
+  `layout`, `CookbookStore.snapshot()` passes its `$state` proxy for `layout`
+  to the controller and smrt-core's cookbook engine fails to `structuredClone`
+  it (`The app's document is not one the planner can read (Failed to execute
+  'structuredClone' on 'Window': #<Object> could not be cloned.)`); the shell
+  at `/planner` then shows no sections and commands fail until the layout is
+  cleared. Code site: `src/routes/planner/+layout.svelte`. Upstream issue: to
+  be filed against smrt-planner (`snapshot()` should `$state.snapshot` `layout`
+  as it does `theme`).
 
 ## Agent lifecycle posture
 
