@@ -1,5 +1,8 @@
 import type { GuideCallout } from '$lib/data/callouts';
 import { SMRT_VERSION } from '$lib/version';
+// The planner is on its own version line, not the framework release. Its
+// installed package.json is the only honest source for the number it renders.
+import plannerPackage from '@happyvertical/smrt-planner/package.json';
 
 export type PackageCategory =
 	| 'Foundation'
@@ -88,6 +91,14 @@ type PackageOptions = Partial<
 		| 'notice'
 	>
 >;
+
+/**
+ * Packages released on a version line of their own. Every other smrt-* package
+ * releases in lockstep and renders SMRT_VERSION.
+ */
+const OWN_VERSION_LINES: Record<string, string> = {
+	'smrt-planner': plannerPackage.version
+};
 
 const smrtUiComponentGroups: PackageComponentGroup[] = [
 	{
@@ -615,7 +626,7 @@ function definePackage(
 		exampleResource: options.exampleResource,
 		surfaceNote: options.surfaceNote,
 		playgroundNote: options.playgroundNote,
-		version: SMRT_VERSION,
+		version: OWN_VERSION_LINES[slug] ?? SMRT_VERSION,
 		status: options.status ?? 'stable',
 		notice: options.notice
 	};
@@ -1959,6 +1970,456 @@ export const packages: SmrtPackage[] = [
 		'smrt-ios',
 		'SwiftUI shell, s-m-r-t theme, and iOS adapters for VisionKit, Speech, Foundation Models, Keychain, and native storage.',
 		{ kind: 'mobile', status: 'private' }
+	),
+
+	// Documented from the published tarballs; the site does not install these
+	// packages, so none has a playground module registered here.
+	definePackage(
+		'Foundation',
+		'smrt-preferences',
+		'Saved user-interface preferences: tenant defaults and per-user overrides for overview layouts and the app frame, validated per registered kind.',
+		{
+			status: 'new',
+			highlights: [
+				'Two built-in kinds: overview (widget layout of a customizable overview page) and shell-layout (AdminShell settings)',
+				'An organization sets the default; each person keeps their own version on top; reset returns to the layer below',
+				'Every kind validates its payload on save and again on load; invalid data is refused or dropped and reported'
+			],
+			details: [
+				{
+					title: 'Stores, not the model',
+					body: 'createPreferenceStore, createOverviewStore, and createShellSettingsPreferences are the application API. The UiPreferenceRecord model refuses writes that do not come from the store and never returns another person’s preferences. Saves pass the revision they loaded; a stale revision returns conflict instead of overwriting.'
+				},
+				{
+					title: 'Permissions are per kind',
+					body: 'overviews.customize and shell.customize change the organization default; overviews.personalize and shell.personalize keep a personal version. Owners and admins receive all four when role permissions are seeded; members and viewers receive the two personalize slugs. The store reads them from the signed-in person’s permission set in the request context.'
+				},
+				{
+					title: 'Register more kinds',
+					body: 'registerPreferenceKind takes a kind name, a format version, the two permission slugs, and a validate function. The table _smrt_ui_preferences is created by smrt db:migrate, never at runtime.'
+				}
+			],
+			surfaceNote:
+				'The preference table has no generated REST, MCP, WebMCP, or CLI surface: a generated route would skip kind validation. Applications call the stores from their own server code.'
+		}
+	),
+	definePackage(
+		'Foundation',
+		'smrt-approvals',
+		'A decision gate: revision-bound, single-use approvals with quorum, expiry, tenant policy, and an append-only event ledger.',
+		{
+			status: 'new',
+			highlights: [
+				'A package defines an approval kind; a requester opens a request bound to one revision of one subject',
+				'Only human principals of the same tenant holding the kind’s permission decide, once each; agents and services may request and consume',
+				'Not a workflow engine: no stages, no executor, no compensation'
+			],
+			details: [
+				{
+					title: 'Request, decide, consume',
+					body: 'ApprovalRequest is one gate on one subject revision. ApprovalEvent is the append-only ledger and the source of truth. ApprovalPolicy lets a tenant tighten a kind with a higher quorum, a shorter expiry, or one more permission; it can never loosen the defaults. An approved request is consumed exactly once against the revision the consumer is about to act on.'
+				},
+				{
+					title: 'Concurrency has one winner',
+					body: 'Every transition is one guarded conditional UPDATE plus one event insert in the same transaction. Concurrent double approval or double consumption has exactly one winner; the loser is refused and writes nothing. Each transition returns transitioned, already_applied for an idempotent requestKey replay, or refused with a typed reason.'
+				},
+				{
+					title: 'Only the service writes',
+					body: 'A request or event built directly is refused at the model layer. Events cannot be updated or deleted. Optional self-approval needs an explicit selfApprovalPermission on the kind and is recorded on the event.'
+				}
+			],
+			surfaceNote:
+				'The generated REST and MCP surface is list and get only, and there is no generated CLI. Writes go through ApprovalService.'
+		}
+	),
+	definePackage(
+		'Foundation',
+		'smrt-webhooks',
+		'Outbound webhook subscriptions with HMAC-signed delivery to public HTTPS endpoints, a durable jobs queue, retries, and a safe delivery log.',
+		{
+			status: 'new',
+			highlights: [
+				'WebhookChangeFeed reads the committed change feed, including delete tombstones, and advances a persisted cursor only after enqueue is durable',
+				'A unique (tenant, subscription, event) outbox row and its job enqueue commit in one transaction; repeated dispatch is a no-op',
+				'Only HTTPS port 443 to public unicast addresses, DNS pinned, no redirects, bounded deadlines'
+			],
+			components: ['WebhookAdmin'],
+			componentImport: '@happyvertical/smrt-webhooks/svelte',
+			details: [
+				{
+					title: 'Two publication paths, never both',
+					body: 'The durable path polls the change feed per tenant context and publishes identity-only payloads. registerWebhookModelEvents is a low-latency hook binding with an explicit model allowlist, but a crash between source commit and enqueue can miss an event. Do not enable both for the same models. A pruned cursor raises WebhookHistoryExpiredError and stops rather than dropping history.'
+				},
+				{
+					title: 'At-least-once delivery',
+					body: 'Five attempts use the jobs package’s exponential retry. A delivery lease prevents overlapping attempts; an expired lease permits recovery after worker death. Receivers must deduplicate the x-smrt-delivery header. The signature is sha256 HMAC over the timestamp and the exact persisted body.'
+				},
+				{
+					title: 'Administration stays on the server',
+					body: 'WebhookAdminService authorizes administrators through a host callback. The WebhookAdmin component takes subscriptions, deliveries, and onCreate, onToggle, onReplay callbacks; it never receives signing secrets. The integrations.webhooks recipe declares a server runtime and a settings panel, not model navigation.'
+				}
+			],
+			surfaceNote:
+				'Secrets and payloads are sensitive fields, so generated REST, MCP, WebMCP, and CLI access is disabled. The host exposes administration through its own authenticated routes.'
+		}
+	),
+	definePackage(
+		'Agents & runtime',
+		'smrt-playbooks',
+		'Layered playbook definitions, app and tenant overrides, and plan resolution for agents: a named sequence of steps every agent surface follows.',
+		{
+			highlights: [
+				'Resolution layers: code default, config override, stored app override, stored tenant override, runtime override',
+				'A playbook is a script, never a call: resolution returns a plan and nothing here executes a step',
+				'Step lists are never editable; enablement and plane lists only narrow'
+			],
+			details: [
+				{
+					title: 'Define and resolve',
+					body: 'definePlaybook registers code defaults in a global process registry, so a package ships its own playbooks. resolvePlaybook merges the layers and returns a plan or fails closed with a specific reason: unknown-playbook, disabled, plane-not-declared, intent-registry-unavailable, or unknown-intent. A TTL cache keyed by key and tenant is invalidated on override save or delete.'
+				},
+				{
+					title: 'Two kinds of step',
+					body: 'An operation step names a qualified model and action, never a generated tool name. An intent step names a declared view intent and is valid only where a surface is mounted. Steps never classify themselves; classification is inherited from the referenced operation and undeclared operations resolve to destructive.'
+				},
+				{
+					title: 'Preflight predicts, never grants',
+					body: 'preflightPlaybook resolves through the caller’s own layer chain and returns a per-step verdict of allow, deny, or unknown plus an aggregate. Every step re-enforces authorization at execution.'
+				}
+			],
+			exampleResource: 'playbook-overrides'
+		}
+	),
+	definePackage(
+		'Agents & runtime',
+		'smrt-mcp-apps',
+		'A framework-neutral, browser-only view-side bridge for portable MCP Apps: lifecycle, correlated transport, and capability gates.',
+		{
+			kind: 'runtime',
+			status: 'new',
+			highlights: [
+				'McpAppBridge binds one host window and one exact origin from trusted configuration for its whole lifetime',
+				'Implements initialize, server tools/call, ui/open-link, text ui/message, text and structured model-context updates, display-mode requests, and teardown',
+				'Bounded JSON everywhere: nesting, array, key, and character budgets, with cycles and accessors rejected'
+			],
+			details: [
+				{
+					title: 'What it is not',
+					body: 'It is not a server adapter, host or sandbox implementation, authorization layer, or WebMCP tool registrar. No app-tools capability is advertised. Resource proxying, sampling, and downloads have no built-in adapter; an opt-in extension adapter may register a bounded contract. Consumers must keep a normal app or review URL fallback.'
+				},
+				{
+					title: 'Svelte bindings',
+					body: 'useMcpApp and useMcpAppIntent are imported from the explicit @happyvertical/smrt-svelte/mcp-apps subpath. useMcpApp constructs the bridge on mount and disposes it on unmount. useMcpAppIntent binds a declared view intent to a mounted registry as a component-local callable, never a remote tool.'
+				},
+				{
+					title: 'Pinned upstream contract',
+					body: 'The runtime schema of a pinned ext-apps revision is authoritative. Its prose examples differ from the schema in places; contract tests pin the runtime shapes explicitly.'
+				}
+			],
+			surfaceNote:
+				'A browser-side bridge without models. It defines no resource of its own; the tools it calls come from the application MCP server the host exposes.'
+		}
+	),
+	definePackage(
+		'Agents & runtime',
+		'smrt-mcp-openai',
+		'Optional OpenAI navigation, settings, context, messages, and composer mentions for authorized s-m-r-t MCP Apps.',
+		{
+			kind: 'runtime',
+			status: 'new',
+			notice: {
+				variant: 'note',
+				title: 'No OpenAI host compatibility is claimed yet',
+				body: 'The package tests against a synthetic host. Its README states that this does not prove desktop, web, iOS, or Android support, and that actual host acceptance remains open.'
+			},
+			highlights: [
+				'Ordinary s-m-r-t apps do not import this package',
+				'Server helpers wrap existing app-MCP workflows; they add no second server and no authorization policy',
+				'Browser helpers depend on the portable smrt-mcp-apps bridge and fall back to inline layouts and plain links'
+			],
+			details: [
+				{
+					title: 'Server composition',
+					body: 'withOpenAiEntrypoints marks idempotent read tools as global or thread entry points. bindOpenAiSettings wraps a read and an update workflow into structured settings; the owning handlers authorize ownership, recheck the tenant, and persist atomically. openAiDisplayMetadata and openAiOnboardingDeclaration return metadata the application merges itself.'
+				},
+				{
+					title: 'Browser navigation',
+					body: 'observeOpenAiNavigation consumes bounded host context, recognizes only deep links, and calls a designated server tool with the URL. Repeated identical routes do not duplicate calls. Query parameters are untrusted input, never identity or approval. Only a rejected tool call selects the denied fallback.'
+				},
+				{
+					title: 'Context, messages, mentions',
+					body: 'updateOpenAiModelContext and sendOpenAiMessage use negotiated native support and fall back to portable text. withOpenAiMentionSearch declares bounded composer search; results are discovery hints, and the selection workflow rechecks ownership on every call.'
+				}
+			],
+			surfaceNote:
+				'An adapter over the application MCP server. It defines no models and generates no interfaces; every tool it decorates belongs to the host application.'
+		}
+	),
+	definePackage(
+		'Web & UI',
+		'smrt-app-runtime',
+		'Validated local, self-hosted, and cloud runtime composition for s-m-r-t applications, with a SvelteKit entry for server hooks.',
+		{
+			kind: 'runtime',
+			highlights: [
+				'The local profile owns user data paths, SQLite custody, application-secret creation, and a single-use loopback owner bootstrap',
+				'Deployed profiles compose provider bindings for database, authentication, assets, and secrets, readiness-checked before startup',
+				'Application migrations run through an explicit, idempotent prepareDatabase hook; runtime never creates tables implicitly'
+			],
+			details: [
+				{
+					title: 'Private local applications',
+					body: 'initializeLocalApplicationRuntime claims a dedicated mode-0700 data root in the OS application-data directory and serializes initializers with a SQLite lock database. The first valid bootstrap claim creates a Person, User, default Tenant, owner Role and Membership, and Session in one transaction. Local MCP tokens are owner-bound, scoped, expiring, and stored only as an HMAC.'
+				},
+				{
+					title: 'Deployed profiles and workers',
+					body: 'initializeDeployedApplicationRuntime composes only self-hosted and cloud. createTaskWorker and createScheduleWorker run the jobs package runners in separate processes against the shared PostgreSQL database; the web process does not start them. health is process liveness; readiness probes database, auth, assets, and secrets.'
+				},
+				{
+					title: 'The SvelteKit entry',
+					body: 'createSmrtSvelteKitRuntime from the sveltekit subpath returns init and handle for hooks.server.ts. init is the fail-closed startup gate. handle runs URL tenant selection, the signed session, and then publishes tenant context only when the active context matches the verified session tenant.'
+				}
+			],
+			surfaceNote:
+				'Infrastructure composition without models of its own. The generated interfaces an application serves come from the packages it registers, not from this one.'
+		}
+	),
+	definePackage(
+		'Web & UI',
+		'smrt-workbench',
+		'A shared developer workbench for s-m-r-t packages and consumer projects: package metadata, route modules, previews, scripts, docs, and manifests in one browser host.',
+		{
+			kind: 'tooling',
+			components: ['WorkbenchHost'],
+			componentImport: '@happyvertical/smrt-workbench/svelte',
+			highlights: [
+				'Consumer projects add a workbench script that runs smrt workbench dev after installing smrt-cli and this package',
+				'Read-only for command execution: scripts and validation commands are shown as copyable text',
+				'Package-owned workbench modules export route modules and metadata through defineWorkbenchModule'
+			],
+			details: [
+				{
+					title: 'What it composes',
+					body: 'The workbench mounts package route modules, smrt-playground previews, package metadata, scripts, docs, manifests, and knowledge summaries in a single shared host. smrt-playground keeps preview discovery and rendering; smrt-dev-mcp keeps knowledge freshness and review bundles.'
+				},
+				{
+					title: 'Three views',
+					body: 'A workspace root shows every workspace package, and a package directory focuses the host on that package. A consumer project shows installed package metadata plus local project knowledge. Yarn consumers must use the node-modules linker, because the browser host is served from the installed package directory.'
+				}
+			],
+			surfaceNote:
+				'Developer tooling without models. It renders other packages’ surfaces and generates none of its own.'
+		}
+	),
+	definePackage(
+		'Web & UI',
+		'smrt-planner',
+		'The s-m-r-t app planner as a mountable Svelte component with a typed command set and a plan snapshot.',
+		{
+			kind: 'tooling',
+			status: 'new',
+			components: ['Planner'],
+			componentImport: '@happyvertical/smrt-planner',
+			highlights: [
+				'Add recipes or whole packages and an app mock-up assembles around them: navigation, a list view and form per model, and help pages',
+				'Recipes and options live in the URL; sample data lives in memory and resets on reload',
+				'Commands are published as tool definitions, so an LLM or MCP server can drive the planner'
+			],
+			details: [
+				{
+					title: 'Mount it in a host page',
+					body: 'Planner and createPlannerController come from the package root, which is Svelte source and needs a Svelte-compiling bundler. The controller runs commands such as add_recipes, set_policy, apply_cookbook, and undo, and returns a snapshot and receipt or a typed error. Subscribe to the controller to re-render on each snapshot.'
+				},
+				{
+					title: 'Drive it from a model',
+					body: 'commandTools from the commands subpath is every command as name, description, and inputSchema. The snapshot is a compact read-only plan of a few kilobytes, fit for a prompt. A plain Node server uses the core subpath for schemas, the assistant prompt, and reply validation. It can serve the prebuilt app from the app subpath.'
+				},
+				{
+					title: 'Its own release line and repository',
+					body: 'The planner is published on its own version line, separate from the framework release, and its source lives in its own repository. Its catalog is generated from the registry and committed, so a build needs no network.',
+					href: 'https://github.com/happyvertical/smrt-planner',
+					linkLabel: 'Open the planner repository'
+				}
+			],
+			surfaceNote:
+				'A browser component with no models. It describes the REST routes, MCP tools, and CLI commands other packages generate; it generates none itself.'
+		}
+	),
+	definePackage(
+		'Content & media',
+		'smrt-comments',
+		'Tenant-scoped comments on any record, mention notification composition, and a browser-safe RecordComments component.',
+		{
+			status: 'new',
+			components: ['RecordComments'],
+			componentImport: '@happyvertical/smrt-comments/svelte',
+			highlights: [
+				'Comments attach to arbitrary records through a qualified polymorphic metaType and metaId pair',
+				'CommentService requires a trusted actor and a host authorizeRecord callback on both create and listForRecord',
+				'No runtime dependency on smrt-messages: the host composes mention notifications through a structural interface'
+			],
+			details: [
+				{
+					title: 'Mentions and delivery',
+					body: 'Mentions are UUIDs, deduplicated, limited to 50; self-mentions do not notify. Validation finishes before the single insert, so an invalid mention leaves no row. The comment is saved before delivery; a delivery rejection leaves it saved, and the retry is delivery, not create.'
+				},
+				{
+					title: 'The component owns nothing but the view',
+					body: 'RecordComments takes authorized comment projections, an onsubmit callback, and a contextKey naming tenant, actor, and record. Changing the key clears drafts and ignores stale submissions. The host owns loading, authentication, mention selection, and refresh. The comments.records recipe has no global navigation: a discussion needs an already-authorized parent record.'
+				}
+			],
+			surfaceNote:
+				'Generated REST, MCP, WebMCP, and CLI access is disabled. Direct model and collection APIs are persistence primitives for trusted code, not authorization boundaries.',
+			playgroundNote:
+				'The package exports RecordCommentsPlayground, a standalone sample-record preview with local-only posting. This site does not install the package, so the preview is not rendered here.'
+		}
+	),
+	definePackage(
+		'Content & media',
+		'smrt-ingestion',
+		'Durable tenant-scoped intake: receipts, evidence, analysis attempts, proposals, and an action journal, with inbox and review components for people.',
+		{
+			status: 'new',
+			notice: {
+				variant: 'warning',
+				title: 'Preview-only: automation stays disabled',
+				body: 'The README reports that the published reference workflow did not meet its supported-reference quality gates and did not establish safety. The recipes do not configure a source or provider, expose generic CRUD routes, or enable automatic execution.'
+			},
+			components: ['IntakeInbox', 'IntakeReview', 'EvidenceViewer'],
+			componentImport: '@happyvertical/smrt-ingestion/svelte',
+			highlights: [
+				'Receipt identity is tenant, source, and delivery key; a source retries the same receive call after failure or lost acknowledgment',
+				'Every read and write rechecks the host scope predicate; source metadata is never authority',
+				'Configured source adapters for email, a watch folder, and vendor webhooks preserve bytes and never perform domain writes'
+			],
+			details: [
+				{
+					title: 'Receive, analyze, journal',
+					body: 'receive accepts bounded original byte buffers with stable part ids and becomes ready only after every part is durable. analyze appends immutable input revisions; claimAnalysis uses leases, monotonic fences, and attempt budgets. createAction, publishProposal, and appendPlan persist explicit intentions for the later review and execution layer; they approve nothing.'
+				},
+				{
+					title: 'Deletion and retention',
+					body: 'expire revokes access and pending work before removing bytes and calling the host purgeDerived callback. Interrupted deletion is retried by repairDeletions and sweepRetention. Minimal identities remain; content-bearing payloads are redacted. Only SQLite and PostgreSQL are supported.'
+				},
+				{
+					title: 'Human review',
+					body: 'IntakeInbox and IntakeReview mount through an authenticated host using the browser-safe IntakeReviewHost contract. The ingestion.inbox and ingestion.review recipes register those routes for a host to mount and declare no model navigation.'
+				}
+			],
+			surfaceNote:
+				'Generated REST, CLI, and MCP mutation of the persistence models is disabled. Hosts expose authorized DTO methods through their own authenticated transport.'
+		}
+	),
+	definePackage(
+		'Business & operations',
+		'smrt-timesheets',
+		'Shared time entries: who worked how long on what, approval and correction, and immutable charge and compensation snapshots taken at approval.',
+		{
+			status: 'new',
+			components: [
+				'TimeEntryCard',
+				'TimeEntryList',
+				'TimeSummary',
+				'DurationDisplay',
+				'TimeEntryApprovalQueue'
+			],
+			componentImport: '@happyvertical/smrt-timesheets/svelte',
+			highlights: [
+				'One model for professional services, shop floors, and job sites: a Profile or an agent, a generic work reference, a duration, a source',
+				'Approved entries never change; a correction is a new row and the original flips to corrected',
+				'Money is never on the entry: approval writes one charge and one compensation snapshot in integer minor units'
+			],
+			details: [
+				{
+					title: 'Moved out of projects and support',
+					body: 'ServiceTimeEntry, the two snapshots, and ServiceEvidenceService moved here from smrt-projects. The table names are unchanged, so existing rows need no migration, and the old qualified names resolve as deprecated aliases. Under pnpm an application that depends on smrt-projects or smrt-support must add this package directly, or the CLI stops planning the three time tables.'
+				},
+				{
+					title: 'Attendance and period timecards',
+					body: 'The attendance subpath adds AttendancePunch, AttendanceBreak, and AttendanceService: punch in and out, paid and unpaid breaks, autoClose, and offline replay where committed attendance wins. The rollup subpath adds per-person regular and overtime rollups, immutable confirmation, and attributed adjustments. Calendar, holiday, and overtime rules belong to the consumer.'
+				},
+				{
+					title: 'Decimal hours and dated labour pricing',
+					body: 'A source that supplies decimal hours records durationHours as exact text; seconds and timestamps stay null. DatedLabourCommercialResolver is an opt-in resolver with effective-dated customer, wage, and burden rates; the host authorizes the schedule and binds the work date.'
+				}
+			],
+			exampleResource: 'service-time-entries'
+		}
+	),
+	definePackage(
+		'Business & operations',
+		'smrt-expenses',
+		'Expense records: a cost incurred against a job, work package, or project, with deduplicated receipts, an explicit review, reimbursement, and purchase-order drawdown.',
+		{
+			status: 'new',
+			components: [
+				'ExpenseForm',
+				'ExpenseList',
+				'ExpenseReceiptCapture',
+				'ExpenseReviewPanel',
+				'ExpenseReviewQueue'
+			],
+			componentImport: '@happyvertical/smrt-expenses/svelte',
+			highlights: [
+				'Review is method-only: review, reject, markDuplicate, and reopen; a reviewed expense’s money, dates, cost object, vendor, and payer are frozen',
+				'The same receipt file twice on one expense is refused; the same file on two expenses is reported for a person to look at',
+				'Reviewed actuals reduce what remains open on a smrt-commerce purchase order, each exactly once'
+			],
+			details: [
+				{
+					title: 'Money and currencies',
+					body: 'Amounts are integer minor units with an ISO 4217 currency. Totals are per currency and never summed across currencies. An expense matched to a commitment must share its currency. Optional financial facts reconcile a subtotal and signed tax components to the amount and yield a cost basis; no tax law is inferred.'
+				},
+				{
+					title: 'What belongs elsewhere',
+					body: 'Allowances are budget records, not expenses. Labour belongs to smrt-timesheets. Receipt OCR and accounting-provider posting are out of scope. Vendors and commitments come from smrt-commerce; receipt files come from smrt-assets; profiles are referenced by id without a dependency.'
+				},
+				{
+					title: 'Tenancy',
+					body: 'Tenancy is optional by default, like smrt-commerce. A consumer makes it required with registerTenantScopedClass for Expense and ExpenseReceipt. A receipt takes its expense’s tenant, and tenants never move once stored.'
+				}
+			],
+			surfaceNote:
+				'Models and collections ship with a closed generated surface: no REST, MCP, WebMCP, or CLI operation reaches cost data. Applications expose expenses through their own permission-checked routes.',
+			playgroundNote:
+				'The package ships a playground module for its entry and review components. This site does not install the package, so the previews are not rendered here.'
+		}
+	),
+	definePackage(
+		'Business & operations',
+		'smrt-human-resources',
+		'HR records: who works for an organization, as what, and with what standing. Employment with dated terms, and qualifications with expiry.',
+		{
+			status: 'new',
+			components: [
+				'EmployeeList',
+				'EmployeeForm',
+				'PersonQualifications',
+				'ExpiringQualificationsList'
+			],
+			componentImport: '@happyvertical/smrt-human-resources/svelte',
+			highlights: [
+				'One Employment per tenant and profile with a stable id; a rehire adds a term, and history is append-only',
+				'Dates are calendar dates with no timezone; the package has no clock and never flips a status when a date passes',
+				'QualificationService.check is the gate before allowing work: not-held, not-yet-issued, expired, suspended, or revoked'
+			],
+			details: [
+				{
+					title: 'Employment',
+					body: 'hire, end, rehire, changePosition, changeWorkerType, placeOnLeave, and returnFromLeave are dated changes recorded by EmploymentService. An end may be recorded ahead of the last day; employed-on-a-date is answered from the terms, never from the stored status. A login belongs to one employment at a time.'
+				},
+				{
+					title: 'Qualifications',
+					body: 'A Qualification defines a ticket, certification, authorization, training, or restriction. A HeldQualification carries issue and expiry dates; a renewal is a new row pointing at the old one. suspend, reinstate, and revoke take an effectiveOn, and standing is decided from the dated history everywhere.'
+				},
+				{
+					title: 'Boundaries',
+					body: 'Pay belongs to payroll, time records to smrt-timesheets, logins and permissions to smrt-users, and identity to smrt-profiles. Every model is tenant-scoped, sensitive, and closed; writes go through the two services, which are constructed from a trusted actor the application has already authorized.'
+				}
+			],
+			surfaceNote:
+				'Every model and collection publishes no generated REST, MCP, WebMCP, or CLI operation. The application authorizes the acting person and calls EmploymentService or QualificationService.'
+		}
 	)
 ];
 
