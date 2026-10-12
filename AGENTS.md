@@ -47,7 +47,7 @@ The site builds directly against `smrt-ui`, `smrt-svelte`, `smrt-playground`.
 
 ## Setup and validation
 
-**`engines.node` is `>=24.18.0` and `.npmrc` sets `engine-strict=true`.** On an
+**`engines.node` is `>=26.0.0` and `.npmrc` sets `engine-strict=true`.** On an
 older Node, `pnpm install` fails outright rather than warning. If the install
 dies on an engine check, switch Node versions — that is the whole problem.
 

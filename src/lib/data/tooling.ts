@@ -4,7 +4,7 @@ import type { Guide } from '$lib/data/guides';
  * Released s-m-r-t version every claim in this section was verified against.
  * When this moves, re-read the canonical sources listed on each page.
  */
-export const TOOLING_PINNED_VERSION = '0.51.31';
+export const TOOLING_PINNED_VERSION = '0.55.16';
 
 /** Canonical upstream tree for the release above. */
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${TOOLING_PINNED_VERSION}`;
@@ -100,7 +100,7 @@ export const toolingGuides: Guide[] = [
 			{
 				title: 'Choose a supported starting point',
 				intro:
-					'The basic SvelteKit template is the small, ground-up path. It includes one model, SQLite, tenant and session hooks, the application shell, and generated interfaces. The SaaS starter is the production-shaped path with accounts, onboarding, subscriptions, workers, mobile clients, and deployment files.',
+					'The basic SvelteKit template is the small, ground-up path. It includes one model, SQLite, the application runtime from smrt-app-runtime mounted through hooks.server.ts, the AppShell root layout, and generated interfaces. It ships no operator scripts; every lifecycle script is a smrt app command. Its vite.config.ts is the smrt() preset, with the consumed packages listed in smrt.config.ts. The SaaS starter is the production-shaped path with accounts, onboarding, subscriptions, workers, mobile clients, and deployment files.',
 				points: [
 					'Use the basic template when you want to learn or build a focused application.',
 					'Use the SaaS starter when the product needs the common multi-tenant application systems from the start.',
@@ -138,7 +138,11 @@ pnpm build`,
 					"doctor's agent-surface section reports the application's agent-addressable model tools and declared view intents from build artifacts alone. It starts no server and mounts no route.",
 					'Use generate-types, generate-routes, generate-register, and generate-mcp for explicit generation tasks.',
 					'Use playground init, playground list, and playground dev for component and package previews.',
-					'Use the knowledge command family when the output is evidence for a coding agent.'
+					'Use the knowledge command family when the output is evidence for a coding agent.',
+					'Use smrt app <operation> for the application lifecycle. The operations are install, setup, start, stop, recover, doctor, open, backup, export, import, migrate, and worker. Success output is JSON on stdout; a failure is one JSON envelope on stderr with exit code 1 and no secret values.',
+					'Use smrt cookbook validate to check a cookbook against the recipe manifests. Use smrt cookbook apply to create a project from it. Use smrt kitchen to serve the planner on localhost and apply the cookbook it produces.',
+					'Every db:* command resolves its database once. packages.cli.database.url from config wins, then DATABASE_URL with the engine from database.type or DATABASE_TYPE, then :memory:, which schema commands refuse.',
+					'smrt db:diff --empty-text-as-null previews how many empty text values become NULL and smrt db:migrate --empty-text-as-null applies it. smrt db:migrate-qualified-names rewrites stored names declared through previousQualifiedNames; it is opt-in and idempotent, and smrt doctor --db counts what remains.'
 				],
 				links: [
 					{ label: 'Deterministic knowledge commands', href: '/tooling/knowledge' },
@@ -162,7 +166,7 @@ pnpm build`,
 			{
 				title: 'Make migrations follow the model',
 				intro:
-					'Schema changes are computed from the current manifest. The CLI does not write migration files to review or commit. Build first so the manifest is current. Then inspect the status or diff before you apply the change. The basic template makes its db:migrate script build before it runs the migration command.',
+					'Schema changes are computed from the current manifest. The CLI does not write migration files to review or commit. Build first so the manifest is current. Then inspect the status or diff before you apply the change. In the basic template, the db:migrate script runs vite build and then smrt app migrate, which holds the operation lock around smrt db:migrate.',
 				filename: 'terminal',
 				lang: 'bash',
 				code: `pnpm build
@@ -369,7 +373,9 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 				points: [
 					'Application-agent surfaces are generated from your @smrt() objects and perform live data operations.',
 					'Development MCP provides code generation output and project analysis for a coding agent.',
-					'Its review and architecture tools are model-agnostic and call no model provider.'
+					'Its review and architecture tools are model-agnostic and call no model provider.',
+					'The standalone install lists all 21 tools but ships no smrt-core. Code generation, the knowledge and context tools, agent skills, and introspection of a built manifest work without a runtime. Source-scan enrichment and the runtime tools need @happyvertical/smrt-core installed in the selected project; without it they return a sanitized runtime_dependency_unavailable diagnostic.',
+					'One server process loads one runtime project. A request for another project fails with runtime_project_mismatch; start a separate server or restart it for that project.'
 				],
 				links: [
 					{ label: 'Generated and application MCP', href: '/tooling/app-mcp' },
@@ -468,7 +474,7 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 			{
 				title: 'Mount the in-app runtime path only in SvelteKit development',
 				intro:
-					"Level 3 uses the app's live ObjectRegistry, so it sees Vite SSR HMR registrations without restarting. Install smrt-dev-mcp as a development dependency and enable the generated route explicitly.",
+					"Level 3 uses the app's live ObjectRegistry, so it sees Vite SSR HMR registrations without restarting. Install smrt-dev-mcp as a development dependency and enable the generated route explicitly. The smrt() preset has no option for this route. An application that wants it calls the two public plugins, smrtConsumer() and smrtPlugin(), in place of the preset and passes devPlaneRoute to smrtPlugin.",
 				filename: 'vite.config.ts',
 				lang: 'ts',
 				code: `smrtPlugin({

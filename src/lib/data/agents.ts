@@ -484,29 +484,42 @@ export class Report extends SmrtObject {
 			{
 				title: "The starter's choice, in full",
 				intro:
-					'The starter template registers the generated read-only tools in its root layout. Three qualifications travel with that choice: it is read-only; it is feature-gated, so server rendering and browsers without the interface get nothing; and it does not enable the six UI tools, which remain a separate decision.',
+					'The starter template registers the generated read-only tools in its root layout, through the Provider inside AppShell from @happyvertical/smrt-svelte/app. Three qualifications travel with that choice: it is read-only; it is feature-gated, so server rendering and browsers without the interface get nothing; and it does not enable the six UI tools, which remain a separate decision. The runtimeDiagnostics prop, on for signed-in sessions, adds exactly one more read-only tool, smrt.runtime.diagnostics.read, which fetches the mounted diagnostics route as the page user.',
 				filename: 'src/routes/+layout.svelte (starter template)',
 				lang: 'svelte',
 				code: `<script lang="ts">
+  import { page } from '$app/state';
+  // A Vite virtual module the smrt() plugin writes from the manifest.
   import { webMcpToolDefinitions } from '@happyvertical/smrt-virt-web';
-  import { Provider } from '@happyvertical/smrt-svelte';
+  import { AppShell } from '@happyvertical/smrt-svelte/app';
+  import type { ShellNavItem } from '@happyvertical/smrt-svelte/workspace';
+
+  let { data, children } = $props();
+
+  const nav: ShellNavItem[] = [
+    { href: '/', label: 'Items', description: 'The example s-m-r-t object' },
+    { href: '/settings', label: 'Settings', description: 'Workspace layout and shortcuts' },
+  ];
 
   // Keep the optional WebMCP registration out of browsers that do not expose
   // it. SSR remains safe because the feature check is document-guarded.
   const webmcp = $derived(
     typeof document !== 'undefined' && 'modelContext' in document
-      ? {
-          definitions: webMcpToolDefinitions,
-          basePath: '/api',
-          effects: ['read'] as const,
-        }
+      ? { definitions: webMcpToolDefinitions, basePath: '/api', effects: ['read'] as const }
       : false,
   );
 </script>
 
-<Provider {webmcp}>
-  <!-- … -->
-</Provider>`
+<AppShell
+  title="s-m-r-t app"
+  {webmcp}
+  {nav}
+  currentHref={page.url.pathname}
+  runtimeDiagnostics={data.session.authenticated}
+  settingsHref="/settings"
+>
+  {@render children()}
+</AppShell>`
 			}
 		],
 		sources: [

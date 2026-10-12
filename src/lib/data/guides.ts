@@ -284,14 +284,14 @@ export const foundationGuides: Guide[] = [
 					'Custom methods can add names such as articles.publish.'
 				],
 				filename: 'seed-access.ts',
-				code: `await syncPermissionCatalog(getSmrtConfig('Permission'));\n\nconst roles = await RoleCollection.create(getSmrtConfig('Role'));\nawait roles.seedSystemRoles({ seedPermissions: true });`
+				code: `import { runtime } from '$lib/server/smrt';\n\nawait syncPermissionCatalog(runtime.classOptions('Permission'));\n\nconst roles = await RoleCollection.create(runtime.classOptions('Role'));\nawait roles.seedSystemRoles({ seedPermissions: true });`
 			},
 			{
 				title: 'Enforce the same decision at every entry point',
 				intro:
 					'Generated routes are authentication-gated and tenant-scoped. Custom SvelteKit actions, jobs, and in-process writes must also check the principal permission snapshot. assertOperationPermission derives the same names the catalog holds and refuses an operation whose name is not in it.',
 				filename: 'src/routes/articles/+page.server.ts',
-				code: `import { assertOperationPermission } from '@happyvertical/smrt-users';\n\n// Throws OperationPermissionError (status: 403) unless the caller holds\n// articles.publish in the tenant that owns this article, or is running in\n// system or super-admin context. Map error.status to a response yourself.\nawait assertOperationPermission({\n  ...getSmrtConfig('Permission'),\n  collection: 'articles',\n  action: 'publish',\n  userId: locals.user.id,\n  tenantId: article.tenantId\n});`
+				code: `import { assertOperationPermission } from '@happyvertical/smrt-users';\nimport { runtime } from '$lib/server/smrt';\n\n// Throws OperationPermissionError (status: 403) unless the caller holds\n// articles.publish in the tenant that owns this article, or is running in\n// system or super-admin context. Map error.status to a response yourself.\nawait assertOperationPermission({\n  ...runtime.classOptions('Permission'),\n  collection: 'articles',\n  action: 'publish',\n  userId: locals.user.id,\n  tenantId: article.tenantId\n});`
 			},
 			{
 				title: 'Postgres can check the same names on every row',
@@ -324,9 +324,12 @@ export const foundationGuides: Guide[] = [
 			{
 				title: 'Keep initial reads in server load',
 				intro:
-					'The server can use the database, signed session, tenant, and permission snapshot directly. Return only the fields the page needs.',
+					'The server can use the database, signed session, tenant, and permission snapshot directly. Return only the fields the page needs. Collections come from the runtime that src/lib/server/smrt.ts exports; runtime.getCollection() is request-scoped, so call it inside the load and never keep the result.',
 				filename: 'src/routes/+page.server.ts',
-				code: `export const load = async ({ depends, locals }) => {\n  depends('smrt:items');\n  if (!locals.permissions.includes('items.read')) return { items: [] };\n\n  const items = await getCollection<Item>('Item');\n  const rows = await items.list({ limit: 50 });\n  return { items: rows.map(({ id, title, status }) => ({ id, title, status })) };\n};`
+				code: `import { runtime } from '$lib/server/smrt';\n\nexport const load = async ({ depends, locals }) => {\n  depends('smrt:items');\n  if (!locals.permissions.includes('items.read')) return { items: [] };\n\n  const items = await runtime.getCollection<Item>('Item');\n  const rows = await items.list({ limit: 50 });\n  return { items: rows.map(({ id, title, status }) => ({ id, title, status })) };\n};`,
+				points: [
+					'Generated API routes resolve collections the same way: each embeds a prelude that imports $lib/server/smrt and calls its runtime.getCollection(). A legacy getCollection or getSmrtConfig export there still wins for one release, with a deprecation warning; do not add one.'
+				]
 			},
 			{
 				title: 'Add a browser collection when the page needs it',
@@ -336,7 +339,7 @@ export const foundationGuides: Guide[] = [
 			{
 				title: 'Use the shared application shell',
 				intro:
-					'AdminShell supplies responsive application chrome, tenant navigation, settings, focus tools, and activity surfaces. Domain packages can stay focused on their own working views.'
+					'AppShell from @happyvertical/smrt-svelte/app is the template root layout. One component composes Provider, ThemeProvider, the theme CSS, and AdminShell, which supplies responsive application chrome, tenant navigation, settings, focus tools, and activity surfaces. Domain packages can stay focused on their own working views.'
 			}
 		]
 	},
@@ -829,7 +832,19 @@ export const nextPageIntent = defineIntent({
 			{
 				title: 'Operations are visible and recoverable',
 				intro:
-					'Runs, watermarks, locks, refresh tasks, and schedules are schema-managed system models. Cron and on-change refreshes use the existing jobs runtime rather than inventing a second queue.'
+					'Runs, watermarks, locks, refresh tasks, and schedules are schema-managed system models. Cron and on-change refreshes use the existing jobs runtime rather than inventing a second queue.',
+				points: [
+					"The reports.materialized recipe declares those bookkeeping tables. An application's own @report classes are not listed because they belong to the application."
+				]
+			},
+			{
+				title: 'Runtime reports are data, not code',
+				intro:
+					'A materialized report is stored rows, refreshed by jobs. A runtime report is the other trade. It is a declarative RuntimeReportSpec stored as a RuntimeReport row, compiled for the running principal on every run; result rows are never persisted. parseRuntimeReportSpec accepts a closed grammar with no SQL, expressions, joins, tables, or tenants. compileRuntimeReportSpec resolves it against a server-owned source allow-list, the field policy, the live permissions, and a fail-closed tenant predicate.',
+				points: [
+					'The assistant tools for runtime reports, reports.runtime.*, live in smrt-chat; the materialized set is read through reports.query and reports.refresh from smrt-agents.',
+					'A runtime report is saved only after a person confirms it.'
+				]
 			}
 		]
 	},
@@ -838,12 +853,53 @@ export const nextPageIntent = defineIntent({
 		navTitle: 'AdminShell',
 		eyebrow: 'New capability',
 		title: 'The admin app shell is already designed',
-		lede: 'AdminShell gives s-m-r-t applications a responsive four-edge workspace with tenant navigation, settings, focus tools, status, and live activity feeds.',
+		lede: 'AppShell composes Provider, ThemeProvider, and AdminShell into one root layout. AdminShell gives s-m-r-t applications a responsive four-edge workspace with tenant navigation, settings, focus tools, status, and live activity feeds.',
 		plainEnglish:
 			'The shell owns application chrome so each domain package can focus on its working surface. A manifest can build tenant navigation on the server; live jobs and changes can feed activity without coupling the shell to a transport.',
 		packages: ['smrt-svelte', 'smrt-ui', 'smrt-template-sveltekit'],
 		visual: 'shell',
 		sections: [
+			{
+				title: 'AppShell is the composed entry',
+				intro:
+					'The template root layout is AppShell from @happyvertical/smrt-svelte/app. It wraps Provider, ThemeProvider, the theme CSS, and AdminShell, takes a small explicit nav, and exposes nav and dock slots. Its Provider registers the generated read-only WebMCP tools when the browser exposes modelContext. The same subpath holds OwnerSetupForm, ShellSettingsPage, and RuntimeDiagnosticsWebMcp, which the template mounts on its setup and settings routes. The subpath is browser-only and imports nothing from the server or from $app.',
+				filename: 'src/routes/+layout.svelte',
+				lang: 'svelte',
+				code: `<script lang="ts">
+  import { page } from '$app/state';
+  import { webMcpToolDefinitions } from '@happyvertical/smrt-virt-web';
+  import { AppShell } from '@happyvertical/smrt-svelte/app';
+  import type { ShellNavItem } from '@happyvertical/smrt-svelte/workspace';
+
+  let { data, children } = $props();
+
+  const nav: ShellNavItem[] = [
+    { href: '/', label: 'Items', description: 'The example s-m-r-t object' },
+    { href: '/settings', label: 'Settings', description: 'Workspace layout and shortcuts' }
+  ];
+
+  const webmcp = $derived(
+    typeof document !== 'undefined' && 'modelContext' in document
+      ? { definitions: webMcpToolDefinitions, basePath: '/api', effects: ['read'] as const }
+      : false
+  );
+</script>
+
+<AppShell
+  title="s-m-r-t app"
+  {webmcp}
+  {nav}
+  currentHref={page.url.pathname}
+  runtimeDiagnostics={data.session.authenticated}
+  settingsHref="/settings"
+>
+  {@render children()}
+</AppShell>`,
+				points: [
+					'runtimeDiagnostics, on for signed-in sessions, owns exactly one additional read-only tool, smrt.runtime.diagnostics.read, which fetches the mounted diagnostics route as the page user.',
+					'Generated REST routes do not create pages. Add each human-facing route to nav explicitly.'
+				]
+			},
 			{
 				title: 'Four edges, four scopes',
 				intro:
@@ -1185,7 +1241,7 @@ export const nextPageIntent = defineIntent({
 					'Field policy adoption is additive. PolicyField outside a provider renders its children without changes. Existing forms continue to operate until you wrap them. Each step below is useful by itself. A project can stop after any step.',
 				points: [
 					'1. Add @happyvertical/smrt-fields at the same exact version as the rest of your s-m-r-t packages. It pins smrt-core, smrt-tenancy, smrt-ui, and smrt-users to that version, and mixing versions installs a second copy of the object registry.',
-					'2. Add it to the package list that the build and runtime share. Pass this packages array to smrtConsumer in vite.config.ts. Import the same list when the application starts. The consumer plugin then merges the package manifest. _smrt_field_policies migrates with the rest of the schema. Installation of the dependency alone does not create the table.',
+					'2. Add it to consumer.packages in smrt.config.ts. The smrt() preset in vite.config.ts consumes exactly that list and merges the package manifest into the generated registration. An application that calls smrtConsumer directly passes the same array as its packages option. _smrt_field_policies then migrates with the rest of the schema. Installation of the dependency alone does not create the table.',
 					'3. Seed presentation in code: add ui hints to the fields that deserve them, and remember the cold-start rule once you mark the first field.',
 					'4. Grant fields.policy.manage to administrator roles and fields.policy.personalize to everyone who should be able to adjust their own forms.',
 					'5. Resolve a policy in a server load and pass it to a form. PolicyField on a few fields is a complete first step.',
