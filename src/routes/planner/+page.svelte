@@ -1,19 +1,32 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { page } from '$app/state';
+	import { onMount } from 'svelte';
 	import SEO from '$lib/components/SEO.svelte';
-	import { getPlannerHost } from '$lib/planner/host.svelte';
 
-	// The planner itself (the package, the framework shell around it and the
-	// catalog) is loaded by the `/planner` layout after mount: none of it can
-	// run during the static prerender, and the planner must mount inside the
-	// shell it edits. The page waits for the host to say it is ready.
-	const host = getPlannerHost();
+	// `Planner` is the complete planner: the framework's own cookbook-driven
+	// `AppShell` built from the plan, with a navigation section per recipe, a
+	// record workspace (list, create and edit form over sample rows) per model
+	// and a Help page per recipe, routed by URL fragment so it needs nothing
+	// from this host's router. It reads browser storage and the DOM, so it
+	// loads after mount; the prerender ships this intro without it.
+	type PlannerModule = typeof import('@happyvertical/smrt-planner');
 
-	const sectionSlug = $derived(browser ? page.url.searchParams.get('s') : null);
-	const entryPath = $derived(browser ? page.url.searchParams.get('m') : null);
-	const showingSection = $derived(Boolean(sectionSlug || entryPath));
-	const loadError = $derived(host?.error ?? null);
+	let Planner = $state.raw<PlannerModule['Planner'] | null>(null);
+	let loadError = $state<string | null>(null);
+
+	onMount(() => {
+		let cancelled = false;
+		import('@happyvertical/smrt-planner').then(
+			(planner) => {
+				if (!cancelled) Planner = planner.Planner;
+			},
+			(error: unknown) => {
+				if (!cancelled) loadError = error instanceof Error ? error.message : String(error);
+			}
+		);
+		return () => {
+			cancelled = true;
+		};
+	});
 </script>
 
 <SEO
@@ -22,71 +35,68 @@
 	url="https://s-m-r-t.dev/planner"
 />
 
-{#if sectionSlug && host?.SectionPage}
-	<host.SectionPage slug={sectionSlug} />
-{:else if entryPath}
-	<section class="entry-note" aria-label="Record view">
-		<p>
-			<code>{`${entryPath}`}</code> is a record view of the planned app: a list with a create and edit
-			form over sample rows. This preview builds the shell, its sections and their pages; the
-			record views are generated when the app is scaffolded. <a href="/planner">Back to the planner</a>.
-		</p>
-	</section>
-{/if}
-
-<article class="planner-page" class:planner-page--compact={showingSection}>
+<div class="planner-page">
+	<nav class="planner-page__bar" aria-label="Site">
+		<a href="/">← Documentation</a>
+	</nav>
 	<header>
 		<p>App planner</p>
-		{#if showingSection}
-			<h2>Plan</h2>
-		{:else}
-			<h1>Plan an application from recipes</h1>
-		{/if}
+		<h1>Plan an application from recipes</h1>
 		<span>
 			Add recipes such as Customers, Sales or Purchases, or whole packages. The application shell
-			around this page is the framework's own: a navigation section per recipe appears in it as
-			you add one, each with its own page, and the Layout tab edits the shell in place. Package
-			selections live in the URL. Recipes, options and layout are kept in this browser.
+			below is the framework's own. A navigation section per recipe appears in it as you add one,
+			each with its own page, list view, form and help. The Layout tab edits the shell in place.
+			Recipes, options and layout are kept in this browser.
 		</span>
 	</header>
 
 	<section class="planner-host" aria-label="Planner">
-		{#if host?.status === 'ready' && host.Planner}
-			<host.Planner basePath="/planner" layout="shell" persistence="self" themeControls />
-		{:else if host?.status === 'failed'}
+		{#if Planner}
+			<!--
+				Known upstream defect (smrt-planner main, unreleased; see AGENTS.md
+				"Active upstream defects"; https://github.com/happyvertical/smrt-planner/issues/53):
+				once a plan with a saved `layout` is reloaded from this browser, the
+				planner's `CookbookStore.snapshot()` hands the controller its `$state`
+				proxy for `layout` (it snapshots `theme` but not `layout`) and smrt-core's
+				cookbook engine fails to `structuredClone` it. Nothing here can unwrap
+				that proxy; the fix is the store's.
+			-->
+			<Planner basePath="/planner" persistence="self" themeControls />
+		{:else if loadError}
 			<p class="planner-status" role="alert">The planner could not load: {loadError}</p>
 		{:else}
 			<p class="planner-status" role="status">Loading the planner…</p>
 		{/if}
 	</section>
-</article>
+</div>
 
 <style>
 	.planner-page {
+		min-height: 100svh;
+		background: var(--site-paper);
+		color: var(--site-ink);
+	}
+	.planner-page__bar,
+	header {
 		width: min(70rem, calc(100% - 3rem));
 		margin: 0 auto;
-		padding: 54px 0 86px;
 	}
-	.planner-page--compact {
-		padding-top: 34px;
-		border-top: 1px solid var(--smrt-color-outline-variant, var(--site-line));
+	.planner-page__bar {
+		padding-top: 1.25rem;
 	}
-	.entry-note {
-		width: min(70rem, calc(100% - 3rem));
-		margin: 0 auto;
-		padding-top: 34px;
-	}
-	.entry-note p {
-		margin: 0;
-		max-width: 760px;
-		line-height: 1.65;
+	.planner-page__bar a {
+		color: var(--site-muted);
+		font-size: 0.875rem;
+		text-decoration: none;
 	}
 	header {
+		padding: 54px 0 34px;
+	}
+	header > * {
 		max-width: 760px;
-		padding-bottom: 34px;
 	}
 	header > p {
-		color: var(--smrt-color-primary, var(--site-accent-strong));
+		color: var(--site-accent-strong);
 		font: 700 0.66rem var(--site-font-mono);
 		text-transform: uppercase;
 	}
@@ -96,34 +106,30 @@
 		letter-spacing: -0.04em;
 		line-height: 1.08;
 	}
-	h2 {
-		margin-top: 11px;
-		font-size: clamp(1.5rem, 3vw, 2rem);
-		letter-spacing: -0.03em;
-		line-height: 1.15;
-	}
 	header > span {
 		display: block;
 		margin-top: 17px;
-		color: var(--smrt-color-on-surface-variant, var(--site-muted));
+		color: var(--site-muted);
 		font-size: 0.94rem;
 		line-height: 1.65;
 	}
 	.planner-host {
-		min-height: 60vh;
-		padding-top: 30px;
-		border-top: 1px solid var(--smrt-color-outline-variant, var(--site-line));
+		min-height: 100svh;
+		border-top: 1px solid var(--site-line);
 	}
 	.planner-status {
-		margin: 0;
-		color: var(--smrt-color-on-surface-variant, var(--site-muted));
+		width: min(70rem, calc(100% - 3rem));
+		margin: 0 auto;
+		padding-top: 30px;
+		color: var(--site-muted);
 	}
 	@media (max-width: 760px) {
-		.planner-page,
-		.entry-note {
+		.planner-page__bar,
+		header,
+		.planner-status {
 			width: calc(100% - 2rem);
 		}
-		.planner-page {
+		header {
 			padding-top: 32px;
 		}
 	}

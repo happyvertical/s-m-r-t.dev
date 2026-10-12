@@ -9,7 +9,7 @@
 
 	let { children } = $props();
 	// The playground and the planner bring their own chrome: the planner runs
-	// inside the framework's `AppShell` (see `planner/+layout.svelte`).
+	// inside the framework's `AppShell` (see `planner/+page.svelte`).
 	const isStandalone = $derived(
 		page.url.pathname === '/playground' ||
 			page.url.pathname === '/planner' ||

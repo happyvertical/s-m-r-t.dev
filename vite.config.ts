@@ -39,9 +39,32 @@ export default defineConfig({
 		// unbundled, that import has no default export and the planner's
 		// client-side load fails in dev (`vite build` is unaffected). Prebundle
 		// just that one package. Upstream: smrt-core could import it as ESM.
-		include: ['@happyvertical/smrt-planner > @happyvertical/smrt-core > pluralize']
+		include: [
+			'@happyvertical/smrt-planner > @happyvertical/smrt-core > pluralize',
+			// QA SESSION ONLY (see `resolve.dedupe` below): with smrt-core deduped
+			// to this project's copy, the nested path above no longer matches.
+			'@happyvertical/smrt-core > pluralize'
+		]
+	},
+	// QA SESSION ONLY (2026-10 site refresh; see `//qa` in package.json):
+	// `@happyvertical/smrt-planner` is a `link:` to a sibling worktree, so its
+	// own node_modules would resolve a second copy of every smrt package (and of
+	// Svelte). Force one copy from this project, and let the dev server read the
+	// linked directory. Remove this block with the override.
+	resolve: {
+		dedupe: [
+			'svelte',
+			'@happyvertical/smrt-core',
+			'@happyvertical/smrt-svelte',
+			'@happyvertical/smrt-ui',
+			'@happyvertical/smrt-chat',
+			'@happyvertical/smrt-assets'
+		]
 	},
 	server: {
-		port: 5183
+		port: 5183,
+		fs: {
+			allow: ['.', '../../smrt-planner/site-refresh']
+		}
 	}
 });
