@@ -26,6 +26,8 @@ import { join } from 'node:path';
 const SCOPE = '@happyvertical';
 const SCOPE_PREFIX = `${SCOPE}/smrt-`;
 const DEFAULT_REGISTRY = 'https://npm.happyvertical.com';
+// Packages released on their own version line, outside the framework lockstep.
+const INDEPENDENT = new Set([`${SCOPE_PREFIX}planner`]);
 const LOCAL_SPEC = /^(file:|link:|workspace:)/;
 
 const USAGE = `update-smrt — pin every @happyvertical/smrt-* dependency and refresh the lockfile.
@@ -135,7 +137,7 @@ for (const field of ['dependencies', 'devDependencies']) {
 	const deps = pkg[field];
 	if (!deps) continue;
 	for (const [name, spec] of Object.entries(deps)) {
-		if (!name.startsWith(SCOPE_PREFIX)) continue;
+		if (!name.startsWith(SCOPE_PREFIX) || INDEPENDENT.has(name)) continue;
 		if (LOCAL_SPEC.test(spec)) {
 			if (checkOnly) {
 				targets.push({ name, field, current: spec });
