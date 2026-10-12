@@ -75,10 +75,11 @@
 		"@happyvertical/smrt-users": "0.55.16",
 		"@happyvertical/smrt-web": "0.55.16"
 	},
-	"//qa": "QA SESSION ONLY (2026-10 site refresh): `pnpm.overrides` below links @happyvertical/smrt-planner to the unreleased worktree at /Users/will/Work/_trees/smrt-planner/site-refresh (branch release/site-refresh). Remove the `//qa` and `pnpm` keys, restore the exact registry pin for smrt-planner, and run `pnpm install` before shipping.",
+	"//qa": "QA SESSION ONLY (2026-10 site refresh): `pnpm.overrides` below links @happyvertical/smrt-planner to the unreleased worktree at /Users/will/Work/_trees/smrt-planner/site-refresh (branch release/site-refresh) and @happyvertical/smrt-svelte to the unreleased monorepo worktree at /Users/will/Work/_trees/smrt/site-refresh (branch release/site-refresh; icon-only left sidebar toggle). Remove the `//qa` and `pnpm` keys, restore the exact registry pins for smrt-planner and smrt-svelte, and run `pnpm install` before shipping.",
 	"pnpm": {
 		"overrides": {
-			"@happyvertical/smrt-planner": "link:../../smrt-planner/site-refresh"
+			"@happyvertical/smrt-planner": "link:../../smrt-planner/site-refresh",
+			"@happyvertical/smrt-svelte": "link:../../smrt/site-refresh/packages/smrt-svelte"
 		}
 	}
 }
