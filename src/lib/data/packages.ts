@@ -95,18 +95,28 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 		description:
 			'Build labeled forms, group related fields, and make validation errors clear and visible.',
 		importPath: '@happyvertical/smrt-ui/forms',
-		components: ['Form', 'Field', 'FormGroup', 'Fieldset', 'InputGroup', 'ErrorSummary']
+		components: [
+			'Form',
+			'Field',
+			'FormGroup',
+			'Fieldset',
+			'InputGroup',
+			'ErrorSummary',
+			'FormActionBar'
+		]
 	},
 	{
 		title: 'Text and structured input',
 		description:
-			'Collect free text, selected options, multiple values, tags, dates, times, and files.',
+			'Collect free text, selected options, related records, multiple values, tags, dates, times, and files.',
 		importPath: '@happyvertical/smrt-ui/forms',
 		components: [
 			'Input',
 			'Textarea',
 			'Select',
 			'Combobox',
+			'RelationInput',
+			'SearchInput',
 			'Listbox',
 			'MultiSelect',
 			'TagsInput',
@@ -130,6 +140,13 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 			'Slider',
 			'RangeSlider'
 		]
+	},
+	{
+		title: 'Capture',
+		description:
+			'Take a photo from the device camera or a drawn signature, and submit it with the surrounding native form.',
+		importPath: '@happyvertical/smrt-ui/forms',
+		components: ['CameraCapture', 'SignaturePad']
 	},
 	{
 		title: 'Agent interaction contracts',
@@ -172,7 +189,7 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 	{
 		title: 'Feedback and overlays',
 		description:
-			'Explain status and progress, or open a focused task while preserving keyboard and focus behavior.',
+			'Explain status and progress, or open a focused task while preserving keyboard and focus behavior. PhoneSheet and WorkingStrip are the phone surfaces.',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		components: [
 			'Alert',
@@ -183,9 +200,11 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 			'Meter',
 			'Spinner',
 			'LoadingOverlay',
+			'WorkingStrip',
 			'Modal',
 			'Drawer',
 			'Sheet',
+			'PhoneSheet',
 			'ConfirmDialog'
 		]
 	},
@@ -203,7 +222,9 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 		importPath: '@happyvertical/smrt-ui/layout',
 		components: [
 			'Container',
+			'PageLayout',
 			'Grid',
+			'ActionGroup',
 			'Header',
 			'Footer',
 			'Masthead',
@@ -226,16 +247,24 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 	},
 	{
 		title: 'Calendar',
-		description: 'Present month and day schedules through the focused calendar entry point.',
+		description:
+			'Time-zone-aware month and week grids with a phone agenda, over a Svelte-free date model. Calendar and DayView are deprecated.',
 		importPath: '@happyvertical/smrt-ui/calendar',
-		components: ['Calendar', 'DayView']
+		components: ['CalendarView', 'toEntries', 'layoutMonth', 'layoutWeek', 'dateKeyInZone']
 	},
 	{
 		title: 'Membership and permission UI',
 		description:
 			'Domain-neutral views typed against shared membership, role, and permission contracts.',
 		importPath: '@happyvertical/smrt-ui',
-		components: ['MembershipCard', 'MembershipList', 'PermissionCheck', 'RoleBadge', 'RoleSelector']
+		components: [
+			'MembershipCard',
+			'MembershipList',
+			'PermissionCheck',
+			'PermissionPicker',
+			'RoleBadge',
+			'RoleSelector'
+		]
 	},
 	{
 		title: 'Module UI registry',
@@ -277,9 +306,17 @@ const usersComponentGroups: PackageComponentGroup[] = [
 			'switchSessionTenant',
 			'createOidcLoginHandler',
 			'createOidcCallbackHandler',
+			'getOidcClientRegistration',
 			'beginOidcLogin',
 			'completeOidcLogin'
 		]
+	},
+	{
+		title: 'Password and device PIN routes',
+		description:
+			'Mount email and password sign-in for an app without an identity provider, or a per-person PIN on an enrolled device.',
+		importPath: '@happyvertical/smrt-users/sveltekit',
+		components: ['createPasswordCredentialHandlers', 'createDeviceCredentialHandlers']
 	},
 	{
 		title: 'Terminal device-code routes',
@@ -303,6 +340,9 @@ const usersComponentGroups: PackageComponentGroup[] = [
 			'SessionService',
 			'OidcLoginService',
 			'TerminalAuthService',
+			'PasswordCredentialService',
+			'DeviceCredentialService',
+			'LoginAttemptLimiter',
 			'TenantService',
 			'AccessRequestService',
 			'MagicLinkService',
@@ -358,7 +398,7 @@ const smrtSvelteComponentGroups: PackageComponentGroup[] = [
 	{
 		title: 'Rich form inputs',
 		description:
-			'Provider-backed inputs for the values applications actually collect, beyond the foundation controls.',
+			'Provider-backed inputs for the values applications actually collect, beyond the foundation controls. RelationInput moved to @happyvertical/smrt-ui/forms; the re-export here is deprecated.',
 		importPath: '@happyvertical/smrt-svelte/forms',
 		components: [
 			'Form',
@@ -376,6 +416,20 @@ const smrtSvelteComponentGroups: PackageComponentGroup[] = [
 			'AddressInput',
 			'FileUpload',
 			'FormMicButton'
+		]
+	},
+	{
+		title: 'Composed app shell',
+		description:
+			'One browser-only root that composes Provider, ThemeProvider, the theme CSS, AdminShell, and tenant navigation; the template root layout uses it.',
+		importPath: '@happyvertical/smrt-svelte/app',
+		components: [
+			'AppShell',
+			'OwnerSetupForm',
+			'ShellSettingsPage',
+			'ShellLayoutEditor',
+			'RuntimeDiagnosticsWebMcp',
+			'useShellLayout'
 		]
 	},
 	{
@@ -417,6 +471,53 @@ const smrtSvelteComponentGroups: PackageComponentGroup[] = [
 		]
 	},
 	{
+		title: 'Command palette',
+		description:
+			'A trigger and dialog on one global shortcut, with navigation and manifest providers; mount it once as an AppShell slot item.',
+		importPath: '@happyvertical/smrt-svelte/command-palette',
+		components: [
+			'CommandPalette',
+			'createCommandPalette',
+			'setCommandPalette',
+			'useCommandPaletteProvider'
+		]
+	},
+	{
+		title: 'Recipe screens',
+		description:
+			'List, view, create, and edit screens derived from a generated web definition and the resolved field policy.',
+		importPath: '@happyvertical/smrt-svelte/screens',
+		components: ['RecipeScreens', 'ListScreen', 'DetailScreen', 'EditForm', 'deriveScreenFields']
+	},
+	{
+		title: 'Overview surfaces',
+		description:
+			'A customizable widget grid joined to the shell layout edit mode, with a host-owned controller; the server load contract is on /overview/server.',
+		importPath: '@happyvertical/smrt-svelte/overview',
+		components: ['OverviewGrid', 'createOverview']
+	},
+	{
+		title: 'Cookbook shell',
+		description:
+			'Build AppShell sections and recipe surfaces from a cookbook and the recipe catalog; loadCookbookApp on /cookbook/server reads and validates it.',
+		importPath: '@happyvertical/smrt-svelte/cookbook',
+		components: ['CookbookApp', 'CookbookSectionPage', 'buildCookbookShell']
+	},
+	{
+		title: 'Import and export',
+		description:
+			'CSV and TSV import with column mapping, a validation preview, and an error report, plus column-selected export. Both follow the collection definitions and the resolved field policy.',
+		importPath: '@happyvertical/smrt-svelte/import-export',
+		components: ['ImportExport']
+	},
+	{
+		title: 'Sortable',
+		description:
+			'Pointer, touch, keyboard, and screen-reader sorting of containers and items on the Board drag engine.',
+		importPath: '@happyvertical/smrt-svelte/sortable',
+		components: ['Sortable']
+	},
+	{
 		title: 'Focus tools dock',
 		description:
 			'The first-generation dock, kept on its own opt-in subpath while applications migrate to AdminShell focus tools.',
@@ -446,7 +547,8 @@ const smrtSvelteComponentGroups: PackageComponentGroup[] = [
 	},
 	{
 		title: 'Browser AI adapters',
-		description: 'Framework-neutral capability detection and the adapters behind the hooks.',
+		description:
+			'Framework-neutral capability detection and the adapters behind the hooks. Speech-to-text is browser-speech, whisper-cpp, whisper-local (alias whisper-wasm), or moonshine; the on-device models need the optional @happyvertical/speech peer.',
 		importPath: '@happyvertical/smrt-svelte/browser-ai',
 		components: [
 			'detectCapabilities',
@@ -455,7 +557,11 @@ const smrtSvelteComponentGroups: PackageComponentGroup[] = [
 			'getBestSTTBackend',
 			'WebLLMAdapter',
 			'BrowserSpeechSTTAdapter',
+			'WhisperCppSTTAdapter',
+			'WhisperLocalSTTAdapter',
 			'WhisperWasmSTTAdapter',
+			'createWhisperLocalModel',
+			'createSttDictationSource',
 			'BrowserSynthesisTTSAdapter',
 			'RECOMMENDED_MODELS'
 		]
@@ -526,7 +632,23 @@ export const packages: SmrtPackage[] = [
 			highlights: [
 				'Typed, column-backed list projections without object hydration',
 				'Context memory and semantic search for durable learned patterns',
-				'Change feeds, conditional reads, sync apply, REST, MCP, WebMCP, and CLI generation'
+				'Change feeds, conditional reads, sync apply, REST, MCP, WebMCP, and CLI generation',
+				'Recipes: declared user-facing units collected into the manifest, plus a cookbook document and engine',
+				'A one-call smrt() Vite preset over the packages declared in smrt.config.ts'
+			],
+			details: [
+				{
+					title: 'Recipes and cookbooks',
+					body: 'A SmrtRecipe is a named, user-facing unit smaller than a package, such as Sales or Customers. Its static id, label, models, nav, requires, and options are read structurally by the scanner into the manifest and knowledge recipes. The /cookbook entry validates and migrates a cookbook v1 document; /cookbook/engine runs typed cookbook commands with idempotent retries, atomic batches, and receipts.'
+				},
+				{
+					title: 'One Vite plugin call for a SvelteKit app',
+					body: 'smrt() from @happyvertical/smrt-core/vite applies the decorator config and composes smrtConsumer and smrtPlugin with the SvelteKit conventions. The consumed packages are the declared list under consumer.packages in smrt.config.ts; a missing or malformed list fails the build. smrtPlugin and smrtConsumer remain public for custom setups. Generated routes resolve collections through the runtime exported from $lib/server/smrt; a hand-written getCollection export is deprecated.'
+				},
+				{
+					title: 'Move a model or close its surface without a subclass',
+					body: 'A class that moves between packages declares its old qualified names in previousQualifiedNames, and lookups by the old name keep resolving. smrt db:migrate-qualified-names rewrites stored names on request. ObjectRegistry.registerOverride closes the generated API, MCP, or CLI surface of a package model, or makes its tenancy required, at startup. Only complete closures are supported; reopening throws. The browser entry builds and evaluates without Node-only modules.'
+				}
 			],
 			exampleResource: 'products'
 		}
@@ -570,7 +692,8 @@ export const packages: SmrtPackage[] = [
 			highlights: [
 				'Required, optional, and global data scopes',
 				'AsyncLocalStorage context propagation',
-				'Tenant-safe interceptors across lookups, hydration, search, and collection memory'
+				'Tenant-safe interceptors across lookups, hydration, search, and collection memory',
+				'Super-admin bypass is a per-class opt-in, off by default'
 			],
 			details: [
 				{
@@ -583,7 +706,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Scope covers each read path',
-					body: 'Tenant context applies to list and get calls, slug lookups, model hydration, vector search, and collection memory. Required models fail closed without a tenant context; system and super-admin contexts are the explicit cross-tenant paths.'
+					body: 'Tenant context applies to list and get calls, slug lookups, model hydration, vector search, and collection memory. Required models fail closed without a tenant context. A system context removes the context entirely and skips every check. withSuperAdminBypass keeps the tenant context and lifts enforcement only for classes that set allowSuperAdminBypass to true. The flag defaults to false, and unresolved config fails closed. auditTenantScopedRegistrations reports runtime-only registrations whose natural key omits the tenant column.'
 				}
 			],
 			components: ['TenantCard', 'TenantSwitcher'],
@@ -599,7 +722,8 @@ export const packages: SmrtPackage[] = [
 			highlights: [
 				'Manifest-derived operation permissions',
 				'Opt-in role inheritance through tenant trees',
-				'OIDC login and terminal device-code auth on one session model',
+				'OIDC, email and password, device PIN, and terminal device-code sign-in on one session model',
+				'One shared login attempt budget across every credential flow',
 				'Reusable mobile auth/session handlers and access-request graduation'
 			],
 			componentGroups: usersComponentGroups,
@@ -630,6 +754,22 @@ export const packages: SmrtPackage[] = [
 					body: 'TerminalAuthService runs the device-code flow for command-line tools, and createRequest returns a device code, a short user code, and a verification URL. The CLI keeps the device code, and the person types the short user code. The service stores only a hash of the device code, and approval is idempotent. exchangeDeviceCode answers pending, expired, or approved. An approved answer includes a bearer token that resolves to the same session context as a browser cookie. Failed approvals have a per-user rate limit because user codes are short, and the handler reports the limit as 429.',
 					href: '/foundations/users-and-profiles',
 					linkLabel: 'See the sign-in flows'
+				},
+				{
+					title: 'Password sign-in without an identity provider',
+					body: 'PasswordCredentialService signs in existing, active users with an email and password; it never creates a user. The password lives in its own sensitive object with no generated REST, MCP, or CLI surface. Hashing is scrypt with a per-hash salt, and weaker hashes are upgraded on the next sign-in. Every refusal returns the same 401, so timing does not reveal whether an account exists. Mount the flow with createPasswordCredentialHandlers from the /sveltekit subpath.',
+					href: '/foundations/users-and-profiles',
+					linkLabel: 'See the sign-in flows'
+				},
+				{
+					title: 'A PIN layered on an enrolled device',
+					body: 'A shared tablet enrolled through the device-code grant holds a device-account bearer session. DeviceCredentialService lets a person sign in on that device with a short PIN. The result is a layered session with authMethod pin and a parentSessionId. The session is valid only while the device session is, never widens tenant scope, and signs out independently. Administering PINs needs users.pin.manage from a non-PIN session.',
+					href: '/foundations/users-and-profiles',
+					linkLabel: 'See the sign-in flows'
+				},
+				{
+					title: 'One login budget for every credential',
+					body: 'Terminal approval, device PIN, and password sign-in reserve an attempt through LoginAttemptLimiter before any credential work. The budget is stored in the database, so it holds across replicas, and its keys are hashed. A rate limit answers 429 with Retry-After. Generated CLI commands on the identity models are list and get only, or closed.'
 				},
 				{
 					title: 'Sync the permission catalog after migration',
@@ -663,7 +803,8 @@ export const packages: SmrtPackage[] = [
 				'Profiles remain separate from authentication records',
 				'Reciprocal and directional relationship types',
 				'Time-bounded relationship terms and contextual third parties',
-				'Organization-to-organization links on the same Profile rows'
+				'Organization-to-organization links on the same Profile rows',
+				'Ordered web links and a public-figure flag on the profile'
 			],
 			details: [
 				{
@@ -672,7 +813,11 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Keep extensible metadata and audit evidence controlled',
-					body: 'ProfileMetafield supplies the validation schema for ProfileMetadata, whose collection supports add, get, batchGet, and batchUpdate. ProfileAsset is the owned-asset join. AuditLog records action, resource type, source, and optional on-behalf-of identity; a super-admin bypass is an explicit policy choice, never an implicit shortcut.'
+					body: 'ProfileMetafield supplies the validation schema for ProfileMetadata, whose collection supports add, get, batchGet, and batchUpdate. ProfileAsset is the owned-asset join. AuditLog is a sensitive model with no generated read routes. It records actor, action, reason, before and after changes, resource, source, and delegated identity. createAuditWriter, the consumer-authorized readAuditTrail, and the bounded pruneAuditTrail are its access paths; its super-admin bypass is an explicit policy choice.'
+				},
+				{
+					title: 'Links and public figures',
+					body: 'ProfileLink stores ordered web links with a platform, a validated http or https url, an optional label, and a sort order. Write them through replaceForProfile and reorder on the collection, or setLinks and getLinks on the profile; each is one transaction. Profile.isPublic records that a person is a public figure and nothing more; consumers decide visibility.'
 				},
 				{
 					title: 'Relate two organizations',
@@ -797,6 +942,10 @@ export const packages: SmrtPackage[] = [
 					body: 'Exported functions and types, the canonical object reference format, the default-value wire contract, write validation, and caching.',
 					href: '/reference/field-policies',
 					linkLabel: 'Field policy API'
+				},
+				{
+					title: 'A recipe for form customization',
+					body: 'The package declares the fields.form-customization recipe, emitted into the manifest and knowledge recipes with its own user-facing help. It declares a server runtime.'
 				}
 			],
 			surfaceNote:
@@ -857,6 +1006,10 @@ export const packages: SmrtPackage[] = [
 					body: 'AgentSchedule records the cron expression, next and last run, concurrency ceiling, timeout, target method, and success and failure counts. The runner that starts these schedules is in smrt-jobs. Thus, an application selects its execution host instead of receiving a background worker with the agent model.',
 					href: '/reference/packages/smrt-jobs',
 					linkLabel: 'smrt-jobs'
+				},
+				{
+					title: 'Agents can offer create entries',
+					body: 'An agent class declares a literal static createEntries array, and the scanner captures it into the serialized agent. resolveAgentCreateEntries filters those entries by base path, access level, and capabilities, so a shell can offer them as create options.'
 				},
 				{
 					title: 'Two Svelte entry points',
@@ -930,6 +1083,10 @@ export const packages: SmrtPackage[] = [
 					body: 'Enqueueing counts the non-terminal jobs for a tenant and refuses another job above the limit. The default limit is ten thousand, and each call or job builder can change it. A value of zero disables the check. Jobs without a tenant do not count against the limit. Requested retry counts are clamped to the supported maximum. Thus, a misconfigured caller cannot pin a worker on a poison job.'
 				},
 				{
+					title: 'Terminal outcomes commit with their event',
+					body: 'Completion, permanent failure, timeout, stale-worker recovery, and cancel update the job row and append its versioned event in one transaction. If either write fails, neither commits. listTerminalOutcomes on the event collection requires an explicit tenant, reads newest first, and returns only the safe terminal shape without arguments, results, or raw errors.'
+				},
+				{
 					title: 'Retention starts after the runner is stable',
 					body: 'TaskRunner schedules its first retention sweep one interval after start, never at startup. The default policy keeps completed or canceled jobs for seven days. It keeps failed jobs and events for thirty days. Dry-run cleanup is available before a deletion policy changes.'
 				}
@@ -941,16 +1098,26 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Agents & runtime',
 		'smrt-chat',
-		'Rooms, direct messages, threads, persona-bound conversations, tool loops, and voice workbench surfaces.',
+		'Rooms, direct messages, threads, persona-bound conversations, tool loops, the AssistantDock, and voice gateway turns.',
 		{
 			status: 'new',
+			highlights: [
+				'AssistantDock with its own mounted SvelteKit routes',
+				'Assistant turns that suspend for browser tools and resume with their results',
+				'Runtime report and overview tools for the persona extraTools seam',
+				'The chat.assistant recipe places the dock in the shell header'
+			],
 			components: [
 				'ChatLayout',
 				'MessageList',
 				'MessageInput',
 				'AgentChat',
+				'AgentSessionPanel',
 				'ToolCallDisplay',
-				'MiniChat'
+				'MiniChat',
+				'AssistantDock',
+				'FloatingAssistant',
+				'ChatTabs'
 			],
 			componentImport: '@happyvertical/smrt-chat/svelte',
 			details: [
@@ -960,7 +1127,15 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'The tool loop and streams have bounded entry points',
-					body: 'runToolLoop and runPersonaConversationTurn use the manifest tool catalog with DEFAULT_MAX_STEPS. runChatConversationStream and createChatStreamHandler provide token SSE through SmrtChatBackend. Voice sessions use createVoiceChatSession and handleVoiceGatewayTurn; validate their tenant, actor, persona, and conversation binding because a gateway bearer token is not user authentication. captureChatFeedback records thumbs and can feed learning reinforcement.'
+					body: 'runToolLoop and runPersonaConversationTurn use the manifest tool catalog with DEFAULT_MAX_STEPS. runChatConversationStream and createChatStreamHandler provide token SSE through SmrtChatBackend. Voice sessions use createVoiceChatSession and handleVoiceGatewayTurn; validate their tenant, actor, persona, and conversation binding because a gateway bearer token is not user authentication. captureChatFeedback records thumbs and can feed learning reinforcement. The voice workbench is a dev-only surface.'
+				},
+				{
+					title: 'The AssistantDock and its routes',
+					body: 'AssistantDock reads the mounted descriptors of a host data-surface registry; with none it is plain chat. mountAssistantRoutes from the /sveltekit subpath serves the dock from one catch-all route. The principal comes from event.locals, and threads only from the actor keyed session room. runAssistantTurn runs one turn over the tool loop with server tools and declared browser tools. A browser tool call suspends the turn; the browser resumes it with results, which reach the model marked untrusted. Destructive browser calls always wait for the person.'
+				},
+				{
+					title: 'Report and overview tools for the assistant',
+					body: 'createRuntimeReportTools returns reports.runtime.sources, define, list, and run for the persona extraTools seam. The model supplies only a declarative RuntimeReportSpec from smrt-reports, and sources are a server-owned allow-list. A report is saved only after a person confirms the exact spec. createOverviewTools returns overviews.describe, apply, and undo over a host-opened overview page. The chat.assistant recipe declares the dock as a header shell widget.'
 				}
 			],
 			exampleResource: 'messages'
@@ -1000,7 +1175,7 @@ export const packages: SmrtPackage[] = [
 		{
 			kind: 'tooling',
 			highlights: [
-				'Fifteen read-only tools over a workspace, with no access to application data',
+				'Twenty-one read-only tools over a workspace, with no access to application data',
 				'A declared ok, coverage, diagnostics, and data result envelope on every tool',
 				'Ships as a self-contained Agent Plugin with one bundled review skill'
 			],
@@ -1008,6 +1183,12 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'The Development MCP server',
 					body: 'The server reads source, manifests, and authored documentation from a workspace on disk. It never writes files, never executes generated code, and calls no model provider: review and architecture tools return deterministic findings plus a reusable prompt bundle.',
+					href: '/tooling/dev-mcp',
+					linkLabel: 'smrt-dev-mcp'
+				},
+				{
+					title: "Runtime tools use the project's own core",
+					body: 'The standalone installation ships static tooling and the scanner, not smrt-core, SQL drivers, AI, or filesystem providers. Code generation, knowledge and context tools, agent skills, and introspection of a built manifest work without a runtime. Source-scan enrichment and the runtime tools resolve @happyvertical/smrt-core from the selected project; install its dependencies first.',
 					href: '/tooling/dev-mcp',
 					linkLabel: 'smrt-dev-mcp'
 				},
@@ -1064,8 +1245,16 @@ export const packages: SmrtPackage[] = [
 					body: 'Alerts, toasts, progress, meters, drawers, popovers, disclosure, and accordions share the same status, focus, keyboard, motion, and theme conventions as the form controls.'
 				},
 				{
+					title: 'Phone surfaces and capture',
+					body: 'PhoneSheet replaces drawers and centered modals on a phone, as a full page or a sheet that closes on a swipe. WorkingStrip shows a transport-neutral working status with pause, review, stop, and close controls. FormActionBar groups form actions and fixes them to the bottom on phones. CameraCapture and SignaturePad post their result with the native form.'
+				},
+				{
+					title: 'One calendar entry point',
+					body: 'CalendarView renders month and week grids in a named time zone and a phone agenda. Its date model is Svelte-free, so a route can compute day keys on the server. Calendar and DayView remain as deprecated exports; they computed days in host-local time.'
+				},
+				{
 					title: 'Focused public imports',
-					body: 'Import from /forms, /ui, /feedback, /data, /layout, and /themes. Each import then identifies the applicable foundation part. The package root remains a compatibility barrel.'
+					body: 'Import from /forms, /ui, /feedback, /data, /layout, /calendar, and /themes. Each import then identifies the applicable foundation part. The Svelte-free /form-retry and /themes/presets entries are safe in plain Node. The package root remains a compatibility barrel.'
 				}
 			],
 			componentImport: '@happyvertical/smrt-ui/forms'
@@ -1074,12 +1263,13 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Web & UI',
 		'smrt-svelte',
-		'The top-of-stack Svelte integration: Provider, rich forms, browser AI, live collections, permissions, and AdminShell.',
+		'The top-of-stack Svelte integration: AppShell, Provider, rich forms, recipe screens, browser AI, live collections, and permissions.',
 		{
 			kind: 'ui',
 			status: 'new',
 			highlights: [
-				'Four-edge AdminShell with tenant navigation and activity feeds',
+				'AppShell composes Provider, ThemeProvider, and the four-edge AdminShell with tenant navigation',
+				'Recipe screens, a command palette, overview grids, and CSV import and export on their own subpaths',
 				'Tenant navigation built from the manifest, not hand-written',
 				'SvelteKit server-to-client collection and message hydration',
 				'Live-query bindings and browser AI adapters with a warm cache'
@@ -1100,6 +1290,16 @@ export const packages: SmrtPackage[] = [
 					body: 'tenantNavFromManifest turns a manifest into ordered navigation sections. It drops collections, internal and test classes, and items without a REST list route. It also drops single-table-inheritance subtypes that share a parent collection because the polymorphic endpoint already includes them. Pass permittedResources to filter the resources that a role can see. The filter checks the inheritance chain, so a permitted subtype keeps its applicable base link. Sorted output prevents manifest changes from reordering the sidebar.',
 					href: '/capabilities/application-shell',
 					linkLabel: 'How the shell is composed'
+				},
+				{
+					title: 'AppShell is the composed entry',
+					body: 'AppShell on the /app subpath wraps Provider, ThemeProvider, the theme CSS, AdminShell, and TenantNav built from the nav you pass. It is browser-only and lives beside /workspace, so the AdminShell barrel stays free of Provider. A dock snippet receives the data-surface registry, so a host places its assistant there without this package importing smrt-chat. Pass layout and onlayoutchange to own shell layout persistence, or neither to store it in user settings.',
+					href: '/capabilities/application-shell',
+					linkLabel: 'How the shell is composed'
+				},
+				{
+					title: 'Screens derived from recipes',
+					body: 'RecipeScreens, ListScreen, DetailScreen, and EditForm on the /screens subpath derive their views from a generated web definition and the resolved field policy. The /cookbook subpath builds AppShell sections and recipe surfaces from a cookbook document. CommandPalette mounts once as a shell slot item and owns the global shortcut. OverviewGrid joins the shell layout edit mode; ImportExport maps CSV columns against collection definitions.'
 				},
 				{
 					title: 'AdminShell replaced the first-generation shells',
@@ -1137,9 +1337,14 @@ export const packages: SmrtPackage[] = [
 				'SSE live updates with polling fallback',
 				'Durable IndexedDB outbox and version-aware persistence',
 				'WebMCP tools',
-				'Policy-governed bespoke tools and a dependency-free view-intent entry'
+				'Policy-governed bespoke tools and a dependency-free view-intent entry',
+				'A page-side registry of the WebMCP tools the page itself registered'
 			],
 			details: [
+				{
+					title: 'The page can see its own tools',
+					body: 'installWebMcpPageToolRegistry on the /webmcp-page-tools subpath records every registered tool while forwarding to the native context. An in-page assistant can then list and run the same tools an outside agent sees. The entry is dependency-free. Collection fetches accept a plain array, a list envelope with an items property, or a data envelope.'
+				},
 				{
 					title: 'Offline writes and read persistence solve different problems',
 					body: 'OfflineOutboxConfig keeps a durable IndexedDB write queue, with Web Locks leader election, exponential backoff, sync-apply-only replay, and onConflict and onSyncStateChange callbacks. persistCollection is the separate read cache: it rehydrates through SQLite-WASM or OPFS, writes back, and invalidates when the manifest hash changes.'
@@ -1177,13 +1382,25 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Web & UI',
 		'smrt-cli',
-		'The framework developer CLI for manifests, database migrations, testing, introspection, and generated resources.',
+		'The framework developer CLI for manifests, database migrations, application operations, cookbooks, introspection, and generated resources.',
 		{
 			kind: 'tooling',
 			details: [
 				{
 					title: 'Operate production schema changes deliberately',
-					body: 'db:migrate --postgres-safe orders dependencies, uses concurrent-index mode, applies lock and statement timeouts, and probes orphan foreign keys. doctor --db and db:status --parity compare the live schema. db:rollback executes only a reconstructible down migration or refuses; --mark-only changes migration bookkeeping without changing schema. db:prune supports dry-run and skip controls for retention work. SQLite type changes rebuild the table.'
+					body: 'db:migrate --postgres-safe orders dependencies, uses concurrent-index mode, applies lock and statement timeouts, and probes orphan foreign keys. doctor --db and db:status --parity compare the live schema. db:rollback executes only a reconstructible down migration or refuses; --mark-only changes migration bookkeeping without changing schema. db:prune supports dry-run and skip controls for retention work. SQLite type changes rebuild the table. db:migrate-qualified-names rewrites stored deprecated qualified names on request, and --empty-text-as-null converts empty text to NULL during a column change.'
+				},
+				{
+					title: 'Which database a db command uses',
+					body: 'Every db command resolves its database once, at startup. An explicit packages.cli.database.url from any config layer wins, so a stray shell DATABASE_URL never retargets it. DATABASE_URL comes next, with the engine from the config, DATABASE_TYPE, or the URL scheme. With neither, the command runs against an in-memory database.'
+				},
+				{
+					title: 'Operate the application with smrt app',
+					body: 'smrt app install, setup, start, stop, recover, doctor, open, backup, export, import, migrate, worker, dev, and build are the operations. They replace the copied operator scripts a template used to ship. Each generated package.json script is one of these one-liners. Local operations run under one operation lock, and start proves readiness against the loopback health route before it reports success.'
+				},
+				{
+					title: 'Cookbooks and the kitchen',
+					body: 'smrt cookbook validate checks a cookbook file or URL against the v1 schema and the recipe manifests. smrt cookbook apply creates a project from it and the start template. smrt kitchen serves the planner on localhost, where a person chats a cookbook into shape and sends it to a directory. smrt kitchen apply does the same from a plan URL.'
 				}
 			]
 		}
@@ -1197,8 +1414,20 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Web & UI',
 		'smrt-template-sveltekit',
-		'The recommended SvelteKit application scaffold with s-m-r-t integration and AdminShell as the default chrome.',
-		{ kind: 'tooling' }
+		'The recommended SvelteKit application scaffold: AppShell as the root layout, a server runtime built once, and smrt app one-liners for every lifecycle script.',
+		{
+			kind: 'tooling',
+			details: [
+				{
+					title: 'The shell and the server runtime',
+					body: 'The root layout renders AppShell from @happyvertical/smrt-svelte/app with the generated read-only WebMCP definitions and a hand-written nav. The server side is createSmrtSvelteKitRuntime from @happyvertical/smrt-app-runtime/sveltekit, built once in src/lib/server/smrt.ts. That module exports only runtime, and generated routes resolve collections through runtime.getCollection. A legacy getCollection or getSmrtConfig export is deprecated and honored for one release.'
+				},
+				{
+					title: 'Lifecycle scripts are CLI commands',
+					body: 'Every package.json script is a smrt app one-liner, and the template ships no scripts directory. db:migrate builds first and then runs smrt app migrate under the operation lock. The production baseline is adapter-node with separate web, task-worker, and schedule-worker processes. Workers import the build-compiled registration before creating runners.'
+				}
+			]
+		}
 	),
 	definePackage(
 		'Web & UI',
@@ -1284,7 +1513,11 @@ export const packages: SmrtPackage[] = [
 			details: [
 				{
 					title: 'AI metadata and derivation retain provenance',
-					body: 'ImageCategorizer produces tags, descriptions, confidence, and subjects. generateAltText uses the prompt registry, a PII-safe allowlist, and tenant overrides. ImageDeriver links parentId and AssetAssociation records; UpstreamManager preserves external-provider provenance, while ImageMetadataExtractor reads dimensions, format, and EXIF.'
+					body: 'ImageCategorizer categorizes curated metadata into tags, a description, confidence, and subjects; image bytes are not sent. generateAltText uses the prompt registry, a PII-safe allowlist, and tenant overrides. ImageEditor creates new Image records that link to their source through sourceAssetId. ImageDeriver records source provenance through AssetAssociation links when asked. UpstreamManager preserves external-provider provenance, while ImageMetadataExtractor reads dimensions, format, and EXIF.'
+				},
+				{
+					title: 'Local adjustments without a GPU',
+					body: 'Brightness, contrast, color, black-and-white, rotate, flip, region crop, and resize run locally through sharp. imageAdjustVariants offers two to four versions of one operation. encodeImageAdjustments and decodeImageAdjustments make a short URL-safe spec for preview routes, and decode refuses anything it did not write. applyImageAdjustments renders, and ImageEditor.adjust saves one result as a derivative.'
 				},
 				{
 					title: 'Collection helpers filter loaded records',
@@ -1297,7 +1530,7 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Content & media',
 		'smrt-messages',
-		'A unified STI hierarchy for email, social, and other communication channels.',
+		'A unified STI hierarchy for email, social, and other communication channels, plus in-app notifications.',
 		{
 			components: ['AccountList', 'MessageList', 'MessageDetail', 'ComposeForm'],
 			componentImport: '@happyvertical/smrt-messages/svelte',
@@ -1308,7 +1541,11 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Persona routes are wired by a trusted caller',
-					body: 'MessagingEndpoint, PersonaMessageRoute, and PersonaMessagingService operate behind messages.send and messages.manage-routes. createPersonaMessagingTool fixes personaId in trusted wiring so an agent-provided argument cannot choose a different persona.'
+					body: 'MessagingEndpoint, PersonaMessageRoute, and PersonaMessagingService operate behind messages.send and messages.manage-routes. createPersonaMessagingTool fixes personaId in trusted wiring so an agent-provided argument cannot choose a different persona. EmailAccount.readIntakeMessage is the authorized seam for opt-in ingestion of full message bytes; it never advances sync checkpoints.'
+				},
+				{
+					title: 'In-app notifications are a closed service',
+					body: 'UserNotification stores one row per recipient with kind, title, body, link, severity, a source reference, and read and dismissed state. UserNotificationService is the only access path: notify and notifyMany deduplicate on the source reference, and listForUser, countUnread, markRead, dismiss, and markAllRead filter on the recipient. Generated REST, MCP, and CLI are off, because a tenant-scoped list would expose every member. Hosts expose their own routes with the signed-in user id.'
 				}
 			],
 			exampleResource: 'messages'
@@ -1340,25 +1577,42 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Business & operations',
 		'smrt-commerce',
-		'Customers, vendors, contracts, invoices, payments, payment instruments, and fulfillment.',
+		'Customers, vendors, contracts, invoices, payments, payment rails, and fulfillment, with four recipes.',
 		{
+			highlights: [
+				'Four recipes: customers, vendors, sales, and purchases',
+				'Decimal invoice quantities over exact integer minor-unit arithmetic',
+				'One issuing provider and any number of payment rails'
+			],
 			components: [
 				'InvoiceCard',
 				'InvoiceHeader',
 				'InvoiceLineItems',
 				'InvoiceTotals',
 				'InvoiceActions',
-				'UnbilledItems'
+				'UnbilledItems',
+				'CustomerSelect',
+				'VendorSelect',
+				'QuoteEditor',
+				'PurchaseOrderEditor'
 			],
 			componentImport: '@happyvertical/smrt-commerce/svelte',
 			details: [
 				{
+					title: 'Recipes cover the headers first',
+					body: 'commerce.customers, commerce.vendors, commerce.sales, and commerce.purchases are declared in the package and emitted into the manifest recipes. Sales requires customers and purchases requires vendors. They cover Customer, Vendor, Order, and PurchaseOrder headers only; line items, fulfillment, invoices, and payments are later recipes. Each ships user-facing help, and the fields it shows carry plain-language descriptions.'
+				},
+				{
 					title: 'One contract hierarchy supports commercial lifecycle',
-					body: 'channelId distinguishes Estimate, Order, Lease, Agreement, PurchaseOrder, WholesaleOrder, ProductionOrder, Cart, and LicenseSale in one table. LicenseSale snapshots rights immutably and revoke() is its explicit transition. Store money as integer minor units; preflightCommerceMoneyMinorUnits and migrateCommerceMoneyToMinorUnits handle the commerce migration.'
+					body: 'channelId distinguishes Estimate, Order, Lease, Agreement, PurchaseOrder, WholesaleOrder, ProductionOrder, Cart, and LicenseSale in one table. LicenseSale snapshots rights immutably and revoke() is its explicit transition. Store money as integer minor units; preflightCommerceMoneyMinorUnits and migrateCommerceMoneyToMinorUnits handle the commerce migration. InvoiceLineItem.quantity is decimal with six fractional places; rounding happens once, where quantity times price meets money. There are no tolerances on any money path. The cost-billing subpath is an independent entry for signed cost billing with explicit tax rounding.'
 				},
 				{
 					title: 'Invoices, payments, and payouts retain evidence',
 					body: 'recognizeRevenue posts accounts-receivable journal evidence. PaymentAllocation and Invoice.updatePaymentStatus connect settlement to the invoice. PaymentIntent locks a multi-rail price behind an idempotency key, while PaymentInstrument identifies the selected rail. Vendor payouts move from pending to sent, confirmed, or failed.'
+				},
+				{
+					title: 'Payment rails behind one issuing provider',
+					body: 'A runtime has one issuing provider and any number of paymentProviders, each with a unique name and its own inbox namespace. Settlement is decided by the pure decideAttempt from gateway state and the payment policy; the gateway is authoritative, and nothing here counts confirmations. Crypto rails implement the port over the payments package and never call a gateway from here. Rails never save cards or charge tax. CustomerSelect and VendorSelect are the registered selectors; QuoteEditor and PurchaseOrderEditor keep draft strings apart from minor-unit revisions.'
 				}
 			],
 			exampleResource: 'invoices'
@@ -1413,15 +1667,24 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Business & operations',
 		'smrt-reports',
-		'Materialized aggregate read models with decorators, rebuild and incremental refresh, schedules, locking, and tenant fan-out.',
+		'Materialized aggregate read models with incremental refresh, schedules, and tenant fan-out, plus runtime reports compiled per principal from a stored spec.',
 		{
 			status: 'new',
 			highlights: [
 				'Decorated groupings, measures, and time buckets',
 				'Incremental refresh with watermarks and affected-group recomputation',
-				'Durable scheduled refresh through smrt-jobs'
+				'Durable scheduled refresh through smrt-jobs',
+				'Runtime reports: a declarative spec stored as data, never a stored result'
 			],
 			details: [
+				{
+					title: 'Runtime reports are data, not code',
+					body: 'parseRuntimeReportSpec accepts a closed grammar with no SQL, expressions, joins, tables, or tenants. compileRuntimeReportSpec resolves it against a server-owned source allow-list, the registry field policy, the live principal permissions, and a fail-closed tenant predicate. A stored RuntimeReport is recompiled for the running principal on every run, and result rows are never persisted. The assistant tools that define and run them live in smrt-chat.'
+				},
+				{
+					title: 'The materialized recipe brings only bookkeeping',
+					body: 'reports.materialized declares the internal refresh tables: runs, watermarks, locks, schedules, and refresh tasks. An app owns its report classes, so the recipe does not list them. Those tables have no REST or MCP surface, so the recipe has no nav, and the package ships no Svelte components.'
+				},
 				{
 					title: 'The adapter is the exposure boundary',
 					body: 'buildReportAdapterDescriptor and queryReportMaterializedRows bind tenant context, projection, paging, filters, and facets before rows cross an application boundary. The adapter redacts fields that the caller is not allowed to expose.'
@@ -1448,7 +1711,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'AI reporting receives a controlled result payload',
-					body: 'analyzePerformance, analyzeResults, and hasPositiveTrends use the prompt registry. The resultData forwarding contract excludes PII-conscious values, so callers must not persist or add sensitive data merely to make it available to an AI provider.'
+					body: 'analyzePerformance, analyzeResults, and hasPositiveTrends use the prompt registry. The resultData forwarding contract excludes PII-conscious values, so callers must not persist or add sensitive data merely to make it available to an AI provider. Generated MCP exposes only list and get on AnalyticsReport; analyzeResults is a model method the application calls, not a tool.'
 				}
 			],
 			exampleResource: 'analytics-events'
@@ -1486,8 +1749,8 @@ export const packages: SmrtPackage[] = [
 		'Business & operations',
 		'smrt-affiliates',
 		'Partners, tiered commissions, attribution, and payout processing. Now a compatibility shim over the smrt-sales commissions module — new applications should use smrt-sales directly.',
-		// No exampleResource: as of 0.40 the shim declares no models of its own, so
-		// it generates no REST, MCP, WebMCP, or CLI surface. The models live in
+		// No exampleResource: the shim declares no models of its own, so it
+		// generates no REST, MCP, WebMCP, or CLI surface. The models live in
 		// smrt-sales.
 		{
 			surfaceNote:
@@ -1528,7 +1791,7 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Business & operations',
 		'smrt-projects',
-		'Provider-neutral projects, repositories, issues, pull requests, and time workflows.',
+		'Provider-neutral projects, repositories, issues, pull requests, and the time workflows re-exported from smrt-timesheets.',
 		{
 			components: [
 				'TimeEntryCard',
@@ -1546,7 +1809,11 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Service billing and repository sync retain correction paths',
-					body: 'ServiceTimeEntry pairs immutable work evidence with ServiceChargeSnapshot and CompensationSnapshot, with a correction chain and SubscriptionServiceCommercialResolver. Repository, issue, and pull-request sync supports GitHub, GitLab, Bitbucket, and Azure. incorporateFeedback can preview or roll back Living Spec changes, while Project.analyzeHealth evaluates the synchronized project.'
+					body: 'ServiceTimeEntry, ServiceChargeSnapshot, and ServiceCompensationSnapshot are owned by smrt-timesheets and re-exported here unchanged, on the same tables. SubscriptionServiceCommercialResolver prices client work through smrt-subscriptions; provider compensation is a separate resolver and snapshot. The time-entry Svelte components are re-exported from smrt-timesheets too. Repository, issue, and pull-request sync supports GitHub, GitLab, Bitbucket, and Azure. incorporateFeedback can preview or roll back Living Spec changes, while Project.analyzeHealth evaluates the synchronized project.'
+				},
+				{
+					title: 'Issues do not need a repository',
+					body: 'Issue and Label carry an optional repositoryId and an optional projectId, so an issue can belong to a project alone. hasRepository gates every provider call: sync is a no-op, state changes stay local, and getRepository throws. The schema change adds the project columns and relaxes repository_id to nullable; db:migrate generates it.'
 				}
 			],
 			exampleResource: 'projects'
@@ -1585,7 +1852,7 @@ export const packages: SmrtPackage[] = [
 			details: [
 				{
 					title: 'Events can nest without a depth ceiling',
-					body: 'SmrtHierarchical supplies getParent, getChildren, getAncestors, getDescendants, getHierarchy, and moveTo. Load the needed tree shape rather than recursively resolving every relation. EventSeries defines daily, weekly, monthly, or yearly recurrence; EventType carries a custom-field JSON schema.'
+					body: 'SmrtHierarchical supplies getParent, getChildren, getAncestors, getDescendants, getHierarchy, and moveTo. Load the needed tree shape rather than recursively resolving every relation. EventSeries defines daily, weekly, monthly, or yearly recurrence, and expandRecurrence or EventSeries.getOccurrences expand it into instants that keep the start wall-clock time in its zone. Event.allDay marks a whole-day event whose endDate is the exclusive midnight after its last day. Event.timeZone is an IANA zone, and an empty value inherits. EventType carries a custom-field JSON schema.'
 				},
 				{
 					title: 'Participants and assets carry presentation detail',
