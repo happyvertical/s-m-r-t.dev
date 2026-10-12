@@ -132,9 +132,9 @@ Then one line below.
   it (`The app's document is not one the planner can read (Failed to execute
   'structuredClone' on 'Window': #<Object> could not be cloned.)`); the shell
   at `/planner` then shows no sections and commands fail until the layout is
-  cleared. Code site: `src/routes/planner/+layout.svelte`. Upstream issue: to
-  be filed against smrt-planner (`snapshot()` should `$state.snapshot` `layout`
-  as it does `theme`).
+  cleared. Code site: `src/routes/planner/+layout.svelte`. Upstream issue:
+  https://github.com/happyvertical/smrt-planner/issues/53 (`snapshot()` should
+  `$state.snapshot` `layout` as it does `theme`).
 
 ## Agent lifecycle posture
 

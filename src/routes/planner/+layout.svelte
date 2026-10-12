@@ -66,7 +66,7 @@
 	// exports it with the rest of the cookbook and the shell re-reads it.
 	//
 	// Known upstream defect (smrt-planner 0.0.2, see AGENTS.md "Active upstream
-	// defects"): once a plan with a saved `layout` is reloaded, the planner's
+	// defects"; https://github.com/happyvertical/smrt-planner/issues/53): once a plan with a saved `layout` is reloaded, the planner's
 	// `CookbookStore.snapshot()` hands the controller its `$state` proxy for
 	// `layout` (it snapshots `theme` but not `layout`), and smrt-core's cookbook
 	// engine fails to `structuredClone` it. The controller then reports an

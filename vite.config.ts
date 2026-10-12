@@ -12,7 +12,8 @@ export default defineConfig({
 		// their package.json has no `svelte` field, so Vite's dev dep scanner
 		// prebundles them with esbuild, which has no .svelte loader and crashes
 		// (`vite build` is unaffected). Serve them unbundled so the svelte plugin
-		// compiles them. Upstream: ship a `svelte` field / exclude in the packages.
+		// compiles them. Upstream: ship a `svelte` field / exclude in the packages
+		// (https://github.com/happyvertical/smrt/issues/3843).
 		exclude: [
 			'@happyvertical/smrt-agents',
 			'@happyvertical/smrt-analytics',
