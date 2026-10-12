@@ -38,6 +38,7 @@ describe('application bar', () => {
 			'Modules',
 			'Tooling',
 			'Playground',
+			'Planner',
 			'Reference'
 		]);
 		expect(within(nav).getByRole('link', { name: 'UI' }).getAttribute('aria-current')).toBe('page');
@@ -71,7 +72,7 @@ describe('application bar', () => {
 		await fireEvent.click(toggle);
 		const navs = screen.getAllByRole('navigation', { name: 'Primary navigation' });
 		expect(navs).toHaveLength(2);
-		expect(within(navs[1]).getAllByRole('link')).toHaveLength(9);
+		expect(within(navs[1]).getAllByRole('link')).toHaveLength(10);
 		expect(toggle.getAttribute('aria-expanded')).toBe('true');
 	});
 });

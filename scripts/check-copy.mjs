@@ -86,6 +86,7 @@ const PROSE_PROPERTIES = new Set([
 const NON_PROSE_PROPERTIES = new Set([
 	'authoredSummaries',
 	'base',
+	'basePath',
 	'boundary',
 	'browser',
 	'candidate',

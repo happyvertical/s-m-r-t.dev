@@ -32,7 +32,13 @@ export default defineConfig({
 			'@happyvertical/smrt-svelte',
 			'@happyvertical/smrt-planner',
 			'@happyvertical/smrt-playground'
-		]
+		],
+		// `smrt-planner` (excluded above) imports `smrt-core/cookbook/engine`,
+		// whose `utils/naming` default-imports the CommonJS `pluralize`. Served
+		// unbundled, that import has no default export and the planner's
+		// client-side load fails in dev (`vite build` is unaffected). Prebundle
+		// just that one package. Upstream: smrt-core could import it as ESM.
+		include: ['@happyvertical/smrt-planner > @happyvertical/smrt-core > pluralize']
 	},
 	server: {
 		port: 5183

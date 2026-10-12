@@ -369,7 +369,8 @@ export const documentationSections: DocumentationSection[] = [
 				items: [
 					{ label: 'Foundation components', href: '/reference/packages/smrt-ui?tab=components' },
 					...uiCapabilityItems,
-					{ label: 'Working playground', href: '/playground' }
+					{ label: 'Working playground', href: '/playground' },
+					{ label: 'App planner', href: '/planner' }
 				]
 			},
 			{
@@ -394,7 +395,8 @@ export const documentationSections: DocumentationSection[] = [
 				label: 'Browse',
 				items: [
 					{ label: 'Package Reference', href: '/reference/packages' },
-					{ label: 'Working playground', href: '/playground' }
+					{ label: 'Working playground', href: '/playground' },
+					{ label: 'App planner', href: '/planner' }
 				]
 			},
 			{
@@ -478,6 +480,7 @@ export const primaryNavigation: PrimaryNavigationItem[] = [
 	{ label: 'Modules', href: '/modules', section: 'modules' },
 	{ label: 'Tooling', href: '/tooling', section: 'tooling' },
 	{ label: 'Playground', href: '/playground' },
+	{ label: 'Planner', href: '/planner' },
 	{ label: 'Reference', href: '/reference', section: 'reference' }
 ];
 
@@ -527,7 +530,8 @@ export function documentationSectionForPathname(pathname: string): Documentation
 
 export function isPrimaryNavigationActive(item: PrimaryNavigationItem, pathname: string): boolean {
 	if (item.href === '/playground') return pathname === '/playground';
-	if (pathname === '/playground') return false;
+	if (item.href === '/planner') return isNavigationItemActive('/planner', pathname);
+	if (pathname === '/playground' || isNavigationItemActive('/planner', pathname)) return false;
 	return item.section === documentationSectionForPathname(pathname).id;
 }
 
@@ -606,6 +610,16 @@ export const docsNavigation: NavigationGroup[] = [
 
 export const searchItems: NavigationItem[] = [
 	...docsNavigation.flatMap((group) => group.items),
+	// Not a documentation page, so it is outside `docsNavigation` (the reading
+	// track and the docs panel) and registered for the palette here, like the
+	// package entries below.
+	{
+		label: 'App planner',
+		href: '/planner',
+		description:
+			'Add recipes or packages and an app mock-up assembles around them: navigation, list views, forms and help per model.',
+		keywords: ['planner', 'recipes', 'cookbook', 'mock-up', 'smrt-planner']
+	},
 	...packages.map((pkg) => ({
 		label: pkg.name,
 		href: `/reference/packages/${pkg.slug}`,
