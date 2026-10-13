@@ -27562,10 +27562,17 @@ export const uiComponents: UiComponentReference[] = [
 		details: [
 			{
 				name: 'density',
-				code: "'comfortable' | 'touch'",
+				code: "ThemeConfig['density']",
 				status: false,
 				description:
 					'Default control target density for descendants; individual controls may override.'
+			},
+			{
+				name: 'contrast',
+				code: 'ContrastPreference',
+				status: false,
+				description:
+					'Contrast preference. `auto` (default) follows `prefers-contrast: more`; `forced-colors: active` always wins. Persisted when set explicitly.'
 			},
 			{
 				name: 'preset',
@@ -29744,8 +29751,8 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2729,
-	totalProps: 2833,
+	describedProps: 2730,
+	totalProps: 2834,
 	authoredSummaries: 151,
 	totalComponents: 387
 };

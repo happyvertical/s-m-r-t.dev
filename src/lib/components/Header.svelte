@@ -359,7 +359,7 @@
 			gap: 1px;
 			padding: 0.75rem max(1rem, calc((100vw - 72rem) / 2));
 			border-block-end: 1px solid var(--site-line-strong);
-			background: var(--smrt-color-surface-container);
+			background: var(--smrt-surface-raised);
 			box-shadow: var(--smrt-elevation-3);
 		}
 

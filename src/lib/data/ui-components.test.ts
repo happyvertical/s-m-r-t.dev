@@ -115,13 +115,10 @@ describe('generated UI component reference', () => {
 		);
 
 		// A component may legitimately declare none (`Record<string, never>`).
-		// Those are the only ones.
+		// That is the only one: 0.55.18 gave ShellSettingsPage and ShellSettingsPanel
+		// real props (signOutHref, onSignOut, appearance, account).
 		const empty = uiComponents.filter((component) => component.details.length === 0);
-		expect(empty.map((component) => component.slug).sort()).toEqual([
-			'mailbox-demo',
-			'shell-settings-page',
-			'shell-settings-panel'
-		]);
+		expect(empty.map((component) => component.slug).sort()).toEqual(['mailbox-demo']);
 	});
 
 	it('keeps every branch of a union props type', () => {

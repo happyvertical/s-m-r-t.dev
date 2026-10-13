@@ -40,9 +40,9 @@
 		top: 0.8rem;
 		right: clamp(1.25rem, 3vw, 3rem);
 		z-index: 1;
-		border: 1px solid var(--smrt-color-outline-variant, #59616e);
+		border: var(--smrt-hairline, 1px solid #59616e);
 		border-radius: 999px;
-		background: var(--smrt-color-surface-container, #1b2028);
+		background: var(--smrt-surface-raised, #1b2028);
 		color: var(--smrt-color-on-surface, #f0f2f7);
 		font-family: var(--smrt-font-family, system-ui, sans-serif);
 		font-size: 0.75rem;
@@ -70,9 +70,9 @@
 		z-index: 1;
 		max-width: min(90vw, 34rem);
 		margin: 0;
-		border: 1px solid var(--smrt-color-outline-variant, #59616e);
+		border: var(--smrt-hairline, 1px solid #59616e);
 		border-radius: 8px;
-		background: var(--smrt-color-surface-container, #1b2028);
+		background: var(--smrt-surface-raised, #1b2028);
 		color: var(--smrt-color-on-surface, #f0f2f7);
 		font-family: var(--smrt-font-family, system-ui, sans-serif);
 		font-size: 0.8rem;
