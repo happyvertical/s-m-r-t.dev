@@ -28,7 +28,7 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
-		"@happyvertical/smrt-cli": "0.55.16",
+		"@happyvertical/smrt-cli": "0.55.17",
 		"@sveltejs/adapter-auto": "^7.0.1",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "2.50.1",
@@ -51,35 +51,34 @@
 		"vitest": "4.0.18"
 	},
 	"dependencies": {
-		"@happyvertical/smrt-agents": "0.55.16",
-		"@happyvertical/smrt-analytics": "0.55.16",
-		"@happyvertical/smrt-assets": "0.55.16",
-		"@happyvertical/smrt-chat": "0.55.16",
-		"@happyvertical/smrt-commerce": "0.55.16",
-		"@happyvertical/smrt-content": "0.55.16",
-		"@happyvertical/smrt-events": "0.55.16",
-		"@happyvertical/smrt-fields": "0.55.16",
-		"@happyvertical/smrt-images": "0.55.16",
-		"@happyvertical/smrt-jobs": "0.55.16",
-		"@happyvertical/smrt-ledgers": "0.55.16",
-		"@happyvertical/smrt-messages": "0.55.16",
-		"@happyvertical/smrt-personas": "0.55.16",
+		"@happyvertical/smrt-agents": "0.55.17",
+		"@happyvertical/smrt-analytics": "0.55.17",
+		"@happyvertical/smrt-assets": "0.55.17",
+		"@happyvertical/smrt-chat": "0.55.17",
+		"@happyvertical/smrt-commerce": "0.55.17",
+		"@happyvertical/smrt-content": "0.55.17",
+		"@happyvertical/smrt-events": "0.55.17",
+		"@happyvertical/smrt-fields": "0.55.17",
+		"@happyvertical/smrt-images": "0.55.17",
+		"@happyvertical/smrt-jobs": "0.55.17",
+		"@happyvertical/smrt-ledgers": "0.55.17",
+		"@happyvertical/smrt-messages": "0.55.17",
+		"@happyvertical/smrt-personas": "0.55.17",
 		"@happyvertical/smrt-planner": "0.0.2",
-		"@happyvertical/smrt-playground": "0.55.16",
-		"@happyvertical/smrt-profiles": "0.55.16",
-		"@happyvertical/smrt-projects": "0.55.16",
-		"@happyvertical/smrt-reports": "0.55.16",
-		"@happyvertical/smrt-svelte": "0.55.16",
-		"@happyvertical/smrt-tenancy": "0.55.16",
-		"@happyvertical/smrt-ui": "0.55.16",
-		"@happyvertical/smrt-users": "0.55.16",
-		"@happyvertical/smrt-web": "0.55.16"
+		"@happyvertical/smrt-playground": "0.55.17",
+		"@happyvertical/smrt-profiles": "0.55.17",
+		"@happyvertical/smrt-projects": "0.55.17",
+		"@happyvertical/smrt-reports": "0.55.17",
+		"@happyvertical/smrt-svelte": "0.55.17",
+		"@happyvertical/smrt-tenancy": "0.55.17",
+		"@happyvertical/smrt-ui": "0.55.17",
+		"@happyvertical/smrt-users": "0.55.17",
+		"@happyvertical/smrt-web": "0.55.17"
 	},
-	"//qa": "QA SESSION ONLY (2026-10 site refresh): `pnpm.overrides` below links @happyvertical/smrt-planner to the unreleased worktree at /Users/will/Work/_trees/smrt-planner/site-refresh (branch release/site-refresh) and @happyvertical/smrt-svelte to the unreleased monorepo worktree at /Users/will/Work/_trees/smrt/site-refresh (branch release/site-refresh; icon-only left sidebar toggle). Remove the `//qa` and `pnpm` keys, restore the exact registry pins for smrt-planner and smrt-svelte, and run `pnpm install` before shipping.",
+	"//qa": "QA SESSION ONLY (2026-10 site refresh): `pnpm.overrides` below links @happyvertical/smrt-planner to the unreleased worktree at /Users/will/Work/_trees/smrt-planner/site-refresh (branch release/site-refresh). Remove the `//qa` and `pnpm` keys, restore the exact registry pin for smrt-planner, and run `pnpm install` before shipping.",
 	"pnpm": {
 		"overrides": {
-			"@happyvertical/smrt-planner": "link:../../smrt-planner/site-refresh",
-			"@happyvertical/smrt-svelte": "link:../../smrt/site-refresh/packages/smrt-svelte"
+			"@happyvertical/smrt-planner": "link:../../smrt-planner/site-refresh"
 		}
 	}
 }

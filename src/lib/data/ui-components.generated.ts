@@ -13637,6 +13637,54 @@ export const uiComponents: UiComponentReference[] = [
 		source: 'packages/personas/src/svelte/components/DirectiveReviewQueue.svelte'
 	},
 	{
+		slug: 'host-planner',
+		name: 'HostPlanner',
+		family: 'smrt-planner-planner',
+		category: 'Planner · Planner',
+		importPath: '@happyvertical/smrt-planner',
+		summary:
+			"The planner inside a Kitchen host (an MCP app or widget): the complete `Planner` over a host session that reads and writes the plan through the host's tools, reconnecting while the page is visible.",
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'callTool',
+				code: 'CallKitchenTool',
+				status: true,
+				description: "Calls one of the host's Kitchen tools by name with its arguments."
+			},
+			{
+				name: 'initial',
+				code: 'HostPlan',
+				status: false,
+				description: 'A plan the host already holds, received before the first connection.'
+			},
+			{
+				name: 'onready',
+				code: '(session: HostSession) => void',
+				status: false,
+				description: 'Called once the session is mounted, with the session to drive it.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onready',
+				code: '(session: HostSession) => void',
+				status: false,
+				description: 'Called once the session is mounted, with the session to drive it.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: null
+	},
+	{
 		slug: 'planner',
 		name: 'Planner',
 		family: 'smrt-planner-planner',
@@ -13658,20 +13706,21 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'string',
 				status: false,
 				description:
-					"Where the planner's own pages are served from (`''`, `'/planner'`). Only links to planner pages use it; the component needs no router of its own."
+					"Where the customization controls' own pages are served from (`''`, `'/planner'`). The complete Planner uses fragment paths for its app sections and model pages, so it needs no host router."
 			},
 			{
 				name: 'inference',
 				code: 'PlannerInference',
 				status: false,
-				description: "A model for the planner's assistant; see `createPlannerAssistant`."
+				description:
+					"A model for the planner's assistant; see `createPlannerAssistant`. The complete `Planner` then shows the assistant icon at the end of its header: it opens the chat dock once a model is ready and the AI models page (`#/ai/`, where a visitor downloads a model or connects their own endpoint) before. Without it the planner has no assistant."
 			},
 			{
 				name: 'layout',
 				code: "'own' | 'shell'",
 				status: false,
 				description:
-					"`'own'` (the default) edits the menu layout on a headless controller built from the cookbook. `'shell'` edits the nearest smrt-svelte `AppShell`'s, as the static app does (it also holds panel and slot placements)."
+					"`PlannerControls` uses `'own'` by default, editing the menu layout on a headless controller. `'shell'` edits the nearest smrt-svelte `AppShell`. The complete `Planner` always uses its own shell for these controls."
 			},
 			{
 				name: 'persistence',
@@ -13687,16 +13736,30 @@ export const uiComponents: UiComponentReference[] = [
 				description: 'Show the theme preset and light/dark controls (they need a theme provider).'
 			},
 			{
+				name: 'advancedStylesHref',
+				code: 'string',
+				status: false,
+				description: "Link to the host's Advanced Styles page, when mounting controls alone."
+			},
+			{
 				name: 'tabs',
 				code: 'readonly PlannerTabId[]',
 				status: false,
 				description: 'Tabs to show, in order; defaults to all.'
 			},
 			{
+				name: 'backLink',
+				code: 'PlannerBackLink',
+				status: false,
+				description:
+					"A host's way back, rendered at the start of the planner's header beside the brand (`{ href: '/', label: 'Back to documentation' }`). Off by default. The complete `Planner` only."
+			},
+			{
 				name: 'onready',
 				code: '(handle: PlannerHandle) => void',
 				status: false,
-				description: ''
+				description:
+					'Called once the planner is mounted, with its controller and (when `inference` was given) the assistant transport, for a host that drives the plan itself.'
 			}
 		],
 		sources: [],
@@ -13706,7 +13769,113 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onready',
 				code: '(handle: PlannerHandle) => void',
 				status: false,
-				description: ''
+				description:
+					'Called once the planner is mounted, with its controller and (when `inference` was given) the assistant transport, for a host that drives the plan itself.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: null
+	},
+	{
+		slug: 'planner-controls',
+		name: 'PlannerControls',
+		family: 'smrt-planner-planner',
+		category: 'Planner · Planner',
+		importPath: '@happyvertical/smrt-planner',
+		summary:
+			"The planner's customization controls alone (Cookbooks, Recipes, Theme, Settings, Export as tabs), for a host that owns the surrounding shell; the complete `Planner` mounts the same inside its own shell.",
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'controller',
+				code: 'PlannerController',
+				status: false,
+				description:
+					"The commands to drive the planner with and the snapshot to read. Defaults to the app's own. A controller made with `createPlannerController` works too; the planner follows its `focus` tab."
+			},
+			{
+				name: 'basePath',
+				code: 'string',
+				status: false,
+				description:
+					"Where the customization controls' own pages are served from (`''`, `'/planner'`). The complete Planner uses fragment paths for its app sections and model pages, so it needs no host router."
+			},
+			{
+				name: 'inference',
+				code: 'PlannerInference',
+				status: false,
+				description:
+					"A model for the planner's assistant; see `createPlannerAssistant`. The complete `Planner` then shows the assistant icon at the end of its header: it opens the chat dock once a model is ready and the AI models page (`#/ai/`, where a visitor downloads a model or connects their own endpoint) before. Without it the planner has no assistant."
+			},
+			{
+				name: 'layout',
+				code: "'own' | 'shell'",
+				status: false,
+				description:
+					"`PlannerControls` uses `'own'` by default, editing the menu layout on a headless controller. `'shell'` edits the nearest smrt-svelte `AppShell`. The complete `Planner` always uses its own shell for these controls."
+			},
+			{
+				name: 'persistence',
+				code: "'self' | 'host'",
+				status: false,
+				description:
+					"`'self'` (the default) reads the saved cookbook from this browser on mount and saves changes. `'host'` leaves both to the host (the static app's layout does them)."
+			},
+			{
+				name: 'themeControls',
+				code: 'boolean',
+				status: false,
+				description: 'Show the theme preset and light/dark controls (they need a theme provider).'
+			},
+			{
+				name: 'advancedStylesHref',
+				code: 'string',
+				status: false,
+				description: "Link to the host's Advanced Styles page, when mounting controls alone."
+			},
+			{
+				name: 'tabs',
+				code: 'readonly PlannerTabId[]',
+				status: false,
+				description: 'Tabs to show, in order; defaults to all.'
+			},
+			{
+				name: 'backLink',
+				code: 'PlannerBackLink',
+				status: false,
+				description:
+					"A host's way back, rendered at the start of the planner's header beside the brand (`{ href: '/', label: 'Back to documentation' }`). Off by default. The complete `Planner` only."
+			},
+			{
+				name: 'onready',
+				code: '(handle: PlannerHandle) => void',
+				status: false,
+				description:
+					'Called once the planner is mounted, with its controller and (when `inference` was given) the assistant transport, for a host that drives the plan itself.'
+			},
+			{
+				name: 'managedByParent',
+				code: 'boolean',
+				status: false,
+				description:
+					'`true` when the complete `Planner` renders these: its own lifecycle already configured the controller, persistence and inference, so the controls do not mount a second one.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onready',
+				code: '(handle: PlannerHandle) => void',
+				status: false,
+				description:
+					'Called once the planner is mounted, with its controller and (when `inference` was given) the assistant transport, for a host that drives the plan itself.'
 			}
 		],
 		components: [],
@@ -14622,6 +14791,40 @@ export const uiComponents: UiComponentReference[] = [
 				description: 'When set, the app panel links here (e.g. a settings route).'
 			},
 			{
+				name: 'accountMenu',
+				code: 'AppShellAccountMenu',
+				status: false,
+				description:
+					"The signed-in user's account menu: the built-in item `item:account` (shown when `user` is set). Default slot `leftSidebar.footer`: the full identity in the expanded sidebar footer, the avatar alone at the bottom of the collapsed rail; on phones the avatar sits at the end of the header band. Menu: name and email, Settings (`settingsHref`) and Sign out (`onSignOut` or `signOutHref`). `false` opts out; `{ slot }` overrides the default slot (users can still move it in the layout editor)."
+			},
+			{
+				name: 'onSignOut',
+				code: '() => void',
+				status: false,
+				description: "Called when the account menu's Sign out is chosen (wins over `signOutHref`)."
+			},
+			{
+				name: 'signOutHref',
+				code: 'string',
+				status: false,
+				description:
+					"Where the account menu's Sign out link goes when there is no `onSignOut`. A link is a GET: never point it at the runtime's POST-only `/sign-out` route; pass `onSignOut` for that."
+			},
+			{
+				name: 'colorSchemeToggle',
+				code: 'boolean | { slot?: ShellSlot; }',
+				status: false,
+				description:
+					'The theme switcher (`ColorSchemeToggle` from `smrt-ui/themes`) as the built-in item `item:color-scheme`, default slot `header.end`. On by default; `false` opts out, `{ slot }` sets the default slot. Icon-only on phones.'
+			},
+			{
+				name: 'commandPalette',
+				code: 'AppShellCommandPalette',
+				status: false,
+				description:
+					'The command palette as the built-in item `item:command-palette` (default slot `header.center`): a search-shaped trigger with the shortcut hint, a search icon button on phones. Mounts the existing `CommandPalette` (trigger, dialog and global shortcut). Off unless given.'
+			},
+			{
 				name: 'webmcp',
 				code: 'boolean | WebMcpProviderConfig',
 				status: false,
@@ -14728,7 +14931,7 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'navMode',
-				code: "'items' | 'sections'",
+				code: "'items' | 'sections' | 'sections-with-items'",
 				status: false,
 				description:
 					"`'items'` (default) lists every section's entries in the left sidebar. `'sections'` lists only the sections, one icon link each, to the section's own page (`ShellNavGroup.href`, else `sectionHref`, else its first entry); render the entries there with `ShellSectionMenu`. In edit mode the sidebar edits sections (grip, rename, hide, icon); entries are edited on the section page."
@@ -14759,6 +14962,27 @@ export const uiComponents: UiComponentReference[] = [
 				description: 'Keyboard shortcuts; default follows `edgeToggles` (see `AdminShell`).'
 			},
 			{
+				name: 'phoneTabBar',
+				code: 'boolean | PhoneTabBarOptions',
+				status: false,
+				description:
+					'Phone bottom tab bar (default `false`): on phones, the footer region\'s phone presentation (conceptually the footer\'s center slot) shows the first N navigation items as icon + label tabs (`aria-current` from `currentHref`), then a tab for the first `dockToggles` entry (or a "Tools" tab when the right edge has tools), then "More" opening the left drawer when navigation overflows. `N` defaults to 4 and counts the dock tab; `{ items }` overrides it. While on, the header "Tools" opener and the header copy of the dock tab\'s toggle are not rendered on phones. Read once at mount, like `config`.'
+			},
+			{
+				name: 'phoneDock',
+				code: "'sheet' | 'drawer'",
+				status: false,
+				description:
+					"How the right edge (dock tools) presents on phones: `'sheet'` rises from the bottom above the tab bar (grabber, swipe down or Escape to close), `'drawer'` slides in from the side. Default `'sheet'` when `phoneTabBar` is on, else `'drawer'`. An explicit value wins over `config.right.phone`. Read once at mount."
+			},
+			{
+				name: 'chrome',
+				code: 'boolean',
+				status: false,
+				description:
+					'Render the shell chrome (default). `false` mounts only the Provider and ThemeProvider around `children`: no navigation, sidebars, header, or footer, so a host can show the first-run setup route chrome-free.'
+			},
+			{
 				name: 'children',
 				code: 'Snippet',
 				status: true,
@@ -14768,6 +14992,12 @@ export const uiComponents: UiComponentReference[] = [
 		sources: [],
 		sections: [],
 		items: [
+			{
+				name: 'onSignOut',
+				code: '() => void',
+				status: false,
+				description: "Called when the account menu's Sign out is chosen (wins over `signOutHref`)."
+			},
 			{
 				name: 'onlayoutchange',
 				code: '(layout: ShellLayout) => void',
@@ -14804,6 +15034,18 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'OwnerSetupFormResult | null',
 				status: false,
 				description: "The route's `form` prop (action failure data)."
+			},
+			{
+				name: 'title',
+				code: 'string',
+				status: false,
+				description: 'Application name shown as the brand above the card.'
+			},
+			{
+				name: 'logoSrc',
+				code: 'string',
+				status: false,
+				description: 'Optional logo shown before the title.'
 			},
 			{
 				name: 'askTenantName',
@@ -14879,10 +15121,31 @@ export const uiComponents: UiComponentReference[] = [
 		summary: 'ShellSettingsPage is part of the svelte · app component family.',
 		summarySynthesized: true,
 		slot: null,
-		details: [],
+		details: [
+			{
+				name: 'signOutHref',
+				code: 'string',
+				status: false,
+				description:
+					"Where the Account section's sign-out link goes; shown only when given. A link is a GET: never point it at the runtime's POST-only `/sign-out`; use `onSignOut` for that."
+			},
+			{
+				name: 'onSignOut',
+				code: '() => void',
+				status: false,
+				description: 'Called by the sign-out control instead of following `signOutHref`.'
+			}
+		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onSignOut',
+				code: '() => void',
+				status: false,
+				description: 'Called by the sign-out control instead of following `signOutHref`.'
+			}
+		],
 		components: [],
 		demo: null,
 		related: {
@@ -15534,6 +15797,12 @@ export const uiComponents: UiComponentReference[] = [
 				description: 'Trigger text and dialog name (default "Search").'
 			},
 			{
+				name: 'placeholder',
+				code: 'string',
+				status: false,
+				description: 'Search box placeholder in the dialog.'
+			},
+			{
 				name: 'compact',
 				code: 'boolean',
 				status: false,
@@ -15796,6 +16065,12 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'CookbookCatalog',
 				status: true,
 				description: ''
+			},
+			{
+				name: 'navMode',
+				code: "'sections' | 'sections-with-items'",
+				status: false,
+				description: 'Expanded section entries are the default; use `sections` for headings only.'
 			},
 			{
 				name: 'loaders',
@@ -19217,7 +19492,15 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'phone',
 				code: 'AdminShellPhoneOptions',
 				status: false,
-				description: 'Phone behavior switches (scrim, swipe to close, hide on scroll).'
+				description:
+					'Phone behavior switches (scrim and swipe to close default on; hide on scroll).'
+			},
+			{
+				name: 'phoneDockOpener',
+				code: 'boolean',
+				status: false,
+				description:
+					'Show the built-in "Tools" opener on phones while the right edge has focus tools (default true). `AppShell` turns it off when dock toggles already open the dock from the header.'
 			},
 			{
 				name: 'pinChrome',
@@ -19379,9 +19662,15 @@ export const uiComponents: UiComponentReference[] = [
 		details: [
 			{
 				name: 'items',
-				code: 'PhoneBottomBarItem[]',
+				code: '(PhoneBottomBarItem | PhoneBottomBarEntry)[]',
 				status: true,
 				description: 'Bar entries, left to right.'
+			},
+			{
+				name: 'iconComponent',
+				code: 'Component<{ name: string; size?: number; }>',
+				status: false,
+				description: 'Renders `iconName`s that are not built-in shell icons.'
 			},
 			{
 				name: 'label',
@@ -19393,7 +19682,7 @@ export const uiComponents: UiComponentReference[] = [
 		sources: [],
 		sections: [],
 		items: [],
-		components: [],
+		components: [''],
 		demo: null,
 		related: {
 			label: 'UI showcase',
@@ -19692,7 +19981,7 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'navMode',
-				code: "'items' | 'sections'",
+				code: "'items' | 'sections' | 'sections-with-items'",
 				status: false,
 				description:
 					"`'sections'` edits only the sections (grip, rename, show, delete, icon picker); their entries are edited on the section's own page with `ShellSectionMenu`. Default `'items'`."
@@ -19890,10 +20179,43 @@ export const uiComponents: UiComponentReference[] = [
 		summary: 'ShellSettingsPanel is part of the svelte · workspace component family.',
 		summarySynthesized: true,
 		slot: null,
-		details: [],
+		details: [
+			{
+				name: 'appearance',
+				code: 'boolean',
+				status: false,
+				description: 'Show the Appearance section (needs a `ThemeProvider` above).'
+			},
+			{
+				name: 'account',
+				code: 'boolean',
+				status: false,
+				description: "Show the Account section (needs the Provider's `useAuth()` above)."
+			},
+			{
+				name: 'signOutHref',
+				code: 'string',
+				status: false,
+				description:
+					'Where the sign-out control goes; the control is hidden when neither this nor `onSignOut` is given.'
+			},
+			{
+				name: 'onSignOut',
+				code: '() => void',
+				status: false,
+				description: 'Called by the sign-out control instead of following `signOutHref`.'
+			}
+		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onSignOut',
+				code: '() => void',
+				status: false,
+				description: 'Called by the sign-out control instead of following `signOutHref`.'
+			}
+		],
 		components: [],
 		demo: null,
 		related: {
@@ -20093,10 +20415,10 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'navMode',
-				code: "'items' | 'sections'",
+				code: "'items' | 'sections' | 'sections-with-items'",
 				status: false,
 				description:
-					"`'items'` (default) lists every group's entries. `'sections'` shows only the sections, one icon link each, to the section's own page (`ShellNavGroup.href`, else `sectionHref(id)`, else its first entry)."
+					"`'items'` (default) lists every group's entries. `'sections'` shows only the sections. `'sections-with-items'` also shows entries when expanded. Section links go to the section's own page (`ShellNavGroup.href`, else `sectionHref(id)`, else its first entry)."
 			},
 			{
 				name: 'sectionHref',
@@ -20199,6 +20521,12 @@ export const uiComponents: UiComponentReference[] = [
 				description: 'Custom display name for the user, falls back to userName.'
 			},
 			{
+				name: 'email',
+				code: 'string',
+				status: false,
+				description: 'Email shown under the name at the top of the open menu.'
+			},
+			{
 				name: 'avatarUrl',
 				code: 'string',
 				status: false,
@@ -20230,15 +20558,29 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'placement',
-				code: 'DropdownPlacement',
+				code: "DropdownPlacement | 'inline-end'",
 				status: false,
-				description: 'Where the dropdown menu appears relative to the trigger button.'
+				description:
+					'Where the menu appears relative to the trigger. `inline-end` opens beside the trigger, bottom-aligned (a compact trigger in a narrow rail).'
 			},
 			{
 				name: 'disabled',
 				code: 'boolean',
 				status: false,
 				description: 'Disables the account menu button.'
+			},
+			{
+				name: 'settingsHref',
+				code: 'string',
+				status: false,
+				description: 'Adds a Settings link to the menu.'
+			},
+			{
+				name: 'signOutHref',
+				code: 'string',
+				status: false,
+				description:
+					"Adds a Sign out link (a GET navigation) to the menu. Never point it at a POST-only route such as the runtime's `/sign-out`; use `onSignOut` for those. Use `onSignOut` for a callback."
 			},
 			{
 				name: 'onTenantSelect',
@@ -27985,7 +28327,7 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'string',
 				status: false,
 				description:
-					'A CSS colour (a token such as `var(--status-draft)` or a value) shown when the toggle is pressed.'
+					'A CSS colour (a token such as `var(--smrt-color-primary)` or a value) shown when the toggle is pressed.'
 			},
 			{
 				name: 'children',
@@ -29402,10 +29744,10 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2689,
-	totalProps: 2794,
-	authoredSummaries: 149,
-	totalComponents: 385
+	describedProps: 2729,
+	totalProps: 2833,
+	authoredSummaries: 151,
+	totalComponents: 387
 };
 
 export const uiComponentGroups = [

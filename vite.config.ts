@@ -57,8 +57,7 @@ export default defineConfig({
 			'@happyvertical/smrt-core',
 			'@happyvertical/smrt-svelte',
 			'@happyvertical/smrt-ui',
-			// The linked smrt-svelte's own node_modules point at its monorepo
-			// siblings; smrt-web carries document-global WebMCP state, so one copy.
+			// smrt-web carries document-global WebMCP state, so one copy.
 			'@happyvertical/smrt-web',
 			'@happyvertical/smrt-chat',
 			'@happyvertical/smrt-assets'
@@ -67,7 +66,7 @@ export default defineConfig({
 	server: {
 		port: 5183,
 		fs: {
-			allow: ['.', '../../smrt-planner/site-refresh', '../../smrt/site-refresh']
+			allow: ['.', '../../smrt-planner/site-refresh']
 		}
 	}
 });
