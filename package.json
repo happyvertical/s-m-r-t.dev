@@ -28,7 +28,7 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
-		"@happyvertical/smrt-cli": "0.55.18",
+		"@happyvertical/smrt-cli": "0.55.19",
 		"@sveltejs/adapter-auto": "^7.0.1",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "2.50.1",
@@ -51,35 +51,36 @@
 		"vitest": "4.0.18"
 	},
 	"dependencies": {
-		"@happyvertical/smrt-agents": "0.55.18",
-		"@happyvertical/smrt-analytics": "0.55.18",
-		"@happyvertical/smrt-assets": "0.55.18",
-		"@happyvertical/smrt-chat": "0.55.18",
-		"@happyvertical/smrt-commerce": "0.55.18",
-		"@happyvertical/smrt-content": "0.55.18",
-		"@happyvertical/smrt-events": "0.55.18",
-		"@happyvertical/smrt-fields": "0.55.18",
-		"@happyvertical/smrt-images": "0.55.18",
-		"@happyvertical/smrt-jobs": "0.55.18",
-		"@happyvertical/smrt-ledgers": "0.55.18",
-		"@happyvertical/smrt-messages": "0.55.18",
-		"@happyvertical/smrt-personas": "0.55.18",
+		"@happyvertical/smrt-agents": "0.55.19",
+		"@happyvertical/smrt-analytics": "0.55.19",
+		"@happyvertical/smrt-assets": "0.55.19",
+		"@happyvertical/smrt-chat": "0.55.19",
+		"@happyvertical/smrt-commerce": "0.55.19",
+		"@happyvertical/smrt-content": "0.55.19",
+		"@happyvertical/smrt-events": "0.55.19",
+		"@happyvertical/smrt-fields": "0.55.19",
+		"@happyvertical/smrt-images": "0.55.19",
+		"@happyvertical/smrt-jobs": "0.55.19",
+		"@happyvertical/smrt-ledgers": "0.55.19",
+		"@happyvertical/smrt-messages": "0.55.19",
+		"@happyvertical/smrt-personas": "0.55.19",
 		"@happyvertical/smrt-planner": "0.0.2",
-		"@happyvertical/smrt-playground": "0.55.18",
-		"@happyvertical/smrt-profiles": "0.55.18",
-		"@happyvertical/smrt-projects": "0.55.18",
-		"@happyvertical/smrt-reports": "0.55.18",
-		"@happyvertical/smrt-svelte": "0.55.18",
-		"@happyvertical/smrt-tenancy": "0.55.18",
-		"@happyvertical/smrt-ui": "0.55.18",
-		"@happyvertical/smrt-users": "0.55.18",
-		"@happyvertical/smrt-web": "0.55.18"
+		"@happyvertical/smrt-playground": "0.55.19",
+		"@happyvertical/smrt-profiles": "0.55.19",
+		"@happyvertical/smrt-projects": "0.55.19",
+		"@happyvertical/smrt-reports": "0.55.19",
+		"@happyvertical/smrt-svelte": "0.55.19",
+		"@happyvertical/smrt-tenancy": "0.55.19",
+		"@happyvertical/smrt-ui": "0.55.19",
+		"@happyvertical/smrt-users": "0.55.19",
+		"@happyvertical/smrt-web": "0.55.19"
 	},
-	"//qa": "QA SESSION ONLY (2026-10 site refresh): `pnpm.overrides` below links @happyvertical/smrt-planner to the unreleased worktree at /Users/will/Work/_trees/smrt-planner/site-refresh (branch release/site-refresh) and @happyvertical/smrt-svelte to the smrt worktree at /Users/will/Work/_trees/smrt/site-refresh (branch release/site-refresh-2, v0.55.18). Remove the `//qa` and `pnpm` keys, restore the exact registry pin for smrt-planner, and run `pnpm install` before shipping.",
+	"//qa": "QA SESSION ONLY (2026-10 site refresh): `pnpm.overrides` below links @happyvertical/smrt-planner to the unreleased worktree at /Users/will/Work/_trees/smrt-planner/site-refresh (branch release/site-refresh) and @happyvertical/smrt-svelte plus @happyvertical/smrt-ui (DataTable summaries, which the linked smrt-svelte record tables need) to the smrt worktree at /Users/will/Work/_trees/smrt/site-refresh (branch release/site-refresh-2, v0.55.19 merged). The other smrt packages stay on the 0.55.19 registry pins; smrt-core is not linked because the branch's core changes are build-time only, and `resolve.dedupe` in vite.config.ts keeps one runtime copy. Remove the `//qa` and `pnpm` keys, restore the exact registry pin for smrt-planner, and run `pnpm install` before shipping.",
 	"pnpm": {
 		"overrides": {
 			"@happyvertical/smrt-planner": "link:../../smrt-planner/site-refresh",
-			"@happyvertical/smrt-svelte": "link:../../smrt/site-refresh/packages/smrt-svelte"
+			"@happyvertical/smrt-svelte": "link:../../smrt/site-refresh/packages/smrt-svelte",
+			"@happyvertical/smrt-ui": "link:../../smrt/site-refresh/packages/smrt-ui"
 		}
 	}
 }

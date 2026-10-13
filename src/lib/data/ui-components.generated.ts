@@ -14799,9 +14799,10 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'onSignOut',
-				code: '() => void',
+				code: '() => unknown',
 				status: false,
-				description: "Called when the account menu's Sign out is chosen (wins over `signOutHref`)."
+				description:
+					"Called when the account menu's Sign out is chosen (wins over `signOutHref`). May be async: the menu awaits it, shows a busy state, and on rejection stays open with an inline error."
 			},
 			{
 				name: 'signOutHref',
@@ -14832,10 +14833,10 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'user',
-				code: 'User | null',
+				code: 'ShellUser',
 				status: false,
 				description:
-					'Authenticated user forwarded to the Provider; `null` renders the shell signed out.'
+					"The signed-in identity (`ShellUser`): the runtime's `SessionLayoutUser` (`data.session.user`) or a full `User` both fit without a cast. It is forwarded to the Provider unchanged; `null` renders the shell signed out."
 			},
 			{
 				name: 'permissions',
@@ -14994,9 +14995,10 @@ export const uiComponents: UiComponentReference[] = [
 		items: [
 			{
 				name: 'onSignOut',
-				code: '() => void',
+				code: '() => unknown',
 				status: false,
-				description: "Called when the account menu's Sign out is chosen (wins over `signOutHref`)."
+				description:
+					"Called when the account menu's Sign out is chosen (wins over `signOutHref`). May be async: the menu awaits it, shows a busy state, and on rejection stays open with an inline error."
 			},
 			{
 				name: 'onlayoutchange',
@@ -15131,9 +15133,10 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'onSignOut',
-				code: '() => void',
+				code: '() => unknown',
 				status: false,
-				description: 'Called by the sign-out control instead of following `signOutHref`.'
+				description:
+					'Called by the sign-out control instead of following `signOutHref`; may be async (busy while pending, inline error on rejection).'
 			}
 		],
 		sources: [],
@@ -15141,9 +15144,10 @@ export const uiComponents: UiComponentReference[] = [
 		items: [
 			{
 				name: 'onSignOut',
-				code: '() => void',
+				code: '() => unknown',
 				status: false,
-				description: 'Called by the sign-out control instead of following `signOutHref`.'
+				description:
+					'Called by the sign-out control instead of following `signOutHref`; may be async (busy while pending, inline error on rejection).'
 			}
 		],
 		components: [],
@@ -16074,10 +16078,10 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'loaders',
-				code: "Omit<CoreWidgetLoaders, 'shortcuts'>",
+				code: 'CookbookLoaders',
 				status: false,
 				description:
-					"Data loaders for the `metric`, `records` and `chart` widgets. With `metric` and `records`, section pages also show a record count and the latest records of the section's lead model."
+					"Data loaders for the `metric`, `records` and `chart` widgets. With `metric` and `records`, section pages also show a record count and the latest records of the section's lead model. `shortcuts` composes with the registry's own entries (see {@link CookbookShortcutsLoader})."
 			},
 			{
 				name: 'widgetContext',
@@ -16127,6 +16131,99 @@ export const uiComponents: UiComponentReference[] = [
 		source: 'packages/smrt-svelte/src/components/cookbook/CookbookApp.svelte'
 	},
 	{
+		slug: 'cookbook-section-overview',
+		name: 'CookbookSectionOverview',
+		family: 'smrt-svelte-cookbook',
+		category: 'Svelte · Cookbook',
+		importPath: '@happyvertical/smrt-svelte/cookbook',
+		summary: 'CookbookSectionOverview is part of the svelte · cookbook component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'presentation',
+				code: "'plain' | 'card'",
+				status: false,
+				description:
+					"How the overview's tiles are drawn outside edit mode: `'plain'` (default) lists a section's entries as unframed rows or tiles on the panel surface; `'card'` keeps the framed look. Editing always keeps its frame."
+			},
+			{
+				name: 'heading',
+				code: "import('svelte').Snippet<[{ section: CookbookSectionHeadingInfo; }]>",
+				status: false,
+				description: 'Replaces the section heading with host content.'
+			},
+			{
+				name: 'definition',
+				code: 'OverviewDefinition',
+				status: true,
+				description:
+					"The section's default overview from the cookbook; read once at mount (key the component on the section id)."
+			},
+			{
+				name: 'registry',
+				code: 'WidgetRegistry',
+				status: true,
+				description:
+					'Widget types available on this overview, with their option schemas and loaders.'
+			},
+			{
+				name: 'store',
+				code: 'CookbookOverviewStore',
+				status: true,
+				description:
+					"Where the user's edits to this overview are read from and written back to (the cookbook override)."
+			},
+			{
+				name: 'entries',
+				code: 'ReadonlyMap<string, CookbookEntry>',
+				status: true,
+				description:
+					"The section's menu entries by id, passed to loaders so shortcuts follow renames, hides and moves."
+			},
+			{
+				name: 'components',
+				code: 'WidgetComponents',
+				status: true,
+				description: 'Svelte component that renders each widget type.'
+			},
+			{
+				name: 'models',
+				code: 'readonly OverviewModelChoice[]',
+				status: true,
+				description: "Models the user may pick as a widget's data source in edit mode."
+			},
+			{
+				name: 'hostContext',
+				code: '() => Record<string, unknown>',
+				status: true,
+				description: 'Host capabilities for widget loaders.'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: true,
+				description: 'Accessible name of the overview grid, usually the section title.'
+			},
+			{
+				name: 'section',
+				code: 'CookbookSectionHeadingInfo',
+				status: false,
+				description: 'The section; needed for `heading`, which renders above the grid.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/cookbook/CookbookSectionOverview.svelte'
+	},
+	{
 		slug: 'cookbook-section-page',
 		name: 'CookbookSectionPage',
 		family: 'smrt-svelte-cookbook',
@@ -16136,6 +16233,19 @@ export const uiComponents: UiComponentReference[] = [
 		summarySynthesized: true,
 		slot: null,
 		details: [
+			{
+				name: 'presentation',
+				code: "'plain' | 'card'",
+				status: false,
+				description:
+					"How the overview's tiles are drawn outside edit mode: `'plain'` (default) lists a section's entries as unframed rows or tiles on the panel surface; `'card'` keeps the framed look. Editing always keeps its frame."
+			},
+			{
+				name: 'heading',
+				code: "import('svelte').Snippet<[{ section: CookbookSectionHeadingInfo; }]>",
+				status: false,
+				description: 'Replaces the section heading with host content.'
+			},
 			{
 				name: 'sectionId',
 				code: 'string',
@@ -17938,6 +18048,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'Component<{ name: string; size?: number; }>',
 				status: false,
 				description: "The host's renderer for icon names that are not built in."
+			},
+			{
+				name: 'presentation',
+				code: "'card' | 'plain'",
+				status: false,
+				description:
+					"How the grid frames tiles right now (`card` when editing, whatever the grid's `presentation` is otherwise). Widgets that draw their own frame drop it under `plain`."
 			}
 		],
 		sources: [],
@@ -17950,6 +18067,77 @@ export const uiComponents: UiComponentReference[] = [
 			href: '/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/overview/widgets/ChartWidget.svelte'
+	},
+	{
+		slug: 'line-items-widget',
+		name: 'LineItemsWidget',
+		family: 'smrt-svelte-overview',
+		category: 'Svelte · Overview',
+		importPath: '@happyvertical/smrt-svelte/overview',
+		summary: 'LineItemsWidget is part of the svelte · overview component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'id',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'options',
+				code: 'OverviewOptions',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'data',
+				code: 'Data | undefined',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'span',
+				code: 'number',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'title',
+				code: 'string',
+				status: true,
+				description: 'Heading shown by the frame (the `title` option, else the type title).'
+			},
+			{
+				name: 'locale',
+				code: 'string',
+				status: true,
+				description: 'BCP-47 locale for number formatting.'
+			},
+			{
+				name: 'iconComponent',
+				code: 'Component<{ name: string; size?: number; }>',
+				status: false,
+				description: "The host's renderer for icon names that are not built in."
+			},
+			{
+				name: 'presentation',
+				code: "'card' | 'plain'",
+				status: false,
+				description:
+					"How the grid frames tiles right now (`card` when editing, whatever the grid's `presentation` is otherwise). Widgets that draw their own frame drop it under `plain`."
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/overview/widgets/LineItemsWidget.svelte'
 	},
 	{
 		slug: 'metric-widget',
@@ -18002,6 +18190,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'Component<{ name: string; size?: number; }>',
 				status: false,
 				description: "The host's renderer for icon names that are not built in."
+			},
+			{
+				name: 'presentation',
+				code: "'card' | 'plain'",
+				status: false,
+				description:
+					"How the grid frames tiles right now (`card` when editing, whatever the grid's `presentation` is otherwise). Widgets that draw their own frame drop it under `plain`."
 			}
 		],
 		sources: [],
@@ -18066,6 +18261,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'Component<{ name: string; size?: number; }>',
 				status: false,
 				description: "The host's renderer for icon names that are not built in."
+			},
+			{
+				name: 'presentation',
+				code: "'card' | 'plain'",
+				status: false,
+				description:
+					"How the grid frames tiles right now (`card` when editing, whatever the grid's `presentation` is otherwise). Widgets that draw their own frame drop it under `plain`."
 			}
 		],
 		sources: [],
@@ -18250,6 +18452,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'Component<{ name: string; size?: number; }>',
 				status: false,
 				description: "The host's renderer for icon names that are not built in."
+			},
+			{
+				name: 'presentation',
+				code: "'card' | 'plain'",
+				status: false,
+				description:
+					"How the grid frames tiles right now (`card` when editing, whatever the grid's `presentation` is otherwise). Widgets that draw their own frame drop it under `plain`."
 			}
 		],
 		sources: [],
@@ -18262,6 +18471,77 @@ export const uiComponents: UiComponentReference[] = [
 			href: '/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/overview/widgets/RecordListWidget.svelte'
+	},
+	{
+		slug: 'related-widget',
+		name: 'RelatedWidget',
+		family: 'smrt-svelte-overview',
+		category: 'Svelte · Overview',
+		importPath: '@happyvertical/smrt-svelte/overview',
+		summary: 'RelatedWidget is part of the svelte · overview component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'id',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'options',
+				code: 'OverviewOptions',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'data',
+				code: 'Data | undefined',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'span',
+				code: 'number',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'title',
+				code: 'string',
+				status: true,
+				description: 'Heading shown by the frame (the `title` option, else the type title).'
+			},
+			{
+				name: 'locale',
+				code: 'string',
+				status: true,
+				description: 'BCP-47 locale for number formatting.'
+			},
+			{
+				name: 'iconComponent',
+				code: 'Component<{ name: string; size?: number; }>',
+				status: false,
+				description: "The host's renderer for icon names that are not built in."
+			},
+			{
+				name: 'presentation',
+				code: "'card' | 'plain'",
+				status: false,
+				description:
+					"How the grid frames tiles right now (`card` when editing, whatever the grid's `presentation` is otherwise). Widgets that draw their own frame drop it under `plain`."
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/overview/widgets/RelatedWidget.svelte'
 	},
 	{
 		slug: 'shortcuts-widget',
@@ -18314,6 +18594,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'Component<{ name: string; size?: number; }>',
 				status: false,
 				description: "The host's renderer for icon names that are not built in."
+			},
+			{
+				name: 'presentation',
+				code: "'card' | 'plain'",
+				status: false,
+				description:
+					"How the grid frames tiles right now (`card` when editing, whatever the grid's `presentation` is otherwise). Widgets that draw their own frame drop it under `plain`."
 			}
 		],
 		sources: [],
@@ -18491,6 +18778,45 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'Snippet',
 				status: false,
 				description: 'Extra content under the fields.'
+			},
+			{
+				name: 'relations',
+				code: 'readonly ScreenRelation[]',
+				status: false,
+				description:
+					'Relations of this model (`deriveScreenRelations`). The `reference` ones map a FK field to its target model, which `labels` is keyed by.'
+			},
+			{
+				name: 'hrefFor',
+				code: '(field: ScreenField, id: string) => string | undefined',
+				status: false,
+				description: "Link for a reference field's value; `undefined` renders no link."
+			},
+			{
+				name: 'labels',
+				code: 'Readonly<Record<string, (id: string) => string | undefined>>',
+				status: false,
+				description:
+					'Display label for a referenced record, keyed by target model id (`relation.model`); `undefined` falls back to the raw id.'
+			},
+			{
+				name: 'exclude',
+				code: 'readonly string[]',
+				status: false,
+				description: 'Field names to leave out (the record header shows them).'
+			},
+			{
+				name: 'hideEmpty',
+				code: 'boolean',
+				status: false,
+				description:
+					'Move fields with no value behind a "Show empty fields" disclosure instead of listing "Not set" cells.'
+			},
+			{
+				name: 'variant',
+				code: "'plain' | 'card'",
+				status: false,
+				description: "`card`: the fields sit in a bordered card (the record page's details card)."
 			}
 		],
 		sources: [],
@@ -18592,6 +18918,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'string | null',
 				status: false,
 				description: 'A form-level failure message from the host.'
+			},
+			{
+				name: 'derivedFields',
+				code: 'readonly string[]',
+				status: false,
+				description:
+					'Fields computed elsewhere (a subtotal / tax / total worked out from the line items): shown read-only with a hint and never part of the payload.'
 			},
 			{
 				name: 'onsubmit',
@@ -18860,6 +19193,19 @@ export const uiComponents: UiComponentReference[] = [
 				code: '(view: RecipeScreenView, recordId: string | null) => void',
 				status: false,
 				description: 'Called on every user navigation, for router synchronization.'
+			},
+			{
+				name: 'definitions',
+				code: 'Readonly<Record<string, ScreenCollectionDefinition>>',
+				status: false,
+				description:
+					"Every exposed collection definition, keyed by collection name; the record view derives this model's relations from it. Omit for none."
+			},
+			{
+				name: 'record',
+				code: "Pick<RecordScreenProps, 'loaders' | 'registry' | 'widgetContext' | 'overview' | 'override' | 'onoverviewchange' | 'layoutEditing' | 'canCustomize' | 'hrefFor' | 'labels' | 'viewAllHref' | 'statusTones'>",
+				status: false,
+				description: 'Passed to `RecordScreen` for the record view and edit.'
 			}
 		],
 		sources: [],
@@ -18879,6 +19225,275 @@ export const uiComponents: UiComponentReference[] = [
 			href: '/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/screens/RecipeScreens.svelte'
+	},
+	{
+		slug: 'record-screen',
+		name: 'RecordScreen',
+		family: 'smrt-svelte-screens',
+		category: 'Svelte · Screens',
+		importPath: '@happyvertical/smrt-svelte/screens',
+		summary: 'RecordScreen is part of the svelte · screens component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'definition',
+				code: 'ScreenCollectionDefinition',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'policy',
+				code: 'ScreenPolicy | null',
+				status: false,
+				description: 'Resolved field policy for the same object; omit for the code seed.'
+			},
+			{
+				name: 'record',
+				code: 'ScreenRecord',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'relations',
+				code: 'readonly ScreenRelation[]',
+				status: false,
+				description: 'Relations of this model (`deriveScreenRelations`).'
+			},
+			{
+				name: 'mode',
+				code: 'RecordScreenMode',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'loaders',
+				code: 'CoreWidgetLoaders',
+				status: false,
+				description:
+					'Loaders of the core widgets; the shell registers them on a registry of its own and runs them in the browser with the record context. A widget without a loader is not offered (and a default using it is dropped).'
+			},
+			{
+				name: 'registry',
+				code: 'WidgetRegistry',
+				status: false,
+				description:
+					'An explicit registry (recipe widgets included) instead of one built from `loaders`.'
+			},
+			{
+				name: 'widgetContext',
+				code: "Omit<WidgetLoadContext, 'overviewId' | 'record'>",
+				status: false,
+				description:
+					'Host capabilities for the widget loads (a `fetch`, a client, the locale). `overviewId` and `record` are set by the screen.'
+			},
+			{
+				name: 'overview',
+				code: 'OverviewDefinition',
+				status: false,
+				description: 'The overview to render; defaults to `recordOverview(definition, relations)`.'
+			},
+			{
+				name: 'override',
+				code: 'OverviewOverride | null',
+				status: false,
+				description: 'The stored layout override for this model kind (host-owned when given).'
+			},
+			{
+				name: 'onoverviewchange',
+				code: '(override: OverviewOverride | null) => void | Promise<void>',
+				status: false,
+				description: 'Receives the override after each layout edit (`null` = defaults).'
+			},
+			{
+				name: 'layoutEditing',
+				code: 'boolean',
+				status: false,
+				description: "Layout edit mode; omit to follow the shell's layout editor."
+			},
+			{
+				name: 'canCustomize',
+				code: 'boolean',
+				status: false,
+				description: 'Whether the viewer may customize the layout (default true).'
+			},
+			{
+				name: 'hrefFor',
+				code: '(field: ScreenField, id: string) => string | undefined',
+				status: false,
+				description: "Link for a reference field's value."
+			},
+			{
+				name: 'labels',
+				code: 'Readonly<Record<string, (id: string) => string | undefined>>',
+				status: false,
+				description: 'Display labels for referenced records, keyed by target model id.'
+			},
+			{
+				name: 'viewAllHref',
+				code: '(relation: ScreenRelation) => string | undefined',
+				status: false,
+				description: '"View all" link of a related-records panel; `undefined` renders none.'
+			},
+			{
+				name: 'title',
+				code: 'string',
+				status: false,
+				description: 'Page title. Defaults to the first basic text field, else the class name.'
+			},
+			{
+				name: 'fields',
+				code: 'readonly string[]',
+				status: false,
+				description: 'Explicit field names, in order (overrides the derived set).'
+			},
+			{
+				name: 'currency',
+				code: 'string',
+				status: false,
+				description: 'ISO 4217 code used by money fields.'
+			},
+			{
+				name: 'locale',
+				code: 'string',
+				status: false,
+				description: 'BCP-47 locale for number and date formatting.'
+			},
+			{
+				name: 'backLabel',
+				code: 'string',
+				status: false,
+				description: 'Label for the back action; defaults to the pluralized class name.'
+			},
+			{
+				name: 'deleting',
+				code: 'boolean',
+				status: false,
+				description: 'Mutation in flight; locks the delete confirmation.'
+			},
+			{
+				name: 'submitting',
+				code: 'boolean',
+				status: false,
+				description: 'True while the host is persisting the edit; locks the form.'
+			},
+			{
+				name: 'fieldErrors',
+				code: 'Readonly<Record<string, string>>',
+				status: false,
+				description: 'Server-reported field messages for the edit form, keyed by field name.'
+			},
+			{
+				name: 'error',
+				code: 'string | null',
+				status: false,
+				description: 'A form-level failure message from the host.'
+			},
+			{
+				name: 'onback',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onedit',
+				code: '() => void',
+				status: false,
+				description: 'When set, an Edit action is offered (the host switches `mode`).'
+			},
+			{
+				name: 'oncancel',
+				code: '() => void',
+				status: false,
+				description: "Closes the edit form (Cancel, the sheet's close button, Escape)."
+			},
+			{
+				name: 'onsave',
+				code: "EditFormProps['onsubmit']",
+				status: false,
+				description: "Receives the edit form's wire-ready values; `EditFormProps['onsubmit']`."
+			},
+			{
+				name: 'ondelete',
+				code: '() => void | Promise<void>',
+				status: false,
+				description: 'When set, Delete (with a confirmation) is offered in the overflow menu.'
+			},
+			{
+				name: 'extraActions',
+				code: 'Snippet',
+				status: false,
+				description: "Extra actions, rendered in the header's overflow menu before Delete."
+			},
+			{
+				name: 'statusTones',
+				code: 'Readonly<Record<string, RecordStatusTone>>',
+				status: false,
+				description:
+					"Badge tone per status value (`paid: 'success'`); unmapped values use `DEFAULT_STATUS_TONES`, else neutral."
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description: 'Extra content under the fields, inside the details card.'
+			},
+			{
+				name: 'derivedFields',
+				code: 'readonly string[]',
+				status: false,
+				description:
+					"The edit form's derived (read-only, never submitted) fields. Defaults to the subtotal / discount / tax / total role fields when the model has an `items` relation, else none."
+			},
+			{
+				name: 'items',
+				code: 'Snippet',
+				status: false,
+				description:
+					"Editable line items (the host's own editor), rendered under the edit form: in the edit column on desktop and inside the edit sheet on phones, so lines are editable on a phone too."
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onoverviewchange',
+				code: '(override: OverviewOverride | null) => void | Promise<void>',
+				status: false,
+				description: 'Receives the override after each layout edit (`null` = defaults).'
+			},
+			{
+				name: 'onback',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onedit',
+				code: '() => void',
+				status: false,
+				description: 'When set, an Edit action is offered (the host switches `mode`).'
+			},
+			{
+				name: 'oncancel',
+				code: '() => void',
+				status: false,
+				description: "Closes the edit form (Cancel, the sheet's close button, Escape)."
+			},
+			{
+				name: 'ondelete',
+				code: '() => void | Promise<void>',
+				status: false,
+				description: 'When set, Delete (with a confirmation) is offered in the overflow menu.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/screens/RecordScreen.svelte'
 	},
 	{
 		slug: 'settings-catalog',
@@ -20201,9 +20816,10 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'onSignOut',
-				code: '() => void',
+				code: '() => unknown',
 				status: false,
-				description: 'Called by the sign-out control instead of following `signOutHref`.'
+				description:
+					'Called by the sign-out control instead of following `signOutHref`. May return a promise: the control is busy and disabled while it is pending; a rejection shows an inline error and leaves the section as it was.'
 			}
 		],
 		sources: [],
@@ -20211,9 +20827,10 @@ export const uiComponents: UiComponentReference[] = [
 		items: [
 			{
 				name: 'onSignOut',
-				code: '() => void',
+				code: '() => unknown',
 				status: false,
-				description: 'Called by the sign-out control instead of following `signOutHref`.'
+				description:
+					'Called by the sign-out control instead of following `signOutHref`. May return a promise: the control is busy and disabled while it is pending; a rejection shows an inline error and leaves the section as it was.'
 			}
 		],
 		components: [],
@@ -20590,9 +21207,10 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'onSignOut',
-				code: '() => void',
+				code: '() => unknown',
 				status: false,
-				description: 'Called when the user clicks sign out.'
+				description:
+					'Called when the user clicks sign out. May return a promise: the item shows a busy state (`aria-busy`, disabled against double submit) while it is pending, the menu closes on success, and stays open with an inline error when it rejects.'
 			}
 		],
 		sources: [],
@@ -20606,9 +21224,10 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'onSignOut',
-				code: '() => void',
+				code: '() => unknown',
 				status: false,
-				description: 'Called when the user clicks sign out.'
+				description:
+					'Called when the user clicks sign out. May return a promise: the item shows a busy state (`aria-busy`, disabled against double submit) while it is pending, the menu closes on success, and stays open with an inline error when it rejects.'
 			}
 		],
 		components: [],
@@ -21847,6 +22466,19 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'readonly DataTableStructuralRow<T>[]',
 				status: false,
 				description: 'Generic report-like rows rendered independently from data row interactions.'
+			},
+			{
+				name: 'summaries',
+				code: 'DataTableSummaries<T>',
+				status: false,
+				description:
+					'Column summaries: a `<tfoot>` row with a `count`, `sum` or `avg` per column id, or a function of the rows returning the cell text. Computed over every filtered row (all pages; only the given rows under manual pagination). A `sum` / `avg` column without an explicit `align` is right-aligned. Rendered after any `footer` structural rows.'
+			},
+			{
+				name: 'summaryLabel',
+				code: 'string',
+				status: false,
+				description: 'Label of the summaries row (default "Total", localized).'
 			},
 			{
 				name: 'visibleColumnIds',
@@ -29751,10 +30383,10 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2730,
-	totalProps: 2834,
+	describedProps: 2798,
+	totalProps: 2914,
 	authoredSummaries: 151,
-	totalComponents: 387
+	totalComponents: 391
 };
 
 export const uiComponentGroups = [
