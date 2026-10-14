@@ -2,7 +2,7 @@ node_modules/
 .svelte-kit/
 build/
 dist/
-.claude/worktrees/
+.claude/
 pnpm-lock.yaml
 
 # Machine-owned hv-agent lifecycle manifest: JSON content under a .yaml
