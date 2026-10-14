@@ -32,7 +32,7 @@ class MemoryStorage implements Storage {
 }
 
 for (const name of ['localStorage', 'sessionStorage'] as const) {
-	let usable = false;
+	let usable: boolean;
 	try {
 		usable = typeof globalThis[name]?.setItem === 'function';
 	} catch {
