@@ -173,8 +173,8 @@
 			<h1 class="visually-hidden">The s-m-r-t application stack</h1>
 			<p class="lede">
 				s-m-r-t is a framework and library for creating software that blurs the line between
-				application and agent. It is better demonstrated than explained: the cookbook planner here is
-				a live demo, and the cookbook it produces can jumpstart your next project.
+				application and agent. It is better demonstrated than explained: the cookbook planner here
+				is a live demo, and the cookbook it produces can jumpstart your next project.
 			</p>
 			<div class="hero-actions">
 				<a class="primary-link" href="/planner">Open the cookbook planner <span>→</span></a>
@@ -214,7 +214,6 @@
 				documented packages · <span class="mono">{componentCount}</span> components ·
 				<span class="mono">{playgroundCount}</span> playground entries
 			</p>
-
 		</div>
 
 		<ol class="mini-scope-map" aria-label="The s-m-r-t application stack in five layers">
