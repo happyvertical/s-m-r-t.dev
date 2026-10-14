@@ -451,4 +451,13 @@
 			display: none;
 		}
 	}
+
+	/* Forced colours replace the inverted colours; draw the active category as selected. */
+	@media (forced-colors: active) {
+		.category-filters button.active {
+			border-color: Highlight;
+			background: Highlight;
+			color: HighlightText;
+		}
+	}
 </style>

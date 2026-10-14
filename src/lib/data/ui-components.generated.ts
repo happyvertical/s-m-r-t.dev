@@ -14883,6 +14883,27 @@ export const uiComponents: UiComponentReference[] = [
 				description: "Light, dark or system color scheme; the user's persisted choice wins."
 			},
 			{
+				name: 'borderRadius',
+				code: "ThemeConfig['borderRadius']",
+				status: false,
+				description:
+					"Corner radius scale passed to the ThemeProvider; the user's persisted choice wins."
+			},
+			{
+				name: 'density',
+				code: "ThemeConfig['density']",
+				status: false,
+				description:
+					"Control target density passed to the ThemeProvider; the user's persisted choice wins."
+			},
+			{
+				name: 'contrast',
+				code: 'ContrastPreference',
+				status: false,
+				description:
+					"Contrast preference passed to the ThemeProvider (`auto` follows the OS); the user's persisted choice wins."
+			},
+			{
 				name: 'appPanelDocs',
 				code: 'Snippet',
 				status: false,
@@ -16110,7 +16131,7 @@ export const uiComponents: UiComponentReference[] = [
 			}
 		],
 		sources: [
-			"Omit<ComponentProps<typeof AppShell>, 'navGroups' | 'nav' | 'navMode' | 'layout' | 'onlayoutchange' | 'preset' | 'colorScheme' | 'sectionHref' | 'title' | 'children'>",
+			"Omit<ComponentProps<typeof AppShell>, 'navGroups' | 'nav' | 'navMode' | 'layout' | 'onlayoutchange' | 'preset' | 'colorScheme' | 'borderRadius' | 'density' | 'contrast' | 'sectionHref' | 'title' | 'children'>",
 			"Pick<BuildCookbookShellOptions, 'recipeOrder' | 'entryPath' | 'sectionPath' | 'href' | 'title'>"
 		],
 		sections: [],
@@ -30383,8 +30404,8 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2798,
-	totalProps: 2914,
+	describedProps: 2801,
+	totalProps: 2917,
 	authoredSummaries: 151,
 	totalComponents: 391
 };

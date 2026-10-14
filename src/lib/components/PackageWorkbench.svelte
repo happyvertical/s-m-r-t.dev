@@ -1215,4 +1215,12 @@
 			padding-left: 0;
 		}
 	}
+
+	/* Forced colours replace the inverted colours; draw the selected tab as selected. */
+	@media (forced-colors: active) {
+		.tabs button.active {
+			background: Highlight;
+			color: HighlightText;
+		}
+	}
 </style>

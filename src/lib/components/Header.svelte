@@ -396,4 +396,11 @@
 			display: none;
 		}
 	}
+
+	/* Forced colours drop the accent colour; the current mobile entry keeps an underline. */
+	@media (forced-colors: active) {
+		.mobile-navigation a[aria-current='page'] {
+			text-decoration: underline;
+		}
+	}
 </style>

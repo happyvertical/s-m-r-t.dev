@@ -256,4 +256,12 @@
 			align-items: center;
 		}
 	}
+
+	/* Forced colours drop the background and inset rule; draw the current page as selected. */
+	@media (forced-colors: active) {
+		.band-pages a[aria-current] {
+			background: Highlight;
+			color: HighlightText;
+		}
+	}
 </style>
