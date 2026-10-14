@@ -62,7 +62,7 @@
 	<section class="planner-host" aria-label="Planner">
 		{#if Planner}
 			<!--
-				Known upstream defect (smrt-planner 0.0.2; fixed on the planner's
+				Known upstream defect (smrt-planner, last release; fixed on the planner's
 				release/site-refresh branch in fd041b6, pending release; see AGENTS.md
 				"Active upstream defects"; https://github.com/happyvertical/smrt-planner/issues/53):
 				once a plan with a saved `layout` is reloaded from this browser, the
