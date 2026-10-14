@@ -66,7 +66,7 @@ export default defineConfig({
 	server: {
 		port: 5183,
 		fs: {
-			allow: ['.', '../../smrt-planner/site-refresh', '../../smrt/site-refresh']
+			allow: ['.', '../../smrt-planner/site-refresh']
 		}
 	}
 });

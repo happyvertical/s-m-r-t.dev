@@ -4919,6 +4919,19 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'PartyExtension<CustomerDisplayData>',
 				status: false,
 				description: 'Consumer content rendered after the standard customer sections.'
+			},
+			{
+				name: 'headless',
+				code: 'boolean',
+				status: false,
+				description:
+					'Omits the built-in page header (title, subtitle, and its create/edit action) for hosts that frame the page themselves.'
+			},
+			{
+				name: 'header',
+				code: 'Snippet',
+				status: false,
+				description: 'Replaces the built-in page header; not rendered when `headless` is set.'
 			}
 		],
 		sources: [],
@@ -5079,6 +5092,19 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'PartyDirectoryExtension<CustomerDisplayData>',
 				status: false,
 				description: 'Consumer content appended to every customer row.'
+			},
+			{
+				name: 'headless',
+				code: 'boolean',
+				status: false,
+				description:
+					'Omits the built-in page header (title, subtitle, and its create/edit action) for hosts that frame the page themselves.'
+			},
+			{
+				name: 'header',
+				code: 'Snippet',
+				status: false,
+				description: 'Replaces the built-in page header; not rendered when `headless` is set.'
 			}
 		],
 		sources: [],
@@ -5208,6 +5234,20 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'Snippet',
 				status: false,
 				description: 'Replaces the default cancel and save action bar.'
+			},
+			{
+				name: 'enhance',
+				code: 'PartyFormEnhance',
+				status: false,
+				description:
+					"Progressive-enhancement hook for the native form element, such as SvelteKit's `enhance`. Needed when an `ssr = false` app must not answer a native post with its empty shell."
+			},
+			{
+				name: 'onsubmit',
+				code: "HTMLFormAttributes['onsubmit']",
+				status: false,
+				description:
+					'Native submit handler. Submission stays native unless the handler calls `event.preventDefault()`.'
 			}
 		],
 		sources: [],
@@ -7187,6 +7227,19 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'PartyExtension<VendorDisplayData>',
 				status: false,
 				description: 'Consumer content rendered after the standard vendor sections.'
+			},
+			{
+				name: 'headless',
+				code: 'boolean',
+				status: false,
+				description:
+					'Omits the built-in page header (title, subtitle, and its create/edit action) for hosts that frame the page themselves.'
+			},
+			{
+				name: 'header',
+				code: 'Snippet',
+				status: false,
+				description: 'Replaces the built-in page header; not rendered when `headless` is set.'
 			}
 		],
 		sources: [],
@@ -7347,6 +7400,19 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'PartyDirectoryExtension<VendorDisplayData>',
 				status: false,
 				description: 'Consumer content appended to every vendor row.'
+			},
+			{
+				name: 'headless',
+				code: 'boolean',
+				status: false,
+				description:
+					'Omits the built-in page header (title, subtitle, and its create/edit action) for hosts that frame the page themselves.'
+			},
+			{
+				name: 'header',
+				code: 'Snippet',
+				status: false,
+				description: 'Replaces the built-in page header; not rendered when `headless` is set.'
 			}
 		],
 		sources: [],
@@ -7470,6 +7536,20 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'Snippet',
 				status: false,
 				description: 'Replaces the default cancel and save action bar.'
+			},
+			{
+				name: 'enhance',
+				code: 'PartyFormEnhance',
+				status: false,
+				description:
+					"Progressive-enhancement hook for the native form element, such as SvelteKit's `enhance`. Needed when an `ssr = false` app must not answer a native post with its empty shell."
+			},
+			{
+				name: 'onsubmit',
+				code: "HTMLFormAttributes['onsubmit']",
+				status: false,
+				description:
+					'Native submit handler. Submission stays native unless the handler calls `event.preventDefault()`.'
 			}
 		],
 		sources: [],
@@ -22296,7 +22376,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'density',
 				code: "'comfortable' | 'touch'",
 				status: false,
-				description: 'Sort-control target density; omit to inherit ThemeProvider.'
+				description: 'Sort-control and pager target density; omit to inherit ThemeProvider.'
 			},
 			{
 				name: 'responsiveMode',
@@ -28615,7 +28695,7 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'string',
 				status: false,
 				description:
-					'Extra class(es) appended after the base `button {variant} {size}` styling. Lets callers adopt Button for custom-styled buttons without losing their own CSS (issue #1589) — the base button styling still applies.'
+					'Extra class(es) appended after the base `button smrt-button__{variant} smrt-button__{size}` styling. Lets callers adopt Button for custom-styled buttons without losing their own CSS (issue #1589) — the base button styling still applies.'
 			},
 			{
 				name: 'target',
@@ -29197,6 +29277,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'number',
 				status: false,
 				description: 'Maximum number of visible page numbers'
+			},
+			{
+				name: 'density',
+				code: "'comfortable' | 'touch'",
+				status: false,
+				description:
+					'Control target density. `touch` raises every page and nav control to `--smrt-touch-target-min`; omit to inherit the ThemeProvider setting (`--smrt-control-target-min`).'
 			}
 		],
 		sources: [],
@@ -30404,8 +30491,8 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2801,
-	totalProps: 2917,
+	describedProps: 2814,
+	totalProps: 2930,
 	authoredSummaries: 151,
 	totalComponents: 391
 };
