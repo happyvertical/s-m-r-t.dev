@@ -29,10 +29,6 @@
 			"version": "0.55.21",
 			"agentsMd": "dffe54f5b13fa274d24056c6dc48179bd3bb4ef93c4e47670651f27b67523826"
 		},
-		"@happyvertical/smrt-core": {
-			"version": "0.55.21",
-			"agentsMd": "a55cc2d7dccf8f5dc9fd515361fddf719466159ee11e265285cf14b3fcdd96fa"
-		},
 		"@happyvertical/smrt-events": {
 			"version": "0.55.21",
 			"agentsMd": "fd92563513c75d3b1f4107a239a7030bbcb8ac45e0e13e87afdbbebc84b0d4be"
