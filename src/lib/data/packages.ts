@@ -1625,6 +1625,10 @@ export const packages: SmrtPackage[] = [
 					body: 'channelId distinguishes Estimate, Order, Lease, Agreement, PurchaseOrder, WholesaleOrder, ProductionOrder, Cart, and LicenseSale in one table. LicenseSale snapshots rights immutably and revoke() is its explicit transition. Store money as integer minor units; preflightCommerceMoneyMinorUnits and migrateCommerceMoneyToMinorUnits handle the commerce migration. InvoiceLineItem.quantity is decimal with six fractional places; rounding happens once, where quantity times price meets money. There are no tolerances on any money path. The cost-billing subpath is an independent entry for signed cost billing with explicit tax rounding.'
 				},
 				{
+					title: 'Sales and purchase contracts have separate parties',
+					body: 'The base Contract holds no party. Abstract SalesContract owns customerId and covers Order, Estimate, Agreement, Lease, LicenseSale, WholesaleOrder, and Cart. Abstract PurchaseContract owns vendorId and covers PurchaseOrder and ProductionOrder. A sales leaf refuses vendorId and a purchase leaf refuses customerId. The contractId on Invoice, Payment, and Fulfillment points at SalesContract. Run preflightCommercePartyLinks on existing data before an upgrade.'
+				},
+				{
 					title: 'Invoices, payments, and payouts retain evidence',
 					body: 'recognizeRevenue posts accounts-receivable journal evidence. PaymentAllocation and Invoice.updatePaymentStatus connect settlement to the invoice. PaymentIntent locks a multi-rail price behind an idempotency key, while PaymentInstrument identifies the selected rail. Vendor payouts move from pending to sent, confirmed, or failed.'
 				},
@@ -2373,7 +2377,7 @@ export const packages: SmrtPackage[] = [
 			highlights: [
 				'Review is method-only: review, reject, markDuplicate, and reopen; a reviewed expense’s money, dates, cost object, vendor, and payer are frozen',
 				'The same receipt file twice on one expense is refused; the same file on two expenses is reported for a person to look at',
-				'Reviewed actuals reduce what remains open on a smrt-commerce purchase order, each exactly once'
+				'Reviewed actuals reduce what remains open on a smrt-commerce purchase commitment, each exactly once'
 			],
 			details: [
 				{
@@ -2382,7 +2386,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'What belongs elsewhere',
-					body: 'Allowances are budget records, not expenses. Labour belongs to smrt-timesheets. Receipt OCR and accounting-provider posting are out of scope. Vendors and commitments come from smrt-commerce; receipt files come from smrt-assets; profiles are referenced by id without a dependency.'
+					body: 'Allowances are budget records, not expenses. Labour belongs to smrt-timesheets. Receipt OCR and accounting-provider posting are out of scope. Vendors and commitments come from smrt-commerce; a commitment is a PurchaseContract, which is a PurchaseOrder or a ProductionOrder; receipt files come from smrt-assets; profiles are referenced by id without a dependency.'
 				},
 				{
 					title: 'Tenancy',
