@@ -12,81 +12,81 @@ importers:
   .:
     dependencies:
       '@happyvertical/smrt-agents':
-        specifier: 0.55.24
-        version: 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-analytics':
-        specifier: 0.55.24
-        version: 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-assets':
-        specifier: 0.55.24
-        version: 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-chat':
-        specifier: 0.55.24
-        version: 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(jimp@1.6.1)(sharp@0.35.5(@types/node@26.2.0))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(jimp@1.6.1)(sharp@0.35.5(@types/node@26.2.0))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-commerce':
-        specifier: 0.55.24
-        version: 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@noble/curves@2.0.1)(@noble/hashes@2.0.1)(@scure/bip32@2.0.1)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@noble/curves@2.0.1)(@noble/hashes@2.0.1)(@scure/bip32@2.0.1)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-content':
-        specifier: 0.55.24
-        version: 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@types/node@26.2.0)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(gsap@3.15.0)(jimp@1.6.1)(sharp@0.35.5(@types/node@26.2.0))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@types/node@26.2.0)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(gsap@3.15.0)(jimp@1.6.1)(sharp@0.35.5(@types/node@26.2.0))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-events':
-        specifier: 0.55.24
-        version: 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-fields':
-        specifier: 0.55.24
-        version: 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-images':
-        specifier: 0.55.24
-        version: 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(gsap@3.15.0)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(gsap@3.15.0)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-jobs':
-        specifier: 0.55.24
-        version: 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-ledgers':
-        specifier: 0.55.24
-        version: 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-messages':
-        specifier: 0.55.24
-        version: 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-personas':
-        specifier: 0.55.24
-        version: 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-planner':
         specifier: link:../../smrt-planner/site-refresh
         version: link:../../smrt-planner/site-refresh
       '@happyvertical/smrt-playground':
-        specifier: 0.55.24
-        version: 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1))
+        specifier: 0.56.0
+        version: 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1))
       '@happyvertical/smrt-profiles':
-        specifier: 0.55.24
-        version: 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-projects':
-        specifier: 0.55.24
-        version: 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-reports':
-        specifier: 0.55.24
-        version: 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-svelte':
-        specifier: 0.55.24
-        version: 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-tenancy':
-        specifier: 0.55.24
-        version: 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-ui':
-        specifier: 0.55.24
-        version: 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+        specifier: 0.56.0
+        version: 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
       '@happyvertical/smrt-users':
-        specifier: 0.55.24
-        version: 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/smrt-web':
-        specifier: 0.55.24
-        version: 0.55.24(typescript@5.9.3)
+        specifier: 0.56.0
+        version: 0.56.0(typescript@5.9.3)
     devDependencies:
       '@eslint/js':
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.9.1(jiti@2.7.0))
       '@happyvertical/smrt-cli':
-        specifier: 0.55.24
-        version: 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@sveltejs/kit@2.50.1(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(hono@4.12.29)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1))(ws@8.21.3)(zod@4.3.6)
+        specifier: 0.56.0
+        version: 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@sveltejs/kit@2.50.1(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(hono@4.12.29)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1))(ws@8.21.3)(zod@4.3.6)
       '@sveltejs/adapter-auto':
         specifier: ^7.0.1
         version: 7.0.1(@sveltejs/kit@2.50.1(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))
@@ -1151,24 +1151,24 @@ packages:
     resolution: {integrity: sha512-gNoVMrOQgU7s0MdsqVkd41Vl6jTKwZTXRTaXGKIPWtS6plqAOcLiFkTgaZfux8NAD1v1hw9/4rMKml37uLHnvw==}
     hasBin: true
 
-  '@happyvertical/smrt-agents@0.55.24':
-    resolution: {integrity: sha512-wrapHvf5391xrpkE7egojAJ4BqsElopdDxLK5p0NP0Q2KVelw0Rqh8aFhadqMeP1RWn/eEwW/umLlYVvQmwQ1A==}
+  '@happyvertical/smrt-agents@0.56.0':
+    resolution: {integrity: sha512-Pg+ljl+8ioeXsv9E4mZ32fUFWH++FsqIbCknvFlDOkqRsMZoyIlA1aOZS+KK0Phwbqlg2YgN+olwE9n30d3cqw==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-analytics@0.55.24':
-    resolution: {integrity: sha512-Sd2LAM/AuB3XbpsBasjk1Zaa7ylKnabixFTi4FgTZ8BtAxlNxYpIP57KwgvW/ykCBCX/rxLTVBmFV+MjgeNEcQ==}
+  '@happyvertical/smrt-analytics@0.56.0':
+    resolution: {integrity: sha512-EejYgcgpCu2wFawu8VRM9hlolri5j5qwwZT1mw29xoG65bCJC0YLxTHuGSRSL61esQA6N9UIPhNrznCK1XLWnQ==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-app-runtime@0.55.24':
-    resolution: {integrity: sha512-rPLWHNTebBJ7O5c5KgAuW2LDDGLXNPO151Ss/clFS4w/4tb6cPPTDDYfRictqtksCYncOGnXWd0mv8f3srWirQ==}
+  '@happyvertical/smrt-app-runtime@0.56.0':
+    resolution: {integrity: sha512-MfkkZsXbir5i7OGyA24bc/KaVZwV75Uq9UwjGhtOkxRR8PA7pDvklupEAl4yVlXQC0dCq3kblcu4xNZX71by4g==}
     engines: {node: '>=26.0.0'}
     peerDependencies:
       '@sveltejs/kit': ^2.20.0
@@ -1176,47 +1176,47 @@ packages:
       '@sveltejs/kit':
         optional: true
 
-  '@happyvertical/smrt-assets@0.55.24':
-    resolution: {integrity: sha512-T1x0K+t35rzrafeppnx5yfbe7AVK3/+x1cV9yfCZx9PztJ6IApF/m62oMFuq74eDIP/Woi+PyLKgg6n/VzNVCw==}
+  '@happyvertical/smrt-assets@0.56.0':
+    resolution: {integrity: sha512-s+QgHUH8FpJvKmkYihxe+khOq7i6tOlk5MOZrKsM4WQ+Cju5nBa3byXHlbinq1fJfU017XkLkeXkMJhIJAFtkg==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-chat@0.55.24':
-    resolution: {integrity: sha512-zFDkvCkUZ54YeCnDCyrTGtv5cz09KwQx4c2/R6cgVlRY4sdxY3uzPFrc36YHKMqT670PKT3V1iZGyK0wzOT0rQ==}
+  '@happyvertical/smrt-chat@0.56.0':
+    resolution: {integrity: sha512-rHHsOQxkxp/uiQDA22lqwVitjM6NhPWsJtM449UCZCP9UhWDg9hu5Bi4+67FAmD62bpZnnWNuKx8o4P+hqkRYw==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-cli@0.55.24':
-    resolution: {integrity: sha512-hY+seX/YmsP/u1wpyQdGcJ7eL1YkVO/3ARQxtHNq3qnrmfhf46IUZkZRD8NzgBoXicW1hg3CalydGHilbmOpYw==}
+  '@happyvertical/smrt-cli@0.56.0':
+    resolution: {integrity: sha512-7/VAl883FFo6VDBJN25c/eyTCjFN5Cf4GxuFvkhn79bZGtVQKZEMzFW9voxpwUrl8+f6jP3NQlBmI9G0xvZJ6Q==}
     hasBin: true
 
-  '@happyvertical/smrt-commerce@0.55.24':
-    resolution: {integrity: sha512-GZEyKdBDenFRDKdEZhAMFGC3scoF42ulk/zyJ1Ifin3JUVombwvgaM4kfoI+ag8ci1tTn9LKe9X2q5x0NHqnfw==}
+  '@happyvertical/smrt-commerce@0.56.0':
+    resolution: {integrity: sha512-qkax1qF8aSPxfVF2Awrw7CCZvV+rfsAPEqgXE6q+tndf7Ln/bvGjArvZjmU6bLLIVhRyQ2cW2inUaDHsXFKFaw==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-config@0.55.24':
-    resolution: {integrity: sha512-pU/SU2CRu9WJgP4b6CtINr6M0EFl1HVBBoHrnzak/keDcEy3jruAZ3MJjBQDGcx/Kptd1lNHLLy4zPcRuuKqQA==}
+  '@happyvertical/smrt-config@0.56.0':
+    resolution: {integrity: sha512-yj6/RktqDxubjw40ImfN15A0MfOJ2I9OZjpGBSE/ZMUuusOmqDEzc7oDdKH42tek6y7fM4HEF7vQQnpyPv+91A==}
 
-  '@happyvertical/smrt-content@0.55.24':
-    resolution: {integrity: sha512-/s03csCQ9DEBmhIEF2PKo26iGxcSvemulLB4g9X1eulXy5BJepqOctP19SGQ9yJixetXfF9AZcmRHs8xwnQQmw==}
+  '@happyvertical/smrt-content@0.56.0':
+    resolution: {integrity: sha512-sCKN+fkzP64YHHHYArxHJjsmBETgZqVHsQlnVAnLYVTYN053vDISKko0WQ+WjTF1o5ymjKOJlPZ2au4Zc5HMXA==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-core@0.55.24':
-    resolution: {integrity: sha512-Z5MWQW20Y0Ytca8ahjAramFn6p4hMFW3Cx1nKHWao3xwjsiW91mzLTe2qjaU33MQnMH0HBY/lTquaYUSEgHsjQ==}
+  '@happyvertical/smrt-core@0.56.0':
+    resolution: {integrity: sha512-x3NSUlqTdOdRNECGesQRfz58695y75lEy2UtYk2n8T9vE0PptgxLX9/T917M2CV81kERq7btUhAdTvTMQrnoeg==}
     engines: {node: '>=26.0.0'}
     hasBin: true
     peerDependencies:
@@ -1228,62 +1228,62 @@ packages:
       '@xenova/transformers':
         optional: true
 
-  '@happyvertical/smrt-dev-mcp@0.55.24':
-    resolution: {integrity: sha512-6B5vOyPFfReGuGP2SMawc+WImiEGn4ASlmhy50lXx4JwLaFBXIkHpJnvahRllvGVEH3DxzoHCQxET13SsB4sNw==}
+  '@happyvertical/smrt-dev-mcp@0.56.0':
+    resolution: {integrity: sha512-W18m+zdNpWugcl5FfI3sHEGEmETRTZO0667jWeLUB3+m4wYCCBqbWNuaf7fTPNpq/LRhXLm8npyLpFkiZiJ3FA==}
     engines: {node: '>=26.0.0'}
     hasBin: true
 
-  '@happyvertical/smrt-events@0.55.24':
-    resolution: {integrity: sha512-ApDPAi6lIgmYsM6mfSRdjYj+9+iQnplk5DW4U+y75EFYOpIq/ceIM4e0QbyVjXykpnXSQDfnk+8Iri6P3bnrLg==}
+  '@happyvertical/smrt-events@0.56.0':
+    resolution: {integrity: sha512-37tpu55NDlsOdJYuueelJqdED4cUTeG/Lz14T7HxGcx0jZDn8VOiB9tvHcHt+jMir7kALgncMNA6gfsGJIgT/A==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-facts@0.55.24':
-    resolution: {integrity: sha512-FFP/Jsa5QPelHHClNUGySeqJJDLM5+pdxKdbKkz+s+6RjAEm2MIYNbHjK4A4IFvf22AvKtkNJb2wGgnPAqlo9A==}
+  '@happyvertical/smrt-facts@0.56.0':
+    resolution: {integrity: sha512-qCoS6byXtQD9nnLE7mmsE2p/zLBnLLn9pmMzvmZpH2RFJfCTkoKAxAeKHYtpcqJYa2BiS9Z+dwPsfWPpWp4wXQ==}
 
-  '@happyvertical/smrt-features@0.55.24':
-    resolution: {integrity: sha512-1SVrGam0lQNWbEI5R5sL1BSeHiFcu3vUBdezpkecF7qNYIV8bIHeKyr5k5LwJVbQk68G9xNUeybf1+k+NN1YRQ==}
+  '@happyvertical/smrt-features@0.56.0':
+    resolution: {integrity: sha512-ZQU9taE6W3Zwa+8SHq7I0mpwAYWzbO0TTot/3vUZDgFzAq6hEZ0QqI/9BjzNtTaZq+UAFxL+DdYT6jLIs2Mllg==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-fields@0.55.24':
-    resolution: {integrity: sha512-Oq+HkIxj54O53uVkkxF+ivr9b4BbgJUvZRtPI3OcaomuKjZdphvrP3jSwXYuqPk3HYa1/9wPDT8ljF08Ag3Z4A==}
+  '@happyvertical/smrt-fields@0.56.0':
+    resolution: {integrity: sha512-bOjh/OTI2p3R0GkJ6YAJCiRSneW4UOXGWaoCD/J4nb8NcX+B2fTjMqzZ+H51f+o+bHo+TPH0YTG0aViNtzUWrQ==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-images@0.55.24':
-    resolution: {integrity: sha512-dysH0QyU/YTzgv5dUQdWiVGX69vB970bt1Rb7OxP47zIHfdNKUCiHbIBg0MlerA+VYwzA37QKw1nvXITj4kdRQ==}
+  '@happyvertical/smrt-images@0.56.0':
+    resolution: {integrity: sha512-xZjTXyGL8es37++T1F9iU4kWgL2Lgnr52zaAdLxsVgUtNGED0TF5taRjXII9nlqhqFkP5Am4PULpOFKekvzw9Q==}
     peerDependencies:
       svelte: ^5.57.0
 
-  '@happyvertical/smrt-jobs@0.55.24':
-    resolution: {integrity: sha512-7Mr75h4UMOEnj0ZbnMSaYIz5av5YJZbJg5O+o6lvHKNB6+MOVIgv0Pc1haQJwrPcat5/IqvK4phNSMrJf0QMdA==}
+  '@happyvertical/smrt-jobs@0.56.0':
+    resolution: {integrity: sha512-sVyWuOHj2F83+1ZwHl1pIBNL/c6/0AXSPSlRkVfKUdHgCPI1nnG7a0RsAwYJnpZ/gwC+3cOvCzdMbwm4eAOCrQ==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-languages@0.55.24':
-    resolution: {integrity: sha512-LbLaRKs/FTTxZxEhtdW+t81aVyer0t8wS0uv4g9nyuCCpxG0d/wibWFFpwvx/aCbGl269qOnFkEhycAs0Iq7wA==}
+  '@happyvertical/smrt-languages@0.56.0':
+    resolution: {integrity: sha512-Epq7TA1/JiAg6uDWmY++6MUPH7BAdR24EhjV7ECq9OPexkOgoKfdWDe2Adff8pT7hLI1VMGtO4w4iJUjF3MZrw==}
 
-  '@happyvertical/smrt-ledgers@0.55.24':
-    resolution: {integrity: sha512-C7EMXappJFL8Dk+LkHLUuxI6T59FhZeCDQu7I0niPlKFWibaE2W4h3oHh+m/ztd2m+c+7rm6S9/ZPE+UOK6odg==}
+  '@happyvertical/smrt-ledgers@0.56.0':
+    resolution: {integrity: sha512-IeKoDgX6pOSL1qNxtRoM5FbQScktn2HQoghrrjC5DEtvpplyRbhBfzsAxw/sWeITis08AZrj+0qPCipBWxfTqA==}
 
-  '@happyvertical/smrt-mcp-apps@0.55.24':
-    resolution: {integrity: sha512-H3UpFTwSFM1zycOnvTBe60wnOEemeAVM77vakJc6khcqlNqA2VgPyRVOnOtQc+BJ+VD9mclr5H+FduMKgqSXSA==}
+  '@happyvertical/smrt-mcp-apps@0.56.0':
+    resolution: {integrity: sha512-A2E04hWhx4PUR1x+Cv4JONXQxlCSwJEDAEZqol1EpJvZobRA5fy4mp0UGzxw69fbdWeXU81Jz1xSFdxezcVKwA==}
 
-  '@happyvertical/smrt-messages@0.55.24':
-    resolution: {integrity: sha512-NnCBfmz7V08XlJj7WZwFFjLfJHlj5PSDthJPLXaP0aPvKZv2c4Bk68X8FVGdLYYcAZyYSoK3v/bZXkmAgsqBkQ==}
+  '@happyvertical/smrt-messages@0.56.0':
+    resolution: {integrity: sha512-+bbYPigzV4VBXAnBeEF40EG2aLx6iZ6g9BACaUkrgk1lp0G3ESDlerwNu9BrrG3PAqBATgQvtwBVEBM75OOKvA==}
     peerDependencies:
       '@happyvertical/encryption': '*'
       svelte: ^5.57.0
@@ -1293,22 +1293,22 @@ packages:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-mobile-contract@0.55.24':
-    resolution: {integrity: sha512-CTQxuvO1yDLUfjAMPpV9jw4FeHHl4E84659CBe9VSp+NKqigh4A8ZlTdH785VQTZ0TLTql6l36nvRQY1lzmo2A==}
+  '@happyvertical/smrt-mobile-contract@0.56.0':
+    resolution: {integrity: sha512-OeIwbOdviGlZUEA2qirnftzdoO9RCWxerQXGj7UHC8wChMp4FriOXVhExbbaqu24iX//yqe3QS7uF/M2+tu4gA==}
 
-  '@happyvertical/smrt-personas@0.55.24':
-    resolution: {integrity: sha512-/ShZoDv7HLnIBl0U99bKnqu6oMMFD/ljuUwH4Cb5i5stqzSmgS3XfSBAvm3z4N15TxvmBh8KxoFkexnmk51hUQ==}
+  '@happyvertical/smrt-personas@0.56.0':
+    resolution: {integrity: sha512-wHEQjzR5UfG6dN4+ZrPmk5IDdYiOWOQ/PUvrlVQAIPL3FVfoQlSyW/AxGRM0fufKz/g7F1Zt6XKivo5jLat9fw==}
     peerDependencies:
       svelte: ^5.57.0
 
-  '@happyvertical/smrt-places@0.55.24':
-    resolution: {integrity: sha512-S57bkz6DjnJ30cjueNTkUcluSsRGk4SskZyk7MJr3YY9YPe55g7Vyl4avRYY8jey3C3UPkc8Am1CwORChQEbag==}
+  '@happyvertical/smrt-places@0.56.0':
+    resolution: {integrity: sha512-1+DVcGFBBioV7n05EGipnJX984ttng7/Ah7iTSCIiPlfCn7t2hDa21PAYJiNCqnvjVNR3Qv7nE6feE4JH5V4Zw==}
 
-  '@happyvertical/smrt-playbooks@0.55.24':
-    resolution: {integrity: sha512-IJnErVlR2Np7h35RtspisNQhkZNk8IC6Bfkqv3pTtNeVpuEsuWDp/eDeVjIo1QOtqRMKAvMCxv9bkT5Z2bBHDA==}
+  '@happyvertical/smrt-playbooks@0.56.0':
+    resolution: {integrity: sha512-EzZx6Y95F+BQAokTh58HED+M26vNI7Kwf7uO3wzYhWrwoML/rffJZ6p1jZQKxMZqXZAXKEQZLlt9VgE+ADP4xw==}
 
-  '@happyvertical/smrt-playground@0.55.24':
-    resolution: {integrity: sha512-1gqVfUipxr8WzyqhKu+vYx8FQzCvzSI4GMEOtwM2Q0m63sZWJ1qVPxznceP3URUtr0lVSFNf7x7rlQnI4qfRsA==}
+  '@happyvertical/smrt-playground@0.56.0':
+    resolution: {integrity: sha512-tgOpJ5sSiqF0ERT2b6qr1e+hRfGiJjmR2Odzq8xs9DqVPaaQ+93apq1MUCm4jtdTkoEt1NjrehjfNqtqsmqw+w==}
     peerDependencies:
       svelte: ^5.57.0
       vite: ^7.0.0 || ^8.0.0
@@ -1318,45 +1318,50 @@ packages:
       vite:
         optional: true
 
-  '@happyvertical/smrt-profiles@0.55.24':
-    resolution: {integrity: sha512-Myb0SZ+Fn9TNsv82YPfjMGMe87dlBARHEYOkwrMI9Oqp+3RAd69+qqMvZLfGvH7SapVUE/0V4q/HJxs/AmZz9w==}
+  '@happyvertical/smrt-profiles@0.56.0':
+    resolution: {integrity: sha512-5HX0ksAxw1PD+LJmxJr2sxXkP1W9z2NLxLFTS/PVuD0gemGBhAffSWShi+1Dox/zKXfXS6t7AaLz4bAEW3at9w==}
 
-  '@happyvertical/smrt-projects@0.55.24':
-    resolution: {integrity: sha512-0raxTLmF3xSVMu0ML47Dr5i2HAZ6p4VU0EzmSy0U6nNMuMVErbAGcbCGh7ZbXttO/iQD7xawQeYJ8twtzBKtKQ==}
+  '@happyvertical/smrt-projects@0.56.0':
+    resolution: {integrity: sha512-ZG+9FtO1odOK4CunQSG/EYBFs0+NHHzf89IT8f0oTMYTBsVoM0CKrpoL+kcSGx55HBKYsOk3dUWK4JdqH9PU9Q==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-prompts@0.55.24':
-    resolution: {integrity: sha512-nMZjI1rbKP/N8D6dEnTjPAeQtnDJRw/C+ubHOvx0f6sKQYWBIPpvqNpf0AbEE249JVmG5DRc085DTTKNfMVTSQ==}
+  '@happyvertical/smrt-prompts@0.56.0':
+    resolution: {integrity: sha512-FOnMGgveuRtvHriI8EfSmUX+3zRaqJ+kyydFxugVe+gbFtn1mhhVVWkVxBsRkk376+p+b4IKUR3Dp9QFWNV3Hw==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-reports@0.55.24':
-    resolution: {integrity: sha512-QnTh3mGRYlFurwhMO0ZR/Fe+B5Ui88CCTOqllvR/RxZ5Qh9cLin2GdJy/kqZk3ktNzGEgRKp7FzBm0Hi6/dnXA==}
+  '@happyvertical/smrt-reports@0.56.0':
+    resolution: {integrity: sha512-6kyeGdPf+dsqur6bfPnMq19IhShbQUtkI50bg38caTT/nW8IHmm7oyhiIWO9OPLLkBfYVzx/9HOtsYhKZa48Ew==}
+    peerDependencies:
+      svelte: ^5.57.0
+    peerDependenciesMeta:
+      svelte:
+        optional: true
 
-  '@happyvertical/smrt-scanner@0.55.24':
-    resolution: {integrity: sha512-3IxSvmMa0I89xTvZamcu3qOvFHT56KCZ8qdLaOThS4PuvcB5qgxQo5+kJxpqe5cCMC3UZ+qdda1D4YGqt0JGow==}
+  '@happyvertical/smrt-scanner@0.56.0':
+    resolution: {integrity: sha512-Vpt/8kr7w4PsFRX9TartzdFktJ0puFyseYls6DnULdGTjXKvShWYkQztubZF2pxhAkOrvorPzW0AoPctU5FH6A==}
     hasBin: true
 
-  '@happyvertical/smrt-secrets@0.55.24':
-    resolution: {integrity: sha512-e1AfL8hywk+tA5lLVKQzt1Rqt2EEocvar/jPyVpO3bayB9stu9mvuoBG/wkuvIXSv07gtd/C4fKa2sEl1UMFSw==}
+  '@happyvertical/smrt-secrets@0.56.0':
+    resolution: {integrity: sha512-qyJxS1j5wW609blnndXE5LIn2FkiyZ1qSeP/h6dGSW1Vw23OiPRi8AjDgskdcF3QPARA+afm2cOBF1laJ/fMtg==}
 
-  '@happyvertical/smrt-subscriptions@0.55.24':
-    resolution: {integrity: sha512-EqD0oYSCOM1mt1NpHNr7ansfMoFSudhtU7cjwEW7tbQCvnv5QFvHodelv/5BMJGfxKlSeDfN256+ZXRoYwxtxg==}
+  '@happyvertical/smrt-subscriptions@0.56.0':
+    resolution: {integrity: sha512-jiSrYkp7ec6egv4+nPbdlnMeKaUIs7sRA8JNWtVcdkKDwxMrvUxLhcGs2JR+ihRN5boAnzBG4sIv4lIy6uRIiA==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-svelte@0.55.24':
-    resolution: {integrity: sha512-nkU7AavhT1yFyF056TG6fMYQL5llvL8yDjnhFiqSuovq54HxAXPnBImkf7SBJE9JiUckiRg42QRJz4Gl6eIohQ==}
+  '@happyvertical/smrt-svelte@0.56.0':
+    resolution: {integrity: sha512-i3nUuhgIy0H5MJeIFVsUKApqK5hAEF+Ia7Fu2vUVibJk68nuBZsrGr0UfoFASIb9Pp5dqnbR8DZP8OMX1mNPyQ==}
     peerDependencies:
       '@happyvertical/speech': '>=0.102.5'
       '@huggingface/transformers': '>=4.3.0'
@@ -1379,30 +1384,30 @@ packages:
       chrono-node:
         optional: true
 
-  '@happyvertical/smrt-tags@0.55.24':
-    resolution: {integrity: sha512-hl0/mJtUE/7avtIGhVuLQEWa8v4SY83Ztw4Zd87FMAiiS8oYXcgd7HIlLnUse+EktGaic33WE7hUVwu+sxgu/Q==}
+  '@happyvertical/smrt-tags@0.56.0':
+    resolution: {integrity: sha512-pbKB/bdLpNu0ijeGgMeWs7J710l8wb1oqZJMjG7+TahoD/0xVvBb6TqIKlhuCfGMKzNwF2wWo1IECi5yQHlxwg==}
 
-  '@happyvertical/smrt-tenancy@0.55.24':
-    resolution: {integrity: sha512-6YWUKKDfyMP35/HTLN2g8uMgqx+JXdINKegtxbyof4FF3ZbZ/NnTYM+9eT4PC3xrAf3qve+FISG9O2cjTtVE+Q==}
+  '@happyvertical/smrt-tenancy@0.56.0':
+    resolution: {integrity: sha512-G3OAyH5fKfNRFf+T/c11eDnPlHijonBfG5IRwy3Mp+C/H+eBzJlkjbeUwVlIT90LxRaMl8ya3XK9me7iU3OLGA==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-timesheets@0.55.24':
-    resolution: {integrity: sha512-5DpMLHSeNv8RSVRNMEOX86oufjqUvsVwkrdKea5t4sVLeBarajOnS3SsJM2Kprpuwbt6tMntgK63w2RDFMlTAQ==}
+  '@happyvertical/smrt-timesheets@0.56.0':
+    resolution: {integrity: sha512-ai8Einl3PyQ8550DoP4uRb49mVuGQok00/35U4NujBj8P6gUe0erP+DSOjrDublsqCT8JM9B+eOaHCwyGgeu/w==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-types@0.55.24':
-    resolution: {integrity: sha512-McVaDR2ZRi8P1YlhAfc1saVxbH6xD849EM1mqcTDLBz6wDJpHY6tH+fJHhifk6ovwODrr+HieT0m2n2sg8IbIA==}
+  '@happyvertical/smrt-types@0.56.0':
+    resolution: {integrity: sha512-g8jgTNuVn9wHs0vxvRDJG5TNSKbUjaWJUUajWkLKc0jpa5YdAejDR/my+Eq20dN5RACRCxljCZThZmbWjcV0Wg==}
 
-  '@happyvertical/smrt-ui@0.55.24':
-    resolution: {integrity: sha512-a4Bj9ZfYhD4ZBK9hXDYw4czzIaFEokEuwAma5cHFXQIsxbKtk7441CMc9z4OgMGJSBm4sKvRPwT9GwdKfHiiNw==}
+  '@happyvertical/smrt-ui@0.56.0':
+    resolution: {integrity: sha512-aHlMItM+udwzzGOFsHWJ/bmKRl5gDcVNHj/ombL1wHZZ5U6JElBlBKzInq7+ysJn/cJMU5wCZegqxbbW4vFEPg==}
     peerDependencies:
       '@happyvertical/speech': '>=0.102.5'
       svelte: ^5.57.0
@@ -1412,16 +1417,16 @@ packages:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-users@0.55.24':
-    resolution: {integrity: sha512-OoXSKsZIQFKw5H55fqst/5JQFgJQbchI7M/uT7Q1FfT+5nWTk4X6ocJOUHYwfygNCfvGCkJyzTUDr3iBV27SkA==}
+  '@happyvertical/smrt-users@0.56.0':
+    resolution: {integrity: sha512-0L20dfjBPvlJ877lymYd4+m3EjZobsKSBacKoDDnE71P/tTwzFp4jZXAo1Ra5FvRENwm8I+xfGpOBrkwGtqkoQ==}
     peerDependencies:
       svelte: ^5.57.0
     peerDependenciesMeta:
       svelte:
         optional: true
 
-  '@happyvertical/smrt-web@0.55.24':
-    resolution: {integrity: sha512-EyyxsFgUvE+6HSiEKcN1FVDWQ3iXnL3W++yuT4U13DPRLAeWzDMr1cYxhD+7c0cWYW84s8ZH7EdlouwTGIx7oQ==}
+  '@happyvertical/smrt-web@0.56.0':
+    resolution: {integrity: sha512-cpafQREoeyemsR7x9eLZssL3NfDkFHnsZpdSz8y1cVGOV+Nuv3zAPNRrm+j4znWOcItGcSu+a/i28anLYA3DQg==}
 
   '@happyvertical/speech@0.103.6':
     resolution: {integrity: sha512-OpohtWCrAb2v1xIZcLvhVMgg1N0NWT3Qqp77G65h+1tzzOxqD7PQAzx4n5lwjk9BsjGusuy18/+666oNbxO6MA==}
@@ -8356,21 +8361,21 @@ snapshots:
       - pg-native
       - utf-8-validate
 
-  '@happyvertical/smrt-agents@0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-agents@0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.103.6(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.103.6
       '@happyvertical/logger': 0.103.6
-      '@happyvertical/smrt-config': 0.55.24
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-jobs': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-playbooks': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-reports': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-secrets': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
-      '@happyvertical/smrt-users': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-config': 0.56.0
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-jobs': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-playbooks': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-reports': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-secrets': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-users': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.103.6
       '@happyvertical/utils': 0.103.6
     optionalDependencies:
@@ -8398,13 +8403,13 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-analytics@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-analytics@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
     optionalDependencies:
       svelte: 5.57.1(@typescript-eslint/types@8.69.0)
     transitivePeerDependencies:
@@ -8425,14 +8430,14 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-app-runtime@0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@sveltejs/kit@2.50.1(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-app-runtime@0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@sveltejs/kit@2.50.1(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-config': 0.55.24
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-jobs': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-profiles': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-users': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-config': 0.56.0
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-jobs': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-profiles': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-users': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.103.6
     optionalDependencies:
       '@sveltejs/kit': 2.50.1(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1))
@@ -8460,16 +8465,16 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-assets@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-assets@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.103.6(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.103.6
       '@happyvertical/logger': 0.103.6
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tags': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tags': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.103.6
       '@happyvertical/utils': 0.103.6
     optionalDependencies:
@@ -8492,23 +8497,23 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-chat@0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(jimp@1.6.1)(sharp@0.35.5(@types/node@26.2.0))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-chat@0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(jimp@1.6.1)(sharp@0.35.5(@types/node@26.2.0))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.103.6(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/animation': 0.5.0(gsap@3.15.0)
       '@happyvertical/images': 0.103.6(jimp@1.6.1)(sharp@0.35.5(@types/node@26.2.0))
-      '@happyvertical/smrt-agents': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-assets': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-config': 0.55.24
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-images': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(gsap@3.15.0)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-personas': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-profiles': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-reports': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
-      '@happyvertical/smrt-users': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-agents': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-assets': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-config': 0.56.0
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-images': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(gsap@3.15.0)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-personas': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-profiles': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-reports': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-users': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/speech': 0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0))
       '@happyvertical/sql': 0.103.6
       gsap: 3.15.0
@@ -8541,20 +8546,20 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-cli@0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@sveltejs/kit@2.50.1(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(hono@4.12.29)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-cli@0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@sveltejs/kit@2.50.1(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(hono@4.12.29)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.103.6(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.103.6
       '@happyvertical/logger': 0.103.6
-      '@happyvertical/smrt-agents': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-app-runtime': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@sveltejs/kit@2.50.1(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-config': 0.55.24
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-dev-mcp': 0.55.24(hono@4.12.29)
-      '@happyvertical/smrt-ledgers': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-playground': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1))
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-users': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-agents': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-app-runtime': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@sveltejs/kit@2.50.1(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@7.3.0(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1)))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-config': 0.56.0
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-dev-mcp': 0.56.0(hono@4.12.29)
+      '@happyvertical/smrt-ledgers': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-playground': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1))
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-users': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.103.6
       '@happyvertical/utils': 0.103.6
       '@modelcontextprotocol/server': 2.0.0
@@ -8589,17 +8594,17 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-commerce@0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@noble/curves@2.0.1)(@noble/hashes@2.0.1)(@scure/bip32@2.0.1)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-commerce@0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@noble/curves@2.0.1)(@noble/hashes@2.0.1)(@scure/bip32@2.0.1)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/accounting': 0.103.6
       '@happyvertical/payments': 0.103.6(@noble/curves@2.0.1)(@noble/hashes@2.0.1)(@scure/bip32@2.0.1)
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-jobs': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-ledgers': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-subscriptions': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-jobs': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-ledgers': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-subscriptions': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
     optionalDependencies:
       svelte: 5.57.1(@typescript-eslint/types@8.69.0)
     transitivePeerDependencies:
@@ -8628,13 +8633,13 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-config@0.55.24':
+  '@happyvertical/smrt-config@0.56.0':
     dependencies:
-      '@happyvertical/smrt-types': 0.55.24
+      '@happyvertical/smrt-types': 0.56.0
       cosmiconfig: 10.0.1
       jiti: 2.7.0
 
-  '@happyvertical/smrt-content@0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@types/node@26.2.0)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(gsap@3.15.0)(jimp@1.6.1)(sharp@0.35.5(@types/node@26.2.0))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-content@0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@types/node@26.2.0)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(gsap@3.15.0)(jimp@1.6.1)(sharp@0.35.5(@types/node@26.2.0))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.103.6(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/documents': 0.103.6(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@types/node@26.2.0)(ws@8.21.3)(zod@4.3.6)
@@ -8644,18 +8649,18 @@ snapshots:
       '@happyvertical/logger': 0.103.6
       '@happyvertical/ocr': 0.61.6(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/pdf': 0.65.9(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-agents': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-assets': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-chat': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(jimp@1.6.1)(sharp@0.35.5(@types/node@26.2.0))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-facts': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-images': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(gsap@3.15.0)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-messages': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-profiles': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-agents': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-assets': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-chat': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(jimp@1.6.1)(sharp@0.35.5(@types/node@26.2.0))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-facts': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-images': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(gsap@3.15.0)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-messages': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-profiles': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
       '@happyvertical/spider': 1.1.13(@opentelemetry/api@1.9.0)(@types/node@26.2.0)
       '@happyvertical/sql': 0.103.6
       '@happyvertical/utils': 0.103.6
@@ -8702,15 +8707,15 @@ snapshots:
       - yauzl
       - zod
 
-  '@happyvertical/smrt-core@0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-core@0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.103.6(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.103.6
       '@happyvertical/json': 0.103.6
       '@happyvertical/logger': 0.103.6
-      '@happyvertical/smrt-config': 0.55.24
-      '@happyvertical/smrt-scanner': 0.55.24
-      '@happyvertical/smrt-types': 0.55.24
+      '@happyvertical/smrt-config': 0.56.0
+      '@happyvertical/smrt-scanner': 0.56.0
+      '@happyvertical/smrt-types': 0.56.0
       '@happyvertical/sql': 0.103.6
       '@happyvertical/utils': 0.103.6
       '@noble/hashes': 2.4.0
@@ -8740,28 +8745,28 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-dev-mcp@0.55.24(hono@4.12.29)':
+  '@happyvertical/smrt-dev-mcp@0.56.0(hono@4.12.29)':
     dependencies:
-      '@happyvertical/smrt-scanner': 0.55.24
-      '@happyvertical/smrt-types': 0.55.24
+      '@happyvertical/smrt-scanner': 0.56.0
+      '@happyvertical/smrt-types': 0.56.0
       '@modelcontextprotocol/node': 2.0.0(@modelcontextprotocol/server@2.0.0)(hono@4.12.29)
       '@modelcontextprotocol/server': 2.0.0
     transitivePeerDependencies:
       - hono
 
-  '@happyvertical/smrt-events@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-events@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.103.6(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.103.6
       '@happyvertical/icalendar': 0.100.3
       '@happyvertical/logger': 0.103.6
-      '@happyvertical/smrt-assets': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-places': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-profiles': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-assets': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-places': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-profiles': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.103.6
       '@happyvertical/utils': 0.103.6
     optionalDependencies:
@@ -8787,14 +8792,14 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-facts@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-facts@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.103.6(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.103.6
       '@happyvertical/logger': 0.103.6
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.103.6
       '@happyvertical/utils': 0.103.6
     transitivePeerDependencies:
@@ -8816,10 +8821,10 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-features@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-features@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
     optionalDependencies:
       svelte: 5.57.1(@typescript-eslint/types@8.69.0)
     transitivePeerDependencies:
@@ -8840,12 +8845,12 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-fields@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-fields@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
-      '@happyvertical/smrt-users': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-users': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.103.6
     optionalDependencies:
       svelte: 5.57.1(@typescript-eslint/types@8.69.0)
@@ -8868,17 +8873,17 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-images@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(gsap@3.15.0)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-images@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@types/node@26.2.0)(@xenova/transformers@2.17.2)(gsap@3.15.0)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.103.6(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/animation': 0.5.0(gsap@3.15.0)
       '@happyvertical/images': 0.103.6(jimp@1.6.1)(sharp@0.35.5(@types/node@26.2.0))
-      '@happyvertical/smrt-assets': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-assets': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
       '@happyvertical/utils': 0.103.6
       jimp: 1.6.1
       sharp: 0.35.5(@types/node@26.2.0)
@@ -8903,15 +8908,15 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-jobs@0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-jobs@0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/jobs': 0.103.6(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(bull@4.16.5)(bullmq@5.76.6)
       '@happyvertical/logger': 0.103.6
-      '@happyvertical/smrt-config': 0.55.24
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-config': 0.56.0
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.103.6
       '@happyvertical/utils': 0.103.6
     optionalDependencies:
@@ -8938,16 +8943,16 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-languages@0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-languages@0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.103.6(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/logger': 0.103.6
-      '@happyvertical/smrt-config': 0.55.24
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-features': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-jobs': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-config': 0.56.0
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-features': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-jobs': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.103.6
     transitivePeerDependencies:
       - '@aws-sdk/client-sqs'
@@ -8972,11 +8977,11 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-ledgers@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-ledgers@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
     transitivePeerDependencies:
       - '@electric-sql/pglite'
       - '@happyvertical/speech'
@@ -8996,20 +9001,20 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-mcp-apps@0.55.24': {}
+  '@happyvertical/smrt-mcp-apps@0.56.0': {}
 
-  '@happyvertical/smrt-messages@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-messages@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/email': 0.103.6
       '@happyvertical/files': 0.103.6
       '@happyvertical/logger': 0.103.6
       '@happyvertical/messages': 0.103.6
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-secrets': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
-      '@happyvertical/smrt-users': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-secrets': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-users': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.103.6
       '@happyvertical/utils': 0.103.6
     optionalDependencies:
@@ -9034,17 +9039,17 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-mobile-contract@0.55.24': {}
+  '@happyvertical/smrt-mobile-contract@0.56.0': {}
 
-  '@happyvertical/smrt-personas@0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-personas@0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-agents': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-messages': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
-      '@happyvertical/smrt-users': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-agents': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-messages': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-users': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.103.6
       svelte: 5.57.1(@typescript-eslint/types@8.69.0)
     transitivePeerDependencies:
@@ -9072,16 +9077,16 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-places@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-places@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@opentelemetry/api@1.9.0)(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.103.6(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/cache': 0.103.6(@opentelemetry/api@1.9.0)
       '@happyvertical/files': 0.103.6
       '@happyvertical/geo': 0.103.6(@opentelemetry/api@1.9.0)
       '@happyvertical/logger': 0.103.6
-      '@happyvertical/smrt-assets': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-assets': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.103.6
       '@happyvertical/utils': 0.103.6
     transitivePeerDependencies:
@@ -9106,12 +9111,12 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-playbooks@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-playbooks@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-config': 0.55.24
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
+      '@happyvertical/smrt-config': 0.56.0
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
       '@happyvertical/sql': 0.103.6
     transitivePeerDependencies:
       - '@electric-sql/pglite'
@@ -9132,9 +9137,9 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-playground@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1))':
+  '@happyvertical/smrt-playground@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))(vite@7.3.1(@types/node@26.2.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.15)(yaml@2.9.1))':
     dependencies:
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
       fast-glob: 3.3.3
       tsx: 4.23.15
     optionalDependencies:
@@ -9143,15 +9148,15 @@ snapshots:
     transitivePeerDependencies:
       - '@happyvertical/speech'
 
-  '@happyvertical/smrt-profiles@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-profiles@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.103.6(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.103.6
       '@happyvertical/logger': 0.103.6
-      '@happyvertical/smrt-assets': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-assets': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.103.6
       '@happyvertical/utils': 0.103.6
       '@noble/curves': 2.4.0
@@ -9175,21 +9180,21 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-projects@0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-projects@0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.103.6(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/logger': 0.103.6
       '@happyvertical/projects': 0.103.6(typescript@5.9.3)
       '@happyvertical/repos': 0.103.6(typescript@5.9.3)
-      '@happyvertical/smrt-config': 0.55.24
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-prompts': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-subscriptions': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-svelte': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-timesheets': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-config': 0.56.0
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-prompts': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-subscriptions': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-svelte': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-timesheets': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.103.6
       '@happyvertical/utils': 0.103.6
     optionalDependencies:
@@ -9220,12 +9225,12 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-prompts@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-prompts@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-config': 0.55.24
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-config': 0.56.0
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.103.6
     optionalDependencies:
       svelte: 5.57.1(@typescript-eslint/types@8.69.0)
@@ -9247,13 +9252,17 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-reports@0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-reports@0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-jobs': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
+      '@happyvertical/smrt-config': 0.56.0
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-jobs': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.103.6
+    optionalDependencies:
+      svelte: 5.57.1(@typescript-eslint/types@8.69.0)
     transitivePeerDependencies:
       - '@aws-sdk/client-sqs'
       - '@electric-sql/pglite'
@@ -9272,25 +9281,24 @@ snapshots:
       - encoding
       - pg-native
       - supports-color
-      - svelte
       - utf-8-validate
       - ws
       - zod
 
-  '@happyvertical/smrt-scanner@0.55.24':
+  '@happyvertical/smrt-scanner@0.56.0':
     dependencies:
-      '@happyvertical/smrt-types': 0.55.24
+      '@happyvertical/smrt-types': 0.56.0
       fast-glob: 3.3.3
       minimatch: 10.2.6
       oxc-parser: 0.150.0
       oxc-resolver: 11.24.2
 
-  '@happyvertical/smrt-secrets@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-secrets@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/logger': 0.103.6
       '@happyvertical/secrets': 0.103.6
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.103.6
       '@happyvertical/utils': 0.103.6
     transitivePeerDependencies:
@@ -9312,11 +9320,11 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-subscriptions@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-subscriptions@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.103.6
     optionalDependencies:
       svelte: 5.57.1(@typescript-eslint/types@8.69.0)
@@ -9338,14 +9346,14 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-svelte@0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-svelte@0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/logger': 0.103.6
-      '@happyvertical/smrt-languages': 0.55.24(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-mcp-apps': 0.55.24
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
-      '@happyvertical/smrt-web': 0.55.24(typescript@5.9.3)
+      '@happyvertical/smrt-languages': 0.56.0(@aws-sdk/client-sqs@3.1045.0)(@google-cloud/tasks@6.2.1)(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(bull@4.16.5)(bullmq@5.76.6)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-mcp-apps': 0.56.0
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-web': 0.56.0(typescript@5.9.3)
       '@tanstack/db': 0.6.17(typescript@5.9.3)
       '@tanstack/svelte-db': 0.1.94(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)
       esm-env: 1.2.2
@@ -9374,13 +9382,13 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-tags@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-tags@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/ai': 0.103.6(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/files': 0.103.6
       '@happyvertical/logger': 0.103.6
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
       '@happyvertical/sql': 0.103.6
       '@happyvertical/utils': 0.103.6
     transitivePeerDependencies:
@@ -9402,12 +9410,12 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-tenancy@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-tenancy@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/logger': 0.103.6
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.103.6
       '@happyvertical/utils': 0.103.6
     optionalDependencies:
@@ -9430,12 +9438,12 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-timesheets@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-timesheets@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)':
     dependencies:
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.103.6
     optionalDependencies:
       svelte: 5.57.1(@typescript-eslint/types@8.69.0)
@@ -9457,27 +9465,27 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-types@0.55.24': {}
+  '@happyvertical/smrt-types@0.56.0': {}
 
-  '@happyvertical/smrt-ui@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))':
+  '@happyvertical/smrt-ui@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))':
     dependencies:
-      '@happyvertical/smrt-types': 0.55.24
+      '@happyvertical/smrt-types': 0.56.0
       esm-env: 1.2.2
     optionalDependencies:
       '@happyvertical/speech': 0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0))
       svelte: 5.57.1(@typescript-eslint/types@8.69.0)
 
-  '@happyvertical/smrt-users@0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
+  '@happyvertical/smrt-users@0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(typescript@5.9.3)(ws@8.21.3)(zod@4.3.6)':
     dependencies:
       '@happyvertical/auth': 0.103.6(typescript@5.9.3)
       '@happyvertical/logger': 0.103.6
-      '@happyvertical/smrt-config': 0.55.24
-      '@happyvertical/smrt-core': 0.55.24(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-mobile-contract': 0.55.24
-      '@happyvertical/smrt-profiles': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-tenancy': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
-      '@happyvertical/smrt-types': 0.55.24
-      '@happyvertical/smrt-ui': 0.55.24(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
+      '@happyvertical/smrt-config': 0.56.0
+      '@happyvertical/smrt-core': 0.56.0(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-mobile-contract': 0.56.0
+      '@happyvertical/smrt-profiles': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-tenancy': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(@huggingface/transformers@4.3.1(@types/node@26.2.0))(@mlc-ai/web-llm@0.2.86)(@modelcontextprotocol/sdk@1.29.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(@xenova/transformers@2.17.2)(svelte@5.57.1(@typescript-eslint/types@8.69.0))(ws@8.21.3)(zod@4.3.6)
+      '@happyvertical/smrt-types': 0.56.0
+      '@happyvertical/smrt-ui': 0.56.0(@happyvertical/speech@0.103.6(@huggingface/transformers@4.3.1(@types/node@26.2.0)))(svelte@5.57.1(@typescript-eslint/types@8.69.0))
       '@happyvertical/sql': 0.103.6
       jose: 6.2.12
     optionalDependencies:
@@ -9501,7 +9509,7 @@ snapshots:
       - ws
       - zod
 
-  '@happyvertical/smrt-web@0.55.24(typescript@5.9.3)':
+  '@happyvertical/smrt-web@0.56.0(typescript@5.9.3)':
     dependencies:
       '@tanstack/db': 0.6.17(typescript@5.9.3)
       '@tanstack/query-core': 5.104.0

@@ -2633,6 +2633,13 @@ export const uiComponents: UiComponentReference[] = [
 					"Renders a message's own `toolCallData` (#2988), inside that message's bubble below its text. Called only for messages whose `toolCallData` is set. Without it the dock renders no tool-call region at all: the payload is host-defined, so the dock never stringifies it or injects it as HTML. Render it with ordinary Svelte markup in the host's own snippet."
 			},
 			{
+				name: 'toolResultComponent',
+				code: '(message: AssistantMessage) => Component<{ message: AssistantMessage; }> | undefined',
+				status: false,
+				description:
+					'Trusted host selection of a component for a tool result. Unknown results retain their ordinary message text and optional toolCall snippet. This seam only renders: it grants no tool execution or confirmation authority.'
+			},
+			{
 				name: 'oncontroller',
 				code: '(controller: AssistantDockController) => void',
 				status: false,
@@ -2833,7 +2840,7 @@ export const uiComponents: UiComponentReference[] = [
 				description: 'Reports whether a person must make an explicit decision.'
 			}
 		],
-		components: [],
+		components: [''],
 		demo: null,
 		related: {
 			label: 'UI showcase',
@@ -3422,6 +3429,13 @@ export const uiComponents: UiComponentReference[] = [
 				status: false,
 				description:
 					"Renders a message's own `toolCallData` (#2988), inside that message's bubble below its text. Called only for messages whose `toolCallData` is set. Without it the dock renders no tool-call region at all: the payload is host-defined, so the dock never stringifies it or injects it as HTML. Render it with ordinary Svelte markup in the host's own snippet."
+			},
+			{
+				name: 'toolResultComponent',
+				code: '(message: AssistantMessage) => Component<{ message: AssistantMessage; }> | undefined',
+				status: false,
+				description:
+					'Trusted host selection of a component for a tool result. Unknown results retain their ordinary message text and optional toolCall snippet. This seam only renders: it grants no tool execution or confirmation authority.'
 			},
 			{
 				name: 'oncontroller',
@@ -13822,6 +13836,13 @@ export const uiComponents: UiComponentReference[] = [
 				description: "Link to the host's Advanced Styles page, when mounting controls alone."
 			},
 			{
+				name: 'defaultTitle',
+				code: 'string',
+				status: false,
+				description:
+					"The shell title shown when no cookbook name and no applied library cookbook names the app (the brand label, and the fallback for a section page without a heading). A host that calls the planner something else passes it here. Defaults to `'Planner'`. The complete `Planner` only."
+			},
+			{
 				name: 'tabs',
 				code: 'readonly PlannerTabId[]',
 				status: false,
@@ -13918,6 +13939,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'string',
 				status: false,
 				description: "Link to the host's Advanced Styles page, when mounting controls alone."
+			},
+			{
+				name: 'defaultTitle',
+				code: 'string',
+				status: false,
+				description:
+					"The shell title shown when no cookbook name and no applied library cookbook names the app (the brand label, and the fallback for a section page without a heading). A host that calls the planner something else passes it here. Defaults to `'Planner'`. The complete `Planner` only."
 			},
 			{
 				name: 'tabs',
@@ -14785,6 +14813,541 @@ export const uiComponents: UiComponentReference[] = [
 			href: '/ui'
 		},
 		source: 'packages/projects/src/svelte/ServiceEvidenceList.svelte'
+	},
+	{
+		slug: 'report-confirmation',
+		name: 'ReportConfirmation',
+		family: 'smrt-reports-svelte',
+		category: 'Reports · Components',
+		importPath: '@happyvertical/smrt-reports/svelte',
+		summary: 'ReportConfirmation is part of the reports · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'proposal',
+				code: 'RuntimeReportProposal',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'confirm',
+				code: '(proposal: RuntimeReportProposal) => Promise<SavedRuntimeReport>',
+				status: true,
+				description: 'Posts the exact displayed spec and hash to the authenticated confirm route.'
+			},
+			{
+				name: 'reportHref',
+				code: '(id: string) => string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondecline',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onsaved',
+				code: '(report: SavedRuntimeReport) => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'locale',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'currency',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'ondecline',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onsaved',
+				code: '(report: SavedRuntimeReport) => void',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/reports/src/svelte/ReportConfirmation.svelte'
+	},
+	{
+		slug: 'report-detail',
+		name: 'ReportDetail',
+		family: 'smrt-reports-svelte',
+		category: 'Reports · Components',
+		importPath: '@happyvertical/smrt-reports/svelte',
+		summary: 'ReportDetail is part of the reports · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'id',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'client',
+				code: 'RuntimeReportsClient',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'locale',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'currency',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/reports/src/svelte/ReportDetail.svelte'
+	},
+	{
+		slug: 'report-picker',
+		name: 'ReportPicker',
+		family: 'smrt-reports-svelte',
+		category: 'Reports · Components',
+		importPath: '@happyvertical/smrt-reports/svelte',
+		summary: 'ReportPicker is part of the reports · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'client',
+				code: 'RuntimeReportsClient',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'reportId',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'measure',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'dimension',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onchange',
+				code: '(value: { reportId: string; measure: string; dimension: string; }) => void',
+				status: true,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(value: { reportId: string; measure: string; dimension: string; }) => void',
+				status: true,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/reports/src/svelte/ReportPicker.svelte'
+	},
+	{
+		slug: 'report-result',
+		name: 'ReportResult',
+		family: 'smrt-reports-svelte',
+		category: 'Reports · Components',
+		importPath: '@happyvertical/smrt-reports/svelte',
+		summary: 'ReportResult is part of the reports · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'result',
+				code: 'RuntimeReportResult',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'locale',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'currency',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/reports/src/svelte/ReportResult.svelte'
+	},
+	{
+		slug: 'runtime-report-chart-widget',
+		name: 'RuntimeReportChartWidget',
+		family: 'smrt-reports-svelte',
+		category: 'Reports · Components',
+		importPath: '@happyvertical/smrt-reports/svelte',
+		summary: 'RuntimeReportChartWidget is part of the reports · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'options',
+				code: 'Record<string, string | number | boolean | null>',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'data',
+				code: 'ChartData',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'title',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'locale',
+				code: 'string',
+				status: true,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/reports/src/svelte/RuntimeReportChartWidget.svelte'
+	},
+	{
+		slug: 'runtime-report-detail-route',
+		name: 'RuntimeReportDetailRoute',
+		family: 'smrt-reports-svelte',
+		category: 'Reports · Components',
+		importPath: '@happyvertical/smrt-reports/svelte',
+		summary: 'RuntimeReportDetailRoute is part of the reports · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'id',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'params',
+				code: '{ id?: string; }',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'client',
+				code: 'RuntimeReportsClient',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'serverAvailable',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'currentUserId',
+				code: 'string',
+				status: false,
+				description: 'Authenticated user id projected by the server route host.'
+			},
+			{
+				name: 'clientScope',
+				code: 'string',
+				status: false,
+				description: 'Opaque active tenant/session key used only to isolate browser hints.'
+			},
+			{
+				name: 'canArchive',
+				code: 'boolean',
+				status: false,
+				description: 'Server-derived capability hint used by the shared session client.'
+			},
+			{
+				name: 'locale',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'currency',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/reports/src/svelte/RuntimeReportDetailRoute.svelte'
+	},
+	{
+		slug: 'runtime-reports-route',
+		name: 'RuntimeReportsRoute',
+		family: 'smrt-reports-svelte',
+		category: 'Reports · Components',
+		importPath: '@happyvertical/smrt-reports/svelte',
+		summary: 'RuntimeReportsRoute is part of the reports · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'client',
+				code: 'RuntimeReportsClient',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'serverAvailable',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'currentUserId',
+				code: 'string',
+				status: false,
+				description: 'Authenticated user id projected by the server route host.'
+			},
+			{
+				name: 'clientScope',
+				code: 'string',
+				status: false,
+				description: 'Opaque active tenant/session key used only to isolate browser hints.'
+			},
+			{
+				name: 'currentUserLabel',
+				code: 'string',
+				status: false,
+				description: 'Display label for the authenticated user; other ids stay opaque.'
+			},
+			{
+				name: 'canArchive',
+				code: 'boolean',
+				status: false,
+				description: 'Server-derived capability hint. Every mutation is still reauthorized.'
+			},
+			{
+				name: 'reportHref',
+				code: '(id: string) => string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'authorLabel',
+				code: '(userId: string) => string | undefined',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/reports/src/svelte/RuntimeReportsRoute.svelte'
+	},
+	{
+		slug: 'runtime-report-tool-result',
+		name: 'RuntimeReportToolResult',
+		family: 'smrt-reports-svelte',
+		category: 'Reports · Components',
+		importPath: '@happyvertical/smrt-reports/svelte',
+		summary: 'RuntimeReportToolResult is part of the reports · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'message',
+				code: 'ToolResultMessage',
+				status: true,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/reports/src/svelte/RuntimeReportToolResult.svelte'
+	},
+	{
+		slug: 'runtime-report-widget-options',
+		name: 'RuntimeReportWidgetOptions',
+		family: 'smrt-reports-svelte',
+		category: 'Reports · Components',
+		importPath: '@happyvertical/smrt-reports/svelte',
+		summary: 'RuntimeReportWidgetOptions is part of the reports · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'initial',
+				code: 'Options',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onsave',
+				code: '(options: Options) => Issue[] | null',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'oncancel',
+				code: '() => void',
+				status: true,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsave',
+				code: '(options: Options) => Issue[] | null',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'oncancel',
+				code: '() => void',
+				status: true,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/reports/src/svelte/RuntimeReportWidgetOptions.svelte'
+	},
+	{
+		slug: 'saved-reports',
+		name: 'SavedReports',
+		family: 'smrt-reports-svelte',
+		category: 'Reports · Components',
+		importPath: '@happyvertical/smrt-reports/svelte',
+		summary: 'SavedReports is part of the reports · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'client',
+				code: 'RuntimeReportsClient',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'reportHref',
+				code: '(id: string) => string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'authorLabel',
+				code: '(userId: string) => string | undefined',
+				status: false,
+				description: 'Host-owned identity projection; report transport never expands users.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/reports/src/svelte/SavedReports.svelte'
 	},
 	{
 		slug: 'app-shell',
@@ -18446,6 +19009,12 @@ export const uiComponents: UiComponentReference[] = [
 					'Resolved widget components (see `resolveWidgetComponents`). A type with no entry falls back to the registered `component`, else renders as unavailable.'
 			},
 			{
+				name: 'optionEditors',
+				code: 'ReadonlyMap<string, Component<WidgetOptionsEditorProps>>',
+				status: false,
+				description: 'Resolved custom option editors (see `resolveWidgetOptionsEditors`).'
+			},
+			{
 				name: 'editing',
 				code: 'boolean',
 				status: false,
@@ -18729,30 +19298,36 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'definition',
 				code: 'RegisteredWidget',
 				status: true,
-				description: 'The widget type being configured.'
+				description: ''
 			},
 			{
 				name: 'initial',
 				code: 'OverviewOptions',
 				status: true,
-				description: 'Current options (an existing widget) or starting values.'
+				description: ''
 			},
 			{
 				name: 'models',
-				code: 'readonly OverviewModelChoice[]',
+				code: 'readonly { value: string; label: string; }[]',
 				status: false,
 				description: ''
 			},
 			{
 				name: 'onsave',
-				code: '(options: OverviewOptions) => OverviewFormIssue[] | null',
+				code: '(options: OverviewOptions) => WidgetOptionIssue[] | null',
 				status: true,
-				description: 'Saves; returns issues to show, or `null` when it worked.'
+				description: ''
 			},
 			{
 				name: 'oncancel',
 				code: '() => void',
 				status: true,
+				description: ''
+			},
+			{
+				name: 'optionsEditor',
+				code: 'Component<WidgetOptionsEditorProps>',
+				status: false,
 				description: ''
 			}
 		],
@@ -18761,9 +19336,9 @@ export const uiComponents: UiComponentReference[] = [
 		items: [
 			{
 				name: 'onsave',
-				code: '(options: OverviewOptions) => OverviewFormIssue[] | null',
+				code: '(options: OverviewOptions) => WidgetOptionIssue[] | null',
 				status: true,
-				description: 'Saves; returns issues to show, or `null` when it worked.'
+				description: ''
 			},
 			{
 				name: 'oncancel',
@@ -21783,6 +22358,52 @@ export const uiComponents: UiComponentReference[] = [
 			href: '/ui'
 		},
 		source: 'packages/smrt-ui/src/components/calendar/DayView.svelte'
+	},
+	{
+		slug: 'chart',
+		name: 'Chart',
+		family: 'smrt-ui-charts',
+		category: 'Charts',
+		importPath: '@happyvertical/smrt-ui/charts',
+		summary: 'Chart is part of the charts component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'data',
+				code: 'ChartData | null',
+				status: true,
+				description: 'Validated chart data to render, or null for the empty state.'
+			},
+			{
+				name: 'style',
+				code: 'string',
+				status: false,
+				description: 'Requested chart presentation; unsupported values fall back to bars.'
+			},
+			{
+				name: 'title',
+				code: 'string',
+				status: false,
+				description: 'Accessible heading shown above the chart.'
+			},
+			{
+				name: 'locale',
+				code: 'string',
+				status: false,
+				description: 'Locale used to format displayed numeric values.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/smrt-ui/src/charts/Chart.svelte'
 	},
 	{
 		slug: 'message-bubble',
@@ -30491,10 +31112,10 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2814,
-	totalProps: 2930,
+	describedProps: 2829,
+	totalProps: 2987,
 	authoredSummaries: 151,
-	totalComponents: 391
+	totalComponents: 402
 };
 
 export const uiComponentGroups = [
