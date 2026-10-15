@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import SEO from '$lib/components/SEO.svelte';
 
+	// This page is called Build a boilerplate; the package keeps its name.
 	// `Planner` is the complete planner: the framework's own cookbook-driven
 	// `AppShell` built from the plan, with a navigation section per recipe, a
 	// record workspace (list, create and edit form over sample rows) per model
@@ -52,14 +53,14 @@
 </script>
 
 <SEO
-	title="s-m-r-t app planner"
-	description="Add recipes or packages and an app mock-up assembles around them: navigation, list views, forms and help per model."
-	url="https://s-m-r-t.dev/planner"
+	title="Build a boilerplate"
+	description="Add recipes or packages and an app mock-up assembles around them: navigation, list views, forms and help per model. Export the cookbook it produces and smrt cookbook apply creates a project from it."
+	url="https://s-m-r-t.dev/build-a-boilerplate"
 />
 
 <div class="planner-page">
-	<h1 class="planner-page__title">s-m-r-t app planner</h1>
-	<section class="planner-host" aria-label="Planner">
+	<h1 class="planner-page__title">Build a boilerplate</h1>
+	<section class="planner-host" aria-label="Build a boilerplate">
 		{#if Planner}
 			<!--
 				Known upstream defect (smrt-planner, last release; fixed on the planner's
@@ -71,11 +72,17 @@
 				cookbook engine fails to `structuredClone` it. Nothing here can unwrap
 				that proxy; the fix is the store's.
 			-->
-			<Planner basePath="/planner" persistence="self" themeControls {inference} {backLink} />
+			<Planner
+				basePath="/build-a-boilerplate"
+				persistence="self"
+				themeControls
+				{inference}
+				{backLink}
+			/>
 		{:else if loadError}
-			<p class="planner-status" role="alert">The planner could not load: {loadError}</p>
+			<p class="planner-status" role="alert">Build a boilerplate could not load: {loadError}</p>
 		{:else}
-			<p class="planner-status" role="status">Loading the planner…</p>
+			<p class="planner-status" role="status">Loading Build a boilerplate…</p>
 		{/if}
 	</section>
 </div>

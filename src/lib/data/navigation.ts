@@ -370,7 +370,7 @@ export const documentationSections: DocumentationSection[] = [
 					{ label: 'Foundation components', href: '/reference/packages/smrt-ui?tab=components' },
 					...uiCapabilityItems,
 					{ label: 'Working playground', href: '/playground' },
-					{ label: 'App planner', href: '/planner' }
+					{ label: 'Build a boilerplate', href: '/build-a-boilerplate' }
 				]
 			},
 			{
@@ -396,7 +396,7 @@ export const documentationSections: DocumentationSection[] = [
 				items: [
 					{ label: 'Package Reference', href: '/reference/packages' },
 					{ label: 'Working playground', href: '/playground' },
-					{ label: 'App planner', href: '/planner' }
+					{ label: 'Build a boilerplate', href: '/build-a-boilerplate' }
 				]
 			},
 			{
@@ -480,7 +480,7 @@ export const primaryNavigation: PrimaryNavigationItem[] = [
 	{ label: 'Modules', href: '/modules', section: 'modules' },
 	{ label: 'Tooling', href: '/tooling', section: 'tooling' },
 	{ label: 'Playground', href: '/playground' },
-	{ label: 'Planner', href: '/planner' },
+	{ label: 'Build a boilerplate', href: '/build-a-boilerplate' },
 	{ label: 'Reference', href: '/reference', section: 'reference' }
 ];
 
@@ -530,8 +530,12 @@ export function documentationSectionForPathname(pathname: string): Documentation
 
 export function isPrimaryNavigationActive(item: PrimaryNavigationItem, pathname: string): boolean {
 	if (item.href === '/playground') return pathname === '/playground';
-	if (item.href === '/planner') return isNavigationItemActive('/planner', pathname);
-	if (pathname === '/playground' || isNavigationItemActive('/planner', pathname)) return false;
+	if (item.href === '/build-a-boilerplate') {
+		return isNavigationItemActive('/build-a-boilerplate', pathname);
+	}
+	if (pathname === '/playground' || isNavigationItemActive('/build-a-boilerplate', pathname)) {
+		return false;
+	}
 	return item.section === documentationSectionForPathname(pathname).id;
 }
 
@@ -614,11 +618,20 @@ export const searchItems: NavigationItem[] = [
 	// track and the docs panel) and registered for the palette here, like the
 	// package entries below.
 	{
-		label: 'App planner',
-		href: '/planner',
+		label: 'Build a boilerplate',
+		href: '/build-a-boilerplate',
 		description:
-			'Add recipes or packages and an app mock-up assembles around them: navigation, list views, forms and help per model.',
-		keywords: ['planner', 'recipes', 'cookbook', 'mock-up', 'smrt-planner']
+			'Add recipes or packages and an app mock-up assembles around them; export the cookbook it produces to start a project.',
+		// Older wording stays searchable: the page used to be called the planner.
+		keywords: [
+			'boilerplate',
+			'planner',
+			'app planner',
+			'recipes',
+			'cookbook',
+			'mock-up',
+			'smrt-planner'
+		]
 	},
 	...packages.map((pkg) => ({
 		label: pkg.name,

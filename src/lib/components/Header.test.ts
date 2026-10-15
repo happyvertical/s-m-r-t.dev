@@ -38,7 +38,7 @@ describe('application bar', () => {
 			'Modules',
 			'Tooling',
 			'Playground',
-			'Planner',
+			'Build a boilerplate',
 			'Reference'
 		]);
 		expect(within(nav).getByRole('link', { name: 'UI' }).getAttribute('aria-current')).toBe('page');

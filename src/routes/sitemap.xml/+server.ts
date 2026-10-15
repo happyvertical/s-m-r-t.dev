@@ -24,7 +24,7 @@ const staticRoutes = [
 	{ path: '/capabilities', priority: '0.9', changefreq: 'weekly' },
 	{ path: '/guides', priority: '0.9', changefreq: 'monthly' },
 	{ path: '/playground', priority: '0.9', changefreq: 'weekly' },
-	{ path: '/planner', priority: '0.9', changefreq: 'weekly' },
+	{ path: '/build-a-boilerplate', priority: '0.9', changefreq: 'weekly' },
 	{ path: '/tooling', priority: '0.85', changefreq: 'monthly' },
 	{ path: '/reference', priority: '0.8', changefreq: 'monthly' }
 ];

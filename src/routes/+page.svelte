@@ -163,7 +163,7 @@
 
 <SEO
 	title="The s-m-r-t application stack"
-	description="A framework and library for creating software that blurs the line between application and agent. The cookbook planner is a live demo; the cookbook it produces can jumpstart your next project."
+	description="A framework and library for creating software that blurs the line between application and agent. Build a boilerplate is a live demo; the cookbook it produces can jumpstart your next project."
 	url="https://s-m-r-t.dev"
 />
 
@@ -173,15 +173,15 @@
 			<h1 class="visually-hidden">The s-m-r-t application stack</h1>
 			<p class="lede">
 				s-m-r-t is a framework and library for creating software that blurs the line between
-				application and agent. It is better demonstrated than explained: the cookbook planner here
-				is a live demo, and the cookbook it produces can jumpstart your next project.
+				application and agent. It is better demonstrated than explained: Build a boilerplate is a
+				live demo, and the cookbook it produces can jumpstart your next project.
 			</p>
 			<div class="hero-actions">
-				<a class="primary-link" href="/planner">Open the cookbook planner <span>→</span></a>
+				<a class="primary-link" href="/build-a-boilerplate">Build a boilerplate <span>→</span></a>
 				<a class="text-link" href="#what-you-get">See how the interfaces connect <span>↓</span></a>
 			</div>
 			<p class="planner-note">
-				The planner's Export tab downloads a cookbook file;
+				Its Export tab downloads a cookbook file;
 				<code>smrt cookbook apply &lt;file&gt;</code> creates a project from it.
 			</p>
 			<ul class="layer-lede-list">

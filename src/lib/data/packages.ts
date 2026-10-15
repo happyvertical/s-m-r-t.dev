@@ -2239,6 +2239,12 @@ export const packages: SmrtPackage[] = [
 					body: 'commandTools from the commands subpath is every command as name, description, and inputSchema. The snapshot is a compact read-only plan of a few kilobytes, fit for a prompt. A plain Node server uses the core subpath for schemas, the assistant prompt, and reply validation. It can serve the prebuilt app from the app subpath.'
 				},
 				{
+					title: 'Mounted on this site as Build a boilerplate',
+					body: 'This site mounts the complete Planner on its Build a boilerplate page, inside the framework AppShell. An on-device model is offered first; a bring-your-own endpoint is the alternative. The page is the site name; the package keeps its own.',
+					href: '/build-a-boilerplate',
+					linkLabel: 'Open Build a boilerplate'
+				},
+				{
 					title: 'Its own release line and repository',
 					body: 'The planner is published on its own version line, separate from the framework release, and its source lives in its own repository. Its catalog is generated from the registry and committed, so a build needs no network.',
 					href: 'https://github.com/happyvertical/smrt-planner',

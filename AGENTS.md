@@ -128,10 +128,10 @@ Then one line below.
 
 - smrt-planner 0.0.2: after a reload of a plan whose cookbook has a saved
   `layout`, `CookbookStore.snapshot()` passes its `$state` proxy to the
-  controller and smrt-core fails to `structuredClone` it; `/planner` then shows
+  controller and smrt-core fails to `structuredClone` it; `/build-a-boilerplate` then shows
   no sections until the layout is cleared. Fixed upstream (smrt-planner
   `release/site-refresh`, fd041b6), pending the planner release. Code site:
-  `src/routes/planner/+page.svelte`. Upstream issue:
+  `src/routes/build-a-boilerplate/+page.svelte`. Upstream issue:
   https://github.com/happyvertical/smrt-planner/issues/53
 
 ## Agent lifecycle posture
