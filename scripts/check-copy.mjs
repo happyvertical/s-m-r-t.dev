@@ -226,6 +226,7 @@ const COMPONENT_NON_COPY_ATTRIBUTES = new Set([
 	'compact',
 	'cookbook',
 	'currentHref',
+	'defaultTitle',
 	'edgeToggles',
 	'entryPath',
 	'environment',

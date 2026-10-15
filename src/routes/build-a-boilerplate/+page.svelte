@@ -76,6 +76,7 @@
 				basePath="/build-a-boilerplate"
 				persistence="self"
 				themeControls
+				defaultTitle="Build a boilerplate"
 				{inference}
 				{backLink}
 			/>
