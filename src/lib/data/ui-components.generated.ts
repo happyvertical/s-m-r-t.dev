@@ -5472,6 +5472,13 @@ export const uiComponents: UiComponentReference[] = [
 				description: 'Called when export/download is clicked'
 			},
 			{
+				name: 'oncreatecreditnote',
+				code: '() => void',
+				status: false,
+				description:
+					'Host-authorized credit-note creation for an issued source invoice. The caller owns authorization, navigation, and persistence.'
+			},
+			{
 				name: 'size',
 				code: "'sm' | 'md'",
 				status: false,
@@ -5516,6 +5523,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: '() => void',
 				status: false,
 				description: 'Called when export/download is clicked'
+			},
+			{
+				name: 'oncreatecreditnote',
+				code: '() => void',
+				status: false,
+				description:
+					'Host-authorized credit-note creation for an issued source invoice. The caller owns authorization, navigation, and persistence.'
 			}
 		],
 		components: [],
@@ -5721,7 +5735,7 @@ export const uiComponents: UiComponentReference[] = [
 			{
 				name: 'values',
 				code: 'InvoiceDraftValues',
-				status: true,
+				status: false,
 				description: 'Retained editable strings; never reconstructed from model numbers.'
 			},
 			{
@@ -5826,6 +5840,12 @@ export const uiComponents: UiComponentReference[] = [
 				code: "HTMLFormAttributes['onsubmit']",
 				status: false,
 				description: 'Optional enhancement; native submission remains the default.'
+			},
+			{
+				name: 'money',
+				code: 'MoneyEditorProps',
+				status: false,
+				description: 'Explicit v2 money surface. Omit to retain the legacy invoice editor API.'
 			}
 		],
 		sources: [],
@@ -6149,6 +6169,60 @@ export const uiComponents: UiComponentReference[] = [
 		source: 'packages/commerce/src/svelte/components/InvoiceLineItems.svelte'
 	},
 	{
+		slug: 'invoice-record-screen',
+		name: 'InvoiceRecordScreen',
+		family: 'smrt-commerce-svelte',
+		category: 'Commerce · Components',
+		importPath: '@happyvertical/smrt-commerce/svelte',
+		summary:
+			"InvoiceRecordScreen composes the published generic record screen with commerce's stored-money projection and host-authorized credit-note action. The host loads `data` server-side with `loadInvoiceRecordScreenData()`.",
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'screen',
+				code: "Omit<RecordScreenProps, 'lineItemStoredTotals' | 'extraActions' | 'children'>",
+				status: true,
+				description: 'Generic record-screen wiring owned by the host application.'
+			},
+			{
+				name: 'data',
+				code: 'InvoiceRecordScreenData',
+				status: true,
+				description: 'Tenant-scoped persisted invoice facts from `loadInvoiceRecordScreenData`.'
+			},
+			{
+				name: 'canCreateCreditNote',
+				code: 'boolean',
+				status: false,
+				description: "Result of the host's server-side authorization check."
+			},
+			{
+				name: 'onCreateCreditNote',
+				code: '() => void',
+				status: false,
+				description: 'Host-owned navigation or mutation after an authorized click.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onCreateCreditNote',
+				code: '() => void',
+				status: false,
+				description: 'Host-owned navigation or mutation after an authorized click.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/commerce/src/svelte/components/InvoiceRecordScreen.svelte'
+	},
+	{
 		slug: 'invoice-review',
 		name: 'InvoiceReview',
 		family: 'smrt-commerce-svelte',
@@ -6279,6 +6353,88 @@ export const uiComponents: UiComponentReference[] = [
 			href: '/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/InvoiceTotals.svelte'
+	},
+	{
+		slug: 'money-invoice-editor',
+		name: 'MoneyInvoiceEditor',
+		family: 'smrt-commerce-svelte',
+		category: 'Commerce · Components',
+		importPath: '@happyvertical/smrt-commerce/svelte',
+		summary: 'MoneyInvoiceEditor is part of the commerce · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'action',
+				code: 'string',
+				status: true,
+				description: "Native form action owned by the caller's invoice route."
+			},
+			{
+				name: 'method',
+				code: "'post' | 'get'",
+				status: false,
+				description: 'Native HTTP method retained for progressive enhancement.'
+			},
+			{
+				name: 'money',
+				code: 'MoneyEditorProps',
+				status: true,
+				description: 'Typed v2 money draft, tax-code choices, and stored issued snapshot.'
+			},
+			{
+				name: 'canEdit',
+				code: 'boolean',
+				status: false,
+				description: 'Presentation capability; the server remains the authority for writes.'
+			},
+			{
+				name: 'pending',
+				code: 'boolean',
+				status: false,
+				description: 'Caller transport state that disables edits and the save submitter.'
+			},
+			{
+				name: 'hiddenFields',
+				code: 'readonly { name: string; value: string; }[]',
+				status: false,
+				description: 'Caller-owned request identity and route fields submitted unchanged.'
+			},
+			{
+				name: 'intentField',
+				code: 'string',
+				status: false,
+				description: 'Native submitter field name expected by the caller.'
+			},
+			{
+				name: 'saveIntent',
+				code: 'string',
+				status: false,
+				description: 'Submitter value that requests a draft save.'
+			},
+			{
+				name: 'saveLabel',
+				code: 'string',
+				status: false,
+				description: 'Caller-visible label for the save submitter.'
+			},
+			{
+				name: 'onsubmit',
+				code: "HTMLFormAttributes['onsubmit']",
+				status: false,
+				description: 'Optional native form enhancement; omitted submissions stay native.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/commerce/src/svelte/components/MoneyInvoiceEditor.svelte'
 	},
 	{
 		slug: 'party-contact-fields',
@@ -6669,6 +6825,18 @@ export const uiComponents: UiComponentReference[] = [
 				status: false,
 				description:
 					'Authorized private attachment surface outside the editor form; never loaded by Commerce.'
+			},
+			{
+				name: 'money',
+				code: 'MoneyHeaderDisplay',
+				status: false,
+				description: 'Explicit v2 stored header facts; no totals are recomputed in this surface.'
+			},
+			{
+				name: 'moneyFieldName',
+				code: 'string',
+				status: false,
+				description: 'Native field name for the explicit document mode.'
 			}
 		],
 		sources: [],
@@ -6999,6 +7167,18 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'Snippet',
 				status: false,
 				description: 'Authorized attachment composition; this component never loads private files.'
+			},
+			{
+				name: 'money',
+				code: 'MoneyHeaderDisplay',
+				status: false,
+				description: 'Explicit v2 stored header facts; this editor never recomputes them.'
+			},
+			{
+				name: 'moneyFieldName',
+				code: 'string',
+				status: false,
+				description: 'Native field name for the explicit document mode.'
 			}
 		],
 		sources: [],
@@ -14815,6 +14995,72 @@ export const uiComponents: UiComponentReference[] = [
 		source: 'packages/projects/src/svelte/ServiceEvidenceList.svelte'
 	},
 	{
+		slug: 'materialized-report-table',
+		name: 'MaterializedReportTable',
+		family: 'smrt-reports-svelte',
+		category: 'Reports · Components',
+		importPath: '@happyvertical/smrt-reports/svelte',
+		summary: 'MaterializedReportTable is part of the reports · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'page',
+				code: 'MaterializedReportPage',
+				status: true,
+				description:
+					'Server-projected descriptor and bounded row page. No client tenant selector exists.'
+			},
+			{
+				name: 'locale',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onDrilldown',
+				code: 'MaterializedReportDrilldown',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onPageChange',
+				code: '(page: number) => void | Promise<void>',
+				status: false,
+				description: 'The application route owns URL navigation for a changed server page.'
+			},
+			{
+				name: 'caption',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onDrilldown',
+				code: 'MaterializedReportDrilldown',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onPageChange',
+				code: '(page: number) => void | Promise<void>',
+				status: false,
+				description: 'The application route owns URL navigation for a changed server page.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/reports/src/svelte/MaterializedReportTable.svelte'
+	},
+	{
 		slug: 'report-confirmation',
 		name: 'ReportConfirmation',
 		family: 'smrt-reports-svelte',
@@ -19879,7 +20125,7 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'record',
-				code: "Pick<RecordScreenProps, 'loaders' | 'registry' | 'widgetContext' | 'overview' | 'override' | 'onoverviewchange' | 'layoutEditing' | 'canCustomize' | 'hrefFor' | 'labels' | 'viewAllHref' | 'statusTones'>",
+				code: "Pick<RecordScreenProps, 'loaders' | 'registry' | 'widgetContext' | 'overview' | 'override' | 'onoverviewchange' | 'layoutEditing' | 'canCustomize' | 'hrefFor' | 'labels' | 'viewAllHref' | 'lineItemStoredTotals' | 'statusTones'>",
 				status: false,
 				description: 'Passed to `RecordScreen` for the record view and edit.'
 			}
@@ -20028,6 +20274,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'string',
 				status: false,
 				description: 'ISO 4217 code used by money fields.'
+			},
+			{
+				name: 'lineItemStoredTotals',
+				code: '() => StoredLineItemsTotals | undefined',
+				status: false,
+				description:
+					'Frozen document-money snapshot for the line-items widget. The host reads its own persisted rows (including per-component tax); this screen never recalculates them from visible lines.'
 			},
 			{
 				name: 'locale',
@@ -31112,10 +31365,10 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2829,
-	totalProps: 2987,
-	authoredSummaries: 151,
-	totalComponents: 402
+	describedProps: 2852,
+	totalProps: 3013,
+	authoredSummaries: 152,
+	totalComponents: 405
 };
 
 export const uiComponentGroups = [
