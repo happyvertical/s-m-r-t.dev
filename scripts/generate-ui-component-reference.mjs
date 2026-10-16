@@ -634,9 +634,6 @@ function bindingsIn(file) {
  * it would be dead. Likewise a package with no `repository.directory` has no
  * path under the monorepo tree. Either way the reference page omits the source
  * link instead of publishing a dead one.
- *
- * smrt-planner ships no declaration maps today, so its components land here
- * with null (https://github.com/happyvertical/smrt/issues/4075).
  */
 function sourcePathFor(declarationPath, group) {
 	if (!group.inMonorepo) return null;

@@ -17,16 +17,7 @@ describe('generated UI component reference', () => {
 		for (const component of uiComponents) {
 			expect(component.name).toBeTruthy();
 			expect(component.importPath).toMatch(/^@happyvertical\/smrt-[a-z-]+/);
-			// smrt-planner ships no declaration maps, so its components cannot be
-			// traced to source and publish no link
-			// (https://github.com/happyvertical/smrt/issues/4075). When a release
-			// ships them, regenerating fills these in and this assertion fails:
-			// delete this branch so planner is held to the rule below.
-			if (component.importPath.startsWith('@happyvertical/smrt-planner')) {
-				expect(component.source).toBeNull();
-			} else {
-				expect(component.source).toMatch(/^packages\/.+\.svelte$/);
-			}
+			expect(component.source).toMatch(/^packages\/.+\.svelte$/);
 			expect(component.related.href).toBe('/ui');
 		}
 	});
