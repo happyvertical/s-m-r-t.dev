@@ -62,7 +62,7 @@ jobs:
         with:
           # Pinned to a major, like the other workflows: `engines.node` plus
           # `engine-strict=true` enforce the real floor at install time.
-          node-version: '24'
+          node-version: '26'
 
       # prettier, eslint, and the template checker all resolve out of the
       # installed tree. `--frozen-lockfile` keeps this honest about the tree the
