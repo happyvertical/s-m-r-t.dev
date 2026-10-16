@@ -1664,7 +1664,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'One contract hierarchy supports commercial lifecycle',
-					body: 'channelId distinguishes Estimate, Order, Lease, Agreement, PurchaseOrder, WholesaleOrder, ProductionOrder, Cart, and LicenseSale in one table. LicenseSale snapshots rights immutably and revoke() is its explicit transition. Store money as integer minor units; preflightCommerceMoneyMinorUnits and migrateCommerceMoneyToMinorUnits handle the commerce migration. InvoiceLineItem.quantity is decimal with six fractional places; rounding happens once, where quantity times price meets money. There are no tolerances on any money path. The cost-billing subpath is an independent entry for signed cost billing with explicit tax rounding.'
+					body: 'channelId distinguishes Estimate, Order, Lease, Agreement, PurchaseOrder, WholesaleOrder, ProductionOrder, Cart, and LicenseSale in one table. LicenseSale snapshots rights immutably and revoke() is its explicit transition. Money is stored as integer minor units. InvoiceLineItem.quantity is decimal with six fractional places; rounding happens once, where quantity times price meets money. There are no tolerances on any money path. The cost-billing subpath is an independent entry for signed cost billing with explicit tax rounding.'
 				},
 				{
 					title: 'Sales and purchase contracts have separate parties',

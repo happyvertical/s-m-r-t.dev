@@ -38,7 +38,8 @@ export default defineConfig({
 		// whose `utils/naming` default-imports the CommonJS `pluralize`. Served
 		// unbundled, that import has no default export and the planner's
 		// client-side load fails in dev (`vite build` is unaffected). Prebundle
-		// just that one package. Upstream: smrt-core could import it as ESM.
+		// just that one package. Upstream: https://github.com/happyvertical/smrt/issues/4054
+		// (removal tracked in #310).
 		include: ['@happyvertical/smrt-planner > @happyvertical/smrt-core > pluralize']
 	},
 	server: {
