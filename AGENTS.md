@@ -132,6 +132,9 @@ Then one line below.
 - smrt#4054: smrt-core default-imports CommonJS `pluralize`, which fails when
   served unbundled in dev; `vite.config.ts` `optimizeDeps.include` prebundles
   it. Tracked here in #310.
+- smrt#4075: smrt-planner ships no declaration maps, so the UI reference
+  publishes no source link for its components; `ui-components.test.ts` fails
+  once a release ships them, which is the cue to drop its planner branch.
 
 ## Agent lifecycle posture
 

@@ -628,10 +628,15 @@ function bindingsIn(file) {
 
 /**
  * Path to a component's real source, relative to the smrt monorepo root, or null
- * when the package does not live in that monorepo. A package with no
- * `repository.directory` (smrt-planner, which has its own repository and version
- * line) has no path under the monorepo tree, so any link built from one would
- * be dead; the reference page omits the source link instead of publishing it.
+ * when it cannot be traced there. The declaration map is the only honest route
+ * back to source: without one, the only path left is the published `dist`
+ * declaration, which does not exist in the repository, so any link built from
+ * it would be dead. Likewise a package with no `repository.directory` has no
+ * path under the monorepo tree. Either way the reference page omits the source
+ * link instead of publishing a dead one.
+ *
+ * smrt-planner ships no declaration maps today, so its components land here
+ * with null (https://github.com/happyvertical/smrt/issues/4075).
  */
 function sourcePathFor(declarationPath, group) {
 	if (!group.inMonorepo) return null;
@@ -644,7 +649,7 @@ function sourcePathFor(declarationPath, group) {
 		if (source)
 			return within(resolve(dirname(mapPath), source)).replace(/\.svelte\.ts$/, '.svelte');
 	}
-	return within(declarationPath);
+	return null;
 }
 
 function buildComponent(name, declarationPath, group, slot = null) {
