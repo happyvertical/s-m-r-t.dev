@@ -1683,6 +1683,10 @@ export const packages: SmrtPackage[] = [
 					body: 'Saving a draft line recalculates the whole invoice once and writes the header totals, each line, and its DocumentTax rows together. InvoiceLineItem.amount is the net line amount and taxAmount is stored beside it. DocumentTax is read-only and records the code, component, percent, liability account, taxable base, and tax for each document. When an invoice leaves draft its money is frozen, and later edits to amounts or lines are refused. getInvoiceMoneyFacts reads the stored facts without recalculating them, and InvoiceRecordScreen shows them on a record page.'
 				},
 				{
+					title: 'Every invoice and contract write needs a tenant',
+					body: 'After creating a tenant, call ensureCommerceTenant(db, tenantId, { cookbook }) once. It seeds the tax settings, the standard tax codes, and the cookbook defaults, returns { tenantId }, and is safe to repeat. Money data written by an earlier release is refused with COMMERCE_DATA_NEEDS_UPGRADE, and the error names the one-time command to run: smrt db:upgrade-commerce-money.'
+				},
+				{
 					title: 'Credit notes',
 					body: 'A credit note is an Invoice with kind credit_note that names the invoice it credits. It credits a quantity or an amount of a source line, never more than the line, or adds a goodwill line with its own tax code. Tax comes from the source invoice as issued, not from current settings. An issued credit note reduces the source balance. A refund is a Payment of kind refund, allocated only to a credit note.'
 				},
