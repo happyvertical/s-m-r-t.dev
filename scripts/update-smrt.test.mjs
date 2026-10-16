@@ -55,6 +55,24 @@ describe('update-smrt --check', () => {
 		}
 	);
 
+	it('exempts an independent package from lockstep but not from exact pins', () => {
+		expect(
+			check({
+				'@happyvertical/smrt-core': '0.40.63',
+				'@happyvertical/smrt-svelte': '0.40.63',
+				'@happyvertical/smrt-planner': '0.1.0'
+			})
+		).toContain('coherent at 0.40.63 (2 packages)');
+		for (const spec of ['^0.1.0', 'link:../smrt-planner']) {
+			expect(() =>
+				check({
+					'@happyvertical/smrt-core': '0.40.63',
+					'@happyvertical/smrt-planner': spec
+				})
+			).toThrow(/SMRT dependencies must use exact versions/);
+		}
+	});
+
 	it('rejects mixed exact versions', () => {
 		expect(() =>
 			check({

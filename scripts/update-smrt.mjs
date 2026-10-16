@@ -133,11 +133,18 @@ const pkgPath = join(root, 'package.json');
 const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
 
 const targets = [];
+// Independent packages still need exact registry pins; they are only left out
+// of the lockstep comparison and the lockstep update.
+const independent = [];
 for (const field of ['dependencies', 'devDependencies']) {
 	const deps = pkg[field];
 	if (!deps) continue;
 	for (const [name, spec] of Object.entries(deps)) {
-		if (!name.startsWith(SCOPE_PREFIX) || INDEPENDENT.has(name)) continue;
+		if (!name.startsWith(SCOPE_PREFIX)) continue;
+		if (INDEPENDENT.has(name)) {
+			independent.push({ name, field, current: spec });
+			continue;
+		}
 		if (LOCAL_SPEC.test(spec)) {
 			if (checkOnly) {
 				targets.push({ name, field, current: spec });
@@ -156,7 +163,9 @@ if (targets.length === 0) {
 }
 
 if (checkOnly) {
-	const invalid = targets.filter((target) => !/^\d+\.\d+\.\d+(?:[-+].+)?$/.test(target.current));
+	const invalid = [...targets, ...independent].filter(
+		(target) => !/^\d+\.\d+\.\d+(?:[-+].+)?$/.test(target.current)
+	);
 	if (invalid.length > 0) {
 		console.error('SMRT dependencies must use exact versions:');
 		for (const target of invalid) console.error(`  - ${target.name}: ${target.current}`);
