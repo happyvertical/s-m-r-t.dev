@@ -4,6 +4,11 @@ import { foundationGuides } from '$lib/data/guides';
 import { entries as componentEntries } from '../../routes/components/[...legacy]/+page.server';
 import { entries as docsEntries } from '../../routes/docs/[...legacy]/+page.server';
 import { entries as moduleEntries } from '../../routes/modules/[slug]/+page.server';
+import {
+	_aliases as referenceComponentAliases,
+	entries as referenceComponentEntries
+} from '../../routes/reference/components/[slug]/+page';
+import { uiComponents } from '$lib/data/ui-components.generated';
 import { entries as foundationEntries } from '../../routes/foundations/[slug]/+page';
 import { entries as packageEntries } from '../../routes/packages/[slug]/+page.server';
 
@@ -58,6 +63,18 @@ describe('legacy static routes', () => {
 		]);
 		expect(paths, RESTORE_DONT_RENUMBER).toHaveLength(packages.length + 3);
 		expect(new Set(paths).size).toBe(paths.length);
+	});
+
+	it('prerenders a redirect for every removed reference component page', async () => {
+		const aliased = (await referenceComponentEntries())
+			.map(({ slug }) => slug)
+			.filter((slug) => !uiComponents.some((component) => component.slug === slug));
+
+		expect(aliased, RESTORE_DONT_RENUMBER).toEqual(['invoice-line-editor']);
+		// Every target must be a live generated page, never another alias.
+		for (const target of Object.values(referenceComponentAliases)) {
+			expect(uiComponents.some((component) => component.slug === target)).toBe(true);
+		}
 	});
 
 	it('prerenders every /foundations alias redirect', async () => {

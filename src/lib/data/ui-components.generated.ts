@@ -5693,7 +5693,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Commerce · Components',
 		importPath: '@happyvertical/smrt-commerce/svelte',
 		summary:
-			'General native invoice editor; server owns prices, tax, authorization and persistence.',
+			'Native invoice editor. The v2 money model is the only invoice model: tax comes from tax codes, and the server recomputes and owns every stored amount.',
 		summarySynthesized: false,
 		slot: {
 			id: 'invoice-editor',
@@ -5703,149 +5703,64 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		details: [
 			{
-				name: 'roundingScope',
-				code: "'line' | 'invoice'",
-				status: false,
-				description: 'Invoice scope groups equal effective percentages and rounds each group once.'
-			},
-			{
 				name: 'action',
 				code: 'string',
 				status: true,
-				description: 'Caller native endpoint.'
+				description: "Native form action owned by the caller's invoice route."
 			},
 			{
 				name: 'method',
 				code: "'post' | 'get'",
 				status: false,
-				description: 'Native method, default POST.'
+				description: 'Native HTTP method retained for progressive enhancement.'
 			},
 			{
-				name: 'id',
-				code: 'string',
-				status: false,
-				description: 'Stable form identity.'
-			},
-			{
-				name: 'title',
-				code: 'string',
-				status: false,
-				description: 'Caller-localized title.'
-			},
-			{
-				name: 'values',
-				code: 'InvoiceDraftValues',
-				status: false,
-				description: 'Retained editable strings; never reconstructed from model numbers.'
-			},
-			{
-				name: 'customers',
-				code: 'readonly { id: string; label: string; }[]',
-				status: false,
-				description: 'Authorized customer projections; retained unknown references stay visible.'
-			},
-			{
-				name: 'errors',
-				code: 'Record<string, string>',
-				status: false,
-				description: 'Caller field errors: header name or lineKey.fieldName.'
-			},
-			{
-				name: 'fields',
-				code: 'Partial<InvoiceFieldNames>',
-				status: false,
-				description: 'Header and submitter field adapters.'
-			},
-			{
-				name: 'lineFields',
-				code: 'Partial<InvoiceLineFieldNames>',
-				status: false,
-				description: 'Repeated line field adapters.'
+				name: 'money',
+				code: 'MoneyEditorProps',
+				status: true,
+				description: 'Typed v2 money draft, tax-code choices, and stored issued snapshot.'
 			},
 			{
 				name: 'canEdit',
 				code: 'boolean',
 				status: false,
-				description: 'Presentation capability only; server reauthorizes all mutations.'
+				description: 'Presentation capability; the server remains the authority for writes.'
 			},
 			{
 				name: 'pending',
 				code: 'boolean',
 				status: false,
-				description: 'Disable submission while a request is pending.'
-			},
-			{
-				name: 'retryStatus',
-				code: 'FormRetryStatus',
-				status: false,
-				description: 'Caller-owned retry-controller status.'
-			},
-			{
-				name: 'message',
-				code: 'string',
-				status: false,
-				description: 'Caller error or uncertain-outcome message.'
-			},
-			{
-				name: 'review',
-				code: 'InvoicePreparationReview',
-				status: false,
-				description: 'Server-authoritative review snapshot.'
+				description: 'Caller transport state that disables edits and the save submitter.'
 			},
 			{
 				name: 'hiddenFields',
 				code: 'readonly InvoicePreparationHiddenField[]',
 				status: false,
-				description: 'Exact caller tokens/context; repeated names preserved.'
+				description: 'Caller-owned request identity and route fields submitted unchanged.'
+			},
+			{
+				name: 'intentField',
+				code: 'string',
+				status: false,
+				description: 'Native submitter field name expected by the caller, default intent.'
 			},
 			{
 				name: 'saveIntent',
 				code: 'string',
 				status: false,
-				description: 'Save intent, default save.'
-			},
-			{
-				name: 'addIntent',
-				code: 'string',
-				status: false,
-				description: 'Add-line intent, default addLine.'
-			},
-			{
-				name: 'removePrefix',
-				code: 'string',
-				status: false,
-				description: 'Remove-line intent prefix, default removeLine:.'
+				description: 'Submitter value that requests a draft save, default save.'
 			},
 			{
 				name: 'saveLabel',
 				code: 'string',
 				status: false,
-				description: 'Caller-localized save label.'
-			},
-			{
-				name: 'cancelHref',
-				code: 'string',
-				status: false,
-				description: 'Optional cancel navigation URL.'
-			},
-			{
-				name: 'children',
-				code: 'Snippet<[InvoiceDraftValues]>',
-				status: false,
-				description:
-					'Domain fields inside the single form; receives current draft for currency-aware extensions.'
+				description: 'Caller-visible label for the save submitter.'
 			},
 			{
 				name: 'onsubmit',
 				code: "HTMLFormAttributes['onsubmit']",
 				status: false,
-				description: 'Optional enhancement; native submission remains the default.'
-			},
-			{
-				name: 'money',
-				code: 'MoneyEditorProps',
-				status: false,
-				description: 'Explicit v2 money surface. Omit to retain the legacy invoice editor API.'
+				description: 'Optional native form enhancement; omitted submissions stay native.'
 			}
 		],
 		sources: [],
@@ -5952,115 +5867,6 @@ export const uiComponents: UiComponentReference[] = [
 			href: '/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/InvoiceHeader.svelte'
-	},
-	{
-		slug: 'invoice-line-editor',
-		name: 'InvoiceLineEditor',
-		family: 'smrt-commerce-svelte',
-		category: 'Commerce · Components',
-		importPath: '@happyvertical/smrt-commerce/svelte',
-		summary: 'General invoice line fields and exact non-authoritative calculation preview.',
-		summarySynthesized: false,
-		slot: null,
-		details: [
-			{
-				name: 'roundingScope',
-				code: "'line' | 'invoice'",
-				status: false,
-				description: 'Invoice scope groups equal effective percentages and rounds each group once.'
-			},
-			{
-				name: 'line',
-				code: 'InvoiceLineDraft',
-				status: true,
-				description: 'Lossless caller-owned line values.'
-			},
-			{
-				name: 'currency',
-				code: 'string',
-				status: true,
-				description: 'Current currency code for shared calculation.'
-			},
-			{
-				name: 'inheritedTaxRate',
-				code: 'string',
-				status: true,
-				description: 'External default tax percentage; explicit line override remains distinct.'
-			},
-			{
-				name: 'number',
-				code: 'number',
-				status: false,
-				description: 'One-based display position.'
-			},
-			{
-				name: 'id',
-				code: 'string',
-				status: false,
-				description: 'Stable control-label prefix.'
-			},
-			{
-				name: 'fields',
-				code: 'Partial<InvoiceLineFieldNames>',
-				status: false,
-				description: 'Native field-name adapters.'
-			},
-			{
-				name: 'errors',
-				code: 'Partial<Record<keyof InvoiceLineFieldNames, string>>',
-				status: false,
-				description: 'Caller errors keyed by canonical line field name.'
-			},
-			{
-				name: 'canEdit',
-				code: 'boolean',
-				status: false,
-				description: 'Presentation capability.'
-			},
-			{
-				name: 'pending',
-				code: 'boolean',
-				status: false,
-				description: 'Disable structural actions while pending.'
-			},
-			{
-				name: 'intentField',
-				code: 'string',
-				status: false,
-				description: 'Native submitter name.'
-			},
-			{
-				name: 'removePrefix',
-				code: 'string',
-				status: false,
-				description: 'Remove intent prefix, followed by caller line key.'
-			},
-			{
-				name: 'onchange',
-				code: '(line: InvoiceLineDraft) => void',
-				status: false,
-				description:
-					'Optional notification with a new lossless draft; the supplied line is never mutated.'
-			}
-		],
-		sources: [],
-		sections: [],
-		items: [
-			{
-				name: 'onchange',
-				code: '(line: InvoiceLineDraft) => void',
-				status: false,
-				description:
-					'Optional notification with a new lossless draft; the supplied line is never mutated.'
-			}
-		],
-		components: [],
-		demo: null,
-		related: {
-			label: 'UI showcase',
-			href: '/ui'
-		},
-		source: 'packages/commerce/src/svelte/components/InvoiceLineEditor.svelte'
 	},
 	{
 		slug: 'invoice-line-items',
@@ -6261,7 +6067,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-commerce-svelte',
 		category: 'Commerce · Components',
 		importPath: '@happyvertical/smrt-commerce/svelte',
-		summary: 'Legacy decimal-major totals or exact retained totals.',
+		summary: 'Exact stored totals; the component never derives tax from a rate.',
 		summarySynthesized: false,
 		slot: {
 			id: 'invoice-totals',
@@ -6271,69 +6077,9 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		details: [
 			{
-				name: 'subtotal',
-				code: 'number',
-				status: false,
-				description: 'Subtotal in decimal dollars'
-			},
-			{
-				name: 'taxRate',
-				code: 'number',
-				status: false,
-				description: 'Tax rate as percentage (e.g., 5 for 5%)'
-			},
-			{
-				name: 'taxAmount',
-				code: 'number',
-				status: false,
-				description: 'Tax amount in decimal dollars (calculated from rate if not provided)'
-			},
-			{
-				name: 'total',
-				code: 'number',
-				status: false,
-				description: 'Total in decimal dollars'
-			},
-			{
-				name: 'amountPaid',
-				code: 'number',
-				status: false,
-				description: 'Amount already paid in decimal dollars'
-			},
-			{
-				name: 'currency',
-				code: "'CAD' | 'USD'",
-				status: false,
-				description: 'Currency code'
-			},
-			{
-				name: 'showTax',
-				code: 'boolean',
-				status: false,
-				description: 'Show tax breakdown'
-			},
-			{
-				name: 'showPaid',
-				code: 'boolean',
-				status: false,
-				description: 'Show payment status'
-			},
-			{
-				name: 'taxLabel',
-				code: 'string',
-				status: false,
-				description: 'Tax label'
-			},
-			{
-				name: 'size',
-				code: "'sm' | 'md' | 'lg'",
-				status: false,
-				description: 'Size variant'
-			},
-			{
 				name: 'retained',
 				code: 'RetainedInvoiceTotalsView',
-				status: false,
+				status: true,
 				description: 'Caller-authoritative totals; omitted facts remain omitted.'
 			},
 			{
@@ -6341,6 +6087,12 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'Snippet<[RetainedInvoiceTotalsView]>',
 				status: false,
 				description: 'Renders additional retained totals evidence.'
+			},
+			{
+				name: 'size',
+				code: "'sm' | 'md' | 'lg'",
+				status: false,
+				description: 'Size variant.'
 			}
 		],
 		sources: [],
@@ -6360,8 +6112,8 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-commerce-svelte',
 		category: 'Commerce · Components',
 		importPath: '@happyvertical/smrt-commerce/svelte',
-		summary: 'MoneyInvoiceEditor is part of the commerce · components component family.',
-		summarySynthesized: true,
+		summary: "The invoice editor's form; the v2 money model is the only invoice model.",
+		summarySynthesized: false,
 		slot: null,
 		details: [
 			{
@@ -6396,7 +6148,7 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'hiddenFields',
-				code: 'readonly { name: string; value: string; }[]',
+				code: 'readonly InvoicePreparationHiddenField[]',
 				status: false,
 				description: 'Caller-owned request identity and route fields submitted unchanged.'
 			},
@@ -6404,13 +6156,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'intentField',
 				code: 'string',
 				status: false,
-				description: 'Native submitter field name expected by the caller.'
+				description: 'Native submitter field name expected by the caller, default intent.'
 			},
 			{
 				name: 'saveIntent',
 				code: 'string',
 				status: false,
-				description: 'Submitter value that requests a draft save.'
+				description: 'Submitter value that requests a draft save, default save.'
 			},
 			{
 				name: 'saveLabel',
@@ -31365,10 +31117,10 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2852,
-	totalProps: 3013,
+	describedProps: 2816,
+	totalProps: 2977,
 	authoredSummaries: 152,
-	totalComponents: 405
+	totalComponents: 404
 };
 
 export const uiComponentGroups = [
