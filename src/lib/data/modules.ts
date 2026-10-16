@@ -51,11 +51,13 @@ export const foundationModuleClusters: ApplicationModuleCluster[] = [
 		status: 'foundation',
 		highlights: [
 			'Users, profiles, tenants, memberships, roles, permissions, sessions, access requests, feature decisions, and protected secrets ship as application models and services.',
-			'OIDC and terminal sign-in use one session model. Tenant context and operation permissions apply the same identity to generated and custom interfaces.'
+			'OIDC and terminal sign-in use one session model. Tenant context and operation permissions apply the same identity to generated and custom interfaces.',
+			'Approvals add a revision-bound decision gate with quorum, expiry, and an append-only ledger. Preferences store tenant defaults and per-user overrides for page and app-frame layout.'
 		],
 		details: [
 			'UserList, UserForm, InviteUserModal, TenantSwitcher, membership controls, and field-policy editors supply common administration surfaces.',
-			'Field policy can change labels, help, visibility, order, and organization locks without creating a second form schema.'
+			'Field policy can change labels, help, visibility, order, and organization locks without creating a second form schema.',
+			'Overview and shell-layout preferences are read and written through stores; each kind validates its own payload and names its own permissions.'
 		],
 		foundation: [
 			'The packages use the framework manifest, tenant context, generated interfaces, and the shared UI component contracts.',
@@ -63,15 +65,18 @@ export const foundationModuleClusters: ApplicationModuleCluster[] = [
 		],
 		body: 'This foundation removes the separate account, session, tenant, role, permission, invitation, feature-control, and field-preference projects that most applications need.',
 		warning: [
-			'Postgres supplies the generated row-level security layer. Other databases do not provide that additional data-layer check.'
+			'Postgres supplies the generated row-level security layer. Other databases do not provide that additional data-layer check.',
+			'smrt-approvals and smrt-preferences are new and have no generated write surface: writes go through their services and stores.'
 		],
 		packages: [
 			{ slug: 'smrt-users', status: 'Released' },
 			{ slug: 'smrt-tenancy', status: 'Released' },
 			{ slug: 'smrt-profiles', status: 'Released' },
 			{ slug: 'smrt-features', status: 'Released' },
-			{ slug: 'smrt-fields', status: 'New' },
-			{ slug: 'smrt-secrets', status: 'Released' }
+			{ slug: 'smrt-fields', status: 'Released' },
+			{ slug: 'smrt-secrets', status: 'Released' },
+			{ slug: 'smrt-approvals', status: 'New' },
+			{ slug: 'smrt-preferences', status: 'New' }
 		],
 		demo: ['smrt-users', 'smrt-tenancy'],
 		guides: [{ label: 'Run a multi-tenant lifecycle', href: '/guides/multi-tenant-lifecycle' }]
@@ -85,28 +90,36 @@ export const foundationModuleClusters: ApplicationModuleCluster[] = [
 		status: 'foundation',
 		highlights: [
 			'Agents declare interests, schedules, tools, tenant bindings, principal limits, and optional learning behavior.',
-			'Personas add durable identity, memory, directives, feedback, and approval. Chat and jobs provide conversation and execution records.'
+			'Personas add durable identity, memory, directives, feedback, and approval. Chat and jobs provide conversation and execution records.',
+			'Playbooks give a multi-step intent a named, layered plan that browser agents, in-app agents, the MCP server, and the CLI all follow. Webhooks publish signed, retried events to outside systems.'
 		],
 		details: [
 			'Agent dashboards, schedule forms, run history, directive review, chat layouts, tool-call views, and job operations ship with the packages.',
-			'The shared module UI registry lets an application place package-owned views inside AdminShell or another shared UI surface.'
+			'The shared module UI registry lets an application place package-owned views inside AdminShell or another shared UI surface.',
+			'The MCP Apps bridge lets a package view run inside an MCP host; the OpenAI adapter adds optional navigation and settings for those views. WebhookAdmin manages subscriptions and replays.'
 		],
 		foundation: [
 			'Principal execution intersects user permissions, agent limits, and persona tool limits before work reaches application models.',
-			'The application MCP runtime exposes selected generated tools. The application must authenticate requests before supplying a principal.'
+			'The application MCP runtime exposes selected generated tools. The application must authenticate requests before supplying a principal.',
+			'A playbook resolves to a plan and never executes as a unit; every step is authorized where it runs. Webhook delivery reads the committed change feed and enqueues through smrt-jobs.'
 		],
-		body: 'These modules remove separate work for persona storage, chat state, schedules, retries, tool policy, job visibility, and agent administration.',
+		body: 'These modules remove separate work for persona storage, chat state, schedules, retries, tool policy, job visibility, agent administration, playbook overrides, and outbound event delivery.',
 		warning: [
-			'smrt-personas and smrt-chat are new. Applications must validate their workflows before broad production use.',
-			'smrt-jobs supplies runners and queue controls, but each deployment must select and operate an execution host.'
+			'smrt-jobs supplies runners and queue controls, but each deployment must select and operate an execution host.',
+			'smrt-mcp-apps and smrt-mcp-openai are new. The OpenAI adapter tests against a synthetic host and claims no OpenAI host compatibility yet.',
+			'smrt-webhooks is new. Delivery is at least once; receivers must deduplicate the delivery id.'
 		],
 		packages: [
-			{ slug: 'smrt-agents', status: 'New' },
-			{ slug: 'smrt-personas', status: 'New' },
-			{ slug: 'smrt-chat', status: 'New' },
+			{ slug: 'smrt-agents', status: 'Released' },
+			{ slug: 'smrt-personas', status: 'Released' },
+			{ slug: 'smrt-chat', status: 'Released' },
 			{ slug: 'smrt-jobs', status: 'Released' },
 			{ slug: 'smrt-prompts', status: 'Released' },
-			{ slug: 'smrt-app-mcp', status: 'Released' }
+			{ slug: 'smrt-app-mcp', status: 'Released' },
+			{ slug: 'smrt-playbooks', status: 'Released' },
+			{ slug: 'smrt-mcp-apps', status: 'New' },
+			{ slug: 'smrt-mcp-openai', status: 'New' },
+			{ slug: 'smrt-webhooks', status: 'New' }
 		],
 		demo: ['smrt-agents', 'smrt-chat', 'smrt-jobs'],
 		guides: [
@@ -123,11 +136,13 @@ export const foundationModuleClusters: ApplicationModuleCluster[] = [
 		status: 'foundation',
 		highlights: [
 			'Content models cover drafts, publication, contributions, reviews, corrections, versions, references, and transparent governance evidence.',
-			'Asset and media packages add storage, versions, image processing, communication accounts, message channels, social publishing, voice, and video production records.'
+			'Asset and media packages add storage, versions, image processing, communication accounts, message channels, social publishing, voice, and video production records.',
+			'Comments attach a tenant-scoped discussion to any record. Ingestion keeps durable receipts, evidence, and analysis attempts for documents that arrive by email, watch folder, or vendor webhook.'
 		],
 		details: [
 			'Content editors, contribution portals, governance views, asset managers, image tools, account lists, message readers, and compose forms ship today.',
-			'Package-owned Playground views demonstrate the major content, asset, image, and message workflows.'
+			'Package-owned Playground views demonstrate the major content, asset, image, and message workflows.',
+			'RecordComments embeds on a record detail page. IntakeInbox, IntakeReview, and EvidenceViewer mount through an authenticated review host.'
 		],
 		foundation: [
 			'Content and media models use the same tenant scope, asset associations, generated interfaces, and shared UI registry as the framework.',
@@ -136,7 +151,8 @@ export const foundationModuleClusters: ApplicationModuleCluster[] = [
 		body: 'This cluster removes separate editorial workflow, asset library, image tool, inbox, social scheduler, voice record, and video workflow foundations.',
 		warning: [
 			'Voice, video, and social packages have no registered Playground examples on this site.',
-			'External storage, messaging, social, voice, and video operations still require provider configuration and credentials.'
+			'External storage, messaging, social, voice, and video operations still require provider configuration and credentials.',
+			'smrt-ingestion is preview-only: its README reports that the reference workflow did not meet its quality gates, and automation stays disabled.'
 		],
 		packages: [
 			{ slug: 'smrt-content', status: 'Released' },
@@ -147,7 +163,9 @@ export const foundationModuleClusters: ApplicationModuleCluster[] = [
 			{ slug: 'smrt-messages', status: 'Released' },
 			{ slug: 'smrt-social', status: 'Released' },
 			{ slug: 'smrt-voice', status: 'Released' },
-			{ slug: 'smrt-video', status: 'Released' }
+			{ slug: 'smrt-video', status: 'Released' },
+			{ slug: 'smrt-comments', status: 'New' },
+			{ slug: 'smrt-ingestion', status: 'New' }
 		],
 		demo: ['smrt-content', 'smrt-assets', 'smrt-images', 'smrt-messages'],
 		guides: [],
@@ -162,20 +180,24 @@ export const foundationModuleClusters: ApplicationModuleCluster[] = [
 		status: 'foundation',
 		highlights: [
 			'Commerce models cover customers, vendors, contracts, invoices, payments, instruments, payouts, fulfillment, and guarded money operations.',
-			'Product, inventory, manufacturing, ledger, and subscription models connect catalog demand to stock, production, accounting, plans, grants, and usage.'
+			'Product, inventory, manufacturing, ledger, and subscription models connect catalog demand to stock, production, accounting, plans, grants, and usage.',
+			'Expenses record reviewed costs with receipts and draw down purchase-order commitments. Human resources records employment terms and qualifications with expiry.'
 		],
 		details: [
 			'Invoice cards, line items, totals, actions, unbilled work, plan selection, subscription summaries, and usage thresholds ship as Svelte components.',
-			'The Commerce Playground shows invoice and unbilled-item workflows. Several supporting packages remain intentionally headless.'
+			'The Commerce Playground shows invoice and unbilled-item workflows. Several supporting packages remain intentionally headless.',
+			'Expense entry, receipt capture, and review queues, plus employee lists, forms, and expiring-qualification lists, ship as Svelte components.'
 		],
 		foundation: [
 			'Tenant-scoped models generate consistent data interfaces and permission names. Commerce operations can post balanced entries to smrt-ledgers.',
-			'The packages use integer minor units for money and explicit services for guarded stock and payment state changes.'
+			'The packages use integer minor units for money and explicit services for guarded stock and payment state changes.',
+			'Tenant tax codes resolve on each invoice line under exclusive, inclusive, or no-tax pricing. An issued invoice keeps its net amounts and stored tax. It posts to the revenue and tax accounts it recorded and feeds a tax summary report.'
 		],
 		body: 'These modules remove the base schemas and lifecycle rules for catalog, stock, production, billing, accounting, entitlement, and fulfillment work.',
 		warning: [
-			'Applications still supply payment rails, tax calculation, provider settlement, and deployment-specific accounting policy.',
-			'smrt-subscriptions has UI components but no registered Playground module on this site.'
+			'Applications still supply payment rails, jurisdiction rules and rates for their tax codes, provider settlement, and deployment-specific accounting policy.',
+			'smrt-subscriptions has UI components but no registered Playground module on this site.',
+			'smrt-expenses and smrt-human-resources are new and ship closed generated surfaces: applications expose them through their own permission-checked routes.'
 		],
 		packages: [
 			{ slug: 'smrt-commerce', status: 'Released' },
@@ -183,7 +205,9 @@ export const foundationModuleClusters: ApplicationModuleCluster[] = [
 			{ slug: 'smrt-inventory', status: 'Released' },
 			{ slug: 'smrt-manufacturing', status: 'Released' },
 			{ slug: 'smrt-ledgers', status: 'Released' },
-			{ slug: 'smrt-subscriptions', status: 'Released' }
+			{ slug: 'smrt-subscriptions', status: 'Released' },
+			{ slug: 'smrt-expenses', status: 'New' },
+			{ slug: 'smrt-human-resources', status: 'New' }
 		],
 		demo: ['smrt-commerce'],
 		guides: [],
@@ -200,25 +224,27 @@ export const focusedModuleClusters: ApplicationModuleCluster[] = [
 			'Route customer cases, connect delivery work, synchronize provider records, and approve the time spent on each result.',
 		status: 'focused',
 		highlights: [
-			'Project models cover repositories, issues, pull requests, time entries, approvals, and provider-neutral synchronization.',
+			'Project models cover repositories, issues, pull requests, and provider-neutral synchronization. Time entries, attendance, and period timecards live in smrt-timesheets and are shared by both.',
 			'Support models add channel-neutral cases, routing, service targets, escalation, audit evidence, and explicit links to delivery work.'
 		],
 		details: [
-			'Time lists, summaries, duration display, approval actions, case queues, case detail, targets, and routing rationale ship with the packages.',
+			'Time lists, summaries, duration display, approval queues, case queues, case detail, targets, and routing rationale ship with the packages.',
 			'The Projects Playground demonstrates time entry, summary, and approval behavior.'
 		],
 		foundation: [
-			'Both packages use tenant-scoped framework models and shared UI contracts. A work link connects support cases to project delivery records.',
-			'Provider adapters synchronize external project systems without changing the application-facing model.'
+			'All three packages use tenant-scoped framework models and shared UI contracts. A work link connects support cases to project delivery records.',
+			'Provider adapters synchronize external project systems without changing the application-facing model. Approval of a time entry writes immutable charge and compensation snapshots.'
 		],
-		body: 'This pair removes the first case queue, service-target engine, project provider layer, time ledger, and approval workflow.',
+		body: 'This group removes the first case queue, service-target engine, project provider layer, time ledger, and approval workflow.',
 		warning: [
-			'smrt-support is new and has no registered Playground example on this site.',
+			'smrt-support has no registered Playground example on this site.',
+			'smrt-timesheets is new. Under pnpm an application that depends on smrt-projects or smrt-support must add it directly, or the CLI stops planning the time tables.',
 			'Provider synchronization requires application credentials and conflict policy for each connected service.'
 		],
 		packages: [
 			{ slug: 'smrt-projects', status: 'Released' },
-			{ slug: 'smrt-support', status: 'New' }
+			{ slug: 'smrt-support', status: 'Released' },
+			{ slug: 'smrt-timesheets', status: 'New' }
 		],
 		demo: ['smrt-projects'],
 		guides: [],
@@ -245,15 +271,15 @@ export const focusedModuleClusters: ApplicationModuleCluster[] = [
 		],
 		body: 'This cluster removes separate reporting infrastructure, event storage, campaign ledgers, CRM foundations, referral attribution, and commission payout models.',
 		warning: [
-			'smrt-reports, smrt-marketing, and smrt-sales are new. Provider connectors still require application configuration.',
+			'Provider connectors still require application configuration.',
 			'smrt-affiliates is a deprecated compatibility layer. New applications must use the smrt-sales commissions module.'
 		],
 		packages: [
-			{ slug: 'smrt-reports', status: 'New' },
+			{ slug: 'smrt-reports', status: 'Released' },
 			{ slug: 'smrt-analytics', status: 'Released' },
 			{ slug: 'smrt-ads', status: 'Released' },
-			{ slug: 'smrt-marketing', status: 'New' },
-			{ slug: 'smrt-sales', status: 'New' },
+			{ slug: 'smrt-marketing', status: 'Released' },
+			{ slug: 'smrt-sales', status: 'Released' },
 			{ slug: 'smrt-affiliates', status: 'Deprecated · compatibility only' }
 		],
 		demo: ['smrt-analytics'],
@@ -322,7 +348,7 @@ export const focusedModuleClusters: ApplicationModuleCluster[] = [
 		],
 		packages: [
 			{ slug: 'smrt-mobile', status: 'Source distribution' },
-			{ slug: 'smrt-mobile-contract', status: 'New' },
+			{ slug: 'smrt-mobile-contract', status: 'Released' },
 			{ slug: 'smrt-android', status: 'Source distribution' },
 			{ slug: 'smrt-ios', status: 'Source distribution' }
 		],

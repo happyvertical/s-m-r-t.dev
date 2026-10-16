@@ -15,6 +15,8 @@ export default defineConfig(({ mode }) => ({
 		// baseline is only trustworthy if something asserts it still matches the
 		// installed tree.
 		include: ['src/**/*.{test,spec}.{js,ts}', 'scripts/**/*.{test,spec}.{js,mjs,ts}'],
-		environment: 'jsdom'
+		environment: 'jsdom',
+		// Node >= 25's built-in localStorage shadows jsdom's; see the file.
+		setupFiles: ['./src/test/setup-storage.ts']
 	}
 }));

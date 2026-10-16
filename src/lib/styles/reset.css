@@ -1,57 +1,64 @@
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
-}
+/* Site base styles live in smrt.reset so smrt component CSS (smrt.structure/smrt.theme) wins.
+   Unlayered rules beat every layer, so a bare `* { padding: 0 }` would zero smrt padding.
+   The order is restated here in case this file is bundled before ThemeProvider injects it. */
+@layer smrt.reset, smrt.structure, smrt.theme;
 
-html {
-	scroll-behavior: smooth;
-	background: var(--site-paper, #f3efe5);
-}
-
-body {
-	min-width: 320px;
-	min-height: 100%;
-	font-family: var(--site-font-sans, system-ui, sans-serif);
-	line-height: 1.5;
-	-webkit-font-smoothing: antialiased;
-	text-rendering: optimizeLegibility;
-}
-
-button,
-input,
-textarea,
-select {
-	font: inherit;
-}
-
-img,
-picture,
-video,
-canvas,
-svg {
-	display: block;
-	max-width: 100%;
-}
-
-button,
-a {
-	-webkit-tap-highlight-color: transparent;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	html {
-		scroll-behavior: auto;
-	}
-
+@layer smrt.reset {
 	*,
 	*::before,
 	*::after {
-		scroll-behavior: auto !important;
-		animation-duration: 0.01ms !important;
-		animation-iteration-count: 1 !important;
-		transition-duration: 0.01ms !important;
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+	}
+
+	html {
+		scroll-behavior: smooth;
+		background: var(--site-paper, #f3efe5);
+	}
+
+	body {
+		min-width: 320px;
+		min-height: 100%;
+		font-family: var(--site-font-sans, system-ui, sans-serif);
+		line-height: 1.5;
+		-webkit-font-smoothing: antialiased;
+		text-rendering: optimizeLegibility;
+	}
+
+	button,
+	input,
+	textarea,
+	select {
+		font: inherit;
+	}
+
+	img,
+	picture,
+	video,
+	canvas,
+	svg {
+		display: block;
+		max-width: 100%;
+	}
+
+	button,
+	a {
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
+
+		*,
+		*::before,
+		*::after {
+			scroll-behavior: auto !important;
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+		}
 	}
 }

@@ -327,4 +327,12 @@
 			min-height: 0;
 		}
 	}
+
+	/* Forced colours replace the accent border and drop the inset rule; frame the chosen family. */
+	@media (forced-colors: active) {
+		.family-grid button.active {
+			border-color: Highlight;
+			outline: 2px solid Highlight;
+		}
+	}
 </style>

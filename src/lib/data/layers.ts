@@ -32,7 +32,11 @@ const BUILDING_BLOCK_CATEGORIES = new Set<PackageCategory>([
  * controls" — it's covered by the Tooling documentation section instead
  * (`tooling.ts` groups `smrt-cli`, `smrt-vitest`, and `smrt-template-*` the
  * same way). Kept as an explicit slug carve-out, the same pattern as
- * `WHO_CAN_DO_WHAT_SLUGS` above.
+ * `WHO_CAN_DO_WHAT_SLUGS` above. `smrt-app-runtime` (the server runtime the
+ * template composes), `smrt-workbench` (the developer workbench), and
+ * `smrt-planner` (the app planner, mounted here as Build a boilerplate at
+ * `/build-a-boilerplate`) sit here too: none is a screen or control a person
+ * uses inside a finished application.
  */
 const DEV_TOOLING_SLUGS = new Set([
 	'smrt-dev-mcp',
@@ -40,7 +44,10 @@ const DEV_TOOLING_SLUGS = new Set([
 	'smrt-cli',
 	'smrt-vitest',
 	'smrt-template-sveltekit',
-	'smrt-template-site-static-json'
+	'smrt-template-site-static-json',
+	'smrt-app-runtime',
+	'smrt-workbench',
+	'smrt-planner'
 ]);
 
 export interface LayerChip {

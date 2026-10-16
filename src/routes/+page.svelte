@@ -163,16 +163,26 @@
 
 <SEO
 	title="The s-m-r-t application stack"
-	description="A TypeScript stack in five layers, released together at one version: foundations, identity and roles, ready-made building blocks, agents included, and screens and controls — for people and software agents."
+	description="A framework and library for creating software that blurs the line between application and agent. Build a boilerplate is a live demo; the cookbook it produces can jumpstart your next project."
 	url="https://s-m-r-t.dev"
 />
 
 <article class="homepage">
 	<header class="hero">
 		<div class="hero-copy">
-			<h1>The s-m-r-t application stack</h1>
+			<h1 class="visually-hidden">The s-m-r-t application stack</h1>
 			<p class="lede">
-				A TypeScript stack in five layers. Every layer releases together, at the same version.
+				s-m-r-t is a framework and library for creating software that blurs the line between
+				application and agent. It is better demonstrated than explained: Build a boilerplate is a
+				live demo, and the cookbook it produces can jumpstart your next project.
+			</p>
+			<div class="hero-actions">
+				<a class="primary-link" href="/build-a-boilerplate">Build a boilerplate <span>→</span></a>
+				<a class="text-link" href="#what-you-get">See how the interfaces connect <span>↓</span></a>
+			</div>
+			<p class="planner-note">
+				Its Export tab downloads a cookbook file;
+				<code>smrt cookbook apply &lt;file&gt;</code> creates a project from it.
 			</p>
 			<ul class="layer-lede-list">
 				{#each appLayers as layer (layer.id)}
@@ -204,8 +214,6 @@
 				documented packages · <span class="mono">{componentCount}</span> components ·
 				<span class="mono">{playgroundCount}</span> playground entries
 			</p>
-
-			<a class="text-link" href="#what-you-get">See how the interfaces connect <span>↓</span></a>
 		</div>
 
 		<ol class="mini-scope-map" aria-label="The s-m-r-t application stack in five layers">
@@ -547,20 +555,72 @@
 		padding-bottom: clamp(4rem, 9vw, 7rem);
 	}
 
-	h1 {
-		max-width: 38rem;
-		font-size: clamp(2.2rem, 4.5vw, 3.4rem);
-		font-weight: 680;
-		letter-spacing: -0.045em;
-		line-height: 1.05;
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		clip-path: inset(50%);
+		white-space: nowrap;
+		border: 0;
 	}
 
 	.hero-copy .lede {
-		margin-top: 1.1rem;
-		max-width: 40rem;
+		margin-top: 0;
+		max-width: 34em;
 		color: var(--site-ink);
-		font-size: 1.02rem;
+		font-size: clamp(1.45rem, 2.4vw, 1.8rem);
+		font-weight: 400;
+		letter-spacing: -0.015em;
+		line-height: 1.4;
+		text-wrap: pretty;
+	}
+
+	.hero-actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem 1.5rem;
+		margin-top: 1.6rem;
+	}
+
+	.hero-actions .text-link {
+		margin-top: 0;
+	}
+
+	.primary-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		min-height: 2.75rem;
+		padding: 0 1.1rem;
+		border-radius: var(--site-radius-md);
+		background: var(--site-accent-strong);
+		color: var(--smrt-color-on-primary, #ffffff);
+		font-size: 0.85rem;
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.primary-link span {
+		color: inherit;
+	}
+
+	.planner-note {
+		max-width: 40rem;
+		margin-top: 0.9rem;
+		color: var(--site-muted);
+		font-size: 0.87rem;
 		line-height: 1.6;
+	}
+
+	.planner-note code {
+		font-family: var(--font-mono);
+		font-size: 0.82em;
+		color: var(--site-ink);
 	}
 
 	.layer-lede-list {

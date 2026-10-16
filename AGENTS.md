@@ -47,7 +47,7 @@ The site builds directly against `smrt-ui`, `smrt-svelte`, `smrt-playground`.
 
 ## Setup and validation
 
-**`engines.node` is `>=24.18.0` and `.npmrc` sets `engine-strict=true`.** On an
+**`engines.node` is `>=26.0.0` and `.npmrc` sets `engine-strict=true`.** On an
 older Node, `pnpm install` fails outright rather than warning. If the install
 dies on an engine check, switch Node versions — that is the whole problem.
 
@@ -126,7 +126,12 @@ and this section grows with every defect. Record one in the **upstream issue**
 why it is deliberate), plus a **repo issue** where a fix makes something here due.
 Then one line below.
 
-None currently tracked.
+- smrt#3843: packages whose `playground.js` lazy-imports `.svelte` lack a
+  `svelte` field, so Vite dev prebundling crashes; `vite.config.ts`
+  `optimizeDeps.exclude` serves them unbundled. Tracked here in #310.
+- smrt#4054: smrt-core default-imports CommonJS `pluralize`, which fails when
+  served unbundled in dev; `vite.config.ts` `optimizeDeps.include` prebundles
+  it. Tracked here in #310.
 
 ## Agent lifecycle posture
 

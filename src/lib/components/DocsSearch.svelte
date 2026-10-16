@@ -299,4 +299,12 @@
 			display: none;
 		}
 	}
+
+	/* Forced colours drop the background; draw the active result as selected. */
+	@media (forced-colors: active) {
+		.search-results button.active {
+			background: Highlight;
+			color: HighlightText;
+		}
+	}
 </style>

@@ -8,7 +8,13 @@
 	import SiteShell from '$lib/components/SiteShell.svelte';
 
 	let { children } = $props();
-	const isStandalonePlayground = $derived(page.url.pathname === '/playground');
+	// The playground and Build a boilerplate bring their own chrome: the planner
+	// runs inside the framework's `AppShell` (see `build-a-boilerplate/+page.svelte`).
+	const isStandalone = $derived(
+		page.url.pathname === '/playground' ||
+			page.url.pathname === '/build-a-boilerplate' ||
+			page.url.pathname.startsWith('/build-a-boilerplate/')
+	);
 </script>
 
 <svelte:head>
@@ -17,7 +23,7 @@
 </svelte:head>
 
 <Provider>
-	{#if isStandalonePlayground}
+	{#if isStandalone}
 		{@render children()}
 	{:else}
 		<SiteShell pathname={page.url.pathname} hash={page.url.hash}>

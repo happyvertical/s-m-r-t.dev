@@ -108,4 +108,12 @@
 			grid-template-columns: 1fr;
 		}
 	}
+
+	/* Forced colours drop the background; draw the current page as selected. */
+	@media (forced-colors: active) {
+		details a[aria-current] {
+			background: Highlight;
+			color: HighlightText;
+		}
+	}
 </style>

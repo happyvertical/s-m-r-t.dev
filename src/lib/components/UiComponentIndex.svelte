@@ -304,4 +304,12 @@
 			grid-row: 1 / span 3;
 		}
 	}
+
+	/* Forced colours replace the inverted colours; draw the active filter as selected. */
+	@media (forced-colors: active) {
+		button.active {
+			background: Highlight;
+			color: HighlightText;
+		}
+	}
 </style>

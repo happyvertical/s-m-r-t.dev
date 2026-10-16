@@ -11,7 +11,7 @@
 </script>
 
 <AppTheme>
-	<AdminShell state={shell}>
+	<AdminShell state={shell} edgeToggles={{ top: true }}>
 		{#snippet appBar()}
 			<p>App bar</p>
 		{/snippet}

@@ -36,17 +36,23 @@ describe('committed baseline', () => {
 		for (const [name, entry] of Object.entries(installed)) {
 			expect(name).toMatch(/^@happyvertical\/smrt-/);
 			expect(entry.version).toMatch(/^\d+\.\d+\.\d+/);
-			expect(entry.agentsMd).toMatch(/^[0-9a-f]{64}$/);
+			// `null` is a real state, not a defect: a package that ships no
+			// AGENTS.md (today, smrt-planner, which has its own repo and release
+			// line) has nothing to hash. The audit types it `string | null`.
+			if (entry.agentsMd !== null) expect(entry.agentsMd).toMatch(/^[0-9a-f]{64}$/);
 		}
 	}, 30_000);
 
-	it('records a version and an AGENTS.md hash for every package', () => {
+	it('records a version for every package, and an AGENTS.md hash where one ships', () => {
 		const entries = Object.entries(baseline.packages);
 		expect(entries.length).toBeGreaterThan(20);
 		for (const [name, entry] of entries) {
 			expect(name).toMatch(/^@happyvertical\/smrt-/);
 			expect(entry.version).toMatch(/^\d+\.\d+\.\d+/);
-			expect(entry.agentsMd).toMatch(/^[0-9a-f]{64}$/);
+			// Same contract as the installed audit above: `null` records a
+			// package that ships no AGENTS.md (smrt-planner's tarball today:
+			// https://github.com/happyvertical/smrt-planner/issues/66).
+			if (entry.agentsMd !== null) expect(entry.agentsMd).toMatch(/^[0-9a-f]{64}$/);
 		}
 	});
 });

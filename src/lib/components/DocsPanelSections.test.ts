@@ -28,15 +28,15 @@ afterEach(() => {
 
 async function renderExpanded(props: { pathname?: string; hash?: string }) {
 	const shell = createDocsShellState();
-	shell.expandPanel('top');
 	render(Harness, { props: { ...props, shell } });
-	// AdminShell hydrates panel visibility from localStorage asynchronously on
-	// mount. Let that settle before asserting/interacting, otherwise the
-	// hydrate resolving after a synchronous state change (e.g. a click below)
-	// can clobber it back to the pre-render value — a test-only race, since a
-	// real user's first click always lands long after mount has settled.
+	// On mount AdminShell hydrates panel visibility from storage and then closes
+	// every overlaid edge (`hydrate().then(closeOverlaidEdges)`), so a panel
+	// expanded before render is collapsed again. Let mount settle first, then
+	// expand — which is also what a real user's first click does.
 	await tick();
 	await new Promise((resolve) => setTimeout(resolve, 0));
+	shell.expandPanel('top');
+	await tick();
 	return shell;
 }
 

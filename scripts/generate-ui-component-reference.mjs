@@ -184,7 +184,7 @@ function slugify(name) {
 }
 
 function svelteDeclarationFor(fromFile, specifier) {
-	return `${resolve(dirname(fromFile), specifier.replace(/\.js$/, ''))}.d.ts`;
+	return `${resolve(dirname(fromFile), specifier.replace(/\.(js|ts)$/, ''))}.d.ts`;
 }
 
 /**
@@ -273,7 +273,8 @@ function declarationsFromBarrel(barrelPath, seen = new Set()) {
 
 function resolveDeclarationModule(fromFile, specifier) {
 	if (!specifier.startsWith('.')) return null;
-	const base = resolve(dirname(fromFile), specifier.replace(/\.js$/, ''));
+	// Declaration files may import a sibling by its source extension (`./types.ts`).
+	const base = resolve(dirname(fromFile), specifier.replace(/\.(js|ts)$/, ''));
 	for (const candidate of [`${base}.d.ts`, join(base, 'index.d.ts')]) {
 		if (existsSync(candidate)) return candidate;
 	}
@@ -625,8 +626,15 @@ function bindingsIn(file) {
 	return [...bindings];
 }
 
-/** Path to a component's real source, relative to the smrt monorepo root. */
+/**
+ * Path to a component's real source, relative to the smrt monorepo root, or null
+ * when the package does not live in that monorepo. A package with no
+ * `repository.directory` (smrt-planner, which has its own repository and version
+ * line) has no path under the monorepo tree, so any link built from one would
+ * be dead; the reference page omits the source link instead of publishing it.
+ */
 function sourcePathFor(declarationPath, group) {
+	if (!group.inMonorepo) return null;
 	const within = (target) =>
 		`${group.repoDirectory}/${relative(group.packageDir, target).replaceAll('\\', '/')}`;
 	const mapPath = `${declarationPath}.map`;
@@ -724,7 +732,8 @@ export interface UiComponentReference {
 	components: string[];
 	demo: { id: string; label: string; href: string } | null;
 	related: { label: string; href: string };
-	source: string;
+	/** Null for a package outside the smrt monorepo, which has no canonical source link. */
+	source: string | null;
 }
 
 const SMRT_TREE = \`https://github.com/happyvertical/smrt/blob/v\${SMRT_VERSION}\`;
@@ -769,8 +778,8 @@ export function getUiComponent(slug: string): UiComponentReference | undefined {
 	return uiComponents.find((component) => component.slug === slug);
 }
 
-export function uiComponentSource(component: UiComponentReference): string {
-	return \`\${SMRT_TREE}/\${component.source}\`;
+export function uiComponentSource(component: UiComponentReference): string | null {
+	return component.source ? \`\${SMRT_TREE}/\${component.source}\` : null;
 }
 `;
 }
@@ -805,6 +814,7 @@ for (const packageName of installedPackages().sort((a, b) => {
 })) {
 	const packageDir = join(SCOPE_ROOT, packageName);
 	const manifest = JSON.parse(readFileSync(join(packageDir, 'package.json'), 'utf8'));
+	const inMonorepo = Boolean(manifest.repository?.directory);
 	const repoDirectory = manifest.repository?.directory ?? `packages/${packageName}`;
 	const label = packageName === 'smrt-ui' ? null : titleCase(packageName.replace(/^smrt-/, ''));
 	const meta = await moduleMetaFor(packageDir);
@@ -838,7 +848,8 @@ for (const packageName of installedPackages().sort((a, b) => {
 					title: label ? `${label} · ${sectionTitle}` : sectionTitle,
 					importPath: entry.importPath,
 					packageDir,
-					repoDirectory
+					repoDirectory,
+					inMonorepo
 				}
 			});
 		}

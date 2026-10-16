@@ -26,7 +26,9 @@ import { describe, expect, it } from 'vitest';
 const NON_FRAMEWORK_VERSIONS: Record<string, string> = {
 	'0.1.0': 'the example app’s own version in MCP serverInfo snippets',
 	'1.0.0': 'the Agent Plugins schema revision smrt-dev-mcp targets',
-	'2.0.0': 'the @modelcontextprotocol/server version both MCP packages pin'
+	'2.0.0': 'the @modelcontextprotocol/server version both MCP packages pin',
+	'26.0.0': 'the minimum Node.js the starter template and generated projects require',
+	'11.25.0': 'the pnpm version the starter template declares as its packageManager'
 };
 
 /**

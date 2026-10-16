@@ -23,7 +23,7 @@
 			<div><span>01</span><small>Learn each layer</small></div>
 			<h2>Basic SvelteKit template</h2>
 			<p>
-				One example object, SQLite, current tenant/session boundaries, an AdminShell, and generated
+				One example object, SQLite, current tenant/session boundaries, an AppShell, and generated
 				REST, MCP, WebMCP, and CLI wiring.
 			</p>
 			<ul>

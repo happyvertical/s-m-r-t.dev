@@ -50,7 +50,7 @@ jobs:
         with:
           # Pinned to a major, like build-deploy.yaml: `engines.node` plus
           # `engine-strict=true` enforce the real floor at install time.
-          node-version: '24'
+          node-version: '26'
 
       # The audit reads the packages' shipped AGENTS.md files out of the
       # installed tree, so it needs a real install. `--frozen-lockfile` keeps the

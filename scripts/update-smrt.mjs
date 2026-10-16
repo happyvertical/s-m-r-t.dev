@@ -26,6 +26,8 @@ import { join } from 'node:path';
 const SCOPE = '@happyvertical';
 const SCOPE_PREFIX = `${SCOPE}/smrt-`;
 const DEFAULT_REGISTRY = 'https://npm.happyvertical.com';
+// Packages released on their own version line, outside the framework lockstep.
+const INDEPENDENT = new Set([`${SCOPE_PREFIX}planner`]);
 const LOCAL_SPEC = /^(file:|link:|workspace:)/;
 
 const USAGE = `update-smrt — pin every @happyvertical/smrt-* dependency and refresh the lockfile.
@@ -46,6 +48,10 @@ smrt dependency on the same exact version.
 The registry comes from npm config for the @happyvertical scope, so this
 follows the project .npmrc rather than hardcoding a host. Deps on a file:,
 link:, or workspace: spec are skipped during updates; --check rejects them.
+
+smrt-planner releases on its own version line. It still needs an exact pin,
+but it is left out of the lockstep comparison, and an update moves it to its
+own latest release (--to does not apply to it).
 
 After a bump, verify with pnpm run lint && pnpm test && pnpm run check &&
 pnpm run build, then commit package.json plus pnpm-lock.yaml.`;
@@ -131,11 +137,22 @@ const pkgPath = join(root, 'package.json');
 const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
 
 const targets = [];
+// Independent packages still need exact registry pins; they are only left out
+// of the lockstep comparison and follow their own latest release on update.
+const independent = [];
 for (const field of ['dependencies', 'devDependencies']) {
 	const deps = pkg[field];
 	if (!deps) continue;
 	for (const [name, spec] of Object.entries(deps)) {
 		if (!name.startsWith(SCOPE_PREFIX)) continue;
+		if (INDEPENDENT.has(name)) {
+			if (LOCAL_SPEC.test(spec) && !checkOnly) {
+				console.log(`  skip   ${name} (${spec}) — local spec`);
+				continue;
+			}
+			independent.push({ name, field, current: spec });
+			continue;
+		}
 		if (LOCAL_SPEC.test(spec)) {
 			if (checkOnly) {
 				targets.push({ name, field, current: spec });
@@ -148,13 +165,15 @@ for (const field of ['dependencies', 'devDependencies']) {
 	}
 }
 
-if (targets.length === 0) {
+if (targets.length === 0 && independent.length === 0) {
 	console.log('No registry-sourced @happyvertical/smrt-* dependencies found.');
 	process.exit(0);
 }
 
 if (checkOnly) {
-	const invalid = targets.filter((target) => !/^\d+\.\d+\.\d+(?:[-+].+)?$/.test(target.current));
+	const invalid = [...targets, ...independent].filter(
+		(target) => !/^\d+\.\d+\.\d+(?:[-+].+)?$/.test(target.current)
+	);
 	if (invalid.length > 0) {
 		console.error('SMRT dependencies must use exact versions:');
 		for (const target of invalid) console.error(`  - ${target.name}: ${target.current}`);
@@ -162,7 +181,7 @@ if (checkOnly) {
 	}
 
 	const versions = [...new Set(targets.map((target) => target.current))];
-	if (versions.length !== 1) {
+	if (versions.length > 1) {
 		console.error(`SMRT dependencies must move in lockstep; found: ${versions.join(', ')}`);
 		process.exit(1);
 	}
@@ -175,16 +194,23 @@ if (checkOnly) {
 
 const registry = resolveRegistry();
 
-console.log(`\nResolving latest versions for ${targets.length} packages from ${registry}...\n`);
+console.log(
+	`\nResolving latest versions for ${targets.length + independent.length} packages from ${registry}...\n`
+);
 
 const changes = [];
-const resolved = await Promise.allSettled(
-	targets.map(async (t) => {
+const resolved = await Promise.allSettled([
+	...targets.map(async (t) => {
 		const version = pinTo ?? (await latestVersion(registry, t.name));
 		t.next = specFor(version);
 		t.nextVersion = version;
+	}),
+	...independent.map(async (t) => {
+		const version = await latestVersion(registry, t.name);
+		t.next = specFor(version);
+		t.nextVersion = version;
 	})
-);
+]);
 const failures = resolved.filter((r) => r.status === 'rejected');
 if (failures.length > 0) {
 	console.error(`\nFailed to resolve ${failures.length} package(s):`);
@@ -192,7 +218,7 @@ if (failures.length > 0) {
 	process.exit(1);
 }
 
-for (const t of targets) {
+for (const t of [...targets, ...independent]) {
 	const changed = t.current !== t.next;
 	if (changed) changes.push(t);
 	const mark = changed ? '→' : '=';

@@ -7,7 +7,7 @@ import { SMRT_VERSION } from '$lib/version';
  * re-read the canonical sources listed on each page and re-run the checks
  * behind them.
  */
-const REFERENCE_PINNED_VERSION = '0.51.31';
+const REFERENCE_PINNED_VERSION = '0.55.16';
 
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${REFERENCE_PINNED_VERSION}`;
 
@@ -259,7 +259,7 @@ export const referenceGuides: Guide[] = [
 					'Sync does not grant anything to a role and does not delete stale permissions.'
 				],
 				filename: 'src/lib/server/permissions.ts',
-				code: `import { SmrtObject, smrt } from '@happyvertical/smrt-core';\nimport { syncPermissionCatalog } from '@happyvertical/smrt-users';\nimport { getSmrtConfig } from '$lib/server/smrt';\n\n@smrt({\n  api: { include: ['list', 'get', 'create', 'update'] },\n  collection: 'articles',\n  mcp: { include: ['publish'] },\n  tenantScoped: { mode: 'required' }\n})\nclass Article extends SmrtObject {\n  tenantId = '';\n  title = '';\n  async publish() { return true; }\n}\n\n// articles.read, articles.create, articles.update, articles.publish\n// — and articles.delete, because no cli config was declared and an\n// unconfigured surface counts as enabled.\nconst result = await syncPermissionCatalog(getSmrtConfig('Permission'));\nresult.created; // slugs written on this run`
+				code: `import { SmrtObject, smrt } from '@happyvertical/smrt-core';\nimport { syncPermissionCatalog } from '@happyvertical/smrt-users';\nimport { runtime } from '$lib/server/smrt';\n\n@smrt({\n  api: { include: ['list', 'get', 'create', 'update'] },\n  collection: 'articles',\n  mcp: { include: ['publish'] },\n  tenantScoped: { mode: 'required' }\n})\nclass Article extends SmrtObject {\n  tenantId = '';\n  title = '';\n  async publish() { return true; }\n}\n\n// articles.read, articles.create, articles.update, articles.publish\n// — and articles.delete, because no cli config was declared and an\n// unconfigured surface counts as enabled.\nconst result = await syncPermissionCatalog(runtime.classOptions('Permission'));\nresult.created; // slugs written on this run`
 			},
 			{
 				title: 'Packages and configuration add to the same list',
@@ -285,16 +285,17 @@ export const referenceGuides: Guide[] = [
 					'A call missing either a resolvable user or a resolvable tenant is refused with reason missing_principal.',
 					'checkOperationPermission, hasOperationPermission, and onDeny: "return" give a decision or a boolean instead of an exception.',
 					'For resource-anchored authorization, pass the resource tenant id. Omit membership so the resolver finds it. The resolver refuses a membership from another tenant.',
-					'Both bypasses are allowed by default, and system context is checked first. An operation that requires an explicit grant needs allowSuperAdminBypass: false and allowSystemContextBypass: false.',
+					'Both bypasses are allowed by default in the guard, and system context is checked first. An operation that requires an explicit grant needs allowSuperAdminBypass: false and allowSystemContextBypass: false.',
+					'The guard option is separate from the data layer. There, withSuperAdminBypass lifts tenant enforcement only for a class whose tenant scope sets allowSuperAdminBypass: true. The flag defaults to false, and unresolved configuration fails closed.',
 					'Neither bypass comes from a user record. The wrapper sets it with withSystemContext, withSuperAdminBypass, or matching context options. superAdminBypass: true on the session handler publishes the bypass on every request.'
 				],
 				filename: 'src/routes/articles/+page.server.ts',
-				code: `import { assertOperationPermission } from '@happyvertical/smrt-users';\nimport { getSmrtConfig } from '$lib/server/smrt';\n\nexport const actions = {\n  publish: async ({ locals, params }) => {\n    const article = await loadArticle(params.id);\n\n    // Throws OperationPermissionError (status 403) when denied.\n    await assertOperationPermission({\n      ...getSmrtConfig('Permission'),\n      collection: 'articles',\n      action: 'publish',\n      userId: locals.user.id,\n      // The resource tenant, not the session tenant.\n      tenantId: article.tenantId\n    });\n\n    await article.publish();\n  }\n};`
+				code: `import { assertOperationPermission } from '@happyvertical/smrt-users';\nimport { runtime } from '$lib/server/smrt';\n\nexport const actions = {\n  publish: async ({ locals, params }) => {\n    const article = await loadArticle(params.id);\n\n    // Throws OperationPermissionError (status 403) when denied.\n    await assertOperationPermission({\n      ...runtime.classOptions('Permission'),\n      collection: 'articles',\n      action: 'publish',\n      userId: locals.user.id,\n      // The resource tenant, not the session tenant.\n      tenantId: article.tenantId\n    });\n\n    await article.publish();\n  }\n};`
 			},
 			{
 				title: 'One context publishes the principal to the database session',
 				intro:
-					'withSessionPermissionContext loads the session, resolves its permissions, opens a transaction, and writes the principal onto that transaction with set_config. Generated SvelteKit routes pick that transaction up through the generated getCollection helper, and getRequestScopedDatabase hands it to code you write. The policies then apply to every query on that connection, whichever entry point issued it.',
+					'withSessionPermissionContext loads the session, resolves its permissions, opens a transaction, and writes the principal onto that transaction with set_config. Generated SvelteKit routes pick that transaction up through the request-scoped runtime.getCollection(), and getRequestScopedDatabase hands it to code you write. The policies then apply to every query on that connection, whichever entry point issued it.',
 				points: [
 					'Six transaction-local settings are published: smrt.tenant_id, smrt.user_id, smrt.session_id, smrt.permissions, smrt.super_admin_bypass, and smrt.system_context.',
 					'smrt.permissions is the resolved slug list as a JSON array; the policies read it as jsonb.',
@@ -302,7 +303,7 @@ export const referenceGuides: Guide[] = [
 					'The wrapper needs a database adapter that supports beginTransaction. The wrapper throws on the first request that enters the context, not at boot. The session handler catches that error.',
 					'Pass postgresRls to createSessionHandler explicitly. The handler reads its own option, not the config flag, for the two behaviors below.',
 					'With the handler option set, an anonymous request enters the context with an empty permission list. It does not run outside the policies. A context failure returns a bare 500. The catch wraps the complete request, so a later route error becomes the same 500. The permissions.postgres.enabled option alone makes anonymous requests skip the context. A context failure is logged, and the request continues.',
-					'getCollection only reaches for the request transaction when neither the call site nor objectOverrides supplies a db. An object pinned to its own connection runs outside the published variables, where the policies match nothing.',
+					'runtime.getCollection() binds to the request transaction unless the classOverrides entry for that class sets its own db. An object pinned to its own connection runs outside the published variables, where the policies match nothing.',
 					'skipPaths is checked first, so a skipped route never enters the context. On a policy-covered table it will therefore read no rows at all.'
 				],
 				filename: 'src/hooks.server.ts',
@@ -357,7 +358,7 @@ export const referenceGuides: Guide[] = [
 					'Row filtering follows the session tenant. The guard can authorize a root-tenant session for a child tenant row when you pass the resource tenant id. Row-level security does not authorize this relationship. On a covered table, the operation is permitted but the row stays invisible. The session must switch to the child tenant, which rotates the session id.',
 					'A session whose tenant is the child tenant does get inherited authority in the policies, because the permission list is resolved before it is published.',
 					'A skipped table has no policies at all. For those tables the guard is the only check, so treat result.skipped as a list of places application code has to carry.',
-					'The bypass helpers are shared. An operation that must resist a super-admin needs allowSuperAdminBypass: false in the guard. It also needs an explicit data-layer design decision.'
+					'The bypass helpers are shared. An operation that must resist a super-admin needs allowSuperAdminBypass: false in the guard. In the data layer the default already resists: withSuperAdminBypass lifts tenant enforcement only for classes that opt in with allowSuperAdminBypass: true on their tenant scope.'
 				]
 			},
 			{
@@ -954,7 +955,11 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: '@smrt()',
 				intro:
-					'Marks a model for scanning and declares which actions appear in REST, MCP, WebMCP definitions, and CLI. Use include, exclude, and writable lists instead of exposing every method by accident.'
+					'Marks a model for scanning and declares which actions appear in REST, MCP, WebMCP definitions, and CLI. Use include, exclude, and writable lists instead of exposing every method by accident.',
+				points: [
+					'A public method routes as a custom action by default only when every parameter is JSON-shaped. @method({ expose }) overrides that heuristic in both directions: expose: true routes the method anyway, and expose: false withholds it.',
+					'previousQualifiedNames lists the deprecated qualified names (@package/name:ClassName) a moved or renamed class used to carry. Keep tableName explicit so the class keeps its table. Lookups by an old name resolve to the current class, and smrt db:migrate-qualified-names rewrites stored names when you ask it to.'
+				]
 			},
 			{
 				title: 'Relationships',
@@ -964,7 +969,15 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: 'Tenant scope',
 				intro:
-					'TenantScoped selects required, optional, or global behavior. The tenantId field decorator records the storage field used by automatic query interceptors.'
+					'TenantScoped selects required, optional, or global behavior. The tenantId field decorator records the storage field used by automatic query interceptors.',
+				points: [
+					'allowSuperAdminBypass, on @TenantScoped or on tenantScoped inside @smrt(), lets withSuperAdminBypass lift tenant enforcement for that class. It defaults to false, so every other tenant-scoped class stays scoped to the caller tenant under the bypass.'
+				]
+			},
+			{
+				title: 'Recipes are declared beside the models',
+				intro:
+					'SmrtRecipe is a base class rather than a decorator: abstract, never persisted, and not marked with @smrt(). A recipe is a subclass with static id, label, models, nav, requires, and options, declared in the package that owns its models. The scanner reads those statics structurally and collects them into the manifest and knowledge recipes list. A cookbook, an application shell, or an agent can then add one named unit of functionality without every model in the package.'
 			},
 			{
 				title: 'Report fields',
@@ -1388,7 +1401,11 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: 'CLI',
 				intro:
-					'Application CLIs turn manifest resources into predictable commands and can add model-specific operations. The framework CLI also owns migration, scanning, generation, and introspection workflows.'
+					'Application CLIs turn manifest resources into predictable commands and can add model-specific operations. The framework CLI also owns migration, scanning, generation, and introspection workflows.',
+				points: [
+					'smrt app <operation> owns the application lifecycle: install, setup, start, stop, recover, doctor, open, backup, export, import, migrate, worker, and dev or build. A generated project maps each package.json script to one of them instead of carrying copied scripts.',
+					'smrt cookbook validate and smrt cookbook apply check a cookbook against the recipe manifests and create a project from it. smrt kitchen serves the planner on localhost and applies the cookbook it produces.'
+				]
 			}
 		]
 	},
@@ -1480,7 +1497,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: 'Version prerequisite',
 				intro:
-					'@happyvertical/smrt-fields first appeared in the 0.40.5x line and is not part of 0.39.x. The package pins smrt-core, smrt-tenancy, smrt-ui, and smrt-users to its exact version. Install it at the same version as the other s-m-r-t packages. A mismatch installs a second object registry, and policy resolution stops recognizing your objects.',
+					'@happyvertical/smrt-fields is released in lockstep with the other packages and pins smrt-core, smrt-tenancy, smrt-ui, and smrt-users to its exact version. Install it at the same version as the other s-m-r-t packages. A mismatch installs a second object registry, and policy resolution stops recognizing your objects.',
 				points: [
 					'smrt-users is a required runtime dependency, not an optional one: the permission catalog and operation guard back every write and gear action.',
 					'The usage-learning loop is available in the released smrt-fields package.'

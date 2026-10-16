@@ -10,7 +10,7 @@ import {
 } from './navigation';
 
 describe('primary navigation', () => {
-	it('uses the approved nine destinations in order', () => {
+	it('uses the approved ten destinations in order', () => {
 		expect(primaryNavigation.map((item) => item.label)).toEqual([
 			'Home',
 			'Framework',
@@ -20,6 +20,7 @@ describe('primary navigation', () => {
 			'Modules',
 			'Tooling',
 			'Playground',
+			'Build a boilerplate',
 			'Reference'
 		]);
 		expect(primaryNavigation.some((item) => item.label === 'Guides')).toBe(false);
@@ -43,6 +44,9 @@ describe('primary navigation', () => {
 		// not UI — only the `/ui` overview page itself owns the UI section now.
 		expect(active('/reference/packages/smrt-ui').map((item) => item.label)).toEqual(['Reference']);
 		expect(active('/playground').map((item) => item.label)).toEqual(['Playground']);
+		expect(active('/build-a-boilerplate').map((item) => item.label)).toEqual([
+			'Build a boilerplate'
+		]);
 		expect(active('/guides/testing-your-app')).toEqual([]);
 	});
 });

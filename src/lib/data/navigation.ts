@@ -88,11 +88,11 @@ const referenceHubItems: NavigationItem[] = referenceFamilies
 	.filter((family) => referenceHubIds.has(family.id))
 	.map((family) => ({ label: family.label, href: family.href }));
 /**
- * Module clusters, not the 23 individual `/packages/<slug>` pages, are the
+ * Module clusters, not the individual `/packages/<slug>` pages, are the
  * "key pages" registered here: `/modules#<cluster-id>` is a real, stable
  * anchor (`ModuleCluster.svelte` sets `id={guide.id}`), the same shape as the
  * homepage's `/#how-it-works` and `/agents#<topic>` entries. Packages already
- * have their own `searchItems` entries below — registering all 23 here too
+ * have their own `searchItems` entries below — registering every one of them here too
  * would duplicate search results.
  */
 const moduleClusterItems: NavigationItem[] = applicationModuleClusters.map((cluster) => ({
@@ -369,7 +369,8 @@ export const documentationSections: DocumentationSection[] = [
 				items: [
 					{ label: 'Foundation components', href: '/reference/packages/smrt-ui?tab=components' },
 					...uiCapabilityItems,
-					{ label: 'Working playground', href: '/playground' }
+					{ label: 'Working playground', href: '/playground' },
+					{ label: 'Build a boilerplate', href: '/build-a-boilerplate' }
 				]
 			},
 			{
@@ -394,7 +395,8 @@ export const documentationSections: DocumentationSection[] = [
 				label: 'Browse',
 				items: [
 					{ label: 'Package Reference', href: '/reference/packages' },
-					{ label: 'Working playground', href: '/playground' }
+					{ label: 'Working playground', href: '/playground' },
+					{ label: 'Build a boilerplate', href: '/build-a-boilerplate' }
 				]
 			},
 			{
@@ -478,6 +480,7 @@ export const primaryNavigation: PrimaryNavigationItem[] = [
 	{ label: 'Modules', href: '/modules', section: 'modules' },
 	{ label: 'Tooling', href: '/tooling', section: 'tooling' },
 	{ label: 'Playground', href: '/playground' },
+	{ label: 'Build a boilerplate', href: '/build-a-boilerplate' },
 	{ label: 'Reference', href: '/reference', section: 'reference' }
 ];
 
@@ -527,7 +530,12 @@ export function documentationSectionForPathname(pathname: string): Documentation
 
 export function isPrimaryNavigationActive(item: PrimaryNavigationItem, pathname: string): boolean {
 	if (item.href === '/playground') return pathname === '/playground';
-	if (pathname === '/playground') return false;
+	if (item.href === '/build-a-boilerplate') {
+		return isNavigationItemActive('/build-a-boilerplate', pathname);
+	}
+	if (pathname === '/playground' || isNavigationItemActive('/build-a-boilerplate', pathname)) {
+		return false;
+	}
 	return item.section === documentationSectionForPathname(pathname).id;
 }
 
@@ -606,6 +614,25 @@ export const docsNavigation: NavigationGroup[] = [
 
 export const searchItems: NavigationItem[] = [
 	...docsNavigation.flatMap((group) => group.items),
+	// Not a documentation page, so it is outside `docsNavigation` (the reading
+	// track and the docs panel) and registered for the palette here, like the
+	// package entries below.
+	{
+		label: 'Build a boilerplate',
+		href: '/build-a-boilerplate',
+		description:
+			'Add recipes or packages and an app mock-up assembles around them; export the cookbook it produces to start a project.',
+		// Older wording stays searchable: the page used to be called the planner.
+		keywords: [
+			'boilerplate',
+			'planner',
+			'app planner',
+			'recipes',
+			'cookbook',
+			'mock-up',
+			'smrt-planner'
+		]
+	},
 	...packages.map((pkg) => ({
 		label: pkg.name,
 		href: `/reference/packages/${pkg.slug}`,

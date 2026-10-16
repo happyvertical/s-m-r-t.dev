@@ -10,7 +10,7 @@ import type { GuideDifficulty, TaskGuide, TaskGuideFamilyId } from '$lib/data/gu
  * the disagreement between the pin and the rendered version is the signal to
  * re-run the guides and move it.
  */
-export const TASK_GUIDES_PINNED_VERSION = '0.51.31';
+export const TASK_GUIDES_PINNED_VERSION = '0.55.16';
 
 /** Canonical upstream tree for the release above. */
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${TASK_GUIDES_PINNED_VERSION}`;
@@ -152,7 +152,7 @@ const guideMigrationDrafts: TaskGuide[] = [
 		task: {
 			family: 'getting-started',
 			purpose: 'Create a small SvelteKit application from the basic template.',
-			prerequisites: ['Node 24.18 or newer', 'pnpm', 'A terminal'],
+			prerequisites: ['Node 26.0.0 or newer', 'pnpm 11.25.0', 'A terminal'],
 			difficulty: 'Beginner',
 			supportRange: TASK_GUIDES_PINNED_VERSION,
 			concepts: ['Application model', 'Tenant scope', 'Generated interfaces', 'Application shell'],
@@ -162,14 +162,16 @@ const guideMigrationDrafts: TaskGuide[] = [
 				{ label: 'Decorator reference', href: '/reference/decorators' },
 				{ label: 'Generated interfaces reference', href: '/reference/interfaces' }
 			],
-			expectedResult: 'The development server shows a working application with one example object.'
+			expectedResult:
+				'The application runs on loopback and opens owner onboarding, with one example object behind it.'
 		},
 		pinnedVersion: TASK_GUIDES_PINNED_VERSION,
 		visual: 'app-model',
 		sections: [
 			{
 				title: 'Create the application',
-				intro: 'Run these commands in a directory that can contain the new project.',
+				intro:
+					'Run these commands in a directory that can contain the new project. app:install runs smrt app install from the CLI dev dependency. Under one operation lock it builds, migrates the local SQLite database, starts the production build on loopback, and opens owner onboarding. The template ships no operator scripts; every lifecycle script is a smrt app command.',
 				filename: 'terminal',
 				lang: 'bash',
 				code: `pnpm add -D @happyvertical/smrt-template-sveltekit
@@ -177,8 +179,11 @@ node --input-type=module -e "import { copyTemplate } from '@happyvertical/smrt-t
 cd my-app
 pnpm install
 cp .env.example .env
-pnpm db:migrate
-pnpm dev`
+pnpm app:install`,
+				points: [
+					'pnpm dev runs smrt app dev for the development loop; pnpm db:migrate builds and then runs smrt app migrate after an object schema change.',
+					'Use the individual app:* scripts (setup, start, stop, recover, doctor, open, backup, export, import) for recovery or explicit operator control.'
+				]
 			},
 			{
 				title: 'Review the first model',
@@ -186,27 +191,42 @@ pnpm dev`
 					'Open the Item model. Its declaration supplies stored fields, tenant scope, and generated interfaces.',
 				filename: 'src/lib/objects/Item.ts',
 				code: `@smrt({
-  api: { include: ['list', 'get', 'create', 'update', 'delete'] },
-  mcp: { include: ['list', 'get', 'create', 'update', 'delete'] },
-  cli: { include: ['list', 'get', 'create', 'update', 'delete'] }
+  api: {
+    include: ['list', 'get', 'create', 'update', 'delete'],
+    writable: ['title', 'description', 'status']
+  },
+  cli: { include: ['list', 'get', 'create', 'update', 'delete'] },
+  mcp: { include: ['list', 'get', 'create', 'update', 'delete'] }
 })
 @TenantScoped({ mode: 'optional' })
 export class Item extends SmrtObject {
   @tenantId({ nullable: true })
   tenantId: string | null = null;
   title = '';
+  description = '';
   status = 'draft';
-}`
+}
+
+export class ItemCollection extends SmrtCollection<Item> {
+  static readonly _itemClass = Item;
+}
+
+ObjectRegistry.registerCollection('Item', ItemCollection);`,
+				points: [
+					'The api writable list is the allowlist for REST writes; fields outside it are read-only over HTTP.',
+					'The explicit ItemCollection registration keeps the generated CLI and MCP runtime commands constructible.'
+				]
 			},
 			{
 				title: 'Validate the template',
 				intro:
-					'Stop the development server. Run the project checks before you change the example model.',
+					'Stop the running application. Run the project checks before you change the example model.',
 				filename: 'terminal',
 				lang: 'bash',
-				code: `pnpm test
-pnpm run check
-pnpm run build`
+				code: `pnpm app:stop
+pnpm check
+pnpm build
+pnpm app:doctor`
 			}
 		],
 		related: [
@@ -230,7 +250,7 @@ pnpm run build`
 		task: {
 			family: 'getting-started',
 			purpose: 'Run the SaaS starter and find the correct place for application logic.',
-			prerequisites: ['Node 24.18 or newer', 'pnpm', 'Docker', 'Git'],
+			prerequisites: ['Node 26.0.0 or newer', 'pnpm', 'Docker', 'Git'],
 			difficulty: 'Intermediate',
 			supportRange: TASK_GUIDES_PINNED_VERSION,
 			concepts: ['Monorepo', 'Tenant administration', 'Jobs', 'Mobile clients', 'Deployment'],
@@ -528,30 +548,25 @@ export class Document extends SmrtObject {
 			{
 				title: 'Establish the context a request runs in',
 				intro:
-					'Nothing is scoped until something establishes the tenant context. In SvelteKit, two handles run in sequence. The tenancy handle opens the asynchronous request context. The session handler resolves the signed-in user, membership, permission snapshot, and active tenant. Outside a request, withTenant supplies the same context around a script, job, or test function.',
-				filename: 'src/hooks.server.ts',
-				code: `import { sequence } from '@sveltejs/kit/hooks';
-import { createSvelteKitHandle } from '@happyvertical/smrt-tenancy/adapters';
-import { enableTenancy } from '@happyvertical/smrt-tenancy';
-import { createSessionHandler } from '@happyvertical/smrt-users/sveltekit';
+					'Nothing is scoped until something establishes the tenant context. In SvelteKit, the application runtime composes three steps in order: the fail-closed startup gate, URL tenant selection, and the signed session. The session step resolves the user, membership, permission snapshot, and active tenant. Only the session establishes tenant context; the URL selection is a candidate for login and membership-gated switch flows. The template builds the runtime once in src/lib/server/smrt.ts and hooks.server.ts re-exports its handle and init. Outside a request, withTenant supplies the same context around a script, job, or test function.',
+				filename: 'src/lib/server/smrt.ts',
+				code: `import { createSmrtSvelteKitRuntime } from '@happyvertical/smrt-app-runtime/sveltekit';
 
-enableTenancy();
+export const runtime = createSmrtSvelteKitRuntime({
+  // Optional: map a trusted URL shape to a tenant candidate. The default
+  // selector reads the leading subdomain and ignores tenant headers.
+  selectTenant: async (event) => selectTenantFromHost(event),
+  // Session handler tuning; enterTenantContext is always true.
+  session: { postgresRls: true }
+});
 
-const tenancyHandle = createSvelteKitHandle({
-  resolveTenantId: async (event) => resolveTenantFromHost(event)
-}) as unknown as Handle;
-
-const sessionHandle = createSessionHandler({
-  ...getSmrtConfig('Session'),
-  enterTenantContext: true,
-  postgresRls: true
-}) as unknown as Handle;
-
-export const handle = sequence(tenancyHandle, sessionHandle);`,
+// src/hooks.server.ts
+// import { runtime } from '$lib/server/smrt';
+// export const { handle, init } = runtime;`,
 				points: [
-					'The session handler populates locals.user, locals.membership, locals.permissions, locals.tenantId, and locals.sessionId — the SessionLocals interface your app.d.ts should extend.',
-					'The tenancy handle populates locals.tenantContext and locals.tenantId. Type that local as TenantContextData; TenantContext itself is a value, not a type.',
-					'Both packages describe the event structurally to avoid depending on @sveltejs/kit, so the casts are expected rather than a smell.',
+					'The session step populates locals.user, locals.membership, locals.permissions, locals.tenantId, and locals.sessionId — the SessionLocals interface your app.d.ts should extend.',
+					'Tenant selection publishes locals.selectedTenantId and locals.selectedTenantSlug. They are never authorization: a selector returns a candidate, and only a verified membership enters tenant context.',
+					'The lower-level pieces remain public. An application that does not use the runtime can sequence createSvelteKitHandle from smrt-tenancy/adapters and createSessionHandler from smrt-users/sveltekit by hand.',
 					'For a job or a CLI entry point, use createCliContext or runTenantScopedEntryPoint so an unscoped run fails instead of quietly reading everything.'
 				]
 			},
@@ -562,12 +577,13 @@ export const handle = sequence(tenancyHandle, sessionHandle);`,
 				filename: 'src/routes/api/tenant/switch/+server.ts',
 				code: `import { error, json } from '@sveltejs/kit';
 import { switchSessionTenant } from '@happyvertical/smrt-users/sveltekit';
+import { runtime } from '$lib/server/smrt';
 
 export const POST = async (event) => {
   const { tenantId } = await event.request.json();
 
   const switched = await switchSessionTenant(event, tenantId, {
-    ...getSmrtConfig('Session'),
+    ...runtime.classOptions('Session'),
     cookieName: 'sid',
     cookieSecure: true,
     cookieSameSite: 'lax'

@@ -476,9 +476,9 @@
 <style>
 	.agent-form-demo {
 		margin: 1.5rem 0;
-		border: 1px solid var(--smrt-color-outline-variant, var(--site-line-strong));
+		border: var(--smrt-hairline, 1px solid var(--site-line-strong));
 		border-radius: 0.8rem;
-		background: var(--smrt-color-surface-container-lowest, var(--site-surface));
+		background: var(--smrt-surface-panel, var(--site-surface));
 		color: var(--smrt-color-on-surface, var(--site-ink));
 		overflow: hidden;
 	}
@@ -494,7 +494,7 @@
 		grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.8fr);
 		gap: 1.5rem;
 		align-items: start;
-		border-bottom: 1px solid var(--smrt-color-outline-variant, var(--site-line));
+		border-bottom: var(--smrt-hairline, 1px solid var(--site-line));
 	}
 
 	.demo-kicker,
@@ -541,7 +541,7 @@
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		margin: 0 0 1rem;
-		border-block: 1px solid var(--smrt-color-outline-variant, var(--site-line));
+		border-block: var(--smrt-hairline, 1px solid var(--site-line));
 	}
 
 	.identity-card div {
@@ -569,7 +569,7 @@
 		gap: 0;
 		margin: 0;
 		padding: 0;
-		border-top: 1px solid var(--smrt-color-outline-variant, var(--site-line));
+		border-top: var(--smrt-hairline, 1px solid var(--site-line));
 		list-style: none;
 	}
 
@@ -579,7 +579,7 @@
 		gap: 1rem;
 		align-items: center;
 		padding: 0.75rem 0;
-		border-bottom: 1px solid var(--smrt-color-outline-variant, var(--site-line));
+		border-bottom: var(--smrt-hairline, 1px solid var(--site-line));
 	}
 
 	.storyboard li::before {
@@ -588,7 +588,7 @@
 		height: 0.5rem;
 		grid-column: 1;
 		grid-row: 1;
-		border: 1px solid var(--smrt-color-outline, var(--site-line-strong));
+		border: var(--smrt-hairline-strong, 1px solid var(--site-line-strong));
 		border-radius: 50%;
 	}
 
@@ -654,7 +654,7 @@
 		grid-template-columns: minmax(0, 1fr) auto minmax(15rem, 0.8fr);
 		gap: 1rem;
 		align-items: center;
-		border-block: 1px solid var(--smrt-color-outline-variant, var(--site-line));
+		border-block: var(--smrt-hairline, 1px solid var(--site-line));
 		background: color-mix(in srgb, var(--smrt-color-error, #ba1a1a) 5%, transparent);
 	}
 
@@ -672,8 +672,8 @@
 
 	.refusal-result {
 		padding: 0.75rem;
-		border: 1px solid var(--smrt-color-outline-variant, var(--site-line));
-		background: var(--smrt-color-surface, var(--site-surface));
+		border: var(--smrt-hairline, 1px solid var(--site-line));
+		background: var(--smrt-surface-panel, var(--site-surface));
 	}
 
 	.refusal-result.denied {
@@ -711,7 +711,7 @@
 
 	.demo-links a {
 		padding: 0.4rem 0.6rem;
-		border: 1px solid var(--smrt-color-outline-variant, var(--site-line));
+		border: var(--smrt-hairline, 1px solid var(--site-line));
 		border-radius: 999px;
 		color: inherit;
 		font-size: 0.68rem;

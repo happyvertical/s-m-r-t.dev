@@ -6,9 +6,9 @@
 
 	const guideMetadata = getGuideLibraryItem('/starters/ground-up');
 
-	const install = `pnpm add -D @happyvertical/smrt-template-sveltekit\nnode --input-type=module -e "import { copyTemplate } from '@happyvertical/smrt-template-sveltekit'; copyTemplate('./my-app', { name: 'my-app' })"\ncd my-app\npnpm install\ncp .env.example .env\npnpm db:migrate\npnpm dev`;
+	const install = `pnpm add -D @happyvertical/smrt-template-sveltekit\nnode --input-type=module -e "import { copyTemplate } from '@happyvertical/smrt-template-sveltekit'; copyTemplate('./my-app', { name: 'my-app' })"\ncd my-app\npnpm install\ncp .env.example .env\npnpm app:install`;
 
-	const item = `@smrt({\n  api: { include: ['list', 'get', 'create', 'update', 'delete'] },\n  mcp: { include: ['list', 'get', 'create', 'update', 'delete'] },\n  cli: { include: ['list', 'get', 'create', 'update', 'delete'] }\n})\n@TenantScoped({ mode: 'optional' })\nexport class Item extends SmrtObject {\n  @tenantId({ nullable: true })\n  tenantId: string | null = null;\n  title = '';\n  status = 'draft';\n}`;
+	const item = `@smrt({\n  api: {\n    include: ['list', 'get', 'create', 'update', 'delete'],\n    writable: ['title', 'description', 'status']\n  },\n  cli: { include: ['list', 'get', 'create', 'update', 'delete'] },\n  mcp: { include: ['list', 'get', 'create', 'update', 'delete'] }\n})\n@TenantScoped({ mode: 'optional' })\nexport class Item extends SmrtObject {\n  @tenantId({ nullable: true })\n  tenantId: string | null = null;\n  title = '';\n  description = '';\n  status = 'draft';\n}\n\nexport class ItemCollection extends SmrtCollection<Item> {\n  static readonly _itemClass = Item;\n}\n\nObjectRegistry.registerCollection('Item', ItemCollection);`;
 </script>
 
 <SEO
@@ -31,8 +31,8 @@
 	<aside class="scope-note">
 		<div>
 			<strong>Included</strong><span
-				>One Item object, SQLite, migrations, tenant/session hooks, users package manifests,
-				AdminShell, SSR data loading, generated routes and tools.</span
+				>One Item object, SQLite, migrations, the application runtime with tenant selection and
+				session, users package manifests, AppShell, SSR data loading, generated routes and tools.</span
 			>
 		</div>
 		<div>
@@ -47,8 +47,11 @@
 	<section id="create">
 		<h2>1. Create and run the app</h2>
 		<p>
-			The template package exports a tested copy helper. Generated projects require Node 24.18 or
-			newer and use the package manager version declared in the template.
+			The template package exports a tested copy helper. Generated projects require Node 26.0.0 or
+			newer and pnpm 11.25.0, the package manager version the template declares. The last command
+			runs <code>smrt app install</code>: it builds, migrates, starts the app on loopback, and opens
+			owner onboarding under one operation lock. Use <code>pnpm dev</code> for the development loop afterward;
+			the template ships no operator scripts of its own.
 		</p>
 		<CodeBlock code={install} language="bash" filename="terminal" />
 	</section>
