@@ -62,16 +62,6 @@
 	<h1 class="planner-page__title">Build a boilerplate</h1>
 	<section class="planner-host" aria-label="Build a boilerplate">
 		{#if Planner}
-			<!--
-				Known upstream defect (smrt-planner, last release; fixed on the planner's
-				release/site-refresh branch in fd041b6, pending release; see AGENTS.md
-				"Active upstream defects"; https://github.com/happyvertical/smrt-planner/issues/53):
-				once a plan with a saved `layout` is reloaded from this browser, the
-				planner's `CookbookStore.snapshot()` hands the controller its `$state`
-				proxy for `layout` (it snapshots `theme` but not `layout`) and smrt-core's
-				cookbook engine fails to `structuredClone` it. Nothing here can unwrap
-				that proxy; the fix is the store's.
-			-->
 			<Planner
 				basePath="/build-a-boilerplate"
 				persistence="self"
