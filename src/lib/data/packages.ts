@@ -125,7 +125,7 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 	{
 		title: 'Text and structured input',
 		description:
-			'Collect free text, selected options, related records, multiple values, tags, dates, times, and files.',
+			'Collect free text, selected options, related records, multiple values, tags, dates, times, files, and dictated speech.',
 		importPath: '@happyvertical/smrt-ui/forms',
 		components: [
 			'Input',
@@ -137,9 +137,14 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 			'Listbox',
 			'MultiSelect',
 			'TagsInput',
+			'CountrySelect',
+			'ProvinceSelect',
+			'CurrencySelect',
 			'DatePicker',
 			'TimePicker',
-			'FilePicker'
+			'FilePicker',
+			'DictationButton',
+			'DictationStatus'
 		]
 	},
 	{
@@ -168,10 +173,12 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 	{
 		title: 'Agent interaction contracts',
 		description:
-			'Give chat, voice, tutorial, or test adapters a stable way to inspect and assist with forms.',
+			'Give chat, voice, tutorial, or test adapters a stable way to inspect and assist with forms. Agents stage proposals; a person confirms them in StagedControlReview.',
 		importPath: '@happyvertical/smrt-ui/forms',
 		components: [
 			'createControlInteractionRegistry',
+			'stageControlProposals',
+			'StagedControlReview',
 			'ControlIdentity',
 			'ControlSnapshot',
 			'ControlCommand',
@@ -185,6 +192,8 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 		importPath: '@happyvertical/smrt-ui/ui',
 		components: [
 			'Button',
+			'IconToggle',
+			'IconToggleGroup',
 			'Dropdown',
 			'Menu',
 			'Pagination',
@@ -230,7 +239,28 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 		description:
 			'Search, select, filter, page, and present typed collections with durable, serializable table view state.',
 		importPath: '@happyvertical/smrt-ui/data',
-		components: ['CollectionToolbar', 'CollectionList', 'ContentList', 'DataTable']
+		components: [
+			'CollectionToolbar',
+			'CollectionList',
+			'ContentList',
+			'DataTable',
+			'SortableHeader',
+			'ListSortSelect'
+		]
+	},
+	{
+		title: 'Charts',
+		description:
+			'One renderer for bar, line, pie, table, and stat charts over structural ChartData. The /charts/format entry is Svelte-free.',
+		importPath: '@happyvertical/smrt-ui/charts',
+		components: ['Chart', 'formatWidgetValue']
+	},
+	{
+		title: 'Chat primitives',
+		description:
+			'Message, reaction, and typing primitives that smrt-chat composes; they import no chat runtime.',
+		importPath: '@happyvertical/smrt-ui/chat',
+		components: ['MessageBubble', 'ReactionPicker', 'TypingIndicator']
 	},
 	{
 		title: 'Layout',
@@ -1116,14 +1146,14 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Agents & runtime',
 		'smrt-chat',
-		'Rooms, direct messages, threads, persona-bound conversations, tool loops, the AssistantDock, and voice gateway turns.',
+		'Rooms, direct messages, threads, persona-bound conversations, tool loops, the AssistantDock, helper preferences, and voice gateway turns.',
 		{
 			status: 'new',
 			highlights: [
 				'AssistantDock with its own mounted SvelteKit routes',
 				'Assistant turns that suspend for browser tools and resume with their results',
-				'Runtime report and overview tools for the persona extraTools seam',
-				'The chat.assistant recipe places the dock in the shell header'
+				'Runtime report, overview, and data-surface tools for the persona extraTools seam',
+				'Two recipes: chat.assistant places the dock in the shell header; chat.rooms brings the room models'
 			],
 			components: [
 				'ChatLayout',
@@ -1134,18 +1164,20 @@ export const packages: SmrtPackage[] = [
 				'ToolCallDisplay',
 				'MiniChat',
 				'AssistantDock',
+				'AssistantThreadList',
 				'FloatingAssistant',
+				'HelperControlPanel',
 				'ChatTabs'
 			],
 			componentImport: '@happyvertical/smrt-chat/svelte',
 			details: [
 				{
 					title: 'Chat is a closed service facade',
-					body: 'ChatService keeps its collections and agent-reply bridge private, so callers use the supported conversation operations instead of bypassing membership or lifecycle checks. allowedTools is fail-closed: an absent or empty allowlist grants no agent tool access.'
+					body: 'ChatService keeps its collections and agent-reply bridge private, so callers use the supported conversation operations instead of bypassing membership or lifecycle checks. All seven models expose only generated list and get. allowedTools is fail-closed: an absent or empty allowlist grants no agent tool access. The agent authors as its resolved bot Profile, recorded on the session as agentProfileId, never as the agentId slug.'
 				},
 				{
 					title: 'The tool loop and streams have bounded entry points',
-					body: 'runToolLoop and runPersonaConversationTurn use the manifest tool catalog with DEFAULT_MAX_STEPS. runChatConversationStream and createChatStreamHandler provide token SSE through SmrtChatBackend. Voice sessions use createVoiceChatSession and handleVoiceGatewayTurn; validate their tenant, actor, persona, and conversation binding because a gateway bearer token is not user authentication. captureChatFeedback records thumbs and can feed learning reinforcement. The voice workbench is a dev-only surface.'
+					body: 'runToolLoop and runPersonaConversationTurn use the manifest tool catalog with DEFAULT_MAX_STEPS. Non-manifest extraTools pass the same allow-list; createDataSurfaceTools supplies principal-bound discovery and reads. runChatConversationStream and createChatStreamHandler provide token SSE through SmrtChatBackend. Voice sessions use createVoiceChatSession and handleVoiceGatewayTurn; validate their tenant, actor, persona, and conversation binding because a gateway bearer token is not user authentication. captureChatFeedback records thumbs and can feed learning reinforcement.'
 				},
 				{
 					title: 'The AssistantDock and its routes',
@@ -1153,7 +1185,11 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Report and overview tools for the assistant',
-					body: 'createRuntimeReportTools returns reports.runtime.sources, define, list, and run for the persona extraTools seam. The model supplies only a declarative RuntimeReportSpec from smrt-reports, and sources are a server-owned allow-list. A report is saved only after a person confirms the exact spec. createOverviewTools returns overviews.describe, apply, and undo over a host-opened overview page. The chat.assistant recipe declares the dock as a header shell widget.'
+					body: 'createRuntimeReportTools returns reports.runtime.sources, define, list, and run for the persona extraTools seam. The model supplies only a declarative RuntimeReportSpec from smrt-reports, and sources are a server-owned allow-list. A report is saved only after a person confirms the exact spec; without a confirmation host, apply returns an awaiting_confirmation proposal and stores nothing. createOverviewTools returns overviews.describe, apply, and undo over a host-opened overview page.'
+				},
+				{
+					title: 'Helper preferences are presentation policy',
+					body: 'HelperPreferencesService on the package root loads, saves, and resets a per-profile helper choice under a host-supplied authorize and policy. It is never an identity, persona, or tool authority. Browser code imports the DTO, parser, and field list from the /helper-preferences subpath, which ships no server adapter. HelperControlPanel keeps a local draft apart from the applied snapshot, and FloatingAssistant accepts the saved bottom-corner placement.'
 				}
 			],
 			exampleResource: 'messages'
@@ -1223,30 +1259,30 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Web & UI',
 		'smrt-ui',
-		'Provider-free Svelte 5 components for accessible forms, agent-assisted controls, feedback, collections, overlays, layouts, and themes.',
+		'Provider-free Svelte 5 components for accessible forms, agent-assisted controls, feedback, collections, charts, overlays, layouts, and themes.',
 		{
 			kind: 'ui',
 			status: 'new',
 			highlights: [
 				'One component contract for semantics, keyboard use, state, themes, and testing',
 				'Forms that chat, voice, tutorials, and tests can address through a consent-aware registry',
-				'Reusable collection, table, feedback, disclosure, and overlay patterns with stable row identity',
+				'Reusable collection, table, chart, feedback, disclosure, and overlay patterns with stable row identity',
 				'Package-owned working examples in the shared playground'
 			],
 			componentGroups: smrtUiComponentGroups,
 			components: smrtUiComponentGroups.flatMap((group) => group.components),
 			details: [
 				{
-					title: 'Collections are a composed working surface',
-					body: 'CollectionToolbar, CollectionList, ContentList, and DataTable work together for search, selection, filtering, pagination, and presentation. DataTable preserves stable row identity through local transforms and can expose serializable controller state when the application owns sorting, paging, or filtering.'
+					title: 'The leaf of the Svelte stack',
+					body: 'The package depends only on svelte and smrt-types, so domain packages take its primitives without depending on smrt-svelte. It owns the visual primitives and the Provider-free form controls. smrt-svelte owns the Provider-backed rich Form and the specialized inputs, and re-exports the base inputs from here. Identity views such as RoleBadge and MembershipList live here because they import no domain package.'
 				},
 				{
 					title: 'Use canonical tokens and aliases intentionally',
-					body: 'Themes use Material 3 names as canonical tokens and retain additive aliases for migration: spacing and radius aliases such as extra-small and sm, plus motion aliases from short1 through long4. Aliases preserve older consumers; new design work should name the canonical semantic token.'
+					body: 'Five presets ship: material, glass, studio, smrt, and happyvertical. Themes use Material 3 names as canonical tokens and retain additive aliases for migration: spacing and radius aliases such as extra-small and sm, plus motion aliases from short1 through long4. Aliases preserve older consumers; new design work should name the canonical semantic token.'
 				},
 				{
 					title: 'A shared component standard',
-					body: 'Foundation controls use native semantics, stable server-safe IDs, and Svelte 5 bindable state. They have visible focus and validation states, reduced-motion rules, semantic design tokens, and focused accessibility tests.'
+					body: 'Foundation controls use native semantics, stable server-safe IDs, and Svelte 5 bindable state. They have visible focus and validation states, reduced-motion rules, semantic design tokens, and focused accessibility tests. Every exported component root carries data-smrt-component, and internal parts carry data-smrt-part; both are public styling hooks.'
 				},
 				{
 					title: 'Forms agents can assist with',
@@ -1256,7 +1292,11 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Reusable collection surfaces',
-					body: 'CollectionToolbar, CollectionList, and DataTable cover search, selection, list or grid presentation, filtering, pagination, expansion, density, and empty or loading states. DataTable keeps a stable row key through local transforms and exposes serializable controller state when the application owns filtering, sorting, or paging.'
+					body: 'CollectionToolbar, CollectionList, and DataTable cover search, selection, list or grid presentation, filtering, pagination, expansion, density, and empty or loading states. DataTable keeps a stable row key through local transforms and renders footer rows and column summaries. It exposes serializable controller state when the application owns filtering, sorting, or paging.'
+				},
+				{
+					title: 'Charts without a report dependency',
+					body: 'Chart from /charts renders bar, line, pie, table, and stat from a structural ChartData value. A report or widget package hands it rows instead of importing a charting library. smrt-reports draws its runtime report results with it. /charts/format holds the minor-unit number formatting and loads in plain Node.'
 				},
 				{
 					title: 'Feedback and focused tasks',
@@ -1272,7 +1312,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Focused public imports',
-					body: 'Import from /forms, /ui, /feedback, /data, /layout, /calendar, and /themes. Each import then identifies the applicable foundation part. The Svelte-free /form-retry and /themes/presets entries are safe in plain Node. The package root remains a compatibility barrel.'
+					body: 'Import from /forms, /ui, /feedback, /data, /layout, /calendar, /charts, /chat, /i18n, /registry, and /themes. Each import then identifies the applicable foundation part. The Svelte-free /form-retry, /data-surface, /charts/format, and /themes/presets entries are safe in plain Node. Server adapters take their protocol limits from /data-surface, not from the /data component barrel. The package root remains a compatibility barrel.'
 				}
 			],
 			componentImport: '@happyvertical/smrt-ui/forms'
@@ -1719,22 +1759,39 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Business & operations',
 		'smrt-reports',
-		'Materialized aggregate read models with incremental refresh, schedules, and tenant fan-out, plus runtime reports compiled per principal from a stored spec.',
+		'Materialized aggregate read models with incremental refresh, schedules, and tenant fan-out, plus runtime reports compiled per principal from a stored spec, with browser surfaces.',
 		{
 			highlights: [
 				'Decorated groupings, measures, and time buckets',
 				'Incremental refresh with watermarks and affected-group recomputation',
 				'Durable scheduled refresh through smrt-jobs',
-				'Runtime reports: a declarative spec stored as data, never a stored result'
+				'Runtime reports: a declarative spec stored as data, never a stored result',
+				'Saved-report routes and a report chart widget on the /svelte subpath'
 			],
+			components: [
+				'SavedReports',
+				'ReportDetail',
+				'ReportResult',
+				'ReportConfirmation',
+				'ReportPicker',
+				'RuntimeReportsRoute',
+				'RuntimeReportDetailRoute',
+				'RuntimeReportChartWidget',
+				'MaterializedReportTable'
+			],
+			componentImport: '@happyvertical/smrt-reports/svelte',
 			details: [
 				{
 					title: 'Runtime reports are data, not code',
 					body: 'parseRuntimeReportSpec accepts a closed grammar with no SQL, expressions, joins, tables, or tenants. compileRuntimeReportSpec resolves it against a server-owned source allow-list, the registry field policy, the live principal permissions, and a fail-closed tenant predicate. A stored RuntimeReport is recompiled for the running principal on every run, and result rows are never persisted. The assistant tools that define and run them live in smrt-chat.'
 				},
 				{
-					title: 'The materialized recipe brings only bookkeeping',
-					body: 'reports.materialized declares the internal refresh tables: runs, watermarks, locks, schedules, and refresh tasks. An app owns its report classes, so the recipe does not list them. Those tables have no REST or MCP surface, so the recipe has no nav, and the package ships no Svelte components.'
+					title: 'Two recipes with different surfaces',
+					body: 'reports.materialized declares the internal refresh tables: runs, watermarks, locks, schedules, and refresh tasks. An app owns its report classes, so the recipe does not list them. Those tables have no REST or MCP surface, so the recipe has no nav and no browser surface. reports.runtime brings the RuntimeReport model with nav, the /reports and /reports/:id routes, and the runtime-report-chart widget.'
+				},
+				{
+					title: 'Server surfaces for the browser components',
+					body: 'createRuntimeReportConfirmHandler serves the confirmation a person gives before a proposed report is saved; runRuntimeReportForPrincipal and archiveRuntimeReportForPrincipal reuse the read and create grants. Source allow-lists come from the packages.reports.runtime.sources config block; no configuration means no sources. The components take server report types as type-only imports and draw charts with smrt-ui/charts.'
 				},
 				{
 					title: 'The adapter is the exposure boundary',
@@ -2251,30 +2308,34 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Web & UI',
 		'smrt-planner',
-		'The s-m-r-t app planner as a mountable Svelte component with a typed command set and a plan snapshot.',
+		'The s-m-r-t app planner as a mountable Svelte component with cookbooks, recipes, layout, theme, and export tabs, a typed command set, and a plan snapshot.',
 		{
 			kind: 'tooling',
 			status: 'new',
 			repository: 'https://github.com/happyvertical/smrt-planner',
-			components: ['Planner'],
+			components: ['Planner', 'PlannerControls', 'HostPlanner'],
 			componentImport: '@happyvertical/smrt-planner',
 			highlights: [
-				'Add recipes or whole packages and an app mock-up assembles around them: navigation, a list view and form per model, and help pages',
-				'Recipes and options live in the URL; sample data lives in memory and resets on reload',
+				'Add recipes or whole packages and an app mock-up assembles around them: navigation, a list and record view with a form per model, and help pages',
+				'Ready-made cookbooks for a bakery, a mechanic, a welder, a yoga studio, and other small businesses; the cookbook saves in the browser or is left to the host',
 				'Commands are published as tool definitions, so an LLM or MCP server can drive the planner'
 			],
 			details: [
 				{
 					title: 'Mount it in a host page',
-					body: 'Planner and createPlannerController come from the package root, which is Svelte source and needs a Svelte-compiling bundler. The controller runs commands such as add_recipes, set_policy, apply_cookbook, and undo, and returns a snapshot and receipt or a typed error. Subscribe to the controller to re-render on each snapshot.'
+					body: 'Planner and createPlannerController come from the package root, which is Svelte source and needs a Svelte-compiling bundler. Its props are all optional: controller, basePath, inference, layout, persistence, themeControls, advancedStylesHref, defaultTitle, tabs, backLink, and onready. The controller runs commands such as add_recipes, set_policy, apply_cookbook, and undo, and returns a snapshot and receipt or a typed error. A host that owns an AppShell mounts PlannerControls inside it with PLANNER_SHELL_EDGE_TOGGLES and PLANNER_SHELL_PANEL_DEFAULTS.'
+				},
+				{
+					title: 'What the tabs cover',
+					body: 'The tabs are cookbooks, recipes, features, layout, theme, settings, and export. The pencil in the header edits the menu and every section page in place, and each edit lands in the cookbook layout and overviews. Metric, records, and chart widgets read the in-browser sample data. Theme offers palettes, appearance, a brand color wheel, fonts, and an Advanced Styles CSS editor. Export shows what the cookbook holds, a prompt to copy for a coding agent, and the download.'
 				},
 				{
 					title: 'Drive it from a model',
-					body: 'commandTools from the commands subpath is every command as name, description, and inputSchema. The snapshot is a compact read-only plan of a few kilobytes, fit for a prompt. A plain Node server uses the core subpath for schemas, the assistant prompt, and reply validation. It can serve the prebuilt app from the app subpath.'
+					body: 'commandTools from the commands subpath is every command as name, description, and inputSchema. The snapshot is a compact read-only plan of a few kilobytes, fit for a prompt. Passing inference switches the assistant on; without it the planner has no chat icon. A plain Node server uses the core subpath for the schemas, buildHostPrompt, parseHostReply, the cookbook library, and createHeadlessPlanner. It serves the prebuilt app from the app subpath. HostPlanner mounts the same planner inside a Kitchen host such as an MCP app or widget.'
 				},
 				{
 					title: 'Mounted on this site as Build a boilerplate',
-					body: 'This site mounts the complete Planner on its Build a boilerplate page, inside the framework AppShell. An on-device model is offered first; a bring-your-own endpoint is the alternative. The page is the site name; the package keeps its own.',
+					body: 'This site mounts the complete Planner on its Build a boilerplate page with a backLink to the documentation. An on-device browser model is offered first; a bring-your-own endpoint, with any key held in memory for the tab, is the alternative. The page is the site name, passed as defaultTitle; the package keeps its own.',
 					href: '/build-a-boilerplate',
 					linkLabel: 'Open Build a boilerplate'
 				},
