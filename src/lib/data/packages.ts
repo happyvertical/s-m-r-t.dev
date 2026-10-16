@@ -1,8 +1,5 @@
 import type { GuideCallout } from '$lib/data/callouts';
 import { SMRT_VERSION } from '$lib/version';
-// The planner is on its own version line, not the framework release. Its
-// installed package.json is the only honest source for the number it renders.
-import plannerPackage from '@happyvertical/smrt-planner/package.json';
 
 export type PackageCategory =
 	| 'Foundation'
@@ -97,14 +94,6 @@ type PackageOptions = Partial<
 		| 'notice'
 	>
 >;
-
-/**
- * Packages released on a version line of their own. Every other smrt-* package
- * releases in lockstep and renders SMRT_VERSION.
- */
-const OWN_VERSION_LINES: Record<string, string> = {
-	'smrt-planner': plannerPackage.version
-};
 
 const smrtUiComponentGroups: PackageComponentGroup[] = [
 	{
@@ -662,7 +651,7 @@ function definePackage(
 		exampleResource: options.exampleResource,
 		surfaceNote: options.surfaceNote,
 		playgroundNote: options.playgroundNote,
-		version: OWN_VERSION_LINES[slug] ?? SMRT_VERSION,
+		version: SMRT_VERSION,
 		status: options.status ?? 'stable',
 		repository: options.repository,
 		notice: options.notice
@@ -2316,7 +2305,6 @@ export const packages: SmrtPackage[] = [
 		{
 			kind: 'tooling',
 			status: 'new',
-			repository: 'https://github.com/happyvertical/smrt-planner',
 			components: ['Planner', 'PlannerControls', 'HostPlanner'],
 			componentImport: '@happyvertical/smrt-planner',
 			highlights: [
@@ -2344,10 +2332,8 @@ export const packages: SmrtPackage[] = [
 					linkLabel: 'Open Build a boilerplate'
 				},
 				{
-					title: 'Its own release line and repository',
-					body: 'The planner is published on its own version line, separate from the framework release, and its source lives in its own repository. Its catalog is generated from the registry and committed, so a build needs no network.',
-					href: 'https://github.com/happyvertical/smrt-planner',
-					linkLabel: 'Open the planner repository'
+					title: 'Released with the framework',
+					body: 'The planner lives in the smrt monorepo and releases in lockstep with every other smrt package. Its catalog is a build output generated from the packages in the same release, so the published planner cannot drift from them.'
 				}
 			],
 			surfaceNote:

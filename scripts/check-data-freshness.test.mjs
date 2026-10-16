@@ -37,8 +37,7 @@ describe('committed baseline', () => {
 			expect(name).toMatch(/^@happyvertical\/smrt-/);
 			expect(entry.version).toMatch(/^\d+\.\d+\.\d+/);
 			// `null` is a real state, not a defect: a package that ships no
-			// AGENTS.md (today, smrt-planner, which has its own repo and release
-			// line) has nothing to hash. The audit types it `string | null`.
+			// AGENTS.md has nothing to hash. The audit types it `string | null`.
 			if (entry.agentsMd !== null) expect(entry.agentsMd).toMatch(/^[0-9a-f]{64}$/);
 		}
 	}, 30_000);
@@ -50,8 +49,7 @@ describe('committed baseline', () => {
 			expect(name).toMatch(/^@happyvertical\/smrt-/);
 			expect(entry.version).toMatch(/^\d+\.\d+\.\d+/);
 			// Same contract as the installed audit above: `null` records a
-			// package that ships no AGENTS.md (smrt-planner's tarball today:
-			// https://github.com/happyvertical/smrt-planner/issues/66).
+			// package that ships no AGENTS.md.
 			if (entry.agentsMd !== null) expect(entry.agentsMd).toMatch(/^[0-9a-f]{64}$/);
 		}
 	});
