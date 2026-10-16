@@ -39,9 +39,7 @@ export default defineConfig({
 		// unbundled, that import has no default export and the planner's
 		// client-side load fails in dev (`vite build` is unaffected). Prebundle
 		// just that one package. Upstream: smrt-core could import it as ESM.
-		include: [
-			'@happyvertical/smrt-planner > @happyvertical/smrt-core > pluralize'
-		]
+		include: ['@happyvertical/smrt-planner > @happyvertical/smrt-core > pluralize']
 	},
 	server: {
 		port: 5183
