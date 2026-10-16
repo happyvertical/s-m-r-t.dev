@@ -13708,7 +13708,7 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: null
+		source: 'packages/planner/src/lib/planner/host/HostPlanner.svelte'
 	},
 	{
 		slug: 'planner',
@@ -13812,7 +13812,7 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: null
+		source: 'packages/planner/src/lib/planner/Planner.svelte'
 	},
 	{
 		slug: 'planner-controls',
@@ -13924,7 +13924,7 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: null
+		source: 'packages/planner/src/lib/planner/PlannerControls.svelte'
 	},
 	{
 		slug: 'playground-host',

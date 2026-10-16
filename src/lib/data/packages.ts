@@ -1,8 +1,5 @@
 import type { GuideCallout } from '$lib/data/callouts';
 import { SMRT_VERSION } from '$lib/version';
-// The planner is on its own version line, not the framework release. Its
-// installed package.json is the only honest source for the number it renders.
-import plannerPackage from '@happyvertical/smrt-planner/package.json';
 
 export type PackageCategory =
 	| 'Foundation'
@@ -97,14 +94,6 @@ type PackageOptions = Partial<
 		| 'notice'
 	>
 >;
-
-/**
- * Packages released on a version line of their own. Every other smrt-* package
- * releases in lockstep and renders SMRT_VERSION.
- */
-const OWN_VERSION_LINES: Record<string, string> = {
-	'smrt-planner': plannerPackage.version
-};
 
 const smrtUiComponentGroups: PackageComponentGroup[] = [
 	{
@@ -662,7 +651,7 @@ function definePackage(
 		exampleResource: options.exampleResource,
 		surfaceNote: options.surfaceNote,
 		playgroundNote: options.playgroundNote,
-		version: OWN_VERSION_LINES[slug] ?? SMRT_VERSION,
+		version: SMRT_VERSION,
 		status: options.status ?? 'stable',
 		repository: options.repository,
 		notice: options.notice
@@ -1732,7 +1721,11 @@ export const packages: SmrtPackage[] = [
 			details: [
 				{
 					title: 'Journal entries must balance',
-					body: 'Accounts have debit- or credit-normal types. A Journal moves from draft to posted or voided, and each JournalEntry is debit-XOR-credit. BALANCE_EPSILON is 0.01. This catches arithmetic imbalance, but a mixed-unit journal can still balance numerically without being semantically valid; keep integer-minor-unit commerce values consistent.'
+					body: 'Accounts have debit- or credit-normal types. A Journal moves from draft to posted or voided, and each JournalEntry is debit-XOR-credit. In the default tolerant mode BALANCE_EPSILON is 0.01. This catches arithmetic imbalance, but a mixed-unit journal can still balance numerically without being semantically valid; keep integer-minor-unit commerce values consistent.'
+				},
+				{
+					title: 'Named ledgers with exact balancing',
+					body: 'A named Ledger fixes its owner, currency, and balance mode when it is created. In exact-integer mode, amounts must be safe integer minor units and debits must equal credits exactly. Accounts assigned to a ledger keep their scope, owner, and type, and cannot be deleted. Posted journals and lines in a named ledger are immutable, so they cannot be voided or deleted; correct them with compensating postings. postReceivable, postPayable, and postSettlement need an exact ledger. Each claims one key per tenant and ledger in a transaction and checks a payload digest when the same key is replayed.'
 				},
 				{
 					title: 'Commerce posts to the accounts each invoice recorded',
@@ -2316,7 +2309,6 @@ export const packages: SmrtPackage[] = [
 		{
 			kind: 'tooling',
 			status: 'new',
-			repository: 'https://github.com/happyvertical/smrt-planner',
 			components: ['Planner', 'PlannerControls', 'HostPlanner'],
 			componentImport: '@happyvertical/smrt-planner',
 			highlights: [
@@ -2344,10 +2336,8 @@ export const packages: SmrtPackage[] = [
 					linkLabel: 'Open Build a boilerplate'
 				},
 				{
-					title: 'Its own release line and repository',
-					body: 'The planner is published on its own version line, separate from the framework release, and its source lives in its own repository. Its catalog is generated from the registry and committed, so a build needs no network.',
-					href: 'https://github.com/happyvertical/smrt-planner',
-					linkLabel: 'Open the planner repository'
+					title: 'Released with the framework',
+					body: 'The planner lives in the smrt monorepo and releases in lockstep with every other smrt package. Its catalog is a build output generated from the packages in the same release, so the published planner cannot drift from them.'
 				}
 			],
 			surfaceNote:

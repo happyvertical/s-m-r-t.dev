@@ -58,15 +58,21 @@ describe('update-smrt --check', () => {
 		}
 	);
 
-	it('exempts an independent package from lockstep but not from exact pins', () => {
+	it('holds smrt-planner to the same lockstep version as every other package', () => {
 		expect(
 			check({
 				'@happyvertical/smrt-core': '0.40.63',
 				'@happyvertical/smrt-svelte': '0.40.63',
+				'@happyvertical/smrt-planner': '0.40.63'
+			})
+		).toContain('coherent at 0.40.63 (3 packages)');
+		expect(() =>
+			check({
+				'@happyvertical/smrt-core': '0.40.63',
 				'@happyvertical/smrt-planner': '0.1.0'
 			})
-		).toContain('coherent at 0.40.63 (2 packages)');
-		for (const spec of ['^0.1.0', 'link:../smrt-planner']) {
+		).toThrow(/SMRT dependencies must move in lockstep/);
+		for (const spec of ['^0.40.63', 'link:../smrt-planner']) {
 			expect(() =>
 				check({
 					'@happyvertical/smrt-core': '0.40.63',
@@ -87,10 +93,10 @@ describe('update-smrt --check', () => {
 });
 
 describe('update-smrt update', () => {
-	it('moves lockstep packages to --to and an independent package to its own latest', async () => {
+	it('moves every package, smrt-planner included, to --to', async () => {
 		const latest = {
 			'@happyvertical/smrt-core': '0.41.0',
-			'@happyvertical/smrt-planner': '0.2.0'
+			'@happyvertical/smrt-planner': '0.41.0'
 		};
 		const server = createServer((request, response) => {
 			const name = decodeURIComponent(request.url.slice(1));
@@ -126,7 +132,7 @@ describe('update-smrt update', () => {
 			const written = JSON.parse(readFileSync(join(directory, 'package.json'), 'utf8'));
 			expect(written.dependencies).toEqual({
 				'@happyvertical/smrt-core': '0.41.0',
-				'@happyvertical/smrt-planner': '0.2.0'
+				'@happyvertical/smrt-planner': '0.41.0'
 			});
 		} finally {
 			server.close();

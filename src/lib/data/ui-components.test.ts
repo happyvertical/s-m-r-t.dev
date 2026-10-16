@@ -17,13 +17,7 @@ describe('generated UI component reference', () => {
 		for (const component of uiComponents) {
 			expect(component.name).toBeTruthy();
 			expect(component.importPath).toMatch(/^@happyvertical\/smrt-[a-z-]+/);
-			// smrt-planner lives in its own repository, so it has no path in the
-			// monorepo tree and publishes no source link.
-			if (component.importPath.startsWith('@happyvertical/smrt-planner')) {
-				expect(component.source).toBeNull();
-			} else {
-				expect(component.source).toMatch(/^packages\/.+\.svelte$/);
-			}
+			expect(component.source).toMatch(/^packages\/.+\.svelte$/);
 			expect(component.related.href).toBe('/ui');
 		}
 	});
