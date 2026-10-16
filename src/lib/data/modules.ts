@@ -190,11 +190,12 @@ export const foundationModuleClusters: ApplicationModuleCluster[] = [
 		],
 		foundation: [
 			'Tenant-scoped models generate consistent data interfaces and permission names. Commerce operations can post balanced entries to smrt-ledgers.',
-			'The packages use integer minor units for money and explicit services for guarded stock and payment state changes.'
+			'The packages use integer minor units for money and explicit services for guarded stock and payment state changes.',
+			'Tenant tax codes resolve on each invoice line under exclusive, inclusive, or no-tax pricing. An issued invoice keeps its net amounts and stored tax. It posts to the revenue and tax accounts it recorded and feeds a tax summary report.'
 		],
 		body: 'These modules remove the base schemas and lifecycle rules for catalog, stock, production, billing, accounting, entitlement, and fulfillment work.',
 		warning: [
-			'Applications still supply payment rails, tax calculation, provider settlement, and deployment-specific accounting policy.',
+			'Applications still supply payment rails, jurisdiction rules and rates for their tax codes, provider settlement, and deployment-specific accounting policy.',
 			'smrt-subscriptions has UI components but no registered Playground module on this site.',
 			'smrt-expenses and smrt-human-resources are new and ship closed generated surfaces: applications expose them through their own permission-checked routes.'
 		],

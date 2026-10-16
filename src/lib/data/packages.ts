@@ -1595,11 +1595,12 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Business & operations',
 		'smrt-commerce',
-		'Customers, vendors, contracts, invoices, payments, payment rails, and fulfillment, with four recipes.',
+		'Customers, vendors, contracts, invoices, credit notes, payments, payment rails, tax codes, and fulfillment, with four recipes.',
 		{
 			highlights: [
 				'Four recipes: customers, vendors, sales, and purchases',
-				'Decimal invoice quantities over exact integer minor-unit arithmetic',
+				'Tenant tax codes with exclusive, inclusive, or no-tax line pricing over exact integer minor units',
+				'Issued invoices keep their net amounts and stored tax; credit notes and the tax summary read those facts',
 				'One issuing provider and any number of payment rails'
 			],
 			components: [
@@ -1612,7 +1613,8 @@ export const packages: SmrtPackage[] = [
 				'CustomerSelect',
 				'VendorSelect',
 				'QuoteEditor',
-				'PurchaseOrderEditor'
+				'PurchaseOrderEditor',
+				'InvoiceRecordScreen'
 			],
 			componentImport: '@happyvertical/smrt-commerce/svelte',
 			details: [
@@ -1627,6 +1629,26 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Sales and purchase contracts have separate parties',
 					body: 'The base Contract holds no party. Abstract SalesContract owns customerId and covers Order, Estimate, Agreement, Lease, LicenseSale, WholesaleOrder, and Cart. Abstract PurchaseContract owns vendorId and covers PurchaseOrder and ProductionOrder. A sales leaf refuses vendorId and a purchase leaf refuses customerId. The contractId on Invoice, Payment, and Fulfillment points at SalesContract. Run preflightCommercePartyLinks on existing data before an upgrade.'
+				},
+				{
+					title: 'Tax codes and components',
+					body: 'A TaxCode lists one or more TaxComponent rows. Each has an exact percent and an optional liability account; a GST plus PST code has two. A used component never changes its percent: archive it and add a replacement. Every tenant starts with exempt, zero-rated, and out-of-scope codes. TaxSettings holds the tenant defaults, registrations, line amount type, and rounding scope. A line resolves its code from its own override, then a customer exemption, the product, the customer, and the tenant default. applyTaxCodeExamplePack imports example codes for Canada, the UK, Australia, and New Zealand; they are examples to review, not jurisdiction rules.'
+				},
+				{
+					title: 'Exclusive, inclusive, or no-tax pricing',
+					body: 'calculateMoneyDocument prices each line as quantity times unit price less one discount. An exclusive line amount is the net before tax. An inclusive amount is the gross the customer sees, and the net is derived by removing tax. A none line carries no tax and needs an out-of-scope code. Rounding is per line or per document, and the chosen scope is stored with the invoice. previewInvoiceMoney shows a proposed draft without writing it.'
+				},
+				{
+					title: 'Issued invoices keep net amounts and stored tax',
+					body: 'Saving a draft line recalculates the whole invoice once and writes the header totals, each line, and its DocumentTax rows together. InvoiceLineItem.amount is the net line amount and taxAmount is stored beside it. DocumentTax is read-only and records the code, component, percent, liability account, taxable base, and tax for each document. When an invoice leaves draft its money is frozen, and later edits to amounts or lines are refused. getInvoiceMoneyFacts reads the stored facts without recalculating them, and InvoiceRecordScreen shows them on a record page.'
+				},
+				{
+					title: 'Credit notes',
+					body: 'A credit note is an Invoice with kind credit_note that names the invoice it credits. It credits a quantity or an amount of a source line, never more than the line, or adds a goodwill line with its own tax code. Tax comes from the source invoice as issued, not from current settings. An issued credit note reduces the source balance. A refund is a Payment of kind refund, allocated only to a credit note.'
+				},
+				{
+					title: 'Posting by account and the tax summary',
+					body: 'Revenue recognition posts each line net to the revenue account stored on the line. Each tax component posts to its own liability account. A credit note posts the reverse. cancelWithRevenueReversal cancels a posted invoice by posting an exact reversing journal. TaxSummaryReport is a materialized report of taxable amounts, tax, and recoverable tax by period, currency, kind of tax code, and component. Expense and ledger figures sit beside them, and each figure drills down to its documents. createTaxSummaryMaterializedReportHost registers it with an application, and MaterializedReportTable from smrt-reports renders it.'
 				},
 				{
 					title: 'Invoices, payments, and payouts retain evidence',
@@ -1667,6 +1689,14 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Journal entries must balance',
 					body: 'Accounts have debit- or credit-normal types. A Journal moves from draft to posted or voided, and each JournalEntry is debit-XOR-credit. BALANCE_EPSILON is 0.01. This catches arithmetic imbalance, but a mixed-unit journal can still balance numerically without being semantically valid; keep integer-minor-unit commerce values consistent.'
+				},
+				{
+					title: 'Commerce posts to the accounts each invoice recorded',
+					body: 'smrt-commerce posts each invoice line net to the revenue account stored on that line, and each tax component to its own liability account. Integer minor units balance exactly. A canceled invoice gets a reversing journal; the original stays posted.'
+				},
+				{
+					title: 'Posted movements for reporting',
+					body: 'JournalEntryCollection.listPostedMovements returns the posted debits and credits for a tenant, a set of accounts, a date range, and a currency, leaving out drafts and voids. The commerce tax summary uses it to set the movement on each tax liability account beside the tax it expects.'
 				},
 				{
 					title: 'Summaries keep sensitive prompt variables out',
@@ -2382,7 +2412,11 @@ export const packages: SmrtPackage[] = [
 			details: [
 				{
 					title: 'Money and currencies',
-					body: 'Amounts are integer minor units with an ISO 4217 currency. Totals are per currency and never summed across currencies. An expense matched to a commitment must share its currency. Optional financial facts reconcile a subtotal and signed tax components to the amount and yield a cost basis; no tax law is inferred.'
+					body: 'Amounts are integer minor units with an ISO 4217 currency. Totals are per currency and never summed across currencies. An expense matched to a commitment must share its currency. Optional financial facts reconcile a subtotal and signed tax components to the amount and yield a cost basis. Recoverable tax is stated explicitly, and no tax law is inferred. A refund is a negative expense that names the expense it refunds.'
+				},
+				{
+					title: 'Expenses in the commerce tax summary',
+					body: 'The smrt-commerce tax summary reads reviewed expenses as recoverable tax. Each supplier tax component needs a tenant-approved mapping to one of its tax codes. An unmapped component shows as a warning, never as a zero. An expense drawn against a purchase order that already records its tax is flagged rather than counted twice.'
 				},
 				{
 					title: 'What belongs elsewhere',
