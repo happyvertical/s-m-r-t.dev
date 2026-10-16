@@ -1721,7 +1721,11 @@ export const packages: SmrtPackage[] = [
 			details: [
 				{
 					title: 'Journal entries must balance',
-					body: 'Accounts have debit- or credit-normal types. A Journal moves from draft to posted or voided, and each JournalEntry is debit-XOR-credit. BALANCE_EPSILON is 0.01. This catches arithmetic imbalance, but a mixed-unit journal can still balance numerically without being semantically valid; keep integer-minor-unit commerce values consistent.'
+					body: 'Accounts have debit- or credit-normal types. A Journal moves from draft to posted or voided, and each JournalEntry is debit-XOR-credit. In the default tolerant mode BALANCE_EPSILON is 0.01. This catches arithmetic imbalance, but a mixed-unit journal can still balance numerically without being semantically valid; keep integer-minor-unit commerce values consistent.'
+				},
+				{
+					title: 'Named ledgers with exact balancing',
+					body: 'A named Ledger fixes its owner, currency, and balance mode when it is created. In exact-integer mode, amounts must be safe integer minor units and debits must equal credits exactly. Accounts assigned to a ledger keep their scope, owner, and type, and cannot be deleted. Posted journals and lines in a named ledger are immutable, so they cannot be voided or deleted; correct them with compensating postings. postReceivable, postPayable, and postSettlement need an exact ledger. Each claims one key per tenant and ledger in a transaction and checks a payload digest when the same key is replayed.'
 				},
 				{
 					title: 'Commerce posts to the accounts each invoice recorded',
