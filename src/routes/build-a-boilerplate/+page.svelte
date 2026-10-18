@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import SEO from '$lib/components/SEO.svelte';
 
-	// This page is called Build a boilerplate; the package keeps its name.
+	// This page is called build-a-boilerplate; the package keeps its name.
 	// `Planner` is the complete planner: the framework's own cookbook-driven
 	// `AppShell` built from the plan, with a navigation section per recipe, a
 	// record workspace (list, create and edit form over sample rows) per model
@@ -53,27 +53,27 @@
 </script>
 
 <SEO
-	title="Build a boilerplate"
-	description="Add recipes or packages and an app mock-up assembles around them: navigation, list views, forms and help per model. Export the cookbook it produces and smrt cookbook apply creates a project from it."
+	title="build-a-boilerplate"
+	description="Add recipes or packages and an app mock-up assembles around them: navigation, list views, forms and help per model. Its Export tab gives you two ways out: download the cookbook and run smrt cookbook apply on the file to create a project, or copy a prompt that has your coding agent build the app from it."
 	url="https://s-m-r-t.dev/build-a-boilerplate"
 />
 
 <div class="planner-page">
-	<h1 class="planner-page__title">Build a boilerplate</h1>
-	<section class="planner-host" aria-label="Build a boilerplate">
+	<h1 class="planner-page__title">build-a-boilerplate</h1>
+	<section class="planner-host" aria-label="build-a-boilerplate">
 		{#if Planner}
 			<Planner
 				basePath="/build-a-boilerplate"
 				persistence="self"
 				themeControls
-				defaultTitle="Build a boilerplate"
+				defaultTitle="build-a-boilerplate"
 				{inference}
 				{backLink}
 			/>
 		{:else if loadError}
-			<p class="planner-status" role="alert">Build a boilerplate could not load: {loadError}</p>
+			<p class="planner-status" role="alert">build-a-boilerplate could not load: {loadError}</p>
 		{:else}
-			<p class="planner-status" role="status">Loading Build a boilerplate…</p>
+			<p class="planner-status" role="status">Loading build-a-boilerplate…</p>
 		{/if}
 	</section>
 </div>

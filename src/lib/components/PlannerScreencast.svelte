@@ -4,7 +4,7 @@
 	import mp4Src from '$lib/assets/planner-home.mp4';
 
 	/**
-	 * Silent, looping recording of Build a boilerplate. There is no static
+	 * Silent, looping recording of build-a-boilerplate. There is no static
 	 * `autoplay` attribute on purpose: it would start downloading and playing
 	 * before the video is on screen and ignore `prefers-reduced-motion`. Playback
 	 * is driven from an IntersectionObserver instead — it plays while at least a
@@ -94,7 +94,7 @@
 			poster={posterSrc}
 			width="1280"
 			height="720"
-			aria-label="Screen recording of Build a boilerplate"
+			aria-label="Screen recording of build-a-boilerplate"
 		>
 			<source src={webmSrc} type="video/webm" />
 			<source src={mp4Src} type="video/mp4" />
@@ -109,7 +109,7 @@
 		</button>
 	</div>
 	<figcaption>
-		Build a boilerplate, recorded on this site: choosing the Mechanic cookbook, opening an invoice
+		build-a-boilerplate, recorded on this site: choosing the Mechanic cookbook, opening an invoice
 		and a sales-by-month report in its preview, then the Export tab's prompt for a coding agent.
 		Silent, about 20 seconds, looping.
 	</figcaption>

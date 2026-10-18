@@ -20,7 +20,7 @@ describe('primary navigation', () => {
 			'Modules',
 			'Tooling',
 			'Playground',
-			'Build a boilerplate',
+			'build-a-boilerplate',
 			'Reference'
 		]);
 		expect(primaryNavigation.some((item) => item.label === 'Guides')).toBe(false);
@@ -45,7 +45,7 @@ describe('primary navigation', () => {
 		expect(active('/reference/packages/smrt-ui').map((item) => item.label)).toEqual(['Reference']);
 		expect(active('/playground').map((item) => item.label)).toEqual(['Playground']);
 		expect(active('/build-a-boilerplate').map((item) => item.label)).toEqual([
-			'Build a boilerplate'
+			'build-a-boilerplate'
 		]);
 		expect(active('/guides/testing-your-app')).toEqual([]);
 	});

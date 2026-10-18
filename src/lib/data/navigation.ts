@@ -370,7 +370,7 @@ export const documentationSections: DocumentationSection[] = [
 					{ label: 'Foundation components', href: '/reference/packages/smrt-ui?tab=components' },
 					...uiCapabilityItems,
 					{ label: 'Working playground', href: '/playground' },
-					{ label: 'Build a boilerplate', href: '/build-a-boilerplate' }
+					{ label: 'build-a-boilerplate', href: '/build-a-boilerplate' }
 				]
 			},
 			{
@@ -396,7 +396,7 @@ export const documentationSections: DocumentationSection[] = [
 				items: [
 					{ label: 'Package Reference', href: '/reference/packages' },
 					{ label: 'Working playground', href: '/playground' },
-					{ label: 'Build a boilerplate', href: '/build-a-boilerplate' }
+					{ label: 'build-a-boilerplate', href: '/build-a-boilerplate' }
 				]
 			},
 			{
@@ -480,7 +480,7 @@ export const primaryNavigation: PrimaryNavigationItem[] = [
 	{ label: 'Modules', href: '/modules', section: 'modules' },
 	{ label: 'Tooling', href: '/tooling', section: 'tooling' },
 	{ label: 'Playground', href: '/playground' },
-	{ label: 'Build a boilerplate', href: '/build-a-boilerplate' },
+	{ label: 'build-a-boilerplate', href: '/build-a-boilerplate' },
 	{ label: 'Reference', href: '/reference', section: 'reference' }
 ];
 
@@ -618,7 +618,7 @@ export const searchItems: NavigationItem[] = [
 	// track and the docs panel) and registered for the palette here, like the
 	// package entries below.
 	{
-		label: 'Build a boilerplate',
+		label: 'build-a-boilerplate',
 		href: '/build-a-boilerplate',
 		description:
 			'Add recipes or packages and an app mock-up assembles around them; export the cookbook it produces to start a project.',
