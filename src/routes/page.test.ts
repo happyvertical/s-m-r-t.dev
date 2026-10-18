@@ -27,6 +27,33 @@ describe('documentation home page', () => {
 		}
 	});
 
+	it('shows the Build a boilerplate recording beside a primary link to the planner', () => {
+		const { container } = render(Page);
+		const intro = container.querySelector('.hero-intro');
+		const video = intro?.querySelector<HTMLVideoElement>('figure.planner-screencast video');
+
+		expect(video).toBeTruthy();
+		expect(video!.muted).toBe(true);
+		expect(video!.loop).toBe(true);
+		expect(video!.hasAttribute('playsinline')).toBe(true);
+		expect(video!.getAttribute('preload')).toBe('none');
+		// Playback is observer-driven so it waits for the viewport and honours
+		// prefers-reduced-motion; a static autoplay attribute would do neither.
+		expect(video!.hasAttribute('autoplay')).toBe(false);
+		expect(video!.getAttribute('poster')).toMatch(/planner-poster/);
+		expect(video!.getAttribute('width')).toBe('1280');
+		expect(video!.getAttribute('height')).toBe('720');
+		expect(
+			[...video!.querySelectorAll('source')].map((source) => source.getAttribute('type'))
+		).toEqual(['video/webm', 'video/mp4']);
+		expect(intro?.querySelector('figcaption')?.textContent).toContain('Build a boilerplate');
+		expect(intro?.querySelector('.playback')).toBeTruthy();
+
+		const cta = intro?.querySelector('a.primary-link--hero');
+		expect(cta?.getAttribute('href')).toBe('/build-a-boilerplate');
+		expect(cta?.textContent).toContain('Build a boilerplate');
+	});
+
 	it('renders the five plain layer names in the hero lede and the mini scope map', () => {
 		const { container } = render(Page);
 

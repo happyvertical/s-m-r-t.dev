@@ -1,6 +1,7 @@
 <script lang="ts">
 	import SEO from '$lib/components/SEO.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import PlannerScreencast from '$lib/components/PlannerScreencast.svelte';
 	import AgentAwareFormDemo from '$lib/ui-showcase/AgentAwareFormDemo.svelte';
 	import UIShowcaseDataTable from '$lib/ui-showcase/UIShowcaseDataTable.svelte';
 	import {
@@ -169,21 +170,29 @@
 
 <article class="homepage">
 	<header class="hero">
-		<div class="hero-copy">
+		<div class="hero-intro">
 			<h1 class="visually-hidden">The s-m-r-t application stack</h1>
 			<p class="lede">
 				s-m-r-t is a framework and library for creating software that blurs the line between
 				application and agent. It is better demonstrated than explained: Build a boilerplate is a
 				live demo, and the cookbook it produces can jumpstart your next project.
 			</p>
+			<div class="hero-shot">
+				<PlannerScreencast />
+			</div>
 			<div class="hero-actions">
-				<a class="primary-link" href="/build-a-boilerplate">Build a boilerplate <span>→</span></a>
+				<a class="primary-link primary-link--hero" href="/build-a-boilerplate"
+					>Build a boilerplate <span aria-hidden="true">→</span></a
+				>
 				<a class="text-link" href="#what-you-get">See how the interfaces connect <span>↓</span></a>
 			</div>
 			<p class="planner-note">
 				Its Export tab downloads a cookbook file;
 				<code>smrt cookbook apply &lt;file&gt;</code> creates a project from it.
 			</p>
+		</div>
+
+		<div class="hero-copy">
 			<ul class="layer-lede-list">
 				{#each appLayers as layer (layer.id)}
 					<li>
@@ -568,11 +577,41 @@
 		border: 0;
 	}
 
-	.hero-copy .lede {
+	.hero-intro {
+		grid-column: 1 / -1;
+		display: grid;
+		grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+		grid-template-areas:
+			'lede shot'
+			'actions shot'
+			'note shot';
+		grid-template-rows: auto auto 1fr;
+		gap: 0 clamp(2rem, 5vw, 3.5rem);
+		align-items: start;
+	}
+
+	.hero-intro .lede {
+		grid-area: lede;
+	}
+
+	.hero-shot {
+		grid-area: shot;
+		min-width: 0;
+	}
+
+	.hero-intro .hero-actions {
+		grid-area: actions;
+	}
+
+	.hero-intro .planner-note {
+		grid-area: note;
+	}
+
+	.hero-intro .lede {
 		margin-top: 0;
 		max-width: 34em;
 		color: var(--site-ink);
-		font-size: clamp(1.45rem, 2.4vw, 1.8rem);
+		font-size: clamp(1.35rem, 2.1vw, 1.6rem);
 		font-weight: 400;
 		letter-spacing: -0.015em;
 		line-height: 1.4;
@@ -607,6 +646,18 @@
 
 	.primary-link span {
 		color: inherit;
+	}
+
+	.primary-link--hero {
+		min-height: 3.25rem;
+		padding: 0 1.5rem;
+		font-size: 1rem;
+		box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+	}
+
+	.primary-link--hero:hover,
+	.primary-link--hero:focus-visible {
+		filter: brightness(1.08);
 	}
 
 	.planner-note {
@@ -701,6 +752,8 @@
 	}
 
 	.mini-scope-map {
+		align-self: start;
+		margin-top: 1.4rem;
 		display: grid;
 		gap: 0;
 		list-style: none;
@@ -1323,6 +1376,20 @@
 			gap: 2.5rem;
 		}
 
+		.hero-intro {
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-areas:
+				'lede'
+				'shot'
+				'actions'
+				'note';
+			grid-template-rows: auto;
+		}
+
+		.hero-shot {
+			margin-top: 1.4rem;
+		}
+
 		.mini-scope-map {
 			max-width: 42rem;
 		}
@@ -1334,7 +1401,7 @@
 
 	@media (max-width: 42rem) {
 		.homepage {
-			width: min(100% - 1.75rem, 70rem);
+			width: min(100% - 2rem, 70rem);
 		}
 
 		.section-heading {
