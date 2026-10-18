@@ -62,7 +62,7 @@ export const homepageFeatures: HomepageFeature[] = [
 		title: 'An application can carry its own assistant',
 		body: [
 			'The assistant is a dock an application adds to its shell, with one recipe or by mounting it. It can read the records on the open page. It acts only as the signed-in person, within what the application allows; it has no permissions of its own. When it needs a decision, it asks with a short form whose options come from the application, not the model.',
-			'It can run on a small model inside the browser, so nothing leaves the device; build-a-boilerplate works that way on this site.'
+			'The model can be a small one running inside the browser, with no key and no model server; build-a-boilerplate works that way on this site.'
 		],
 		links: [
 			{ label: 'Admin shell', href: '/capabilities/application-shell' },
