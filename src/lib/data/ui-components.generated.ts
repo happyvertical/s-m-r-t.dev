@@ -2849,6 +2849,65 @@ export const uiComponents: UiComponentReference[] = [
 		source: 'packages/chat/src/svelte/components/assistant/AssistantDock.svelte'
 	},
 	{
+		slug: 'assistant-question-form',
+		name: 'AssistantQuestionForm',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'AssistantQuestionForm is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'question',
+				code: 'AssistantQuestion',
+				status: true,
+				description: 'The structured question to ask: its prompt, fields and options.'
+			},
+			{
+				name: 'answered',
+				code: 'AssistantQuestionAnswer | null',
+				status: false,
+				description: 'The answer, when given (from the question itself or the host).'
+			},
+			{
+				name: 'onsubmit',
+				code: '(values: AssistantQuestionAnswer) => void | Promise<void>',
+				status: true,
+				description: 'Called once with the chosen values; the host continues the turn.'
+			},
+			{
+				name: 'autofocus',
+				code: 'boolean',
+				status: false,
+				description: 'Move focus into the form when it appears (the newest message).'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Lock the controls (a turn is in flight elsewhere).'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsubmit',
+				code: '(values: AssistantQuestionAnswer) => void | Promise<void>',
+				status: true,
+				description: 'Called once with the chosen values; the host continues the turn.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/chat/src/svelte/components/assistant/AssistantQuestionForm.svelte'
+	},
+	{
 		slug: 'assistant-thread-list',
 		name: 'AssistantThreadList',
 		family: 'smrt-chat-svelte',
@@ -14853,6 +14912,20 @@ export const uiComponents: UiComponentReference[] = [
 				description: ''
 			},
 			{
+				name: 'outcome',
+				code: 'ReportConfirmationOutcome | null',
+				status: false,
+				description:
+					'An earlier answer (from the transcript): the card shows its outcome line and offers no buttons, so a reloaded or re-rendered card cannot approve twice.'
+			},
+			{
+				name: 'fields',
+				code: 'readonly ReportFieldInfo[]',
+				status: false,
+				description:
+					'The source\'s field labels and formats (its descriptor\'s `fields`), so groupings and filters read "Issue date", "Total amount" and money, not model field names. Omitted, names are humanized.'
+			},
+			{
 				name: 'locale',
 				code: 'string',
 				status: false,
@@ -14912,6 +14985,30 @@ export const uiComponents: UiComponentReference[] = [
 				description: ''
 			},
 			{
+				name: 'sources',
+				code: 'readonly ReportSourceInfo[]',
+				status: false,
+				description: 'The report sources by label and fields (`reports.runtime.sources`).'
+			},
+			{
+				name: 'authorLabel',
+				code: '(userId: string) => string | undefined',
+				status: false,
+				description: 'Host-owned identity projection ("You"); others stay unnamed.'
+			},
+			{
+				name: 'onreport',
+				code: '(report: SavedRuntimeReport) => void',
+				status: false,
+				description: 'Called with the report once it loads (a host titles its page with it).'
+			},
+			{
+				name: 'onedit',
+				code: '(report: SavedRuntimeReport) => void',
+				status: false,
+				description: "Replace Edit asking the page's assistant."
+			},
+			{
 				name: 'locale',
 				code: 'string',
 				status: false,
@@ -14926,7 +15023,20 @@ export const uiComponents: UiComponentReference[] = [
 		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onreport',
+				code: '(report: SavedRuntimeReport) => void',
+				status: false,
+				description: 'Called with the report once it loads (a host titles its page with it).'
+			},
+			{
+				name: 'onedit',
+				code: '(report: SavedRuntimeReport) => void',
+				status: false,
+				description: "Replace Edit asking the page's assistant."
+			}
+		],
 		components: [],
 		demo: null,
 		related: {
@@ -14970,6 +15080,12 @@ export const uiComponents: UiComponentReference[] = [
 				description: ''
 			},
 			{
+				name: 'sources',
+				code: 'readonly ReportSourceInfo[]',
+				status: false,
+				description: 'The report sources by label and fields, for measure and grouping names.'
+			},
+			{
 				name: 'onchange',
 				code: '(value: { reportId: string; measure: string; dimension: string; }) => void',
 				status: true,
@@ -15009,6 +15125,24 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'RuntimeReportResult',
 				status: true,
 				description: ''
+			},
+			{
+				name: 'variant',
+				code: "'compact' | 'full'",
+				status: false,
+				description: "`compact` (default) for a preview card, `full` for a report's page."
+			},
+			{
+				name: 'spec',
+				code: 'RuntimeReportSpec',
+				status: false,
+				description: "The report's spec, so figures know which measures add up."
+			},
+			{
+				name: 'view',
+				code: "'chart' | 'table'",
+				status: false,
+				description: "Chart or table, bindable so the page's actions can follow it."
 			},
 			{
 				name: 'locale',
@@ -15308,6 +15442,83 @@ export const uiComponents: UiComponentReference[] = [
 		source: 'packages/reports/src/svelte/RuntimeReportWidgetOptions.svelte'
 	},
 	{
+		slug: 'saved-report-card',
+		name: 'SavedReportCard',
+		family: 'smrt-reports-svelte',
+		category: 'Reports · Components',
+		importPath: '@happyvertical/smrt-reports/svelte',
+		summary:
+			"One saved report as a card: its title (the whole card opens it), a line saying what it covers, a headline figure from its latest run with a sparkline over time, and when it was saved and run. The same card is the Saved reports page's and the Reports section page's.",
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'report',
+				code: 'SavedRuntimeReport',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'href',
+				code: 'string',
+				status: true,
+				description: "The report's page."
+			},
+			{
+				name: 'result',
+				code: 'RuntimeReportResult | null',
+				status: false,
+				description: 'Its latest run; `undefined` while it runs, `null` when it could not run.'
+			},
+			{
+				name: 'source',
+				code: 'ReportSourceInfo',
+				status: false,
+				description: "The report's source by label and fields, for its description line."
+			},
+			{
+				name: 'actions',
+				code: 'MenuItem[]',
+				status: false,
+				description: 'The secondary actions (Archive, Restore) of its "more" menu.'
+			},
+			{
+				name: 'author',
+				code: 'string',
+				status: false,
+				description: 'Who saved it, as the host names them ("You").'
+			},
+			{
+				name: 'headingLevel',
+				code: '2 | 3',
+				status: false,
+				description: "Heading level of the title, under the surrounding page's heading."
+			},
+			{
+				name: 'locale',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'currency',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/reports/src/svelte/SavedReportCard.svelte'
+	},
+	{
 		slug: 'saved-reports',
 		name: 'SavedReports',
 		family: 'smrt-reports-svelte',
@@ -15334,6 +15545,131 @@ export const uiComponents: UiComponentReference[] = [
 				code: '(userId: string) => string | undefined',
 				status: false,
 				description: 'Host-owned identity projection; report transport never expands users.'
+			},
+			{
+				name: 'sources',
+				code: 'readonly ReportSourceInfo[]',
+				status: false,
+				description: 'The report sources by label and fields (`reports.runtime.sources`).'
+			},
+			{
+				name: 'variant',
+				code: "'page' | 'section'",
+				status: false,
+				description: "`page` (default) or `section`, the Reports section page's widget."
+			},
+			{
+				name: 'limit',
+				code: 'number',
+				status: false,
+				description: 'Most cards shown (and run); the section shows its first few.'
+			},
+			{
+				name: 'listHref',
+				code: 'string',
+				status: false,
+				description: 'The Saved reports page, for the section\'s "View all".'
+			},
+			{
+				name: 'onnewreport',
+				code: '() => void',
+				status: false,
+				description: 'Replace "New report" asking the page\'s assistant.'
+			},
+			{
+				name: 'locale',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'currency',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onnewreport',
+				code: '() => void',
+				status: false,
+				description: 'Replace "New report" asking the page\'s assistant.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/ui'
+		},
+		source: 'packages/reports/src/svelte/SavedReports.svelte'
+	},
+	{
+		slug: 'saved-reports-widget',
+		name: 'SavedReportsWidget',
+		family: 'smrt-reports-svelte',
+		category: 'Reports · Components',
+		importPath: '@happyvertical/smrt-reports/svelte',
+		summary: 'SavedReportsWidget is part of the reports · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'options',
+				code: 'Record<string, string | number | boolean | null>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'title',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'locale',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'client',
+				code: 'RuntimeReportsClient',
+				status: false,
+				description: "A host-owned transport; omitted, the app's shared browser client."
+			},
+			{
+				name: 'reportHref',
+				code: '(id: string) => string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'listHref',
+				code: 'string',
+				status: false,
+				description: 'The Saved reports page ("View all"); default `/reports`.'
+			},
+			{
+				name: 'sources',
+				code: 'readonly ReportSourceInfo[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'authorLabel',
+				code: '(userId: string) => string | undefined',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'currency',
+				code: 'string',
+				status: false,
+				description: ''
 			}
 		],
 		sources: [],
@@ -15345,7 +15681,7 @@ export const uiComponents: UiComponentReference[] = [
 			label: 'UI showcase',
 			href: '/ui'
 		},
-		source: 'packages/reports/src/svelte/SavedReports.svelte'
+		source: 'packages/reports/src/svelte/SavedReportsWidget.svelte'
 	},
 	{
 		slug: 'app-shell',
@@ -22404,6 +22740,34 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'string',
 				status: false,
 				description: 'Locale used to format displayed numeric values.'
+			},
+			{
+				name: 'size',
+				code: "'compact' | 'regular' | 'tall'",
+				status: false,
+				description:
+					"How much room the chart takes. `compact` is a sparkline for a card (a line with no axis, labels or readout); `tall` gives a page's main chart room. Default `regular`."
+			},
+			{
+				name: 'valueAxis',
+				code: 'boolean',
+				status: false,
+				description:
+					'Line: label the value axis (top, middle and bottom values, short form) with light gridlines. Default on for `tall`.'
+			},
+			{
+				name: 'explore',
+				code: 'boolean',
+				status: false,
+				description:
+					'Line: let the pointer and the arrow keys read each value in a tooltip (a slider whose value text is the point). Default on for `tall`.'
+			},
+			{
+				name: 'readout',
+				code: 'boolean',
+				status: false,
+				description:
+					'Line: the peak and latest values under the chart. Default on; a page that shows its own headline figures turns it off.'
 			}
 		],
 		sources: [],
@@ -31124,10 +31488,10 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2817,
-	totalProps: 2978,
-	authoredSummaries: 152,
-	totalComponents: 404
+	describedProps: 2849,
+	totalProps: 3022,
+	authoredSummaries: 153,
+	totalComponents: 407
 };
 
 export const uiComponentGroups = [
