@@ -109,8 +109,8 @@
 		</button>
 	</div>
 	<figcaption>
-		build-a-boilerplate, recorded on this site. Twenty seconds, silent, looping: choosing the
-		Mechanic cookbook, opening an invoice and a sales-by-month report, then the Export tab.
+		build-a-boilerplate, recorded on this site: the Mechanic cookbook, an invoice, a sales-by-month
+		report, then the Export tab. Twenty seconds, silent, looping.
 	</figcaption>
 </figure>
 
@@ -148,7 +148,7 @@
 		border-radius: var(--site-radius-md);
 		background: var(--site-surface);
 		color: var(--site-ink);
-		font: 700 0.72rem var(--site-font-mono);
+		font: 700 0.78rem var(--site-font-mono);
 		cursor: pointer;
 		opacity: 0.92;
 	}
@@ -162,7 +162,7 @@
 	figcaption {
 		margin-top: 0.7rem;
 		color: var(--site-muted);
-		font-size: 0.8rem;
+		font-size: 0.875rem;
 		line-height: 1.55;
 		text-wrap: pretty;
 	}

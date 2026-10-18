@@ -132,6 +132,9 @@ Then one line below.
 - smrt#4054: smrt-core default-imports CommonJS `pluralize`, which fails when
   served unbundled in dev; `vite.config.ts` `optimizeDeps.include` prebundles
   it. Tracked here in #310.
+- smrt#2071: the `smrt` preset's light primary / on-primary pair is 3.6:1,
+  short of AA; `variables.css` carries `--site-accent-ink` and
+  `--site-on-accent` until it passes. Tracked here in #332.
 
 ## Agent lifecycle posture
 

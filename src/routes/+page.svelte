@@ -75,24 +75,21 @@
 				<PlannerScreencast />
 			</div>
 			<p class="outcome-line">
-				You leave with a cookbook file, or a prompt that has a coding agent build from it.
-				<code>smrt cookbook apply</code> turns the file into a project: an app with an admin shell, an
-				assistant inside it, tools for browser and MCP agents, and a local database. Running it still
-				needs a terminal or a coding agent.
+				You leave with a cookbook file — readable JSON — or a prompt for a coding agent.
+				<code>smrt cookbook apply</code> turns the file into a project: an admin shell, an assistant inside
+				it, tools for browser and MCP agents, and a local database. Running it needs a terminal or a coding
+				agent.
 			</p>
 		</div>
 
 		<div class="hero-copy">
-			<aside class="saadl-definition">
+			<!-- A div, not <aside>: inside <main> an aside is a nested complementary landmark (axe: landmark-complementary-is-top-level). -->
+			<div class="saadl-definition">
 				<p><strong>{saadlDefinition}</strong> Pronounced "saddle."</p>
-				<p>
-					In plain terms: people and software agents use the same application, through the same
-					doors, under the same rules.
-				</p>
 				<a class="text-link" href="/reference/saadl"
 					>What is a SAADL? <span aria-hidden="true">→</span></a
 				>
-			</aside>
+			</div>
 
 			<p class="scale-line">
 				<span class="mono">{SMRT_VERSION}</span> · <span class="mono">{packageCount}</span>
@@ -116,17 +113,12 @@
 
 	<section class="outcome-section" id="what-you-get" aria-labelledby="outcome-heading">
 		<div class="section-heading">
-			<div>
-				<p class="eyebrow">What you get</p>
-				<h2 id="outcome-heading">A working application, not a template</h2>
-			</div>
+			<h2 id="outcome-heading">A working application, not a template</h2>
 		</div>
 		<p class="section-copy">
 			The starting points cover common businesses: a bakery, a repair shop, a salon, a non-profit,
-			an agency. Each one is a list of recipes — Customers, Estimates, Invoicing, Bookkeeping — and
-			every recipe brings its screens, its rules and its sample data. Change the list and the
-			mock-up changes with it. The Export tab writes the plan to a file; the plan is JSON you can
-			read.
+			an agency. Each is a list of recipes — Customers, Estimates, Invoicing, Bookkeeping — with
+			their screens, rules and sample data. Change the list and the mock-up changes.
 		</p>
 	</section>
 
@@ -143,15 +135,11 @@
 
 	<section class="model-section" id="one-description" aria-labelledby="model-heading">
 		<div class="section-heading">
-			<div>
-				<p class="eyebrow">One description, every surface</p>
-				<h2 id="model-heading">Describe the record once</h2>
-			</div>
+			<h2 id="model-heading">Describe the record once</h2>
 			<p>
-				One class says what a record stores, which actions are available on the web and to agents,
-				and which fields are required, read-only or secret. Storage, forms, the API, the command
-				line, the agent tools and the permissions are generated from it. Change the description and
-				every surface changes with it.
+				One class says what a record stores, which actions the web and agents get, and which fields
+				are required, read-only or secret. Storage, forms, API, command line, agent tools and
+				permissions are generated from it; change the description and every surface follows.
 			</p>
 		</div>
 		<div class="model-grid">
@@ -174,14 +162,10 @@
 
 	<section class="scope-section" id="scope" aria-labelledby="scope-heading">
 		<div class="section-heading">
-			<div>
-				<p class="eyebrow">Scope · The package catalog</p>
-				<h2 id="scope-heading">Five layers, one release</h2>
-			</div>
+			<h2 id="scope-heading">Five layers, one release</h2>
 			<p>
-				This is what each layer contains, with a few examples from each. Every package releases
-				together, at the same version. Each example links to its package page; the count opens the
-				full catalog.
+				Every package releases together at one version. Each example opens its package page; the
+				count opens the catalog.
 			</p>
 		</div>
 
@@ -219,26 +203,25 @@
 
 		<p class="scope-reconciliation">
 			These five layers place {packageCount - unlayeredPackageCount} of the catalog's {packageCount}
-			packages. The rest is native mobile — source-only and unpublished — plus the command-line, testing,
-			and project-scaffold packages: see <a href="/tooling">Tooling</a>, the
-			<a href="/capabilities/mobile">Mobile capability page</a>, and the
+			packages. The rest — native mobile, source-only and unpublished, plus the command-line, testing
+			and scaffold packages — is under <a href="/tooling">Tooling</a>,
+			<a href="/capabilities/mobile">Mobile</a> and the
 			<a href="/reference/packages">full catalog</a>.
 		</p>
 	</section>
 
 	<p class="evidence-note">
 		Every claim on this page has a source. <a href="/reference/evidence"
-			>See the evidence, claim by claim →</a
+			>See the evidence, claim by claim <span aria-hidden="true">→</span></a
 		>
 	</p>
 
 	<section class="start-section" id="start-here" aria-labelledby="start-heading">
 		<div>
-			<p class="eyebrow">Start here</p>
 			<h2 id="start-heading">Three ways in</h2>
 			<p class="start-note">
-				Coding agents: every installed package ships instructions written for that exact version,
-				and a read-only development server answers questions about the project.
+				Coding agents: each installed package ships instructions for its exact version, and a
+				read-only development server answers questions about the project.
 				<a href="/tooling">Tooling <span aria-hidden="true">→</span></a>
 			</p>
 		</div>
@@ -274,9 +257,10 @@
 		min-width: 0;
 	}
 
+	/* The category H1: visible, small-caps mono, in accent ink (AA on the paper). */
 	.hero-intro h1 {
-		color: var(--site-accent-strong);
-		font: 700 0.78rem var(--site-font-mono);
+		color: var(--site-accent-ink);
+		font: 700 0.85rem var(--site-font-mono);
 		letter-spacing: 0.07em;
 		text-transform: uppercase;
 	}
@@ -317,8 +301,8 @@
 		padding: 0 1.1rem;
 		border-radius: var(--site-radius-md);
 		background: var(--site-accent-strong);
-		color: var(--smrt-color-on-primary, #ffffff);
-		font-size: 0.85rem;
+		color: var(--site-on-accent);
+		font-size: 0.9rem;
 		font-weight: 700;
 		text-decoration: none;
 	}
@@ -343,7 +327,7 @@
 		max-width: 44rem;
 		margin-top: 1rem;
 		color: var(--site-muted);
-		font-size: 0.92rem;
+		font-size: 0.9375rem;
 		line-height: 1.65;
 	}
 
@@ -363,12 +347,8 @@
 
 	.saadl-definition p {
 		color: var(--site-muted);
-		font-size: 0.86rem;
+		font-size: 0.9375rem;
 		line-height: 1.6;
-	}
-
-	.saadl-definition p + p {
-		margin-top: 0.6rem;
 	}
 
 	.saadl-definition strong {
@@ -379,12 +359,12 @@
 		max-width: 42rem;
 		margin-top: 1.4rem;
 		color: var(--site-muted);
-		font: 0.76rem var(--site-font-mono);
+		font: 0.8rem var(--site-font-mono);
 		letter-spacing: 0.01em;
 	}
 
 	.scale-line .mono {
-		color: var(--site-accent-strong);
+		color: var(--site-accent-ink);
 		font-weight: 700;
 	}
 
@@ -395,7 +375,7 @@
 		min-height: 2.75rem;
 		margin-top: 1.35rem;
 		color: var(--site-ink);
-		font-size: 0.8rem;
+		font-size: 0.875rem;
 		font-weight: 700;
 		text-underline-offset: 0.3rem;
 	}
@@ -439,19 +419,19 @@
 	}
 
 	.mini-index {
-		color: var(--site-accent-strong);
-		font: 700 0.68rem var(--site-font-mono);
+		color: var(--site-accent-ink);
+		font: 700 0.78rem var(--site-font-mono);
 	}
 
 	.mini-name {
 		flex: 1;
-		font-size: 0.86rem;
+		font-size: 0.9rem;
 		font-weight: 700;
 	}
 
 	.mini-count {
 		color: var(--site-muted);
-		font: 0.7rem var(--site-font-mono);
+		font: 0.78rem var(--site-font-mono);
 	}
 
 	section {
@@ -460,15 +440,7 @@
 		scroll-margin-top: 5.5rem;
 	}
 
-	.eyebrow {
-		color: var(--site-accent-strong);
-		font: 700 0.66rem var(--site-font-mono);
-		letter-spacing: 0.07em;
-		text-transform: uppercase;
-	}
-
 	h2 {
-		margin-top: 0.65rem;
 		font-size: clamp(1.9rem, 4.5vw, 3.4rem);
 		letter-spacing: -0.05em;
 		line-height: 1.05;
@@ -485,7 +457,7 @@
 	.section-heading > p {
 		max-width: 29rem;
 		color: var(--site-muted);
-		font-size: 0.84rem;
+		font-size: 0.9375rem;
 		line-height: 1.58;
 	}
 
@@ -508,8 +480,8 @@
 	}
 
 	.projection-label {
-		color: var(--site-accent-strong);
-		font: 700 0.66rem var(--site-font-mono);
+		color: var(--site-accent-ink);
+		font: 700 0.75rem var(--site-font-mono);
 		letter-spacing: 0.07em;
 		text-transform: uppercase;
 	}
@@ -532,14 +504,14 @@
 		min-height: 2.75rem;
 		padding: 0.5rem 0.25rem;
 		color: var(--site-ink);
-		font-size: 0.82rem;
+		font-size: 0.875rem;
 		font-weight: 700;
 		text-decoration: none;
 	}
 
 	.projection-list a:hover,
 	.projection-list a:focus-visible {
-		color: var(--site-accent-strong);
+		color: var(--site-accent-ink);
 	}
 
 	.projection-list b {
@@ -569,8 +541,8 @@
 	}
 
 	.layer-index {
-		color: var(--site-accent-strong);
-		font: 700 0.68rem var(--site-font-mono);
+		color: var(--site-accent-ink);
+		font: 700 0.78rem var(--site-font-mono);
 	}
 
 	.layer-band-head h3 {
@@ -581,7 +553,7 @@
 		grid-column: 2;
 		max-width: 42rem;
 		color: var(--site-muted);
-		font-size: 0.82rem;
+		font-size: 0.9375rem;
 		line-height: 1.55;
 	}
 
@@ -606,7 +578,7 @@
 		border: 1px solid var(--site-line-strong);
 		border-radius: 999px;
 		color: var(--site-muted);
-		font: 500 0.75rem/1.2 var(--site-font-sans);
+		font: 500 0.8rem/1.2 var(--site-font-sans);
 		text-decoration: none;
 	}
 
@@ -632,7 +604,7 @@
 		max-width: 46rem;
 		margin-top: 1.5rem;
 		color: var(--site-muted);
-		font-size: 0.78rem;
+		font-size: 0.9375rem;
 		line-height: 1.6;
 	}
 
@@ -643,7 +615,7 @@
 	.evidence-note {
 		max-width: 60ch;
 		color: var(--site-muted);
-		font-size: 0.92rem;
+		font-size: 0.9375rem;
 		line-height: 1.6;
 	}
 
@@ -666,7 +638,7 @@
 		max-width: 40rem;
 		margin-top: 1rem;
 		color: var(--site-muted);
-		font-size: 0.9rem;
+		font-size: 0.9375rem;
 		line-height: 1.65;
 	}
 
@@ -706,13 +678,13 @@
 
 	.start-section nav strong {
 		grid-column: 1;
-		font-size: 0.82rem;
+		font-size: 0.9rem;
 	}
 
 	.start-section nav span {
 		grid-column: 1;
 		color: var(--site-muted);
-		font-size: 0.74rem;
+		font-size: 0.8rem;
 		line-height: 1.5;
 	}
 
@@ -725,7 +697,7 @@
 
 	.start-section nav a.primary-link {
 		background: var(--site-accent-strong);
-		color: var(--smrt-color-on-primary, #fff);
+		color: var(--site-on-accent);
 	}
 
 	.start-section nav a.primary-link span,

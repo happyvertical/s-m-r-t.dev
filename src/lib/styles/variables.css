@@ -23,6 +23,19 @@
 	--site-accent: var(--smrt-color-primary, #e35d12);
 	--site-accent-strong: var(--smrt-color-primary, #e35d12);
 	--site-accent-soft: var(--smrt-color-primary-container, #ffe6d4);
+	/*
+	 * Accent as *text*, and text *on* the accent fill. The light-scheme primary
+	 * (#e35d12) is 3.1:1 on the paper and 3.6:1 under white — both short of
+	 * AA 4.5:1 for small text (upstream: happyvertical/smrt#2071, the smrt-ui
+	 * `smrt` preset; retire these two tokens per s-m-r-t.dev#332 once the pair
+	 * passes). Small accent-coloured text therefore uses the preset's own
+	 * on-primary-container (#7a2e00, 8.2:1 on paper), and text on an accent
+	 * fill uses the ink (5.0:1 on #e35d12). The dark scheme's primary
+	 * (#ff7a1a, 7.5:1) and on-primary (#1a0e02, 7.3:1) already pass, so dark
+	 * keeps the preset values below.
+	 */
+	--site-accent-ink: var(--smrt-color-on-primary-container, #7a2e00);
+	--site-on-accent: var(--site-ink);
 	--site-note: var(--smrt-color-primary, #e35d12);
 	--site-note-soft: var(--smrt-color-primary-container, #ffe6d4);
 	--site-warn: var(--smrt-color-warning, #b06a00);
@@ -37,6 +50,11 @@
 	--site-radius-lg: var(--smrt-radius-large, 20px);
 	--font-sans: var(--site-font-sans);
 	--font-mono: var(--site-font-mono);
+}
+
+html[data-color-scheme='dark'] {
+	--site-accent-ink: var(--site-accent-strong);
+	--site-on-accent: var(--smrt-color-on-primary, #1a0e02);
 }
 
 *:focus-visible {

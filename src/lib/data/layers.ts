@@ -145,7 +145,7 @@ export const appLayers: AppLayer[] = [
 		heroLine:
 			'one description of the application: what it stores, what it can do, and who is allowed to do it. Rules about who can see each record are enforced where the data lives.',
 		scopeCopy:
-			'One description of the application: what it stores, what it can do, who is allowed. Rules about who can see each record are enforced where the data lives. Runs out of the box with a local database.',
+			'One description of the application: what it stores, what it can do, who is allowed. Runs out of the box with a local database.',
 		packages: foundationsPackages,
 		chips: chipsFor(foundationsPackages)
 	},
@@ -181,7 +181,9 @@ export const appLayers: AppLayer[] = [
 		heroLine:
 			'an application comes with agents of its own: they follow written instructions, run on schedules, talk in chat, and learn from feedback. Outside agents can connect on the same terms, with their own identity and fixed lists of allowed actions — and an agent never has more power than the person it works for.',
 		scopeCopy:
-			'An application comes with agents of its own: they follow written instructions, run on schedules, talk in chat, and learn from feedback. An agent can propose changes to its own instructions — nothing changes until a person approves. Outside agents can connect on the same terms, with their own identity and fixed lists of allowed actions; an agent never has more power than the person it works for. Making tools visible to outside agents is a choice each application makes, never a default.',
+			// The propose-then-confirm and opt-in-doors claims this line used to
+			// repeat are stated once each in the homepage feature sections (#321 D).
+			'An application comes with agents of its own: they follow written instructions, run on schedules, talk in chat, and learn from feedback. Outside agents can connect on the same terms, with their own identity and fixed lists of allowed actions; an agent never has more power than the person it works for.',
 		packages: agentsIncludedPackages,
 		chips: chipsFor(agentsIncludedPackages)
 	},

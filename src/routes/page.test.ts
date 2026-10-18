@@ -178,14 +178,20 @@ describe('documentation home page', () => {
 	it('keeps the homepage anchors the navigation registers', () => {
 		const { container } = render(Page);
 
-		for (const [id, label] of [
-			['what-you-get', 'What you get'],
+		// Slice D dropped the section eyebrows ("What you get", "Start here"):
+		// each anchor is identified by its H2 alone, and the navigation labels
+		// for the first and last are shorter nav names, not page copy.
+		for (const [id, heading] of [
+			['what-you-get', 'A working application, not a template'],
 			['one-description', 'Describe the record once'],
 			['scope', 'Five layers, one release'],
 			['start-here', 'Three ways in']
 		]) {
-			expect(container.querySelector(`#${id}`)?.textContent).toContain(label);
+			expect(container.querySelector(`#${id} h2`)?.textContent).toBe(heading);
 		}
+		expect(
+			container.querySelectorAll('.homepage section:not(.evidence-section) .eyebrow')
+		).toHaveLength(0);
 		expect(container.querySelector('.hero-actions a[href="#what-you-get"]')).toBeTruthy();
 	});
 
@@ -266,9 +272,11 @@ describe('documentation home page', () => {
 			'SAADL — Software as Agentic Domain Logic: software whose domain logic exposes the same ' +
 				'operations to human users (UI, HTTP, CLI) and to software agents (callable tools).'
 		);
-		expect(text(container.querySelector('.saadl-definition'))).toContain(
-			'through the same doors, under the same rules'
-		);
+		// Slice D dropped the "In plain terms" gloss: the lede already says it in
+		// plain words, so the aside holds the definition, its pronunciation and
+		// the link only.
+		expect(text(container.querySelector('.saadl-definition'))).toContain('Pronounced "saddle."');
+		expect(text(container.querySelector('.saadl-definition'))).not.toContain('In plain terms');
 	});
 
 	it('offers three start paths and the coding-agent note', () => {
@@ -288,6 +296,44 @@ describe('documentation home page', () => {
 		expect(container.querySelector('#start-here .start-note a')?.getAttribute('href')).toBe(
 			'/tooling'
 		);
+	});
+
+	it('keeps one H1, an H2 per section and no skipped heading levels', () => {
+		const { container } = render(Page);
+		const levels = [...container.querySelectorAll('h1, h2, h3, h4, h5, h6')].map((heading) =>
+			Number(heading.tagName.slice(1))
+		);
+
+		expect(levels.filter((level) => level === 1)).toHaveLength(1);
+		expect(levels[0]).toBe(1);
+		levels.reduce((previous, level) => {
+			expect(level, `h${level} after h${previous}`).toBeLessThanOrEqual(previous + 1);
+			return level;
+		}, 0);
+		for (const section of container.querySelectorAll('.homepage section')) {
+			expect(
+				section.querySelector('h2'),
+				`${section.id || section.className} has an H2`
+			).not.toBeNull();
+		}
+	});
+
+	it('marks every decorative arrow aria-hidden and keeps the Preview chip beside its heading', () => {
+		const { container } = render(Page);
+
+		for (const link of container.querySelectorAll('.homepage a')) {
+			if (!/[→↓]/.test(link.textContent ?? '')) continue;
+			const arrow = [...link.querySelectorAll('[aria-hidden="true"]')].find((node) =>
+				/[→↓]/.test(node.textContent ?? '')
+			);
+			expect(
+				arrow,
+				`${link.textContent?.trim()} hides its arrow from the accessible name`
+			).toBeTruthy();
+		}
+		const preview = container.querySelector('#paperwork-in-proposals-out .status');
+		expect(preview?.textContent).toBe('Preview');
+		expect(container.querySelectorAll('.feature .eyebrow, .feature .sketch')).toHaveLength(0);
 	});
 
 	it('points at the evidence ledger instead of rendering the table (#321 slice E)', () => {
