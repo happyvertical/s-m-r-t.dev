@@ -2,6 +2,7 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import PlannerScreencast from '$lib/components/PlannerScreencast.svelte';
+	import FeatureSections from '$lib/components/home/FeatureSections.svelte';
 	import {
 		appLayers,
 		buildingBlockNouns,
@@ -136,14 +137,15 @@
 	</section>
 
 	<!--
-		Slice B mount point (happyvertical/s-m-r-t.dev#321): the six feature
-		sections — the in-app assistant, propose-then-confirm, reports on
-		request, paperwork intake, who can see what, and outside agents — render
-		here, between "What you get" and "Describe the record once", from
-		`src/lib/data/homepage-features.ts` through one component. Nothing
-		renders from this element until that slice lands.
+		Slice B (happyvertical/s-m-r-t.dev#321): the six feature sections — the
+		in-app assistant, propose-then-confirm, reports on request, paperwork
+		intake, who can see what, and outside agents — render here, between
+		"What you get" and "Describe the record once", from
+		`src/lib/data/homepage-features.ts` through one component.
 	-->
-	<div class="feature-sections-slot" data-slot="homepage-features"></div>
+	<div class="feature-sections-slot" data-slot="homepage-features">
+		<FeatureSections />
+	</div>
 
 	<section class="model-section" id="one-description" aria-labelledby="model-heading">
 		<div class="section-heading">

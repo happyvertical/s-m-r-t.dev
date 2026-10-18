@@ -123,7 +123,7 @@ export const whySmrtClaims: WhySmrtClaim[] = [
 		claim:
 			'AssistantDock reads mounted data-surface descriptors and offers only fail-closed allowed tools as the resolved principal. Structured questions take their options from code. A browser inference backend can run the model on-device.',
 		display:
-			'The assistant reads the open page, acts only as the signed-in person, asks with forms the application defines, and can run in the browser.',
+			'An application adds the assistant dock itself. The dock reads the open page, acts only as the signed-in person, asks with forms the application defines, and can run in the browser.',
 		canonical: { label: 'smrt-chat', href: '/reference/packages/smrt-chat' },
 		source: {
 			label: 'smrt-chat release contract',
@@ -173,7 +173,7 @@ export const whySmrtClaims: WhySmrtClaim[] = [
 		claim:
 			'Tenant hierarchy has a maximum depth of 10. Tenant scope is applied by collection interceptors on list, get, save, and delete. Generated PostgreSQL row policies enforce the same permission catalog. Field policies gate reads and generated writes. AuditLog records actor and delegated identity.',
 		display:
-			'Which records a request may see is decided at the data layer for every surface, with PostgreSQL enforcing it too; fields and audit follow the same rules.',
+			'Which records a request may see is decided at the data layer for every surface, and PostgreSQL enforces it too. Fields and audit follow the same rules.',
 		canonical: { label: 'Tenants', href: '/foundations/tenants' },
 		source: {
 			label: 'smrt-users and smrt-tenancy release contracts',
@@ -183,9 +183,9 @@ export const whySmrtClaims: WhySmrtClaim[] = [
 	{
 		id: 'agent-doors',
 		claim:
-			'The application MCP server exposes an explicit model allow-list with required scopes and an effects filter. Unauthenticated callers see public read-only tools only. Bearer principals are bound into the app’s RLS context. WebMCP excludes undeclared tools under a default read-only policy. The app CLI bridges to the same MCP path.',
+			'The application MCP server exposes an explicit model allow-list with required scopes and an effects filter. Unauthenticated callers see public read-only tools only. Bearer principals are bound into the app’s RLS context. WebMCP excludes undeclared tools under a default read-only policy. The generated CLI exposes the actions the application selected; the app CLI bridge reaches the same MCP path.',
 		display:
-			'MCP, the command line, and in-page browser tools are each turned on per application, list their operations, and start read-only. Without a sign-in only public read tools are visible; writes run as a signed-in identity.',
+			'MCP, the command line, and in-page browser tools are each turned on per application and name their operations. Browser tools start read-only, anonymous MCP callers see only public read tools, and the command line carries the actions the application selected. Writes run as a signed-in identity.',
 		canonical: { label: 'Agents', href: '/agents' },
 		source: {
 			label: 'Application MCP release contract',

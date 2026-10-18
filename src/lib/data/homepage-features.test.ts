@@ -126,18 +126,13 @@ describe('homepage feature sections (#321 slice B)', () => {
 		}
 	});
 
-	it('indexes each section for the palette, keyed by plain words, pending the mount', () => {
-		// `homepageFeatureEntries` is spread into `searchEntries` by the commit
-		// that mounts `FeatureSections` on `/`; until then a palette hit on
-		// `/#assistant` would land on a page without that anchor.
+	it('is discoverable from the command palette in plain words', () => {
 		expect(homepageFeatureEntries.map((entry) => entry.href)).toEqual(
 			homepageFeatures.map((feature) => `/#${feature.id}`)
 		);
-		const byId = new Map(homepageFeatures.map((feature) => [`/#${feature.id}`, feature]));
-		for (const entry of homepageFeatureEntries) {
-			expect(entry.kind).toBe('section');
-			expect(entry.keywords).toEqual(expect.arrayContaining(byId.get(entry.href)!.keywords));
-		}
-		expect(searchDocs('paperwork').some((entry) => entry.href.startsWith('/#'))).toBe(false);
+		expect(searchDocs('assistant').some((entry) => entry.href === '/#assistant')).toBe(true);
+		expect(searchDocs('who can see what')[0]).toMatchObject({ href: '/#who-can-see-what' });
+		expect(searchDocs('paperwork')[0]).toMatchObject({ href: '/#paperwork-in-proposals-out' });
+		expect(searchDocs('outside agents')[0]).toMatchObject({ href: '/#outside-agents-same-rules' });
 	});
 });

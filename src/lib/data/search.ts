@@ -227,8 +227,7 @@ export const searchEntries: SearchEntry[] = dedupe([
 	...pageEntries,
 	...sectionEntries,
 	...landingEntries,
-	// `homepageFeatureEntries` joins this list in the commit that mounts
-	// `FeatureSections` on `/` (#323): until then its `/#…` anchors do not render.
+	...homepageFeatureEntries,
 	...packageEntries
 ]);
 
