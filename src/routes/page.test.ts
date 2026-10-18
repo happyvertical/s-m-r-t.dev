@@ -27,7 +27,7 @@ describe('documentation home page', () => {
 		}
 	});
 
-	it('shows the Build a boilerplate recording beside a primary link to the planner', () => {
+	it('puts the primary build-a-boilerplate link above the recording and its caption', () => {
 		const { container } = render(Page);
 		const intro = container.querySelector('.hero-intro');
 		const video = intro?.querySelector<HTMLVideoElement>('figure.planner-screencast video');
@@ -46,12 +46,20 @@ describe('documentation home page', () => {
 		expect(
 			[...video!.querySelectorAll('source')].map((source) => source.getAttribute('type'))
 		).toEqual(['video/webm', 'video/mp4']);
-		expect(intro?.querySelector('figcaption')?.textContent).toContain('Build a boilerplate');
+		expect(intro?.querySelector('figcaption')?.textContent).toContain('build-a-boilerplate');
 		expect(intro?.querySelector('.playback')).toBeTruthy();
 
 		const cta = intro?.querySelector('a.primary-link--hero');
 		expect(cta?.getAttribute('href')).toBe('/build-a-boilerplate');
-		expect(cta?.textContent).toContain('Build a boilerplate');
+		expect(cta?.textContent).toContain('build-a-boilerplate');
+		// Order: intro text, then the button, then the video, then its caption.
+		const lede = intro!.querySelector('.lede')!;
+		const caption = intro!.querySelector('figcaption')!;
+		const follows = (a: Node, b: Node) =>
+			Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+		expect(follows(lede, cta!)).toBe(true);
+		expect(follows(cta!, video!)).toBe(true);
+		expect(follows(video!, caption)).toBe(true);
 	});
 
 	it('renders the five plain layer names in the hero lede and the mini scope map', () => {

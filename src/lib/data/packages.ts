@@ -2340,10 +2340,10 @@ export const packages: SmrtPackage[] = [
 					body: 'commandTools from the commands subpath is every command as name, description, and inputSchema. The snapshot is a compact read-only plan of a few kilobytes, fit for a prompt. Passing inference switches the assistant on; without it the planner has no chat icon. A plain Node server uses the core subpath for the schemas, buildHostPrompt, parseHostReply, the cookbook library, and createHeadlessPlanner. It serves the prebuilt app from the app subpath. HostPlanner mounts the same planner inside a Kitchen host such as an MCP app or widget.'
 				},
 				{
-					title: 'Mounted on this site as Build a boilerplate',
-					body: 'This site mounts the complete Planner on its Build a boilerplate page with a backLink to the documentation. An on-device browser model is offered first; a bring-your-own endpoint, with any key held in memory for the tab, is the alternative. The page is the site name, passed as defaultTitle; the package keeps its own.',
+					title: 'Mounted on this site as build-a-boilerplate',
+					body: 'This site mounts the complete Planner on its build-a-boilerplate page with a backLink to the documentation. An on-device browser model is offered first; a bring-your-own endpoint, with any key held in memory for the tab, is the alternative. The page is the site name, passed as defaultTitle; the package keeps its own.',
 					href: '/build-a-boilerplate',
-					linkLabel: 'Open Build a boilerplate'
+					linkLabel: 'Open build-a-boilerplate'
 				},
 				{
 					title: 'Released with the framework',
