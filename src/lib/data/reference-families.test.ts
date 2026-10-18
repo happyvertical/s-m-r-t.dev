@@ -15,6 +15,7 @@ const expectedFamilies = [
 	'Field policy API',
 	'Terminology and SAADL',
 	'Versions and support status',
+	'Evidence',
 	'FAQ'
 ];
 

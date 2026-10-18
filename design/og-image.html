@@ -5,15 +5,20 @@
   To regenerate the PNG: open it in Chrome as a file:// URL, emulate a
   1200x630 viewport at device pixel ratio 1, wait for document.fonts.ready,
   and screenshot the viewport to static/og-image.png. Confirm with
-  `sips -g pixelWidth -g pixelHeight static/og-image.png` (1200 x 630).
+  `sips -g pixelWidth -g pixelHeight static/og-image.png` (1200 x 630) and
+  keep the file under 300 KB.
 
-  Tokens are the smrt theme's dark scheme, which the site renders by default
-  (data-theme="smrt", --smrt-color-* from @happyvertical/smrt-ui). The mark is
-  src/lib/assets/smrt-mark.svg inlined; its ember glow is the resting filter
-  from Header.svelte's .brand img, scaled to the larger mark. Fonts are the
-  theme's self-hosted Inter (resolved from node_modules, so run pnpm install
-  first) and the site's ui-monospace stack for the wordmark, as
+  Tokens are the site's light scheme: the fallback values of the --site-*
+  variables in src/lib/styles/variables.css (paper, surface, ink, muted, line,
+  accent). The mark is src/lib/assets/smrt-mark.svg inlined. The font is the
+  smrt theme's self-hosted Inter (resolved from node_modules, so run
+  pnpm install first) with the site's monospace stack for the wordmark, as
   Header.svelte's .brand span uses.
+
+  og-frame.png beside this file is one frame of the build-a-boilerplate
+  recording (screencast v3, planner-home.mp4 at 16.2 s): the Mechanic
+  mock-up's "Sales by month" report with the assistant open, cropped to the
+  stat tiles, the chart and the assistant's reply, cursor removed.
 -->
 <html lang="en">
 	<head>
@@ -28,19 +33,20 @@
 					format('woff2');
 			}
 			:root {
-				--bg: #0b0c0e;
-				--surface: #121417;
-				--ink: #c9cdd3;
-				--muted: #9aa3af;
-				--accent: #ff7a1a;
-				--line: #23272e;
+				--paper: #edeff2;
+				--surface: #ffffff;
+				--ink: #14171c;
+				--muted: #5b6470;
+				--line: #dfe3e8;
+				--accent: #e35d12;
+				--accent-soft: #ffe6d4;
 				--font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 				--font-mono: ui-monospace, 'SF Mono', Monaco, 'Cascadia Code', Consolas, monospace;
 			}
 			html,
 			body {
 				margin: 0;
-				background: var(--bg);
+				background: var(--paper);
 			}
 			.card {
 				position: relative;
@@ -48,66 +54,91 @@
 				height: 630px;
 				overflow: hidden;
 				box-sizing: border-box;
-				padding: 84px 96px 80px;
-				display: flex;
-				flex-direction: column;
-				justify-content: space-between;
+				padding: 60px 84px 0;
 				color: var(--ink);
 				font-family: var(--font-sans);
 				background:
-					radial-gradient(640px 420px at 12% 8%, rgba(240, 91, 43, 0.14), transparent 70%),
-					var(--bg);
+					radial-gradient(720px 420px at 100% 0%, rgba(227, 93, 18, 0.1), transparent 70%),
+					var(--paper);
 			}
 			.brand {
 				display: flex;
 				align-items: center;
-				gap: 20px;
+				gap: 14px;
 			}
 			.brand svg {
-				width: 80px;
-				height: 80px;
-				filter: drop-shadow(0 0 4px rgba(255, 211, 61, 0.28))
-					drop-shadow(0 0 12px rgba(240, 91, 43, 0.3))
-					drop-shadow(0 3px 20px rgba(201, 56, 30, 0.22));
+				width: 52px;
+				height: 52px;
 			}
 			.brand span {
 				font-family: var(--font-mono);
-				font-size: 44px;
+				font-size: 30px;
 				font-weight: 800;
 				letter-spacing: -0.045em;
 			}
 			h1 {
-				margin: 0;
+				margin: 26px 0 0;
 				white-space: nowrap;
-				font-size: 74px;
+				font-size: 68px;
 				font-weight: 680;
 				letter-spacing: -0.045em;
-				line-height: 1.05;
+				line-height: 1.04;
 			}
-			/*
-   * One quiet line: the five layer names from src/lib/data/layers.ts in their
-   * canonical order. At 40px (the floor that survives thumbnailing) they do
-   * not fit one row, so the breaks are set by hand — a name never splits and
-   * a separator never strands at a row end.
-   */
-			.layers {
-				margin: 0;
-				padding-top: 28px;
-				border-top: 1px solid var(--line);
-				display: grid;
-				row-gap: 8px;
+			.sub {
+				margin: 14px 0 0;
 				color: var(--muted);
-				font-size: 40px;
+				font-size: 27px;
 				font-weight: 400;
 				letter-spacing: -0.01em;
-				line-height: 1.2;
+				line-height: 1.3;
 			}
-			.layers .row {
-				white-space: nowrap;
+			/*
+       * The recording frame sits in a window that runs off the bottom edge.
+       * It is the picture; the words above it carry the message, so it may be
+       * cropped at thumbnail sizes without losing anything that has to read.
+       */
+			.window {
+				position: absolute;
+				left: 84px;
+				right: 84px;
+				top: 318px;
+				border: 1px solid var(--line);
+				border-bottom: 0;
+				border-radius: 14px 14px 0 0;
+				background: var(--surface);
+				box-shadow:
+					0 -1px 0 rgba(255, 255, 255, 0.8) inset,
+					0 18px 48px rgba(20, 23, 28, 0.12);
+				overflow: hidden;
 			}
-			.layers .sep {
-				color: var(--accent);
-				padding: 0 0.3em;
+			.window .bar {
+				display: flex;
+				align-items: center;
+				gap: 7px;
+				height: 34px;
+				padding: 0 14px;
+				border-bottom: 1px solid var(--line);
+				background: #f5f6f8;
+			}
+			.window .bar i {
+				width: 10px;
+				height: 10px;
+				border-radius: 50%;
+				background: var(--line);
+			}
+			.window .bar i:first-child {
+				background: var(--accent);
+			}
+			.window .bar span {
+				margin-left: 10px;
+				color: var(--muted);
+				font-family: var(--font-mono);
+				font-size: 13px;
+			}
+			.window img {
+				display: block;
+				width: 100%;
+				height: auto;
 			}
 		</style>
 	</head>
@@ -169,11 +200,11 @@
 				<span>s-m-r-t</span>
 			</div>
 			<h1>The s-m-r-t application stack</h1>
-			<p class="layers">
-				<span class="row">Foundations<span class="sep">·</span>Who can do what</span>
-				<span class="row">Ready-made building blocks<span class="sep">·</span>Agents included</span>
-				<span class="row">Screens and controls</span>
-			</p>
+			<p class="sub">Business software for people and software agents.</p>
+			<div class="window">
+				<div class="bar"><i></i><i></i><i></i><span>Mechanic · Reports · Sales by month</span></div>
+				<img src="og-frame.png" alt="" width="1760" height="620" />
+			</div>
 		</div>
 	</body>
 </html>
