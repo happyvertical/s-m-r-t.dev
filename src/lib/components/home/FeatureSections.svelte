@@ -17,18 +17,16 @@
 	const claimsById = new Map(whySmrtClaims.map((claim) => [claim.id, claim]));
 
 	/**
-	 * Where a section's "Sources" link goes.
-	 *
-	 * TODO(#321 slice E): once `/reference/evidence` exists, return
-	 * `/reference/evidence#${feature.evidenceId}` — the row ids are the anchor
-	 * ids. Until that page ships, a link to it would be a hard 404 on this
-	 * static site (and `check:links` would fail the build), so the link goes
-	 * straight to the row's release-verified source instead.
+	 * Where a section's "Sources" link goes: the section's row on
+	 * /reference/evidence (#321 slice E), whose anchors are the row ids. The
+	 * lookup stays so a feature naming a row that does not exist fails at
+	 * render time instead of shipping a link to nothing.
 	 */
 	function sourcesHref(feature: HomepageFeature): string {
-		const claim = claimsById.get(feature.evidenceId);
-		if (!claim) throw new Error(`No evidence row "${feature.evidenceId}" for /#${feature.id}`);
-		return claim.source.href;
+		if (!claimsById.has(feature.evidenceId)) {
+			throw new Error(`No evidence row "${feature.evidenceId}" for /#${feature.id}`);
+		}
+		return `/reference/evidence#${feature.evidenceId}`;
 	}
 </script>
 

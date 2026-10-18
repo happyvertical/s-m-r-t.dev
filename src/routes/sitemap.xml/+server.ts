@@ -45,6 +45,7 @@ export const GET: RequestHandler = () => {
 		// intentionally absent here — a sitemap must not list a redirecting URL.
 		entry('/reference/api', '0.8', 'monthly'),
 		entry('/reference/faq', '0.6', 'monthly'),
+		entry('/reference/evidence', '0.6', 'monthly'),
 		entry('/reference/packages', '0.9', 'weekly'),
 		...packages.map((pkg) => entry(`/reference/packages/${pkg.slug}`, '0.75', 'monthly')),
 		entry('/reference/components', '0.5', 'weekly'),

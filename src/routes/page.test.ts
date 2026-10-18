@@ -2,11 +2,11 @@ import { cleanup, render, screen } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 import { appLayers, buildingBlockNouns, layerNames, unlayeredPackageCount } from '$lib/data/layers';
 import { frameworkModelProjections } from '$lib/data/framework';
+import { homepageFeatures } from '$lib/data/homepage-features';
 import { curatedChipsFor } from '$lib/data/layer-chips';
 import { packages } from '$lib/data/packages';
 import { playgroundModules } from '$lib/data/playgrounds';
 import { uiComponents } from '$lib/data/ui-components.generated';
-import { whySmrtClaims } from '$lib/data/why-smrt-claims';
 import { SMRT_VERSION } from '$lib/version';
 import Page from './+page.svelte';
 
@@ -158,7 +158,6 @@ describe('documentation home page', () => {
 			'Three doors, and each one is a choice',
 			'Describe the record once',
 			'Five layers, one release',
-			'Every claim on this page has a source',
 			'Three ways in'
 		]);
 
@@ -337,17 +336,23 @@ describe('documentation home page', () => {
 		expect(container.querySelectorAll('.feature .eyebrow, .feature .sketch')).toHaveLength(0);
 	});
 
-	it('renders one evidence row per rendered claim, deliberately excluding the unpublished mobile row', () => {
+	it('points at the evidence ledger instead of rendering the table (#321 slice E)', () => {
 		const { container } = render(Page);
-		const rows = [...container.querySelectorAll('.evidence-table tbody tr')];
 
-		// The homepage evidence strip filters out the mobile claim (unpublished
-		// smrt-mobile / smrt-android / smrt-ios packages); asserting both counts
-		// keeps a future restoration of that row a deliberate, visible edit.
-		expect(whySmrtClaims).toHaveLength(13);
-		expect(rows).toHaveLength(12);
-		expect(rows.map((row) => row.querySelector('td')?.textContent)).not.toContain(
-			whySmrtClaims.find((claim) => claim.id === 'mobile-kmp')?.display
+		// The release-audit table moved to /reference/evidence; the homepage keeps
+		// one line so the claim-to-source discipline stays visible without the
+		// weight of the table on a landing page.
+		expect(container.querySelector('.evidence-table')).toBeNull();
+		const note = container.querySelector('.evidence-note');
+		expect(text(note)).toContain('Every claim on this page has a source');
+		expect(note?.querySelector('a')?.getAttribute('href')).toBe('/reference/evidence');
+
+		// Each feature section's "Sources" link lands on its own row of that page;
+		// reference/evidence/page.test.ts pins that every row id is an anchor.
+		const sources = [...container.querySelectorAll('.feature a.sources')];
+		expect(sources).toHaveLength(homepageFeatures.length);
+		expect(sources.map((link) => link.getAttribute('href'))).toEqual(
+			homepageFeatures.map((feature) => `/reference/evidence#${feature.evidenceId}`)
 		);
 	});
 });

@@ -1,25 +1,28 @@
 # s-m-r-t
 
-> s-m-r-t gives an application an explicit, governed model of its meaning, operations, interfaces, and agent access. The application model can project into human interfaces, APIs, CLI, MCP, and WebMCP without a separate bot surface. Awareness is not authority: discovery never grants permission.
+> s-m-r-t is an MIT-licensed TypeScript stack for business software that people and software agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The stack includes an in-app assistant, scheduled agents, approvals, reports on request and row-level data rules. Outside agents connect over MCP or in the browser as a signed-in identity. build-a-boilerplate assembles a working mock-up for a kind of business in the browser and exports the plan as a file.
 
 ## Canonical technical documentation
 
-- https://s-m-r-t.dev/ — the s-m-r-t application stack: its five layers, the package scope map, and a source-linked evidence table
+- https://s-m-r-t.dev/ — the s-m-r-t application stack: what an application gets, how one record description becomes every surface, and the five layers
+- https://s-m-r-t.dev/build-a-boilerplate — assemble a working mock-up for a kind of business in the browser and export the plan as a cookbook file
+- https://s-m-r-t.dev/agents — agents as operators: browser agents, MCP agents and the application’s own scheduled and chat agents, all under the same permissions
 - https://s-m-r-t.dev/reference/saadl — Software as Agentic Domain Logic and human/agent parity
 - https://s-m-r-t.dev/capabilities/agent-legible-applications — manifests, control descriptions, MCP/WebMCP schemas, and bounded runtime awareness
 - https://s-m-r-t.dev/capabilities/agent-assisted-forms — stable control identities, validation, staged changes, and confirmation
 - https://s-m-r-t.dev/capabilities/webmcp — selected browser tools using the signed-in page session
 - https://s-m-r-t.dev/tooling/app-mcp — generated and application MCP for permitted runtime data operations
-- https://s-m-r-t.dev/tooling/dev-mcp — read-only development MCP for workspace and installed-package knowledge
+- https://s-m-r-t.dev/tooling/dev-mcp — read-only development MCP for workspace, installed-package and, when a development database is configured, system-table knowledge
 - https://s-m-r-t.dev/reference/security — authentication, tenant scope, writable-field policy, and authorization boundaries
+- https://s-m-r-t.dev/reference/evidence — each site claim beside the released source it was verified in
 - https://s-m-r-t.dev/playground — component and package demonstrations
 
 ## Released boundaries
 
 This site documents the installed s-m-r-t release. The framework supports a shared domain model and manifest. It generates REST, CLI, MCP, and selected WebMCP surfaces. Agent-assisted form controls support explain, validate, staged-change, and confirmed-apply flows. Application MCP surfaces include allow-lists and policy checks. These explicit surfaces do not expose every model method or field.
 
-Generated runtime operations still resolve through the application’s principal, tenant scope, field policy, writable-field rules, permissions, and any required confirmation. Development MCP is a separate, read-only workspace plane; it does not access a running application, application data, principals, tenants, or credentials.
+Generated runtime operations still resolve through the application’s principal, tenant scope, field policy, writable-field rules, permissions, and any required confirmation. Development MCP is a separate, read-only development plane; it never executes the project’s application entry and never reads record payloads, principals, or credentials. Awareness is not authority: discovery never grants permission.
 
-## Runtime-environment registry boundary: conditional and unreleased by default
+## Runtime provenance in the development MCP: read-only and only when configured
 
-The released development MCP does not connect to a running application or inspect its live ObjectRegistry. A future or application-provided runtime bridge can expose bounded capability metadata after explicit installation, exposure, and discovery. Do not assume that a runtime-environment registry exists. Such a bridge must distinguish observed facts from declared facts. The bridge must not expose application records, credentials, principals, or tenant data. Live data operations remain on the generated and application MCP runtime plane and remain policy-controlled.
+Without a development database configured, the development MCP answers from the workspace and installed packages only. With one configured (SMRT_DEV_DB_URL or the project’s CLI database setting), it adds read-only runtime provenance: migration, job, schedule and dispatch health from the framework’s system tables, a tail of the change feed, and a sanitized snapshot of the booted object registry. That snapshot is built from manifests without executing the project’s application entry. Payloads, results, agent configuration and credentials are never read. These tools distinguish observed facts from declared facts. Live data operations remain on the generated and application MCP runtime plane and remain policy-controlled.
