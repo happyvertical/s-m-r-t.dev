@@ -1,6 +1,7 @@
 import { cleanup, render } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 import { whySmrtClaims } from '$lib/data/why-smrt-claims';
+import { SMRT_VERSION } from '$lib/version';
 import Page from './+page.svelte';
 
 afterEach(cleanup);
@@ -32,6 +33,15 @@ describe('/reference/evidence', () => {
 			expect(cells[0].textContent).toContain(claim.display);
 			expect(cells[0].querySelector(`a[href="${claim.canonical.href}"]`)).toBeTruthy();
 			expect(cells[1].querySelector(`a[href="${claim.source.href}"]`)).toBeTruthy();
+		}
+	});
+
+	it('states the installed release once, and every package source links that release', () => {
+		const { container } = render(Page);
+		expect(container.querySelector('.pinned')?.textContent).toContain(SMRT_VERSION);
+		for (const claim of whySmrtClaims) {
+			if (!claim.source.href.includes('github.com/happyvertical/smrt/')) continue;
+			expect(claim.source.href, claim.id).toContain(`/blob/v${SMRT_VERSION}/`);
 		}
 	});
 });

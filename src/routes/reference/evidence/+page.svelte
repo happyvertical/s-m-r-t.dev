@@ -8,7 +8,7 @@
 	import ReferenceFamilyBar from '$lib/components/ReferenceFamilyBar.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { whySmrtClaims } from '$lib/data/why-smrt-claims';
-	import { TOOLING_PINNED_VERSION } from '$lib/data/tooling';
+	import { SMRT_VERSION } from '$lib/version';
 </script>
 
 <SEO
@@ -27,7 +27,10 @@
 			Each claim the site makes about the framework, with the page that explains it and the released
 			source it was checked against.
 		</p>
-		<p class="pinned">Verified against s-m-r-t {TOOLING_PINNED_VERSION}</p>
+		<p class="pinned">
+			Package sources are the AGENTS.md contracts shipped in s-m-r-t
+			<span class="version">{SMRT_VERSION}</span>; the site row links a commit of this repository.
+		</p>
 	</header>
 
 	<div class="table-wrap">
@@ -102,6 +105,7 @@
 		color: var(--site-muted);
 		font: 0.66rem var(--site-font-mono);
 		letter-spacing: 0.03em;
+		line-height: 1.5;
 	}
 	.table-wrap {
 		overflow-x: auto;

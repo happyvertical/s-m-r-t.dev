@@ -1,11 +1,11 @@
-import { TOOLING_PINNED_VERSION } from '$lib/data/tooling';
 import { SMRT_VERSION } from '$lib/version';
 
-const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${TOOLING_PINNED_VERSION}`;
 /**
- * The tree of the release this build installs. The homepage feature rows
- * (#321 slice B) were verified against the installed packages' `AGENTS.md`,
- * so their sources follow the installed version rather than the tooling pin.
+ * The tree of the release this build installs. Every package row was
+ * re-verified against that release's `AGENTS.md` (the original rows on
+ * 2026-10-18 for #328, after first being audited at the tooling pin; the
+ * homepage feature rows for #321 slice B), so all sources follow the installed
+ * version and /reference/evidence can state one release for the page.
  */
 const INSTALLED_TREE = `https://github.com/happyvertical/smrt/blob/v${SMRT_VERSION}`;
 const SITE_SOURCE =
@@ -35,19 +35,19 @@ export const whySmrtClaims: WhySmrtClaim[] = [
 		canonical: { label: 'What is a SAADL?', href: '/reference/saadl' },
 		source: {
 			label: 'Core release contract',
-			href: `${SMRT_TREE}/packages/core/AGENTS.md`
+			href: `${INSTALLED_TREE}/packages/core/AGENTS.md`
 		}
 	},
 	{
 		id: 'control-lifecycle',
 		claim:
-			'Controls can be explained, validated, staged, confirmed, or refused through a semantic registry.',
+			'Form controls carry a stable identity through a transport-neutral control interaction registry. An agent can stage a value under sensitivity checks; only a local human handler submits the confirmed apply.',
 		display:
-			'Any control can be explained, validated, staged, confirmed, or refused through one registry.',
+			'Any control can be named, staged by an agent, and applied only when a person confirms it — through one registry.',
 		canonical: { label: 'Agent-assisted forms', href: '/capabilities/agent-assisted-forms' },
 		source: {
 			label: 'smrt-ui release contract',
-			href: `${SMRT_TREE}/packages/smrt-ui/AGENTS.md`
+			href: `${INSTALLED_TREE}/packages/smrt-ui/AGENTS.md`
 		},
 		demo: { label: 'Agent-aware form demo', href: '/playground?entry=agent-aware-form' }
 	},
@@ -60,36 +60,36 @@ export const whySmrtClaims: WhySmrtClaim[] = [
 		canonical: { label: 'Agents', href: '/agents' },
 		source: {
 			label: 'smrt-web release contract',
-			href: `${SMRT_TREE}/packages/smrt-web/AGENTS.md`
+			href: `${INSTALLED_TREE}/packages/smrt-web/AGENTS.md`
 		},
 		demo: { label: 'UI overview', href: '/ui' }
 	},
 	{
 		id: 'policy-checks',
 		claim:
-			'A described control or tool remains subject to principal, tenant, permission, and writable-field checks.',
+			'A described control or tool remains subject to principal, tenant-boundary, and scope and permission checks, and fails closed when a binding is missing.',
 		display:
 			'However a request arrives, the same permission checks apply — down to the stored record.',
 		canonical: { label: 'Security defaults', href: '/reference/security' },
 		source: {
 			label: 'Application MCP release contract',
-			href: `${SMRT_TREE}/packages/smrt-app-mcp/AGENTS.md`
+			href: `${INSTALLED_TREE}/packages/smrt-app-mcp/AGENTS.md`
 		},
 		demo: { label: 'Governed interaction demo', href: '/ui' }
 	},
 	{
 		id: 'runtime-awareness',
 		claim:
-			'Runtime awareness is conditional: released development tooling reads workspace and installed-package artifacts; a runtime bridge must be explicitly exposed.',
+			'The development MCP server reads the workspace and installed packages. Only with a development database configured does it add read-only system-table health and a sanitized booted registry snapshot. It never executes the project’s app entry or reads record payloads, agent configuration, or credentials.',
 		display:
-			'An application becomes visible to a live coding-agent bridge only when it explicitly turns that bridge on.',
+			'A coding agent’s development server reads the project and its installed packages. It sees a development database’s system tables only when one is configured, and never your records.',
 		canonical: {
 			label: 'Agent-legible applications',
 			href: '/capabilities/agent-legible-applications'
 		},
 		source: {
 			label: 'Development MCP release contract',
-			href: `${SMRT_TREE}/packages/smrt-dev-mcp/AGENTS.md`
+			href: `${INSTALLED_TREE}/packages/smrt-dev-mcp/AGENTS.md`
 		}
 	},
 	{
@@ -101,7 +101,7 @@ export const whySmrtClaims: WhySmrtClaim[] = [
 		canonical: { label: 'Mobile', href: '/capabilities/mobile' },
 		source: {
 			label: 'Mobile source contract (source-only; package publishing deferred)',
-			href: `${SMRT_TREE}/packages/smrt-mobile/AGENTS.md`
+			href: `${INSTALLED_TREE}/packages/smrt-mobile/AGENTS.md`
 		}
 	},
 	{

@@ -88,6 +88,17 @@ const referenceHubItems: NavigationItem[] = referenceFamilies
 	.filter((family) => referenceHubIds.has(family.id))
 	.map((family) => ({ label: family.label, href: family.href }));
 /**
+ * The evidence ledger (#321 slice E) is a hand-written Reference page, not a
+ * `referenceGuides` entry, so it is registered here by hand; `docsNavigation`
+ * below feeds the docs panel and the palette's page entries.
+ */
+const referenceEvidenceItem: NavigationItem = {
+	label: 'Evidence',
+	href: '/reference/evidence',
+	description: 'Each site claim beside the released source it was verified in.',
+	keywords: ['evidence', 'claims', 'sources', 'audit']
+};
+/**
  * Module clusters, not the individual `/packages/<slug>` pages, are the
  * "key pages" registered here: `/modules#<cluster-id>` is a real, stable
  * anchor (`ModuleCluster.svelte` sets `id={guide.id}`), the same shape as the
@@ -462,16 +473,7 @@ export const documentationSections: DocumentationSection[] = [
 		groups: [
 			{
 				label: 'Reference families',
-				items: [
-					...referenceItems,
-					{
-						label: 'Evidence',
-						href: '/reference/evidence',
-						description: 'Each site claim beside the released source it was verified in.',
-						keywords: ['evidence', 'claims', 'sources', 'audit']
-					},
-					{ label: 'FAQ', href: '/reference/faq' }
-				]
+				items: [...referenceItems, referenceEvidenceItem, { label: 'FAQ', href: '/reference/faq' }]
 			},
 			{
 				label: 'Generated inventories',
@@ -623,7 +625,12 @@ export const docsNavigation: NavigationGroup[] = [
 	{ label: 'Guides', items: [sectionOverviewItem('guides'), ...taskItems] },
 	{
 		label: 'Reference',
-		items: [sectionOverviewItem('reference'), ...referenceHubItems, ...referenceItems]
+		items: [
+			sectionOverviewItem('reference'),
+			...referenceHubItems,
+			...referenceItems,
+			referenceEvidenceItem
+		]
 	}
 ];
 

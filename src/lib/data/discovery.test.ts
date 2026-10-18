@@ -50,9 +50,9 @@ describe('Why s-m-r-t discovery surfaces', () => {
 		expect(llms).toContain('https://s-m-r-t.dev/capabilities/agent-legible-applications');
 		expect(llms).toContain('https://s-m-r-t.dev/tooling/app-mcp');
 		expect(llms).toContain(
-			'Runtime-environment registry boundary: conditional and unreleased by default'
+			'Runtime provenance in the development MCP: read-only and only when configured'
 		);
-		expect(llms).toContain('does not connect to a running application');
+		expect(llms).toContain('never executes the project’s application entry');
 		expect(llms).not.toMatch(/\b\d+\.\d+\.\d+\b/);
 	});
 });
