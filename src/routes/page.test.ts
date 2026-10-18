@@ -265,8 +265,8 @@ describe('documentation home page', () => {
 		// The homepage evidence strip filters out the mobile claim (unpublished
 		// smrt-mobile / smrt-android / smrt-ios packages); asserting both counts
 		// keeps a future restoration of that row a deliberate, visible edit.
-		expect(whySmrtClaims).toHaveLength(7);
-		expect(rows).toHaveLength(6);
+		expect(whySmrtClaims).toHaveLength(13);
+		expect(rows).toHaveLength(12);
 		expect(rows.map((row) => row.querySelector('td')?.textContent)).not.toContain(
 			whySmrtClaims.find((claim) => claim.id === 'mobile-kmp')?.display
 		);
