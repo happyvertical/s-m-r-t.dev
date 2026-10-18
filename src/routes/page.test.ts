@@ -2,6 +2,7 @@ import { cleanup, render, screen } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 import { appLayers, buildingBlockNouns, layerNames, unlayeredPackageCount } from '$lib/data/layers';
 import { frameworkModelProjections } from '$lib/data/framework';
+import { curatedChipsFor } from '$lib/data/layer-chips';
 import { packages } from '$lib/data/packages';
 import { playgroundModules } from '$lib/data/playgrounds';
 import { uiComponents } from '$lib/data/ui-components.generated';
@@ -107,22 +108,29 @@ describe('documentation home page', () => {
 		);
 	});
 
-	it('renders every layer chip as a same-tab link into the package catalog', () => {
+	it('renders the curated chips per layer, then an "all N" link with the generated count', () => {
 		const { container } = render(Page);
 		const bands = [...container.querySelectorAll('.layer-band')];
 
 		expect(bands).toHaveLength(appLayers.length);
 		bands.forEach((band, index) => {
 			const layer = appLayers[index];
-			const chipLinks = [...band.querySelectorAll('.layer-chips a')];
+			const curated = curatedChipsFor(layer);
+			const chipLinks = [...band.querySelectorAll('.layer-chips li:not(.layer-chips-all) a')];
 
-			expect(chipLinks).toHaveLength(layer.chips.length);
+			expect(chipLinks).toHaveLength(curated.length);
 			chipLinks.forEach((link, chipIndex) => {
-				expect(link.getAttribute('href')).toBe(
-					`/reference/packages/${layer.chips[chipIndex].slug}`
-				);
+				expect(link.getAttribute('href')).toBe(`/reference/packages/${curated[chipIndex].slug}`);
+				expect(link.textContent).toBe(curated[chipIndex].label);
 				expect(link.getAttribute('target')).toBeNull();
 			});
+
+			// The count is the layer's full membership, not the curated handful.
+			const allLink = band.querySelector('.layer-chips-all a');
+			expect(allLink?.getAttribute('href')).toBe('/reference/packages');
+			expect(allLink?.textContent?.replace(/\s+/g, ' ').trim()).toBe(
+				`all ${layer.packages.length} →`
+			);
 		});
 	});
 
