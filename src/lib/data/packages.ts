@@ -1677,7 +1677,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Credit notes',
-					body: 'A credit note is an Invoice with kind credit_note that names the invoice it credits. It credits a quantity or an amount of a source line, never more than the line, or adds a goodwill line with its own tax code. Tax comes from the source invoice as issued, not from current settings. An issued credit note reduces the source balance. A refund is a Payment of kind refund, allocated only to a credit note.'
+					body: 'A credit note is an Invoice with kind credit_note that names the invoice it credits. It credits a quantity or an amount of a source line, never more than the line, or adds a goodwill line with its own tax code. Tax comes from the source invoice as issued, not from current settings. An issued credit note reduces the source balance. A credit refund is a Payment of kind refund, allocated only to a credit note. Refunding an unapplied customer advance is a separate command, refundCustomerFunds, and that refund can never be allocated to an invoice credit.'
 				},
 				{
 					title: 'Posting by account and the tax summary',
