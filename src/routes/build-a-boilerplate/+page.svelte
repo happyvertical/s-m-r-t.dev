@@ -54,7 +54,7 @@
 
 <SEO
 	title="build-a-boilerplate"
-	description="Add recipes or packages and an app mock-up assembles around them: navigation, list views, forms and help per model. Its Export tab downloads the cookbook it produces, for smrt cookbook apply to create a project from, or gives a prompt that has your coding agent build the app from it."
+	description="Add recipes or packages and an app mock-up assembles around them: navigation, list views, forms and help per model. Its Export tab gives you two ways out: download the cookbook and run smrt cookbook apply on the file to create a project, or copy a prompt that has your coding agent build the app from it."
 	url="https://s-m-r-t.dev/build-a-boilerplate"
 />
 
