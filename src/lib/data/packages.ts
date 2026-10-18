@@ -1179,7 +1179,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Questions the assistant asks are data',
-					body: 'An assistant turn that asks the person to choose attaches an assistant-question object to the message, with choice fields whose options come from code that knows the domain, never from model text. AssistantDock renders it as AssistantQuestionForm, a radio group, select, or checkboxes with the default preselected. Submitting calls the transport\'s optional answerQuestion, which continues the turn in code with no model round-trip; a transport without it receives the answer as an ordinary message, and a typed reply is matched against the options. parseAssistantQuestion and matchAssistantQuestionText come from the /svelte subpath.'
+					body: "An assistant turn that asks the person to choose attaches an assistant-question object to its message. Its options come from code that knows the domain, never from model text. AssistantDock renders it as AssistantQuestionForm: a radio group, a select, or checkboxes, with the default preselected. On submit, the transport's optional answerQuestion continues the turn in code with no model round-trip. A transport without it receives the answer as an ordinary message, and a typed reply is matched against the options. parseAssistantQuestion and matchAssistantQuestionText come from the /svelte subpath."
 				},
 				{
 					title: 'Helper preferences are presentation policy',
@@ -1790,7 +1790,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Preview a spec in the browser',
-					body: 'The /spec subpath is the browser-safe half of runtime reports: parseRuntimeReportSpec, the spec grammar and time helpers, runtimeReportSpecDigest, and runRuntimeReportInMemory, which evaluates a spec over rows the caller already holds using the compiler\'s own rules. It is a preview and test runner, never an authority boundary; stored reports still compile per principal on the server.'
+					body: "The /spec subpath is the browser-safe half of runtime reports. It exports parseRuntimeReportSpec, the spec grammar and time helpers, and runtimeReportSpecDigest. runRuntimeReportInMemory evaluates a spec over rows the caller already holds, with the compiler's own rules. It is a preview and test runner, never an authority boundary. Stored reports still compile per principal on the server."
 				},
 				{
 					title: 'Two recipes with different surfaces',
