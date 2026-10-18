@@ -65,7 +65,11 @@
 			</button>
 		</div>
 	</div>
-	<pre><code>{code}</code></pre>
+	<!-- The sample scrolls sideways on narrow screens; tabindex puts the scroll region in the
+	     keyboard order (axe: scrollable-region-focusable). Svelte has no scroll-container
+	     exemption for its noninteractive-tabindex rule, hence the ignore. -->
+	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+	<pre tabindex="0"><code>{code}</code></pre>
 </div>
 
 <style>
