@@ -91,7 +91,7 @@ const referenceHubItems: NavigationItem[] = referenceFamilies
  * Module clusters, not the individual `/packages/<slug>` pages, are the
  * "key pages" registered here: `/modules#<cluster-id>` is a real, stable
  * anchor (`ModuleCluster.svelte` sets `id={guide.id}`), the same shape as the
- * homepage's `/#how-it-works` and `/agents#<topic>` entries. Packages already
+ * homepage's `/#what-you-get` and `/agents#<topic>` entries. Packages already
  * have their own `searchItems` entries below — registering every one of them here too
  * would duplicate search results.
  */
@@ -162,7 +162,11 @@ const whyItem: NavigationItem = {
 		'governed',
 		'awareness is not authority',
 		'Software as Agentic Domain Logic',
-		'SAADL'
+		'SAADL',
+		// The visible H1 and the hero's subject, so a visitor who read the page
+		// name or the lede can get back to it from search.
+		'application stack',
+		'business software'
 	]
 };
 
@@ -258,8 +262,9 @@ export const documentationSections: DocumentationSection[] = [
 				label: 'On this overview',
 				items: [
 					{ label: 'What you get', href: '/#what-you-get' },
-					{ label: 'How it works', href: '/#how-it-works' },
-					{ label: 'What you lose', href: '/#what-you-lose' }
+					{ label: 'Describe the record once', href: '/#one-description' },
+					{ label: 'Five layers, one release', href: '/#scope' },
+					{ label: 'Start here', href: '/#start-here' }
 				]
 			},
 			{
@@ -574,8 +579,9 @@ export const docsNavigation: NavigationGroup[] = [
 		items: [
 			whyItem,
 			{ label: 'What you get', href: '/#what-you-get' },
-			{ label: 'How it works', href: '/#how-it-works' },
-			{ label: 'What you lose', href: '/#what-you-lose' },
+			{ label: 'Describe the record once', href: '/#one-description' },
+			{ label: 'Five layers, one release', href: '/#scope' },
+			{ label: 'Start here', href: '/#start-here' },
 			{ label: 'Choose a starting point', href: '/starters' },
 			{ label: 'Basic SvelteKit app', href: '/starters/ground-up' },
 			{ label: 'SaaS starter', href: '/starters/saas' }

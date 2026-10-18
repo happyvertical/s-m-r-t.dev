@@ -2,12 +2,9 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import PlannerScreencast from '$lib/components/PlannerScreencast.svelte';
-	import AgentAwareFormDemo from '$lib/ui-showcase/AgentAwareFormDemo.svelte';
-	import UIShowcaseDataTable from '$lib/ui-showcase/UIShowcaseDataTable.svelte';
 	import {
 		appLayers,
 		buildingBlockNouns,
-		buildingBlocksHeroLede,
 		buildingBlocksScopeLede,
 		unlayeredPackageCount
 	} from '$lib/data/layers';
@@ -15,73 +12,8 @@
 	import { packages } from '$lib/data/packages';
 	import { uiComponents } from '$lib/data/ui-components.generated';
 	import { playgroundModules } from '$lib/data/playgrounds';
-	import { applicationModuleClusters } from '$lib/data/modules';
 	import { whySmrtClaims } from '$lib/data/why-smrt-claims';
 	import { SMRT_VERSION } from '$lib/version';
-
-	const participants = [
-		{
-			label: 'Persons',
-			body: 'Use visible controls, natural language, chat, and voice.'
-		},
-		{
-			label: 'Application agents',
-			body: 'Discover declared controls and operations within assigned authority.'
-		},
-		{
-			label: 'Developers',
-			body: 'Define application behavior once and maintain fewer parallel interfaces.'
-		},
-		{
-			label: 'Coding agents',
-			body: 'Read deterministic project knowledge and version-matched instructions.'
-		}
-	];
-
-	const modelParts = ['Fields', 'Relationships', 'Operations', 'Permissions'];
-
-	const featureSections = [
-		{
-			label: 'Framework',
-			body: 'Models, persistence, identity, security, and generated interfaces.',
-			href: '/framework'
-		},
-		{
-			label: 'Agents',
-			body: 'Where agents connect, what they may do, and whose authority they carry.',
-			href: '/agents'
-		},
-		{
-			label: 'Interaction',
-			body: 'Natural language, shared control, proposals, confirmations, and refusals.',
-			href: '/interaction'
-		},
-		{
-			label: 'UI',
-			body: 'Accessible controls, forms, data views, feedback, and application structure.',
-			href: '/ui'
-		},
-		{
-			label: 'Modules',
-			body: 'Prebuilt application outcomes that use the same framework contracts.',
-			href: '/modules'
-		},
-		{
-			label: 'Tooling',
-			body: 'Deterministic workspace knowledge for developers and coding agents.',
-			href: '/tooling'
-		},
-		{
-			label: 'Playground',
-			body: 'Released controls and package views in a standalone workbench.',
-			href: '/playground'
-		},
-		{
-			label: 'Reference',
-			body: 'Exhaustive interface, security, configuration, and package contracts.',
-			href: '/reference'
-		}
-	];
 
 	// Every count below is derived from the same data the rest of the site reads
 	// from — never hand-typed — so it cannot drift from the installed catalog.
@@ -91,7 +23,6 @@
 	const playgroundCount = $derived(
 		playgroundModules.reduce((total, module) => total + (module.entries?.length ?? 0), 0)
 	);
-	const moduleGroupCount = $derived(applicationModuleClusters.length);
 
 	// The mobile claim (smrt-mobile / smrt-mobile-contract / smrt-android /
 	// smrt-ios) stays out of the homepage evidence strip while those packages
@@ -99,60 +30,23 @@
 	// Restore this row once they publish to npm.
 	const evidenceClaims = $derived(whySmrtClaims.filter((claim) => claim.id !== 'mobile-kmp'));
 
-	interface SolutionLink {
-		label: string;
-		href: string;
-	}
-
-	interface SolutionGroup {
-		title: string;
-		body: string;
-		includes: string;
-		includesLinks: SolutionLink[];
-	}
-
-	const solutionGroups: SolutionGroup[] = [
+	const startPaths = [
 		{
-			title: 'Working with records',
-			body: 'Tables and forms for finding, reading, and changing records: search, filters, sorting, saved views, and changes a person reviews before they apply. The table below is one of these tools, running here — everything about its current view fits in a link that can be saved or shared.',
-			includes: 'DataTable, forms with staged review',
-			includesLinks: [
-				{ label: 'smrt-ui components', href: '/reference/packages/smrt-ui?tab=components' }
-			]
+			label: 'Try it',
+			body: 'build-a-boilerplate, in the browser, nothing installed.',
+			href: '/build-a-boilerplate'
 		},
 		{
-			title: 'Content management',
-			body: 'Writing, reviewing, and publishing: drafts, versions, review policies, corrections, and held submissions from outside contributors.',
-			includes: 'the content list with saved views, the governance screens',
-			includesLinks: [
-				{
-					label: 'smrt-content components',
-					href: '/reference/packages/smrt-content?tab=components'
-				}
-			]
+			label: 'Build one',
+			body: 'A basic SvelteKit application, step by step.',
+			href: '/starters/ground-up'
 		},
 		{
-			title: 'Reports and analytics',
-			body: 'Numbers kept current: reports declared once and refreshed on a schedule, with saved views and exports; visitor analytics from common providers alongside.',
-			includes: 'report tables and saved views',
-			includesLinks: [
-				{ label: 'smrt-reports', href: '/reference/packages/smrt-reports' },
-				{ label: 'smrt-analytics', href: '/reference/packages/smrt-analytics?tab=components' }
-			]
-		},
-		{
-			title: 'Conversation',
-			body: "Chat rooms and threads where people and agents talk, with each agent's allowed tools set by the application. Voice input where the device supports it.",
-			includes: 'chat layouts, agent sessions, voice input',
-			includesLinks: [
-				{ label: 'smrt-chat', href: '/reference/packages/smrt-chat?tab=components' },
-				{ label: 'smrt-svelte', href: '/reference/packages/smrt-svelte?tab=components' }
-			]
+			label: 'Connect an agent',
+			body: 'The doors, the defaults and the identity every call runs as.',
+			href: '/agents'
 		}
 	];
-
-	const recordsGroup = $derived(solutionGroups[0]);
-	const linkOnlyGroups = $derived(solutionGroups.slice(1));
 
 	// Locked verbatim, character-for-character (approved landing-page
 	// proposal, §3.3) — do not rephrase. Kept as one script-level string
@@ -164,65 +58,51 @@
 
 <SEO
 	title="The s-m-r-t application stack"
-	description="A framework and library for creating software that blurs the line between application and agent. build-a-boilerplate is a live demo; the cookbook it produces can jumpstart your next project."
+	description="s-m-r-t builds business software that people and software agents use through the same screens, rules and permissions. build-a-boilerplate assembles a working mock-up in the browser and exports the plan as a cookbook file."
 	url="https://s-m-r-t.dev"
 />
 
 <article class="homepage">
 	<header class="hero">
 		<div class="hero-intro">
-			<h1 class="visually-hidden">The s-m-r-t application stack</h1>
+			<h1>The s-m-r-t application stack</h1>
 			<p class="lede">
-				s-m-r-t is a framework and library for creating software that blurs the line between
-				application and agent. It is better demonstrated than explained: build-a-boilerplate is a
-				live demo, and the cookbook it produces can jumpstart your next project.
+				s-m-r-t builds business software that people and software agents use through the same
+				screens, rules and permissions. The fastest way to see it is to build one.
 			</p>
 			<div class="hero-actions">
 				<a class="primary-link primary-link--hero" href="/build-a-boilerplate"
 					>build-a-boilerplate <span aria-hidden="true">→</span></a
 				>
-				<a class="text-link" href="#what-you-get">See how the interfaces connect <span>↓</span></a>
+				<a class="text-link" href="#what-you-get">How it works <span aria-hidden="true">↓</span></a>
 			</div>
 			<div class="hero-shot">
 				<PlannerScreencast />
 			</div>
-			<p class="planner-note">
-				Its Export tab gives you two ways out: download the cookbook file and run
-				<code>smrt cookbook apply &lt;file&gt;</code> to create a project, or copy a prompt that has your
-				coding agent build the app from it.
+			<p class="outcome-line">
+				You leave with a cookbook file, or a prompt that has a coding agent build from it.
+				<code>smrt cookbook apply</code> turns the file into a project: an app with an admin shell, an
+				assistant inside it, tools for browser and MCP agents, and a local database. Running it still
+				needs a terminal or a coding agent.
 			</p>
 		</div>
 
 		<div class="hero-copy">
-			<ul class="layer-lede-list">
-				{#each appLayers as layer (layer.id)}
-					<li>
-						<strong>{layer.name}</strong>
-						{#if layer.id === 'building-blocks'}
-							— {buildingBlocksHeroLede}
-							{#each buildingBlockNouns as noun, index (noun.label)}{index > 0 ? ', ' : ''}<a
-									href={noun.href}>{noun.label}</a
-								>{/each}.
-						{:else}
-							— {layer.heroLine}
-						{/if}
-					</li>
-				{/each}
-			</ul>
-
 			<aside class="saadl-definition">
 				<p><strong>{saadlDefinition}</strong> Pronounced "saddle."</p>
 				<p>
 					In plain terms: people and software agents use the same application, through the same
 					doors, under the same rules.
 				</p>
-				<a class="text-link" href="/reference/saadl">What is a SAADL? <span>→</span></a>
+				<a class="text-link" href="/reference/saadl"
+					>What is a SAADL? <span aria-hidden="true">→</span></a
+				>
 			</aside>
 
 			<p class="scale-line">
 				<span class="mono">{SMRT_VERSION}</span> · <span class="mono">{packageCount}</span>
-				documented packages · <span class="mono">{componentCount}</span> components ·
-				<span class="mono">{playgroundCount}</span> playground entries
+				packages, released together · <span class="mono">{componentCount}</span> components ·
+				<span class="mono">{playgroundCount}</span> working examples
 			</p>
 		</div>
 
@@ -239,100 +119,61 @@
 		</ol>
 	</header>
 
-	<section class="model-section" id="what-you-get" aria-labelledby="model-heading">
+	<section class="outcome-section" id="what-you-get" aria-labelledby="outcome-heading">
 		<div class="section-heading">
 			<div>
-				<p class="eyebrow">What you get · One description, every surface</p>
+				<p class="eyebrow">What you get</p>
+				<h2 id="outcome-heading">A working application, not a template</h2>
+			</div>
+		</div>
+		<p class="section-copy">
+			The starting points cover common businesses: a bakery, a repair shop, a salon, a non-profit,
+			an agency. Each one is a list of recipes — Customers, Estimates, Invoicing, Bookkeeping — and
+			every recipe brings its screens, its rules and its sample data. Change the list and the
+			mock-up changes with it. The Export tab writes the plan to a file; the plan is JSON you can
+			read.
+		</p>
+	</section>
+
+	<!--
+		Slice B mount point (happyvertical/s-m-r-t.dev#321): the six feature
+		sections — the in-app assistant, propose-then-confirm, reports on
+		request, paperwork intake, who can see what, and outside agents — render
+		here, between "What you get" and "Describe the record once", from
+		`src/lib/data/homepage-features.ts` through one component. Nothing
+		renders from this element until that slice lands.
+	-->
+	<div class="feature-sections-slot" data-slot="homepage-features"></div>
+
+	<section class="model-section" id="one-description" aria-labelledby="model-heading">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">One description, every surface</p>
 				<h2 id="model-heading">Describe the record once</h2>
 			</div>
 			<p>
-				This is one record type, described once. The description says what the record stores, which
-				actions are available on the web and to agents, and which fields are required, read-only, or
-				secret. The surfaces it selects are generated from it: the storage, the forms, the web API,
-				the agent tools, and the permissions.
+				One class says what a record stores, which actions are available on the web and to agents,
+				and which fields are required, read-only or secret. Storage, forms, the API, the command
+				line, the agent tools and the permissions are generated from it. Change the description and
+				every surface changes with it.
 			</p>
 		</div>
 		<div class="model-grid">
 			<CodeBlock code={homepageModelExample} filename="src/lib/objects/Article.ts" />
-			<ul class="projection-list">
-				{#each frameworkModelProjections as projection (projection.label)}
-					<li>
-						<a href={projection.href}>
-							<strong>{projection.label}</strong>
-							<span>{projection.body}</span>
-							<b aria-hidden="true">→</b>
-						</a>
-					</li>
-				{/each}
-			</ul>
-		</div>
-		<p class="model-note">
-			Change the description and every surface changes with it. There are no separate copies to keep
-			in sync.
-		</p>
-		<a class="text-link" href="/framework">Read the Framework overview <span>→</span></a>
-	</section>
-
-	<section class="interaction-section" id="how-it-works" aria-labelledby="interaction-heading">
-		<div class="section-heading">
-			<div>
-				<p class="eyebrow">How it works · People and agents, same rules</p>
-				<h2 id="interaction-heading">An agent can propose a change. A person applies it.</h2>
-			</div>
-		</div>
-
-		<div class="interaction-copy">
-			<p>
-				Every button and field in a s-m-r-t application carries a description an agent can read:
-				what it is, what values it accepts, and who may use it. In the demo below, an agent finds a
-				field, checks a new value against the same rule a person sees, and sets its proposal beside
-				the current value. Nothing changes until a person clicks confirm — and that click is
-				something an agent cannot send. The red panel at the end is not an error: the agent asks for
-				a protected field, and the application refuses.
-			</p>
-			<p>
-				An agent never acts on its own authority. It can do only what three lists all allow: what
-				the signed-in person may do, what its kind of agent may ever do, and what its assigned role
-				permits. The check runs everywhere — when the agent looks, when it offers, when it acts, and
-				at the stored record itself.
-			</p>
-			<p class="run-steps">
-				Run each step below. The same demo, with its technical notes, is on the
-				<a href="/ui">UI overview</a> and in the
-				<a href="/playground?entry=agent-aware-form">Playground</a>.
-			</p>
-		</div>
-
-		<div class="participant-map" aria-label="Four participants use one application model">
-			<div class="model-core">
-				<span>Shared definition</span>
-				<strong>One application model</strong>
-				<ul>
-					{#each modelParts as part (part)}
-						<li>{part}</li>
+			<div class="model-aside">
+				<p class="projection-label">Generated from it</p>
+				<ul class="projection-list" aria-label="Surfaces generated from the record description">
+					{#each frameworkModelProjections as projection (projection.label)}
+						<li>
+							<a href={projection.href}>{projection.label} <b aria-hidden="true">→</b></a>
+						</li>
 					{/each}
 				</ul>
+				<a class="text-link" href="/framework"
+					>Framework overview <span aria-hidden="true">→</span></a
+				>
 			</div>
-			<ul class="participant-list">
-				{#each participants as participant (participant.label)}
-					<li>
-						<strong>{participant.label}</strong>
-						<span>{participant.body}</span>
-					</li>
-				{/each}
-			</ul>
 		</div>
-
-		<div class="agent-demo-embed">
-			<AgentAwareFormDemo />
-		</div>
-
-		<p class="interaction-closing">
-			The propose-then-confirm pattern ships with the toolkit as a released component (<code
-				>StagedControlReview</code
-			>) — not something each application builds for itself. This demo drives the same registry
-			directly, one storyboard step at a time, so each stage keeps its own button.
-		</p>
 	</section>
 
 	<section class="scope-section" id="scope" aria-labelledby="scope-heading">
@@ -384,114 +225,6 @@
 			<a href="/capabilities/mobile">Mobile capability page</a>, and the
 			<a href="/reference/packages">full catalog</a>.
 		</p>
-
-		<nav class="scope-feature-links" aria-label="Documentation destinations">
-			{#each featureSections as feature, index (feature.href)}
-				<a href={feature.href}>
-					<span class="feature-index">{String(index + 1).padStart(2, '0')}</span>
-					<span class="feature-label">{feature.label}</span>
-				</a>
-			{/each}
-		</nav>
-
-		<div class="inventory-strip">
-			<a href="/reference/packages">
-				<strong>{packageCount}</strong>
-				<span>documented packages</span>
-			</a>
-			<a href="/reference/components">
-				<strong>{componentCount}</strong>
-				<span>documented components</span>
-			</a>
-			<a href="/playground">
-				<strong>{playgroundCount}</strong>
-				<span>working examples</span>
-			</a>
-			<a href="/modules">
-				<strong>{moduleGroupCount}</strong>
-				<span>building-block groups</span>
-			</a>
-		</div>
-	</section>
-
-	<section class="solutions-section" aria-labelledby="solutions-heading">
-		<div class="section-heading">
-			<div>
-				<p class="eyebrow">UI · Tools people operate</p>
-				<h2 id="solutions-heading">What you can build</h2>
-			</div>
-			<p>
-				The building blocks come with their screens. These are the kinds of tools an application
-				assembles from the released parts. This site is built from the same packages, and the
-				Playground holds working examples from each group.
-			</p>
-		</div>
-
-		<div class="solution-groups">
-			<article class="solution-group solution-group-live">
-				<h3>{recordsGroup.title}</h3>
-				<p>{recordsGroup.body}</p>
-				<div class="live-table-embed">
-					<UIShowcaseDataTable variant="compact" />
-				</div>
-				<p class="includes">
-					<em
-						>Includes: {recordsGroup.includes} →
-						{#each recordsGroup.includesLinks as link, index (link.href)}{index > 0 ? ' · ' : ''}<a
-								href={link.href}>{link.label}</a
-							>{/each}</em
-					>
-				</p>
-			</article>
-
-			{#each linkOnlyGroups as group (group.title)}
-				<article class="solution-group">
-					<h3>{group.title}</h3>
-					<p>{group.body}</p>
-					<p class="includes">
-						<em
-							>Includes: {group.includes} →
-							{#each group.includesLinks as link, index (link.href)}{index > 0 ? ' · ' : ''}<a
-									href={link.href}>{link.label}</a
-								>{/each}</em
-						>
-					</p>
-				</article>
-			{/each}
-		</div>
-
-		<div class="solutions-links">
-			<a href="/ui">Browse the UI overview <span>→</span></a>
-			<a href="/playground">Open the Playground <span>→</span></a>
-		</div>
-	</section>
-
-	<section class="builder-section" id="what-you-lose" aria-labelledby="builder-heading">
-		<div class="section-heading">
-			<div>
-				<p class="eyebrow">What you lose · Separate copies to keep in sync</p>
-				<h2 id="builder-heading">Built for the people who build it</h2>
-			</div>
-		</div>
-		<div class="builder-grid">
-			<article>
-				<span>Developers</span>
-				<p>
-					Describe the application once instead of keeping several copies in sync. A new application
-					runs immediately, storing data locally, before any database is set up.
-				</p>
-			</article>
-			<article>
-				<span>Coding agents</span>
-				<p>
-					Read the same description of the project the application runs on, plus instructions
-					written for the exact installed version rather than for some other release.
-				</p>
-			</article>
-		</div>
-		<a class="text-link" href="/tooling"
-			>Explore developer and coding-agent Tooling <span>→</span></a
-		>
 	</section>
 
 	<section class="evidence-section" aria-labelledby="evidence-heading">
@@ -533,19 +266,24 @@
 		</div>
 	</section>
 
-	<section class="guide-section" aria-labelledby="guide-heading">
+	<section class="start-section" id="start-here" aria-labelledby="start-heading">
 		<div>
-			<p class="eyebrow">Guides and start paths</p>
-			<h2 id="guide-heading">Follow one supported job from start to finish</h2>
-			<p>
-				Guides give tested procedures and expected results. Start with a basic application or
-				inspect released behavior before installation.
+			<p class="eyebrow">Start here</p>
+			<h2 id="start-heading">Three ways in</h2>
+			<p class="start-note">
+				Coding agents: every installed package ships instructions written for that exact version,
+				and a read-only development server answers questions about the project.
+				<a href="/tooling">Tooling <span aria-hidden="true">→</span></a>
 			</p>
 		</div>
-		<nav aria-label="Guide and start paths">
-			<a class="primary-link" href="/guides">Browse Guides <span>→</span></a>
-			<a href="/starters/ground-up">Build a basic SvelteKit application <span>→</span></a>
-			<a href="/playground">Inspect the Playground <span>→</span></a>
+		<nav aria-label="Start paths">
+			{#each startPaths as path, index (path.href)}
+				<a href={path.href} class:primary-link={index === 0}>
+					<strong>{path.label}</strong>
+					<span>{path.body}</span>
+					<b aria-hidden="true">→</b>
+				</a>
+			{/each}
 		</nav>
 	</section>
 </article>
@@ -565,22 +303,16 @@
 		padding-bottom: clamp(4rem, 9vw, 7rem);
 	}
 
-	.visually-hidden {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		margin: -1px;
-		padding: 0;
-		overflow: hidden;
-		clip: rect(0 0 0 0);
-		clip-path: inset(50%);
-		white-space: nowrap;
-		border: 0;
-	}
-
 	.hero-intro {
 		grid-column: 1 / -1;
 		min-width: 0;
+	}
+
+	.hero-intro h1 {
+		color: var(--site-accent-strong);
+		font: 700 0.78rem var(--site-font-mono);
+		letter-spacing: 0.07em;
+		text-transform: uppercase;
 	}
 
 	.hero-shot {
@@ -589,7 +321,7 @@
 	}
 
 	.hero-intro .lede {
-		margin-top: 0;
+		margin-top: 0.9rem;
 		max-width: 34em;
 		color: var(--site-ink);
 		font-size: clamp(1.45rem, 2.4vw, 1.8rem);
@@ -641,48 +373,22 @@
 		filter: brightness(1.08);
 	}
 
-	.planner-note {
-		max-width: 40rem;
-		margin-top: 0.9rem;
+	.outcome-line {
+		max-width: 44rem;
+		margin-top: 1rem;
 		color: var(--site-muted);
-		font-size: 0.87rem;
-		line-height: 1.6;
+		font-size: 0.92rem;
+		line-height: 1.65;
 	}
 
-	.planner-note code {
+	.outcome-line code {
 		font-family: var(--font-mono);
-		font-size: 0.82em;
+		font-size: 0.85em;
 		color: var(--site-ink);
-	}
-
-	.layer-lede-list {
-		display: grid;
-		gap: 0.6rem;
-		max-width: 42rem;
-		margin-top: 1.4rem;
-		padding-top: 1.2rem;
-		border-top: 1px solid var(--site-line);
-		list-style: none;
-	}
-
-	.layer-lede-list li {
-		color: var(--site-muted);
-		font-size: 0.87rem;
-		line-height: 1.6;
-	}
-
-	.layer-lede-list strong {
-		color: var(--site-ink);
-	}
-
-	.layer-lede-list a {
-		color: var(--site-ink);
-		text-underline-offset: 0.2rem;
 	}
 
 	.saadl-definition {
 		max-width: 42rem;
-		margin-top: 1.6rem;
 		padding: 1.1rem 1.25rem;
 		border: 1px solid var(--site-line-strong);
 		border-radius: var(--site-radius-md);
@@ -691,7 +397,7 @@
 
 	.saadl-definition p {
 		color: var(--site-muted);
-		font-size: 0.83rem;
+		font-size: 0.86rem;
 		line-height: 1.6;
 	}
 
@@ -707,7 +413,7 @@
 		max-width: 42rem;
 		margin-top: 1.4rem;
 		color: var(--site-muted);
-		font: 0.72rem var(--site-font-mono);
+		font: 0.76rem var(--site-font-mono);
 		letter-spacing: 0.01em;
 	}
 
@@ -734,7 +440,6 @@
 
 	.mini-scope-map {
 		align-self: start;
-		margin-top: 1.4rem;
 		display: grid;
 		gap: 0;
 		list-style: none;
@@ -818,14 +523,33 @@
 		line-height: 1.58;
 	}
 
+	.outcome-section .section-heading {
+		margin-bottom: 1.25rem;
+	}
+
+	.section-copy {
+		max-width: 48rem;
+		color: var(--site-muted);
+		font-size: 0.95rem;
+		line-height: 1.65;
+	}
+
 	.model-grid {
 		display: grid;
-		grid-template-columns: minmax(0, 1.25fr) minmax(17rem, 0.75fr);
-		gap: 1rem;
+		grid-template-columns: minmax(0, 1.25fr) minmax(16rem, 0.75fr);
+		gap: 1.5rem;
 		align-items: start;
 	}
 
+	.projection-label {
+		color: var(--site-accent-strong);
+		font: 700 0.66rem var(--site-font-mono);
+		letter-spacing: 0.07em;
+		text-transform: uppercase;
+	}
+
 	.projection-list {
+		margin-top: 0.5rem;
 		border-top: 1px solid var(--site-line);
 		list-style: none;
 	}
@@ -835,159 +559,26 @@
 	}
 
 	.projection-list a {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) auto;
-		gap: 0.35rem 1rem;
-		padding: 0.85rem 0.25rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		min-height: 2.75rem;
+		padding: 0.5rem 0.25rem;
 		color: var(--site-ink);
+		font-size: 0.82rem;
+		font-weight: 700;
 		text-decoration: none;
 	}
 
-	.projection-list strong {
-		grid-column: 1;
-		font-size: 0.82rem;
-	}
-
-	.projection-list span {
-		grid-column: 1;
-		color: var(--site-muted);
-		font-size: 0.72rem;
-		line-height: 1.5;
+	.projection-list a:hover,
+	.projection-list a:focus-visible {
+		color: var(--site-accent-strong);
 	}
 
 	.projection-list b {
-		grid-column: 2;
-		grid-row: 1 / span 2;
-		font-weight: 500;
-	}
-
-	.model-note {
-		max-width: 48rem;
-		margin-top: 1.25rem;
-		color: var(--site-muted);
-		font-size: 0.9rem;
-		line-height: 1.65;
-	}
-
-	.interaction-copy p {
-		max-width: 52rem;
-		color: var(--site-muted);
-		font-size: 0.92rem;
-		line-height: 1.68;
-	}
-
-	.interaction-copy p + p {
-		margin-top: 0.9rem;
-	}
-
-	.run-steps {
-		color: var(--site-ink) !important;
-	}
-
-	.run-steps a {
-		color: var(--site-ink);
-	}
-
-	.participant-map {
-		position: relative;
-		max-width: 46rem;
-		margin-top: 2.25rem;
-		padding: 1.15rem;
-		border: 1px solid var(--site-line-strong);
-		border-radius: var(--site-radius-lg);
-		background:
-			radial-gradient(circle at 50% 30%, var(--site-accent-soft), transparent 46%),
-			var(--site-surface);
-	}
-
-	.model-core {
-		padding: 1.25rem;
-		border: 1px solid color-mix(in srgb, var(--site-accent-strong) 60%, var(--site-line));
-		border-radius: var(--site-radius-md);
-		background: var(--site-paper-deep);
-		text-align: center;
-	}
-
-	.model-core > span {
 		color: var(--site-accent-strong);
-		font: 700 0.62rem var(--site-font-mono);
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
-	}
-
-	.model-core > strong {
-		display: block;
-		margin-top: 0.4rem;
-		font-size: 1.08rem;
-	}
-
-	.model-core ul {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 0.35rem;
-		margin-top: 0.8rem;
-		list-style: none;
-	}
-
-	.model-core li {
-		padding: 0.25rem 0.45rem;
-		border: 1px solid var(--site-line-strong);
-		border-radius: 999px;
-		background: var(--site-surface);
-		color: var(--site-muted);
-		font: 0.59rem var(--site-font-mono);
-	}
-
-	.participant-list {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 0.6rem;
-		margin-top: 0.75rem;
-		list-style: none;
-	}
-
-	.participant-list li {
-		min-height: 7.5rem;
-		padding: 0.9rem;
-		border: 1px solid var(--site-line);
-		border-radius: var(--site-radius-md);
-		background: color-mix(in srgb, var(--site-surface) 88%, transparent);
-	}
-
-	.participant-list strong,
-	.participant-list span {
-		display: block;
-	}
-
-	.participant-list strong {
-		font-size: 0.78rem;
-	}
-
-	.participant-list span {
-		margin-top: 0.4rem;
-		color: var(--site-muted);
-		font-size: 0.71rem;
-		line-height: 1.5;
-	}
-
-	.agent-demo-embed {
-		margin-top: 2rem;
-	}
-
-	.interaction-closing {
-		max-width: 52rem;
-		margin-top: 1.5rem;
-		color: var(--site-muted);
-		font-size: 0.88rem;
-		line-height: 1.65;
-	}
-
-	.interaction-closing code {
-		padding: 0.1rem 0.35rem;
-		border-radius: 0.3rem;
-		background: var(--site-paper);
-		font-size: 0.85em;
+		font-weight: 500;
 	}
 
 	.layer-diagram {
@@ -1090,151 +681,6 @@
 		color: var(--site-ink);
 	}
 
-	.scope-feature-links {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 0.5rem;
-		margin-top: 2.5rem;
-	}
-
-	.scope-feature-links a {
-		display: flex;
-		align-items: baseline;
-		gap: 0.5rem;
-		padding: 0.75rem 0.6rem;
-		border: 1px solid var(--site-line);
-		border-radius: calc(var(--site-radius-md) - 0.25rem);
-		color: var(--site-ink);
-		font-size: 0.78rem;
-		font-weight: 700;
-		text-decoration: none;
-	}
-
-	.scope-feature-links a:hover {
-		border-color: var(--site-accent-strong);
-	}
-
-	.feature-index {
-		color: var(--site-accent-strong);
-		font: 700 0.62rem var(--site-font-mono);
-	}
-
-	.inventory-strip {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 0.75rem;
-		margin-top: 1.5rem;
-	}
-
-	.inventory-strip a {
-		display: flex;
-		flex-direction: column;
-		gap: 0.35rem;
-		padding: 1.1rem;
-		border: 1px solid var(--site-line-strong);
-		border-radius: var(--site-radius-md);
-		background: var(--site-surface);
-		color: var(--site-ink);
-		text-decoration: none;
-	}
-
-	.inventory-strip a:hover {
-		border-color: var(--site-accent-strong);
-	}
-
-	.inventory-strip strong {
-		font: 700 1.6rem var(--site-font-mono);
-	}
-
-	.inventory-strip span {
-		color: var(--site-muted);
-		font-size: 0.72rem;
-	}
-
-	.solution-groups {
-		display: grid;
-		gap: 1rem;
-	}
-
-	.solution-group {
-		padding: 1.5rem;
-		border: 1px solid var(--site-line-strong);
-		border-radius: var(--site-radius-md);
-		background: var(--site-surface);
-	}
-
-	.solution-group h3 {
-		font-size: 1.05rem;
-	}
-
-	.solution-group > p:not(.includes) {
-		max-width: 52rem;
-		margin-top: 0.6rem;
-		color: var(--site-muted);
-		font-size: 0.87rem;
-		line-height: 1.6;
-	}
-
-	.includes {
-		margin-top: 1rem;
-		color: var(--site-muted);
-		font-size: 0.76rem;
-		line-height: 1.5;
-	}
-
-	.includes a {
-		color: var(--site-ink);
-	}
-
-	.live-table-embed {
-		margin-top: 1.25rem;
-	}
-
-	.solutions-links {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1.5rem;
-		margin-top: 1.5rem;
-	}
-
-	.solutions-links a {
-		color: var(--site-ink);
-		font-size: 0.8rem;
-		font-weight: 700;
-		text-underline-offset: 0.25rem;
-	}
-
-	.solutions-links a span {
-		color: var(--site-accent-strong);
-	}
-
-	.builder-grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1rem;
-	}
-
-	.builder-grid article {
-		padding: 1.5rem;
-		border: 1px solid var(--site-line-strong);
-		border-radius: var(--site-radius-md);
-		background: var(--site-surface);
-	}
-
-	.builder-grid span {
-		color: var(--site-accent-strong);
-		font: 700 0.62rem var(--site-font-mono);
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
-	}
-
-	.builder-grid p {
-		margin-top: 0.9rem;
-		color: var(--site-muted);
-		font-size: 0.9rem;
-		line-height: 1.65;
-	}
-
 	.evidence-table-wrap {
 		overflow-x: auto;
 	}
@@ -1272,7 +718,7 @@
 		font-size: 0.78rem;
 	}
 
-	.guide-section {
+	.start-section {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.72fr);
 		gap: clamp(2rem, 7vw, 5rem);
@@ -1283,7 +729,7 @@
 		background: var(--site-accent-soft);
 	}
 
-	.guide-section > div > p:last-child {
+	.start-note {
 		max-width: 40rem;
 		margin-top: 1rem;
 		color: var(--site-muted);
@@ -1291,34 +737,67 @@
 		line-height: 1.65;
 	}
 
-	.guide-section nav {
+	.start-note a {
+		color: var(--site-ink);
+		font-weight: 700;
+		text-underline-offset: 0.25rem;
+	}
+
+	.start-note a span {
+		color: var(--site-accent-strong);
+	}
+
+	.start-section nav {
 		display: grid;
 		align-content: center;
 		gap: 0.55rem;
 	}
 
-	.guide-section nav a {
-		display: flex;
+	.start-section nav a {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 0.2rem 1rem;
 		align-items: center;
-		justify-content: space-between;
 		min-height: 3rem;
-		padding: 0.75rem 0.9rem;
+		padding: 0.8rem 0.9rem;
 		border: 1px solid color-mix(in srgb, var(--site-accent-strong) 35%, var(--site-line));
 		border-radius: calc(var(--site-radius-md) - 0.25rem);
 		background: var(--site-surface);
 		color: var(--site-ink);
-		font-size: 0.76rem;
-		font-weight: 700;
 		text-decoration: none;
 	}
 
-	.guide-section nav a:hover {
+	.start-section nav a:hover {
 		border-color: var(--site-accent-strong);
 	}
 
-	.guide-section nav .primary-link {
+	.start-section nav strong {
+		grid-column: 1;
+		font-size: 0.82rem;
+	}
+
+	.start-section nav span {
+		grid-column: 1;
+		color: var(--site-muted);
+		font-size: 0.74rem;
+		line-height: 1.5;
+	}
+
+	.start-section nav b {
+		grid-column: 2;
+		grid-row: 1 / span 2;
+		color: var(--site-accent-strong);
+		font-weight: 500;
+	}
+
+	.start-section nav a.primary-link {
 		background: var(--site-accent-strong);
 		color: var(--smrt-color-on-primary, #fff);
+	}
+
+	.start-section nav a.primary-link span,
+	.start-section nav a.primary-link b {
+		color: inherit;
 	}
 
 	@media (max-width: 64rem) {
@@ -1335,21 +814,12 @@
 		.layer-role {
 			grid-column: 1;
 		}
-
-		.scope-feature-links {
-			grid-template-columns: repeat(2, 1fr);
-		}
-
-		.inventory-strip {
-			grid-template-columns: repeat(2, 1fr);
-		}
 	}
 
 	@media (max-width: 58rem) {
 		.hero,
 		.model-grid,
-		.builder-grid,
-		.guide-section {
+		.start-section {
 			grid-template-columns: 1fr;
 		}
 
@@ -1361,7 +831,7 @@
 			max-width: 42rem;
 		}
 
-		.guide-section {
+		.start-section {
 			gap: 2rem;
 		}
 	}
@@ -1375,12 +845,6 @@
 			align-items: flex-start;
 			flex-direction: column;
 			gap: 0.9rem;
-		}
-
-		.builder-grid,
-		.scope-feature-links,
-		.inventory-strip {
-			grid-template-columns: 1fr;
 		}
 
 		.evidence-table thead {

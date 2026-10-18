@@ -25,6 +25,10 @@ describe('Why s-m-r-t discovery surfaces', () => {
 		// still works.
 		expect(searchDocs('why s-m-r-t')[0]).toMatchObject({ label: 'Home', href: '/' });
 		expect(searchDocs('why smrt')[0]).toMatchObject({ label: 'Home', href: '/' });
+		// The visible H1 ("The s-m-r-t application stack") and the lede's subject
+		// are registered as keywords so the page's own words find it.
+		expect(searchDocs('application stack')[0]).toMatchObject({ label: 'Home', href: '/' });
+		expect(searchDocs('business software')[0]).toMatchObject({ label: 'Home', href: '/' });
 
 		const sitemapXml = await (await sitemap({} as never)).text();
 		expect(sitemapXml).toContain('<loc>https://s-m-r-t.dev</loc>');

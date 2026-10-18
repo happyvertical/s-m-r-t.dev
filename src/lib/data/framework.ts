@@ -71,7 +71,7 @@ export class Article extends SmrtObject {
 }`;
 
 /**
- * The homepage's "Describe the record once" section (`#what-you-get`) shows a
+ * The homepage's "Describe the record once" section (`#one-description`) shows a
  * trimmed variant of the same model — the `@smrt()` config block plus the
  * three field policies the adjacent copy names (required, read-only,
  * secret) — so the section stays about one viewport tall. This is a teaser
