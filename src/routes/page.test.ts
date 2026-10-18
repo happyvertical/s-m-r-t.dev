@@ -1,33 +1,40 @@
 import { cleanup, render, screen } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 import { appLayers, buildingBlockNouns, layerNames, unlayeredPackageCount } from '$lib/data/layers';
-import { applicationModuleClusters } from '$lib/data/modules';
+import { frameworkModelProjections } from '$lib/data/framework';
 import { packages } from '$lib/data/packages';
 import { playgroundModules } from '$lib/data/playgrounds';
 import { uiComponents } from '$lib/data/ui-components.generated';
 import { whySmrtClaims } from '$lib/data/why-smrt-claims';
+import { SMRT_VERSION } from '$lib/version';
 import Page from './+page.svelte';
 
 afterEach(cleanup);
 
 const buildingBlocksIndex = appLayers.findIndex((layer) => layer.id === 'building-blocks');
 
-describe('documentation home page', () => {
-	it('names the s-m-r-t application stack and keeps the participant map', () => {
-		render(Page);
+const follows = (a: Node, b: Node) =>
+	Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
 
-		expect(
-			screen.getByRole('heading', {
-				level: 1,
-				name: 'The s-m-r-t application stack'
-			})
-		).toBeTruthy();
-		for (const participant of ['Persons', 'Application agents', 'Developers', 'Coding agents']) {
-			expect(screen.getByText(participant, { selector: 'strong' })).toBeTruthy();
-		}
+// Template line breaks reach textContent as runs of whitespace.
+const text = (node: Element | null | undefined) => node?.textContent?.replace(/\s+/g, ' ') ?? '';
+
+describe('documentation home page', () => {
+	it('shows the category H1 and a plain lede with the metaphor retired', () => {
+		const { container } = render(Page);
+
+		const h1 = screen.getByRole('heading', { level: 1, name: 'The s-m-r-t application stack' });
+		// Phase 2 of the homepage refresh (#321) makes the H1 visible: the OG
+		// image already shows it, so the page should match.
+		expect(h1.classList.contains('visually-hidden')).toBe(false);
+		expect(text(container.querySelector('.lede'))).toContain(
+			'people and software agents use through the same screens, rules and permissions'
+		);
+		expect(container.textContent).not.toContain('blurs the line');
+		expect(container.textContent).not.toContain('better demonstrated than explained');
 	});
 
-	it('puts the primary build-a-boilerplate link above the recording and its caption', () => {
+	it('puts the primary build-a-boilerplate link above the recording, its caption and the outcome line', () => {
 		const { container } = render(Page);
 		const intro = container.querySelector('.hero-intro');
 		const video = intro?.querySelector<HTMLVideoElement>('figure.planner-screencast video');
@@ -52,40 +59,45 @@ describe('documentation home page', () => {
 		const cta = intro?.querySelector('a.primary-link--hero');
 		expect(cta?.getAttribute('href')).toBe('/build-a-boilerplate');
 		expect(cta?.textContent).toContain('build-a-boilerplate');
-		// Order: intro text, then the button, then the video, then its caption.
+		// Order: H1, lede, the button, the video, its caption, then what you
+		// leave with.
+		const h1 = intro!.querySelector('h1')!;
 		const lede = intro!.querySelector('.lede')!;
 		const caption = intro!.querySelector('figcaption')!;
-		const follows = (a: Node, b: Node) =>
-			Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+		const outcome = intro!.querySelector('.outcome-line')!;
+		expect(follows(h1, lede)).toBe(true);
 		expect(follows(lede, cta!)).toBe(true);
 		expect(follows(cta!, video!)).toBe(true);
 		expect(follows(video!, caption)).toBe(true);
+		expect(follows(caption, outcome)).toBe(true);
+		expect(outcome.textContent).toContain('smrt cookbook apply');
 	});
 
-	it('renders the five plain layer names in the hero lede and the mini scope map', () => {
+	it('keeps the mini scope map as the hero visual and moves the five-layer list out of the hero', () => {
 		const { container } = render(Page);
 
-		const ledeNames = [...container.querySelectorAll('.layer-lede-list strong')].map(
-			(node) => node.textContent
-		);
 		const miniMapNames = [...container.querySelectorAll('.mini-name')].map(
 			(node) => node.textContent
 		);
-
-		expect(ledeNames).toEqual(layerNames);
 		expect(miniMapNames).toEqual(layerNames);
+		expect(container.querySelector('.hero .layer-lede-list')).toBeNull();
+		// The five layers still read as sentences — once, in the scope section.
+		const bandNames = [...container.querySelectorAll('#scope .layer-band h3')].map(
+			(node) => node.textContent
+		);
+		expect(bandNames).toEqual(layerNames);
+		appLayers.forEach((layer, index) => {
+			if (layer.id === 'building-blocks') return;
+			expect(container.querySelectorAll('#scope .layer-role')[index]?.textContent?.trim()).toBe(
+				layer.scopeCopy
+			);
+		});
 	});
 
-	it('links the shared Ready-made building blocks nouns identically in the hero lede and the scope map', () => {
+	it('links the shared Ready-made building blocks nouns in the scope map', () => {
 		const { container } = render(Page);
 		const expectedHrefs = buildingBlockNouns.map((noun) => noun.href);
 		const expectedLabels = buildingBlockNouns.map((noun) => noun.label).join(', ');
-
-		const ledeItem = container.querySelectorAll('.layer-lede-list li')[buildingBlocksIndex];
-		expect(ledeItem?.textContent).toContain(expectedLabels);
-		expect([...ledeItem!.querySelectorAll('a')].map((link) => link.getAttribute('href'))).toEqual(
-			expectedHrefs
-		);
 
 		const scopeBand = container.querySelectorAll('.layer-band')[buildingBlocksIndex];
 		const scopeRole = scopeBand.querySelector('.layer-role');
@@ -123,110 +135,83 @@ describe('documentation home page', () => {
 		expect(miniMapLinks.every((link) => link.getAttribute('href') === '#scope')).toBe(true);
 	});
 
-	it('follows the approved narrative order', () => {
-		render(Page);
+	it('follows the approved section order, with the slice B slot before the record description', () => {
+		const { container } = render(Page);
 
 		expect(
 			screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent)
 		).toEqual([
+			'A working application, not a template',
 			'Describe the record once',
-			'An agent can propose a change. A person applies it.',
 			'Five layers, one release',
-			'What you can build',
-			'Built for the people who build it',
 			'Every claim on this page has a source',
-			'Follow one supported job from start to finish'
+			'Three ways in'
 		]);
-	});
 
-	it('maps every approved documentation destination from the scope map', () => {
-		const { container } = render(Page);
-		const featureLinks = [...container.querySelectorAll('.scope-feature-links a')];
-
+		// Slice B of #321 mounts the six feature sections here. The slot is
+		// empty until then, and it sits between "What you get" and the scope
+		// half of the page so B does not have to reorder anything.
+		const slot = container.querySelector('[data-slot="homepage-features"]');
+		expect(slot).toBeTruthy();
+		expect(slot!.childElementCount).toBe(0);
+		expect(follows(container.querySelector('#what-you-get')!, slot!)).toBe(true);
+		expect(follows(slot!, container.querySelector('#one-description')!)).toBe(true);
 		expect(
-			featureLinks.map((link) => ({
-				label: link.querySelector('.feature-label')?.textContent,
-				href: link.getAttribute('href')
-			}))
-		).toEqual([
-			{ label: 'Framework', href: '/framework' },
-			{ label: 'Agents', href: '/agents' },
-			{ label: 'Interaction', href: '/interaction' },
-			{ label: 'UI', href: '/ui' },
-			{ label: 'Modules', href: '/modules' },
-			{ label: 'Tooling', href: '/tooling' },
-			{ label: 'Playground', href: '/playground' },
-			{ label: 'Reference', href: '/reference' }
-		]);
-		expect(screen.getByRole('link', { name: /browse guides/i })).toBeTruthy();
+			follows(container.querySelector('#one-description')!, container.querySelector('#scope')!)
+		).toBe(true);
 	});
 
-	it('keeps the homepage content coherent with the existing anchor labels', () => {
+	it('keeps the homepage anchors the navigation registers', () => {
 		const { container } = render(Page);
 
 		for (const [id, label] of [
-			['how-it-works', 'How it works'],
 			['what-you-get', 'What you get'],
-			['what-you-lose', 'What you lose']
+			['one-description', 'Describe the record once'],
+			['scope', 'Five layers, one release'],
+			['start-here', 'Three ways in']
 		]) {
 			expect(container.querySelector(`#${id}`)?.textContent).toContain(label);
 		}
+		expect(container.querySelector('.hero-actions a[href="#what-you-get"]')).toBeTruthy();
 	});
 
-	it('runs the agent-aware form demo live inside the how-it-works section', () => {
+	it('removes the older embeds and the sections build-a-boilerplate replaced', () => {
 		const { container } = render(Page);
-		const section = container.querySelector('#how-it-works');
 
-		expect(section?.querySelector('.agent-demo-embed .agent-form-demo')).toBeTruthy();
-	});
-
-	it('builds four solution groups, the first running the live DataTable', () => {
-		const { container } = render(Page);
-		const cards = [...container.querySelectorAll('.solution-group')];
-
-		expect(cards).toHaveLength(4);
-		expect(cards.map((card) => card.querySelector('h3')?.textContent)).toEqual([
-			'Working with records',
-			'Content management',
-			'Reports and analytics',
-			'Conversation'
-		]);
-		expect(cards[0].querySelector('.live-table-embed table')).toBeTruthy();
-		for (const card of cards) {
-			expect(card.querySelector('.includes a')).toBeTruthy();
+		// AgentAwareFormDemo and UIShowcaseDataTable stay on /ui, /agents and
+		// in the playground; the homepage's demo is the recording.
+		expect(container.querySelector('.agent-form-demo')).toBeNull();
+		expect(container.querySelector('.live-table-embed, .solution-group')).toBeNull();
+		expect(container.querySelector('.participant-map')).toBeNull();
+		expect(container.querySelector('.inventory-strip')).toBeNull();
+		expect(container.querySelector('.scope-feature-links')).toBeNull();
+		expect(container.querySelector('.builder-grid')).toBeNull();
+		for (const retired of [
+			'What you can build',
+			'Built for the people who build it',
+			'What you lose',
+			'Scripted adapter',
+			'Awareness is not authority'
+		]) {
+			expect(container.textContent).not.toContain(retired);
 		}
 	});
 
-	it('generates the inventory strip from the real catalog instead of a hand-picked teaser', () => {
+	it('generates the scale line from the catalog instead of hand-typed counts', () => {
 		const { container } = render(Page);
-		const tiles = [...container.querySelectorAll('.inventory-strip a')];
+		const line = container.querySelector('.scale-line');
+		const playgroundCount = playgroundModules.reduce(
+			(total, module) => total + (module.entries?.length ?? 0),
+			0
+		);
 
-		expect(
-			tiles.map((tile) => ({
-				count: tile.querySelector('strong')?.textContent,
-				label: tile.querySelector('span')?.textContent,
-				href: tile.getAttribute('href')
-			}))
-		).toEqual([
-			{ count: String(packages.length), label: 'documented packages', href: '/reference/packages' },
-			{
-				count: String(uiComponents.length),
-				label: 'documented components',
-				href: '/reference/components'
-			},
-			{
-				count: String(
-					playgroundModules.reduce((total, module) => total + (module.entries?.length ?? 0), 0)
-				),
-				label: 'working examples',
-				href: '/playground'
-			},
-			{
-				count: String(applicationModuleClusters.length),
-				label: 'building-block groups',
-				href: '/modules'
-			}
+		expect([...line!.querySelectorAll('.mono')].map((node) => node.textContent)).toEqual([
+			SMRT_VERSION,
+			String(packages.length),
+			String(uiComponents.length),
+			String(playgroundCount)
 		]);
+		expect(line?.textContent).toContain('released together');
 	});
 
 	it('reconciles the five-layer diagram against the full catalog total', () => {
@@ -242,11 +227,22 @@ describe('documentation home page', () => {
 		);
 	});
 
-	it('shows the record description example and drops the chat transcript', () => {
-		render(Page);
+	it('shows the trimmed record description with one link per generated surface', () => {
+		const { container } = render(Page);
 
 		expect(screen.queryByText(/export class Article/)).not.toBeNull();
 		expect(screen.queryByText(/assistant:/i)).toBeNull();
+		expect(
+			[...container.querySelectorAll('.projection-list a')].map((link) => ({
+				label: text(link).replace('→', '').trim(),
+				href: link.getAttribute('href')
+			}))
+		).toEqual(
+			frameworkModelProjections.map((projection) => ({
+				label: projection.label,
+				href: projection.href
+			}))
+		);
 	});
 
 	it('renders the locked SAADL definition sentence verbatim', () => {
@@ -255,6 +251,28 @@ describe('documentation home page', () => {
 		expect(container.querySelector('.saadl-definition strong')?.textContent).toBe(
 			'SAADL — Software as Agentic Domain Logic: software whose domain logic exposes the same ' +
 				'operations to human users (UI, HTTP, CLI) and to software agents (callable tools).'
+		);
+		expect(text(container.querySelector('.saadl-definition'))).toContain(
+			'through the same doors, under the same rules'
+		);
+	});
+
+	it('offers three start paths and the coding-agent note', () => {
+		const { container } = render(Page);
+		const paths = [...container.querySelectorAll('#start-here nav a')];
+
+		expect(
+			paths.map((link) => ({
+				label: link.querySelector('strong')?.textContent,
+				href: link.getAttribute('href')
+			}))
+		).toEqual([
+			{ label: 'Try it', href: '/build-a-boilerplate' },
+			{ label: 'Build one', href: '/starters/ground-up' },
+			{ label: 'Connect an agent', href: '/agents' }
+		]);
+		expect(container.querySelector('#start-here .start-note a')?.getAttribute('href')).toBe(
+			'/tooling'
 		);
 	});
 

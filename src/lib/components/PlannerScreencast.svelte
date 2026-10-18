@@ -109,9 +109,8 @@
 		</button>
 	</div>
 	<figcaption>
-		build-a-boilerplate, recorded on this site: choosing the Mechanic cookbook, opening an invoice
-		and a sales-by-month report in its preview, then the Export tab's prompt for a coding agent.
-		Silent, about 20 seconds, looping.
+		build-a-boilerplate, recorded on this site. Twenty seconds, silent, looping: choosing the
+		Mechanic cookbook, opening an invoice and a sales-by-month report, then the Export tab.
 	</figcaption>
 </figure>
 
