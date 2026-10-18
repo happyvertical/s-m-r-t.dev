@@ -135,25 +135,32 @@ describe('documentation home page', () => {
 		expect(miniMapLinks.every((link) => link.getAttribute('href') === '#scope')).toBe(true);
 	});
 
-	it('follows the approved section order, with the slice B slot before the record description', () => {
+	it('follows the approved section order, with the slice B sections before the record description', () => {
 		const { container } = render(Page);
 
 		expect(
 			screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent)
 		).toEqual([
 			'A working application, not a template',
+			'An application can carry its own assistant',
+			'An agent can propose. A person confirms.',
+			'Say what you want to see',
+			'An inbox for the documents a business receives',
+			'Rules about data live with the data',
+			'Three doors, and each one is a choice',
 			'Describe the record once',
 			'Five layers, one release',
 			'Every claim on this page has a source',
 			'Three ways in'
 		]);
 
-		// Slice B of #321 mounts the six feature sections here. The slot is
-		// empty until then, and it sits between "What you get" and the scope
-		// half of the page so B does not have to reorder anything.
+		// Slice B of #321 mounts the six feature sections here, between "What
+		// you get" and the scope half of the page: six sections, then the one
+		// money sentence.
 		const slot = container.querySelector('[data-slot="homepage-features"]');
 		expect(slot).toBeTruthy();
-		expect(slot!.childElementCount).toBe(0);
+		expect(slot!.querySelectorAll(':scope > section')).toHaveLength(6);
+		expect(slot!.querySelector(':scope > p.money-note')).toBeTruthy();
 		expect(follows(container.querySelector('#what-you-get')!, slot!)).toBe(true);
 		expect(follows(slot!, container.querySelector('#one-description')!)).toBe(true);
 		expect(
@@ -283,8 +290,8 @@ describe('documentation home page', () => {
 		// The homepage evidence strip filters out the mobile claim (unpublished
 		// smrt-mobile / smrt-android / smrt-ios packages); asserting both counts
 		// keeps a future restoration of that row a deliberate, visible edit.
-		expect(whySmrtClaims).toHaveLength(7);
-		expect(rows).toHaveLength(6);
+		expect(whySmrtClaims).toHaveLength(13);
+		expect(rows).toHaveLength(12);
 		expect(rows.map((row) => row.querySelector('td')?.textContent)).not.toContain(
 			whySmrtClaims.find((claim) => claim.id === 'mobile-kmp')?.display
 		);
