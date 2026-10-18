@@ -36,6 +36,16 @@ describe('Why s-m-r-t discovery surfaces', () => {
 	});
 
 	it('publishes the thesis, canonical technical routes, and runtime boundary for crawlers', () => {
+		// The lede is the quotable paragraph from the homepage proposal (#321
+		// slice E): the same text as the homepage SEO description.
+		expect(llms).toContain(
+			'> s-m-r-t is an MIT-licensed TypeScript stack for business software that people and software agents use through the same screens, rules and permissions.'
+		);
+		expect(llms).toContain('build-a-boilerplate assembles a working mock-up');
+		expect(llms).not.toContain('Build a boilerplate');
+		expect(llms).toContain('https://s-m-r-t.dev/build-a-boilerplate');
+		expect(llms).toContain('https://s-m-r-t.dev/agents');
+		expect(llms).toContain('https://s-m-r-t.dev/reference/evidence');
 		expect(llms).toContain('Awareness is not authority');
 		expect(llms).toContain('https://s-m-r-t.dev/capabilities/agent-legible-applications');
 		expect(llms).toContain('https://s-m-r-t.dev/tooling/app-mcp');
