@@ -1154,6 +1154,7 @@ export const packages: SmrtPackage[] = [
 				'MiniChat',
 				'AssistantDock',
 				'AssistantThreadList',
+				'AssistantQuestionForm',
 				'FloatingAssistant',
 				'HelperControlPanel',
 				'ChatTabs'
@@ -1175,6 +1176,10 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Report and overview tools for the assistant',
 					body: 'createRuntimeReportTools returns reports.runtime.sources, define, list, and run for the persona extraTools seam. The model supplies only a declarative RuntimeReportSpec from smrt-reports, and sources are a server-owned allow-list. A report is saved only after a person confirms the exact spec; without a confirmation host, apply returns an awaiting_confirmation proposal and stores nothing. createOverviewTools returns overviews.describe, apply, and undo over a host-opened overview page.'
+				},
+				{
+					title: 'Questions the assistant asks are data',
+					body: 'An assistant turn that asks the person to choose attaches an assistant-question object to the message, with choice fields whose options come from code that knows the domain, never from model text. AssistantDock renders it as AssistantQuestionForm, a radio group, select, or checkboxes with the default preselected. Submitting calls the transport\'s optional answerQuestion, which continues the turn in code with no model round-trip; a transport without it receives the answer as an ordinary message, and a typed reply is matched against the options. parseAssistantQuestion and matchAssistantQuestionText come from the /svelte subpath.'
 				},
 				{
 					title: 'Helper preferences are presentation policy',
@@ -1774,6 +1779,7 @@ export const packages: SmrtPackage[] = [
 				'RuntimeReportsRoute',
 				'RuntimeReportDetailRoute',
 				'RuntimeReportChartWidget',
+				'SavedReportsWidget',
 				'MaterializedReportTable'
 			],
 			componentImport: '@happyvertical/smrt-reports/svelte',
@@ -1781,6 +1787,10 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Runtime reports are data, not code',
 					body: 'parseRuntimeReportSpec accepts a closed grammar with no SQL, expressions, joins, tables, or tenants. compileRuntimeReportSpec resolves it against a server-owned source allow-list, the registry field policy, the live principal permissions, and a fail-closed tenant predicate. A stored RuntimeReport is recompiled for the running principal on every run, and result rows are never persisted. The assistant tools that define and run them live in smrt-chat.'
+				},
+				{
+					title: 'Preview a spec in the browser',
+					body: 'The /spec subpath is the browser-safe half of runtime reports: parseRuntimeReportSpec, the spec grammar and time helpers, runtimeReportSpecDigest, and runRuntimeReportInMemory, which evaluates a spec over rows the caller already holds using the compiler\'s own rules. It is a preview and test runner, never an authority boundary; stored reports still compile per principal on the server.'
 				},
 				{
 					title: 'Two recipes with different surfaces',
