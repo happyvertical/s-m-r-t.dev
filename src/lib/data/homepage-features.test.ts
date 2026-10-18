@@ -3,7 +3,7 @@ import { agentsTopics } from '$lib/data/agents';
 import { homepageFeatures, homepageMoneyNote } from '$lib/data/homepage-features';
 import { interactionContent } from '$lib/data/interaction';
 import { applicationModuleClusters } from '$lib/data/modules';
-import { searchDocs } from '$lib/data/search';
+import { homepageFeatureEntries, searchDocs } from '$lib/data/search';
 import { whySmrtClaims } from '$lib/data/why-smrt-claims';
 import { SMRT_VERSION } from '$lib/version';
 
@@ -126,10 +126,18 @@ describe('homepage feature sections (#321 slice B)', () => {
 		}
 	});
 
-	it('is discoverable from the command palette in plain words', () => {
-		expect(searchDocs('assistant').some((entry) => entry.href === '/#assistant')).toBe(true);
-		expect(searchDocs('who can see what')[0]).toMatchObject({ href: '/#who-can-see-what' });
-		expect(searchDocs('paperwork')[0]).toMatchObject({ href: '/#paperwork-in-proposals-out' });
-		expect(searchDocs('outside agents')[0]).toMatchObject({ href: '/#outside-agents-same-rules' });
+	it('indexes each section for the palette, keyed by plain words, pending the mount', () => {
+		// `homepageFeatureEntries` is spread into `searchEntries` by the commit
+		// that mounts `FeatureSections` on `/`; until then a palette hit on
+		// `/#assistant` would land on a page without that anchor.
+		expect(homepageFeatureEntries.map((entry) => entry.href)).toEqual(
+			homepageFeatures.map((feature) => `/#${feature.id}`)
+		);
+		const byId = new Map(homepageFeatures.map((feature) => [`/#${feature.id}`, feature]));
+		for (const entry of homepageFeatureEntries) {
+			expect(entry.kind).toBe('section');
+			expect(entry.keywords).toEqual(expect.arrayContaining(byId.get(entry.href)!.keywords));
+		}
+		expect(searchDocs('paperwork').some((entry) => entry.href.startsWith('/#'))).toBe(false);
 	});
 });

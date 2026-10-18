@@ -185,7 +185,7 @@ export const whySmrtClaims: WhySmrtClaim[] = [
 		claim:
 			'The application MCP server exposes an explicit model allow-list with required scopes and an effects filter. Unauthenticated callers see public read-only tools only. Bearer principals are bound into the app’s RLS context. WebMCP excludes undeclared tools under a default read-only policy. The app CLI bridges to the same MCP path.',
 		display:
-			'MCP, the command line, and in-page browser tools are each turned on per application, list their operations, start read-only, and run as a signed-in identity.',
+			'MCP, the command line, and in-page browser tools are each turned on per application, list their operations, and start read-only. Without a sign-in only public read tools are visible; writes run as a signed-in identity.',
 		canonical: { label: 'Agents', href: '/agents' },
 		source: {
 			label: 'Application MCP release contract',

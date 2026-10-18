@@ -153,7 +153,7 @@ const landingEntries: SearchEntry[] = landingTracks.flatMap(({ base, label, topi
  * so without this track "assistant", "report", "approvals" or "who can see
  * what" would find the deeper pages and never the plain-language overview.
  */
-const homepageFeatureEntries: SearchEntry[] = homepageFeatures.map((feature) => ({
+export const homepageFeatureEntries: SearchEntry[] = homepageFeatures.map((feature) => ({
 	label: feature.title,
 	href: `/#${feature.id}`,
 	breadcrumb: `Home · ${feature.eyebrow}`,
@@ -227,7 +227,8 @@ export const searchEntries: SearchEntry[] = dedupe([
 	...pageEntries,
 	...sectionEntries,
 	...landingEntries,
-	...homepageFeatureEntries,
+	// `homepageFeatureEntries` joins this list in the commit that mounts
+	// `FeatureSections` on `/` (#323): until then its `/#…` anchors do not render.
 	...packageEntries
 ]);
 
