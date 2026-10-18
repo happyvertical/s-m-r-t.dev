@@ -15457,7 +15457,7 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'boolean | { slot?: ShellSlot; }',
 				status: false,
 				description:
-					'The theme switcher (`ColorSchemeToggle` from `smrt-ui/themes`) as the built-in item `item:color-scheme`, default slot `header.end`. On by default; `false` opts out, `{ slot }` sets the default slot. Icon-only on phones.'
+					'The light/dark switch as the built-in item `item:color-scheme`: an icon-only toggle (moon or sun, "Dark mode" with `aria-pressed`). Default slot `leftSidebar.footer`, where it renders in the sidebar\'s utility row beside the collapse chevron, above the account menu, and stays a compact icon in the collapsed rail; on phones it defaults to `header.end`. On by default; `false` opts out, `{ slot }` sets the default slot (users can still move it in the layout editor).'
 			},
 			{
 				name: 'commandPalette',
@@ -20661,6 +20661,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'Snippet',
 				status: false,
 				description: 'Content pinned below the collapsed tenant rail.'
+			},
+			{
+				name: 'tenantUtilities',
+				code: 'Snippet',
+				status: false,
+				description:
+					"Icon controls in the left sidebar's utility row: with the collapse chevron at the end of the nav region, above the sidebar footer, in the expanded sidebar (start of the row; the chevron keeps the inner edge) and in the collapsed rail (stacked above the chevron). Desktop only; `AppShell` puts its color-scheme item here."
 			},
 			{
 				name: 'tenantPanel',
@@ -31117,8 +31124,8 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2816,
-	totalProps: 2977,
+	describedProps: 2817,
+	totalProps: 2978,
 	authoredSummaries: 152,
 	totalComponents: 404
 };
