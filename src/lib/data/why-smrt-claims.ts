@@ -43,7 +43,7 @@ export const whySmrtClaims: WhySmrtClaim[] = [
 		claim:
 			'Form controls carry a stable identity through a transport-neutral control interaction registry. An agent can stage a value under sensitivity checks; only a local human handler submits the confirmed apply.',
 		display:
-			'Any control can be named, staged by an agent, and applied only when a person confirms it — through one registry.',
+			'Every control has a stable name; an agent can stage a value only where sensitivity rules allow, and only a person’s confirmation applies it.',
 		canonical: { label: 'Agent-assisted forms', href: '/capabilities/agent-assisted-forms' },
 		source: {
 			label: 'smrt-ui release contract',
