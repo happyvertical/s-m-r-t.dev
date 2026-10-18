@@ -2,6 +2,8 @@ import { cleanup, render, screen } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 import { appLayers, buildingBlockNouns, layerNames, unlayeredPackageCount } from '$lib/data/layers';
 import { frameworkModelProjections } from '$lib/data/framework';
+import { homepageFeatures } from '$lib/data/homepage-features';
+import { curatedChipsFor } from '$lib/data/layer-chips';
 import { packages } from '$lib/data/packages';
 import { playgroundModules } from '$lib/data/playgrounds';
 import { uiComponents } from '$lib/data/ui-components.generated';
@@ -106,22 +108,29 @@ describe('documentation home page', () => {
 		);
 	});
 
-	it('renders every layer chip as a same-tab link into the package catalog', () => {
+	it('renders the curated chips per layer, then an "all N" link with the generated count', () => {
 		const { container } = render(Page);
 		const bands = [...container.querySelectorAll('.layer-band')];
 
 		expect(bands).toHaveLength(appLayers.length);
 		bands.forEach((band, index) => {
 			const layer = appLayers[index];
-			const chipLinks = [...band.querySelectorAll('.layer-chips a')];
+			const curated = curatedChipsFor(layer);
+			const chipLinks = [...band.querySelectorAll('.layer-chips li:not(.layer-chips-all) a')];
 
-			expect(chipLinks).toHaveLength(layer.chips.length);
+			expect(chipLinks).toHaveLength(curated.length);
 			chipLinks.forEach((link, chipIndex) => {
-				expect(link.getAttribute('href')).toBe(
-					`/reference/packages/${layer.chips[chipIndex].slug}`
-				);
+				expect(link.getAttribute('href')).toBe(`/reference/packages/${curated[chipIndex].slug}`);
+				expect(link.textContent).toBe(curated[chipIndex].label);
 				expect(link.getAttribute('target')).toBeNull();
 			});
+
+			// The count is the layer's full membership, not the curated handful.
+			const allLink = band.querySelector('.layer-chips-all a');
+			expect(allLink?.getAttribute('href')).toBe('/reference/packages');
+			expect(allLink?.textContent?.replace(/\s+/g, ' ').trim()).toBe(
+				`all ${layer.packages.length} →`
+			);
 		});
 	});
 
@@ -134,24 +143,31 @@ describe('documentation home page', () => {
 		expect(miniMapLinks.every((link) => link.getAttribute('href') === '#scope')).toBe(true);
 	});
 
-	it('follows the approved section order, with the slice B slot before the record description', () => {
+	it('follows the approved section order, with the slice B sections before the record description', () => {
 		const { container } = render(Page);
 
 		expect(
 			screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent)
 		).toEqual([
 			'A working application, not a template',
+			'An application can carry its own assistant',
+			'An agent can propose. A person confirms.',
+			'Say what you want to see',
+			'An inbox for the documents a business receives',
+			'Rules about data live with the data',
+			'Three doors, and each one is a choice',
 			'Describe the record once',
 			'Five layers, one release',
 			'Three ways in'
 		]);
 
-		// Slice B of #321 mounts the six feature sections here. The slot is
-		// empty until then, and it sits between "What you get" and the scope
-		// half of the page so B does not have to reorder anything.
+		// Slice B of #321 mounts the six feature sections here, between "What
+		// you get" and the scope half of the page: six sections, then the one
+		// money sentence.
 		const slot = container.querySelector('[data-slot="homepage-features"]');
 		expect(slot).toBeTruthy();
-		expect(slot!.childElementCount).toBe(0);
+		expect(slot!.querySelectorAll(':scope > section')).toHaveLength(6);
+		expect(slot!.querySelector(':scope > p.money-note')).toBeTruthy();
 		expect(follows(container.querySelector('#what-you-get')!, slot!)).toBe(true);
 		expect(follows(slot!, container.querySelector('#one-description')!)).toBe(true);
 		expect(
@@ -284,5 +300,13 @@ describe('documentation home page', () => {
 		const note = container.querySelector('.evidence-note');
 		expect(text(note)).toContain('Every claim on this page has a source');
 		expect(note?.querySelector('a')?.getAttribute('href')).toBe('/reference/evidence');
+
+		// Each feature section's "Sources" link lands on its own row of that page;
+		// reference/evidence/page.test.ts pins that every row id is an anchor.
+		const sources = [...container.querySelectorAll('.feature a.sources')];
+		expect(sources).toHaveLength(homepageFeatures.length);
+		expect(sources.map((link) => link.getAttribute('href'))).toEqual(
+			homepageFeatures.map((feature) => `/reference/evidence#${feature.evidenceId}`)
+		);
 	});
 });
