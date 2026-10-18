@@ -88,9 +88,9 @@ describe('contextual navigation', () => {
 	});
 
 	it('uses location state for homepage anchors', () => {
-		expect(isNavigationItemActive('/#how-it-works', '/', '#how-it-works')).toBe(true);
-		expect(isNavigationItemActive('/', '/', '#how-it-works')).toBe(false);
-		expect(isNavigationItemActive('/#what-you-get', '/', '#how-it-works')).toBe(false);
+		expect(isNavigationItemActive('/#one-description', '/', '#one-description')).toBe(true);
+		expect(isNavigationItemActive('/', '/', '#one-description')).toBe(false);
+		expect(isNavigationItemActive('/#what-you-get', '/', '#one-description')).toBe(false);
 	});
 
 	it('marks exactly one /agents "On this page" anchor active for the current topic', () => {
