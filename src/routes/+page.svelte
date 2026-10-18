@@ -8,6 +8,7 @@
 		buildingBlocksScopeLede,
 		unlayeredPackageCount
 	} from '$lib/data/layers';
+	import { curatedChipsFor } from '$lib/data/layer-chips';
 	import { frameworkModelProjections, homepageModelExample } from '$lib/data/framework';
 	import { packages } from '$lib/data/packages';
 	import { uiComponents } from '$lib/data/ui-components.generated';
@@ -183,8 +184,9 @@
 				<h2 id="scope-heading">Five layers, one release</h2>
 			</div>
 			<p>
-				This is what each layer contains. Every package releases together, at the same version. Each
-				package name below links to its page in the catalog.
+				This is what each layer contains, with a few examples from each. Every package releases
+				together, at the same version. Each example links to its package page; the count opens the
+				full catalog.
 			</p>
 		</div>
 
@@ -194,7 +196,6 @@
 					<div class="layer-band-head">
 						<span class="layer-index">{String(layer.index).padStart(2, '0')}</span>
 						<h3>{layer.name}</h3>
-						<span class="layer-count">{layer.packages.length}</span>
 					</div>
 					<p class="layer-role">
 						{#if layer.id === 'building-blocks'}
@@ -206,14 +207,17 @@
 							{layer.scopeCopy}
 						{/if}
 					</p>
-					<ul class="layer-chips">
-						{#each layer.chips as chip (chip.slug)}
-							<li><a href={`/reference/packages/${chip.slug}`}>{chip.shortName}</a></li>
+					<ul class="layer-chips" aria-label={`Examples from ${layer.name}`}>
+						{#each curatedChipsFor(layer) as chip (chip.slug)}
+							<li><a href={`/reference/packages/${chip.slug}`}>{chip.label}</a></li>
 						{/each}
+						<li class="layer-chips-all">
+							<!-- The count is the layer's real membership from packages.ts, never a literal. -->
+							<a href="/reference/packages"
+								>all {layer.packages.length} <span aria-hidden="true">→</span></a
+							>
+						</li>
 					</ul>
-					<a class="layer-catalog-link" href="/reference/packages"
-						>Browse in the catalog <span aria-hidden="true">→</span></a
-					>
 				</div>
 			{/each}
 		</div>
@@ -589,7 +593,7 @@
 
 	.layer-band {
 		display: grid;
-		grid-template-columns: 14rem minmax(0, 1fr) auto;
+		grid-template-columns: 14rem minmax(0, 1fr);
 		gap: 1rem 1.5rem;
 		align-items: start;
 		padding: 1.5rem 0;
@@ -609,12 +613,6 @@
 
 	.layer-band-head h3 {
 		font-size: 1rem;
-	}
-
-	.layer-count {
-		margin-left: auto;
-		color: var(--site-muted);
-		font: 700 0.68rem var(--site-font-mono);
 	}
 
 	.layer-role {
@@ -640,11 +638,13 @@
 
 	.layer-chips a {
 		display: inline-flex;
-		padding: 0.25rem 0.55rem;
+		align-items: center;
+		gap: 0.3em;
+		padding: 0.3rem 0.65rem;
 		border: 1px solid var(--site-line-strong);
 		border-radius: 999px;
 		color: var(--site-muted);
-		font: 0.63rem var(--site-font-mono);
+		font: 500 0.75rem/1.2 var(--site-font-sans);
 		text-decoration: none;
 	}
 
@@ -654,18 +654,15 @@
 		color: var(--site-ink);
 	}
 
-	.layer-catalog-link {
-		grid-column: 3;
-		grid-row: 1;
-		justify-self: end;
+	/* "all N →": the generated count, set apart from the examples. */
+	.layer-chips-all a {
+		border-color: transparent;
 		color: var(--site-ink);
-		font-size: 0.72rem;
 		font-weight: 700;
-		text-underline-offset: 0.25rem;
 		white-space: nowrap;
 	}
 
-	.layer-catalog-link span {
+	.layer-chips-all a span {
 		color: var(--site-accent-strong);
 	}
 
@@ -803,12 +800,6 @@
 	@media (max-width: 64rem) {
 		.layer-band {
 			grid-template-columns: 1fr;
-		}
-
-		.layer-catalog-link {
-			grid-column: 1;
-			grid-row: auto;
-			justify-self: start;
 		}
 
 		.layer-role {
