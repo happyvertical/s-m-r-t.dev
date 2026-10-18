@@ -91,6 +91,13 @@ export const referenceFamilies: ReferenceFamily[] = [
 		keywords: ['versions', 'support', 'status', 'release', 'compatibility']
 	},
 	{
+		id: 'evidence',
+		label: 'Evidence',
+		href: '/reference/evidence',
+		description: 'Check each site claim against the released source it was verified in.',
+		keywords: ['evidence', 'claims', 'sources', 'audit', 'verified']
+	},
+	{
 		id: 'faq',
 		label: 'FAQ',
 		href: '/reference/faq',

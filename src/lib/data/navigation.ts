@@ -462,7 +462,16 @@ export const documentationSections: DocumentationSection[] = [
 		groups: [
 			{
 				label: 'Reference families',
-				items: [...referenceItems, { label: 'FAQ', href: '/reference/faq' }]
+				items: [
+					...referenceItems,
+					{
+						label: 'Evidence',
+						href: '/reference/evidence',
+						description: 'Each site claim beside the released source it was verified in.',
+						keywords: ['evidence', 'claims', 'sources', 'audit']
+					},
+					{ label: 'FAQ', href: '/reference/faq' }
+				]
 			},
 			{
 				label: 'Generated inventories',

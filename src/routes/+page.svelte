@@ -12,7 +12,6 @@
 	import { packages } from '$lib/data/packages';
 	import { uiComponents } from '$lib/data/ui-components.generated';
 	import { playgroundModules } from '$lib/data/playgrounds';
-	import { whySmrtClaims } from '$lib/data/why-smrt-claims';
 	import { SMRT_VERSION } from '$lib/version';
 
 	// Every count below is derived from the same data the rest of the site reads
@@ -23,12 +22,6 @@
 	const playgroundCount = $derived(
 		playgroundModules.reduce((total, module) => total + (module.entries?.length ?? 0), 0)
 	);
-
-	// The mobile claim (smrt-mobile / smrt-mobile-contract / smrt-android /
-	// smrt-ios) stays out of the homepage evidence strip while those packages
-	// are still `status: 'private'` in packages.ts (unpublished, source-only).
-	// Restore this row once they publish to npm.
-	const evidenceClaims = $derived(whySmrtClaims.filter((claim) => claim.id !== 'mobile-kmp'));
 
 	const startPaths = [
 		{
@@ -58,7 +51,7 @@
 
 <SEO
 	title="The s-m-r-t application stack"
-	description="s-m-r-t builds business software that people and software agents use through the same screens, rules and permissions. build-a-boilerplate assembles a working mock-up in the browser and exports the plan as a cookbook file."
+	description="s-m-r-t is an MIT-licensed TypeScript stack for business software that people and software agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The stack includes an in-app assistant, scheduled agents, approvals, reports on request and row-level data rules. Outside agents connect over MCP or in the browser as a signed-in identity. build-a-boilerplate assembles a working mock-up for a kind of business in the browser and exports the plan as a file."
 	url="https://s-m-r-t.dev"
 />
 
@@ -227,44 +220,11 @@
 		</p>
 	</section>
 
-	<section class="evidence-section" aria-labelledby="evidence-heading">
-		<div class="section-heading">
-			<div>
-				<p class="eyebrow">Evidence · Release-audited claims</p>
-				<h2 id="evidence-heading">Every claim on this page has a source</h2>
-			</div>
-			<p>
-				Each row links a claim to the page that explains it and to the released source it was
-				verified against.
-			</p>
-		</div>
-		<div class="evidence-table-wrap">
-			<table class="evidence-table">
-				<thead>
-					<tr>
-						<th scope="col">Claim</th>
-						<th scope="col">Explained at</th>
-						<th scope="col">Verified in</th>
-						<th scope="col">Try it</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each evidenceClaims as claim (claim.id)}
-						<tr>
-							<td data-label="Claim">{claim.display}</td>
-							<td data-label="Explained at"
-								><a href={claim.canonical.href}>{claim.canonical.label}</a></td
-							>
-							<td data-label="Verified in"><a href={claim.source.href}>{claim.source.label}</a></td>
-							<td data-label={claim.demo ? 'Try it' : undefined}
-								>{#if claim.demo}<a href={claim.demo.href}>{claim.demo.label}</a>{/if}</td
-							>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
-	</section>
+	<p class="evidence-note">
+		Every claim on this page has a source. <a href="/reference/evidence"
+			>See the evidence, claim by claim →</a
+		>
+	</p>
 
 	<section class="start-section" id="start-here" aria-labelledby="start-heading">
 		<div>
@@ -681,41 +641,15 @@
 		color: var(--site-ink);
 	}
 
-	.evidence-table-wrap {
-		overflow-x: auto;
-	}
-
-	.evidence-table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: 0.82rem;
-	}
-
-	.evidence-table th {
-		padding: 0.6rem 0.75rem;
-		border-bottom: 2px solid var(--site-line-strong);
+	.evidence-note {
+		max-width: 60ch;
 		color: var(--site-muted);
-		font: 700 0.64rem var(--site-font-mono);
-		letter-spacing: 0.05em;
-		text-align: left;
-		text-transform: uppercase;
+		font-size: 0.92rem;
+		line-height: 1.6;
 	}
 
-	.evidence-table td {
-		padding: 0.85rem 0.75rem;
-		border-bottom: 1px solid var(--site-line);
-		vertical-align: top;
-	}
-
-	.evidence-table td:first-child {
-		max-width: 24rem;
+	.evidence-note a {
 		color: var(--site-ink);
-	}
-
-	.evidence-table a {
-		color: var(--site-ink);
-		font-family: var(--site-font-mono);
-		font-size: 0.78rem;
 	}
 
 	.start-section {
@@ -845,42 +779,6 @@
 			align-items: flex-start;
 			flex-direction: column;
 			gap: 0.9rem;
-		}
-
-		.evidence-table thead {
-			display: none;
-		}
-
-		.evidence-table,
-		.evidence-table tbody,
-		.evidence-table tr,
-		.evidence-table td {
-			display: block;
-			width: 100%;
-		}
-
-		.evidence-table tr {
-			padding: 0.75rem 0;
-			border-bottom: 1px solid var(--site-line-strong);
-		}
-
-		.evidence-table td {
-			padding: 0.3rem 0;
-			border-bottom: 0;
-		}
-
-		.evidence-table td:empty {
-			display: none;
-		}
-
-		.evidence-table td::before {
-			content: attr(data-label);
-			display: block;
-			margin-bottom: 0.2rem;
-			color: var(--site-muted);
-			font: 700 0.6rem var(--site-font-mono);
-			letter-spacing: 0.05em;
-			text-transform: uppercase;
 		}
 	}
 </style>
