@@ -48,12 +48,12 @@
 	// (rather than split across template lines) so the rendered text can't
 	// pick up incidental source-indentation whitespace.
 	const saadlDefinition =
-		'SAADL — Software as Agentic Domain Logic: software whose domain logic exposes the same operations to human users (UI, HTTP, CLI) and to software agents (callable tools).';
+		'SAADL — Software as Agentic Domain Logic: software whose domain logic exposes the same operations to human users (UI, HTTP, CLI) and to agents (callable tools).';
 </script>
 
 <SEO
 	title="The s-m-r-t application stack"
-	description="s-m-r-t is an MIT-licensed TypeScript stack for business software that people and software agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The stack includes an in-app assistant, scheduled agents, approvals, reports on request and row-level data rules. Outside agents connect over MCP or in the browser as a signed-in identity. build-a-boilerplate assembles a working mock-up for a kind of business in the browser and exports the plan as a file."
+	description="s-m-r-t is an MIT-licensed TypeScript stack for business software that people and agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The stack includes an in-app assistant, scheduled agents, approvals, reports on request and row-level data rules. Outside agents connect over MCP or in the browser as a signed-in identity. build-a-boilerplate assembles a working mock-up for a kind of business in the browser and exports the plan as a file."
 	url="https://s-m-r-t.dev"
 />
 
@@ -62,8 +62,8 @@
 		<div class="hero-intro">
 			<h1>The s-m-r-t application stack</h1>
 			<p class="lede">
-				s-m-r-t builds business software that people and software agents use through the same
-				screens, rules and permissions. The fastest way to see it is to build one.
+				s-m-r-t builds business software that people and agents use through the same screens, rules
+				and permissions. The fastest way to see it is to build one.
 			</p>
 			<div class="hero-actions">
 				<a class="primary-link primary-link--hero" href="/build-a-boilerplate"

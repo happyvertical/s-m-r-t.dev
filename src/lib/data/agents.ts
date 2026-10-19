@@ -2,7 +2,7 @@ import type { FrameworkTopic } from '$lib/data/framework';
 import { SMRT_VERSION } from '$lib/version';
 
 /**
- * `/agents` copy: what a software agent can do with a s-m-r-t application, the
+ * `/agents` copy: what an agent can do with a s-m-r-t application, the
  * four tool surfaces, the read-only exposure default, and the identity every
  * call runs as.
  *
@@ -438,7 +438,7 @@ export class Report extends SmrtObject {
 			{
 				title: 'See it run',
 				intro:
-					'The same demo that runs on the front page and the UI overview: an agent finds a field, checks its proposal against the same rule a person sees, stages it, and is refused on a protected field. Nothing changes until the confirm click — which an agent cannot send.'
+					'The same demo that runs on the UI overview: an agent finds a field, checks its proposal against the same rule a person sees, stages it, and is refused on a protected field. Nothing changes until the confirm click — which an agent cannot send.'
 			}
 		],
 		sources: [

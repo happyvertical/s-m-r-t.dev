@@ -539,7 +539,7 @@ export const frameworkTopics: FrameworkTopic[] = [
 			{
 				title: 'SAADL joins meaning and governed operations',
 				intro:
-					'Software as Agentic Domain Logic describes an application where persons and software agents reach the same permitted application operations. The application does not maintain a separate, reduced agent definition that can drift from the human interface.',
+					'Software as Agentic Domain Logic describes an application where persons and agents reach the same permitted application operations. The application does not maintain a separate, reduced agent definition that can drift from the human interface.',
 				links: [
 					{ label: 'Complete SAADL terminology entry', href: '/reference/saadl' },
 					{ label: 'Human-agent interaction', href: '/interaction' }

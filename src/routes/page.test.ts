@@ -29,7 +29,7 @@ describe('documentation home page', () => {
 		// image already shows it, so the page should match.
 		expect(h1.classList.contains('visually-hidden')).toBe(false);
 		expect(text(container.querySelector('.lede'))).toContain(
-			'people and software agents use through the same screens, rules and permissions'
+			'people and agents use through the same screens, rules and permissions'
 		);
 		expect(container.textContent).not.toContain('blurs the line');
 		expect(container.textContent).not.toContain('better demonstrated than explained');
@@ -270,7 +270,7 @@ describe('documentation home page', () => {
 
 		expect(container.querySelector('.saadl-definition strong')?.textContent).toBe(
 			'SAADL — Software as Agentic Domain Logic: software whose domain logic exposes the same ' +
-				'operations to human users (UI, HTTP, CLI) and to software agents (callable tools).'
+				'operations to human users (UI, HTTP, CLI) and to agents (callable tools).'
 		);
 		// Slice D dropped the "In plain terms" gloss: the lede already says it in
 		// plain words, so the aside holds the definition, its pronunciation and

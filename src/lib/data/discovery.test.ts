@@ -39,7 +39,7 @@ describe('Why s-m-r-t discovery surfaces', () => {
 		// The lede is the quotable paragraph from the homepage proposal (#321
 		// slice E): the same text as the homepage SEO description.
 		expect(llms).toContain(
-			'> s-m-r-t is an MIT-licensed TypeScript stack for business software that people and software agents use through the same screens, rules and permissions.'
+			'> s-m-r-t is an MIT-licensed TypeScript stack for business software that people and agents use through the same screens, rules and permissions.'
 		);
 		expect(llms).toContain('build-a-boilerplate assembles a working mock-up');
 		expect(llms).not.toContain('Build a boilerplate');

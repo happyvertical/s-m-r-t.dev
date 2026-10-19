@@ -20,7 +20,7 @@ export const referenceGuides: Guide[] = [
 		navTitle: 'What is a SAADL?',
 		eyebrow: 'Framework concept',
 		title: 'Software as Agentic Domain Logic',
-		lede: 'A SAADL application exposes the same domain operations to people and software agents instead of maintaining a separate, reduced bot interface.',
+		lede: 'A SAADL application exposes the same domain operations to people and agents instead of maintaining a separate, reduced bot interface.',
 		plainEnglish:
 			'Define the work once. People can reach it through pages, HTTP, or the command line. Agents receive callable tools that resolve to the same models, permissions, and field policies.',
 		packages: ['smrt-core', 'smrt-app-mcp', 'smrt-app-cli', 'smrt-web'],
