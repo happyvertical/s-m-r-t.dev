@@ -75,7 +75,7 @@
 			<!--
 				"Blurs the line" (#335): kept because it is true, and said concretely.
 				Each sentence is covered by a /reference/evidence row: agents-included
-				(the application's own agents), agent-doors and policy-checks (tools
+				and chat-agents (the application's own agents), agent-doors and policy-checks (tools
 				and checks), in-app-assistant (the shell's assistant). It sits below
 				the primary action so the button stays above the fold.
 			-->

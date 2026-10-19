@@ -183,16 +183,30 @@ export const whySmrtClaims: WhySmrtClaim[] = [
 	// The hero's "blurs the line" passage (#335) cites the application's own
 	// agents; this row is its source. smrt-agents is installed here, so the
 	// claim is checkable against node_modules as well as the release tree.
+	// Two rows, one source each: a row cites exactly one contract, so the
+	// scheduled-agent facts and the chat-agent facts are kept apart.
 	{
 		id: 'agents-included',
 		claim:
-			'AgentSchedule stores cron schedules that ScheduleRunner executes. executeAsPrincipal runs agent work as a persona’s bound user through the existing RBAC cascade. Chat agent sessions enforce an app-controlled allowedTools list fail-closed.',
+			'AgentSchedule stores cron schedules that ScheduleRunner executes. executeAsPrincipal runs agent work as a persona’s bound user through the existing RBAC cascade.',
 		display:
-			'An application’s own agents run on schedules or in chat as a bound user account, with that account’s permissions and an application-set list of allowed tools.',
+			'An application’s own agents run on schedules as a bound user account, with that account’s permissions.',
 		canonical: { label: 'Agents', href: '/agents' },
 		source: {
-			label: 'smrt-agents and smrt-chat release contracts',
+			label: 'smrt-agents release contract',
 			href: `${INSTALLED_TREE}/packages/agents/AGENTS.md`
+		}
+	},
+	{
+		id: 'chat-agents',
+		claim:
+			'An AgentSession carries an app-controlled allowedTools list and enforces it fail-closed: an empty or unparseable list permits no tools.',
+		display:
+			'An agent in chat may use only the tools the application lists for it; an empty list means none.',
+		canonical: { label: 'smrt-chat', href: '/reference/packages/smrt-chat' },
+		source: {
+			label: 'smrt-chat release contract',
+			href: `${INSTALLED_TREE}/packages/chat/AGENTS.md`
 		}
 	},
 	{
