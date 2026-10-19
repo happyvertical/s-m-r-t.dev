@@ -177,7 +177,7 @@ const whyItem: NavigationItem = {
 		// The visible H1 and the hero's subject, so a visitor who read the page
 		// name or the lede can get back to it from search.
 		'application stack',
-		'business software'
+		'agentic software'
 	]
 };
 

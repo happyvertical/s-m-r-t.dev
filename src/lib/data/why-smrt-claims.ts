@@ -180,6 +180,21 @@ export const whySmrtClaims: WhySmrtClaim[] = [
 			href: `${INSTALLED_TREE}/packages/users/AGENTS.md`
 		}
 	},
+	// The hero's "blurs the line" passage (#335) cites the application's own
+	// agents; this row is its source. smrt-agents is installed here, so the
+	// claim is checkable against node_modules as well as the release tree.
+	{
+		id: 'agents-included',
+		claim:
+			'AgentSchedule stores cron schedules that ScheduleRunner executes. executeAsPrincipal runs agent work as a persona’s bound user through the existing RBAC cascade. Chat agent sessions enforce an app-controlled allowedTools list fail-closed.',
+		display:
+			'An application’s own agents run on schedules or in chat as a bound user account, with that account’s permissions and an application-set list of allowed tools.',
+		canonical: { label: 'Agents', href: '/agents' },
+		source: {
+			label: 'smrt-agents and smrt-chat release contracts',
+			href: `${INSTALLED_TREE}/packages/agents/AGENTS.md`
+		}
+	},
 	{
 		id: 'agent-doors',
 		claim:

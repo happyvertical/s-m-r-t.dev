@@ -183,7 +183,7 @@ export const appLayers: AppLayer[] = [
 		scopeCopy:
 			// The propose-then-confirm and opt-in-doors claims this line used to
 			// repeat are stated once each in the homepage feature sections (#321 D).
-			'An application comes with agents of its own: they follow written instructions, run on schedules, talk in chat, and learn from feedback. Outside agents can connect on the same terms, with their own identity and fixed lists of allowed actions; an agent never has more power than the person it works for.',
+			'An application comes with agents of its own: they follow written instructions, run on schedules, talk in chat, and learn from feedback. Outside agents connect on the same terms, and an agent never has more power than the person it works for.',
 		packages: agentsIncludedPackages,
 		chips: chipsFor(agentsIncludedPackages)
 	},
