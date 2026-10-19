@@ -57,7 +57,7 @@
 			</ul>
 		</div>
 		<p class="model-note">
-			Persons and software agents can reach the same permitted application operations. This is
+			Persons and agents can reach the same permitted application operations. This is
 			<a href="/reference/saadl">Software as Agentic Domain Logic (SAADL)</a>. The shared model
 			keeps the human and agent interfaces on one contract. It does not give an agent authority.
 		</p>

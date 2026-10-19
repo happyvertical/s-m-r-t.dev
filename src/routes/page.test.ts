@@ -21,17 +21,33 @@ const follows = (a: Node, b: Node) =>
 const text = (node: Element | null | undefined) => node?.textContent?.replace(/\s+/g, ' ') ?? '';
 
 describe('documentation home page', () => {
-	it('shows the category H1 and a plain lede with the metaphor retired', () => {
+	it('shows the category H1, the agentic-software lede and the concrete line passage', () => {
 		const { container } = render(Page);
 
 		const h1 = screen.getByRole('heading', { level: 1, name: 'The s-m-r-t application stack' });
 		// Phase 2 of the homepage refresh (#321) makes the H1 visible: the OG
 		// image already shows it, so the page should match.
 		expect(h1.classList.contains('visually-hidden')).toBe(false);
-		expect(text(container.querySelector('.lede'))).toContain(
-			'people and software agents use through the same screens, rules and permissions'
+		const lede = text(container.querySelector('.lede'));
+		// #335: "agentic software", never "business software"; "agents", never
+		// "software agents"; the product name stays lowercase at sentence start.
+		expect(lede).toContain(
+			'stack for agentic software: applications that people and agents use through the same screens, rules and permissions'
 		);
-		expect(container.textContent).not.toContain('blurs the line');
+		expect(lede).toContain(
+			'build-a-boilerplate puts an example application together in your browser for you to play with and customize.'
+		);
+		expect(container.textContent).not.toMatch(/business software|software agents?/i);
+		// #335 brings "blurs the line between application and agent" back as a
+		// concrete passage; each sentence has an evidence row. It sits below the
+		// primary action (so the button stays above the fold) and above the video.
+		const passage = container.querySelector('.hero-intro .hero-passage')!;
+		expect(text(passage)).toContain(
+			'A s-m-r-t application blurs the line between application and agent.'
+		);
+		expect(text(passage)).toContain('through the same doors, under the same checks.');
+		expect(follows(container.querySelector('a.primary-link--hero')!, passage)).toBe(true);
+		expect(follows(passage, container.querySelector('figure.planner-screencast')!)).toBe(true);
 		expect(container.textContent).not.toContain('better demonstrated than explained');
 	});
 
@@ -270,7 +286,7 @@ describe('documentation home page', () => {
 
 		expect(container.querySelector('.saadl-definition strong')?.textContent).toBe(
 			'SAADL — Software as Agentic Domain Logic: software whose domain logic exposes the same ' +
-				'operations to human users (UI, HTTP, CLI) and to software agents (callable tools).'
+				'operations to human users (UI, HTTP, CLI) and to agents (callable tools).'
 		);
 		// Slice D dropped the "In plain terms" gloss: the lede already says it in
 		// plain words, so the aside holds the definition, its pronunciation and

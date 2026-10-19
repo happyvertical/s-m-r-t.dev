@@ -157,7 +157,7 @@ export const homepageFeatures: HomepageFeature[] = [
 		title: 'Three doors, and each one is a choice',
 		body: [
 			'An MCP endpoint for connected agents, a command line, and tools a browser agent can see on the page. Each is turned on per application and names its operations. Browser tools start read-only; the command line carries the actions the application selected.',
-			'Whatever the door, a change runs as a signed-in identity and passes the same checks as a click. Without a sign-in, a door shows only what the application marks public, read-only.'
+			'Without a sign-in, a door shows only what the application marks public, read-only.'
 		],
 		links: [
 			{ label: 'Agents', href: '/agents#where-agents-connect' },

@@ -48,12 +48,12 @@
 	// (rather than split across template lines) so the rendered text can't
 	// pick up incidental source-indentation whitespace.
 	const saadlDefinition =
-		'SAADL — Software as Agentic Domain Logic: software whose domain logic exposes the same operations to human users (UI, HTTP, CLI) and to software agents (callable tools).';
+		'SAADL — Software as Agentic Domain Logic: software whose domain logic exposes the same operations to human users (UI, HTTP, CLI) and to agents (callable tools).';
 </script>
 
 <SEO
 	title="The s-m-r-t application stack"
-	description="s-m-r-t is an MIT-licensed TypeScript stack for business software that people and software agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The stack includes an in-app assistant, scheduled agents, approvals, reports on request and row-level data rules. Outside agents connect over MCP or in the browser as a signed-in identity. build-a-boilerplate assembles a working mock-up for a kind of business in the browser and exports the plan as a file."
+	description="s-m-r-t is an MIT-licensed TypeScript stack for agentic software that people and agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The stack includes an in-app assistant, scheduled agents, approvals, reports on request and row-level data rules. Outside agents connect over MCP or in the browser as a signed-in identity. build-a-boilerplate assembles a working mock-up for a kind of business in the browser and exports the plan as a file."
 	url="https://s-m-r-t.dev"
 />
 
@@ -62,8 +62,9 @@
 		<div class="hero-intro">
 			<h1>The s-m-r-t application stack</h1>
 			<p class="lede">
-				s-m-r-t builds business software that people and software agents use through the same
-				screens, rules and permissions. The fastest way to see it is to build one.
+				s-m-r-t is a TypeScript stack for agentic software: applications that people and agents use
+				through the same screens, rules and permissions. build-a-boilerplate puts an example
+				application together in your browser for you to play with and customize.
 			</p>
 			<div class="hero-actions">
 				<a class="primary-link primary-link--hero" href="/build-a-boilerplate"
@@ -71,14 +72,26 @@
 				>
 				<a class="text-link" href="#what-you-get">How it works <span aria-hidden="true">↓</span></a>
 			</div>
+			<!--
+				"Blurs the line" (#335): kept because it is true, and said concretely.
+				Each sentence is covered by a /reference/evidence row: agents-included
+				and chat-agents (the application's own agents), agent-doors and policy-checks (tools
+				and checks), in-app-assistant (the shell's assistant). It sits below
+				the primary action so the button stays above the fold.
+			-->
+			<p class="hero-passage">
+				A s-m-r-t application blurs the line between application and agent. It ships with agents of
+				its own, which run on schedules or in chat as a bound user account, with that account's
+				permissions. Its operations are also tools. The assistant inside it and any agent outside it
+				work the application the way a person does: through the same doors, under the same checks.
+			</p>
 			<div class="hero-shot">
 				<PlannerScreencast />
 			</div>
 			<p class="outcome-line">
 				You leave with a cookbook file — readable JSON — or a prompt for a coding agent.
-				<code>smrt cookbook apply</code> turns the file into a project: an admin shell, an assistant inside
-				it, tools for browser and MCP agents, and a local database. Running it needs a terminal or a coding
-				agent.
+				<code>smrt cookbook apply</code> turns the file into a project; running it needs a terminal or
+				a coding agent.
 			</p>
 		</div>
 
@@ -139,7 +152,7 @@
 			<p>
 				One class says what a record stores, which actions the web and agents get, and which fields
 				are required, read-only or secret. Storage, forms, API, command line, agent tools and
-				permissions are generated from it; change the description and every surface follows.
+				permissions are generated from it.
 			</p>
 		</div>
 		<div class="model-grid">
@@ -163,10 +176,7 @@
 	<section class="scope-section" id="scope" aria-labelledby="scope-heading">
 		<div class="section-heading">
 			<h2 id="scope-heading">Five layers, one release</h2>
-			<p>
-				Every package releases together at one version. Each example opens its package page; the
-				count opens the catalog.
-			</p>
+			<p>Every package releases together at one version.</p>
 		</div>
 
 		<div class="layer-diagram">
@@ -278,6 +288,15 @@
 		font-weight: 400;
 		letter-spacing: -0.015em;
 		line-height: 1.4;
+		text-wrap: pretty;
+	}
+
+	.hero-passage {
+		max-width: 44rem;
+		margin-top: 1.1rem;
+		color: var(--site-muted);
+		font-size: 1.0625rem;
+		line-height: 1.6;
 		text-wrap: pretty;
 	}
 

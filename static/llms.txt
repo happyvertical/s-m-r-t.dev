@@ -1,6 +1,6 @@
 # s-m-r-t
 
-> s-m-r-t is an MIT-licensed TypeScript stack for business software that people and software agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The stack includes an in-app assistant, scheduled agents, approvals, reports on request and row-level data rules. Outside agents connect over MCP or in the browser as a signed-in identity. build-a-boilerplate assembles a working mock-up for a kind of business in the browser and exports the plan as a file.
+> s-m-r-t is an MIT-licensed TypeScript stack for agentic software that people and agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The stack includes an in-app assistant, scheduled agents, approvals, reports on request and row-level data rules. Outside agents connect over MCP or in the browser as a signed-in identity. build-a-boilerplate assembles a working mock-up for a kind of business in the browser and exports the plan as a file.
 
 ## Canonical technical documentation
 

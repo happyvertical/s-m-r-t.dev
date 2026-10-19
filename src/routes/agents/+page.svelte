@@ -13,7 +13,7 @@
 
 <SEO
 	title="Agents and the s-m-r-t application"
-	description="What a software agent can do with a s-m-r-t application: the four tool surfaces, the read-only exposure default, and the identity every call runs as."
+	description="What an agent can do with a s-m-r-t application: the four tool surfaces, the read-only exposure default, and the identity every call runs as."
 	url="https://s-m-r-t.dev/agents"
 />
 
@@ -24,10 +24,9 @@
 			<h1>Agents work with borrowed authority.</h1>
 			<div class="hero-lede">
 				<p>
-					A s-m-r-t application can offer its operations to software agents: an agent in the browser
-					page, an agent connected over MCP, or one of the application's own scheduled and chat
-					agents. Each connects through a defined door, and every door is a choice the application
-					makes.
+					A s-m-r-t application can offer its operations to agents: an agent in the browser page, an
+					agent connected over MCP, or one of the application's own scheduled and chat agents. Each
+					connects through a defined door, and every door is a choice the application makes.
 				</p>
 				<p>
 					Whichever door it uses, an agent acts as someone — the signed-in person on the page, or a

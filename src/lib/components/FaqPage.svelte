@@ -83,11 +83,11 @@
 			items: [
 				{
 					q: 'Why build one application for both people and agents?',
-					a: 'Building two systems — a person-facing application and a separate, reduced set of endpoints or bots for software — means keeping two descriptions of the same operations in sync by hand, and the second one tends to drift and shrink over time. A s-m-r-t application describes each operation once; people reach it through pages, HTTP, or the command line, and software agents reach the identical operation as a callable tool, so there is no second definition to fall behind.'
+					a: 'Building two systems — a person-facing application and a separate, reduced set of endpoints or bots for software — means keeping two descriptions of the same operations in sync by hand, and the second one tends to drift and shrink over time. A s-m-r-t application describes each operation once; people reach it through pages, HTTP, or the command line, and agents reach the identical operation as a callable tool, so there is no second definition to fall behind.'
 				},
 				{
 					q: 'What is SAADL, and how is it pronounced?',
-					a: 'SAADL — Software as Agentic Domain Logic: software whose domain logic exposes the same operations to human users (UI, HTTP, CLI) and to software agents (callable tools). Pronounced "saddle."',
+					a: 'SAADL — Software as Agentic Domain Logic: software whose domain logic exposes the same operations to human users (UI, HTTP, CLI) and to agents (callable tools). Pronounced "saddle."',
 					link: { label: 'Read the full SAADL reference', href: '/reference/saadl' }
 				},
 				{
