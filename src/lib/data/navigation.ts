@@ -281,9 +281,10 @@ export const documentationSections: DocumentationSection[] = [
 			{
 				label: 'Start building',
 				items: [
-					{ label: 'Choose a starting point', href: '/starters' },
-					{ label: 'Basic SvelteKit app', href: '/starters/ground-up' },
-					{ label: 'SaaS starter', href: '/starters/saas' }
+					{ label: 'Getting Started', href: '/starters' },
+					{ label: 'build-a-boilerplate', href: '/build-a-boilerplate' },
+					{ label: 'Start from a cookbook', href: '/starters#cookbook' },
+					{ label: 'smrt-start', href: '/starters/smrt-start' }
 				]
 			},
 			{
@@ -451,11 +452,12 @@ export const documentationSections: DocumentationSection[] = [
 		groups: [
 			{ label: 'Task guides', items: taskItems },
 			{
-				label: 'Getting started',
+				label: 'Getting Started',
 				items: [
-					{ label: 'Choose a starting point', href: '/starters' },
-					{ label: 'Basic SvelteKit app', href: '/starters/ground-up' },
-					{ label: 'SaaS starter', href: '/starters/saas' }
+					{ label: 'Getting Started', href: '/starters' },
+					{ label: 'build-a-boilerplate', href: '/build-a-boilerplate' },
+					{ label: 'Start from a cookbook', href: '/starters#cookbook' },
+					{ label: 'smrt-start', href: '/starters/smrt-start' }
 				]
 			},
 			{
@@ -593,9 +595,11 @@ export const docsNavigation: NavigationGroup[] = [
 			{ label: 'Describe the record once', href: '/#one-description' },
 			{ label: 'Five layers, one release', href: '/#scope' },
 			{ label: 'Start here', href: '/#start-here' },
-			{ label: 'Choose a starting point', href: '/starters' },
-			{ label: 'Basic SvelteKit app', href: '/starters/ground-up' },
-			{ label: 'SaaS starter', href: '/starters/saas' }
+			// build-a-boilerplate is not a documentation page; it is registered
+			// for the palette in `searchItems` below, so it is not repeated here.
+			{ label: 'Getting Started', href: '/starters' },
+			{ label: 'Start from a cookbook', href: '/starters#cookbook' },
+			{ label: 'smrt-start', href: '/starters/smrt-start' }
 		]
 	},
 	{

@@ -4,8 +4,8 @@ import GuideLibraryMetadata from '$lib/components/GuideLibraryMetadata.svelte';
 import { getGuideLibraryItem } from '$lib/data/task-guides';
 
 describe('GuideLibraryMetadata', () => {
-	it('shows metadata and family-local sibling links', () => {
-		const guide = getGuideLibraryItem('/starters/ground-up');
+	it('shows metadata and the family footer for the smrt-start page', () => {
+		const guide = getGuideLibraryItem('/starters/smrt-start');
 		expect(guide).toBeDefined();
 		render(GuideLibraryMetadata, { props: { guide: guide! } });
 
@@ -13,11 +13,12 @@ describe('GuideLibraryMetadata', () => {
 		expect(screen.getByText('Beginner')).toBeTruthy();
 		expect(
 			screen.getByText(
-				'The application runs on loopback and opens owner onboarding, with one example object behind it.'
+				'The application runs on loopback with you as its owner, and one Note model behind it.'
 			)
 		).toBeTruthy();
-		expect(
-			screen.getByRole('link', { name: 'Start with the SaaS starter' }).getAttribute('href')
-		).toBe('/starters/saas');
+		// smrt-start is the only Getting started guide since the SaaS starter was
+		// retired (#338), so the family footer says so instead of linking siblings.
+		expect(screen.getByText('This is the only guide in this family.')).toBeTruthy();
+		expect(screen.queryByRole('link', { name: /SaaS starter/ })).toBeNull();
 	});
 });

@@ -259,7 +259,7 @@ export const foundationGuides: Guide[] = [
 			{
 				title: 'Let the starter wire the common flow',
 				intro:
-					'Both starter paths include current session handling. The SaaS starter adds the finished onboarding, account, and tenant-management surfaces; the ground-up template keeps them visible as small examples you can change.'
+					'smrt-start includes current session handling. Owner setup, the session layout load, sign-out, and the settings page are mounted from the framework packages as small files you can read and change.'
 			}
 		]
 	},
@@ -1113,7 +1113,7 @@ export const nextPageIntent = defineIntent({
 					'Keep delete out of the include list when the interface never deletes.',
 					'writable narrows which fields a generated write will accept, independently of what the form displays.',
 					'Field policy never widens this. A field hidden by policy is still writable by the API unless the model says otherwise.',
-					'The example below is the SaaS starter’s own settings object; the operations guide walks the rest of its integration.'
+					'The example below is the settings object from smrt-saas-starter, an earlier reference app; the operations guide walks the rest of its integration.'
 				],
 				filename: 'packages/app-objects/src/models/StarterAppSetting.ts',
 				code: `@smrt({\n  tableName: 'starter_app_settings',\n  conflictColumns: ['key'],\n  api: {\n    include: ['list', 'get', 'create', 'update'],\n    principalContext: true,\n    writable: ['key', 'value', 'metadata']\n  },\n  mcp: false,\n  cli: false\n})\nexport class StarterAppSetting extends SmrtObject {\n  // ...\n}`
@@ -1226,15 +1226,15 @@ export const nextPageIntent = defineIntent({
 				]
 			},
 			{
-				title: 'The SaaS starter shows the whole path',
+				title: 'An earlier reference app showed the whole path',
 				intro:
-					'The public smrt-saas-starter uses the complete policy rail. It has static ui hints, a policy-aware ObjectForm, a permission-checked control panel route, and a shell navigation entry. The starter also shows an API constraint. Its objects were closed to the generated API. The browser-managed object needed a narrow include list before the form could save and reload data.',
+					'smrt-saas-starter, an earlier reference app that is no longer a starting point, used the complete policy rail at the commit linked below. It had static ui hints, a policy-aware ObjectForm, a permission-checked control panel route, and a shell navigation entry. It also showed an API constraint. Its objects were closed to the generated API, and the browser-managed object needed a narrow include list before the form could save and reload data. The current template, smrt-start, does not use field policy, so these links remain the public worked example.',
 				points: [
-					'packages/app-objects/src/models/StarterAppSetting.ts carries the @field({ ui }) seed and the narrowed api include list; its sibling StarterInvitation stays api: false.',
-					'apps/web/src/lib/field-policy-client.ts contains the adapter. The adapter posts to hand-written /api/field-policies routes instead of wrapping the generated client. The transport-neutral adapter contract permits both shapes.',
-					'apps/web/src/lib/server/field-policy.ts wraps every call in the membership the application already verified and rejects any object reference other than its own settings object.',
-					'apps/web/src/routes/app/settings/field-policies/+page.server.ts checks fields.policy.manage before it builds the catalog, and its test asserts a non-manager is refused before any data is loaded.',
-					'The starter registers role-to-permission mapping in its own authorization module rather than seeding the framework permission catalog, which is worth knowing before copying it.'
+					'packages/app-objects/src/models/StarterAppSetting.ts carried the @field({ ui }) seed and the narrowed api include list; its sibling StarterInvitation stayed api: false.',
+					'apps/web/src/lib/field-policy-client.ts held the adapter. It posted to hand-written /api/field-policies routes instead of wrapping the generated client. The transport-neutral adapter contract permits both shapes.',
+					'apps/web/src/lib/server/field-policy.ts wrapped every call in the membership the application had already verified and rejected any object reference other than its own settings object.',
+					'apps/web/src/routes/app/settings/field-policies/+page.server.ts checked fields.policy.manage before it built the catalog, and its test asserted a non-manager is refused before any data is loaded.',
+					'That app registered role-to-permission mapping in its own authorization module rather than seeding the framework permission catalog, which is worth knowing before copying from it.'
 				]
 			},
 			{
@@ -1259,23 +1259,26 @@ export const nextPageIntent = defineIntent({
 			{ label: 'Field policy API', href: '/reference/field-policies' },
 			{ label: 'Memberships and permissions', href: '/foundations/memberships-and-permissions' },
 			{ label: 'Security defaults', href: '/reference/security' },
+			// Dated evidence: smrt-saas-starter at a pinned commit. smrt-start, the
+			// current template, has no field-policy code, so these stay as the only
+			// public end-to-end example (#338).
 			{
-				label: 'Starter: StarterAppSetting.ts',
+				label: 'smrt-saas-starter (pinned): StarterAppSetting.ts',
 				href: 'https://github.com/happyvertical/smrt-saas-starter/blob/e24131ab6ea9ebe46762065b8b413eba97559994/packages/app-objects/src/models/StarterAppSetting.ts',
 				external: true
 			},
 			{
-				label: 'Starter: field-policy-client.ts',
+				label: 'smrt-saas-starter (pinned): field-policy-client.ts',
 				href: 'https://github.com/happyvertical/smrt-saas-starter/blob/e24131ab6ea9ebe46762065b8b413eba97559994/apps/web/src/lib/field-policy-client.ts',
 				external: true
 			},
 			{
-				label: 'Starter: server/field-policy.ts',
+				label: 'smrt-saas-starter (pinned): server/field-policy.ts',
 				href: 'https://github.com/happyvertical/smrt-saas-starter/blob/e24131ab6ea9ebe46762065b8b413eba97559994/apps/web/src/lib/server/field-policy.ts',
 				external: true
 			},
 			{
-				label: 'Starter: control panel route',
+				label: 'smrt-saas-starter (pinned): control panel route',
 				href: 'https://github.com/happyvertical/smrt-saas-starter/blob/e24131ab6ea9ebe46762065b8b413eba97559994/apps/web/src/routes/app/settings/field-policies',
 				external: true
 			}

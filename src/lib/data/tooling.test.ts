@@ -57,7 +57,8 @@ describe('Tooling information architecture', () => {
 		for (const required of [
 			'CLI',
 			'SvelteKit template',
-			'SaaS starter',
+			'smrt-start',
+			'cookbook apply',
 			'scanner',
 			'manifest',
 			'migration',

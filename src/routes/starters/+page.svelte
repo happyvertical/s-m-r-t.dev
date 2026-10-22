@@ -1,61 +1,117 @@
 <script lang="ts">
+	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import SEO from '$lib/components/SEO.svelte';
+	import { SMRT_VERSION } from '$lib/version';
+
+	// Four ways to a project on the smrt-start template. The homepage's
+	// Getting Started section links each of these targets; keep the hrefs and
+	// the `#cookbook` id stable.
+	const paths = [
+		{
+			label: 'build-a-boilerplate',
+			body: 'Pick recipes in the browser and export a cookbook file, or a prompt for your coding agent. Nothing to install.',
+			href: '/build-a-boilerplate'
+		},
+		{
+			label: 'Start from a cookbook',
+			body: 'smrt cookbook apply turns a cookbook file into a project on the smrt-start template, pinned to the current release.',
+			href: '#cookbook'
+		},
+		{
+			label: 'Clone smrt-start',
+			body: 'The template on its own: one owner, local SQLite, a Note model, an assistant and read-only MCP.',
+			href: '/starters/smrt-start'
+		},
+		{
+			label: 'Hand it to your agent',
+			body: 'Copy a prompt into Claude Code, Codex or another coding agent. It runs the smrt CLI and creates the app.',
+			href: '/#agent-prompt'
+		}
+	];
+
+	// The CLI package ships four library cookbooks under `cookbooks/` (bakery,
+	// mechanic, welder, yoga-studio); the same files are in the smrt repository
+	// at the release tag, which is what the URL example below fetches.
+	const cli = `npx -y @happyvertical/smrt-cli@${SMRT_VERSION}`;
+
+	const applyFile = `${cli} cookbook validate my.cookbook.json
+${cli} cookbook apply my.cookbook.json my-app
+cd my-app
+pnpm install
+pnpm app:setup
+pnpm app:doctor
+pnpm dev                    # http://127.0.0.1:5173
+pnpm app:open               # the one-time owner setup page`;
+
+	const applyLibrary = `${cli} cookbook apply \\
+  https://raw.githubusercontent.com/happyvertical/smrt/v${SMRT_VERSION}/packages/cli/cookbooks/bakery.cookbook.json \\
+  bakery`;
 </script>
 
 <SEO
-	title="Choose a s-m-r-t starter"
-	description="Choose the basic SvelteKit template or the production-shaped s-m-r-t SaaS starter."
+	title="Getting Started"
+	description="Four ways to a s-m-r-t project on the smrt-start template: build-a-boilerplate, smrt cookbook apply, a clone of smrt-start, or a prompt for your coding agent."
 	url="https://s-m-r-t.dev/starters"
 />
 
 <article class="starter-index">
 	<header>
-		<p>Getting started</p>
-		<h1>Choose how much application you want on day one.</h1>
+		<p>Getting Started</p>
+		<h1>Four ways to a running application.</h1>
 		<span
-			>Both paths use the same object model, tenant rules, users, permissions, and generated
-			interfaces.</span
+			>Each one ends with a SvelteKit project on the smrt-start template, with the s-m-r-t packages
+			installed. Pick by how you want to begin.</span
 		>
 	</header>
 
-	<section class="choice-list">
-		<a href="/starters/ground-up">
-			<div><span>01</span><small>Learn each layer</small></div>
-			<h2>Basic SvelteKit template</h2>
-			<p>
-				One example object, SQLite, current tenant/session boundaries, an AppShell, and generated
-				REST, MCP, WebMCP, and CLI wiring.
-			</p>
-			<ul>
-				<li>Small enough to read in one sitting</li>
-				<li>Good for a focused app or framework evaluation</li>
-				<li>You choose authentication and production services</li>
-			</ul>
-			<strong>Open the ground-up guide →</strong>
-		</a>
+	<nav class="path-list" aria-label="Getting started paths">
+		{#each paths as path, index (path.href)}
+			<a href={path.href}>
+				<span class="index">0{index + 1}</span>
+				<strong>{path.label}</strong>
+				<p>{path.body}</p>
+			</a>
+		{/each}
+	</nav>
 
-		<a href="/starters/saas">
-			<div><span>02</span><small>Begin production-shaped</small></div>
-			<h2>s-m-r-t SaaS starter</h2>
-			<p>
-				A reference monorepo with onboarding, tenant administration, subscriptions, jobs, MCP,
-				mobile clients, and deployment manifests already connected.
-			</p>
-			<ul>
-				<li>Good for a multi-tenant product</li>
-				<li>Shows complete operational patterns</li>
-				<li>More code to understand before changing the shape</li>
-			</ul>
-			<strong>Tour the SaaS starter →</strong>
-		</a>
+	<section id="cookbook">
+		<h2>Start from a cookbook</h2>
+		<p>
+			A cookbook is a JSON file naming the recipes an application is made of. build-a-boilerplate
+			exports one. The smrt CLI ships four of its own: bakery, mechanic, welder and yoga-studio.
+		</p>
+		<p>
+			<code>smrt cookbook apply</code> copies the smrt-start template, adds the packages the recipes
+			need, pins every s-m-r-t package to the CLI's own release ({SMRT_VERSION}), and writes the
+			cookbook to <code>smrt.cookbook.json</code>. Nothing else changes, and no sample data is
+			created. You need Node 26 or newer, git and pnpm 11; no account or token.
+		</p>
+		<CodeBlock code={applyFile} language="bash" filename="terminal" />
+		<p>
+			A library cookbook has no name of its own, so give the directory. The file can be a path or a
+			URL; this one is the bakery at the release tag.
+		</p>
+		<CodeBlock code={applyLibrary} language="bash" filename="terminal" />
+		<ul>
+			<li><code>--dry-run</code> prints what apply would do without writing anything.</li>
+			<li>
+				<code>--into my-app</code> applies an edited cookbook to an existing project. Edit the
+				cookbook and re-apply; do not hand-edit <code>smrt.cookbook.json</code>.
+			</li>
+			<li>
+				<code>pnpm app:setup</code> builds, creates the local database and issues a one-time owner
+				invitation; <code>pnpm app:open</code> opens the page that claims it.
+			</li>
+		</ul>
 	</section>
 
 	<aside>
-		<h2>Not sure?</h2>
+		<h2>Coding agents</h2>
 		<p>
-			Use the basic template when you are still deciding what the app is. Use the SaaS starter when
-			the product clearly needs accounts, organizations, plans, workers, and deployment from the
-			start.
+			Each installed <code>@happyvertical/smrt-*</code> package ships an <code>AGENTS.md</code>
+			written for its exact version, under <code>node_modules</code>.
+			<a href="/tooling">Developer tooling</a>
+			covers the rest.
 		</p>
 	</aside>
 </article>
@@ -73,8 +129,7 @@
 	}
 
 	header > p,
-	.choice-list small,
-	.choice-list > a > div span {
+	.path-list .index {
 		color: var(--site-accent-strong);
 		font-family: var(--site-font-mono);
 		font-size: 0.66rem;
@@ -98,16 +153,16 @@
 		line-height: 1.65;
 	}
 
-	.choice-list {
+	.path-list {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 16px;
 	}
 
-	.choice-list > a {
+	.path-list > a {
 		display: flex;
 		flex-direction: column;
-		padding: 25px;
+		padding: 22px 25px 25px;
 		border: 1px solid var(--site-line-strong);
 		border-radius: 10px;
 		background: var(--site-surface);
@@ -115,54 +170,69 @@
 		text-decoration: none;
 	}
 
-	.choice-list > a:hover {
+	.path-list > a:hover {
 		border-color: var(--site-accent-strong);
 	}
 
-	.choice-list > a > div {
-		display: flex;
-		justify-content: space-between;
-		gap: 20px;
+	.path-list strong {
+		margin-top: 18px;
+		font-size: 1.15rem;
+		letter-spacing: -0.02em;
 	}
 
-	.choice-list h2 {
-		margin-top: 25px;
-		font-size: 1.3rem;
-	}
-
-	.choice-list p,
-	.choice-list li,
+	.path-list p,
+	section > p,
+	section li,
 	aside p {
 		color: var(--site-muted);
-		font-size: 0.81rem;
-		line-height: 1.58;
+		font-size: 0.84rem;
+		line-height: 1.6;
 	}
 
-	.choice-list p {
-		margin-top: 11px;
+	.path-list p {
+		margin-top: 9px;
 	}
 
-	.choice-list ul {
-		margin: 20px 0 0;
-		padding: 16px 0 0 18px;
+	section {
+		margin-top: 44px;
+		padding-top: 34px;
 		border-top: 1px solid var(--site-line);
 	}
 
-	.choice-list li + li {
+	section h2 {
+		font-size: 1.35rem;
+		letter-spacing: -0.025em;
+	}
+
+	section > p {
+		max-width: 680px;
+		margin-top: 12px;
+	}
+
+	section :global(.code-block) {
+		margin-top: 18px;
+	}
+
+	section ul {
+		max-width: 680px;
+		margin: 18px 0 0;
+		padding-left: 20px;
+	}
+
+	section li + li {
 		margin-top: 6px;
 	}
 
-	.choice-list strong {
-		margin-top: auto;
-		padding-top: 26px;
-		font-size: 0.78rem;
+	code {
+		font-family: var(--site-font-mono);
+		font-size: 0.92em;
 	}
 
 	aside {
 		display: grid;
 		grid-template-columns: 120px 1fr;
 		gap: 28px;
-		margin-top: 30px;
+		margin-top: 40px;
 		padding: 22px 0;
 		border-top: 1px solid var(--site-line);
 	}
@@ -171,13 +241,17 @@
 		font-size: 0.9rem;
 	}
 
+	aside a {
+		color: var(--site-ink);
+	}
+
 	@media (max-width: 720px) {
 		.starter-index {
 			width: min(100% - 28px, 920px);
 			padding-top: 38px;
 		}
 
-		.choice-list,
+		.path-list,
 		aside {
 			grid-template-columns: 1fr;
 		}

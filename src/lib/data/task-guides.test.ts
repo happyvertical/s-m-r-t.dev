@@ -47,13 +47,14 @@ describe('guide library', () => {
 	});
 
 	it('places starter content in Getting started', () => {
-		expect(getGuideLibraryItem('/starters/ground-up')?.task.family).toBe('getting-started');
-		expect(getGuideLibraryItem('/starters/saas')?.task.family).toBe('getting-started');
+		expect(getGuideLibraryItem('/starters/smrt-start')?.task.family).toBe('getting-started');
+		// Retired with smrt-saas-starter (#338): the URLs are redirects, not guides.
+		expect(getGuideLibraryItem('/starters/ground-up')).toBeUndefined();
+		expect(getGuideLibraryItem('/starters/saas')).toBeUndefined();
 	});
 
 	it('uses the step counts from migrated destination pages', () => {
-		expect(getGuideLibraryItem('/starters/ground-up')?.stepCount).toBe(3);
-		expect(getGuideLibraryItem('/starters/saas')?.stepCount).toBe(4);
+		expect(getGuideLibraryItem('/starters/smrt-start')?.stepCount).toBe(3);
 		expect(getGuideLibraryItem('/foundations/interfaces')?.stepCount).toBe(3);
 	});
 
