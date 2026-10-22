@@ -10,7 +10,8 @@
 	 * is driven from an IntersectionObserver instead — it plays while at least a
 	 * quarter of the frame is visible and pauses offscreen. Under reduced motion
 	 * only the poster shows (`preload="none"` means nothing else is fetched)
-	 * until the reader presses Play.
+	 * until the reader presses Play. There is no caption (#337); the video's
+	 * aria-label is its accessible name.
 	 */
 	let video: HTMLVideoElement | undefined = $state();
 	let playing = $state(false);
@@ -108,10 +109,6 @@
 			{playing ? 'Pause' : 'Play'}
 		</button>
 	</div>
-	<figcaption>
-		build-a-boilerplate, recorded on this site: the Mechanic cookbook, an invoice, a sales-by-month
-		report, then the Export tab. Twenty seconds, silent, looping.
-	</figcaption>
 </figure>
 
 <style>
@@ -157,13 +154,5 @@
 	.playback:focus-visible {
 		opacity: 1;
 		border-color: var(--site-accent-strong);
-	}
-
-	figcaption {
-		margin-top: 0.7rem;
-		color: var(--site-muted);
-		font-size: 0.875rem;
-		line-height: 1.55;
-		text-wrap: pretty;
 	}
 </style>

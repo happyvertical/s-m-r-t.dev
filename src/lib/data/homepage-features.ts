@@ -54,7 +54,7 @@ export const homepageFeatures: HomepageFeature[] = [
 		eyebrow: 'An assistant in the app',
 		title: 'An application can carry its own assistant',
 		body: [
-			'An application adds the assistant to its shell with one recipe. It can read the records on the open page, acts only as the signed-in person, and has no permissions of its own. When it needs a decision, it asks with a short form whose options the application defines, not the model.',
+			'An application adds the assistant to its shell with one recipe. It can read the records on the open page and acts only as the signed-in person. When it needs a decision, it asks with a short form whose options the application defines, not the model.',
 			'The model can be small enough to run in the browser, with no key and no model server; build-a-boilerplate works that way here.'
 		],
 		links: [
@@ -126,8 +126,7 @@ export const homepageFeatures: HomepageFeature[] = [
 		label: 'Preview',
 		title: 'An inbox for the documents a business receives',
 		body: [
-			'Email, a watched folder, a supplier’s webhook, a photo from a phone. The original is kept as evidence and its text read out. An AI suggests what to do next from a list the application defines; a person approves or declines.',
-			'Automation is off by design, which is why this part is labeled preview.'
+			'Email, a watched folder, a supplier’s webhook, a photo from a phone. The original is kept as evidence and its text read out. An AI suggests what to do next from a list the application defines; a person approves or declines.'
 		],
 		links: [
 			{ label: 'Modules', href: '/modules#content-and-media' },
@@ -141,7 +140,7 @@ export const homepageFeatures: HomepageFeature[] = [
 		eyebrow: 'Who can see what',
 		title: 'Rules about data live with the data',
 		body: [
-			'An application can hold many organizations, nested up to ten deep. Which records a request may see is decided where data is read and written, not in page code. So the answer is the same for screens, the API, the command line and agent tools; on PostgreSQL the database enforces it too. A field can be required, read-only or secret on every surface. A change can record who made it and, for an agent, whom it acted for.'
+			'An application can hold many organizations. Which records a request may see is decided where data is read and written, not in page code. So the answer is the same for screens, the API, the command line and agent tools; on PostgreSQL the database enforces it too. A field can be required, read-only or secret on every surface. A change can record who made it and, for an agent, whom it acted for.'
 		],
 		links: [
 			{ label: 'Tenants', href: '/foundations/tenants' },
@@ -156,8 +155,7 @@ export const homepageFeatures: HomepageFeature[] = [
 		eyebrow: 'Outside agents, same rules',
 		title: 'Three doors, and each one is a choice',
 		body: [
-			'An MCP endpoint for connected agents, a command line, and tools a browser agent can see on the page. Each is turned on per application and names its operations. Browser tools start read-only; the command line carries the actions the application selected.',
-			'Without a sign-in, a door shows only what the application marks public, read-only.'
+			'An MCP endpoint for connected agents, a command line, and tools a browser agent can see on the page. Each is turned on per application and names its operations. Browser tools start read-only; the command line carries the actions the application selected.'
 		],
 		links: [
 			{ label: 'Agents', href: '/agents#where-agents-connect' },
