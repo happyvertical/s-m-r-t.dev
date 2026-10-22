@@ -171,7 +171,8 @@ const NON_PROSE_PROPERTIES = new Set([
 	'uiDependencies',
 	'variant',
 	'version',
-	'visual'
+	'visual',
+	'wrap'
 ]);
 
 const CONTENT_ELEMENTS = new Set([
