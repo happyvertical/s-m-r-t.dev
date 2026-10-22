@@ -10,7 +10,7 @@ const destinations: Record<string, string> = {
 	'agents/dispatch': '/reference/packages/smrt-agents',
 	'components/feedback/confirm-dialog': '/reference/packages/smrt-ui',
 	'components/feedback/progress-bar': '/reference/packages/smrt-ui',
-	migration: '/starters/ground-up',
+	migration: '/starters/smrt-start',
 	security: '/reference/security',
 	'concepts/configuration': '/reference/configuration',
 	'concepts/multi-tenancy': '/foundations/tenants',

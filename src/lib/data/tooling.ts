@@ -100,16 +100,16 @@ export const toolingGuides: Guide[] = [
 			{
 				title: 'Choose a supported starting point',
 				intro:
-					'The basic SvelteKit template is the small, ground-up path. It includes one model, SQLite, the application runtime from smrt-app-runtime mounted through hooks.server.ts, the AppShell root layout, and generated interfaces. It ships no operator scripts; every lifecycle script is a smrt app command. Its vite.config.ts is the smrt() preset, with the consumed packages listed in smrt.config.ts. The SaaS starter is the production-shaped path with accounts, onboarding, subscriptions, workers, mobile clients, and deployment files.',
+					'smrt-start is the public SvelteKit template, and the one smrt cookbook apply copies by default. It includes one Note model, SQLite, the application runtime from smrt-app-runtime mounted through hooks.server.ts, the AppShell root layout, an assistant, and generated interfaces. It ships no operator scripts; every lifecycle script is a smrt app command. Its vite.config.ts is the smrt() preset, with the consumed packages read from package.json in smrt.config.ts. A cookbook, from build-a-boilerplate or the CLI library, adds recipe packages on top of the same template.',
 				points: [
-					'Use the basic template when you want to learn or build a focused application.',
-					'Use the SaaS starter when the product needs the common multi-tenant application systems from the start.',
+					'Clone smrt-start when you want the smallest working application with every layer visible.',
+					'Use smrt cookbook apply when you have a cookbook; it pins the template to the CLI release.',
 					'Use smrt init only to add framework files to an existing SvelteKit project.'
 				],
 				links: [
-					{ label: 'Compare the application starters', href: '/starters' },
-					{ label: 'Ground-up SvelteKit guide', href: '/starters/ground-up' },
-					{ label: 'SaaS starter guide', href: '/starters/saas' }
+					{ label: 'Getting Started', href: '/starters' },
+					{ label: 'Start from a cookbook', href: '/starters#cookbook' },
+					{ label: 'Clone smrt-start', href: '/starters/smrt-start' }
 				]
 			},
 			{
@@ -166,7 +166,7 @@ pnpm build`,
 			{
 				title: 'Make migrations follow the model',
 				intro:
-					'Schema changes are computed from the current manifest. The CLI does not write migration files to review or commit. Build first so the manifest is current. Then inspect the status or diff before you apply the change. In the basic template, the db:migrate script runs vite build and then smrt app migrate, which holds the operation lock around smrt db:migrate.',
+					'Schema changes are computed from the current manifest. The CLI does not write migration files to review or commit. Build first so the manifest is current. Then inspect the status or diff before you apply the change. In smrt-start, the db:migrate script runs smrt app build and then smrt app migrate, which holds the operation lock around smrt db:migrate.',
 				filename: 'terminal',
 				lang: 'bash',
 				code: `pnpm build
@@ -199,7 +199,7 @@ export default defineConfig({
 		],
 		related: [
 			{ label: 'Framework overview', href: '/framework' },
-			{ label: 'Application starters', href: '/starters' },
+			{ label: 'Getting Started', href: '/starters' },
 			{ label: 'Testing guide', href: '/guides/testing-your-app' },
 			{ label: 'Generated interfaces reference', href: '/reference/interfaces' }
 		]

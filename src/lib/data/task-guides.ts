@@ -88,13 +88,16 @@ export const guideMigrationDecisions: GuideMigrationRecord[] = [
 	},
 	{ source: '/starters', decision: 'merge', family: 'getting-started' },
 	{
+		// Became /starters/smrt-start (#338); the old URL is a prerendered 301.
 		source: '/starters/ground-up',
 		decision: 'move',
 		family: 'getting-started'
 	},
 	{
+		// smrt-saas-starter is no longer a starting point (#338); the old URL
+		// is a prerendered 301 to /starters.
 		source: '/starters/saas',
-		decision: 'move',
+		decision: 'retire',
 		family: 'getting-started'
 	},
 	{
@@ -141,18 +144,18 @@ export function taskGuideSearchTerms(guide: TaskGuide): string[] {
  */
 const guideMigrationDrafts: TaskGuide[] = [
 	{
-		slug: 'start-with-basic-sveltekit',
-		navTitle: 'Start with basic SvelteKit',
+		slug: 'start-with-smrt-start',
+		navTitle: 'Clone smrt-start',
 		eyebrow: 'Getting started',
-		title: 'Start a basic s-m-r-t SvelteKit application',
-		lede: 'Copy the basic template. Run the application. Review the first model and its generated interfaces.',
+		title: 'Start from the smrt-start template',
+		lede: 'Clone the template. Run the application. Read the first model and its generated interfaces.',
 		plainEnglish:
-			'Use this path when you want a small application that keeps each framework layer visible.',
-		packages: ['smrt-template-sveltekit', 'smrt-core', 'smrt-svelte', 'smrt-ui'],
+			'Use this path when you want the smallest working application with each framework layer visible.',
+		packages: ['smrt-core', 'smrt-app-runtime', 'smrt-svelte', 'smrt-ui'],
 		task: {
 			family: 'getting-started',
-			purpose: 'Create a small SvelteKit application from the basic template.',
-			prerequisites: ['Node 26.0.0 or newer', 'pnpm 11.25.0', 'A terminal'],
+			purpose: 'Create a small SvelteKit application from the smrt-start template.',
+			prerequisites: ['Node 26.0.0 or newer', 'pnpm 11.25.0', 'git', 'A terminal'],
 			difficulty: 'Beginner',
 			supportRange: TASK_GUIDES_PINNED_VERSION,
 			concepts: ['Application model', 'Tenant scope', 'Generated interfaces', 'Application shell'],
@@ -163,58 +166,50 @@ const guideMigrationDrafts: TaskGuide[] = [
 				{ label: 'Generated interfaces reference', href: '/reference/interfaces' }
 			],
 			expectedResult:
-				'The application runs on loopback and opens owner onboarding, with one example object behind it.'
+				'The application runs on loopback with you as its owner, and one Note model behind it.'
 		},
 		pinnedVersion: TASK_GUIDES_PINNED_VERSION,
 		visual: 'app-model',
 		sections: [
 			{
-				title: 'Create the application',
+				title: 'Clone and run it',
 				intro:
-					'Run these commands in a directory that can contain the new project. app:install runs smrt app install from the CLI dev dependency. Under one operation lock it builds, migrates the local SQLite database, starts the production build on loopback, and opens owner onboarding. The template ships no operator scripts; every lifecycle script is a smrt app command.',
+					'Run these commands in a directory that can contain the new project. app:setup builds, creates the local SQLite database and issues a one-time owner invitation; app:open opens the page that claims it. Every lifecycle script is a smrt app command; the template ships no operator scripts of its own.',
 				filename: 'terminal',
 				lang: 'bash',
-				code: `pnpm add -D @happyvertical/smrt-template-sveltekit
-node --input-type=module -e "import { copyTemplate } from '@happyvertical/smrt-template-sveltekit'; copyTemplate('./my-app', { name: 'my-app' })"
+				code: `git clone https://github.com/happyvertical/smrt-start.git my-app
 cd my-app
 pnpm install
 cp .env.example .env
-pnpm app:install`,
+pnpm app:setup
+pnpm dev
+pnpm app:open                # in a second terminal`,
 				points: [
-					'pnpm dev runs smrt app dev for the development loop; pnpm db:migrate builds and then runs smrt app migrate after an object schema change.',
-					'Use the individual app:* scripts (setup, start, stop, recover, doctor, open, backup, export, import) for recovery or explicit operator control.'
+					'pnpm dev runs smrt app dev for the development loop; pnpm db:migrate builds and then runs smrt app migrate after a model schema change.',
+					'Use the individual app:* scripts (setup, start, stop, recover, doctor, open) for recovery or explicit operator control.'
 				]
 			},
 			{
-				title: 'Review the first model',
+				title: 'Read the first model',
 				intro:
-					'Open the Item model. Its declaration supplies stored fields, tenant scope, and generated interfaces.',
-				filename: 'src/lib/objects/Item.ts',
+					'Open the Note model. Its declaration supplies stored fields, tenant scope, and generated interfaces.',
+				filename: 'src/lib/models/Note.ts',
 				code: `@smrt({
-  api: {
-    include: ['list', 'get', 'create', 'update', 'delete'],
-    writable: ['title', 'description', 'status']
-  },
-  cli: { include: ['list', 'get', 'create', 'update', 'delete'] },
-  mcp: { include: ['list', 'get', 'create', 'update', 'delete'] }
+  api: { include: ['list', 'get', 'create'], writable: ['title', 'body'] },
+  mcp: { include: ['list', 'get', 'create'] },
 })
-@TenantScoped({ mode: 'optional' })
-export class Item extends SmrtObject {
-  @tenantId({ nullable: true })
-  tenantId: string | null = null;
-  title = '';
-  description = '';
-  status = 'draft';
-}
+@TenantScoped({ mode: 'required' })
+export class Note extends SmrtObject {
+  @tenantId()
+  tenantId: string = '';
 
-export class ItemCollection extends SmrtCollection<Item> {
-  static readonly _itemClass = Item;
-}
+  title: string = '';
 
-ObjectRegistry.registerCollection('Item', ItemCollection);`,
+  body: string = '';
+}`,
 				points: [
 					'The api writable list is the allowlist for REST writes; fields outside it are read-only over HTTP.',
-					'The explicit ItemCollection registration keeps the generated CLI and MCP runtime commands constructible.'
+					'The smrt() Vite preset scans src/lib/models and regenerates the routes, types and WebMCP definitions on every pnpm dev and pnpm build.'
 				]
 			},
 			{
@@ -224,7 +219,7 @@ ObjectRegistry.registerCollection('Item', ItemCollection);`,
 				filename: 'terminal',
 				lang: 'bash',
 				code: `pnpm app:stop
-pnpm check
+pnpm typecheck
 pnpm build
 pnpm app:doctor`
 			}
@@ -232,84 +227,8 @@ pnpm app:doctor`
 		related: [
 			{ label: 'Build a tenant foundation', href: '/guides/multi-tenant-lifecycle' },
 			{
-				label: 'Basic template source',
-				href: `${SMRT_TREE}/packages/template-sveltekit`,
-				external: true
-			}
-		]
-	},
-	{
-		slug: 'start-with-saas-starter',
-		navTitle: 'Start with the SaaS starter',
-		eyebrow: 'Getting started',
-		title: 'Start with the s-m-r-t SaaS application',
-		lede: 'Run the reference application. Find each application area. Replace the example model while you keep the framework foundations.',
-		plainEnglish:
-			'Use this path when your application needs accounts, tenants, subscriptions, jobs, mobile clients, and deployment.',
-		packages: ['smrt-core', 'smrt-svelte', 'smrt-users', 'smrt-tenancy'],
-		task: {
-			family: 'getting-started',
-			purpose: 'Run the SaaS starter and find the correct place for application logic.',
-			prerequisites: ['Node 26.0.0 or newer', 'pnpm', 'Docker', 'Git'],
-			difficulty: 'Intermediate',
-			supportRange: TASK_GUIDES_PINNED_VERSION,
-			concepts: ['Monorepo', 'Tenant administration', 'Jobs', 'Mobile clients', 'Deployment'],
-			relatedUi: [{ label: 'UI overview', href: '/ui' }],
-			relatedModules: [{ label: 'Application modules', href: '/modules' }],
-			relatedReference: [
-				{ label: 'Configuration reference', href: '/reference/configuration' },
-				{ label: 'Authorization reference', href: '/reference/authorization' }
-			],
-			expectedResult:
-				'The local reference application starts with its database and development services.'
-		},
-		pinnedVersion: TASK_GUIDES_PINNED_VERSION,
-		visual: 'shell',
-		sections: [
-			{
-				title: 'Run the reference application',
-				intro: 'Clone the starter. Then start its services and web application.',
-				filename: 'terminal',
-				lang: 'bash',
-				code: `git clone https://github.com/happyvertical/smrt-saas-starter.git my-app
-cd my-app
-pnpm install
-cp .env.example .env
-pnpm services:up
-pnpm db:migrate
-pnpm db:seed
-pnpm --filter @happyvertical/smrt-saas-web dev`
-			},
-			{
-				title: 'Find each responsibility',
-				intro:
-					'Use the repository areas to find web, worker, mobile, model, UI, and deployment code.',
-				points: [
-					'apps/web contains the public site, onboarding, accounts, tenant administration, billing, and MCP routes.',
-					'apps/worker contains queued and scheduled jobs.',
-					'apps/mobile contains the Android and iOS application shells.',
-					'packages/app-objects contains the starter models and services.',
-					'packages/app-ui contains reusable application components.',
-					'manifests contains deployment configuration.'
-				]
-			},
-			{
-				title: 'Replace the example model',
-				intro:
-					'Start in packages/app-objects. Keep the tenant, permission, session, and generated-interface patterns.',
-				points: [
-					'Choose public, invite-only, or request-access onboarding.',
-					'Replace the example plans, entitlements, and usage measures.',
-					'Add application navigation to the shared shell.',
-					'Contribute reusable framework improvements to s-m-r-t.'
-				]
-			}
-		],
-		related: [
-			{ label: 'Build a tenant foundation', href: '/guides/multi-tenant-lifecycle' },
-			{
-				label: 'SaaS starter source',
-				href: 'https://github.com/happyvertical/smrt-saas-starter',
+				label: 'smrt-start source',
+				href: 'https://github.com/happyvertical/smrt-start',
 				external: true
 			}
 		]
@@ -416,11 +335,7 @@ export const taskGuides: TaskGuide[] = [
 		sources: [
 			{ label: 'smrt-tenancy README', href: `${SMRT_TREE}/packages/tenancy/README.md` },
 			{ label: 'smrt-tenancy AGENTS.md', href: `${SMRT_TREE}/packages/tenancy/AGENTS.md` },
-			{ label: 'smrt-users README', href: `${SMRT_TREE}/packages/users/README.md` },
-			{
-				label: 'smrt-saas-starter',
-				href: 'https://github.com/happyvertical/smrt-saas-starter'
-			}
+			{ label: 'smrt-users README', href: `${SMRT_TREE}/packages/users/README.md` }
 		],
 		sections: [
 			{
@@ -1622,8 +1537,7 @@ interface MigrationGuideDestination {
 }
 
 const migrationGuideDestinations = new Map<string, MigrationGuideDestination>([
-	['start-with-basic-sveltekit', { href: '/starters/ground-up', stepCount: 3 }],
-	['start-with-saas-starter', { href: '/starters/saas', stepCount: 4 }],
+	['start-with-smrt-start', { href: '/starters/smrt-start', stepCount: 3 }],
 	['add-generated-interfaces', { href: '/foundations/interfaces', stepCount: 3 }]
 ]);
 

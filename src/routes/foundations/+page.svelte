@@ -39,9 +39,8 @@
 	<aside>
 		<strong>Starting a project?</strong>
 		<p>
-			The <a href="/starters/ground-up">basic template</a> walks through these foundations in a
-			small app. The <a href="/starters/saas">SaaS starter</a> shows the same model in a production-shaped
-			monorepo.
+			The <a href="/starters/smrt-start">smrt-start template</a> walks through these foundations in
+			a small app. <a href="/starters">Getting Started</a> lists the other ways in.
 		</p>
 	</aside>
 </article>

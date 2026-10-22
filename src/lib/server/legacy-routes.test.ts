@@ -103,18 +103,18 @@ describe('legacy static routes', () => {
 		expect(new Set(paths).size).toBe(paths.length);
 	});
 
+	const redirectTarget = (load: () => never) => {
+		try {
+			load();
+		} catch (response) {
+			return response as { status: number; location: string };
+		}
+		throw new Error('expected a redirect');
+	};
+
 	it('redirects the legacy /packages and /faq singular pages to Reference', async () => {
 		const { load: packagesLoad } = await import('../../routes/packages/+page.server');
 		const { load: faqLoad } = await import('../../routes/faq/+page.server');
-
-		const redirectTarget = (load: () => never) => {
-			try {
-				load();
-			} catch (response) {
-				return response as { status: number; location: string };
-			}
-			throw new Error('expected a redirect');
-		};
 
 		expect(redirectTarget(packagesLoad as () => never)).toMatchObject({
 			status: 301,
@@ -124,5 +124,29 @@ describe('legacy static routes', () => {
 			status: 301,
 			location: '/reference/faq'
 		});
+	});
+
+	it('redirects the two retired starter pages without chaining (#338)', async () => {
+		// /starters/ground-up became /starters/smrt-start; /starters/saas was
+		// retired with smrt-saas-starter. Both are single-file, non-parametrized
+		// redirect routes, so there is nothing to enumerate — only the target.
+		const { load: groundUpLoad } = await import('../../routes/starters/ground-up/+page.server');
+		const { load: saasLoad } = await import('../../routes/starters/saas/+page.server');
+
+		expect(redirectTarget(groundUpLoad as () => never)).toMatchObject({
+			status: 301,
+			location: '/starters/smrt-start'
+		});
+		expect(redirectTarget(saasLoad as () => never)).toMatchObject({
+			status: 301,
+			location: '/starters'
+		});
+
+		// The docs legacy map's `migration` entry points straight at the live page,
+		// never through /starters/ground-up (a 301 to a 301).
+		const { load: docsLoad } = await import('../../routes/docs/[...legacy]/+page.server');
+		expect(
+			redirectTarget((() => docsLoad({ params: { legacy: 'migration' } } as never)) as () => never)
+		).toMatchObject({ status: 301, location: '/starters/smrt-start' });
 	});
 });

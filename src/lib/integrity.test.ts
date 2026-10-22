@@ -158,7 +158,11 @@ describe('emitted-route inventory (#187 S4)', () => {
 			'/saadl',
 			'/themes',
 			'/packages',
-			'/faq'
+			'/faq',
+			// #338: the ground-up page became /starters/smrt-start; the SaaS
+			// starter page was retired. Both are guarded in legacy-routes.test.ts.
+			'/starters/ground-up',
+			'/starters/saas'
 		];
 		for (const path of knownSingleRedirectRoutes) {
 			expect(
