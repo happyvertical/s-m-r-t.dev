@@ -1,12 +1,9 @@
 import { cleanup, render, screen } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
-import { appLayers, buildingBlockNouns, layerNames, unlayeredPackageCount } from '$lib/data/layers';
+import { appLayers, buildingBlockNouns, layerNames } from '$lib/data/layers';
 import { frameworkModelProjections } from '$lib/data/framework';
 import { homepageFeatures } from '$lib/data/homepage-features';
 import { curatedChipsFor } from '$lib/data/layer-chips';
-import { packages } from '$lib/data/packages';
-import { playgroundModules } from '$lib/data/playgrounds';
-import { uiComponents } from '$lib/data/ui-components.generated';
 import { SMRT_VERSION } from '$lib/version';
 import Page from './+page.svelte';
 
@@ -39,19 +36,20 @@ describe('documentation home page', () => {
 		);
 		expect(container.textContent).not.toMatch(/business software|software agents?/i);
 		// #335 brings "blurs the line between application and agent" back as a
-		// concrete passage; each sentence has an evidence row. It sits below the
-		// primary action (so the button stays above the fold) and above the video.
+		// concrete passage; each sentence has an evidence row. #337 moves it under
+		// the video, where the outcome line used to be.
 		const passage = container.querySelector('.hero-intro .hero-passage')!;
 		expect(text(passage)).toContain(
 			'A s-m-r-t application blurs the line between application and agent.'
 		);
 		expect(text(passage)).toContain('through the same doors, under the same checks.');
-		expect(follows(container.querySelector('a.primary-link--hero')!, passage)).toBe(true);
-		expect(follows(passage, container.querySelector('figure.planner-screencast')!)).toBe(true);
+		expect(follows(container.querySelector('figure.planner-screencast')!, passage)).toBe(true);
+		expect(container.querySelector('.outcome-line')).toBeNull();
+		expect(container.textContent).not.toContain('You leave with a cookbook file');
 		expect(container.textContent).not.toContain('better demonstrated than explained');
 	});
 
-	it('puts the primary build-a-boilerplate link above the recording, its caption and the outcome line', () => {
+	it('puts the primary build-a-boilerplate link above the recording and the line passage', () => {
 		const { container } = render(Page);
 		const intro = container.querySelector('.hero-intro');
 		const video = intro?.querySelector<HTMLVideoElement>('figure.planner-screencast video');
@@ -70,24 +68,22 @@ describe('documentation home page', () => {
 		expect(
 			[...video!.querySelectorAll('source')].map((source) => source.getAttribute('type'))
 		).toEqual(['video/webm', 'video/mp4']);
-		expect(intro?.querySelector('figcaption')?.textContent).toContain('build-a-boilerplate');
+		// #337 dropped the caption; the video's aria-label is its accessible name.
+		expect(intro?.querySelector('figcaption')).toBeNull();
+		expect(video!.getAttribute('aria-label')).toContain('build-a-boilerplate');
 		expect(intro?.querySelector('.playback')).toBeTruthy();
 
 		const cta = intro?.querySelector('a.primary-link--hero');
 		expect(cta?.getAttribute('href')).toBe('/build-a-boilerplate');
 		expect(cta?.textContent).toContain('build-a-boilerplate');
-		// Order: H1, lede, the button, the video, its caption, then what you
-		// leave with.
+		// Order: H1, lede, the button, the video, then the line passage.
 		const h1 = intro!.querySelector('h1')!;
 		const lede = intro!.querySelector('.lede')!;
-		const caption = intro!.querySelector('figcaption')!;
-		const outcome = intro!.querySelector('.outcome-line')!;
+		const passage = intro!.querySelector('.hero-passage')!;
 		expect(follows(h1, lede)).toBe(true);
 		expect(follows(lede, cta!)).toBe(true);
 		expect(follows(cta!, video!)).toBe(true);
-		expect(follows(video!, caption)).toBe(true);
-		expect(follows(caption, outcome)).toBe(true);
-		expect(outcome.textContent).toContain('smrt cookbook apply');
+		expect(follows(video!, passage)).toBe(true);
 	});
 
 	it('keeps the mini scope map as the hero visual and moves the five-layer list out of the hero', () => {
@@ -97,6 +93,8 @@ describe('documentation home page', () => {
 			(node) => node.textContent
 		);
 		expect(miniMapNames).toEqual(layerNames);
+		// #337: the mini-map names the layers without counting their packages.
+		expect(container.querySelector('.mini-scope-map .mini-count')).toBeNull();
 		expect(container.querySelector('.hero .layer-lede-list')).toBeNull();
 		// The five layers still read as sentences — once, in the scope section.
 		const bandNames = [...container.querySelectorAll('#scope .layer-band h3')].map(
@@ -174,7 +172,7 @@ describe('documentation home page', () => {
 			'Three doors, and each one is a choice',
 			'Describe the record once',
 			'Five layers, one release',
-			'Three ways in'
+			'Getting Started'
 		]);
 
 		// Slice B of #321 mounts the six feature sections here, between "What
@@ -201,7 +199,7 @@ describe('documentation home page', () => {
 			['what-you-get', 'A working application, not a template'],
 			['one-description', 'Describe the record once'],
 			['scope', 'Five layers, one release'],
-			['start-here', 'Three ways in']
+			['start-here', 'Getting Started']
 		]) {
 			expect(container.querySelector(`#${id} h2`)?.textContent).toBe(heading);
 		}
@@ -233,34 +231,19 @@ describe('documentation home page', () => {
 		}
 	});
 
-	it('generates the scale line from the catalog instead of hand-typed counts', () => {
+	it('drops the scale line and keeps the release statement in the layers subhead (#337)', () => {
 		const { container } = render(Page);
-		const line = container.querySelector('.scale-line');
-		const playgroundCount = playgroundModules.reduce(
-			(total, module) => total + (module.entries?.length ?? 0),
-			0
+
+		expect(container.querySelector('.scale-line')).toBeNull();
+		expect(container.textContent).not.toContain('working examples');
+		expect(text(container.querySelector('#scope .section-heading p'))).toBe(
+			'Every package releases together at one version.'
 		);
-
-		expect([...line!.querySelectorAll('.mono')].map((node) => node.textContent)).toEqual([
-			SMRT_VERSION,
-			String(packages.length),
-			String(uiComponents.length),
-			String(playgroundCount)
-		]);
-		expect(line?.textContent).toContain('released together');
-	});
-
-	it('reconciles the five-layer diagram against the full catalog total', () => {
-		const { container } = render(Page);
-		const layeredCount = appLayers.reduce((total, layer) => total + layer.packages.length, 0);
-
-		// The five layers never cover the whole catalog (native mobile and
-		// coding-agent/CI tooling sit outside them) — the reconciliation note
-		// must account for the gap instead of leaving it unexplained.
-		expect(layeredCount + unlayeredPackageCount).toBe(packages.length);
-		expect(container.querySelector('.scope-reconciliation')?.textContent).toContain(
-			`${layeredCount} of the catalog's ${packages.length}`
-		);
+		// The catalog footnote names where the unlayered packages are, without
+		// counting them.
+		const footnote = container.querySelector('.scope-reconciliation');
+		expect(text(footnote).trim()).toBe('Tooling and mobile packages are in the full catalog.');
+		expect(footnote?.querySelector('a')?.getAttribute('href')).toBe('/reference/packages');
 	});
 
 	it('shows the trimmed record description with one link per generated surface', () => {
@@ -288,14 +271,13 @@ describe('documentation home page', () => {
 			'SAADL — Software as Agentic Domain Logic: software whose domain logic exposes the same ' +
 				'operations to human users (UI, HTTP, CLI) and to agents (callable tools).'
 		);
-		// Slice D dropped the "In plain terms" gloss: the lede already says it in
-		// plain words, so the aside holds the definition, its pronunciation and
-		// the link only.
-		expect(text(container.querySelector('.saadl-definition'))).toContain('Pronounced "saddle."');
+		// Slice D dropped the "In plain terms" gloss and #337 the pronunciation:
+		// the aside holds the definition and the link only.
+		expect(text(container.querySelector('.saadl-definition'))).not.toContain('Pronounced');
 		expect(text(container.querySelector('.saadl-definition'))).not.toContain('In plain terms');
 	});
 
-	it('offers three start paths and the coding-agent note', () => {
+	it('offers four getting-started guides and the coding-agent note', () => {
 		const { container } = render(Page);
 		const paths = [...container.querySelectorAll('#start-here nav a')];
 
@@ -305,13 +287,49 @@ describe('documentation home page', () => {
 				href: link.getAttribute('href')
 			}))
 		).toEqual([
-			{ label: 'Try it', href: '/build-a-boilerplate' },
-			{ label: 'Build one', href: '/starters/ground-up' },
-			{ label: 'Connect an agent', href: '/agents' }
+			{ label: 'build-a-boilerplate', href: '/build-a-boilerplate' },
+			{ label: 'Start from a cookbook', href: '/starters#cookbook' },
+			{ label: 'Clone smrt-start', href: '/starters/smrt-start' },
+			{ label: 'Hand it to your agent', href: '#agent-prompt' }
 		]);
+		// build-a-boilerplate is always lowercase and hyphenated.
+		expect(container.textContent).not.toContain('Build a boilerplate');
 		expect(container.querySelector('#start-here .start-note a')?.getAttribute('href')).toBe(
 			'/tooling'
 		);
+	});
+
+	it('carries a copyable agent prompt pinned to the installed release (#337)', () => {
+		const { container } = render(Page);
+		const block = container.querySelector('#start-here #agent-prompt');
+		const prompt = block?.querySelector('pre code')?.textContent ?? '';
+
+		expect(block?.querySelector('h3')?.textContent).toBe('Hand it to your agent');
+		expect(block?.querySelector('button[aria-label="Copy code"]')).toBeTruthy();
+		expect(prompt).toContain('Create a new s-m-r-t app.');
+		// The CLI pin and the cookbook URL's release tag both follow SMRT_VERSION.
+		expect(prompt).toContain(`npx -y @happyvertical/smrt-cli@${SMRT_VERSION} cookbook apply`);
+		expect(prompt).toContain(
+			`https://raw.githubusercontent.com/happyvertical/smrt/v${SMRT_VERSION}/packages/cli/cookbooks/`
+		);
+		// Every version in the prompt is the installed release; nothing is typed.
+		const versions = prompt.match(/\d+\.\d+\.\d+/g) ?? [];
+		expect(versions.length).toBeGreaterThan(0);
+		expect(new Set(versions)).toEqual(new Set([SMRT_VERSION]));
+		// Not on the page until they work: `smrt onboard` (smrt#4139) is a source
+		// comment, `smrt kitchen` is broken in the installed release.
+		expect(prompt).not.toContain('onboard');
+		expect(prompt).not.toContain('kitchen');
+		expect(prompt).not.toContain('<!--');
+	});
+
+	it('ends the page with the evidence note, after Getting Started (#337)', () => {
+		const { container } = render(Page);
+		const note = container.querySelector('.evidence-note')!;
+		const article = container.querySelector('article.homepage')!;
+
+		expect(follows(container.querySelector('#start-here')!, note)).toBe(true);
+		expect(article.lastElementChild).toBe(note);
 	});
 
 	it('keeps one H1, an H2 per section and no skipped heading levels', () => {

@@ -177,7 +177,9 @@ const whyItem: NavigationItem = {
 		// The visible H1 and the hero's subject, so a visitor who read the page
 		// name or the lede can get back to it from search.
 		'application stack',
-		'agentic software'
+		'agentic software',
+		// The Getting Started section's copyable prompt (#337) lives on this page.
+		'agent prompt'
 	]
 };
 

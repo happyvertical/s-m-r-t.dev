@@ -29,6 +29,8 @@ describe('Why s-m-r-t discovery surfaces', () => {
 		// are registered as keywords so the page's own words find it.
 		expect(searchDocs('application stack')[0]).toMatchObject({ label: 'Home', href: '/' });
 		expect(searchDocs('agentic software')[0]).toMatchObject({ label: 'Home', href: '/' });
+		// The Getting Started section (#337) keeps the agent prompt on the homepage.
+		expect(searchDocs('agent prompt')[0]).toMatchObject({ label: 'Home', href: '/' });
 
 		const sitemapXml = await (await sitemap({} as never)).text();
 		expect(sitemapXml).toContain('<loc>https://s-m-r-t.dev</loc>');

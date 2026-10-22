@@ -3,45 +3,64 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import PlannerScreencast from '$lib/components/PlannerScreencast.svelte';
 	import FeatureSections from '$lib/components/home/FeatureSections.svelte';
-	import {
-		appLayers,
-		buildingBlockNouns,
-		buildingBlocksScopeLede,
-		unlayeredPackageCount
-	} from '$lib/data/layers';
+	import { appLayers, buildingBlockNouns, buildingBlocksScopeLede } from '$lib/data/layers';
 	import { curatedChipsFor } from '$lib/data/layer-chips';
 	import { frameworkModelProjections, homepageModelExample } from '$lib/data/framework';
-	import { packages } from '$lib/data/packages';
-	import { uiComponents } from '$lib/data/ui-components.generated';
-	import { playgroundModules } from '$lib/data/playgrounds';
 	import { SMRT_VERSION } from '$lib/version';
 
-	// Every count below is derived from the same data the rest of the site reads
-	// from — never hand-typed — so it cannot drift from the installed catalog.
-	// See pinned-versions.test.ts for the rule this satisfies.
-	const packageCount = $derived(packages.length);
-	const componentCount = $derived(uiComponents.length);
-	const playgroundCount = $derived(
-		playgroundModules.reduce((total, module) => total + (module.entries?.length ?? 0), 0)
-	);
-
+	// Getting Started (#337): four entries, each a getting-started guide. The
+	// last one lands on the agent prompt below, on this page.
 	const startPaths = [
 		{
-			label: 'Try it',
-			body: 'build-a-boilerplate, in the browser, nothing installed.',
+			label: 'build-a-boilerplate',
+			body: 'Pick recipes in the browser and export a cookbook file or a prompt for your coding agent. Nothing to install.',
 			href: '/build-a-boilerplate'
 		},
 		{
-			label: 'Build one',
-			body: 'A basic SvelteKit application, step by step.',
-			href: '/starters/ground-up'
+			label: 'Start from a cookbook',
+			body: 'smrt cookbook apply turns a cookbook into a project on the smrt-start template, pinned to the current release.',
+			href: '/starters#cookbook'
 		},
 		{
-			label: 'Connect an agent',
-			body: 'The doors, the defaults and the identity every call runs as.',
-			href: '/agents'
+			label: 'Clone smrt-start',
+			body: 'The canonical template: one owner, local SQLite, a Notes model, an assistant and read-only MCP.',
+			href: '/starters/smrt-start'
+		},
+		{
+			label: 'Hand it to your agent',
+			body: 'Copy a prompt into Claude Code, Codex or another coding agent; it runs the smrt CLI and creates the app.',
+			href: '#agent-prompt'
 		}
 	];
+
+	// The prompt a visitor hands to a coding agent (#337). It is modelled on the
+	// planner's own export prompt but starts from a library cookbook instead of
+	// an embedded one. The CLI pin and the cookbook URL's release tag both come
+	// from SMRT_VERSION (pinned-versions.test.ts forbids a typed version), and
+	// the cookbook list is the four the CLI package ships.
+	const cli = `npx -y @happyvertical/smrt-cli@${SMRT_VERSION}`;
+	const agentPrompt = [
+		'Create a new s-m-r-t app. Work in a new, empty directory outside any existing project, run the steps in order, and when you finish report what you ran and what happened, including anything that failed.',
+		'',
+		'1. Prerequisites: Node 26 or newer (`node --version`), git, and pnpm 11 or newer (`npm install -g pnpm` if missing). The smrt CLI runs through npx; nothing needs a token.',
+		'',
+		`2. Learn the CLI: \`${cli} --help\` (read the Cookbook section).`,
+		// smrt#4139: when `smrt onboard` ships, replace step 2 with
+		// `${cli} onboard` and "follow what it prints".
+		'',
+		'3. Choose a cookbook. If I gave you a cookbook file or URL, use that. Otherwise ask me what the app is for and pick the closest of bakery, mechanic, welder, yoga-studio:',
+		`   https://raw.githubusercontent.com/happyvertical/smrt/v${SMRT_VERSION}/packages/cli/cookbooks/<id>.cookbook.json`,
+		'   (For anything else, I can build one at https://s-m-r-t.dev/build-a-boilerplate and give you its prompt.)',
+		'',
+		`4. Validate it, then create the app in ./my-app (a copy of the smrt-start template, smrt packages pinned to ${SMRT_VERSION}):`,
+		`   ${cli} cookbook validate <cookbook>`,
+		`   ${cli} cookbook apply <cookbook> my-app`,
+		'',
+		'5. Set it up (in a subshell, so later commands still run from this directory):',
+		'   (cd my-app && pnpm install && pnpm exec smrt app install)',
+		'',
+		`If a step fails, run \`pnpm exec smrt app doctor\` inside my-app and include its findings. Before changing code, read my-app/README.md and node_modules/@happyvertical/<package>/AGENTS.md for each package you touch. To change recipes, edit the cookbook and run \`${cli} cookbook apply <cookbook> --into my-app\`; do not hand-edit smrt.cookbook.json.`
+	].join('\n');
 
 	// Locked verbatim, character-for-character (approved landing-page
 	// proposal, §3.3) — do not rephrase. Kept as one script-level string
@@ -72,12 +91,15 @@
 				>
 				<a class="text-link" href="#what-you-get">How it works <span aria-hidden="true">↓</span></a>
 			</div>
+			<div class="hero-shot">
+				<PlannerScreencast />
+			</div>
 			<!--
 				"Blurs the line" (#335): kept because it is true, and said concretely.
 				Each sentence is covered by a /reference/evidence row: agents-included
 				and chat-agents (the application's own agents), agent-doors and policy-checks (tools
-				and checks), in-app-assistant (the shell's assistant). It sits below
-				the primary action so the button stays above the fold.
+				and checks), in-app-assistant (the shell's assistant). It sits under
+				the recording (#337) so the button stays next to the lede.
 			-->
 			<p class="hero-passage">
 				A s-m-r-t application blurs the line between application and agent. It ships with agents of
@@ -85,30 +107,16 @@
 				permissions. Its operations are also tools. The assistant inside it and any agent outside it
 				work the application the way a person does: through the same doors, under the same checks.
 			</p>
-			<div class="hero-shot">
-				<PlannerScreencast />
-			</div>
-			<p class="outcome-line">
-				You leave with a cookbook file — readable JSON — or a prompt for a coding agent.
-				<code>smrt cookbook apply</code> turns the file into a project; running it needs a terminal or
-				a coding agent.
-			</p>
 		</div>
 
 		<div class="hero-copy">
 			<!-- A div, not <aside>: inside <main> an aside is a nested complementary landmark (axe: landmark-complementary-is-top-level). -->
 			<div class="saadl-definition">
-				<p><strong>{saadlDefinition}</strong> Pronounced "saddle."</p>
+				<p><strong>{saadlDefinition}</strong></p>
 				<a class="text-link" href="/reference/saadl"
 					>What is a SAADL? <span aria-hidden="true">→</span></a
 				>
 			</div>
-
-			<p class="scale-line">
-				<span class="mono">{SMRT_VERSION}</span> · <span class="mono">{packageCount}</span>
-				packages, released together · <span class="mono">{componentCount}</span> components ·
-				<span class="mono">{playgroundCount}</span> working examples
-			</p>
 		</div>
 
 		<ol class="mini-scope-map" aria-label="The s-m-r-t application stack in five layers">
@@ -117,7 +125,6 @@
 					<a href="#scope">
 						<span class="mini-index">{String(layer.index).padStart(2, '0')}</span>
 						<span class="mini-name">{layer.name}</span>
-						<span class="mini-count">{layer.packages.length}</span>
 					</a>
 				</li>
 			{/each}
@@ -130,8 +137,8 @@
 		</div>
 		<p class="section-copy">
 			The starting points cover common businesses: a bakery, a repair shop, a salon, a non-profit,
-			an agency. Each is a list of recipes — Customers, Estimates, Invoicing, Bookkeeping — with
-			their screens, rules and sample data. Change the list and the mock-up changes.
+			an agency. Each comes with its screens, rules and sample data. Change it and the mock-up
+			changes.
 		</p>
 	</section>
 
@@ -212,30 +219,20 @@
 		</div>
 
 		<p class="scope-reconciliation">
-			These five layers place {packageCount - unlayeredPackageCount} of the catalog's {packageCount}
-			packages. The rest — native mobile, source-only and unpublished, plus the command-line, testing
-			and scaffold packages — is under <a href="/tooling">Tooling</a>,
-			<a href="/capabilities/mobile">Mobile</a> and the
-			<a href="/reference/packages">full catalog</a>.
+			Tooling and mobile packages are in the <a href="/reference/packages">full catalog</a>.
 		</p>
 	</section>
 
-	<p class="evidence-note">
-		Every claim on this page has a source. <a href="/reference/evidence"
-			>See the evidence, claim by claim <span aria-hidden="true">→</span></a
-		>
-	</p>
-
 	<section class="start-section" id="start-here" aria-labelledby="start-heading">
 		<div>
-			<h2 id="start-heading">Three ways in</h2>
+			<h2 id="start-heading">Getting Started</h2>
 			<p class="start-note">
 				Coding agents: each installed package ships instructions for its exact version, and a
 				read-only development server answers questions about the project.
 				<a href="/tooling">Tooling <span aria-hidden="true">→</span></a>
 			</p>
 		</div>
-		<nav aria-label="Start paths">
+		<nav aria-label="Getting started guides">
 			{#each startPaths as path, index (path.href)}
 				<a href={path.href} class:primary-link={index === 0}>
 					<strong>{path.label}</strong>
@@ -244,7 +241,21 @@
 				</a>
 			{/each}
 		</nav>
+		<div class="agent-prompt" id="agent-prompt">
+			<h3>Hand it to your agent</h3>
+			<p>
+				Copy this into your coding agent. It creates the app from one of the library cookbooks, or
+				from a cookbook you give it.
+			</p>
+			<CodeBlock code={agentPrompt} lang="prompt" />
+		</div>
 	</section>
+
+	<p class="evidence-note">
+		Every claim on this page has a source. <a href="/reference/evidence"
+			>See the evidence, claim by claim <span aria-hidden="true">→</span></a
+		>
+	</p>
 </article>
 
 <style>
@@ -293,7 +304,7 @@
 
 	.hero-passage {
 		max-width: 44rem;
-		margin-top: 1.1rem;
+		margin-top: 1.25rem;
 		color: var(--site-muted);
 		font-size: 1.0625rem;
 		line-height: 1.6;
@@ -342,20 +353,6 @@
 		filter: brightness(1.08);
 	}
 
-	.outcome-line {
-		max-width: 44rem;
-		margin-top: 1rem;
-		color: var(--site-muted);
-		font-size: 0.9375rem;
-		line-height: 1.65;
-	}
-
-	.outcome-line code {
-		font-family: var(--font-mono);
-		font-size: 0.85em;
-		color: var(--site-ink);
-	}
-
 	.saadl-definition {
 		max-width: 42rem;
 		padding: 1.1rem 1.25rem;
@@ -372,19 +369,6 @@
 
 	.saadl-definition strong {
 		color: var(--site-ink);
-	}
-
-	.scale-line {
-		max-width: 42rem;
-		margin-top: 1.4rem;
-		color: var(--site-muted);
-		font: 0.8rem var(--site-font-mono);
-		letter-spacing: 0.01em;
-	}
-
-	.scale-line .mono {
-		color: var(--site-accent-ink);
-		font-weight: 700;
 	}
 
 	.text-link {
@@ -446,11 +430,6 @@
 		flex: 1;
 		font-size: 0.9rem;
 		font-weight: 700;
-	}
-
-	.mini-count {
-		color: var(--site-muted);
-		font: 0.78rem var(--site-font-mono);
 	}
 
 	section {
@@ -633,6 +612,7 @@
 
 	.evidence-note {
 		max-width: 60ch;
+		margin-top: 2rem;
 		color: var(--site-muted);
 		font-size: 0.9375rem;
 		line-height: 1.6;
@@ -722,6 +702,24 @@
 	.start-section nav a.primary-link span,
 	.start-section nav a.primary-link b {
 		color: inherit;
+	}
+
+	.agent-prompt {
+		grid-column: 1 / -1;
+		min-width: 0;
+		scroll-margin-top: 5.5rem;
+	}
+
+	.agent-prompt h3 {
+		font-size: 1rem;
+	}
+
+	.agent-prompt > p {
+		max-width: 40rem;
+		margin-top: 0.5rem;
+		color: var(--site-muted);
+		font-size: 0.9375rem;
+		line-height: 1.65;
 	}
 
 	@media (max-width: 64rem) {
