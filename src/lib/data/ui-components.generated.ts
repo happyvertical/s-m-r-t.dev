@@ -2565,6 +2565,12 @@ export const uiComponents: UiComponentReference[] = [
 		slot: null,
 		details: [
 			{
+				name: 'suggestions',
+				code: 'readonly { label: string; prompt: string; }[]',
+				status: false,
+				description: 'Explicit send choices for a fresh conversation. Nothing runs until clicked.'
+			},
+			{
 				name: 'transport',
 				code: 'AssistantTransport',
 				status: true,
@@ -3421,6 +3427,12 @@ export const uiComponents: UiComponentReference[] = [
 		summarySynthesized: true,
 		slot: null,
 		details: [
+			{
+				name: 'suggestions',
+				code: 'readonly { label: string; prompt: string; }[]',
+				status: false,
+				description: 'Explicit send choices for a fresh conversation. Nothing runs until clicked.'
+			},
 			{
 				name: 'transport',
 				code: 'AssistantTransport',
@@ -13780,11 +13792,73 @@ export const uiComponents: UiComponentReference[] = [
 		slot: null,
 		details: [
 			{
+				name: 'entryMode',
+				code: "'browse' | 'planning'",
+				status: false,
+				description: 'Suppress the empty cookbook chooser while a trusted host conceives the app.'
+			},
+			{
+				name: 'conversationalAction',
+				code: 'PlannerHostTurnHandler',
+				status: false,
+				description: 'Trusted host receives only current native user sends, never model output.'
+			},
+			{
+				name: 'onreset',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'resetDisabledReason',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
 				name: 'controller',
 				code: 'PlannerController',
 				status: false,
 				description:
 					"The commands to drive the planner with and the snapshot to read. Defaults to the app's own. A controller made with `createPlannerController` works too; the planner follows its `focus` tab."
+			},
+			{
+				name: 'headerNav',
+				code: "'icons' | 'labelled'",
+				status: false,
+				description:
+					"Complete Planner only: the header's navigation. `'icons'` (default) is the chef's hat and export icon. `'labelled'` shows four bordered, coloured buttons, Specs, Features, Styles and Build, each opening that group of configure tabs (`#/configure/specs/`, `recipes/`, `theme/`, `export/`); Features and Build keep the guide's `planner-customize` / `planner-export` targets, and Build uses `exportLabel` when set. The tab strip then shows only the opened button's group. Accents are the theme's info, success, tertiary and warning colours."
+			},
+			{
+				name: 'exportLabel',
+				code: 'string',
+				status: false,
+				description:
+					'Complete Planner only: visible native export label; blank/omitted keeps the icon-only default.'
+			},
+			{
+				name: 'headerAction',
+				code: 'PlannerExportAction',
+				status: false,
+				description: 'Complete Planner only: primary header action with the same export capture.'
+			},
+			{
+				name: 'exportAction',
+				code: 'PlannerExportAction',
+				status: false,
+				description: 'Optional first primary Export action; native download remains available.'
+			},
+			{
+				name: 'initialConversation',
+				code: 'PlannerConversationSeed',
+				status: false,
+				description: 'Complete Planner only: plain earlier turns, seeded before native sends.'
+			},
+			{
+				name: 'cookbookOffers',
+				code: 'boolean',
+				status: false,
+				description: 'Complete Planner only: offer library cookbooks in native chat (default true).'
 			},
 			{
 				name: 'basePath',
@@ -13813,6 +13887,13 @@ export const uiComponents: UiComponentReference[] = [
 				status: false,
 				description:
 					"`'self'` (the default) reads the saved cookbook from this browser on mount and saves changes. `'host'` leaves both to the host (the static app's layout does them)."
+			},
+			{
+				name: 'projectPersistence',
+				code: 'PlannerProjectPersistence | null',
+				status: false,
+				description:
+					'Host-owned storage UI capability. Supply only from the owner that actually saves the current cookbook; self mode uses the canonical facade by default.'
 			},
 			{
 				name: 'themeControls',
@@ -13858,6 +13939,12 @@ export const uiComponents: UiComponentReference[] = [
 		sections: [],
 		items: [
 			{
+				name: 'onreset',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
 				name: 'onready',
 				code: '(handle: PlannerHandle) => void',
 				status: false,
@@ -13885,11 +13972,73 @@ export const uiComponents: UiComponentReference[] = [
 		slot: null,
 		details: [
 			{
+				name: 'entryMode',
+				code: "'browse' | 'planning'",
+				status: false,
+				description: 'Suppress the empty cookbook chooser while a trusted host conceives the app.'
+			},
+			{
+				name: 'conversationalAction',
+				code: 'PlannerHostTurnHandler',
+				status: false,
+				description: 'Trusted host receives only current native user sends, never model output.'
+			},
+			{
+				name: 'onreset',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'resetDisabledReason',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
 				name: 'controller',
 				code: 'PlannerController',
 				status: false,
 				description:
 					"The commands to drive the planner with and the snapshot to read. Defaults to the app's own. A controller made with `createPlannerController` works too; the planner follows its `focus` tab."
+			},
+			{
+				name: 'headerNav',
+				code: "'icons' | 'labelled'",
+				status: false,
+				description:
+					"Complete Planner only: the header's navigation. `'icons'` (default) is the chef's hat and export icon. `'labelled'` shows four bordered, coloured buttons, Specs, Features, Styles and Build, each opening that group of configure tabs (`#/configure/specs/`, `recipes/`, `theme/`, `export/`); Features and Build keep the guide's `planner-customize` / `planner-export` targets, and Build uses `exportLabel` when set. The tab strip then shows only the opened button's group. Accents are the theme's info, success, tertiary and warning colours."
+			},
+			{
+				name: 'exportLabel',
+				code: 'string',
+				status: false,
+				description:
+					'Complete Planner only: visible native export label; blank/omitted keeps the icon-only default.'
+			},
+			{
+				name: 'headerAction',
+				code: 'PlannerExportAction',
+				status: false,
+				description: 'Complete Planner only: primary header action with the same export capture.'
+			},
+			{
+				name: 'exportAction',
+				code: 'PlannerExportAction',
+				status: false,
+				description: 'Optional first primary Export action; native download remains available.'
+			},
+			{
+				name: 'initialConversation',
+				code: 'PlannerConversationSeed',
+				status: false,
+				description: 'Complete Planner only: plain earlier turns, seeded before native sends.'
+			},
+			{
+				name: 'cookbookOffers',
+				code: 'boolean',
+				status: false,
+				description: 'Complete Planner only: offer library cookbooks in native chat (default true).'
 			},
 			{
 				name: 'basePath',
@@ -13918,6 +14067,13 @@ export const uiComponents: UiComponentReference[] = [
 				status: false,
 				description:
 					"`'self'` (the default) reads the saved cookbook from this browser on mount and saves changes. `'host'` leaves both to the host (the static app's layout does them)."
+			},
+			{
+				name: 'projectPersistence',
+				code: 'PlannerProjectPersistence | null',
+				status: false,
+				description:
+					'Host-owned storage UI capability. Supply only from the owner that actually saves the current cookbook; self mode uses the canonical facade by default.'
 			},
 			{
 				name: 'themeControls',
@@ -13964,11 +14120,23 @@ export const uiComponents: UiComponentReference[] = [
 				status: false,
 				description:
 					'`true` when the complete `Planner` renders these: its own lifecycle already configured the controller, persistence and inference, so the controls do not mount a second one.'
+			},
+			{
+				name: 'nativeAssistant',
+				code: 'BrowserAssistantTransport',
+				status: false,
+				description: ''
 			}
 		],
 		sources: [],
 		sections: [],
 		items: [
+			{
+				name: 'onreset',
+				code: '() => void',
+				status: false,
+				description: ''
+			},
 			{
 				name: 'onready',
 				code: '(handle: PlannerHandle) => void',
@@ -15456,7 +15624,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'report',
 				code: 'SavedRuntimeReport',
 				status: true,
-				description: ''
+				description: 'The saved report to show: its title, spec and saved-at time.'
 			},
 			{
 				name: 'href',
@@ -15498,13 +15666,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'locale',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'BCP 47 locale for dates, numbers and relative times; default `en`.'
 			},
 			{
 				name: 'currency',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ISO 4217 code that formats currency measures; default `USD`.'
 			}
 		],
 		sources: [],
@@ -15580,13 +15748,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'locale',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'BCP 47 locale for dates, numbers and relative times; default `en`.'
 			},
 			{
 				name: 'currency',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ISO 4217 code that formats currency measures on the cards; default `USD`.'
 			}
 		],
 		sources: [],
@@ -15621,19 +15789,21 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'options',
 				code: 'Record<string, string | number | boolean | null>',
 				status: false,
-				description: ''
+				description:
+					"The widget's options from the host's layout; `limit` (a positive number) caps the cards shown, default 6."
 			},
 			{
 				name: 'title',
 				code: 'string',
 				status: false,
-				description: ''
+				description:
+					"The widget's heading as set in the host's layout. This widget does not render it; the host places it."
 			},
 			{
 				name: 'locale',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'BCP 47 locale for dates, numbers and relative times; default `en`.'
 			},
 			{
 				name: 'client',
@@ -15645,7 +15815,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'reportHref',
 				code: '(id: string) => string',
 				status: false,
-				description: ''
+				description: 'The page of one report by id; default `/reports/<id>`.'
 			},
 			{
 				name: 'listHref',
@@ -15657,19 +15827,21 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'sources',
 				code: 'readonly ReportSourceInfo[]',
 				status: false,
-				description: ''
+				description:
+					"The report sources by label and fields (`reports.runtime.sources`), for each card's description line."
 			},
 			{
 				name: 'authorLabel',
 				code: '(userId: string) => string | undefined',
 				status: false,
-				description: ''
+				description:
+					'Host-owned identity projection naming who saved a report; report transport never expands users.'
 			},
 			{
 				name: 'currency',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'ISO 4217 code that formats currency measures; default `USD`.'
 			}
 		],
 		sources: [],
@@ -17143,7 +17315,7 @@ export const uiComponents: UiComponentReference[] = [
 				code: "'plain' | 'card'",
 				status: false,
 				description:
-					"How the overview's tiles are drawn outside edit mode: `'plain'` (default) lists a section's entries as unframed rows or tiles on the panel surface; `'card'` keeps the framed look. Editing always keeps its frame."
+					"How the overview's tiles are drawn outside edit mode: `'card'` (default) uses the current theme's framed styles. Explicit `'plain'` lists entries as unframed rows or tiles. Editing always keeps its frame."
 			},
 			{
 				name: 'heading',
@@ -17236,7 +17408,7 @@ export const uiComponents: UiComponentReference[] = [
 				code: "'plain' | 'card'",
 				status: false,
 				description:
-					"How the overview's tiles are drawn outside edit mode: `'plain'` (default) lists a section's entries as unframed rows or tiles on the panel surface; `'card'` keeps the framed look. Editing always keeps its frame."
+					"How the overview's tiles are drawn outside edit mode: `'card'` (default) uses the current theme's framed styles. Explicit `'plain'` lists entries as unframed rows or tiles. Editing always keeps its frame."
 			},
 			{
 				name: 'heading',
@@ -31488,8 +31660,8 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2849,
-	totalProps: 3022,
+	describedProps: 2881,
+	totalProps: 3047,
 	authoredSummaries: 153,
 	totalComponents: 407
 };
