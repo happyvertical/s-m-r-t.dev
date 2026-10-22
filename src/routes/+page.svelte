@@ -57,7 +57,7 @@
 		`   ${cli} cookbook apply <cookbook> my-app`,
 		'',
 		'5. Set it up (in a subshell, so later commands still run from this directory):',
-		'   (cd my-app && pnpm install && pnpm exec smrt app install)',
+		'   (cd my-app && pnpm exec smrt app install)',
 		'',
 		`If a step fails, run \`pnpm exec smrt app doctor\` inside my-app and include its findings. Before changing code, read my-app/README.md and node_modules/@happyvertical/<package>/AGENTS.md for each package you touch. To change recipes, edit the cookbook and run \`${cli} cookbook apply <cookbook> --into my-app\`; do not hand-edit smrt.cookbook.json.`
 	].join('\n');
@@ -247,7 +247,7 @@
 				Copy this into your coding agent. It creates the app from one of the library cookbooks, or
 				from a cookbook you give it.
 			</p>
-			<CodeBlock code={agentPrompt} lang="prompt" />
+			<CodeBlock code={agentPrompt} lang="prompt" wrap />
 		</div>
 	</section>
 

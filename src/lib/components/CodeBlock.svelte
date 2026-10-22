@@ -5,9 +5,11 @@
 		/** Alias for `language` (top-right label). Takes precedence when set. */
 		lang?: string;
 		filename?: string;
+		/** Wrap long lines instead of scrolling sideways (prose such as a prompt). */
+		wrap?: boolean;
 	}
 
-	let { code, language = 'typescript', lang, filename }: Props = $props();
+	let { code, language = 'typescript', lang, filename, wrap = false }: Props = $props();
 	let copied = $state(false);
 
 	// Resolved language label shown top-right. `lang` wins over `language`.
@@ -69,7 +71,7 @@
 	     keyboard order (axe: scrollable-region-focusable). Svelte has no scroll-container
 	     exemption for its noninteractive-tabindex rule, hence the ignore. -->
 	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-	<pre tabindex="0"><code>{code}</code></pre>
+	<pre tabindex="0" class:wrap><code>{code}</code></pre>
 </div>
 
 <style>
@@ -138,6 +140,11 @@
 		margin: 0;
 		padding: 20px;
 		overflow-x: auto;
+	}
+
+	pre.wrap {
+		white-space: pre-wrap;
+		overflow-wrap: anywhere;
 	}
 
 	code {
