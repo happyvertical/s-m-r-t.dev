@@ -13,7 +13,7 @@ pnpm install
 cp .env.example .env        # ANTHROPIC_API_KEY, for the assistant only
 pnpm app:setup
 pnpm dev                    # http://127.0.0.1:5173
-pnpm app:open               # the one-time owner setup page`;
+pnpm app:open               # in a second terminal: the one-time owner setup page`;
 
 	// src/lib/models/Note.ts in happyvertical/smrt-start, verbatim.
 	const note = `import { SmrtObject, smrt } from '@happyvertical/smrt-core';

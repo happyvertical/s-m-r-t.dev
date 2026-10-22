@@ -183,7 +183,7 @@ pnpm install
 cp .env.example .env
 pnpm app:setup
 pnpm dev
-pnpm app:open`,
+pnpm app:open                # in a second terminal`,
 				points: [
 					'pnpm dev runs smrt app dev for the development loop; pnpm db:migrate builds and then runs smrt app migrate after a model schema change.',
 					'Use the individual app:* scripts (setup, start, stop, recover, doctor, open) for recovery or explicit operator control.'

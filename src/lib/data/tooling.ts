@@ -166,7 +166,7 @@ pnpm build`,
 			{
 				title: 'Make migrations follow the model',
 				intro:
-					'Schema changes are computed from the current manifest. The CLI does not write migration files to review or commit. Build first so the manifest is current. Then inspect the status or diff before you apply the change. In the basic template, the db:migrate script runs vite build and then smrt app migrate, which holds the operation lock around smrt db:migrate.',
+					'Schema changes are computed from the current manifest. The CLI does not write migration files to review or commit. Build first so the manifest is current. Then inspect the status or diff before you apply the change. In smrt-start, the db:migrate script runs smrt app build and then smrt app migrate, which holds the operation lock around smrt db:migrate.',
 				filename: 'terminal',
 				lang: 'bash',
 				code: `pnpm build

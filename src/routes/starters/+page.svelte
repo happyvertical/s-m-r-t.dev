@@ -37,11 +37,10 @@
 	const applyFile = `${cli} cookbook validate my.cookbook.json
 ${cli} cookbook apply my.cookbook.json my-app
 cd my-app
-pnpm install
 pnpm app:setup
 pnpm app:doctor
 pnpm dev                    # http://127.0.0.1:5173
-pnpm app:open               # the one-time owner setup page`;
+pnpm app:open               # in a second terminal: the one-time owner setup page`;
 
 	const applyLibrary = `${cli} cookbook apply \\
   https://raw.githubusercontent.com/happyvertical/smrt/v${SMRT_VERSION}/packages/cli/cookbooks/bakery.cookbook.json \\
