@@ -181,3 +181,18 @@ tofu destroy -var-file=production.tfvars
 ```
 
 **Warning**: This will delete the S3 buckets and all content!
+
+## Agent document delivery
+
+The build emits `/llms.txt`, `/llms-full.txt`, and a `.md` sibling of each
+canonical HTML page (homepage: `/index.md`). The CloudFront rewrite preserves
+paths with extensions. Both deployment jobs explicitly upload `.txt` as
+`text/plain; charset=utf-8` and `.md` as `text/markdown; charset=utf-8`; this avoids
+platform-dependent S3 MIME guessing. They retain the one-hour cache policy.
+
+Deployments wait for invalidation to complete, then run
+`node scripts/check-agent-metadata.mjs --origin <site-url>`. This checks both text
+indexes, every Markdown URL from the sitemap, and representative HTML JSON-LD
+and no-JavaScript content. A missing S3 object can return 403 rather than 404;
+either status fails the verification. The same checker runs on local build
+output before artifacts are uploaded.

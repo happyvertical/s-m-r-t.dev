@@ -261,7 +261,8 @@ describe('href literals resolve to an emitted route (#187 S4)', () => {
 			for (const href of hrefs) {
 				const target = stripQueryAndHash(href);
 				expect(
-					routesByPath.has(target),
+					// Generated after prerender; exhaustive artifact coverage is checked by check:agent-docs.
+					routesByPath.has(target) || target === '/llms.txt',
 					`${file}: href "${href}" does not resolve to any route in ` +
 						`src/routes (checked "${target}").`
 				).toBe(true);

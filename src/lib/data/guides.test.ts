@@ -58,7 +58,7 @@ describe('WebMCP guide correction stays fixed', () => {
 		// `collectionDefinitions` legitimately appears elsewhere (the
 		// unrelated ObjectFormSourceRegistry sample) and would false-positive
 		// a whole-file check.
-		const webmcpTabStart = source.indexOf("activeTab === 'webmcp'");
+		const webmcpTabStart = source.indexOf("tab.id === 'webmcp'");
 		expect(webmcpTabStart).toBeGreaterThan(-1);
 		const webmcpTabSample = source.slice(webmcpTabStart, webmcpTabStart + 1500);
 

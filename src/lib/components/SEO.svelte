@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { jsonLdScript } from '$lib/seo/structured-data';
 	interface SEOProps {
 		title: string;
 		description: string;
@@ -26,9 +27,13 @@
 	const fullTitle = $derived(
 		title === 's-m-r-t Framework' ? title : `${title} | s-m-r-t Framework`
 	);
+	const jsonLd = $derived(jsonLdScript(title, description, url));
 </script>
 
 <svelte:head>
+	<!-- JSON-LD values escape <, > and & before this fixed script wrapper is inserted. -->
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+	{@html jsonLd}
 	<!-- Primary Meta Tags -->
 	<title>{fullTitle}</title>
 	<meta name="title" content={fullTitle} />

@@ -58,7 +58,7 @@
 	url="https://s-m-r-t.dev/build-a-boilerplate"
 />
 
-<div class="planner-page">
+<div class="planner-page" id="main-content">
 	<h1 class="planner-page__title">build-a-boilerplate</h1>
 	<section class="planner-host" aria-label="build-a-boilerplate">
 		{#if Planner}
@@ -74,6 +74,15 @@
 			<p class="planner-status" role="alert">build-a-boilerplate could not load: {loadError}</p>
 		{:else}
 			<p class="planner-status" role="status">Loading build-a-boilerplate…</p>
+			<p class="planner-status">
+				Add recipes or packages and an app mock-up assembles around them: navigation, list views,
+				forms and help per model. Its Export tab gives you two ways out: download the cookbook and
+				run smrt cookbook apply on the file to create a project, or copy a prompt that has your
+				coding agent build the app from it.
+			</p>
+			<noscript
+				><p class="planner-status">Enable JavaScript to use this interactive mock-up.</p></noscript
+			>
 		{/if}
 	</section>
 </div>

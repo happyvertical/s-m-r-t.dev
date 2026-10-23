@@ -144,394 +144,398 @@
 		</div>
 	</div>
 
-	<div class="panel" id={`panel-${activeTab}`} role="tabpanel">
-		{#if activeTab === 'overview'}
-			<div class="overview-layout">
-				{#if module}
-					<aside class="module-facts">
-						<p class="kicker">Declared by the package</p>
-						<dl>
-							{#if module.uiDependencies.length}
-								<div>
-									<dt>Install alongside</dt>
-									<dd>
-										{#each module.uiDependencies as dependency (dependency)}
-											<span class="dep">{dependency}</span>
-										{/each}
-									</dd>
-								</div>
-							{/if}
-							{#if module.models.length}
-								<div>
-									<dt>Models</dt>
-									<dd>{module.models.join(', ')}</dd>
-								</div>
-							{/if}
-							{#if module.collections.length}
-								<div>
-									<dt>Collections</dt>
-									<dd>{module.collections.join(', ')}</dd>
-								</div>
-							{/if}
-							{#if module.slots}
-								<div>
-									<dt>Registry slots</dt>
-									<dd>{module.slots}</dd>
-								</div>
-							{/if}
-						</dl>
-					</aside>
-				{/if}
-				<div class="overview-grid">
-					<div class="overview-copy">
-						<p class="kicker">What it gives you</p>
-						<h2>{pkg.summary}</h2>
-						{#if pkg.highlights.length}
-							<ol class="highlights">
-								{#each pkg.highlights as highlight, index (highlight)}
-									<li><span>{String(index + 1).padStart(2, '0')}</span>{highlight}</li>
-								{/each}
-							</ol>
-						{:else if pkg.surfaceNote}
-							<p class="overview-note">{pkg.surfaceNote}</p>
-						{:else}
-							<p class="overview-note">
-								This package is one focused part of the s-m-r-t stack. Its decorated models
-								participate in the same manifest, tenancy, persistence, and generated-interface
-								conventions as the rest of the framework.
-							</p>
-						{/if}
-					</div>
-					<aside class="install-panel">
-						<p>Install</p>
-						{#if pkg.status === 'private'}
-							<CodeBlock code={sourceInstallCode} language="bash" />
-						{:else}
-							<CodeBlock code={`pnpm add ${pkg.name}`} language="bash" />
-						{/if}
-						<dl>
-							<div>
-								<dt>Layer</dt>
-								<dd>{pkg.category}</dd>
-							</div>
-							<div>
-								<dt>Shape</dt>
-								<dd>{pkg.kind}</dd>
-							</div>
-							<div>
-								<dt>Release</dt>
-								<dd>{pkg.version}</dd>
-							</div>
-						</dl>
-					</aside>
-				</div>
-
-				{#if pkg.details.length}
-					<div class="package-details" aria-label="Package guide">
-						{#each pkg.details as detail (detail.title)}
-							<section>
-								<h3>{detail.title}</h3>
-								<p>{detail.body}</p>
-								{#if detail.href}
-									<a href={detail.href}>{detail.linkLabel ?? 'Read the guide'} →</a>
-								{/if}
-							</section>
-						{/each}
-					</div>
-				{/if}
-			</div>
-		{:else if activeTab === 'components'}
-			<div class="components-panel">
-				<div class="panel-heading">
-					<div>
-						<p class="kicker">Package UI</p>
-						<h2>
-							{pkg.components.length
-								? pkg.componentGroups.length
-									? 'Component catalog and public contracts'
-									: 'Components in this package'
-								: 'No UI layer to carry'}
-						</h2>
-					</div>
-					<p>
-						{pkg.componentGroups.length
-							? 'Browse by the job you are doing. Each group shows its focused import path; the Playground tab renders the working controls and composed patterns.'
-							: pkg.components.length
-								? 'Import these public components directly. When the package also exports playground entries, the next tab renders its real components with package-owned example data.'
-								: 'This package stays focused on models, runtime behavior, or tooling. Build its interface with smrt-ui, or use a related domain package that exposes a /svelte entry point.'}
-					</p>
-				</div>
-				{#if pkg.components.length}
-					{#if pkg.componentGroups.length > 1}
-						<nav class="group-toc" aria-label="On this page">
-							<strong>On this page</strong>
-							<div>
-								{#each pkg.componentGroups as group (group.title)}
-									<a href={`#${toAnchorId(group.title)}`}
-										>{group.title}<span>{group.components.length}</span></a
-									>
-								{/each}
-							</div>
-						</nav>
-					{/if}
-					{#if pkg.componentGroups.length}
-						<div class="component-groups">
-							{#each pkg.componentGroups as group (group.title)}
-								<section id={toAnchorId(group.title)}>
-									<header>
-										<div>
-											<h3>{group.title}</h3>
-											<p>{group.description}</p>
-										</div>
-										<code>{group.importPath}</code>
-									</header>
-									<div class="component-index">
-										{#each group.components as component (component)}
-											{@const referenceHref = componentReferenceHref(component)}
-											<div>
-												{#if referenceHref}
-													<a href={referenceHref}
-														><samp>{component}</samp><span>Open contract →</span></a
-													>
-												{:else}
-													<samp>{component}</samp>
-												{/if}
-												<span>Exported from {group.importPath}</span>
-											</div>
-										{/each}
+	{#each tabs as tab (tab.id)}
+		<div class="panel" id={`panel-${tab.id}`} role="tabpanel" hidden={activeTab !== tab.id}>
+			{#if tab.id === 'overview'}
+				<div class="overview-layout">
+					{#if module}
+						<aside class="module-facts">
+							<p class="kicker">Declared by the package</p>
+							<dl>
+								{#if module.uiDependencies.length}
+									<div>
+										<dt>Install alongside</dt>
+										<dd>
+											{#each module.uiDependencies as dependency (dependency)}
+												<span class="dep">{dependency}</span>
+											{/each}
+										</dd>
 									</div>
+								{/if}
+								{#if module.models.length}
+									<div>
+										<dt>Models</dt>
+										<dd>{module.models.join(', ')}</dd>
+									</div>
+								{/if}
+								{#if module.collections.length}
+									<div>
+										<dt>Collections</dt>
+										<dd>{module.collections.join(', ')}</dd>
+									</div>
+								{/if}
+								{#if module.slots}
+									<div>
+										<dt>Registry slots</dt>
+										<dd>{module.slots}</dd>
+									</div>
+								{/if}
+							</dl>
+						</aside>
+					{/if}
+					<div class="overview-grid">
+						<div class="overview-copy">
+							<p class="kicker">What it gives you</p>
+							<h2>{pkg.summary}</h2>
+							{#if pkg.highlights.length}
+								<ol class="highlights">
+									{#each pkg.highlights as highlight, index (highlight)}
+										<li><span>{String(index + 1).padStart(2, '0')}</span>{highlight}</li>
+									{/each}
+								</ol>
+							{:else if pkg.surfaceNote}
+								<p class="overview-note">{pkg.surfaceNote}</p>
+							{:else}
+								<p class="overview-note">
+									This package is one focused part of the s-m-r-t stack. Its decorated models
+									participate in the same manifest, tenancy, persistence, and generated-interface
+									conventions as the rest of the framework.
+								</p>
+							{/if}
+						</div>
+						<aside class="install-panel">
+							<p>Install</p>
+							{#if pkg.status === 'private'}
+								<CodeBlock code={sourceInstallCode} language="bash" />
+							{:else}
+								<CodeBlock code={`pnpm add ${pkg.name}`} language="bash" />
+							{/if}
+							<dl>
+								<div>
+									<dt>Layer</dt>
+									<dd>{pkg.category}</dd>
+								</div>
+								<div>
+									<dt>Shape</dt>
+									<dd>{pkg.kind}</dd>
+								</div>
+								<div>
+									<dt>Release</dt>
+									<dd>{pkg.version}</dd>
+								</div>
+							</dl>
+						</aside>
+					</div>
+
+					{#if pkg.details.length}
+						<div class="package-details" aria-label="Package guide">
+							{#each pkg.details as detail (detail.title)}
+								<section>
+									<h3>{detail.title}</h3>
+									<p>{detail.body}</p>
+									{#if detail.href}
+										<a href={detail.href}>{detail.linkLabel ?? 'Read the guide'} →</a>
+									{/if}
 								</section>
 							{/each}
 						</div>
-					{:else}
-						<div class="component-index">
-							{#each pkg.components as component (component)}
+					{/if}
+				</div>
+			{:else if tab.id === 'components'}
+				<div class="components-panel">
+					<div class="panel-heading">
+						<div>
+							<p class="kicker">Package UI</p>
+							<h2>
+								{pkg.components.length
+									? pkg.componentGroups.length
+										? 'Component catalog and public contracts'
+										: 'Components in this package'
+									: 'No UI layer to carry'}
+							</h2>
+						</div>
+						<p>
+							{pkg.componentGroups.length
+								? 'Browse by the job you are doing. Each group shows its focused import path; the Playground tab renders the working controls and composed patterns.'
+								: pkg.components.length
+									? 'Import these public components directly. When the package also exports playground entries, the next tab renders its real components with package-owned example data.'
+									: 'This package stays focused on models, runtime behavior, or tooling. Build its interface with smrt-ui, or use a related domain package that exposes a /svelte entry point.'}
+						</p>
+					</div>
+					{#if pkg.components.length}
+						{#if pkg.componentGroups.length > 1}
+							<nav class="group-toc" aria-label="On this page">
+								<strong>On this page</strong>
 								<div>
-									<samp>{component}</samp><span>Exported from {pkg.componentImport}</span>
+									{#each pkg.componentGroups as group (group.title)}
+										<a href={`#${toAnchorId(group.title)}`}
+											>{group.title}<span>{group.components.length}</span></a
+										>
+									{/each}
 								</div>
-							{/each}
+							</nav>
+						{/if}
+						{#if pkg.componentGroups.length}
+							<div class="component-groups">
+								{#each pkg.componentGroups as group (group.title)}
+									<section id={toAnchorId(group.title)}>
+										<header>
+											<div>
+												<h3>{group.title}</h3>
+												<p>{group.description}</p>
+											</div>
+											<code>{group.importPath}</code>
+										</header>
+										<div class="component-index">
+											{#each group.components as component (component)}
+												{@const referenceHref = componentReferenceHref(component)}
+												<div>
+													{#if referenceHref}
+														<a href={referenceHref}
+															><samp>{component}</samp><span>Open contract →</span></a
+														>
+													{:else}
+														<samp>{component}</samp>
+													{/if}
+													<span>Exported from {group.importPath}</span>
+												</div>
+											{/each}
+										</div>
+									</section>
+								{/each}
+							</div>
+						{:else}
+							<div class="component-index">
+								{#each pkg.components as component (component)}
+									<div>
+										<samp>{component}</samp><span>Exported from {pkg.componentImport}</span>
+									</div>
+								{/each}
+							</div>
+						{/if}
+						{#if packagePlaygroundEntries.length}<button
+								class="playground-link"
+								type="button"
+								onclick={() => selectTab('playground')}
+								>Try {packagePlaygroundEntries.length} package previews in the Playground tab →</button
+							>{/if}
+					{:else}
+						<div class="empty-surface">
+							<span>UI</span>
+							<p>Intentionally headless</p>
 						</div>
 					{/if}
-					{#if packagePlaygroundEntries.length}<button
-							class="playground-link"
-							type="button"
-							onclick={() => selectTab('playground')}
-							>Try {packagePlaygroundEntries.length} package previews in the Playground tab →</button
-						>{/if}
-				{:else}
-					<div class="empty-surface">
-						<span>UI</span>
-						<p>Intentionally headless</p>
-					</div>
-				{/if}
-			</div>
-		{:else if activeTab === 'playground'}
-			<div class="playground-panel">
-				<div class="panel-heading">
-					<div>
-						<p class="kicker">Package previews</p>
-						<h2>
+				</div>
+			{:else if tab.id === 'playground'}
+				<div class="playground-panel">
+					<div class="panel-heading">
+						<div>
+							<p class="kicker">Package previews</p>
+							<h2>
+								{packagePlaygroundEntries.length
+									? 'Try the working views'
+									: pkg.playgroundNote
+										? 'Not rendered here yet'
+										: 'No playground module yet'}
+							</h2>
+						</div>
+						<p>
 							{packagePlaygroundEntries.length
-								? 'Try the working views'
-								: pkg.playgroundNote
-									? 'Not rendered here yet'
-									: 'No playground module yet'}
-						</h2>
+								? 'These previews are owned by the package and use its public components. Mock mode is intended for safe browsing; live mode appears only where the package supports it.'
+								: (pkg.playgroundNote ??
+									'This package does not currently export a ./playground module. Its component names and import path remain available in the Components tab.')}
+						</p>
 					</div>
-					<p>
-						{packagePlaygroundEntries.length
-							? 'These previews are owned by the package and use its public components. Mock mode is intended for safe browsing; live mode appears only where the package supports it.'
-							: (pkg.playgroundNote ??
-								'This package does not currently export a ./playground module. Its component names and import path remain available in the Components tab.')}
-					</p>
-				</div>
-				{#if packagePlaygroundModules.length}
-					<PlaygroundEmbed modules={packagePlaygroundModules} compact />
-				{:else if packagePlaygroundEntries.length}
-					<div class="entry-list">
-						{#each packagePlaygroundEntries as entry (entry)}<span>{entry}</span>{/each}
-						<p>The interactive module is part of the next component release.</p>
-					</div>
-				{:else}
-					<div class="empty-surface">
-						<span>Preview</span>
-						<p>Intentionally not registered</p>
-					</div>
-				{/if}
-			</div>
-		{:else if activeTab === 'rest'}
-			<div class="surface-panel">
-				<div class="panel-heading">
-					<div>
-						<p class="kicker">Generated interface</p>
-						<h2>REST</h2>
-					</div>
-					<p>
-						The exact route set comes from each model's <code>@smrt(&#123; api &#125;)</code> policy and
-						the application manifest—not from a second controller definition.
-					</p>
-				</div>
-				{#if hasGeneratedSurface}
-					<div class="surface-example">
-						<CodeBlock
-							code={`GET    /api/${resource}\nGET    /api/${resource}/:id\nPOST   /api/${resource}\nPATCH  /api/${resource}/:id`}
-							language="http"
-						/>
-						<div>
-							<h3>What stays consistent</h3>
-							<ul>
-								<li>Tenant scope and operation permissions run before model access.</li>
-								<li>OpenAPI and generated clients use the same manifest fields.</li>
-								<li>Packages can expose read-only or custom action sets.</li>
-							</ul>
-						</div>
-					</div>
-				{:else}
-					<div class="empty-surface">
-						<span>REST</span>
-						{#if pkg.surfaceNote}
-							<p>{pkg.surfaceNote}</p>
-						{:else}
-							<p>
-								This package supports the runtime or build pipeline; it does not define a
-								representative CRUD resource of its own.
-							</p>
+					{#if packagePlaygroundModules.length}
+						{#if activeTab === 'playground'}
+							<PlaygroundEmbed modules={packagePlaygroundModules} compact />
 						{/if}
-					</div>
-				{/if}
-			</div>
-		{:else if activeTab === 'mcp'}
-			<div class="surface-panel">
-				<div class="panel-heading">
-					<div>
-						<p class="kicker">Generated interface</p>
-						<h2>MCP</h2>
-					</div>
-					<p>
-						AI tools are generated from the methods you explicitly include. Their inputs are
-						validated against the same model metadata used by REST and CLI.
-					</p>
-				</div>
-				{#if hasGeneratedSurface}
-					<div class="surface-example">
-						<CodeBlock
-							code={`${resource}_list({ where, limit, orderBy })\n${resource}_get({ id })\n${resource}_create({ data })\n${resource}_update({ id, data })`}
-							language="text"
-						/>
-						<div>
-							<h3>Agent-safe by construction</h3>
-							<ul>
-								<li>Tool availability can be narrower than the HTTP API.</li>
-								<li>Principal execution intersects RBAC, agent ceilings, and persona tools.</li>
-								<li>Descriptions and schemas are emitted from source metadata.</li>
-							</ul>
+					{:else if packagePlaygroundEntries.length}
+						<div class="entry-list">
+							{#each packagePlaygroundEntries as entry (entry)}<span>{entry}</span>{/each}
+							<p>The interactive module is part of the next component release.</p>
 						</div>
-					</div>
-				{:else}
-					<div class="empty-surface">
-						<span>MCP</span>
-						{#if pkg.surfaceNote}
-							<p>{pkg.surfaceNote}</p>
-						{:else}
-							<p>
-								This package is itself infrastructure, UI, or tooling. Its capabilities are consumed
-								by generated app MCP servers rather than exposed as a model resource.
-							</p>
-						{/if}
-					</div>
-				{/if}
-			</div>
-		{:else if activeTab === 'webmcp'}
-			<div class="surface-panel">
-				<div class="panel-heading">
-					<div>
-						<p class="kicker">Browser-native agent interface</p>
-						<h2>WebMCP</h2>
-					</div>
-					<p>
-						The generated web definitions carry the same tool names, descriptions, and JSON Schema
-						inputs as MCP. smrt-web registers them with <code>document.modelContext</code>.
-					</p>
-				</div>
-				{#if hasGeneratedSurface || pkg.slug === 'smrt-web' || pkg.slug === 'smrt-core'}
-					<div class="surface-example">
-						<CodeBlock
-							code={`import { webMcpToolDefinitions } from '@happyvertical/smrt-virt-web';\nimport { registerWebMcpTools } from '@happyvertical/smrt-web';\n\n// Omitting an exposure policy registers read-only tools only.\nconst dispose = registerWebMcpTools(webMcpToolDefinitions);`}
-							language="typescript"
-						/>
-						<div>
-							<h3>The page keeps its security boundary</h3>
-							<ul>
-								<li>Tools execute through generated REST fetchers as the signed-in page user.</li>
-								<li>
-									Authentication, tenant gates, permissions, and field policy stay server-side.
-								</li>
-								<li>
-									Feature detection makes registration a safe no-op outside supported browsers.
-								</li>
-							</ul>
+					{:else}
+						<div class="empty-surface">
+							<span>Preview</span>
+							<p>Intentionally not registered</p>
 						</div>
-					</div>
-				{:else}
-					<div class="empty-surface">
-						<span>WebMCP</span>
-						{#if pkg.surfaceNote}
-							<p>{pkg.surfaceNote}</p>
-						{:else}
-							<p>
-								This package does not define a representative browser tool itself. Its models can
-								still participate when an application exposes them through generated web
-								collections.
-							</p>
-						{/if}
-					</div>
-				{/if}
-			</div>
-		{:else}
-			<div class="surface-panel">
-				<div class="panel-heading">
-					<div>
-						<p class="kicker">Generated interface</p>
-						<h2>CLI</h2>
-					</div>
-					<p>
-						The app CLI turns manifest resources into predictable operator commands while keeping
-						package-specific actions close to their models.
-					</p>
+					{/if}
 				</div>
-				{#if hasGeneratedSurface}
-					<div class="surface-example">
-						<CodeBlock
-							code={`smrt ${resource} list --limit 25 --order-by created_at:desc\nsmrt ${resource} get <id>\nsmrt ${resource} create --from-file ./record.json`}
-							language="bash"
-						/>
+			{:else if tab.id === 'rest'}
+				<div class="surface-panel">
+					<div class="panel-heading">
 						<div>
-							<h3>Made for automation</h3>
-							<ul>
-								<li>Machine-readable output and file-based input.</li>
-								<li>The same include/exclude policy as other surfaces.</li>
-								<li>
-									Migration, introspection, dispatch, and knowledge commands stay in smrt-cli.
-								</li>
-							</ul>
+							<p class="kicker">Generated interface</p>
+							<h2>REST</h2>
 						</div>
+						<p>
+							The exact route set comes from each model's <code>@smrt(&#123; api &#125;)</code> policy
+							and the application manifest—not from a second controller definition.
+						</p>
 					</div>
-				{:else}
-					<div class="empty-surface">
-						<span>CLI</span>
-						{#if pkg.surfaceNote}
-							<p>{pkg.surfaceNote}</p>
-						{:else}
-							<p>
-								Use this package through its documented build or runtime entry points. It does not
-								contribute a representative generated resource command.
-							</p>
-						{/if}
+					{#if hasGeneratedSurface}
+						<div class="surface-example">
+							<CodeBlock
+								code={`GET    /api/${resource}\nGET    /api/${resource}/:id\nPOST   /api/${resource}\nPATCH  /api/${resource}/:id`}
+								language="http"
+							/>
+							<div>
+								<h3>What stays consistent</h3>
+								<ul>
+									<li>Tenant scope and operation permissions run before model access.</li>
+									<li>OpenAPI and generated clients use the same manifest fields.</li>
+									<li>Packages can expose read-only or custom action sets.</li>
+								</ul>
+							</div>
+						</div>
+					{:else}
+						<div class="empty-surface">
+							<span>REST</span>
+							{#if pkg.surfaceNote}
+								<p>{pkg.surfaceNote}</p>
+							{:else}
+								<p>
+									This package supports the runtime or build pipeline; it does not define a
+									representative CRUD resource of its own.
+								</p>
+							{/if}
+						</div>
+					{/if}
+				</div>
+			{:else if tab.id === 'mcp'}
+				<div class="surface-panel">
+					<div class="panel-heading">
+						<div>
+							<p class="kicker">Generated interface</p>
+							<h2>MCP</h2>
+						</div>
+						<p>
+							AI tools are generated from the methods you explicitly include. Their inputs are
+							validated against the same model metadata used by REST and CLI.
+						</p>
 					</div>
-				{/if}
-			</div>
-		{/if}
-	</div>
+					{#if hasGeneratedSurface}
+						<div class="surface-example">
+							<CodeBlock
+								code={`${resource}_list({ where, limit, orderBy })\n${resource}_get({ id })\n${resource}_create({ data })\n${resource}_update({ id, data })`}
+								language="text"
+							/>
+							<div>
+								<h3>Agent-safe by construction</h3>
+								<ul>
+									<li>Tool availability can be narrower than the HTTP API.</li>
+									<li>Principal execution intersects RBAC, agent ceilings, and persona tools.</li>
+									<li>Descriptions and schemas are emitted from source metadata.</li>
+								</ul>
+							</div>
+						</div>
+					{:else}
+						<div class="empty-surface">
+							<span>MCP</span>
+							{#if pkg.surfaceNote}
+								<p>{pkg.surfaceNote}</p>
+							{:else}
+								<p>
+									This package is itself infrastructure, UI, or tooling. Its capabilities are
+									consumed by generated app MCP servers rather than exposed as a model resource.
+								</p>
+							{/if}
+						</div>
+					{/if}
+				</div>
+			{:else if tab.id === 'webmcp'}
+				<div class="surface-panel">
+					<div class="panel-heading">
+						<div>
+							<p class="kicker">Browser-native agent interface</p>
+							<h2>WebMCP</h2>
+						</div>
+						<p>
+							The generated web definitions carry the same tool names, descriptions, and JSON Schema
+							inputs as MCP. smrt-web registers them with <code>document.modelContext</code>.
+						</p>
+					</div>
+					{#if hasGeneratedSurface || pkg.slug === 'smrt-web' || pkg.slug === 'smrt-core'}
+						<div class="surface-example">
+							<CodeBlock
+								code={`import { webMcpToolDefinitions } from '@happyvertical/smrt-virt-web';\nimport { registerWebMcpTools } from '@happyvertical/smrt-web';\n\n// Omitting an exposure policy registers read-only tools only.\nconst dispose = registerWebMcpTools(webMcpToolDefinitions);`}
+								language="typescript"
+							/>
+							<div>
+								<h3>The page keeps its security boundary</h3>
+								<ul>
+									<li>Tools execute through generated REST fetchers as the signed-in page user.</li>
+									<li>
+										Authentication, tenant gates, permissions, and field policy stay server-side.
+									</li>
+									<li>
+										Feature detection makes registration a safe no-op outside supported browsers.
+									</li>
+								</ul>
+							</div>
+						</div>
+					{:else}
+						<div class="empty-surface">
+							<span>WebMCP</span>
+							{#if pkg.surfaceNote}
+								<p>{pkg.surfaceNote}</p>
+							{:else}
+								<p>
+									This package does not define a representative browser tool itself. Its models can
+									still participate when an application exposes them through generated web
+									collections.
+								</p>
+							{/if}
+						</div>
+					{/if}
+				</div>
+			{:else}
+				<div class="surface-panel">
+					<div class="panel-heading">
+						<div>
+							<p class="kicker">Generated interface</p>
+							<h2>CLI</h2>
+						</div>
+						<p>
+							The app CLI turns manifest resources into predictable operator commands while keeping
+							package-specific actions close to their models.
+						</p>
+					</div>
+					{#if hasGeneratedSurface}
+						<div class="surface-example">
+							<CodeBlock
+								code={`smrt ${resource} list --limit 25 --order-by created_at:desc\nsmrt ${resource} get <id>\nsmrt ${resource} create --from-file ./record.json`}
+								language="bash"
+							/>
+							<div>
+								<h3>Made for automation</h3>
+								<ul>
+									<li>Machine-readable output and file-based input.</li>
+									<li>The same include/exclude policy as other surfaces.</li>
+									<li>
+										Migration, introspection, dispatch, and knowledge commands stay in smrt-cli.
+									</li>
+								</ul>
+							</div>
+						</div>
+					{:else}
+						<div class="empty-surface">
+							<span>CLI</span>
+							{#if pkg.surfaceNote}
+								<p>{pkg.surfaceNote}</p>
+							{:else}
+								<p>
+									Use this package through its documented build or runtime entry points. It does not
+									contribute a representative generated resource command.
+								</p>
+							{/if}
+						</div>
+					{/if}
+				</div>
+			{/if}
+		</div>
+	{/each}
 
 	<section class="related-content" aria-labelledby="related-content-title">
 		<div>
@@ -697,6 +701,10 @@
 		--site-paper: #f3efe5;
 		background: var(--site-ink);
 		color: var(--site-paper);
+	}
+
+	.panel[hidden] {
+		display: none;
 	}
 
 	.panel {
