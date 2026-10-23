@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createMatomoTracker, type MatomoEnv } from './matomo';
+import { MATOMO_SITE_ID, createMatomoTracker, type MatomoEnv } from './matomo';
 
 const config = { url: 'https://matomo.example/', siteId: '7' };
 
@@ -27,7 +27,6 @@ describe('matomo tracker', () => {
 	it('is a no-op while the site ID is unset', () => {
 		const { e, scripts } = env();
 		expect(createMatomoTracker(e, { url: config.url, siteId: null })).toBeNull();
-		expect(createMatomoTracker(e)).toBeNull(); // shipped default
 		expect(e.paq).toEqual([]);
 		expect(scripts).toEqual([]);
 	});
@@ -70,5 +69,11 @@ describe('matomo tracker', () => {
 		expect(e.paq.filter((c) => c[0] === 'trackPageView')).toHaveLength(1);
 		t.pageView(new URL('https://s-m-r-t.dev/saadl?view=a'), 'SAADL');
 		expect(e.paq.filter((c) => c[0] === 'trackPageView')).toHaveLength(2);
+	});
+});
+
+describe('matomo config', () => {
+	it('ships site 31 on matomo.happyvertical.com', () => {
+		expect(MATOMO_SITE_ID).toBe('31');
 	});
 });
