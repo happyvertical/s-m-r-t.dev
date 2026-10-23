@@ -79,7 +79,7 @@ describe('copy checker', () => {
 				'src/routes/+page.svelte',
 				'src/lib/components/GuidePage.svelte',
 				'src/lib/data/guides.ts',
-				'static/llms.txt'
+				'scripts/agent-docs/source.txt'
 			])
 		);
 		expect(files.some((file) => file.includes('.test.'))).toBe(false);

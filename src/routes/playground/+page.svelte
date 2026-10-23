@@ -19,7 +19,7 @@
 />
 
 <AppTheme>
-	<div class="playground-page">
+	<div class="playground-page" id="main-content">
 		<a class="docs-link" href="/">← Docs</a>
 		{#if unknownSlug}
 			<p class="unknown-slug-notice" role="status">

@@ -15,7 +15,8 @@ const COPY_GLOBS = [
 	'src/lib/components/**/*.svelte',
 	'src/lib/data/**/*.ts',
 	'src/lib/version.ts',
-	'static/**/*.txt'
+	'static/**/*.txt',
+	'scripts/agent-docs/source.txt'
 ];
 
 const COPY_IGNORES = [

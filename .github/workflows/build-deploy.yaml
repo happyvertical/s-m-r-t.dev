@@ -92,7 +92,10 @@ jobs:
 
       - name: Check build-output links, canonicals, and sitemap coverage
         working-directory: s-m-r-t.dev
-        run: pnpm run check:links
+        run: |
+          pnpm run check:links
+          pnpm run check:agent-docs
+          node scripts/check-agent-metadata.mjs
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -148,10 +151,17 @@ jobs:
       - name: Deploy to S3
         run: |
           aws s3 sync build/ s3://havesmrt-staging/ --delete --cache-control "public, max-age=3600"
+          aws s3 cp build/ s3://havesmrt-staging/ --recursive --exclude "*" --include "*.txt" --content-type "text/plain; charset=utf-8" --cache-control "public, max-age=3600"
+          aws s3 cp build/ s3://havesmrt-staging/ --recursive --exclude "*" --include "*.md" --content-type "text/markdown; charset=utf-8" --cache-control "public, max-age=3600"
           aws s3 cp build/_app/ s3://havesmrt-staging/_app/ --recursive --cache-control "public, max-age=31536000, immutable"
 
       - name: Invalidate CloudFront cache
-        run: aws cloudfront create-invalidation --distribution-id E1OSZKW909MZLI --paths "/*"
+        run: |
+          invalidation_id=$(aws cloudfront create-invalidation --distribution-id E1OSZKW909MZLI --paths "/*" --query 'Invalidation.Id' --output text)
+          aws cloudfront wait invalidation-completed --distribution-id E1OSZKW909MZLI --id "$invalidation_id"
+
+      - name: Verify deployed agent documents and no-JS metadata
+        run: node scripts/check-agent-metadata.mjs --origin https://staging.s-m-r-t.dev
 
   deploy-production:
     needs:
@@ -201,7 +211,14 @@ jobs:
       - name: Deploy to S3
         run: |
           aws s3 sync build/ s3://havesmrt-production/ --delete --cache-control "public, max-age=3600"
+          aws s3 cp build/ s3://havesmrt-production/ --recursive --exclude "*" --include "*.txt" --content-type "text/plain; charset=utf-8" --cache-control "public, max-age=3600"
+          aws s3 cp build/ s3://havesmrt-production/ --recursive --exclude "*" --include "*.md" --content-type "text/markdown; charset=utf-8" --cache-control "public, max-age=3600"
           aws s3 cp build/_app/ s3://havesmrt-production/_app/ --recursive --cache-control "public, max-age=31536000, immutable"
 
       - name: Invalidate CloudFront cache
-        run: aws cloudfront create-invalidation --distribution-id EV2V4BTTHGGOV --paths "/*"
+        run: |
+          invalidation_id=$(aws cloudfront create-invalidation --distribution-id EV2V4BTTHGGOV --paths "/*" --query 'Invalidation.Id' --output text)
+          aws cloudfront wait invalidation-completed --distribution-id EV2V4BTTHGGOV --id "$invalidation_id"
+
+      - name: Verify deployed agent documents and no-JS metadata
+        run: node scripts/check-agent-metadata.mjs --origin https://s-m-r-t.dev

@@ -9,7 +9,7 @@
 	},
 	"scripts": {
 		"dev": "vite dev",
-		"build": "pnpm run check:templates && vite build",
+		"build": "pnpm run check:templates && vite build && node scripts/generate-agent-docs.mjs",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -24,7 +24,8 @@
 		"update:smrt": "node scripts/update-smrt.mjs",
 		"lint": "prettier --check . && eslint . && pnpm run check:templates",
 		"format": "prettier --write .",
-		"test": "pnpm run check:smrt && pnpm run check:copy && pnpm run check:ui-reference && vitest"
+		"test": "pnpm run check:smrt && pnpm run check:copy && pnpm run check:ui-reference && vitest",
+		"check:agent-docs": "node scripts/generate-agent-docs.mjs --check"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",

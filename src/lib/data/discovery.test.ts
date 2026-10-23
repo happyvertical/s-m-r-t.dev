@@ -4,7 +4,7 @@ import { docsNavigation } from '$lib/data/navigation';
 import { searchDocs } from '$lib/data/search';
 import { GET as sitemap } from '../../routes/sitemap.xml/+server';
 
-const llms = readFileSync('static/llms.txt', 'utf8');
+const llms = readFileSync('scripts/agent-docs/source.txt', 'utf8');
 
 describe('Why s-m-r-t discovery surfaces', () => {
 	it('uses the canonical homepage in navigation, search, and the sitemap', async () => {

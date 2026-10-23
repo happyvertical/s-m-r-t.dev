@@ -33,6 +33,7 @@
 </script>
 
 <svelte:head>
+	<link rel="alternate" type="text/plain" href="/llms.txt" />
 	<link rel="icon" href={favicon} />
 	<meta name="theme-color" content="#141812" />
 </svelte:head>
