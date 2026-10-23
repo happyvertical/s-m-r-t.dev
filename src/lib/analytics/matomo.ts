@@ -16,7 +16,12 @@ type PaqCommand = [string, ...unknown[]];
 
 export interface MatomoEnv {
 	hostname: string;
-	paq: PaqCommand[];
+	/**
+	 * Queue one command. matomo.js replaces `window._paq` with its own object
+	 * when it loads, so this must look the queue up on every call; a captured
+	 * array reference would silently swallow every later page view.
+	 */
+	push: (_command: PaqCommand) => void;
 	loadScript: (_src: string) => void;
 }
 
@@ -47,7 +52,7 @@ export function createMatomoTracker(
 	if (!siteId || env.hostname !== MATOMO_HOSTNAME) return null;
 
 	const base = url.replace(/\/+$/, '') + '/';
-	const { paq } = env;
+	const paq = { push: env.push };
 	paq.push(['disableCookies']);
 	paq.push(['setTrackerUrl', base + 'matomo.php']);
 	paq.push(['setSiteId', siteId]);
@@ -69,10 +74,11 @@ export function createMatomoTracker(
 
 /** Browser wiring; call from onMount only (touches window and document). */
 export function initMatomo(): MatomoTracker | null {
-	const paq = (window._paq = window._paq || []);
 	return createMatomoTracker({
 		hostname: location.hostname,
-		paq,
+		push(command) {
+			(window._paq = window._paq || []).push(command);
+		},
 		loadScript(src) {
 			const s = document.createElement('script');
 			s.async = true;
