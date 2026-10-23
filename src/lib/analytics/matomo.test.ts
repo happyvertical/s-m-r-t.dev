@@ -1,11 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { MATOMO_SITE_ID, createMatomoTracker, type MatomoEnv } from './matomo';
 
+type Command = [string, ...unknown[]];
+
 const config = { url: 'https://matomo.example/', siteId: '7' };
 
 function env(hostname = 's-m-r-t.dev') {
 	const scripts: string[] = [];
-	const e: MatomoEnv = { hostname, paq: [], loadScript: (s) => scripts.push(s) };
+	const paq: Command[] = [];
+	const e: MatomoEnv & { paq: Command[] } = {
+		hostname,
+		paq,
+		push: (c) => paq.push(c),
+		loadScript: (s) => scripts.push(s)
+	};
 	return { e, scripts };
 }
 
@@ -69,6 +77,23 @@ describe('matomo tracker', () => {
 		expect(e.paq.filter((c) => c[0] === 'trackPageView')).toHaveLength(1);
 		t.pageView(new URL('https://s-m-r-t.dev/saadl?view=a'), 'SAADL');
 		expect(e.paq.filter((c) => c[0] === 'trackPageView')).toHaveLength(2);
+	});
+});
+
+describe('matomo queue swap', () => {
+	it('keeps reporting after matomo.js replaces the queue', () => {
+		// matomo.js swaps window._paq for its own object on load; pushes must follow it.
+		let queue: Command[] = [];
+		const tracker = createMatomoTracker(
+			{ hostname: 's-m-r-t.dev', push: (c) => queue.push(c), loadScript: () => {} },
+			config
+		);
+		tracker?.pageView(new URL('https://s-m-r-t.dev/starters'), 'Getting Started');
+		const loaded: Command[] = [];
+		queue = loaded; // the script has loaded and taken over the queue
+		tracker?.pageView(new URL('https://s-m-r-t.dev/starters/smrt-start'), 'Clone smrt-start');
+		expect(loaded).toContainEqual(['setCustomUrl', 'https://s-m-r-t.dev/starters/smrt-start']);
+		expect(loaded).toContainEqual(['trackPageView']);
 	});
 });
 
