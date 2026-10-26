@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SEO from '$lib/components/SEO.svelte';
+	import BlockMap from '$lib/components/home/BlockMap.svelte';
 	import { blockIsPreview } from '$lib/data/block-status';
 	import { blockBranches, buildingBlocks } from '$lib/data/blocks';
 
@@ -35,6 +36,10 @@
 			<a href="/build-a-boilerplate">build-a-boilerplate</a>.
 		</p>
 	</header>
+
+	<div class="map">
+		<BlockMap layout="full" />
+	</div>
 
 	{#each blockBranches as branch (branch.id)}
 		<section
@@ -86,6 +91,9 @@
 		max-width: 44rem;
 		color: var(--site-muted);
 		line-height: 1.65;
+	}
+	.map {
+		margin-top: 32px;
 	}
 	.branch {
 		margin-top: 40px;

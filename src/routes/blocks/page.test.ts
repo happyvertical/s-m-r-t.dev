@@ -36,6 +36,19 @@ describe('/blocks landing', () => {
 		}
 	});
 
+	it('mounts the building blocks map above the branch lists', () => {
+		const { container } = render(Landing);
+		const map = container.querySelector('.block-map');
+
+		expect(map?.getAttribute('data-layout')).toBe('full');
+		expect(map?.querySelectorAll('svg a.leaf')).toHaveLength(buildingBlocks.length);
+		expect(map?.querySelector('a.centre')?.getAttribute('href')).toBe('/build-a-boilerplate');
+		expect(
+			map!.compareDocumentPosition(container.querySelector('section.branch')!) &
+				Node.DOCUMENT_POSITION_FOLLOWING
+		).toBeTruthy();
+	});
+
 	it('keeps every old /modules cluster id as an anchor', () => {
 		const { container } = render(Landing);
 		for (const id of oldClusterIds) {

@@ -280,7 +280,7 @@ export const documentationSections: DocumentationSection[] = [
 				items: [
 					{ label: 'What you get', href: '/#what-you-get' },
 					{ label: 'Describe the record once', href: '/#one-description' },
-					{ label: 'Five layers, one release', href: '/#scope' },
+					{ label: 'Building blocks map', href: '/#blocks' },
 					{ label: 'Start here', href: '/#start-here' }
 				]
 			},
@@ -601,7 +601,7 @@ export const docsNavigation: NavigationGroup[] = [
 			whyItem,
 			{ label: 'What you get', href: '/#what-you-get' },
 			{ label: 'Describe the record once', href: '/#one-description' },
-			{ label: 'Five layers, one release', href: '/#scope' },
+			{ label: 'Building blocks map', href: '/#blocks' },
 			{ label: 'Start here', href: '/#start-here' },
 			// build-a-boilerplate is not a documentation page; it is registered
 			// for the palette in `searchItems` below, so it is not repeated here.
