@@ -1,5 +1,4 @@
 import { capabilityGuides, foundationGuides } from '$lib/data/guides';
-import { buildingBlocks } from '$lib/data/blocks';
 import { featurePath, featureSectionPath, featureSections, features } from '$lib/data/features';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
@@ -20,7 +19,6 @@ const staticRoutes = [
 	{ path: '/docs/agents', priority: '0.95', changefreq: 'weekly' },
 	{ path: '/docs/interaction', priority: '0.95', changefreq: 'weekly' },
 	{ path: '/docs/ui', priority: '0.95', changefreq: 'weekly' },
-	{ path: '/blocks', priority: '0.95', changefreq: 'weekly' },
 	{ path: '/docs/getting-started', priority: '0.9', changefreq: 'monthly' },
 	{ path: '/docs/getting-started/smrt-start', priority: '0.9', changefreq: 'monthly' },
 	{ path: '/docs/foundations', priority: '0.9', changefreq: 'monthly' },
@@ -43,12 +41,10 @@ export const GET: RequestHandler = () => {
 		...capabilityGuides.map((guide) => entry(`/docs/capabilities/${guide.slug}`, '0.85', 'weekly')),
 		...featureSections.map((section) => entry(featureSectionPath(section), '0.9', 'monthly')),
 		...features.map((item) => entry(featurePath(item), '0.85', 'monthly')),
-		// The #352 block pages stay until #361 slice E retires them.
-		...buildingBlocks.map((block) => entry(`/blocks/${block.id}`, '0.85', 'monthly')),
 		...taskGuides.map((guide) => entry(`/docs/guides/${guide.slug}`, '0.85', 'monthly')),
 		...toolingGuides.map((guide) => entry(`/docs/tooling/${guide.slug}`, '0.8', 'monthly')),
 		...referenceGuides.map((guide) => entry(`/docs/reference/${guide.slug}`, '0.75', 'monthly')),
-		// /packages*, /faq and every pre-#365 path outside /docs are redirects to
+		// /packages*, /faq, /blocks* and every pre-#365 path outside /docs are redirects to
 		// these URLs and are intentionally absent here — a sitemap must not list a
 		// redirecting URL.
 		entry('/docs/reference/api', '0.8', 'monthly'),

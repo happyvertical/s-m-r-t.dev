@@ -118,8 +118,8 @@
 				<strong>UI</strong>
 				<span>See the controls and shell that make application state and authority visible.</span>
 			</a>
-			<a href="/blocks">
-				<strong>Building blocks</strong>
+			<a href="/features">
+				<strong>Features</strong>
 				<span>Find prebuilt application parts that use the same framework foundation.</span>
 			</a>
 			<a href="/docs/tooling">

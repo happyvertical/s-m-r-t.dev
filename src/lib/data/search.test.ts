@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { agentsTopics } from '$lib/data/agents';
+import { featurePath, features } from '$lib/data/features';
 import { frameworkTopics } from '$lib/data/framework';
 import { guidePages } from '$lib/data/guide-families';
 import { interactionContent } from '$lib/data/interaction';
-import { buildingBlocks } from '$lib/data/blocks';
 import { searchDocs, searchEntries } from '$lib/data/search';
 
 describe('search index', () => {
@@ -127,23 +127,20 @@ describe('search index', () => {
 		});
 	});
 
-	describe('building blocks', () => {
-		it('gives every block a page entry with its package slugs as keywords', () => {
-			for (const block of buildingBlocks) {
+	describe('features', () => {
+		it('gives every feature a page entry with its package slugs as keywords', () => {
+			for (const item of features) {
 				const entry = searchEntries.find(
-					(candidate) => candidate.kind === 'page' && candidate.href === `/blocks/${block.id}`
+					(candidate) => candidate.kind === 'page' && candidate.href === featurePath(item)
 				);
-				expect(entry?.label, `missing entry for /blocks/${block.id}`).toBe(block.title);
-				expect(entry?.description).toBe(block.capability);
-				expect(entry?.keywords).toEqual(block.packages);
+				expect(entry?.label, `missing entry for ${featurePath(item)}`).toBe(item.word);
+				expect(entry?.description).toBe(item.hint);
+				expect(entry?.keywords).toEqual(item.packages);
 			}
 		});
 
-		it('resolves a block title through search', () => {
-			const block = buildingBlocks[0];
-			expect(searchDocs(block.title).some((entry) => entry.href === `/blocks/${block.id}`)).toBe(
-				true
-			);
+		it('keeps the retired /blocks pages out of the index', () => {
+			expect(searchEntries.some((entry) => entry.href.startsWith('/blocks'))).toBe(false);
 		});
 
 		it('keeps the retired module-cluster entries out of the index', () => {

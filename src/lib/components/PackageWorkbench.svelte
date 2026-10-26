@@ -543,8 +543,8 @@
 			<h2 id="related-content-title">Related stories and guides</h2>
 		</div>
 		<div class="related-links">
-			<a href="/blocks">
-				<strong>Building blocks</strong>
+			<a href="/features">
+				<strong>Features</strong>
 				<span>See the application outcomes that packages provide.</span>
 			</a>
 			{#each relatedGuides as guide (guide.slug)}

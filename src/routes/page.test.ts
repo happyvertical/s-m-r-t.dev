@@ -16,14 +16,12 @@ afterEach(() => {
 const text = (node: Element | null | undefined) => node?.textContent?.replace(/\s+/g, ' ') ?? '';
 
 describe('front page (#361)', () => {
-	it('is the feature map first, then three doors, then the footer line', () => {
+	it('is the feature map first, then three doors', () => {
 		const { container } = render(Page);
 		const map = container.querySelector('section.map')!;
 		const doors = container.querySelector('section.doors')!;
-		const foot = container.querySelector('p.foot')!;
 
 		expect(map.compareDocumentPosition(doors) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-		expect(doors.compareDocumentPosition(foot) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 		expect(
 			[...doors.querySelectorAll('a.door')].map((a) => [
 				text(a.querySelector('b')),
@@ -34,7 +32,8 @@ describe('front page (#361)', () => {
 			['Features', '/features'],
 			['Docs', '/docs']
 		]);
-		expect(text(foot)).toBe('MIT · one version');
+		// The licence and version are stated once, in the shell footer.
+		expect(container.querySelector('.foot')).toBeNull();
 	});
 
 	it('keeps one visually hidden H1 and no headline in the map', () => {

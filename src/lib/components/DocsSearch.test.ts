@@ -7,7 +7,7 @@ afterEach(cleanup);
 describe('documentation search', () => {
 	it('opens from the app bar, finds section pages, and restores trigger focus', async () => {
 		render(DocsSearch);
-		const trigger = screen.getByRole('button', { name: 'Search documentation' });
+		const trigger = screen.getByRole('button', { name: 'Search docs ⌘ K' });
 		trigger.focus();
 		await fireEvent.click(trigger);
 

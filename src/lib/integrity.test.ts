@@ -34,6 +34,7 @@ import { docsMoveRedirectCount } from '$lib/server/legacy-inventory';
 import { entries as componentEntries } from '../routes/components/[...legacy]/+page.server';
 import { entries as docsEntries } from '../routes/docs/[...legacy]/+page.server';
 import { _aliases as docsGuideAliases } from '../routes/docs/guides/[slug]/+page';
+import { entries as blockEntries } from '../routes/blocks/[slug]/+page.server';
 import { entries as moduleEntries } from '../routes/modules/[slug]/+page.server';
 import { entries as packageEntries } from '../routes/packages/[slug]/+page.server';
 
@@ -47,6 +48,9 @@ describe('emitted-route inventory (#187 S4)', () => {
 		const componentCount = (await componentEntries()).length;
 		const docsCount = (await docsEntries()).length;
 		const moduleCount = (await moduleEntries()).length;
+		// #361 slice E: the 23 retired #358 /blocks/<slug> pages (the /blocks index is a
+		// single-file redirect, listed below). Guarded in legacy-routes.test.ts.
+		const blockCount = (await blockEntries()).length;
 		const packageCount = (await packageEntries()).length;
 		// The 3 /foundations/* aliases (guarded in legacy-routes.test.ts) plus an
 		// EXPLICIT, hand-maintained list of the small single-file static redirects
@@ -77,8 +81,11 @@ describe('emitted-route inventory (#187 S4)', () => {
 			// starter page was retired. Both are guarded in legacy-routes.test.ts.
 			'/starters/ground-up',
 			'/starters/saas',
-			// #355: the module-cluster index became /blocks. Guarded in legacy-routes.test.ts.
-			'/modules'
+			// #355 / #361: the module-cluster index was /blocks and is now /features;
+			// the /blocks landing it pointed at redirects there too. Guarded in
+			// legacy-routes.test.ts.
+			'/modules',
+			'/blocks'
 		];
 		for (const path of knownSingleRedirectRoutes) {
 			expect(
@@ -91,7 +98,7 @@ describe('emitted-route inventory (#187 S4)', () => {
 		expect(
 			redirectRoutes.length,
 			'A new redirect-shaped route appeared that is not one of the guarded families ' +
-				'(components, docs, modules, packages, the #365 /docs moves and docs guide aliases) or a known single-file ' +
+				'(components, docs, modules, blocks, packages, the #365 /docs moves and docs guide aliases) or a known single-file ' +
 				'static redirect. If it is a real new family, add it to legacy-routes.test.ts the way ' +
 				'the foundations aliases were added; if it is a new single-file redirect, add it to ' +
 				'`knownSingleRedirectRoutes` above. Do not just widen this expectation.'
@@ -99,6 +106,7 @@ describe('emitted-route inventory (#187 S4)', () => {
 			componentCount +
 				docsCount +
 				moduleCount +
+				blockCount +
 				packageCount +
 				docsMoveCount +
 				docsGuideAliasCount +

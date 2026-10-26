@@ -21,7 +21,7 @@
 
 <SEO
 	title="The s-m-r-t application stack"
-	description="s-m-r-t is an MIT-licensed TypeScript stack for agentic software that people and agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The stack includes an in-app assistant, scheduled agents, approvals, reports on request and row-level data rules. Outside agents connect over MCP or in the browser as a signed-in identity. build-a-boilerplate assembles a working mock-up for a kind of business in the browser and exports the plan as a file."
+	description="s-m-r-t is an MIT-licensed TypeScript stack for agentic software that people and agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The site has three doors, BUILD, FEATURES and DOCS. FEATURES groups what ships into nine sections (Agents, Basics, Screens, Content, Messaging, Commerce, Operations, Marketing and World), and each feature has a showcase with a live example where the packages ship one. build-a-boilerplate, behind BUILD, assembles a working mock-up for a kind of business in the browser and exports the plan as a file. DOCS holds every technical page, for developers and for agents."
 	url="https://s-m-r-t.dev"
 />
 
@@ -38,7 +38,6 @@
 			{/each}
 		</div>
 	</section>
-	<p class="foot">MIT · one version</p>
 </div>
 
 <style>
@@ -170,15 +169,6 @@
 	.door.hot b,
 	.door.hot span {
 		color: var(--front-door-hot-ink);
-	}
-	.foot {
-		margin: 0;
-		text-align: center;
-		color: var(--front-dim-text);
-		font-size: 12px;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		padding-block: 0 32px;
 	}
 
 	@media (prefers-reduced-motion: reduce) {

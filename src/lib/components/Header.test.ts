@@ -38,12 +38,14 @@ describe('application bar', () => {
 
 	it('offers the docs panel toggle only inside Docs (#365)', () => {
 		render(Harness, { props: { pathname: '/features/agents' } });
-		expect(screen.queryByRole('button', { name: 'Open documentation navigation' })).toBeNull();
+		expect(
+			screen.queryByRole('button', { name: 'Sections: open documentation navigation' })
+		).toBeNull();
 	});
 
 	it('opens the AdminShell application panel from the app bar', async () => {
 		render(Harness, { props: { pathname: '/docs' } });
-		const toggle = screen.getByRole('button', { name: 'Open documentation navigation' });
+		const toggle = screen.getByRole('button', { name: 'Sections: open documentation navigation' });
 
 		expect(toggle.getAttribute('aria-expanded')).toBe('false');
 		await fireEvent.click(toggle);

@@ -6,7 +6,7 @@
 <footer>
 	<div class="footer-inner">
 		<p class="brand"><img src={brandMark} alt="" width="28" height="28" /><span>s-m-r-t</span></p>
-		<p>Framework documentation · {SMRT_VERSION}</p>
+		<p>Framework documentation · MIT · {SMRT_VERSION}</p>
 		<nav aria-label="Footer navigation">
 			<a href="/docs/reference/faq">FAQ</a>
 			<a href="https://github.com/happyvertical/smrt" target="_blank" rel="noreferrer">GitHub ↗</a>

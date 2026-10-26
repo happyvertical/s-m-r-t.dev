@@ -25,8 +25,7 @@ export interface FrameworkTopic {
 }
 
 /**
- * The detailed model example now belongs to Framework. The homepage keeps its
- * current copy until the coordinated homepage change removes it.
+ * The detailed model example belongs to Framework.
  */
 export const frameworkModelExample = `import {
   field, smrt, SmrtObject
@@ -68,50 +67,6 @@ export class Article extends SmrtObject {
   async publish() {
     return true;
   }
-}`;
-
-/**
- * The homepage's "Describe the record once" section (`#one-description`) shows a
- * trimmed variant of the same model — the `@smrt()` config block plus the
- * three field policies the adjacent copy names (required, read-only,
- * secret) — so the section stays about one viewport tall. This is a teaser
- * of the data above, not a copy: Framework keeps the full
- * `frameworkModelExample`.
- */
-export const homepageModelExample = `import {
-  field, smrt, SmrtObject
-} from '@happyvertical/smrt-core';
-
-@smrt({
-  api: {
-    include: ['list', 'get', 'create', 'update']
-  },
-  mcp: { include: ['publish'] },
-  cli: false,
-  ui: {
-    label: 'Articles',
-    description: 'Stories your team publishes.'
-  }
-})
-export class Article extends SmrtObject {
-  title = '';
-
-  @field({ required: true })
-  author = '';
-
-  @field({
-    readonly: true,
-    description: 'Server-set; writes cannot touch it.'
-  })
-  viewCount = 0;
-
-  @field({
-    sensitive: true,
-    exported: false,
-    description: 'Editorial notes for the team.',
-    ui: { group: 'Editorial', order: 10 }
-  })
-  authorNotes = '';
 }`;
 
 export const frameworkModelProjections: ModelProjection[] = [
@@ -195,7 +150,7 @@ export const frameworkTopics: FrameworkTopic[] = [
 		],
 		related: [
 			{ label: 'Start from smrt-start', href: '/docs/getting-started/smrt-start' },
-			{ label: 'Building blocks', href: '/blocks' },
+			{ label: 'Features', href: '/features' },
 			{ label: 'Model-aware UI', href: '/docs/ui' }
 		],
 		sources: [

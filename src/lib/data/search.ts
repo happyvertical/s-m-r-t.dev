@@ -15,7 +15,6 @@ import { toAnchorId } from '$lib/data/anchors';
 import { agentsTopics } from '$lib/data/agents';
 import { frameworkTopics, type FrameworkTopic } from '$lib/data/framework';
 import { capabilityGuides, foundationGuides, type Guide } from '$lib/data/guides';
-import { homepageFeatures } from '$lib/data/homepage-features';
 import { interactionContent } from '$lib/data/interaction';
 import { docsNavigation, featureNavigation, searchItems } from '$lib/data/navigation';
 import { packages } from '$lib/data/packages';
@@ -153,25 +152,6 @@ const landingEntries: SearchEntry[] = landingTracks.flatMap(({ base, label, topi
 	})
 );
 
-/**
- * The homepage's feature sections (`homepage-features.ts`, #321 slice B). They
- * live on `/`, which has a page entry but no headings of its own in the index,
- * so without this track "assistant", "report", "approvals" or "who can see
- * what" would find the deeper pages and never the plain-language overview.
- */
-export const homepageFeatureEntries: SearchEntry[] = homepageFeatures.map((feature) => ({
-	label: feature.title,
-	href: `/#${feature.id}`,
-	breadcrumb: `Home · ${feature.eyebrow}`,
-	description: feature.body[0],
-	keywords: [
-		...(feature.points ?? []).map((point) => point.label),
-		...feature.links.map((link) => link.label),
-		...feature.keywords
-	],
-	kind: 'section' as const
-}));
-
 const packageEntries: SearchEntry[] = packages.flatMap((pkg) => {
 	const componentsHref = `/docs/reference/packages/${pkg.slug}?tab=components`;
 	/** A single component's own generated contract page, when one exists. */
@@ -233,7 +213,6 @@ export const searchEntries: SearchEntry[] = dedupe([
 	...pageEntries,
 	...sectionEntries,
 	...landingEntries,
-	...homepageFeatureEntries,
 	...packageEntries
 ]);
 

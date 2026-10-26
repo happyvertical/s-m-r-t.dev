@@ -1,6 +1,5 @@
 import { agentsTopics } from '$lib/data/agents';
 import { capabilityGuides, foundationGuides } from '$lib/data/guides';
-import { blockBranches, buildingBlocks } from '$lib/data/blocks';
 import { featurePath, featureSectionPath, featureSections, features } from '$lib/data/features';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
@@ -91,29 +90,10 @@ const referenceEvidenceItem: NavigationItem = {
 	keywords: ['evidence', 'claims', 'sources', 'audit']
 };
 /**
- * One entry per #352 building block. The `/blocks` pages stay until the
- * redesign retires them (#361 slice E); they are showcases, not
- * documentation, so since #365 they are registered for the palette only and
- * never appear in the docs panel.
- */
-const blockItemsByBranch: NavigationGroup[] = blockBranches.map((branch) => ({
-	label: branch.title,
-	items: buildingBlocks
-		.filter((block) => block.branch === branch.id)
-		.map((block) => ({
-			label: block.title,
-			href: `/blocks/${block.id}`,
-			description: block.capability,
-			keywords: block.packages
-		}))
-}));
-const blockItems: NavigationItem[] = blockItemsByBranch.flatMap((group) => group.items);
-
-/**
  * The FEATURES door (#361): one group per section, its index page first and
  * then one entry per feature showcase. Feature pages are generated from
  * `features.ts`, not `Guide[]`, so they are registered here by hand. Like the
- * blocks they are showcases, not documentation: palette only, no docs panel.
+ * rest of the front-door pages they are showcases, not documentation: palette only, no docs panel.
  */
 export const featureNavigation: NavigationGroup[] = featureSections.map((section) => ({
 	label: section.word,
@@ -134,9 +114,6 @@ export const featureNavigation: NavigationGroup[] = featureSections.map((section
 			}))
 	]
 }));
-
-/** Palette-only registration of the #352 block pages, until slice E retires them. */
-export const blockNavigation: NavigationGroup[] = blockItemsByBranch;
 
 const interactionCapabilitySlugs = new Set([
 	'agent-legible-applications',
@@ -204,8 +181,8 @@ const whyItem: NavigationItem = {
 		// name or the lede can get back to it from search.
 		'application stack',
 		'agentic software',
-		// The Getting Started section's copyable prompt (#337) lives on this page.
-		'agent prompt'
+		// The three doors below the feature map.
+		'features map'
 	]
 };
 
@@ -548,9 +525,7 @@ export function documentationSectionForPathname(pathname: string): Documentation
 
 export function isPrimaryNavigationActive(item: PrimaryNavigationItem, pathname: string): boolean {
 	if (item.href === '/features') {
-		// The #352 `/blocks` pages are the FEATURES door's predecessor until
-		// slice E retires them.
-		return underPath(pathname, '/features') || underPath(pathname, '/blocks');
+		return underPath(pathname, '/features');
 	}
 	return isNavigationItemActive(item.href, pathname);
 }
@@ -628,18 +603,12 @@ export const docsNavigation: NavigationGroup[] = [
 
 export const searchItems: NavigationItem[] = [
 	...docsNavigation.flatMap((group) => group.items),
-	// The homepage, the feature showcases, the #352 blocks and
+	// The homepage, the feature showcases and
 	// build-a-boilerplate are not documentation pages, so they are outside
 	// `docsNavigation` (the reading track and the docs panel) and registered
 	// for the palette here, like the package entries below.
 	whyItem,
 	...featureNavigation.flatMap((group) => group.items),
-	{
-		label: 'Blocks overview',
-		href: '/blocks',
-		description: 'Find the capabilities you will not build from scratch.'
-	},
-	...blockItems,
 	{
 		label: 'build-a-boilerplate',
 		href: '/build-a-boilerplate',

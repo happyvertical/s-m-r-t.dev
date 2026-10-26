@@ -1,8 +1,7 @@
 <script lang="ts">
 	/**
-	 * /reference/evidence — the release-audit ledger behind the homepage (#321
-	 * slice E). Every row in `why-smrt-claims.ts` renders here with its row id as
-	 * the anchor, so a "Sources" link elsewhere on the site can point at
+	 * /reference/evidence — the release-audit ledger (#321 slice E). Every row in
+	 * `why-smrt-claims.ts` renders here with its row id as the anchor, so a "Sources" link elsewhere on the site can point at
 	 * `/docs/reference/evidence#<rowId>` and land on the row it cites.
 	 */
 	import ReferenceFamilyBar from '$lib/components/ReferenceFamilyBar.svelte';

@@ -1,9 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { blockBranches, buildingBlocks } from '$lib/data/blocks';
 import { featurePath, featureSections, features } from '$lib/data/features';
 import { taskGuides } from '$lib/data/task-guides';
 import {
-	blockNavigation,
 	documentationSectionForPathname,
 	documentationSections,
 	featureNavigation,
@@ -32,8 +30,6 @@ describe('primary navigation', () => {
 		expect(active('/build-a-boilerplate')).toEqual(['Build']);
 		expect(active('/features')).toEqual(['Features']);
 		expect(active('/features/agents/approvals')).toEqual(['Features']);
-		// The #352 block pages stay under FEATURES until slice E retires them.
-		expect(active('/blocks/records')).toEqual(['Features']);
 		for (const pathname of [
 			'/docs',
 			'/docs/foundations/objects-and-collections',
@@ -101,9 +97,9 @@ describe('contextual navigation', () => {
 	});
 
 	it('uses location state for homepage anchors', () => {
-		expect(isNavigationItemActive('/#one-description', '/', '#one-description')).toBe(true);
-		expect(isNavigationItemActive('/', '/', '#one-description')).toBe(false);
-		expect(isNavigationItemActive('/#what-you-get', '/', '#one-description')).toBe(false);
+		expect(isNavigationItemActive('/#doors', '/', '#doors')).toBe(true);
+		expect(isNavigationItemActive('/', '/', '#doors')).toBe(false);
+		expect(isNavigationItemActive('/#features', '/', '#doors')).toBe(false);
 	});
 
 	it('marks exactly one /agents "On this page" anchor active for the current topic', () => {
@@ -137,16 +133,6 @@ describe('contextual navigation', () => {
 		expect(hrefs.size).toBe(featureSections.length + features.length);
 		for (const item of features) {
 			expect(hrefs.has(featurePath(item)), `${item.id} is not registered`).toBe(true);
-		}
-	});
-
-	it('still registers every #352 block by branch until slice E retires them', () => {
-		expect(blockNavigation.map((group) => group.label)).toEqual(
-			blockBranches.map((branch) => branch.title)
-		);
-		const hrefs = new Set(blockNavigation.flatMap((group) => group.items.map((i) => i.href)));
-		for (const block of buildingBlocks) {
-			expect(hrefs.has(`/blocks/${block.id}`), `${block.id} is not registered`).toBe(true);
 		}
 	});
 

@@ -3,9 +3,9 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import { SMRT_VERSION } from '$lib/version';
 
-	// Four ways to a project on the smrt-start template. The homepage's
-	// Getting Started section links each of these targets; keep the hrefs and
-	// the `#cookbook` id stable.
+	// Three ways to a project on the smrt-start template; build-a-boilerplate
+	// also exports a prompt for a coding agent. Keep the hrefs and the
+	// `#cookbook` id stable.
 	const paths = [
 		{
 			label: 'build-a-boilerplate',
@@ -21,11 +21,6 @@
 			label: 'Clone smrt-start',
 			body: 'The template on its own: one owner, local SQLite, a Note model, an assistant and read-only MCP.',
 			href: '/docs/getting-started/smrt-start'
-		},
-		{
-			label: 'Hand it to your agent',
-			body: 'Copy a prompt into Claude Code, Codex or another coding agent. It runs the smrt CLI and creates the app.',
-			href: '/#agent-prompt'
 		}
 	];
 
@@ -49,14 +44,14 @@ pnpm app:open               # in a second terminal: the one-time owner setup pag
 
 <SEO
 	title="Getting Started"
-	description="Four ways to a s-m-r-t project on the smrt-start template: build-a-boilerplate, smrt cookbook apply, a clone of smrt-start, or a prompt for your coding agent."
+	description="Three ways to a s-m-r-t project on the smrt-start template: build-a-boilerplate (which also exports a prompt for your coding agent), smrt cookbook apply, or a clone of smrt-start."
 	url="https://s-m-r-t.dev/docs/getting-started"
 />
 
 <article class="starter-index">
 	<header>
 		<p>Getting Started</p>
-		<h1>Four ways to a running application.</h1>
+		<h1>Three ways to a running application.</h1>
 		<span
 			>Each one ends with a SvelteKit project on the smrt-start template, with the s-m-r-t packages
 			installed. Pick by how you want to begin.</span

@@ -13,8 +13,7 @@ describe('/docs/reference/evidence', () => {
 
 		expect(rows).toHaveLength(whySmrtClaims.length);
 		expect(rows.map((row) => row.id)).toEqual(whySmrtClaims.map((claim) => claim.id));
-		// The homepage's "Sources" links (slice B of #321) and anything else on
-		// the site cite rows by this URL shape; a renamed id breaks them silently.
+		// Any "Sources" link on the site cites rows by this URL shape; a renamed id breaks them silently.
 		for (const claim of whySmrtClaims) {
 			expect(container.querySelector(`tr#${claim.id} a[href="#${claim.id}"]`)).toBeTruthy();
 		}

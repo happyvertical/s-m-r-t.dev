@@ -8,6 +8,10 @@ import { toolingGuides } from '$lib/data/tooling';
 import { entries as componentEntries } from '../../routes/components/[...legacy]/+page.server';
 import { entries as docsEntries } from '../../routes/docs/[...legacy]/+page.server';
 import { _aliases as docsGuideAliases } from '../../routes/docs/guides/[slug]/+page';
+import {
+	_aliases as blockAliases,
+	entries as blockEntries
+} from '../../routes/blocks/[slug]/+page.server';
 import { entries as moduleEntries } from '../../routes/modules/[slug]/+page.server';
 import {
 	_aliases as referenceComponentAliases,
@@ -97,8 +101,7 @@ describe('legacy static routes', () => {
 		const paths = (await moduleEntries()).map(({ slug }) => slug);
 
 		// Every package redirects from /modules/<slug> automatically (the /modules
-		// index itself redirects to /blocks, asserted below; slice E of #361
-		// re-points it to /features). These three
+		// index itself redirects to /features, asserted below). These three
 		// do not correspond to a package, so they exist only as hand-written
 		// entries and are the ones a cleanup would quietly drop.
 		expect(paths.filter((slug) => !packages.some((pkg) => pkg.slug === slug))).toEqual([
@@ -158,15 +161,39 @@ describe('legacy static routes', () => {
 		throw new Error('expected a redirect');
 	};
 
-	it('redirects the retired /modules index to /blocks (#355)', async () => {
+	it('redirects the retired /modules index to /features (#355, #366)', async () => {
 		// /modules/<slug> (counted above) still goes to Reference; the index is a
 		// single non-parametrized route, so there is nothing to enumerate.
 		const { load } = await import('../../routes/modules/+page.server');
 
 		expect(redirectTarget(load as () => never), RESTORE_DONT_RENUMBER).toMatchObject({
 			status: 301,
-			location: '/blocks'
+			location: '/features'
 		});
+	});
+
+	it('prerenders a 301 for every retired #358 /blocks page (#366)', async () => {
+		// #366 deleted the /blocks landing, its 23 block pages and `blocks.ts`.
+		// The block slugs are frozen in the route's `_aliases` because the data
+		// they came from is gone, so this is the only record of them: a cleanup
+		// there would 404 a live URL without a build warning.
+		const slugs = (await blockEntries()).map(({ slug }) => slug);
+		expect(slugs, RESTORE_DONT_RENUMBER).toHaveLength(23);
+		expect(new Set(slugs).size).toBe(slugs.length);
+		expect(slugs).toEqual(expect.arrayContaining(['agent-tools', 'records', 'mobile']));
+
+		const { load: landingLoad } = await import('../../routes/blocks/+page.server');
+		expect(redirectTarget(landingLoad as () => never), RESTORE_DONT_RENUMBER).toMatchObject({
+			status: 301,
+			location: '/features'
+		});
+
+		// Each target is a live feature or section page, never another redirect.
+		for (const [slug, target] of Object.entries(blockAliases)) {
+			const route = routesByPath.get(target);
+			expect(route, `/blocks/${slug} -> ${target} does not prerender.`).toBeDefined();
+			expect(route?.isRedirect, `/blocks/${slug} -> ${target} is a redirect chain.`).toBe(false);
+		}
 	});
 
 	it('redirects the legacy /packages and /faq singular pages to Reference', async () => {

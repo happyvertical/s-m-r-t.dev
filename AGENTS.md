@@ -65,22 +65,34 @@ it catches `{UndefinedVar}` in templates.
 
 ## How the content is authored
 
-The site is data-driven, not page-per-file: the guide, reference, and package
-pages are entries in `src/lib/data/`, served by three renderers —
-`GuidePage.svelte` for the `Guide[]` modules, `PackageWorkbench.svelte` for
-`packages.ts`, `BlockPage.svelte` for `blocks.ts` (`/blocks/[slug]`). Adding one of those means adding a data entry, not a route; the
-route's `entries()` prerenders it automatically. Editing a renderer changes
-every page it serves, so check a few before assuming. Landing pages and section
-indexes are ordinary hand-written `+page.svelte` files.
+The site has three doors — BUILD (`/build-a-boilerplate`), FEATURES (`/features`)
+and DOCS (`/docs`) — and the front page is the FEATURES map. Every technical
+page lives under `/docs` (framework, foundations, capabilities, agents,
+interaction, ui, tooling, guides, reference, getting-started).
 
-A new `Guide[]` route family is the exception — it needs a `[slug]` route of its
-own plus registering by hand in `navigation.ts`, `search.ts`, and the sitemap.
-Add the family and let `registration.test.ts` name what you missed; it discovers
-the families, so it knows about yours before you have told it anything.
+It is data-driven, not page-per-file. The guide, reference and package pages are
+entries in `src/lib/data/`, served by renderers: `GuidePage.svelte` for the
+`Guide[]` modules and `PackageWorkbench.svelte` for `packages.ts`. Adding one
+means adding a data entry, not a route; the route's `entries()` prerenders it.
+Editing a renderer changes every page it serves, so check a few before assuming.
+Landing pages and the section indexes are ordinary hand-written `+page.svelte`.
 
-The blocks family is not a `Guide[]` family, so `registration.test.ts` does not
-see it: register a block by hand in `navigation.ts`, the sitemap, and
-`generate-agent-docs.mjs`. `blocks.test.ts` and `navigation.test.ts` name misses.
+**Features -> sections -> showcases.** `src/lib/data/features.ts` holds the nine
+sections and their features (word, hint, packages, reference, source, example,
+inTheBox). The front page graph (`components/home/`), the section index
+(`/features/[section]`) and the showcase (`/features/[section]/[feature]`,
+`components/features/Showcase.svelte`) are all generated from it. A live example
+is a real playground entry from `playgrounds.ts`; otherwise a still from
+`scripts/generate-feature-stills.mjs`. `features.test.ts` guards the shape.
+
+A new `Guide[]` route family needs a `[slug]` route of its own plus registering
+by hand in `navigation.ts`, `search.ts`, and the sitemap. Add the family and let
+`registration.test.ts` name what you missed; it discovers the families.
+
+Features are not a `Guide[]` family, so `registration.test.ts` does not see
+them: register a new section or feature by hand in `navigation.ts`, the sitemap
+and `generate-agent-docs.mjs`. `features.test.ts` and `navigation.test.ts` name
+misses. Evidence rows (`why-smrt-claims.ts`) exist only for claims a page cites.
 
 ### Nothing regenerates that content, so it goes stale silently
 
@@ -92,6 +104,8 @@ merge, because a hash comparison is not qualified to reject prose.
 ## Legacy redirects are a contract
 
 `src/routes/docs/[...legacy]/`, `src/routes/components/[...legacy]/`,
+`src/routes/blocks/` (the retired #358 landing and 23 block pages, each a 301 to a
+feature or section),
 `src/routes/modules/[slug]/`, `src/routes/packages/[slug]/`, `src/routes/packages/`,
 and `src/routes/faq/` prerender 301 redirects for URLs the site used to serve.
 The site is static, so a path with no prerendered redirect is a hard 404 in
@@ -136,6 +150,11 @@ Then one line below.
 - smrt#4054: smrt-core default-imports CommonJS `pluralize`, which fails when
   served unbundled in dev; `vite.config.ts` `optimizeDeps.include` prebundles
   it. Tracked here in #310.
+- smrt#4374: `PlaygroundHost` in embedded mode renders a nested `main`, so axe
+  reports `landmark-main-is-top-level`/`landmark-no-duplicate-main`/
+  `landmark-unique` on live-example showcases. Tracked here in #368.
+- smrt#4375: `AgentScheduleList` rows are `role=button` holding buttons (axe
+  `nested-interactive`) on the Agents showcase. Tracked here in #368.
 - smrt#2071: the `smrt` preset's light primary / on-primary pair is 3.6:1,
   short of AA; `variables.css` carries `--site-accent-ink` and
   `--site-on-accent` until it passes. Tracked here in #332.

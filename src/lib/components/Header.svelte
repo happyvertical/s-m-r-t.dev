@@ -48,7 +48,7 @@
 		<button
 			class="panel-toggle"
 			type="button"
-			aria-label={`${panelOpen ? 'Close' : 'Open'} documentation navigation`}
+			aria-label={`Sections: ${panelOpen ? 'close' : 'open'} documentation navigation`}
 			aria-expanded={panelOpen}
 			aria-controls="smrt-admin-shell-top-panel"
 			onclick={toggleDocumentationPanel}
@@ -150,7 +150,8 @@
 		padding: 0.55rem 0.75rem;
 		border-radius: var(--site-radius-md);
 		background: var(--smrt-color-primary);
-		color: var(--smrt-color-on-primary);
+		/* smrt#2071: the preset's light on-primary is 3.6:1 here. */
+		color: var(--site-on-accent);
 		font-size: 0.8rem;
 		font-weight: 700;
 		transform: translateY(-150%);
