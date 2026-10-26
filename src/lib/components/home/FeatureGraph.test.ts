@@ -9,6 +9,7 @@ vi.mock('$app/navigation', () => ({ goto: vi.fn() }));
 let resizeCallback: (() => void) | undefined;
 
 beforeEach(() => {
+	sessionStorage.clear();
 	vi.stubGlobal(
 		'ResizeObserver',
 		class {
@@ -105,20 +106,49 @@ describe('FeatureGraph', () => {
 		});
 	});
 
-	it('keeps circle and label as separate click handlers on a keyboard-reachable link', async () => {
+	it('selects on circle click, opens on label click, and counts on the hub', async () => {
 		const { goto } = await import('$app/navigation');
 		const { container } = render(FeatureGraph);
 		const node = container.querySelector('svg a.n.d2') as SVGAElement;
 
 		expect(node.getAttribute('aria-label')).toMatch(/: .+/);
 		node
-			.querySelector('circle')!
+			.querySelector('circle.dot')!
 			.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+		await vi.waitFor(() => expect(node.classList.contains('sel')).toBe(true));
+		expect(goto).not.toHaveBeenCalled();
+		expect(node.querySelector('circle.ring')).not.toBeNull();
+		expect(node.getAttribute('aria-label')).toMatch(/, selected: /);
+		expect(container.querySelector('svg a.hub text')?.textContent).toBe('BUILD · 1');
+		expect(JSON.parse(sessionStorage.getItem('smrt-map-selection')!)).toHaveLength(1);
+
 		node
 			.querySelector('text')!
 			.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-		expect(goto).toHaveBeenCalledTimes(2);
 		expect(goto).toHaveBeenCalledWith(node.getAttribute('href'));
+		expect(node.classList.contains('sel')).toBe(true);
+	});
+
+	it('selects with Space and restores the selection after a round trip', async () => {
+		const { container, unmount } = render(FeatureGraph);
+		const nodes = [...container.querySelectorAll('svg a.n.d2')];
+		for (const node of nodes.slice(0, 3)) {
+			node.dispatchEvent(
+				new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true })
+			);
+		}
+		await vi.waitFor(() =>
+			expect(container.querySelector('svg a.hub text')?.textContent).toBe('BUILD · 3')
+		);
+		const href = container.querySelector('svg a.hub')!.getAttribute('href')!;
+		expect(href).toMatch(/^\/build-a-boilerplate\?features=[a-z-]+(,[a-z-]+){2}$/);
+		unmount();
+
+		const again = render(FeatureGraph);
+		await vi.waitFor(() =>
+			expect(again.container.querySelector('svg a.hub text')?.textContent).toBe('BUILD · 3')
+		);
+		expect(again.container.querySelectorAll('svg a.n.sel')).toHaveLength(3);
 	});
 
 	it('shows one hover sentence and lights the section', async () => {

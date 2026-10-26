@@ -2,8 +2,9 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { SvelteSet } from 'svelte/reactivity';
+	import { buildHref, loadSelection, saveSelection } from '$lib/build-handoff';
 	import { featureSections, featuresInSection } from '$lib/data/features';
-	import { BUILD_HREF, fitGraph, HUB_RADIUS, type PlacedNode } from './graph-layout';
+	import { fitGraph, HUB_RADIUS, type PlacedNode } from './graph-layout';
 	import SunCanvas from './SunCanvas.svelte';
 	import { SUN_SIZE } from './sun';
 
@@ -17,6 +18,22 @@
 	let hintEl: HTMLElement;
 	let focused = $state<PlacedNode | null>(null);
 
+	// Features picked for build-a-boilerplate (#367). Read after mount so the
+	// prerendered page is the empty selection; kept in sessionStorage so a
+	// showcase visit and Back return to it.
+	const selected = new SvelteSet<string>();
+	const count = $derived(selected.size);
+	const buildTarget = $derived(buildHref(selected));
+	const isFeature = (node: PlacedNode) => node.depth === 2;
+	const featureId = (node: PlacedNode) => node.id.replace(/^feature:/, '');
+	const isSelected = (node: PlacedNode) => isFeature(node) && selected.has(featureId(node));
+
+	function toggle(node: PlacedNode) {
+		const id = featureId(node);
+		if (!selected.delete(id)) selected.add(id);
+		saveSelection(selected);
+	}
+
 	// The focused node, its section and, for a section, all of its features.
 	const lit = $derived.by(() => {
 		if (!focused) return null;
@@ -29,6 +46,7 @@
 	});
 
 	onMount(() => {
+		for (const id of loadSelection()) selected.add(id);
 		const measure = () => {
 			const { clientWidth, clientHeight } = map;
 			if (clientWidth > 0 && clientHeight > 0) size = { width: clientWidth, height: clientHeight };
@@ -52,11 +70,18 @@
 		hintEl.style.top = `${y + 14}px`;
 	});
 
-	// Circle and label keep their own handlers: selecting a feature (#367) will
-	// attach to the circle while the label stays a link.
+	// Circle and label keep their own handlers: the circle of a feature selects
+	// it, everything else (and every label) opens the page.
 	function onCircleClick(event: MouseEvent, node: PlacedNode) {
 		event.preventDefault();
-		void goto(node.href);
+		if (isFeature(node)) toggle(node);
+		else void goto(node.href);
+	}
+	// Space selects; Enter is the link's own click and opens.
+	function onNodeKeydown(event: KeyboardEvent, node: PlacedNode) {
+		if (event.key !== ' ' || !isFeature(node)) return;
+		event.preventDefault();
+		toggle(node);
 	}
 	function onLabelClick(event: MouseEvent, node: PlacedNode) {
 		event.preventDefault();
@@ -64,7 +89,7 @@
 	}
 	function onHubClick(event: MouseEvent) {
 		event.preventDefault();
-		void goto(BUILD_HREF);
+		void goto(buildTarget);
 	}
 </script>
 
@@ -96,14 +121,22 @@
 					<a
 						class="n d{node.depth}"
 						class:on={lit?.has(node.id)}
+						class:sel={isSelected(node)}
 						href={node.href}
-						aria-label="{node.word}{node.depth === 1 ? ' section' : ''}: {node.hint}"
+						aria-label="{node.word}{node.depth === 1 ? ' section' : ''}{isSelected(node)
+							? ', selected'
+							: ''}: {node.hint}"
+						onkeydown={(event) => onNodeKeydown(event, node)}
 						onmouseenter={() => (focused = node)}
 						onfocus={() => (focused = node)}
 						onmouseleave={() => (focused = null)}
 						onblur={() => (focused = null)}
 					>
+						{#if isSelected(node)}
+							<circle class="ring" r={node.r + 5} />
+						{/if}
 						<circle
+							class="dot"
 							r={node.r}
 							onclick={(event) => onCircleClick(event, node)}
 							role="presentation"
@@ -120,9 +153,16 @@
 			{/each}
 		</g>
 		<g transform="translate({hub.x},{hub.y})">
-			<a class="hub" href={BUILD_HREF} aria-label="BUILD: build-a-boilerplate" onclick={onHubClick}>
+			<a
+				class="hub"
+				href={buildTarget}
+				aria-label={count
+					? `BUILD · ${count}: build-a-boilerplate with ${count} selected`
+					: 'BUILD: build-a-boilerplate'}
+				onclick={onHubClick}
+			>
 				<circle r={HUB_RADIUS} />
-				<text y="7" text-anchor="middle">BUILD</text>
+				<text y="7" text-anchor="middle">{count ? `BUILD · ${count}` : 'BUILD'}</text>
 			</a>
 		</g>
 	</svg>
@@ -138,7 +178,7 @@
 	<p class="lede">Hover a node</p>
 
 	<div class="stacks">
-		<div class="hubbtn"><a href={BUILD_HREF}>BUILD</a></div>
+		<div class="hubbtn"><a href={buildTarget}>{count ? `BUILD · ${count}` : 'BUILD'}</a></div>
 		{#each featureSections as section (section.id)}
 			<div class="stack">
 				<h2><a href="/features/{section.id}">{section.word}</a></h2>
@@ -220,6 +260,20 @@
 		font-weight: 700;
 		fill: var(--front-orange-ink);
 		letter-spacing: 0.14em;
+	}
+	.n circle.ring,
+	.n:hover circle.ring,
+	.n.on circle.ring,
+	.n:focus-visible circle.ring {
+		fill: none;
+		stroke: var(--front-ink);
+		stroke-width: 2.5;
+		opacity: 1;
+		pointer-events: none;
+	}
+	.n.sel .dot {
+		fill: var(--front-yellow);
+		opacity: 1;
 	}
 	.n:hover circle,
 	.n.on circle,
