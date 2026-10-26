@@ -4,7 +4,7 @@
 
 ## Canonical technical documentation
 
-- https://s-m-r-t.dev/ — the s-m-r-t application stack: what an application gets, how one record description becomes every surface, and the five layers
+- https://s-m-r-t.dev/ — the s-m-r-t application stack: what an application gets, how one record description becomes every surface, and the agentic building blocks map
 - https://s-m-r-t.dev/build-a-boilerplate — assemble a working mock-up for a kind of business in the browser and export the plan as a cookbook file
 - https://s-m-r-t.dev/agents — agents as operators: browser agents, MCP agents and the application’s own scheduled and chat agents, all under the same permissions
 - https://s-m-r-t.dev/reference/saadl — Software as Agentic Domain Logic and human/agent parity
