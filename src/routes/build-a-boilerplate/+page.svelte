@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import SEO from '$lib/components/SEO.svelte';
+	import { parseFeatures, recipesFor, seedFor } from '$lib/build-handoff';
 
 	// This page is called build-a-boilerplate; the package keeps its name.
 	// `Planner` is the complete planner: the framework's own cookbook-driven
@@ -16,6 +17,25 @@
 
 	let Planner = $state.raw<PlannerModule['Planner'] | null>(null);
 	let loadError = $state<string | null>(null);
+
+	type PlannerHandle = import('@happyvertical/smrt-planner').PlannerHandle;
+	type PlannerConversationSeed = import('@happyvertical/smrt-planner').PlannerConversationSeed;
+
+	// A selection from the front-page map (`?features=`, #367), read after
+	// mount so the prerender never depends on the query. The planner's own
+	// `?p=` names packages, so the recipes go in through its controller.
+	let selected = $state.raw<string[]>([]);
+	const initialConversation = $derived<PlannerConversationSeed | undefined>(
+		selected.length ? seedFor(selected) : undefined
+	);
+
+	async function onready({ controller, openAssistant }: PlannerHandle) {
+		const ids = recipesFor(selected);
+		if (ids.length) await controller.run({ name: 'add_recipes', input: { ids } });
+		// Opens only once an inference mode is ready; until then the planner's
+		// own AI setup page is where the visitor starts.
+		await openAssistant?.();
+	}
 
 	// The way back to the documentation, rendered by the planner at the start
 	// of its own header beside the brand.
@@ -38,6 +58,7 @@
 
 	onMount(() => {
 		let cancelled = false;
+		selected = parseFeatures(window.location.search);
 		import('@happyvertical/smrt-planner').then(
 			(planner) => {
 				if (!cancelled) Planner = planner.Planner;
@@ -69,6 +90,8 @@
 				defaultTitle="build-a-boilerplate"
 				{inference}
 				{backLink}
+				{initialConversation}
+				{onready}
 			/>
 		{:else if loadError}
 			<p class="planner-status" role="alert">build-a-boilerplate could not load: {loadError}</p>
