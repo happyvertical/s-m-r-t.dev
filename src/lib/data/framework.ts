@@ -195,7 +195,7 @@ export const frameworkTopics: FrameworkTopic[] = [
 		],
 		related: [
 			{ label: 'Start from smrt-start', href: '/starters/smrt-start' },
-			{ label: 'Application modules', href: '/modules' },
+			{ label: 'Building blocks', href: '/blocks' },
 			{ label: 'Model-aware UI', href: '/ui' }
 		],
 		sources: [

@@ -114,8 +114,8 @@
 				<strong>UI</strong>
 				<span>See the controls and shell that make application state and authority visible.</span>
 			</a>
-			<a href="/modules">
-				<strong>Application modules</strong>
+			<a href="/blocks">
+				<strong>Building blocks</strong>
 				<span>Find prebuilt application parts that use the same framework foundation.</span>
 			</a>
 			<a href="/tooling">

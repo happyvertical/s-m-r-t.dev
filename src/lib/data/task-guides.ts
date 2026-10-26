@@ -160,7 +160,7 @@ const guideMigrationDrafts: TaskGuide[] = [
 			supportRange: TASK_GUIDES_PINNED_VERSION,
 			concepts: ['Application model', 'Tenant scope', 'Generated interfaces', 'Application shell'],
 			relatedUi: [{ label: 'UI overview', href: '/ui' }],
-			relatedModules: [{ label: 'Application modules', href: '/modules' }],
+			relatedModules: [{ label: 'Building blocks', href: '/blocks' }],
 			relatedReference: [
 				{ label: 'Decorator reference', href: '/reference/decorators' },
 				{ label: 'Generated interfaces reference', href: '/reference/interfaces' }
@@ -323,7 +323,7 @@ export const taskGuides: TaskGuide[] = [
 			supportRange: TASK_GUIDES_PINNED_VERSION,
 			concepts: ['Tenant hierarchy', 'Membership', 'Role', 'Tenant context', 'Row isolation'],
 			relatedUi: [],
-			relatedModules: [{ label: 'Application modules', href: '/modules' }],
+			relatedModules: [{ label: 'Building blocks', href: '/blocks' }],
 			relatedReference: [
 				{ label: 'Authorization reference', href: '/reference/authorization' },
 				{ label: 'Security reference', href: '/reference/security' }
@@ -628,7 +628,7 @@ it('refuses a foreign filter', async () => {
 			supportRange: TASK_GUIDES_PINNED_VERSION,
 			concepts: ['Application agent', 'MCP tool', 'Principal', 'Tenant scope', 'Authorization'],
 			relatedUi: [],
-			relatedModules: [{ label: 'Application modules', href: '/modules' }],
+			relatedModules: [{ label: 'Building blocks', href: '/blocks' }],
 			relatedReference: [
 				{ label: 'Generated interfaces reference', href: '/reference/interfaces' },
 				{ label: 'Security reference', href: '/reference/security' }
@@ -971,7 +971,7 @@ export const POST = mountMcpRoute(mcpServer);
 			supportRange: TASK_GUIDES_PINNED_VERSION,
 			concepts: ['Embedding', 'Semantic search', 'Candidate limit', 'Tenant filter'],
 			relatedUi: [],
-			relatedModules: [{ label: 'Application modules', href: '/modules' }],
+			relatedModules: [{ label: 'Building blocks', href: '/blocks' }],
 			relatedReference: [
 				{ label: 'AI and retrieval reference', href: '/reference/ai-and-retrieval' },
 				{ label: 'Collections reference', href: '/reference/collections' }

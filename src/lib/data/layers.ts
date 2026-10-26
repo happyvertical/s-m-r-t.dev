@@ -106,7 +106,7 @@ export const unlayeredPackageCount =
 
 /**
  * The "Ready-made building blocks" noun list. Each noun links to its home —
- * a `/modules` cluster anchor, or a package page when a cluster would repeat
+ * a `/blocks` page, or a package page when a block would repeat
  * another noun's target. Rendered identically in the hero lede and in the
  * Section 4 band copy for that layer: one shared constant, not two texts
  * that can drift.
@@ -117,14 +117,14 @@ export interface LayerNoun {
 }
 
 export const buildingBlockNouns: LayerNoun[] = [
-	{ label: 'articles', href: '/modules#content-and-media' },
+	{ label: 'articles', href: '/blocks/content-and-media' },
 	{ label: 'files', href: '/reference/packages/smrt-assets' },
 	{ label: 'images', href: '/reference/packages/smrt-images' },
-	{ label: 'events', href: '/modules#domain-knowledge' },
-	{ label: 'invoices', href: '/modules#commerce-and-operations' },
-	{ label: 'projects', href: '/modules#support-and-projects' },
+	{ label: 'events', href: '/blocks/facts' },
+	{ label: 'invoices', href: '/blocks/commerce-and-money' },
+	{ label: 'projects', href: '/blocks/operations' },
 	{ label: 'messages', href: '/reference/packages/smrt-messages' },
-	{ label: 'reports', href: '/modules#analytics-and-growth' }
+	{ label: 'reports', href: '/blocks/insight-and-marketing' }
 ];
 
 /**

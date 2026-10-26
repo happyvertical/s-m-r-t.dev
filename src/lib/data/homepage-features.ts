@@ -129,7 +129,7 @@ export const homepageFeatures: HomepageFeature[] = [
 			'Email, a watched folder, a supplier’s webhook, a photo from a phone. The original is kept as evidence and its text read out. An AI suggests what to do next from a list the application defines; a person approves or declines.'
 		],
 		links: [
-			{ label: 'Modules', href: '/modules#content-and-media' },
+			{ label: 'Ingestion block', href: '/blocks/ingestion' },
 			{ label: 'smrt-ingestion', href: '/reference/packages/smrt-ingestion' }
 		],
 		evidenceId: 'ingestion-preview',
