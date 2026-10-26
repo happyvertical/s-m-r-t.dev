@@ -103,12 +103,12 @@ describe('/blocks/[slug]', () => {
 				expect(container.textContent).toContain(item);
 			}
 			for (const slug of block.packages) {
-				expect(container.querySelector(`a[href="/reference/packages/${slug}"]`)).toBeTruthy();
+				expect(container.querySelector(`a[href="/docs/reference/packages/${slug}"]`)).toBeTruthy();
 			}
 			for (const guide of block.guides) {
 				expect(container.querySelector(`a[href="${guide.href}"]`)).toBeTruthy();
 			}
-			expect(!!container.querySelector('a[href="/reference/evidence"]')).toBe(
+			expect(!!container.querySelector('a[href="/docs/reference/evidence"]')).toBe(
 				!!block.evidence?.length
 			);
 		});

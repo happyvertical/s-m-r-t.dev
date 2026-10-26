@@ -58,8 +58,8 @@ export const homepageFeatures: HomepageFeature[] = [
 			'The model can be small enough to run in the browser, with no key and no model server; build-a-boilerplate works that way here.'
 		],
 		links: [
-			{ label: 'Admin shell', href: '/capabilities/application-shell' },
-			{ label: 'smrt-chat', href: '/reference/packages/smrt-chat' }
+			{ label: 'Admin shell', href: '/docs/capabilities/application-shell' },
+			{ label: 'smrt-chat', href: '/docs/reference/packages/smrt-chat' }
 		],
 		evidenceId: 'in-app-assistant',
 		keywords: ['assistant', 'AssistantDock', 'chat', 'on-device', 'browser model', 'WebLLM']
@@ -90,10 +90,10 @@ export const homepageFeatures: HomepageFeature[] = [
 			}
 		],
 		links: [
-			{ label: 'Agent-assisted forms', href: '/capabilities/agent-assisted-forms' },
-			{ label: 'Authority', href: '/interaction#consent-sensitivity-and-authority' },
-			{ label: 'Learning agents', href: '/capabilities/learning-agents' },
-			{ label: 'smrt-approvals', href: '/reference/packages/smrt-approvals' }
+			{ label: 'Agent-assisted forms', href: '/docs/capabilities/agent-assisted-forms' },
+			{ label: 'Authority', href: '/docs/interaction#consent-sensitivity-and-authority' },
+			{ label: 'Learning agents', href: '/docs/capabilities/learning-agents' },
+			{ label: 'smrt-approvals', href: '/docs/reference/packages/smrt-approvals' }
 		],
 		evidenceId: 'propose-confirm',
 		keywords: [
@@ -114,8 +114,8 @@ export const homepageFeatures: HomepageFeature[] = [
 			'“Sales by month, last quarter.” The assistant turns that into a report description — data, not code or SQL — and previews it before anything is saved. Saved reports run under the permissions of whoever opens them, every time.'
 		],
 		links: [
-			{ label: 'Reports', href: '/capabilities/reports' },
-			{ label: 'smrt-reports', href: '/reference/packages/smrt-reports' }
+			{ label: 'Reports', href: '/docs/capabilities/reports' },
+			{ label: 'smrt-reports', href: '/docs/reference/packages/smrt-reports' }
 		],
 		evidenceId: 'runtime-reports',
 		keywords: ['report', 'reports', 'runtime report', 'analytics', 'dashboard']
@@ -130,7 +130,7 @@ export const homepageFeatures: HomepageFeature[] = [
 		],
 		links: [
 			{ label: 'Ingestion block', href: '/blocks/ingestion' },
-			{ label: 'smrt-ingestion', href: '/reference/packages/smrt-ingestion' }
+			{ label: 'smrt-ingestion', href: '/docs/reference/packages/smrt-ingestion' }
 		],
 		evidenceId: 'ingestion-preview',
 		keywords: ['ingestion', 'inbox', 'intake', 'paperwork', 'documents', 'OCR', 'preview']
@@ -143,9 +143,9 @@ export const homepageFeatures: HomepageFeature[] = [
 			'An application can hold many organizations. Which records a request may see is decided where data is read and written, not in page code. So the answer is the same for screens, the API, the command line and agent tools; on PostgreSQL the database enforces it too. A field can be required, read-only or secret on every surface. A change can record who made it and, for an agent, whom it acted for.'
 		],
 		links: [
-			{ label: 'Tenants', href: '/foundations/tenants' },
-			{ label: 'Field policies', href: '/capabilities/field-policies' },
-			{ label: 'Security', href: '/reference/security' }
+			{ label: 'Tenants', href: '/docs/foundations/tenants' },
+			{ label: 'Field policies', href: '/docs/capabilities/field-policies' },
+			{ label: 'Security', href: '/docs/reference/security' }
 		],
 		evidenceId: 'who-can-see-what',
 		keywords: ['tenancy', 'tenants', 'permissions', 'row-level security', 'audit']
@@ -158,9 +158,9 @@ export const homepageFeatures: HomepageFeature[] = [
 			'An MCP endpoint for connected agents, a command line, and tools a browser agent can see on the page. Each is turned on per application and names its operations. Browser tools start read-only; the command line carries the actions the application selected.'
 		],
 		links: [
-			{ label: 'Agents', href: '/agents#where-agents-connect' },
-			{ label: 'App MCP', href: '/tooling/app-mcp' },
-			{ label: 'WebMCP', href: '/capabilities/webmcp' }
+			{ label: 'Agents', href: '/docs/agents#where-agents-connect' },
+			{ label: 'App MCP', href: '/docs/tooling/app-mcp' },
+			{ label: 'WebMCP', href: '/docs/capabilities/webmcp' }
 		],
 		evidenceId: 'agent-doors',
 		keywords: ['MCP', 'WebMCP', 'CLI', 'agents', 'read-only']
@@ -176,5 +176,5 @@ export const homepageFeatures: HomepageFeature[] = [
 export const homepageMoneyNote = {
 	body: 'Money is kept exactly: whole numbers in the currency’s smallest unit, invoice figures frozen once issued, ledger entries voided rather than edited.',
 	linkLabel: 'smrt-commerce',
-	href: '/reference/packages/smrt-commerce'
+	href: '/docs/reference/packages/smrt-commerce'
 };

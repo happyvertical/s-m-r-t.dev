@@ -4,13 +4,19 @@
 	import { useAdminShell } from '@happyvertical/smrt-svelte/workspace';
 	import brandMark from '$lib/assets/smrt-mark.svg';
 	import DocsSearch from '$lib/components/DocsSearch.svelte';
-	import { isPrimaryNavigationActive, primaryNavigation } from '$lib/data/navigation';
+	import {
+		isDocsPathname,
+		isPrimaryNavigationActive,
+		primaryNavigation
+	} from '$lib/data/navigation';
 
 	let { pathname }: { pathname: string } = $props();
 	let menuOpen = $state(false);
 	const shell = useAdminShell();
 	const theme = getThemeContext();
 	const panelOpen = $derived(shell.panels.top === 'expanded');
+	// The section-map toggle exists only inside Docs, where the panel does.
+	const inDocs = $derived(isDocsPathname(pathname));
 	const nextScheme = $derived(theme.state.isDark ? 'light' : 'dark');
 	const schemeActionLabel = $derived(`Switch to ${nextScheme} color scheme`);
 
@@ -38,19 +44,21 @@
 		<span>s-m-r-t</span>
 	</a>
 
-	<button
-		class="panel-toggle"
-		type="button"
-		aria-label={`${panelOpen ? 'Close' : 'Open'} documentation navigation`}
-		aria-expanded={panelOpen}
-		aria-controls="smrt-admin-shell-top-panel"
-		onclick={toggleDocumentationPanel}
-	>
-		<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-			<path d="M4 5.5h16M4 12h16M4 18.5h10"></path>
-		</svg>
-		<span>Docs</span>
-	</button>
+	{#if inDocs}
+		<button
+			class="panel-toggle"
+			type="button"
+			aria-label={`${panelOpen ? 'Close' : 'Open'} documentation navigation`}
+			aria-expanded={panelOpen}
+			aria-controls="smrt-admin-shell-top-panel"
+			onclick={toggleDocumentationPanel}
+		>
+			<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+				<path d="M4 5.5h16M4 12h16M4 18.5h10"></path>
+			</svg>
+			<span>Sections</span>
+		</button>
+	{/if}
 
 	<nav class="desktop-navigation" aria-label="Primary navigation">
 		{#each primaryNavigation as item (item.href)}
@@ -302,7 +310,10 @@
 		color: var(--site-muted);
 		font-size: 0.72rem;
 		font-weight: 650;
+		letter-spacing: 0.08em;
 		text-decoration: none;
+		/* The three doors read BUILD · FEATURES · DOCS (#361). */
+		text-transform: uppercase;
 	}
 
 	.desktop-navigation a:hover,
@@ -336,7 +347,7 @@
 		display: none;
 	}
 
-	@media (max-width: 74rem) {
+	@media (max-width: 42rem) {
 		.desktop-navigation {
 			display: none;
 		}
@@ -355,7 +366,7 @@
 			inset-inline: 0;
 			z-index: 80;
 			display: grid;
-			grid-template-columns: repeat(4, minmax(0, 1fr));
+			grid-template-columns: repeat(3, minmax(0, 1fr));
 			gap: 1px;
 			padding: 0.75rem max(1rem, calc((100vw - 72rem) / 2));
 			border-block-end: 1px solid var(--site-line-strong);
@@ -384,10 +395,6 @@
 
 		.search {
 			min-width: 44px;
-		}
-
-		.mobile-navigation {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
 	}
 

@@ -88,17 +88,17 @@
 				{
 					q: 'What is SAADL, and how is it pronounced?',
 					a: 'SAADL — Software as Agentic Domain Logic: software whose domain logic exposes the same operations to human users (UI, HTTP, CLI) and to agents (callable tools). Pronounced "saddle."',
-					link: { label: 'Read the full SAADL reference', href: '/reference/saadl' }
+					link: { label: 'Read the full SAADL reference', href: '/docs/reference/saadl' }
 				},
 				{
 					q: 'Can an agent do anything a signed-in person cannot?',
 					a: 'No. An agent can do only what three lists all allow: what the signed-in person may do, what its kind of agent may ever do, and what its assigned role permits. The check runs from the moment an agent reads a description to the stored record itself — a description does not by itself grant a session, a tenant, or a permission.',
-					link: { label: 'Security defaults', href: '/reference/security' }
+					link: { label: 'Security defaults', href: '/docs/reference/security' }
 				},
 				{
 					q: "Does asking in chat skip the application's rules?",
 					a: 'No. However a request arrives — a click, a typed command, or a natural-language chat message — it enters through the same declared control or operation, and the same tenant, permission, and field-policy checks apply.',
-					link: { label: 'Human-agent interaction', href: '/interaction' }
+					link: { label: 'Human-agent interaction', href: '/docs/interaction' }
 				},
 				{
 					q: 'Is this site itself built with s-m-r-t?',
@@ -117,7 +117,7 @@
 <SEO
 	title="s-m-r-t FAQ"
 	description="Clear answers about s-m-r-t, SAADL applications, users, tenants, generated interfaces, agent-assisted forms, learning agents, mobile, WebMCP, and live data."
-	url="https://s-m-r-t.dev/reference/faq"
+	url="https://s-m-r-t.dev/docs/reference/faq"
 />
 
 <ReferenceFamilyBar id="faq" />
@@ -153,7 +153,7 @@
 	</div>
 	<footer>
 		<p>Still looking for a concept?</p>
-		<a href="/reference/packages">Search all packages <span>→</span></a>
+		<a href="/docs/reference/packages">Search all packages <span>→</span></a>
 	</footer>
 </article>
 

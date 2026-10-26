@@ -110,10 +110,10 @@ export const buildingBlocks: BuildingBlock[] = [
 		],
 		packages: ['smrt-core', 'smrt-app-mcp', 'smrt-web', 'smrt-mcp-apps', 'smrt-mcp-openai'],
 		guides: [
-			{ label: 'Agents', href: '/agents' },
-			{ label: 'Generated interfaces', href: '/foundations/interfaces' },
-			{ label: 'Expose your application over MCP', href: '/guides/expose-your-app-over-mcp' },
-			{ label: 'Runtime MCP surfaces', href: '/tooling/app-mcp' }
+			{ label: 'Agents', href: '/docs/agents' },
+			{ label: 'Generated interfaces', href: '/docs/foundations/interfaces' },
+			{ label: 'Expose your application over MCP', href: '/docs/guides/expose-your-app-over-mcp' },
+			{ label: 'Runtime MCP surfaces', href: '/docs/tooling/app-mcp' }
 		],
 		evidence: ['agent-doors', 'webmcp']
 	},
@@ -143,9 +143,12 @@ export const buildingBlocks: BuildingBlock[] = [
 		],
 		packages: ['smrt-scanner', 'smrt-dev-mcp'],
 		guides: [
-			{ label: 'Agent-legible applications', href: '/capabilities/agent-legible-applications' },
-			{ label: 'Development MCP', href: '/tooling/dev-mcp' },
-			{ label: 'Knowledge tooling', href: '/tooling/knowledge' }
+			{
+				label: 'Agent-legible applications',
+				href: '/docs/capabilities/agent-legible-applications'
+			},
+			{ label: 'Development MCP', href: '/docs/tooling/dev-mcp' },
+			{ label: 'Knowledge tooling', href: '/docs/tooling/knowledge' }
 		],
 		evidence: ['runtime-awareness']
 	},
@@ -175,9 +178,9 @@ export const buildingBlocks: BuildingBlock[] = [
 		],
 		packages: ['smrt-agents', 'smrt-personas', 'smrt-playbooks', 'smrt-prompts', 'smrt-chat'],
 		guides: [
-			{ label: 'Agents', href: '/agents' },
-			{ label: 'smrt-agents', href: '/reference/packages/smrt-agents' },
-			{ label: 'smrt-chat', href: '/reference/packages/smrt-chat' }
+			{ label: 'Agents', href: '/docs/agents' },
+			{ label: 'smrt-agents', href: '/docs/reference/packages/smrt-agents' },
+			{ label: 'smrt-chat', href: '/docs/reference/packages/smrt-chat' }
 		],
 		evidence: ['agents-included', 'chat-agents', 'playbook-steps']
 	},
@@ -206,10 +209,10 @@ export const buildingBlocks: BuildingBlock[] = [
 		],
 		packages: ['smrt-ui', 'smrt-svelte', 'smrt-web'],
 		guides: [
-			{ label: 'Agent-assisted forms', href: '/capabilities/agent-assisted-forms' },
-			{ label: 'Policy-aware forms', href: '/capabilities/policy-aware-forms' },
-			{ label: 'WebMCP', href: '/capabilities/webmcp' },
-			{ label: 'Control interaction', href: '/reference/control-interaction' }
+			{ label: 'Agent-assisted forms', href: '/docs/capabilities/agent-assisted-forms' },
+			{ label: 'Policy-aware forms', href: '/docs/capabilities/policy-aware-forms' },
+			{ label: 'WebMCP', href: '/docs/capabilities/webmcp' },
+			{ label: 'Control interaction', href: '/docs/reference/control-interaction' }
 		],
 		evidence: ['control-lifecycle', 'propose-confirm']
 	},
@@ -239,8 +242,8 @@ export const buildingBlocks: BuildingBlock[] = [
 		],
 		packages: ['smrt-agents', 'smrt-personas'],
 		guides: [
-			{ label: 'Learning agents', href: '/capabilities/learning-agents' },
-			{ label: 'Agents', href: '/agents' }
+			{ label: 'Learning agents', href: '/docs/capabilities/learning-agents' },
+			{ label: 'Agents', href: '/docs/agents' }
 		],
 		evidence: ['learning-boundaries', 'propose-confirm']
 	},
@@ -270,10 +273,10 @@ export const buildingBlocks: BuildingBlock[] = [
 		],
 		packages: ['smrt-approvals', 'smrt-fields', 'smrt-features'],
 		guides: [
-			{ label: 'Authorization model', href: '/reference/authorization' },
-			{ label: 'Field policies', href: '/capabilities/field-policies' },
-			{ label: 'Operate field policies', href: '/capabilities/field-policy-operations' },
-			{ label: 'Agents', href: '/agents' }
+			{ label: 'Authorization model', href: '/docs/reference/authorization' },
+			{ label: 'Field policies', href: '/docs/capabilities/field-policies' },
+			{ label: 'Operate field policies', href: '/docs/capabilities/field-policy-operations' },
+			{ label: 'Agents', href: '/docs/agents' }
 		],
 		evidence: ['approvals-human-decide', 'propose-confirm']
 	},
@@ -302,7 +305,7 @@ export const buildingBlocks: BuildingBlock[] = [
 			'Whether to adopt it yet: the package is preview-only and automation stays disabled.'
 		],
 		packages: ['smrt-ingestion'],
-		guides: [{ label: 'smrt-ingestion', href: '/reference/packages/smrt-ingestion' }],
+		guides: [{ label: 'smrt-ingestion', href: '/docs/reference/packages/smrt-ingestion' }],
 		evidence: ['ingestion-preview']
 	},
 	{
@@ -331,8 +334,8 @@ export const buildingBlocks: BuildingBlock[] = [
 		],
 		packages: ['smrt-jobs', 'smrt-webhooks'],
 		guides: [
-			{ label: 'smrt-jobs', href: '/reference/packages/smrt-jobs' },
-			{ label: 'smrt-webhooks', href: '/reference/packages/smrt-webhooks' }
+			{ label: 'smrt-jobs', href: '/docs/reference/packages/smrt-jobs' },
+			{ label: 'smrt-webhooks', href: '/docs/reference/packages/smrt-webhooks' }
 		],
 		evidence: ['jobs-at-least-once', 'webhooks-at-least-once']
 	},
@@ -361,9 +364,9 @@ export const buildingBlocks: BuildingBlock[] = [
 		],
 		packages: ['smrt-facts'],
 		guides: [
-			{ label: 'smrt-facts', href: '/reference/packages/smrt-facts' },
-			{ label: 'Add semantic search', href: '/guides/semantic-search' },
-			{ label: 'AI and retrieval', href: '/reference/ai-and-retrieval' }
+			{ label: 'smrt-facts', href: '/docs/reference/packages/smrt-facts' },
+			{ label: 'Add semantic search', href: '/docs/guides/semantic-search' },
+			{ label: 'AI and retrieval', href: '/docs/reference/ai-and-retrieval' }
 		]
 	},
 
@@ -394,10 +397,10 @@ export const buildingBlocks: BuildingBlock[] = [
 		],
 		packages: ['smrt-core', 'smrt-fields', 'smrt-types', 'smrt-scanner'],
 		guides: [
-			{ label: 'Objects and collections', href: '/foundations/objects-and-collections' },
-			{ label: 'Collections', href: '/capabilities/collections' },
-			{ label: 'Decorators', href: '/reference/decorators' },
-			{ label: 'Relationships', href: '/reference/relationships' }
+			{ label: 'Objects and collections', href: '/docs/foundations/objects-and-collections' },
+			{ label: 'Collections', href: '/docs/capabilities/collections' },
+			{ label: 'Decorators', href: '/docs/reference/decorators' },
+			{ label: 'Relationships', href: '/docs/reference/relationships' }
 		],
 		evidence: ['article-projection']
 	},
@@ -434,11 +437,14 @@ export const buildingBlocks: BuildingBlock[] = [
 			'smrt-sites'
 		],
 		guides: [
-			{ label: 'Tenants', href: '/foundations/tenants' },
-			{ label: 'Users and profiles', href: '/foundations/users-and-profiles' },
-			{ label: 'Memberships and permissions', href: '/foundations/memberships-and-permissions' },
-			{ label: 'Authorization model', href: '/reference/authorization' },
-			{ label: 'Run a multi-tenant lifecycle', href: '/guides/multi-tenant-lifecycle' }
+			{ label: 'Tenants', href: '/docs/foundations/tenants' },
+			{ label: 'Users and profiles', href: '/docs/foundations/users-and-profiles' },
+			{
+				label: 'Memberships and permissions',
+				href: '/docs/foundations/memberships-and-permissions'
+			},
+			{ label: 'Authorization model', href: '/docs/reference/authorization' },
+			{ label: 'Run a multi-tenant lifecycle', href: '/docs/guides/multi-tenant-lifecycle' }
 		],
 		evidence: ['who-can-see-what', 'profile-sti']
 	},
@@ -468,8 +474,8 @@ export const buildingBlocks: BuildingBlock[] = [
 		],
 		packages: ['smrt-web', 'smrt-svelte', 'smrt-core'],
 		guides: [
-			{ label: 'Live data', href: '/capabilities/live-data' },
-			{ label: 'Pages and data', href: '/foundations/pages-and-data' }
+			{ label: 'Live data', href: '/docs/capabilities/live-data' },
+			{ label: 'Pages and data', href: '/docs/foundations/pages-and-data' }
 		]
 	},
 	{
@@ -498,8 +504,8 @@ export const buildingBlocks: BuildingBlock[] = [
 		],
 		packages: ['smrt-reports', 'smrt-ui'],
 		guides: [
-			{ label: 'Reports', href: '/capabilities/reports' },
-			{ label: 'smrt-reports', href: '/reference/packages/smrt-reports' }
+			{ label: 'Reports', href: '/docs/capabilities/reports' },
+			{ label: 'smrt-reports', href: '/docs/reference/packages/smrt-reports' }
 		],
 		evidence: ['runtime-reports']
 	},
@@ -540,8 +546,8 @@ export const buildingBlocks: BuildingBlock[] = [
 			'smrt-comments'
 		],
 		guides: [
-			{ label: 'smrt-content', href: '/reference/packages/smrt-content' },
-			{ label: 'smrt-assets', href: '/reference/packages/smrt-assets' },
+			{ label: 'smrt-content', href: '/docs/reference/packages/smrt-content' },
+			{ label: 'smrt-assets', href: '/docs/reference/packages/smrt-assets' },
 			{ label: 'Working Playground', href: '/playground' }
 		]
 	},
@@ -571,8 +577,8 @@ export const buildingBlocks: BuildingBlock[] = [
 		],
 		packages: ['smrt-messages', 'smrt-social'],
 		guides: [
-			{ label: 'smrt-messages', href: '/reference/packages/smrt-messages' },
-			{ label: 'smrt-social', href: '/reference/packages/smrt-social' }
+			{ label: 'smrt-messages', href: '/docs/reference/packages/smrt-messages' },
+			{ label: 'smrt-social', href: '/docs/reference/packages/smrt-social' }
 		]
 	},
 	{
@@ -607,8 +613,8 @@ export const buildingBlocks: BuildingBlock[] = [
 			'smrt-sales'
 		],
 		guides: [
-			{ label: 'smrt-commerce', href: '/reference/packages/smrt-commerce' },
-			{ label: 'smrt-ledgers', href: '/reference/packages/smrt-ledgers' },
+			{ label: 'smrt-commerce', href: '/docs/reference/packages/smrt-commerce' },
+			{ label: 'smrt-ledgers', href: '/docs/reference/packages/smrt-ledgers' },
 			{ label: 'Working Playground', href: '/playground' }
 		]
 	},
@@ -646,8 +652,8 @@ export const buildingBlocks: BuildingBlock[] = [
 			'smrt-human-resources'
 		],
 		guides: [
-			{ label: 'smrt-inventory', href: '/reference/packages/smrt-inventory' },
-			{ label: 'smrt-support', href: '/reference/packages/smrt-support' },
+			{ label: 'smrt-inventory', href: '/docs/reference/packages/smrt-inventory' },
+			{ label: 'smrt-support', href: '/docs/reference/packages/smrt-support' },
 			{ label: 'Working Playground', href: '/playground' }
 		]
 	},
@@ -683,8 +689,8 @@ export const buildingBlocks: BuildingBlock[] = [
 			'smrt-properties'
 		],
 		guides: [
-			{ label: 'smrt-analytics', href: '/reference/packages/smrt-analytics' },
-			{ label: 'smrt-marketing', href: '/reference/packages/smrt-marketing' },
+			{ label: 'smrt-analytics', href: '/docs/reference/packages/smrt-analytics' },
+			{ label: 'smrt-marketing', href: '/docs/reference/packages/smrt-marketing' },
 			{ label: 'Working Playground', href: '/playground' }
 		]
 	},
@@ -713,7 +719,7 @@ export const buildingBlocks: BuildingBlock[] = [
 		],
 		packages: ['smrt-events'],
 		guides: [
-			{ label: 'smrt-events', href: '/reference/packages/smrt-events' },
+			{ label: 'smrt-events', href: '/docs/reference/packages/smrt-events' },
 			{ label: 'Working Playground', href: '/playground' }
 		]
 	},
@@ -741,7 +747,7 @@ export const buildingBlocks: BuildingBlock[] = [
 			'Your place types beyond the shipped country, city, building, zone, room and region.'
 		],
 		packages: ['smrt-places'],
-		guides: [{ label: 'smrt-places', href: '/reference/packages/smrt-places' }]
+		guides: [{ label: 'smrt-places', href: '/docs/reference/packages/smrt-places' }]
 	},
 	{
 		id: 'tags',
@@ -767,7 +773,7 @@ export const buildingBlocks: BuildingBlock[] = [
 			'Which languages get aliases, and who writes them.'
 		],
 		packages: ['smrt-tags'],
-		guides: [{ label: 'smrt-tags', href: '/reference/packages/smrt-tags' }]
+		guides: [{ label: 'smrt-tags', href: '/docs/reference/packages/smrt-tags' }]
 	},
 
 	// Branch: Screens
@@ -797,10 +803,10 @@ export const buildingBlocks: BuildingBlock[] = [
 		],
 		packages: ['smrt-ui', 'smrt-svelte', 'smrt-playground', 'smrt-languages'],
 		guides: [
-			{ label: 'Application shell', href: '/capabilities/application-shell' },
-			{ label: 'UI overview', href: '/ui' },
+			{ label: 'Application shell', href: '/docs/capabilities/application-shell' },
+			{ label: 'UI overview', href: '/docs/ui' },
 			{ label: 'Working Playground', href: '/playground' },
-			{ label: 'Component reference', href: '/reference/components' }
+			{ label: 'Component reference', href: '/docs/reference/components' }
 		],
 		evidence: ['self-hosting']
 	},
@@ -827,7 +833,7 @@ export const buildingBlocks: BuildingBlock[] = [
 			'Whether to adopt now: the mobile packages are source distributions, not published packages.'
 		],
 		packages: ['smrt-mobile', 'smrt-mobile-contract', 'smrt-android', 'smrt-ios'],
-		guides: [{ label: 'Mobile', href: '/capabilities/mobile' }],
+		guides: [{ label: 'Mobile', href: '/docs/capabilities/mobile' }],
 		evidence: ['mobile-kmp']
 	}
 ];

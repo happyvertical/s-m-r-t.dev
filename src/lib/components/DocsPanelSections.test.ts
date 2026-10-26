@@ -42,7 +42,7 @@ async function renderExpanded(props: { pathname?: string; hash?: string }) {
 
 describe('docs panel section map', () => {
 	it('renders one band per documentation section, in canonical order', async () => {
-		await renderExpanded({ pathname: '/framework' });
+		await renderExpanded({ pathname: '/docs/framework' });
 		const nav = screen.getByRole('navigation', { name: 'Documentation section map' });
 		const headingLinks = within(nav)
 			.getAllByRole('heading', { level: 3 })
@@ -52,7 +52,7 @@ describe('docs panel section map', () => {
 	});
 
 	it('marks the current section as "you are here" and links its landing page', async () => {
-		await renderExpanded({ pathname: '/tooling/dev-mcp' });
+		await renderExpanded({ pathname: '/docs/tooling/dev-mcp' });
 		const nav = screen.getByRole('navigation', { name: 'Documentation section map' });
 		const bands = within(nav).getAllByRole('heading', { level: 3 });
 		const toolingHeading = bands.find((heading) => heading.textContent?.includes('Tooling'));
@@ -67,7 +67,7 @@ describe('docs panel section map', () => {
 	});
 
 	it('marks the current page link with aria-current', async () => {
-		await renderExpanded({ pathname: '/reference' });
+		await renderExpanded({ pathname: '/docs/reference' });
 		expect(screen.getByRole('link', { name: 'Reference' }).getAttribute('aria-current')).toBe(
 			'page'
 		);
@@ -80,11 +80,11 @@ describe('docs panel section map', () => {
 	 * (more when Reference is the current section, fewer otherwise), so a hub
 	 * sitting behind all 17 reference detail entries would never appear
 	 * outside its own page — this asserts it from both the current-section
-	 * case (`/reference`, generous limit) and a non-Reference page
-	 * (`/framework`, tight limit), since the tighter limit is the one a
+	 * case (`/docs/reference`, generous limit) and a non-Reference page
+	 * (`/docs/framework`, tight limit), since the tighter limit is the one a
 	 * hand-authored ordering fix is most likely to leave broken.
 	 */
-	it.each([['/reference'], ['/framework']])(
+	it.each([['/docs/reference'], ['/docs/framework']])(
 		'lists all four Reference hubs in the Reference band from %s',
 		async (pathname) => {
 			await renderExpanded({ pathname });
@@ -101,17 +101,17 @@ describe('docs panel section map', () => {
 
 			expect(hrefs).toEqual(
 				expect.arrayContaining([
-					'/reference/api',
-					'/reference/packages',
-					'/reference/components',
-					'/reference/faq'
+					'/docs/reference/api',
+					'/docs/reference/packages',
+					'/docs/reference/components',
+					'/docs/reference/faq'
 				])
 			);
 		}
 	);
 
 	it('closes the panel when a link is clicked', async () => {
-		const shell = await renderExpanded({ pathname: '/framework' });
+		const shell = await renderExpanded({ pathname: '/docs/framework' });
 		expect(shell.panels.top).toBe('expanded');
 
 		const link = screen.getByRole('link', { name: 'UI' });
@@ -126,7 +126,7 @@ describe('docs panel section map', () => {
 	/**
 	 * The band marked "current" comes from `documentationSectionForPathname`,
 	 * which resolves a pathname to a section by *route family* (e.g. every
-	 * `/starters/*` route is part of the Guides route family). The band an
+	 * `/docs/getting-started/*` route is part of the Guides route family). The band an
 	 * item actually renders in comes from `docs-panel.ts`'s join against
 	 * `docsNavigation`, which assigns each page to exactly one *canonical
 	 * nav group* (e.g. the starter links are canonically Home group pages,

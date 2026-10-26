@@ -453,9 +453,9 @@
 	<p bind:this={statusElement} class="demo-status" role="status" tabindex="-1">{status}</p>
 
 	<nav class="demo-links" aria-label="Agent-aware form demonstration resources">
-		<a href="/interaction#commands-and-lifecycle">Interaction lifecycle</a>
-		<a href="/capabilities/agent-assisted-forms">Implementation guide</a>
-		<a href="/reference/control-interaction">Reference contract</a>
+		<a href="/docs/interaction#commands-and-lifecycle">Interaction lifecycle</a>
+		<a href="/docs/capabilities/agent-assisted-forms">Implementation guide</a>
+		<a href="/docs/reference/control-interaction">Reference contract</a>
 	</nav>
 
 	<noscript>

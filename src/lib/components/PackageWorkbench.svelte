@@ -20,7 +20,7 @@
 		backHref?: string;
 	}
 
-	let { pkg, backHref = '/reference/packages' }: Props = $props();
+	let { pkg, backHref = '/docs/reference/packages' }: Props = $props();
 	let activeTab = $state<Tab>('overview');
 	const tabs: { id: Tab; label: string }[] = [
 		{ id: 'overview', label: 'Overview' },
@@ -42,7 +42,7 @@
 	const relatedGuides = $derived(
 		taskGuides.filter((guide) => guide.packages.includes(pkg.slug)).slice(0, 4)
 	);
-	const packageHref = $derived(`/reference/packages/${pkg.slug}`);
+	const packageHref = $derived(`/docs/reference/packages/${pkg.slug}`);
 	const module = $derived(getUiModule(pkg.slug));
 	// Keyed by package as well as name: six component names are published by two
 	// packages each (Form, Avatar, ContentList, FileUpload, MessageList,
@@ -50,7 +50,7 @@
 	const uiComponentHrefByName = new Map(
 		uiComponents.map((component) => [
 			`${component.importPath.split('/').slice(0, 2).join('/')}:${component.name}`,
-			`/reference/components/${component.slug}`
+			`/docs/reference/components/${component.slug}`
 		])
 	);
 	const sourceInstallCode =
@@ -548,13 +548,13 @@
 				<span>See the application outcomes that packages provide.</span>
 			</a>
 			{#each relatedGuides as guide (guide.slug)}
-				<a href={`/guides/${guide.slug}`}>
+				<a href={`/docs/guides/${guide.slug}`}>
 					<strong>{guide.navTitle ?? guide.title}</strong>
 					<span>{guide.plainEnglish}</span>
 				</a>
 			{/each}
 			{#if relatedGuides.length === 0}
-				<a href="/guides">
+				<a href="/docs/guides">
 					<strong>All guides</strong>
 					<span>Find a task procedure that uses this part of the framework.</span>
 				</a>

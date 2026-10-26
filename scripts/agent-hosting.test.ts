@@ -8,7 +8,12 @@ describe('agent static hosting', () => {
 	it('preserves text and Markdown paths through the deployed CloudFront rewrite', () => {
 		const terraform = readFileSync('infra/modules/havesmrt/main.tf', 'utf8');
 		const source = terraform.match(/code\s*=\s*<<-EOF\n([\s\S]*?)\n\s*EOF/)![1];
-		for (const path of ['/llms.txt', '/llms-full.txt', '/index.md', '/reference/security.md']) {
+		for (const path of [
+			'/llms.txt',
+			'/llms-full.txt',
+			'/index.md',
+			'/docs/reference/security.md'
+		]) {
 			expect(
 				runInNewContext(`${source}\nhandler({request: {uri: ${JSON.stringify(path)}}}).uri`)
 			).toBe(path);
@@ -33,17 +38,21 @@ describe('agent static hosting', () => {
 	});
 	it('rejects missing, malformed and unsafe metadata in the real-output checker', () => {
 		const graph = serializeJsonLd(
-			structuredData('Security', 'Rules', 'https://s-m-r-t.dev/reference/security')
+			structuredData('Security', 'Rules', 'https://s-m-r-t.dev/docs/reference/security')
 		);
 		const html = `<h1>Security</h1><link rel="alternate" type="text/plain" href="/llms.txt"><script type="application/ld+json">${graph}</script>`;
-		expect(() => checkMetadata(html, '/reference/security')).not.toThrow();
+		expect(() => checkMetadata(html, '/docs/reference/security')).not.toThrow();
 		expect(() =>
-			checkMetadata(html.replace('application/ld+json', 'text/plain'), '/reference/security')
+			checkMetadata(html.replace('application/ld+json', 'text/plain'), '/docs/reference/security')
 		).toThrow();
-		expect(() => checkMetadata(html.replace(graph, '{oops}'), '/reference/security')).toThrow();
-		expect(() => checkMetadata(html.replace('Rules', '<unsafe>'), '/reference/security')).toThrow();
 		expect(() =>
-			checkMetadata(html.replace('rel="alternate"', 'rel="other"'), '/reference/security')
+			checkMetadata(html.replace(graph, '{oops}'), '/docs/reference/security')
+		).toThrow();
+		expect(() =>
+			checkMetadata(html.replace('Rules', '<unsafe>'), '/docs/reference/security')
+		).toThrow();
+		expect(() =>
+			checkMetadata(html.replace('rel="alternate"', 'rel="other"'), '/docs/reference/security')
 		).toThrow();
 	});
 });

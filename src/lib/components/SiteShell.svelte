@@ -7,6 +7,7 @@
 	import DocsPanelSections from '$lib/components/DocsPanelSections.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import { isDocsPathname } from '$lib/data/navigation';
 	import { createShellScrollMemory } from '$lib/scroll';
 	import { createDocsShellState } from '$lib/shell';
 
@@ -17,6 +18,12 @@
 	}: { pathname: string; hash?: string; children: Snippet } = $props();
 	const shell = createDocsShellState();
 	const scrollMemory = createShellScrollMemory();
+	// The docs panel (the section map) lives only inside Docs (#365). Leaving
+	// Docs with it open closes it, so it never hangs over a feature page.
+	const inDocs = $derived(isDocsPathname(pathname));
+	$effect(() => {
+		if (!inDocs && shell.panels.top === 'expanded') shell.collapsePanel('top');
+	});
 
 	function shellMain() {
 		return document.querySelector<HTMLElement>('.smrt-admin-shell__main');
@@ -71,14 +78,14 @@
 	});
 </script>
 
+{#snippet docsPanel()}
+	<DocsPanelSections {pathname} {hash} />
+{/snippet}
+
 <AppTheme>
-	<AdminShell state={shell} edgeToggles={{ top: true }}>
+	<AdminShell state={shell} edgeToggles={{ top: inDocs }} appPanel={inDocs ? docsPanel : undefined}>
 		{#snippet appBar()}
 			<Header {pathname} />
-		{/snippet}
-
-		{#snippet appPanel()}
-			<DocsPanelSections {pathname} {hash} />
 		{/snippet}
 
 		<div class="site-content">

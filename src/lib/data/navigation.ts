@@ -1,6 +1,7 @@
 import { agentsTopics } from '$lib/data/agents';
 import { capabilityGuides, foundationGuides } from '$lib/data/guides';
 import { blockBranches, buildingBlocks } from '$lib/data/blocks';
+import { featurePath, featureSectionPath, featureSections, features } from '$lib/data/features';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
 import { referenceFamilies } from '$lib/data/reference-families';
@@ -20,15 +21,7 @@ export interface NavigationGroup {
 }
 
 export type DocumentationSectionId =
-	| 'why'
-	| 'framework'
-	| 'agents'
-	| 'interaction'
-	| 'ui'
-	| 'blocks'
-	| 'tooling'
-	| 'guides'
-	| 'reference';
+	'docs' | 'framework' | 'agents' | 'interaction' | 'ui' | 'tooling' | 'guides' | 'reference';
 
 export interface DocumentationSection {
 	id: DocumentationSectionId;
@@ -39,37 +32,36 @@ export interface DocumentationSection {
 	groups: NavigationGroup[];
 }
 
-export interface PrimaryNavigationItem extends NavigationItem {
-	section?: DocumentationSectionId;
-}
+/** One of the three doors (#361): BUILD · FEATURES · DOCS. */
+export type PrimaryNavigationItem = NavigationItem;
 
 const foundationItems: NavigationItem[] = foundationGuides.map((guide) => ({
 	label: guide.navTitle ?? guide.title,
-	href: `/foundations/${guide.slug}`,
+	href: `/docs/foundations/${guide.slug}`,
 	description: guide.plainEnglish,
 	keywords: guide.packages
 }));
 const capabilityItems: NavigationItem[] = capabilityGuides.map((guide) => ({
 	label: guide.navTitle ?? guide.title,
-	href: `/capabilities/${guide.slug}`,
+	href: `/docs/capabilities/${guide.slug}`,
 	description: guide.plainEnglish,
 	keywords: guide.packages
 }));
 const taskItems: NavigationItem[] = taskGuides.map((guide) => ({
 	label: guide.navTitle ?? guide.title,
-	href: `/guides/${guide.slug}`,
+	href: `/docs/guides/${guide.slug}`,
 	description: guide.plainEnglish,
 	keywords: guide.packages
 }));
 const toolingItems: NavigationItem[] = toolingGuides.map((guide) => ({
 	label: guide.navTitle ?? guide.title,
-	href: `/tooling/${guide.slug}`,
+	href: `/docs/tooling/${guide.slug}`,
 	description: guide.plainEnglish,
 	keywords: guide.packages
 }));
 const referenceItems: NavigationItem[] = referenceGuides.map((guide) => ({
 	label: guide.navTitle ?? guide.title,
-	href: `/reference/${guide.slug}`,
+	href: `/docs/reference/${guide.slug}`,
 	description: guide.plainEnglish,
 	keywords: guide.packages
 }));
@@ -94,14 +86,15 @@ const referenceHubItems: NavigationItem[] = referenceFamilies
  */
 const referenceEvidenceItem: NavigationItem = {
 	label: 'Evidence',
-	href: '/reference/evidence',
+	href: '/docs/reference/evidence',
 	description: 'Each site claim beside the released source it was verified in.',
 	keywords: ['evidence', 'claims', 'sources', 'audit']
 };
 /**
- * One entry per building block (#352). Block pages are generated from
- * `blocks.ts`, not `Guide[]`, so they are registered here by hand; the
- * branches become the groups of the Blocks section.
+ * One entry per #352 building block. The `/blocks` pages stay until the
+ * redesign retires them (#361 slice E); they are showcases, not
+ * documentation, so since #365 they are registered for the palette only and
+ * never appear in the docs panel.
  */
 const blockItemsByBranch: NavigationGroup[] = blockBranches.map((branch) => ({
 	label: branch.title,
@@ -116,6 +109,35 @@ const blockItemsByBranch: NavigationGroup[] = blockBranches.map((branch) => ({
 }));
 const blockItems: NavigationItem[] = blockItemsByBranch.flatMap((group) => group.items);
 
+/**
+ * The FEATURES door (#361): one group per section, its index page first and
+ * then one entry per feature showcase. Feature pages are generated from
+ * `features.ts`, not `Guide[]`, so they are registered here by hand. Like the
+ * blocks they are showcases, not documentation: palette only, no docs panel.
+ */
+export const featureNavigation: NavigationGroup[] = featureSections.map((section) => ({
+	label: section.word,
+	items: [
+		{
+			label: section.word,
+			href: featureSectionPath(section),
+			description: section.hint,
+			keywords: section.packages
+		},
+		...features
+			.filter((item) => item.section === section.id)
+			.map((item) => ({
+				label: item.word,
+				href: featurePath(item),
+				description: item.hint,
+				keywords: item.packages
+			}))
+	]
+}));
+
+/** Palette-only registration of the #352 block pages, until slice E retires them. */
+export const blockNavigation: NavigationGroup[] = blockItemsByBranch;
+
 const interactionCapabilitySlugs = new Set([
 	'agent-legible-applications',
 	'agent-assisted-forms',
@@ -129,9 +151,9 @@ const uiCapabilitySlugs = new Set([
 ]);
 /**
  * The WebMCP deep-dive lives under Agents, not Interaction: it is the
- * protocol-level mechanics behind the tool surfaces `/agents` maps, not a
+ * protocol-level mechanics behind the tool surfaces `/docs/agents` maps, not a
  * moment-to-moment interaction concept. The URL is unchanged
- * (`/capabilities/webmcp`) — only which primary section claims it moves.
+ * (`/docs/capabilities/webmcp`) — only which primary section claims it moves.
  */
 const agentsCapabilitySlugs = new Set(['webmcp']);
 
@@ -187,13 +209,21 @@ const whyItem: NavigationItem = {
 	]
 };
 
+/** The `/docs` landing (#365), the entry into every technical section. */
+const docsItem: NavigationItem = {
+	label: 'Docs overview',
+	href: '/docs',
+	description: 'Start as a developer or point an agent at the machine-readable entry points.',
+	keywords: ['docs', 'documentation', 'llms.txt', 'agent docs', 'developers', 'agents']
+};
+
 const sectionOverviewItems = new Map<DocumentationSectionId, NavigationItem>([
-	['why', whyItem],
+	['docs', docsItem],
 	[
 		'framework',
 		{
 			label: 'Framework overview',
-			href: '/framework',
+			href: '/docs/framework',
 			description: 'See how the application model connects framework mechanisms and interfaces.'
 		}
 	],
@@ -201,7 +231,7 @@ const sectionOverviewItems = new Map<DocumentationSectionId, NavigationItem>([
 		'agents',
 		{
 			label: 'Agents overview',
-			href: '/agents',
+			href: '/docs/agents',
 			description: 'See where agents connect, what they may do, and whose authority they carry.'
 		}
 	],
@@ -209,7 +239,7 @@ const sectionOverviewItems = new Map<DocumentationSectionId, NavigationItem>([
 		'interaction',
 		{
 			label: 'Interaction overview',
-			href: '/interaction',
+			href: '/docs/interaction',
 			description: 'See how persons and application agents communicate and share control.'
 		}
 	],
@@ -217,23 +247,15 @@ const sectionOverviewItems = new Map<DocumentationSectionId, NavigationItem>([
 		'ui',
 		{
 			label: 'UI overview',
-			href: '/ui',
+			href: '/docs/ui',
 			description: 'See the components that make application meaning, state, and change visible.'
-		}
-	],
-	[
-		'blocks',
-		{
-			label: 'Blocks overview',
-			href: '/blocks',
-			description: 'Find the capabilities you will not build from scratch.'
 		}
 	],
 	[
 		'tooling',
 		{
 			label: 'Tooling overview',
-			href: '/tooling',
+			href: '/docs/tooling',
 			description: 'Choose tools for developer and coding-agent workflows.'
 		}
 	],
@@ -241,7 +263,7 @@ const sectionOverviewItems = new Map<DocumentationSectionId, NavigationItem>([
 		'guides',
 		{
 			label: 'All guides',
-			href: '/guides',
+			href: '/docs/guides',
 			description: 'Use task procedures for one complete result at a time.'
 		}
 	],
@@ -249,7 +271,7 @@ const sectionOverviewItems = new Map<DocumentationSectionId, NavigationItem>([
 		'reference',
 		{
 			label: 'Reference overview',
-			href: '/reference',
+			href: '/docs/reference',
 			description: 'Find exhaustive package, interface, configuration, and contract details.'
 		}
 	]
@@ -261,6 +283,14 @@ const sectionOverviewItem = (id: DocumentationSectionId): NavigationItem => {
 	return item;
 };
 
+/** Getting Started moved from the old starters path to `/docs/getting-started` in #365. */
+const gettingStartedItems: NavigationItem[] = [
+	{ label: 'Getting Started', href: '/docs/getting-started' },
+	{ label: 'build-a-boilerplate', href: '/build-a-boilerplate' },
+	{ label: 'Start from a cookbook', href: '/docs/getting-started#cookbook' },
+	{ label: 'smrt-start', href: '/docs/getting-started/smrt-start' }
+];
+
 const relatedGuides = (...hrefs: string[]): NavigationGroup => ({
 	label: 'Related guides',
 	items: [...hrefs.map((href) => itemByHref(taskItems, href)), sectionOverviewItem('guides')]
@@ -268,37 +298,31 @@ const relatedGuides = (...hrefs: string[]): NavigationGroup => ({
 
 export const documentationSections: DocumentationSection[] = [
 	{
-		id: 'why',
-		label: 'Home',
-		title: 'Home',
-		href: '/',
-		description:
-			'Start with the reason for one shared application model and choose a deeper section.',
+		id: 'docs',
+		label: 'Docs',
+		title: 'Docs',
+		href: '/docs',
+		description: 'Start as a developer or point an agent at the machine-readable entry points.',
 		groups: [
+			{ label: 'For developers', items: gettingStartedItems },
 			{
-				label: 'On this overview',
+				label: 'For agents',
 				items: [
-					{ label: 'What you get', href: '/#what-you-get' },
-					{ label: 'Describe the record once', href: '/#one-description' },
-					{ label: 'Building blocks map', href: '/#blocks' },
-					{ label: 'Start here', href: '/#start-here' }
+					itemByHref(toolingItems, '/docs/tooling/app-mcp'),
+					itemByHref(toolingItems, '/docs/tooling/dev-mcp'),
+					referenceEvidenceItem
 				]
 			},
 			{
-				label: 'Start building',
-				items: [
-					{ label: 'Getting Started', href: '/starters' },
-					{ label: 'build-a-boilerplate', href: '/build-a-boilerplate' },
-					{ label: 'Start from a cookbook', href: '/starters#cookbook' },
-					{ label: 'smrt-start', href: '/starters/smrt-start' }
-				]
-			},
-			{
-				label: 'Explore',
+				label: 'Sections',
 				items: [
 					sectionOverviewItem('framework'),
+					sectionOverviewItem('agents'),
 					sectionOverviewItem('interaction'),
-					sectionOverviewItem('guides')
+					sectionOverviewItem('ui'),
+					sectionOverviewItem('tooling'),
+					sectionOverviewItem('guides'),
+					sectionOverviewItem('reference')
 				]
 			}
 		]
@@ -307,27 +331,27 @@ export const documentationSections: DocumentationSection[] = [
 		id: 'framework',
 		label: 'Framework',
 		title: 'Framework',
-		href: '/framework',
+		href: '/docs/framework',
 		description:
 			'Learn how models, data, identity, permissions, and generated interfaces fit together.',
 		groups: [
 			{
 				label: 'Application foundations',
-				items: [{ label: 'Foundations overview', href: '/foundations' }, ...foundationItems]
+				items: [{ label: 'Foundations overview', href: '/docs/foundations' }, ...foundationItems]
 			},
 			{
 				label: 'Framework capabilities',
 				items: [
-					{ label: 'Capabilities overview', href: '/capabilities' },
+					{ label: 'Capabilities overview', href: '/docs/capabilities' },
 					...frameworkCapabilityItems
 				]
 			},
-			relatedGuides('/guides/multi-tenant-lifecycle', '/guides/semantic-search'),
+			relatedGuides('/docs/guides/multi-tenant-lifecycle', '/docs/guides/semantic-search'),
 			{
 				label: 'Reference',
 				items: [
-					{ label: 'Generated interfaces', href: '/reference/interfaces' },
-					{ label: 'Authorization model', href: '/reference/authorization' },
+					{ label: 'Generated interfaces', href: '/docs/reference/interfaces' },
+					{ label: 'Authorization model', href: '/docs/reference/authorization' },
 					sectionOverviewItem('reference')
 				]
 			}
@@ -337,26 +361,29 @@ export const documentationSections: DocumentationSection[] = [
 		id: 'agents',
 		label: 'Agents',
 		title: 'Agents',
-		href: '/agents',
+		href: '/docs/agents',
 		description: 'See where agents connect, what they may do, and whose authority they carry.',
 		groups: [
 			{
 				label: 'On this page',
 				items: agentsTopics.map((topic) => ({
 					label: topic.navTitle,
-					href: `/agents#${topic.slug}`
+					href: `/docs/agents#${topic.slug}`
 				}))
 			},
 			{
 				label: 'Deep dives',
-				items: [...agentsCapabilityItems, { label: 'Application MCP', href: '/tooling/app-mcp' }]
+				items: [
+					...agentsCapabilityItems,
+					{ label: 'Application MCP', href: '/docs/tooling/app-mcp' }
+				]
 			},
 			{
 				label: 'Related reference',
 				items: [
-					{ label: 'Authorization model', href: '/reference/authorization' },
-					{ label: 'Security defaults', href: '/reference/security' },
-					{ label: 'Generated interfaces', href: '/reference/interfaces' }
+					{ label: 'Authorization model', href: '/docs/reference/authorization' },
+					{ label: 'Security defaults', href: '/docs/reference/security' },
+					{ label: 'Generated interfaces', href: '/docs/reference/interfaces' }
 				]
 			}
 		]
@@ -365,7 +392,7 @@ export const documentationSections: DocumentationSection[] = [
 		id: 'interaction',
 		label: 'Interaction',
 		title: 'Human-Agent Interaction',
-		href: '/interaction',
+		href: '/docs/interaction',
 		description:
 			'Learn how persons and application agents communicate, propose changes, and share control.',
 		groups: [
@@ -373,8 +400,8 @@ export const documentationSections: DocumentationSection[] = [
 			{
 				label: 'Related material',
 				items: [
-					{ label: 'Security defaults', href: '/reference/security' },
-					{ label: 'Field policy API', href: '/reference/field-policies' },
+					{ label: 'Security defaults', href: '/docs/reference/security' },
+					{ label: 'Field policy API', href: '/docs/reference/field-policies' },
 					sectionOverviewItem('guides')
 				]
 			}
@@ -384,13 +411,16 @@ export const documentationSections: DocumentationSection[] = [
 		id: 'ui',
 		label: 'UI',
 		title: 'UI',
-		href: '/ui',
+		href: '/docs/ui',
 		description: 'Explore the visible components and patterns that implement governed interaction.',
 		groups: [
 			{
 				label: 'Components and shell',
 				items: [
-					{ label: 'Foundation components', href: '/reference/packages/smrt-ui?tab=components' },
+					{
+						label: 'Foundation components',
+						href: '/docs/reference/packages/smrt-ui?tab=components'
+					},
 					...uiCapabilityItems,
 					{ label: 'Working playground', href: '/playground' },
 					{ label: 'build-a-boilerplate', href: '/build-a-boilerplate' }
@@ -399,32 +429,10 @@ export const documentationSections: DocumentationSection[] = [
 			{
 				label: 'Related material',
 				items: [
-					{ label: 'Field policy API', href: '/reference/field-policies' },
-					{ label: 'Package Reference', href: '/reference/packages' },
+					{ label: 'Field policy API', href: '/docs/reference/field-policies' },
+					{ label: 'Package Reference', href: '/docs/reference/packages' },
 					sectionOverviewItem('guides')
 				]
-			}
-		]
-	},
-	{
-		id: 'blocks',
-		label: 'Blocks',
-		title: 'Agentic building blocks',
-		href: '/blocks',
-		description: 'Find the capabilities you will not build from scratch.',
-		groups: [
-			...blockItemsByBranch,
-			{
-				label: 'Browse',
-				items: [
-					{ label: 'Package Reference', href: '/reference/packages' },
-					{ label: 'Working playground', href: '/playground' },
-					{ label: 'build-a-boilerplate', href: '/build-a-boilerplate' }
-				]
-			},
-			{
-				label: 'Related material',
-				items: [sectionOverviewItem('framework'), sectionOverviewItem('guides')]
 			}
 		]
 	},
@@ -432,17 +440,17 @@ export const documentationSections: DocumentationSection[] = [
 		id: 'tooling',
 		label: 'Tooling',
 		title: 'Tooling',
-		href: '/tooling',
+		href: '/docs/tooling',
 		description:
 			'Use development tools, framework knowledge, and MCP surfaces for the correct job.',
 		groups: [
 			{ label: 'Developer and coding-agent tools', items: toolingItems },
-			relatedGuides('/guides/expose-your-app-over-mcp', '/guides/testing-your-app'),
+			relatedGuides('/docs/guides/expose-your-app-over-mcp', '/docs/guides/testing-your-app'),
 			{
 				label: 'Reference',
 				items: [
-					{ label: 'Generated interfaces', href: '/reference/interfaces' },
-					{ label: 'Testing', href: '/reference/testing' },
+					{ label: 'Generated interfaces', href: '/docs/reference/interfaces' },
+					{ label: 'Testing', href: '/docs/reference/testing' },
 					sectionOverviewItem('reference')
 				]
 			}
@@ -452,20 +460,12 @@ export const documentationSections: DocumentationSection[] = [
 		id: 'guides',
 		label: 'Guides',
 		title: 'Guides',
-		href: '/guides',
+		href: '/docs/guides',
 		description:
 			'Follow task procedures and keep concept and reference details in their source sections.',
 		groups: [
 			{ label: 'Task guides', items: taskItems },
-			{
-				label: 'Getting Started',
-				items: [
-					{ label: 'Getting Started', href: '/starters' },
-					{ label: 'build-a-boilerplate', href: '/build-a-boilerplate' },
-					{ label: 'Start from a cookbook', href: '/starters#cookbook' },
-					{ label: 'smrt-start', href: '/starters/smrt-start' }
-				]
-			},
+			{ label: 'Getting Started', items: gettingStartedItems },
 			{
 				label: 'Look up details',
 				items: [sectionOverviewItem('framework'), sectionOverviewItem('reference')]
@@ -476,18 +476,22 @@ export const documentationSections: DocumentationSection[] = [
 		id: 'reference',
 		label: 'Reference',
 		title: 'Reference',
-		href: '/reference',
+		href: '/docs/reference',
 		description: 'Look up exhaustive package, interface, configuration, and contract details.',
 		groups: [
 			{
 				label: 'Reference families',
-				items: [...referenceItems, referenceEvidenceItem, { label: 'FAQ', href: '/reference/faq' }]
+				items: [
+					...referenceItems,
+					referenceEvidenceItem,
+					{ label: 'FAQ', href: '/docs/reference/faq' }
+				]
 			},
 			{
 				label: 'Generated inventories',
 				items: [
-					{ label: 'Package Reference', href: '/reference/packages' },
-					{ label: 'UI Component Reference', href: '/reference/components' }
+					{ label: 'Package Reference', href: '/docs/reference/packages' },
+					{ label: 'UI Component Reference', href: '/docs/reference/components' }
 				]
 			},
 			{ label: 'Related guides', items: [sectionOverviewItem('guides')] }
@@ -495,17 +499,15 @@ export const documentationSections: DocumentationSection[] = [
 	}
 ];
 
+/**
+ * The three doors (#361): BUILD · FEATURES · DOCS. Every technical section is
+ * reached through Docs, whose panel (`DocsPanelSections.svelte`) carries the
+ * section map; the labels render uppercase in `Header.svelte`.
+ */
 export const primaryNavigation: PrimaryNavigationItem[] = [
-	{ label: 'Home', href: '/', section: 'why' },
-	{ label: 'Framework', href: '/framework', section: 'framework' },
-	{ label: 'Agents', href: '/agents', section: 'agents' },
-	{ label: 'Interaction', href: '/interaction', section: 'interaction' },
-	{ label: 'UI', href: '/ui', section: 'ui' },
-	{ label: 'Blocks', href: '/blocks', section: 'blocks' },
-	{ label: 'Tooling', href: '/tooling', section: 'tooling' },
-	{ label: 'Playground', href: '/playground' },
-	{ label: 'build-a-boilerplate', href: '/build-a-boilerplate' },
-	{ label: 'Reference', href: '/reference', section: 'reference' }
+	{ label: 'Build', href: '/build-a-boilerplate' },
+	{ label: 'Features', href: '/features' },
+	{ label: 'Docs', href: '/docs' }
 ];
 
 export function getDocumentationSection(id: DocumentationSectionId): DocumentationSection {
@@ -514,55 +516,43 @@ export function getDocumentationSection(id: DocumentationSectionId): Documentati
 	return section;
 }
 
+/** True for `/docs` and every page under it — the only pages with the docs panel. */
+export function isDocsPathname(pathname: string): boolean {
+	return pathname === '/docs' || pathname.startsWith('/docs/');
+}
+
+const underPath = (pathname: string, base: string) =>
+	pathname === base || pathname.startsWith(`${base}/`);
+
 export function documentationSectionForPathname(pathname: string): DocumentationSection {
-	if (pathname === '/') return getDocumentationSection('why');
-	if (pathname === '/framework' || pathname.startsWith('/foundations')) {
+	if (underPath(pathname, '/docs/framework') || underPath(pathname, '/docs/foundations')) {
 		return getDocumentationSection('framework');
 	}
-	if (pathname === '/agents') return getDocumentationSection('agents');
-	if (pathname === '/interaction') return getDocumentationSection('interaction');
-	if (pathname === '/ui') return getDocumentationSection('ui');
-	if (pathname === '/blocks' || pathname.startsWith('/blocks/')) {
-		return getDocumentationSection('blocks');
-	}
-	if (
-		pathname === '/guides' ||
-		pathname.startsWith('/guides/') ||
-		pathname.startsWith('/starters')
-	) {
-		return getDocumentationSection('guides');
-	}
-	if (pathname === '/tooling' || pathname.startsWith('/tooling/')) {
-		return getDocumentationSection('tooling');
-	}
-	if (pathname === '/capabilities' || pathname.startsWith('/capabilities/')) {
-		const slug = pathname.split('/')[2] ?? '';
+	if (underPath(pathname, '/docs/agents')) return getDocumentationSection('agents');
+	if (underPath(pathname, '/docs/interaction')) return getDocumentationSection('interaction');
+	if (underPath(pathname, '/docs/ui')) return getDocumentationSection('ui');
+	if (underPath(pathname, '/docs/guides')) return getDocumentationSection('guides');
+	if (underPath(pathname, '/docs/tooling')) return getDocumentationSection('tooling');
+	if (underPath(pathname, '/docs/capabilities')) {
+		// `/docs/capabilities/<slug>`
+		const slug = pathname.split('/')[3] ?? '';
 		if (agentsCapabilitySlugs.has(slug)) return getDocumentationSection('agents');
 		if (interactionCapabilitySlugs.has(slug)) return getDocumentationSection('interaction');
 		if (uiCapabilitySlugs.has(slug)) return getDocumentationSection('ui');
 		return getDocumentationSection('framework');
 	}
-	if (
-		pathname === '/reference' ||
-		pathname.startsWith('/reference/') ||
-		pathname === '/packages' ||
-		pathname.startsWith('/packages/') ||
-		pathname === '/faq'
-	) {
-		return getDocumentationSection('reference');
-	}
-	return getDocumentationSection('why');
+	if (underPath(pathname, '/docs/reference')) return getDocumentationSection('reference');
+	// `/docs` itself and Getting Started, plus any page outside Docs.
+	return getDocumentationSection('docs');
 }
 
 export function isPrimaryNavigationActive(item: PrimaryNavigationItem, pathname: string): boolean {
-	if (item.href === '/playground') return pathname === '/playground';
-	if (item.href === '/build-a-boilerplate') {
-		return isNavigationItemActive('/build-a-boilerplate', pathname);
+	if (item.href === '/features') {
+		// The #352 `/blocks` pages are the FEATURES door's predecessor until
+		// slice E retires them.
+		return underPath(pathname, '/features') || underPath(pathname, '/blocks');
 	}
-	if (pathname === '/playground' || isNavigationItemActive('/build-a-boilerplate', pathname)) {
-		return false;
-	}
-	return item.section === documentationSectionForPathname(pathname).id;
+	return isNavigationItemActive(item.href, pathname);
 }
 
 export function isNavigationItemActive(href: string, pathname: string, hash = ''): boolean {
@@ -596,27 +586,21 @@ export function isNavigationGroupActive(
  */
 export const docsNavigation: NavigationGroup[] = [
 	{
-		label: 'Home',
+		label: 'Docs',
 		items: [
-			whyItem,
-			{ label: 'What you get', href: '/#what-you-get' },
-			{ label: 'Describe the record once', href: '/#one-description' },
-			{ label: 'Building blocks map', href: '/#blocks' },
-			{ label: 'Start here', href: '/#start-here' },
+			docsItem,
 			// build-a-boilerplate is not a documentation page; it is registered
 			// for the palette in `searchItems` below, so it is not repeated here.
-			{ label: 'Getting Started', href: '/starters' },
-			{ label: 'Start from a cookbook', href: '/starters#cookbook' },
-			{ label: 'smrt-start', href: '/starters/smrt-start' }
+			...gettingStartedItems.filter((item) => item.href !== '/build-a-boilerplate')
 		]
 	},
 	{
 		label: 'Framework',
 		items: [
 			sectionOverviewItem('framework'),
-			{ label: 'Foundations overview', href: '/foundations' },
+			{ label: 'Foundations overview', href: '/docs/foundations' },
 			...foundationItems,
-			{ label: 'Capabilities overview', href: '/capabilities' },
+			{ label: 'Capabilities overview', href: '/docs/capabilities' },
 			...frameworkCapabilityItems
 		]
 	},
@@ -629,10 +613,6 @@ export const docsNavigation: NavigationGroup[] = [
 		items: [sectionOverviewItem('interaction'), ...interactionCapabilityItems]
 	},
 	{ label: 'UI', items: [sectionOverviewItem('ui'), ...uiCapabilityItems] },
-	{
-		label: 'Blocks',
-		items: [sectionOverviewItem('blocks'), ...blockItems]
-	},
 	{ label: 'Tooling', items: [sectionOverviewItem('tooling'), ...toolingItems] },
 	{ label: 'Guides', items: [sectionOverviewItem('guides'), ...taskItems] },
 	{
@@ -648,9 +628,18 @@ export const docsNavigation: NavigationGroup[] = [
 
 export const searchItems: NavigationItem[] = [
 	...docsNavigation.flatMap((group) => group.items),
-	// Not a documentation page, so it is outside `docsNavigation` (the reading
-	// track and the docs panel) and registered for the palette here, like the
-	// package entries below.
+	// The homepage, the feature showcases, the #352 blocks and
+	// build-a-boilerplate are not documentation pages, so they are outside
+	// `docsNavigation` (the reading track and the docs panel) and registered
+	// for the palette here, like the package entries below.
+	whyItem,
+	...featureNavigation.flatMap((group) => group.items),
+	{
+		label: 'Blocks overview',
+		href: '/blocks',
+		description: 'Find the capabilities you will not build from scratch.'
+	},
+	...blockItems,
 	{
 		label: 'build-a-boilerplate',
 		href: '/build-a-boilerplate',
@@ -669,7 +658,7 @@ export const searchItems: NavigationItem[] = [
 	},
 	...packages.map((pkg) => ({
 		label: pkg.name,
-		href: `/reference/packages/${pkg.slug}`,
+		href: `/docs/reference/packages/${pkg.slug}`,
 		description: pkg.summary,
 		keywords: [pkg.category, pkg.kind, ...pkg.components]
 	}))

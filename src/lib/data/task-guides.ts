@@ -67,46 +67,46 @@ export interface GuideMigrationRecord {
 /** Content decisions for the guide sources that this issue reorganizes. */
 export const guideMigrationDecisions: GuideMigrationRecord[] = [
 	{
-		source: '/guides/multi-tenant-lifecycle',
+		source: '/docs/guides/multi-tenant-lifecycle',
 		decision: 'keep',
 		family: 'build-foundation'
 	},
 	{
-		source: '/guides/expose-your-app-over-mcp',
+		source: '/docs/guides/expose-your-app-over-mcp',
 		decision: 'keep',
 		family: 'connect-agents'
 	},
 	{
-		source: '/guides/semantic-search',
+		source: '/docs/guides/semantic-search',
 		decision: 'keep',
 		family: 'add-modules'
 	},
 	{
-		source: '/guides/testing-your-app',
+		source: '/docs/guides/testing-your-app',
 		decision: 'keep',
 		family: 'operate-and-ship'
 	},
-	{ source: '/starters', decision: 'merge', family: 'getting-started' },
+	{ source: '/docs/getting-started', decision: 'merge', family: 'getting-started' },
 	{
 		// Became /starters/smrt-start (#338); the old URL is a prerendered 301.
-		source: '/starters/ground-up',
+		source: '/docs/getting-started/ground-up',
 		decision: 'move',
 		family: 'getting-started'
 	},
 	{
 		// smrt-saas-starter is no longer a starting point (#338); the old URL
 		// is a prerendered 301 to /starters.
-		source: '/starters/saas',
+		source: '/docs/getting-started/saas',
 		decision: 'retire',
 		family: 'getting-started'
 	},
 	{
-		source: '/foundations/interfaces',
+		source: '/docs/foundations/interfaces',
 		decision: 'split',
 		family: 'add-interfaces'
 	},
 	{
-		source: '/capabilities/agent-legible-applications',
+		source: '/docs/capabilities/agent-legible-applications',
 		decision: 'split',
 		family: 'connect-agents'
 	}
@@ -159,11 +159,11 @@ const guideMigrationDrafts: TaskGuide[] = [
 			difficulty: 'Beginner',
 			supportRange: TASK_GUIDES_PINNED_VERSION,
 			concepts: ['Application model', 'Tenant scope', 'Generated interfaces', 'Application shell'],
-			relatedUi: [{ label: 'UI overview', href: '/ui' }],
+			relatedUi: [{ label: 'UI overview', href: '/docs/ui' }],
 			relatedModules: [{ label: 'Building blocks', href: '/blocks' }],
 			relatedReference: [
-				{ label: 'Decorator reference', href: '/reference/decorators' },
-				{ label: 'Generated interfaces reference', href: '/reference/interfaces' }
+				{ label: 'Decorator reference', href: '/docs/reference/decorators' },
+				{ label: 'Generated interfaces reference', href: '/docs/reference/interfaces' }
 			],
 			expectedResult:
 				'The application runs on loopback with you as its owner, and one Note model behind it.'
@@ -225,7 +225,7 @@ pnpm app:doctor`
 			}
 		],
 		related: [
-			{ label: 'Build a tenant foundation', href: '/guides/multi-tenant-lifecycle' },
+			{ label: 'Build a tenant foundation', href: '/docs/guides/multi-tenant-lifecycle' },
 			{
 				label: 'smrt-start source',
 				href: 'https://github.com/happyvertical/smrt-start',
@@ -249,11 +249,11 @@ pnpm app:doctor`
 			difficulty: 'Intermediate',
 			supportRange: TASK_GUIDES_PINNED_VERSION,
 			concepts: ['Model manifest', 'REST', 'MCP', 'CLI', 'Authorization'],
-			relatedUi: [{ label: 'UI overview', href: '/ui' }],
+			relatedUi: [{ label: 'UI overview', href: '/docs/ui' }],
 			relatedModules: [],
 			relatedReference: [
-				{ label: 'Generated interfaces reference', href: '/reference/interfaces' },
-				{ label: 'Authorization reference', href: '/reference/authorization' }
+				{ label: 'Generated interfaces reference', href: '/docs/reference/interfaces' },
+				{ label: 'Authorization reference', href: '/docs/reference/authorization' }
 			],
 			expectedResult:
 				'The generated manifest contains only the selected operations for each interface.'
@@ -299,8 +299,8 @@ export class Article extends SmrtObject {
 			}
 		],
 		related: [
-			{ label: 'Connect an agent through MCP', href: '/guides/expose-your-app-over-mcp' },
-			{ label: 'Generated interfaces reference', href: '/reference/interfaces' }
+			{ label: 'Connect an agent through MCP', href: '/docs/guides/expose-your-app-over-mcp' },
+			{ label: 'Generated interfaces reference', href: '/docs/reference/interfaces' }
 		]
 	}
 ];
@@ -325,8 +325,8 @@ export const taskGuides: TaskGuide[] = [
 			relatedUi: [],
 			relatedModules: [{ label: 'Building blocks', href: '/blocks' }],
 			relatedReference: [
-				{ label: 'Authorization reference', href: '/reference/authorization' },
-				{ label: 'Security reference', href: '/reference/security' }
+				{ label: 'Authorization reference', href: '/docs/reference/authorization' },
+				{ label: 'Security reference', href: '/docs/reference/security' }
 			],
 			expectedResult: 'Tests prove that each tenant can read and change only its permitted records.'
 		},
@@ -348,7 +348,7 @@ export const taskGuides: TaskGuide[] = [
 					'The SvelteKit session handler lives at @happyvertical/smrt-users/sveltekit.',
 					'The SvelteKit tenant-context handle lives at @happyvertical/smrt-tenancy/adapters.'
 				],
-				links: [{ label: 'Foundation: where data belongs', href: '/foundations/tenants' }]
+				links: [{ label: 'Foundation: where data belongs', href: '/docs/foundations/tenants' }]
 			},
 			{
 				title: 'Create the schema and the system roles',
@@ -577,7 +577,7 @@ const { statements, targets, skipped } =
 					'Set postgresRls on the session handler so each request runs in a transaction carrying its own tenant and permission settings.'
 				],
 				links: [
-					{ label: 'Reference: security defaults', href: '/reference/security' },
+					{ label: 'Reference: security defaults', href: '/docs/reference/security' },
 					{
 						label: 'Tenant isolation hardening (#126)',
 						href: 'https://github.com/happyvertical/s-m-r-t.dev/issues/126',
@@ -603,7 +603,9 @@ it('refuses a foreign filter', async () => {
       documents.list({ where: { tenantId: 'globex' } }));
   });
 });`,
-				links: [{ label: 'Task guide: test your application', href: '/guides/testing-your-app' }]
+				links: [
+					{ label: 'Task guide: test your application', href: '/docs/guides/testing-your-app' }
+				]
 			}
 		]
 	},
@@ -630,8 +632,8 @@ it('refuses a foreign filter', async () => {
 			relatedUi: [],
 			relatedModules: [{ label: 'Building blocks', href: '/blocks' }],
 			relatedReference: [
-				{ label: 'Generated interfaces reference', href: '/reference/interfaces' },
-				{ label: 'Security reference', href: '/reference/security' }
+				{ label: 'Generated interfaces reference', href: '/docs/reference/interfaces' },
+				{ label: 'Security reference', href: '/docs/reference/security' }
 			],
 			expectedResult: 'A client lists and calls only the MCP tools that the application exposes.'
 		},
@@ -669,7 +671,7 @@ export class Article extends SmrtObject {
 					'A tool is treated as read-only when its name ends in _list or _get. That suffix rule decides what an unauthenticated caller can ever see.',
 					'Collection classes are scanned too, so a plain build also produces articlecollection_* tools. The application allow-list below is where you drop them.'
 				],
-				links: [{ label: 'Reference: generated interfaces', href: '/reference/interfaces' }]
+				links: [{ label: 'Reference: generated interfaces', href: '/docs/reference/interfaces' }]
 			},
 			{
 				title: 'Generate the local stdio server',
@@ -777,7 +779,7 @@ export const mcpServer = createMcpAppServer({
 					'A policy that throws is treated as a denial, so failures close rather than open.',
 					'Denials carry the non-retryable mcp_tool_access_denied code and deliberately reveal nothing about the tool, principal, or policy.'
 				],
-				links: [{ label: 'Tooling reference: app MCP', href: '/tooling/app-mcp' }]
+				links: [{ label: 'Tooling reference: app MCP', href: '/docs/tooling/app-mcp' }]
 			},
 			{
 				title: 'Mount one route',
@@ -890,7 +892,7 @@ export const POST = mountMcpRoute(mcpServer);
   },
   "id": 1
 }`,
-				links: [{ label: 'Protocol and conformance detail', href: '/tooling/compatibility' }]
+				links: [{ label: 'Protocol and conformance detail', href: '/docs/tooling/compatibility' }]
 			},
 			{
 				title: 'Terminate authorization in front of the route',
@@ -907,7 +909,7 @@ export const POST = mountMcpRoute(mcpServer);
 					'Leave public tool patterns empty unless anonymous read access is a decision someone made on purpose.',
 					'Header presence is not authentication. The required headers exist to keep the envelope honest, nothing more.'
 				],
-				links: [{ label: 'Reference: security defaults', href: '/reference/security' }]
+				links: [{ label: 'Reference: security defaults', href: '/docs/reference/security' }]
 			},
 			{
 				title: 'Connect a deployed application to a local client',
@@ -938,8 +940,8 @@ export const POST = mountMcpRoute(mcpServer);
 					'smrt-mcp-bridge is the only binary the package publishes. The device flow — /api/cli/auth/start, then polling /api/cli/auth/token — reaches you through an application CLI you assemble with its exported createAppCli.'
 				],
 				links: [
-					{ label: 'Tooling reference: app MCP', href: '/tooling/app-mcp' },
-					{ label: 'Development MCP: smrt-dev-mcp', href: '/tooling/dev-mcp' }
+					{ label: 'Tooling reference: app MCP', href: '/docs/tooling/app-mcp' },
+					{ label: 'Development MCP: smrt-dev-mcp', href: '/docs/tooling/dev-mcp' }
 				]
 			},
 			{
@@ -947,9 +949,9 @@ export const POST = mountMcpRoute(mcpServer);
 				intro:
 					'It is worth restating which surface does what, because the failure mode of confusing them is an agent with the wrong authority. The Development MCP server reads your workspace and cannot touch application data. Generated local MCP and hosted application MCP are servers that operate on data. WebMCP is not a separate server; it registers tools in the browser page and calls the generated REST surface as the signed-in user. None of the three application-facing surfaces know anything about your repository layout.',
 				links: [
-					{ label: 'Choose a surface', href: '/tooling' },
-					{ label: 'Capability: WebMCP in the browser', href: '/capabilities/webmcp' },
-					{ label: 'Task guide: test your application', href: '/guides/testing-your-app' }
+					{ label: 'Choose a surface', href: '/docs/tooling' },
+					{ label: 'Capability: WebMCP in the browser', href: '/docs/capabilities/webmcp' },
+					{ label: 'Task guide: test your application', href: '/docs/guides/testing-your-app' }
 				]
 			}
 		]
@@ -973,8 +975,8 @@ export const POST = mountMcpRoute(mcpServer);
 			relatedUi: [],
 			relatedModules: [{ label: 'Building blocks', href: '/blocks' }],
 			relatedReference: [
-				{ label: 'AI and retrieval reference', href: '/reference/ai-and-retrieval' },
-				{ label: 'Collections reference', href: '/reference/collections' }
+				{ label: 'AI and retrieval reference', href: '/docs/reference/ai-and-retrieval' },
+				{ label: 'Collections reference', href: '/docs/reference/collections' }
 			],
 			expectedResult:
 				'A collection query returns relevant records without crossing the active tenant boundary.'
@@ -1076,7 +1078,7 @@ const related = await recipes.findSimilar(hits[0], { limit: 5 });`,
 					'findSimilar excludes the source record by default and reads its stored vector, so it raises if that record was never embedded.',
 					'field selects which configured field to search when a class declares more than one.'
 				],
-				links: [{ label: 'Reference: AI and retrieval', href: '/reference/ai-and-retrieval' }]
+				links: [{ label: 'Reference: AI and retrieval', href: '/docs/reference/ai-and-retrieval' }]
 			},
 			{
 				title: 'Serve it from a route',
@@ -1113,8 +1115,8 @@ export const GET = async ({ url, locals }) => {
 					'Native vector search falls back to the in-application scan when the database call fails. Results stay correct and get much slower, and the only trace is a logged warning.'
 				],
 				links: [
-					{ label: 'Foundation: collections and reads', href: '/capabilities/collections' },
-					{ label: 'Reference: security defaults', href: '/reference/security' }
+					{ label: 'Foundation: collections and reads', href: '/docs/capabilities/collections' },
+					{ label: 'Reference: security defaults', href: '/docs/reference/security' }
 				]
 			},
 			{
@@ -1158,11 +1160,11 @@ const db = await getDatabase({
 			difficulty: 'Intermediate',
 			supportRange: TASK_GUIDES_PINNED_VERSION,
 			concepts: ['Isolated database', 'Tenant boundary', 'Generated interface', 'Component test'],
-			relatedUi: [{ label: 'UI overview', href: '/ui' }],
+			relatedUi: [{ label: 'UI overview', href: '/docs/ui' }],
 			relatedModules: [],
 			relatedReference: [
-				{ label: 'Testing reference', href: '/reference/testing' },
-				{ label: 'Security reference', href: '/reference/security' }
+				{ label: 'Testing reference', href: '/docs/reference/testing' },
+				{ label: 'Security reference', href: '/docs/reference/security' }
 			],
 			expectedResult:
 				'The test suite validates model behavior, isolation, interfaces, and components in one run.'
@@ -1375,8 +1377,11 @@ describe('tenant isolation', () => {
   });
 });`,
 				links: [
-					{ label: 'The lifecycle these rules come from', href: '/guides/multi-tenant-lifecycle' },
-					{ label: 'Reference: security defaults', href: '/reference/security' }
+					{
+						label: 'The lifecycle these rules come from',
+						href: '/docs/guides/multi-tenant-lifecycle'
+					},
+					{ label: 'Reference: security defaults', href: '/docs/reference/security' }
 				]
 			},
 			{
@@ -1433,7 +1438,7 @@ it('offers only read-only tools to an anonymous caller', async () => {
 				links: [
 					{
 						label: 'Task guide: expose your app over MCP',
-						href: '/guides/expose-your-app-over-mcp'
+						href: '/docs/guides/expose-your-app-over-mcp'
 					}
 				]
 			},
@@ -1516,7 +1521,7 @@ jobs:
 					'A module-level singleton cache inside a collection survives between tests and ignores fresh mocks; call vi.resetModules() in beforeEach and await import(...) inside the test instead of importing at the top.',
 					'A create() on a tenant-scoped class whose tenant field is declared non-nullable fails validation before the interceptor can populate it. Either pass tenantId explicitly, or declare the field nullable so the context fills it.'
 				],
-				links: [{ label: 'Reference: testing contracts', href: '/reference/testing' }]
+				links: [{ label: 'Reference: testing contracts', href: '/docs/reference/testing' }]
 			}
 		]
 	}
@@ -1537,8 +1542,8 @@ interface MigrationGuideDestination {
 }
 
 const migrationGuideDestinations = new Map<string, MigrationGuideDestination>([
-	['start-with-smrt-start', { href: '/starters/smrt-start', stepCount: 3 }],
-	['add-generated-interfaces', { href: '/foundations/interfaces', stepCount: 3 }]
+	['start-with-smrt-start', { href: '/docs/getting-started/smrt-start', stepCount: 3 }],
+	['add-generated-interfaces', { href: '/docs/foundations/interfaces', stepCount: 3 }]
 ]);
 
 function guideLibraryItem(
@@ -1565,11 +1570,11 @@ export const guideLibrary: GuideLibraryItem[] = [
 		const destination = migrationGuideDestinations.get(guide.slug);
 		return guideLibraryItem(
 			guide,
-			destination?.href ?? `/guides/${guide.slug}`,
+			destination?.href ?? `/docs/guides/${guide.slug}`,
 			destination?.stepCount
 		);
 	}),
-	...taskGuides.map((guide) => guideLibraryItem(guide, `/guides/${guide.slug}`))
+	...taskGuides.map((guide) => guideLibraryItem(guide, `/docs/guides/${guide.slug}`))
 ];
 
 export function guideLibraryItemsInFamily(family: TaskGuideFamilyId): GuideLibraryItem[] {

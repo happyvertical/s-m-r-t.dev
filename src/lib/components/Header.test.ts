@@ -25,27 +25,24 @@ afterEach(() => {
 
 describe('application bar', () => {
 	it('renders the approved primary navigation and active state', () => {
-		render(Harness, { props: { pathname: '/ui' } });
+		render(Harness, { props: { pathname: '/docs/ui' } });
 		const nav = screen.getByRole('navigation', { name: 'Primary navigation' });
 		const links = within(nav).getAllByRole('link');
 
-		expect(links.map((link) => link.textContent)).toEqual([
-			'Home',
-			'Framework',
-			'Agents',
-			'Interaction',
-			'UI',
-			'Blocks',
-			'Tooling',
-			'Playground',
-			'build-a-boilerplate',
-			'Reference'
-		]);
-		expect(within(nav).getByRole('link', { name: 'UI' }).getAttribute('aria-current')).toBe('page');
+		// The three doors (#361); CSS renders them uppercase.
+		expect(links.map((link) => link.textContent)).toEqual(['Build', 'Features', 'Docs']);
+		expect(within(nav).getByRole('link', { name: 'Docs' }).getAttribute('aria-current')).toBe(
+			'page'
+		);
+	});
+
+	it('offers the docs panel toggle only inside Docs (#365)', () => {
+		render(Harness, { props: { pathname: '/features/agents' } });
+		expect(screen.queryByRole('button', { name: 'Open documentation navigation' })).toBeNull();
 	});
 
 	it('opens the AdminShell application panel from the app bar', async () => {
-		render(Harness);
+		render(Harness, { props: { pathname: '/docs' } });
 		const toggle = screen.getByRole('button', { name: 'Open documentation navigation' });
 
 		expect(toggle.getAttribute('aria-expanded')).toBe('false');
@@ -72,7 +69,7 @@ describe('application bar', () => {
 		await fireEvent.click(toggle);
 		const navs = screen.getAllByRole('navigation', { name: 'Primary navigation' });
 		expect(navs).toHaveLength(2);
-		expect(within(navs[1]).getAllByRole('link')).toHaveLength(10);
+		expect(within(navs[1]).getAllByRole('link')).toHaveLength(3);
 		expect(toggle.getAttribute('aria-expanded')).toBe('true');
 	});
 });

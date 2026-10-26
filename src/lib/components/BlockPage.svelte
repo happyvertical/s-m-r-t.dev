@@ -60,7 +60,7 @@
 		<ul class="chips">
 			{#each chips as chip (chip.slug)}
 				<li>
-					<a href={`/reference/packages/${chip.slug}`}>
+					<a href={`/docs/reference/packages/${chip.slug}`}>
 						<code>{chip.name}</code>
 						{#if chip.status}<span class="chip">{chip.status}</span>{/if}
 					</a>
@@ -76,7 +76,7 @@
 			</ul>
 		{/if}
 		{#if block.evidence?.length}
-			<p class="sources"><a href="/reference/evidence">Sources</a></p>
+			<p class="sources"><a href="/docs/reference/evidence">Sources</a></p>
 		{/if}
 	</section>
 </article>

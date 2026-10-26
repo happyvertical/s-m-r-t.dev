@@ -41,8 +41,8 @@ function expectWithinCopyLimits(text: string, where: string) {
 
 /** In-page anchors the data links to, by landing route. */
 const knownAnchors: Record<string, Set<string>> = {
-	'/agents': new Set(agentsTopics.map((topic) => topic.slug)),
-	'/interaction': new Set(interactionContent.guides.map((guide) => guide.slug))
+	'/docs/agents': new Set(agentsTopics.map((topic) => topic.slug)),
+	'/docs/interaction': new Set(interactionContent.guides.map((guide) => guide.slug))
 };
 
 describe('homepage feature sections (#321 slice B)', () => {

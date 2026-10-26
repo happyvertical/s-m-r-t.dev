@@ -17,7 +17,7 @@ import { frameworkTopics, type FrameworkTopic } from '$lib/data/framework';
 import { capabilityGuides, foundationGuides, type Guide } from '$lib/data/guides';
 import { homepageFeatures } from '$lib/data/homepage-features';
 import { interactionContent } from '$lib/data/interaction';
-import { docsNavigation, searchItems } from '$lib/data/navigation';
+import { docsNavigation, featureNavigation, searchItems } from '$lib/data/navigation';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
 import { taskGuides } from '$lib/data/task-guides';
@@ -51,9 +51,15 @@ export interface SearchEntry {
 }
 
 /** Sidebar group that owns a page, used as its breadcrumb. */
-const groupByHref = new Map<string, string>(
-	docsNavigation.flatMap((group) => group.items.map((item) => [item.href, group.label] as const))
-);
+const groupByHref = new Map<string, string>([
+	...docsNavigation.flatMap((group) =>
+		group.items.map((item) => [item.href, group.label] as const)
+	),
+	// Feature showcases (#361) sit outside the docs panel; their section is the breadcrumb.
+	...featureNavigation.flatMap((group) =>
+		group.items.map((item) => [item.href, `Features · ${group.label}`] as const)
+	)
+]);
 
 /**
  * Every route family whose pages render through `GuidePage`.
@@ -63,11 +69,11 @@ const groupByHref = new Map<string, string>(
  * headings will be missing from the palette while its pages appear.
  */
 const guideTracks: { base: string; label: string; guides: Guide[] }[] = [
-	{ base: '/foundations', label: 'Application foundations', guides: foundationGuides },
-	{ base: '/capabilities', label: 'Capabilities', guides: capabilityGuides },
-	{ base: '/guides', label: 'Task guides', guides: taskGuides },
-	{ base: '/tooling', label: 'Developer tooling', guides: toolingGuides },
-	{ base: '/reference', label: 'Reference', guides: referenceGuides }
+	{ base: '/docs/foundations', label: 'Application foundations', guides: foundationGuides },
+	{ base: '/docs/capabilities', label: 'Capabilities', guides: capabilityGuides },
+	{ base: '/docs/guides', label: 'Task guides', guides: taskGuides },
+	{ base: '/docs/tooling', label: 'Developer tooling', guides: toolingGuides },
+	{ base: '/docs/reference', label: 'Reference', guides: referenceGuides }
 ];
 
 const pageEntries: SearchEntry[] = searchItems.map((item) => ({
@@ -75,7 +81,7 @@ const pageEntries: SearchEntry[] = searchItems.map((item) => ({
 	href: item.href,
 	breadcrumb:
 		groupByHref.get(item.href) ??
-		(item.href.startsWith('/reference/packages/') ? 'Packages' : undefined),
+		(item.href.startsWith('/docs/reference/packages/') ? 'Packages' : undefined),
 	description: item.description,
 	keywords: item.keywords,
 	kind: 'page'
@@ -95,7 +101,7 @@ const sectionEntries: SearchEntry[] = guideTracks.flatMap(({ base, label, guides
 );
 
 /**
- * The single-route landing pages: `/framework`, `/interaction`, and `/agents`
+ * The single-route landing pages: `/docs/framework`, `/docs/interaction`, and `/docs/agents`
  * each render several topics on one page rather than one route per topic, so
  * — unlike `guideTracks`, where every guide already has its own page entry —
  * neither the topics nor their subsections get a palette entry unless this
@@ -107,9 +113,9 @@ const landingTracks: {
 	label: string;
 	topics: readonly (FrameworkTopic | Guide)[];
 }[] = [
-	{ base: '/framework', label: 'Framework', topics: frameworkTopics },
-	{ base: '/interaction', label: 'Interaction', topics: interactionContent.guides },
-	{ base: '/agents', label: 'Agents', topics: agentsTopics }
+	{ base: '/docs/framework', label: 'Framework', topics: frameworkTopics },
+	{ base: '/docs/interaction', label: 'Interaction', topics: interactionContent.guides },
+	{ base: '/docs/agents', label: 'Agents', topics: agentsTopics }
 ];
 
 /**
@@ -167,11 +173,11 @@ export const homepageFeatureEntries: SearchEntry[] = homepageFeatures.map((featu
 }));
 
 const packageEntries: SearchEntry[] = packages.flatMap((pkg) => {
-	const componentsHref = `/reference/packages/${pkg.slug}?tab=components`;
+	const componentsHref = `/docs/reference/packages/${pkg.slug}?tab=components`;
 	/** A single component's own generated contract page, when one exists. */
 	const componentHref = (component: string): string =>
 		uiComponentSlugByPackageAndName.get(`@happyvertical/${pkg.slug}:${component}`) !== undefined
-			? `/reference/components/${uiComponentSlugByPackageAndName.get(`@happyvertical/${pkg.slug}:${component}`)}`
+			? `/docs/reference/components/${uiComponentSlugByPackageAndName.get(`@happyvertical/${pkg.slug}:${component}`)}`
 			: componentsHref;
 	const entries: SearchEntry[] = [];
 

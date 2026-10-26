@@ -234,6 +234,7 @@ const COPY_ATTRIBUTES = new Set([
 ]);
 
 const COMPONENT_NON_COPY_ATTRIBUTES = new Set([
+	'appPanel',
 	'article',
 	'backHref',
 	'backLink',

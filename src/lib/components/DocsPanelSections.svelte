@@ -48,7 +48,7 @@
 					     A docsNavigation item's own href can resolve `current` (via
 					     documentationSectionForPathname) to a *different* section than
 					     the band that actually lists it — e.g. the starter guides are
-					     Home-group pages by canonical ownership, but resolve to the
+					     Docs-group pages by canonical ownership, but resolve to the
 					     Guides route family — or an item can simply sit past position
 					     `keyPageLimit` in a long band. Either way, without the active-item
 					     check below, the page the reader is actually on can be absent
@@ -74,8 +74,6 @@
 			<a class="band-all" href={section.href} onclick={closePanel}>
 				{#if section.items.length - 1 > keyPageLimit}
 					See all {section.items.length} pages <span aria-hidden="true">→</span>
-				{:else if section.id === 'why'}
-					Open the homepage <span aria-hidden="true">→</span>
 				{:else}
 					Section overview <span aria-hidden="true">→</span>
 				{/if}

@@ -5,7 +5,7 @@ import { getGuideLibraryItem } from '$lib/data/task-guides';
 
 describe('GuideLibraryMetadata', () => {
 	it('shows metadata and the family footer for the smrt-start page', () => {
-		const guide = getGuideLibraryItem('/starters/smrt-start');
+		const guide = getGuideLibraryItem('/docs/getting-started/smrt-start');
 		expect(guide).toBeDefined();
 		render(GuideLibraryMetadata, { props: { guide: guide! } });
 

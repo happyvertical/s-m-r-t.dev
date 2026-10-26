@@ -118,32 +118,32 @@ export const frameworkModelProjections: ModelProjection[] = [
 	{
 		label: 'Storage and collections',
 		body: 'A database table and a typed collection store and query articles.',
-		href: '/framework#persistence-and-live-data'
+		href: '/docs/framework#persistence-and-live-data'
 	},
 	{
 		label: 'Forms',
 		body: 'Form controls use the model fields, descriptions, validation, and field rules.',
-		href: '/ui'
+		href: '/docs/ui'
 	},
 	{
 		label: 'REST API',
 		body: 'Generated routes and clients expose only the actions selected on the model.',
-		href: '/reference/interfaces'
+		href: '/docs/reference/interfaces'
 	},
 	{
 		label: 'Commands',
 		body: 'Application commands use the same declared actions when the model enables CLI access.',
-		href: '/framework#generated-interfaces'
+		href: '/docs/framework#generated-interfaces'
 	},
 	{
 		label: 'Agent tools',
 		body: 'The publish action becomes a described tool at an enabled MCP boundary.',
-		href: '/tooling/app-mcp'
+		href: '/docs/tooling/app-mcp'
 	},
 	{
 		label: 'Permissions',
 		body: 'Named operation permissions apply at each network and application boundary.',
-		href: '/framework#permissions-and-security'
+		href: '/docs/framework#permissions-and-security'
 	}
 ];
 
@@ -188,15 +188,15 @@ export const frameworkTopics: FrameworkTopic[] = [
 				intro:
 					'A normal collection list returns model instances with their methods. A selected list returns smaller plain rows. Both paths use the same field mapping, interceptors, tenant rules, and query limits.',
 				links: [
-					{ label: 'Collections reference', href: '/reference/collections' },
-					{ label: 'Relationships reference', href: '/reference/relationships' }
+					{ label: 'Collections reference', href: '/docs/reference/collections' },
+					{ label: 'Relationships reference', href: '/docs/reference/relationships' }
 				]
 			}
 		],
 		related: [
-			{ label: 'Start from smrt-start', href: '/starters/smrt-start' },
+			{ label: 'Start from smrt-start', href: '/docs/getting-started/smrt-start' },
 			{ label: 'Building blocks', href: '/blocks' },
-			{ label: 'Model-aware UI', href: '/ui' }
+			{ label: 'Model-aware UI', href: '/docs/ui' }
 		],
 		sources: [
 			{
@@ -253,22 +253,24 @@ export const frameworkTopics: FrameworkTopic[] = [
 					'The signal path is a prompt to read the durable feed, not a second data source.',
 					'An offline outbox replays writes through the same server contract with idempotency keys.'
 				],
-				links: [{ label: 'Hydration and live-data capability', href: '/capabilities/live-data' }]
+				links: [
+					{ label: 'Hydration and live-data capability', href: '/docs/capabilities/live-data' }
+				]
 			},
 			{
 				title: 'System facilities have narrow jobs',
 				intro:
 					'Tables with the _smrt_ prefix support framework operations. For example, _smrt_changes stores change records, _smrt_contexts stores scoped memory, and _smrt_embeddings stores retrieval vectors. They do not replace application models.',
 				links: [
-					{ label: 'AI and retrieval reference', href: '/reference/ai-and-retrieval' },
-					{ label: 'Semantic search guide', href: '/guides/semantic-search' }
+					{ label: 'AI and retrieval reference', href: '/docs/reference/ai-and-retrieval' },
+					{ label: 'Semantic search guide', href: '/docs/guides/semantic-search' }
 				]
 			}
 		],
 		related: [
-			{ label: 'Build pages and live data', href: '/foundations/pages-and-data' },
-			{ label: 'UI components', href: '/ui' },
-			{ label: 'Testing guide', href: '/guides/testing-your-app' }
+			{ label: 'Build pages and live data', href: '/docs/foundations/pages-and-data' },
+			{ label: 'UI components', href: '/docs/ui' },
+			{ label: 'Testing guide', href: '/docs/guides/testing-your-app' }
 		],
 		sources: [
 			{
@@ -326,15 +328,15 @@ export const frameworkTopics: FrameworkTopic[] = [
 				intro:
 					'Tenant context adds the tenant identifier to normal collection reads and writes for a tenant-scoped model. Missing required context fails closed. System and super-admin bypasses are explicit server operations.',
 				links: [
-					{ label: 'Multi-tenant lifecycle guide', href: '/guides/multi-tenant-lifecycle' },
-					{ label: 'Security reference', href: '/reference/security' }
+					{ label: 'Multi-tenant lifecycle guide', href: '/docs/guides/multi-tenant-lifecycle' },
+					{ label: 'Security reference', href: '/docs/reference/security' }
 				]
 			}
 		],
 		related: [
-			{ label: 'Decide where data belongs', href: '/foundations/tenants' },
-			{ label: 'Add people and accounts', href: '/foundations/users-and-profiles' },
-			{ label: 'Human-agent interaction', href: '/interaction' }
+			{ label: 'Decide where data belongs', href: '/docs/foundations/tenants' },
+			{ label: 'Add people and accounts', href: '/docs/foundations/users-and-profiles' },
+			{ label: 'Human-agent interaction', href: '/docs/interaction' }
 		],
 		sources: [
 			{
@@ -392,15 +394,15 @@ export const frameworkTopics: FrameworkTopic[] = [
 					body: 'A manifest or tool description supplies meaning. It does not supply a session, a tenant, or a permission.'
 				},
 				links: [
-					{ label: 'Authorization reference', href: '/reference/authorization' },
-					{ label: 'Security reference', href: '/reference/security' }
+					{ label: 'Authorization reference', href: '/docs/reference/authorization' },
+					{ label: 'Security reference', href: '/docs/reference/security' }
 				]
 			}
 		],
 		related: [
-			{ label: 'Grant access', href: '/foundations/memberships-and-permissions' },
-			{ label: 'Field-policy UI', href: '/ui' },
-			{ label: 'Application MCP security boundary', href: '/tooling/app-mcp' }
+			{ label: 'Grant access', href: '/docs/foundations/memberships-and-permissions' },
+			{ label: 'Field-policy UI', href: '/docs/ui' },
+			{ label: 'Application MCP security boundary', href: '/docs/tooling/app-mcp' }
 		],
 		sources: [
 			{
@@ -455,15 +457,15 @@ export const frameworkTopics: FrameworkTopic[] = [
 				intro:
 					'Generation does not make every action public. The host selects the surface, resolves the caller, applies tenant context, and checks the operation. A browser tool uses the signed-in page session. A remote MCP gateway resolves a principal for each request.',
 				links: [
-					{ label: 'Complete generated-interface reference', href: '/reference/interfaces' },
-					{ label: 'WebMCP concept', href: '/capabilities/webmcp' },
-					{ label: 'Expose an application over MCP', href: '/guides/expose-your-app-over-mcp' }
+					{ label: 'Complete generated-interface reference', href: '/docs/reference/interfaces' },
+					{ label: 'WebMCP concept', href: '/docs/capabilities/webmcp' },
+					{ label: 'Expose an application over MCP', href: '/docs/guides/expose-your-app-over-mcp' }
 				]
 			}
 		],
 		related: [
-			{ label: 'Connect APIs, tools, and agents', href: '/foundations/interfaces' },
-			{ label: 'Development tooling', href: '/tooling' },
+			{ label: 'Connect APIs, tools, and agents', href: '/docs/foundations/interfaces' },
+			{ label: 'Development tooling', href: '/docs/tooling' },
 			{ label: 'Working playground', href: '/playground' }
 		],
 		sources: [
@@ -534,15 +536,17 @@ export const frameworkTopics: FrameworkTopic[] = [
 					title: 'Check the installed development tool',
 					body: 'Runtime-environment awareness is conditional. The workspace view and the running process can differ.'
 				},
-				links: [{ label: 'Development MCP and its runtime boundary', href: '/tooling/dev-mcp' }]
+				links: [
+					{ label: 'Development MCP and its runtime boundary', href: '/docs/tooling/dev-mcp' }
+				]
 			},
 			{
 				title: 'SAADL joins meaning and governed operations',
 				intro:
 					'Software as Agentic Domain Logic describes an application where persons and agents reach the same permitted application operations. The application does not maintain a separate, reduced agent definition that can drift from the human interface.',
 				links: [
-					{ label: 'Complete SAADL terminology entry', href: '/reference/saadl' },
-					{ label: 'Human-agent interaction', href: '/interaction' }
+					{ label: 'Complete SAADL terminology entry', href: '/docs/reference/saadl' },
+					{ label: 'Human-agent interaction', href: '/docs/interaction' }
 				]
 			},
 			{
@@ -550,15 +554,18 @@ export const frameworkTopics: FrameworkTopic[] = [
 				intro:
 					'A stable description lets an agent plan and explain. It does not supply credentials, tenant data, or permission. The host chooses the visible operations, and the server checks each request.',
 				links: [
-					{ label: 'Authorization reference', href: '/reference/authorization' },
-					{ label: 'Agent-assisted forms', href: '/capabilities/agent-assisted-forms' }
+					{ label: 'Authorization reference', href: '/docs/reference/authorization' },
+					{ label: 'Agent-assisted forms', href: '/docs/capabilities/agent-assisted-forms' }
 				]
 			}
 		],
 		related: [
-			{ label: 'Agent-legible applications', href: '/capabilities/agent-legible-applications' },
-			{ label: 'Application-agent tooling', href: '/tooling/app-mcp' },
-			{ label: 'Coding-agent tooling', href: '/tooling/dev-mcp' }
+			{
+				label: 'Agent-legible applications',
+				href: '/docs/capabilities/agent-legible-applications'
+			},
+			{ label: 'Application-agent tooling', href: '/docs/tooling/app-mcp' },
+			{ label: 'Coding-agent tooling', href: '/docs/tooling/dev-mcp' }
 		],
 		sources: [
 			{
@@ -591,63 +598,63 @@ export interface FrameworkMigrationDecision {
  */
 export const frameworkMigrationDecisions: FrameworkMigrationDecision[] = [
 	{
-		source: '/foundations',
+		source: '/docs/foundations',
 		status: 'redirect',
-		href: '/framework',
+		href: '/docs/framework',
 		note: 'Apply the redirect in the final route migration after all destination sections are stable.'
 	},
 	{
-		source: '/foundations/objects-and-collections',
+		source: '/docs/foundations/objects-and-collections',
 		status: 'merge',
-		href: '/framework#models-and-collections',
+		href: '/docs/framework#models-and-collections',
 		note: 'Keep the source route until the final route migration.'
 	},
 	{
-		source: '/foundations/tenants',
+		source: '/docs/foundations/tenants',
 		status: 'merge',
-		href: '/framework#tenancy-and-identity',
+		href: '/docs/framework#tenancy-and-identity',
 		note: 'Merge organization boundaries with the related identity concepts.'
 	},
 	{
-		source: '/foundations/users-and-profiles',
+		source: '/docs/foundations/users-and-profiles',
 		status: 'merge',
-		href: '/framework#tenancy-and-identity',
+		href: '/docs/framework#tenancy-and-identity',
 		note: 'Keep the distinctions between authentication identity, profile, and tenant.'
 	},
 	{
-		source: '/foundations/memberships-and-permissions',
+		source: '/docs/foundations/memberships-and-permissions',
 		status: 'move',
-		href: '/framework#permissions-and-security',
+		href: '/docs/framework#permissions-and-security',
 		note: 'Move the concept summary and link to the exhaustive authorization reference.'
 	},
 	{
-		source: '/foundations/pages-and-data',
+		source: '/docs/foundations/pages-and-data',
 		status: 'merge',
-		href: '/framework#persistence-and-live-data',
+		href: '/docs/framework#persistence-and-live-data',
 		note: 'Merge server loading with hydration, change signals, and offline replay.'
 	},
 	{
-		source: '/foundations/interfaces',
+		source: '/docs/foundations/interfaces',
 		status: 'move',
-		href: '/framework#generated-interfaces',
+		href: '/docs/framework#generated-interfaces',
 		note: 'Keep the concept summary separate from the exhaustive interface contract.'
 	},
 	{
-		source: '/capabilities/collections',
+		source: '/docs/capabilities/collections',
 		status: 'merge',
-		href: '/framework#models-and-collections',
+		href: '/docs/framework#models-and-collections',
 		note: 'Retain detailed collection behavior in the existing capability and reference pages.'
 	},
 	{
-		source: '/capabilities/live-data',
+		source: '/docs/capabilities/live-data',
 		status: 'merge',
-		href: '/framework#persistence-and-live-data',
+		href: '/docs/framework#persistence-and-live-data',
 		note: 'Retain the detailed capability page as supporting evidence.'
 	},
 	{
-		source: '/capabilities/agent-legible-applications',
+		source: '/docs/capabilities/agent-legible-applications',
 		status: 'merge',
-		href: '/framework#agent-awareness',
+		href: '/docs/framework#agent-awareness',
 		note: 'Keep the detailed registry and control examples as supporting evidence.'
 	}
 ];

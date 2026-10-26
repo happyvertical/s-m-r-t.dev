@@ -1,5 +1,6 @@
 import { capabilityGuides, foundationGuides } from '$lib/data/guides';
 import { buildingBlocks } from '$lib/data/blocks';
+import { featurePath, featureSectionPath, featureSections, features } from '$lib/data/features';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
 import { taskGuides } from '$lib/data/task-guides';
@@ -13,20 +14,22 @@ const baseUrl = 'https://s-m-r-t.dev';
 
 const staticRoutes = [
 	{ path: '', priority: '1.0', changefreq: 'weekly' },
-	{ path: '/framework', priority: '0.95', changefreq: 'weekly' },
-	{ path: '/agents', priority: '0.95', changefreq: 'weekly' },
-	{ path: '/interaction', priority: '0.95', changefreq: 'weekly' },
-	{ path: '/ui', priority: '0.95', changefreq: 'weekly' },
+	{ path: '/features', priority: '0.95', changefreq: 'weekly' },
+	{ path: '/docs', priority: '0.95', changefreq: 'weekly' },
+	{ path: '/docs/framework', priority: '0.95', changefreq: 'weekly' },
+	{ path: '/docs/agents', priority: '0.95', changefreq: 'weekly' },
+	{ path: '/docs/interaction', priority: '0.95', changefreq: 'weekly' },
+	{ path: '/docs/ui', priority: '0.95', changefreq: 'weekly' },
 	{ path: '/blocks', priority: '0.95', changefreq: 'weekly' },
-	{ path: '/starters', priority: '0.9', changefreq: 'monthly' },
-	{ path: '/starters/smrt-start', priority: '0.9', changefreq: 'monthly' },
-	{ path: '/foundations', priority: '0.9', changefreq: 'monthly' },
-	{ path: '/capabilities', priority: '0.9', changefreq: 'weekly' },
-	{ path: '/guides', priority: '0.9', changefreq: 'monthly' },
+	{ path: '/docs/getting-started', priority: '0.9', changefreq: 'monthly' },
+	{ path: '/docs/getting-started/smrt-start', priority: '0.9', changefreq: 'monthly' },
+	{ path: '/docs/foundations', priority: '0.9', changefreq: 'monthly' },
+	{ path: '/docs/capabilities', priority: '0.9', changefreq: 'weekly' },
+	{ path: '/docs/guides', priority: '0.9', changefreq: 'monthly' },
 	{ path: '/playground', priority: '0.9', changefreq: 'weekly' },
 	{ path: '/build-a-boilerplate', priority: '0.9', changefreq: 'weekly' },
-	{ path: '/tooling', priority: '0.85', changefreq: 'monthly' },
-	{ path: '/reference', priority: '0.8', changefreq: 'monthly' }
+	{ path: '/docs/tooling', priority: '0.85', changefreq: 'monthly' },
+	{ path: '/docs/reference', priority: '0.8', changefreq: 'monthly' }
 ];
 
 function entry(path: string, priority: string, changefreq: string): string {
@@ -36,22 +39,26 @@ function entry(path: string, priority: string, changefreq: string): string {
 export const GET: RequestHandler = () => {
 	const urls = [
 		...staticRoutes.map((route) => entry(route.path, route.priority, route.changefreq)),
-		...foundationGuides.map((guide) => entry(`/foundations/${guide.slug}`, '0.8', 'monthly')),
-		...capabilityGuides.map((guide) => entry(`/capabilities/${guide.slug}`, '0.85', 'weekly')),
+		...foundationGuides.map((guide) => entry(`/docs/foundations/${guide.slug}`, '0.8', 'monthly')),
+		...capabilityGuides.map((guide) => entry(`/docs/capabilities/${guide.slug}`, '0.85', 'weekly')),
+		...featureSections.map((section) => entry(featureSectionPath(section), '0.9', 'monthly')),
+		...features.map((item) => entry(featurePath(item), '0.85', 'monthly')),
+		// The #352 block pages stay until #361 slice E retires them.
 		...buildingBlocks.map((block) => entry(`/blocks/${block.id}`, '0.85', 'monthly')),
-		...taskGuides.map((guide) => entry(`/guides/${guide.slug}`, '0.85', 'monthly')),
-		...toolingGuides.map((guide) => entry(`/tooling/${guide.slug}`, '0.8', 'monthly')),
-		...referenceGuides.map((guide) => entry(`/reference/${guide.slug}`, '0.75', 'monthly')),
-		// /packages* and /faq are redirects to these Reference URLs (S3) and are
-		// intentionally absent here — a sitemap must not list a redirecting URL.
-		entry('/reference/api', '0.8', 'monthly'),
-		entry('/reference/faq', '0.6', 'monthly'),
-		entry('/reference/evidence', '0.6', 'monthly'),
-		entry('/reference/packages', '0.9', 'weekly'),
-		...packages.map((pkg) => entry(`/reference/packages/${pkg.slug}`, '0.75', 'monthly')),
-		entry('/reference/components', '0.5', 'weekly'),
+		...taskGuides.map((guide) => entry(`/docs/guides/${guide.slug}`, '0.85', 'monthly')),
+		...toolingGuides.map((guide) => entry(`/docs/tooling/${guide.slug}`, '0.8', 'monthly')),
+		...referenceGuides.map((guide) => entry(`/docs/reference/${guide.slug}`, '0.75', 'monthly')),
+		// /packages*, /faq and every pre-#365 path outside /docs are redirects to
+		// these URLs and are intentionally absent here — a sitemap must not list a
+		// redirecting URL.
+		entry('/docs/reference/api', '0.8', 'monthly'),
+		entry('/docs/reference/faq', '0.6', 'monthly'),
+		entry('/docs/reference/evidence', '0.6', 'monthly'),
+		entry('/docs/reference/packages', '0.9', 'weekly'),
+		...packages.map((pkg) => entry(`/docs/reference/packages/${pkg.slug}`, '0.75', 'monthly')),
+		entry('/docs/reference/components', '0.5', 'weekly'),
 		...uiComponents.map((component) =>
-			entry(`/reference/components/${component.slug}`, '0.5', 'monthly')
+			entry(`/docs/reference/components/${component.slug}`, '0.5', 'monthly')
 		)
 	];
 

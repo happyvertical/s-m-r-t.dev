@@ -695,7 +695,7 @@ function buildComponent(name, declarationPath, group, slot = null) {
 		demo: exampleId
 			? { id: exampleId, label: exampleLabels[exampleId], href: `/playground` }
 			: null,
-		related: { label: 'UI showcase', href: '/ui' },
+		related: { label: 'UI showcase', href: '/docs/ui' },
 		source: sourcePathFor(declarationPath, group)
 	};
 }

@@ -12,6 +12,7 @@ import images from '@happyvertical/smrt-images/playground';
 import jobs from '@happyvertical/smrt-jobs/playground';
 import messages from '@happyvertical/smrt-messages/playground';
 import projects from '@happyvertical/smrt-projects/playground';
+import reports from '@happyvertical/smrt-reports/playground';
 import tenancy from '@happyvertical/smrt-tenancy/playground';
 import users from '@happyvertical/smrt-users/playground';
 import { sitePlayground } from '$lib/data/site-playground';
@@ -30,6 +31,7 @@ export const playgroundModules: SmrtPlaygroundModule[] = [
 	jobs,
 	messages,
 	projects,
+	reports,
 	tenancy,
 	users,
 	sitePlayground
@@ -63,6 +65,14 @@ export const playgroundEntryTitles: Record<string, string[]> = {
 	'smrt-jobs': ['Job Dashboard', 'Job Detail', 'Job Status Badge'],
 	'smrt-messages': ['Account List', 'Message List', 'Message Detail', 'Compose Form'],
 	'smrt-projects': ['Time Entry List', 'Time Summary', 'Approval Actions'],
+	'smrt-reports': [
+		'Saved reports',
+		'Report detail',
+		'Report confirmation',
+		'Report picker',
+		'Reports unavailable',
+		'Empty report'
+	],
 	'smrt-tenancy': ['Tenant Card', 'Tenant Switcher'],
 	'smrt-users': ['User List', 'User Form', 'Invite User Modal', 'User Menu']
 };

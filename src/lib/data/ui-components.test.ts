@@ -18,7 +18,7 @@ describe('generated UI component reference', () => {
 			expect(component.name).toBeTruthy();
 			expect(component.importPath).toMatch(/^@happyvertical\/smrt-[a-z-]+/);
 			expect(component.source).toMatch(/^packages\/.+\.svelte$/);
-			expect(component.related.href).toBe('/ui');
+			expect(component.related.href).toBe('/docs/ui');
 		}
 	});
 
