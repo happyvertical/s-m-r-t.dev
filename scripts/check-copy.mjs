@@ -230,6 +230,7 @@ const COMPONENT_NON_COPY_ATTRIBUTES = new Set([
 	'article',
 	'backHref',
 	'backLink',
+	'block',
 	'catalog',
 	'class',
 	'code',

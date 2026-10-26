@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { blockBranches, buildingBlocks } from '$lib/data/blocks';
 import { taskGuides } from '$lib/data/task-guides';
 import {
 	documentationSectionForPathname,
@@ -17,7 +18,7 @@ describe('primary navigation', () => {
 			'Agents',
 			'Interaction',
 			'UI',
-			'Modules',
+			'Blocks',
 			'Tooling',
 			'Playground',
 			'build-a-boilerplate',
@@ -59,7 +60,8 @@ describe('contextual navigation', () => {
 		expect(documentationSectionForPathname('/capabilities/webmcp').id).toBe('agents');
 		expect(documentationSectionForPathname('/interaction').id).toBe('interaction');
 		expect(documentationSectionForPathname('/ui').id).toBe('ui');
-		expect(documentationSectionForPathname('/modules').id).toBe('modules');
+		expect(documentationSectionForPathname('/blocks').id).toBe('blocks');
+		expect(documentationSectionForPathname('/blocks/records').id).toBe('blocks');
 		expect(documentationSectionForPathname('/tooling/dev-mcp').id).toBe('tooling');
 		expect(documentationSectionForPathname('/guides/semantic-search').id).toBe('guides');
 		expect(documentationSectionForPathname('/reference/security').id).toBe('reference');
@@ -109,19 +111,16 @@ describe('contextual navigation', () => {
 		}
 	});
 
-	it('marks exactly one /modules cluster anchor active for the current cluster', () => {
-		const section = documentationSections.find((candidate) => candidate.id === 'modules');
-		const clusters = section?.groups.find((group) => group.label === 'Module clusters');
-		expect(clusters).toBeTruthy();
-		expect(clusters!.items.length).toBeGreaterThan(1);
-
-		for (const target of clusters!.items) {
-			const hash = new URL(target.href, 'https://s-m-r-t.dev').hash;
-			const activeHrefs = clusters!.items
-				.filter((item) => isNavigationItemActive(item.href, '/modules', hash))
-				.map((item) => item.href);
-
-			expect(activeHrefs).toEqual([target.href]);
+	it('groups the Blocks section by branch, one item per block', () => {
+		const section = documentationSections.find((candidate) => candidate.id === 'blocks');
+		expect(section?.groups.slice(0, blockBranches.length).map((group) => group.label)).toEqual(
+			blockBranches.map((branch) => branch.title)
+		);
+		const hrefs = new Set(section!.groups.flatMap((group) => group.items.map((i) => i.href)));
+		for (const block of buildingBlocks) {
+			expect(hrefs.has(`/blocks/${block.id}`), `${block.id} missing from the Blocks section`).toBe(
+				true
+			);
 		}
 	});
 

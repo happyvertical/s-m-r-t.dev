@@ -1,6 +1,6 @@
 import { agentsTopics } from '$lib/data/agents';
 import { capabilityGuides, foundationGuides } from '$lib/data/guides';
-import { applicationModuleClusters } from '$lib/data/modules';
+import { blockBranches, buildingBlocks } from '$lib/data/blocks';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
 import { referenceFamilies } from '$lib/data/reference-families';
@@ -25,7 +25,7 @@ export type DocumentationSectionId =
 	| 'agents'
 	| 'interaction'
 	| 'ui'
-	| 'modules'
+	| 'blocks'
 	| 'tooling'
 	| 'guides'
 	| 'reference';
@@ -99,18 +99,22 @@ const referenceEvidenceItem: NavigationItem = {
 	keywords: ['evidence', 'claims', 'sources', 'audit']
 };
 /**
- * Module clusters, not the individual `/packages/<slug>` pages, are the
- * "key pages" registered here: `/modules#<cluster-id>` is a real, stable
- * anchor (`ModuleCluster.svelte` sets `id={guide.id}`), the same shape as the
- * homepage's `/#what-you-get` and `/agents#<topic>` entries. Packages already
- * have their own `searchItems` entries below — registering every one of them here too
- * would duplicate search results.
+ * One entry per building block (#352). Block pages are generated from
+ * `blocks.ts`, not `Guide[]`, so they are registered here by hand; the
+ * branches become the groups of the Blocks section.
  */
-const moduleClusterItems: NavigationItem[] = applicationModuleClusters.map((cluster) => ({
-	label: cluster.title,
-	href: `/modules#${cluster.id}`,
-	description: cluster.summary
+const blockItemsByBranch: NavigationGroup[] = blockBranches.map((branch) => ({
+	label: branch.title,
+	items: buildingBlocks
+		.filter((block) => block.branch === branch.id)
+		.map((block) => ({
+			label: block.title,
+			href: `/blocks/${block.id}`,
+			description: block.capability,
+			keywords: block.packages
+		}))
 }));
+const blockItems: NavigationItem[] = blockItemsByBranch.flatMap((group) => group.items);
 
 const interactionCapabilitySlugs = new Set([
 	'agent-legible-applications',
@@ -218,11 +222,11 @@ const sectionOverviewItems = new Map<DocumentationSectionId, NavigationItem>([
 		}
 	],
 	[
-		'modules',
+		'blocks',
 		{
-			label: 'Application modules overview',
-			href: '/modules',
-			description: 'Find prebuilt application parts by the outcome they supply.'
+			label: 'Blocks overview',
+			href: '/blocks',
+			description: 'Find the capabilities you will not build from scratch.'
 		}
 	],
 	[
@@ -403,13 +407,13 @@ export const documentationSections: DocumentationSection[] = [
 		]
 	},
 	{
-		id: 'modules',
-		label: 'Modules',
-		title: 'Application modules',
-		href: '/modules',
-		description: 'Find substantial application parts by the outcome they provide.',
+		id: 'blocks',
+		label: 'Blocks',
+		title: 'Agentic building blocks',
+		href: '/blocks',
+		description: 'Find the capabilities you will not build from scratch.',
 		groups: [
-			{ label: 'Module clusters', items: moduleClusterItems },
+			...blockItemsByBranch,
 			{
 				label: 'Browse',
 				items: [
@@ -497,7 +501,7 @@ export const primaryNavigation: PrimaryNavigationItem[] = [
 	{ label: 'Agents', href: '/agents', section: 'agents' },
 	{ label: 'Interaction', href: '/interaction', section: 'interaction' },
 	{ label: 'UI', href: '/ui', section: 'ui' },
-	{ label: 'Modules', href: '/modules', section: 'modules' },
+	{ label: 'Blocks', href: '/blocks', section: 'blocks' },
 	{ label: 'Tooling', href: '/tooling', section: 'tooling' },
 	{ label: 'Playground', href: '/playground' },
 	{ label: 'build-a-boilerplate', href: '/build-a-boilerplate' },
@@ -518,7 +522,9 @@ export function documentationSectionForPathname(pathname: string): Documentation
 	if (pathname === '/agents') return getDocumentationSection('agents');
 	if (pathname === '/interaction') return getDocumentationSection('interaction');
 	if (pathname === '/ui') return getDocumentationSection('ui');
-	if (pathname === '/modules') return getDocumentationSection('modules');
+	if (pathname === '/blocks' || pathname.startsWith('/blocks/')) {
+		return getDocumentationSection('blocks');
+	}
 	if (
 		pathname === '/guides' ||
 		pathname.startsWith('/guides/') ||
@@ -624,8 +630,8 @@ export const docsNavigation: NavigationGroup[] = [
 	},
 	{ label: 'UI', items: [sectionOverviewItem('ui'), ...uiCapabilityItems] },
 	{
-		label: 'Application modules',
-		items: [sectionOverviewItem('modules'), ...moduleClusterItems]
+		label: 'Blocks',
+		items: [sectionOverviewItem('blocks'), ...blockItems]
 	},
 	{ label: 'Tooling', items: [sectionOverviewItem('tooling'), ...toolingItems] },
 	{ label: 'Guides', items: [sectionOverviewItem('guides'), ...taskItems] },

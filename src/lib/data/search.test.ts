@@ -3,8 +3,7 @@ import { agentsTopics } from '$lib/data/agents';
 import { frameworkTopics } from '$lib/data/framework';
 import { guidePages } from '$lib/data/guide-families';
 import { interactionContent } from '$lib/data/interaction';
-import { applicationModuleClusters } from '$lib/data/modules';
-import { docsNavigation } from '$lib/data/navigation';
+import { buildingBlocks } from '$lib/data/blocks';
 import { searchDocs, searchEntries } from '$lib/data/search';
 
 describe('search index', () => {
@@ -126,38 +125,27 @@ describe('search index', () => {
 		});
 	});
 
-	describe('module clusters', () => {
-		it('gives every module cluster a page entry at its /modules anchor', () => {
-			for (const cluster of applicationModuleClusters) {
+	describe('building blocks', () => {
+		it('gives every block a page entry with its package slugs as keywords', () => {
+			for (const block of buildingBlocks) {
 				const entry = searchEntries.find(
-					(candidate) => candidate.kind === 'page' && candidate.href === `/modules#${cluster.id}`
+					(candidate) => candidate.kind === 'page' && candidate.href === `/blocks/${block.id}`
 				);
-				expect(entry?.label, `missing entry for /modules#${cluster.id}`).toBe(cluster.title);
+				expect(entry?.label, `missing entry for /blocks/${block.id}`).toBe(block.title);
+				expect(entry?.description).toBe(block.capability);
+				expect(entry?.keywords).toEqual(block.packages);
 			}
 		});
 
-		it('resolves a cluster title through search without duplicating its packages entries', () => {
-			const cluster = applicationModuleClusters[0];
-			const results = searchDocs(cluster.title);
-			expect(results.some((entry) => entry.href === `/modules#${cluster.id}`)).toBe(true);
-
-			// searchEntries is deduped by kind:href:label, so asserting against it
-			// cannot detect a duplicate *source* registration — a second
-			// docsNavigation item with the same href and label collapses before
-			// this test could see it. Assert directly against docsNavigation
-			// instead: no group (in particular "Application modules") may
-			// register an individual package's own href. Registering all 23
-			// packages there — instead of the 8 cluster anchors this diff adds —
-			// is exactly the duplication acceptance criterion #5 rules out.
-			const navigationHrefs = new Set(
-				docsNavigation.flatMap((group) => group.items.map((item) => item.href))
+		it('resolves a block title through search', () => {
+			const block = buildingBlocks[0];
+			expect(searchDocs(block.title).some((entry) => entry.href === `/blocks/${block.id}`)).toBe(
+				true
 			);
-			for (const pkg of cluster.packages) {
-				expect(
-					navigationHrefs.has(`/reference/packages/${pkg.slug}`),
-					`docsNavigation should not register /reference/packages/${pkg.slug} directly`
-				).toBe(false);
-			}
+		});
+
+		it('keeps the retired module-cluster entries out of the index', () => {
+			expect(searchEntries.some((entry) => entry.href.startsWith('/modules'))).toBe(false);
 		});
 	});
 });
