@@ -343,7 +343,7 @@ export const features: Feature[] = [
 		word: 'Reports',
 		hint: 'Declared or asked-for reports, refreshed on schedule, rechecked against permissions.',
 		packages: ['smrt-reports'],
-		example: still('reports'),
+		example: playground('report-detail'),
 		inTheBox: ['declared reports', 'runtime reports', 'saved views', 'ReportPicker', 'watermarks']
 	}),
 

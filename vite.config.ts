@@ -27,6 +27,7 @@ export default defineConfig({
 			'@happyvertical/smrt-jobs',
 			'@happyvertical/smrt-messages',
 			'@happyvertical/smrt-projects',
+			'@happyvertical/smrt-reports',
 			'@happyvertical/smrt-tenancy',
 			'@happyvertical/smrt-users',
 			'@happyvertical/smrt-ui',

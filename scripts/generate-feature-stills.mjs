@@ -117,17 +117,6 @@ const cards = {
 			['WG-120', '0 · reorder', '12 s ago']
 		]
 	},
-	reports: {
-		kicker: 'Declared report · Acme Corp',
-		title: 'Sales by product line, monthly',
-		columns: ['Line', 'Units', 'Revenue'],
-		rows: [
-			['widgets', '4,210', '$84,200'],
-			['gizmos', '1,980', '$59,400'],
-			['gadgets', '860', '$43,000'],
-			['doodads', '12,400', '$24,800']
-		]
-	},
 	shell: {
 		kicker: 'Application shell · Acme Corp',
 		title: 'Inventory › Widgets',
