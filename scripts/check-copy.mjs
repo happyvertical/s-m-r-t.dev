@@ -52,6 +52,8 @@ const PROSE_PROPERTIES = new Set([
 	'kicker',
 	'heroLine',
 	'highlights',
+	'hint',
+	'inTheBox',
 	'intro',
 	'label',
 	'layer',
@@ -85,6 +87,7 @@ const PROSE_PROPERTIES = new Set([
 	'track',
 	'version-added',
 	'warning',
+	'word',
 	'youDecide'
 ]);
 
@@ -115,6 +118,7 @@ const NON_PROSE_PROPERTIES = new Set([
 	'entryTitle',
 	'evidence',
 	'evidenceId',
+	'example',
 	'exampleResource',
 	'family',
 	'filename',
@@ -149,7 +153,9 @@ const NON_PROSE_PROPERTIES = new Set([
 	'plane',
 	'prev',
 	'qualifiedId',
+	'recipes',
 	'records',
+	'reference',
 	'related',
 	'relatedModules',
 	'relatedReference',
@@ -167,6 +173,7 @@ const NON_PROSE_PROPERTIES = new Set([
 	'slugs',
 	'source',
 	'sources',
+	'src',
 	'status',
 	'stepCount',
 	'summarySynthesized',

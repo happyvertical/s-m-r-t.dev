@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-labelledby="title-ingestion">
+  <title id="title-ingestion">Documents received — Intake · Acme Corp, an illustration</title>
+  <style>
+    .bg { fill: #fbf8f3; }
+    .card { fill: #ffffff; stroke: #e3dbd0; }
+    .kicker { font: 600 12px/1 ui-monospace, "JetBrains Mono", monospace; fill: #c2410c; letter-spacing: 0.08em; text-transform: uppercase; }
+    .title { font: 600 24px/1 Avenir, Inter, system-ui, sans-serif; fill: #1c1917; }
+    .head { font: 600 12px/1 Avenir, Inter, system-ui, sans-serif; fill: #78716c; letter-spacing: 0.04em; text-transform: uppercase; }
+    .cell { font: 400 15px/1 Avenir, Inter, system-ui, sans-serif; fill: #292524; }
+    .rule { stroke: #efe9e1; }
+    .badge { font: 600 11px/1 ui-monospace, "JetBrains Mono", monospace; fill: #78716c; letter-spacing: 0.06em; }
+  </style>
+  <rect class="bg" width="640" height="400"/>
+  <rect class="card" x="20" y="20" width="600" height="360" rx="16"/>
+  <text x="40" y="64" class="kicker">Intake · Acme Corp</text>
+  <text x="40" y="104" class="title">Documents received</text>
+  <text x="600" y="64" text-anchor="end" class="badge">ILLUSTRATION</text>
+  <g>
+    <text x="40" y="150" class="head">Source</text><text x="280" y="150" class="head">Document</text><text x="470" y="150" class="head">Proposal</text>
+    <line x1="40" x2="600" y1="208" y2="208" class="rule"/><text x="40" y="194" class="cell">email</text><text x="280" y="194" class="cell">Gizmo invoice #4471</text><text x="470" y="194" class="cell">Expense · awaiting review</text>
+    <line x1="40" x2="600" y1="252" y2="252" class="rule"/><text x="40" y="238" class="cell">watch folder</text><text x="280" y="238" class="cell">Widget spec v3.pdf</text><text x="470" y="238" class="cell">Asset · proposed</text>
+    <line x1="40" x2="600" y1="296" y2="296" class="rule"/><text x="40" y="282" class="cell">webhook</text><text x="280" y="282" class="cell">Doodad delivery note</text><text x="470" y="282" class="cell">Stock receipt · proposed</text>
+  </g>
+</svg>

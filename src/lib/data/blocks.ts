@@ -2,6 +2,11 @@
  * Agentic building blocks (#352): the capabilities a builder will not have to
  * write from scratch, grouped into four branches for first-time builders.
  *
+ * Superseded by `features.ts` (#361, #362), which carries the locked nine
+ * sections and forty-nine features. This seed stays only for the #358
+ * consumers (`BlockMap`, `BlockPage`, the `/blocks` routes) until slice E
+ * (#366) retires them; add nothing new here.
+ *
  * A block is a capability, not a package category. One package can be a block
  * (ingestion), a cross-cutting feature can be a block (agent-assisted forms),
  * and a package may sit behind several blocks. The reader test for every line
