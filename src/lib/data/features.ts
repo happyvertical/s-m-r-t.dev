@@ -198,7 +198,7 @@ export const features: Feature[] = [
 		hint: 'One record declaration yields MCP, CLI and in-page tools.',
 		packages: ['smrt-app-mcp', 'smrt-core', 'smrt-web', 'smrt-mcp-apps', 'smrt-mcp-openai'],
 		example: still('tools'),
-		inTheBox: ['tools', 'allow-list', 'scopes', 'denial envelope', 'WebMCP tools']
+		inTheBox: ['tools', 'allow-lists', 'scopes', 'safe denials', 'in-page tools']
 	}),
 	feature({
 		id: 'blueprint',
@@ -207,7 +207,13 @@ export const features: Feature[] = [
 		hint: 'A coding agent reads your records and interfaces without running anything.',
 		packages: ['smrt-scanner', 'smrt-dev-mcp'],
 		example: still('blueprint'),
-		inTheBox: ['scanner', 'manifest', 'introspection', 'knowledge', 'freshness']
+		inTheBox: [
+			'scanner',
+			'manifest',
+			'project introspection',
+			'ecosystem knowledge',
+			'freshness checks'
+		]
 	}),
 	feature({
 		id: 'agents',
@@ -225,7 +231,7 @@ export const features: Feature[] = [
 		hint: 'An agent fills a form as proposals; a person applies them.',
 		packages: ['smrt-ui', 'smrt-svelte', 'smrt-web'],
 		example: playground('agent-aware-form'),
-		inTheBox: ['interaction registry', 'staged proposals', 'StagedControlReview', 'secret controls']
+		inTheBox: ['interaction registry', 'staged proposals', 'proposal review', 'protected fields']
 	}),
 	feature({
 		id: 'memory',
@@ -261,7 +267,7 @@ export const features: Feature[] = [
 		hint: 'Background work and cron schedules on a durable queue with retries.',
 		packages: ['smrt-jobs'],
 		example: playground('job-dashboard'),
-		inTheBox: ['jobs', 'schedules', 'retries', 'leases', 'runner']
+		inTheBox: ['jobs', 'queues', 'schedules', 'retries', 'workers']
 	}),
 	feature({
 		id: 'webhooks',
@@ -279,7 +285,7 @@ export const features: Feature[] = [
 		hint: 'Small units of knowledge keep sources, confidence and corrections.',
 		packages: ['smrt-facts'],
 		example: still('facts'),
-		inTheBox: ['facts', 'sources', 'credibility', 'evolution chains', 'FactSubject']
+		inTheBox: ['facts', 'sources', 'credibility', 'evolution chains', 'linked records']
 	}),
 
 	// Basics
@@ -289,7 +295,7 @@ export const features: Feature[] = [
 		word: 'Records',
 		hint: 'One class describes a record; storage, migrations and interfaces follow.',
 		packages: ['smrt-core', 'smrt-types'],
-		example: playground('object-form'),
+		example: playground('data-table'),
 		inTheBox: ['models', 'collections', 'decorators', 'migrations', 'REST routes']
 	}),
 	feature({
@@ -299,7 +305,7 @@ export const features: Feature[] = [
 		hint: 'Per-field labels, defaults, visibility and locks, layered by app, tenant, user.',
 		packages: ['smrt-fields'],
 		example: playground('policy-form'),
-		inTheBox: ['FieldPolicy', 'layers', 'defaults', 'labels', 'locks']
+		inTheBox: ['field policies', 'layers', 'defaults', 'labels', 'locks']
 	}),
 	feature({
 		id: 'flags',
@@ -308,7 +314,7 @@ export const features: Feature[] = [
 		hint: 'Feature switches defined in code, overridden per tenant without a redeploy.',
 		packages: ['smrt-features'],
 		example: still('flags'),
-		inTheBox: ['feature definitions', 'overrides', 'tenant hierarchy', 'resolver']
+		inTheBox: ['feature definitions', 'overrides', 'tenant hierarchy', 'settings screen']
 	}),
 	feature({
 		id: 'people',
@@ -325,8 +331,8 @@ export const features: Feature[] = [
 		word: 'Tenants',
 		hint: 'Tenants nest; scoped collections decide who sees which records.',
 		packages: ['smrt-tenancy', 'smrt-sites'],
-		example: playground('tenant-switcher'),
-		inTheBox: ['tenants', 'tenant-scoped collections', 'interceptors', 'RLS', 'sites']
+		example: playground('tenant-card'),
+		inTheBox: ['tenants', 'tenant-scoped collections', 'tenant context', 'interceptors', 'sites']
 	}),
 	feature({
 		id: 'realtime',
@@ -335,7 +341,13 @@ export const features: Feature[] = [
 		hint: 'Screens stay current as records change, with cached and offline writes.',
 		packages: ['smrt-web', 'smrt-svelte'],
 		example: still('realtime'),
-		inTheBox: ['web collections', 'SSE client', 'optimistic writes', 'offline outbox', 'sync-apply']
+		inTheBox: [
+			'web collections',
+			'live updates',
+			'cached reads',
+			'optimistic writes',
+			'offline outbox'
+		]
 	}),
 	feature({
 		id: 'reports',
@@ -344,7 +356,7 @@ export const features: Feature[] = [
 		hint: 'Declared or asked-for reports, refreshed on schedule, rechecked against permissions.',
 		packages: ['smrt-reports'],
 		example: playground('report-detail'),
-		inTheBox: ['declared reports', 'runtime reports', 'saved views', 'ReportPicker', 'watermarks']
+		inTheBox: ['declared reports', 'runtime reports', 'saved views', 'scheduled refresh', 'exports']
 	}),
 
 	// Screens
@@ -355,16 +367,16 @@ export const features: Feature[] = [
 		hint: 'A themed application shell with navigation, panels, hotkeys and a palette.',
 		packages: ['smrt-svelte', 'smrt-ui', 'smrt-playground', 'smrt-languages'],
 		example: still('shell'),
-		inTheBox: ['AppShell', 'AdminShell', 'themes', 'recipe surfaces', 'language strings']
+		inTheBox: ['app shell', 'admin shell', 'themes', 'command palette', 'language strings']
 	}),
 	feature({
 		id: 'mobile',
 		section: 'screens',
 		word: 'Mobile',
-		hint: 'Android and iOS clients share one Kotlin core and generated DTOs.',
+		hint: 'Android and iOS clients share one Kotlin core and generated data types.',
 		packages: ['smrt-mobile', 'smrt-mobile-contract', 'smrt-android', 'smrt-ios'],
 		example: still('mobile'),
-		inTheBox: ['Kotlin Multiplatform core', 'write queue', 'PKCE sessions', 'generated DTOs']
+		inTheBox: ['shared Kotlin core', 'write queue', 'sign-in sessions', 'generated data types']
 	}),
 
 	// Content
@@ -374,7 +386,7 @@ export const features: Feature[] = [
 		word: 'Articles',
 		hint: 'Drafts, review, publication and corrections, each with a version.',
 		packages: ['smrt-content'],
-		example: playground('content-editor'),
+		example: playground('contribution-inbox'),
 		inTheBox: ['articles', 'drafts', 'contributions', 'reviews', 'versions']
 	}),
 	feature({
@@ -384,7 +396,7 @@ export const features: Feature[] = [
 		hint: 'Files with versions and provenance behind a provider-neutral store.',
 		packages: ['smrt-assets', 'smrt-assets-local', 'smrt-assets-ergot'],
 		example: playground('asset-grid'),
-		inTheBox: ['assets', 'versioning', 'provenance', 'AssetStore', 'providers']
+		inTheBox: ['assets', 'versions', 'provenance', 'attachments', 'storage providers']
 	}),
 	feature({
 		id: 'images',
@@ -402,7 +414,7 @@ export const features: Feature[] = [
 		hint: 'Voice profiles and generated speech outputs stored as records.',
 		packages: ['smrt-voice'],
 		example: still('voice'),
-		inTheBox: ['voice profiles', 'voice outputs', 'TTS providers', 'transcription']
+		inTheBox: ['voice profiles', 'voice outputs', 'speech providers', 'transcription']
 	}),
 	feature({
 		id: 'video',
@@ -420,7 +432,7 @@ export const features: Feature[] = [
 		hint: 'A discussion attached to any record, with mentions.',
 		packages: ['smrt-comments'],
 		example: still('comments'),
-		inTheBox: ['comments', 'record discussions', 'mentions', 'notification adapter']
+		inTheBox: ['comments', 'record discussions', 'mentions', 'moderation', 'notifications']
 	}),
 
 	// Messaging
@@ -440,7 +452,7 @@ export const features: Feature[] = [
 		hint: 'Email accounts and messages with send status and retries.',
 		packages: ['smrt-messages'],
 		example: playground('mailbox'),
-		inTheBox: ['EmailAccount', 'Email messages', 'send status', 'attachments', 'mailbox sync']
+		inTheBox: ['email accounts', 'messages', 'send status', 'attachments', 'mailbox sync']
 	}),
 	feature({
 		id: 'slack',
@@ -449,7 +461,7 @@ export const features: Feature[] = [
 		hint: 'Slack accounts and messages in the same family as email.',
 		packages: ['smrt-messages'],
 		example: playground('account-list'),
-		inTheBox: ['SlackAccount', 'SlackMessage', 'channels', 'reactions', 'blocks']
+		inTheBox: ['Slack accounts', 'Slack messages', 'channels', 'threads', 'reactions']
 	}),
 	feature({
 		id: 'social',
@@ -458,7 +470,7 @@ export const features: Feature[] = [
 		hint: 'Social accounts with OAuth, and posts with schedule and status.',
 		packages: ['smrt-social', 'smrt-messages'],
 		example: still('social'),
-		inTheBox: ['social accounts', 'posts', 'OAuth', 'scheduling', 'Tweet']
+		inTheBox: ['social accounts', 'posts', 'OAuth', 'scheduling', 'post analytics']
 	}),
 
 	// Commerce
@@ -466,9 +478,9 @@ export const features: Feature[] = [
 		id: 'commerce',
 		section: 'commerce',
 		word: 'Commerce',
-		hint: 'Contracts, orders, invoices and payments with guarded state machines.',
+		hint: 'Contracts, orders, invoices and payments with rules on every status change.',
 		packages: ['smrt-commerce'],
-		example: playground('invoice-card'),
+		example: playground('customer-directory'),
 		inTheBox: ['contracts', 'orders', 'invoices', 'payments', 'tax codes']
 	}),
 	feature({
@@ -487,7 +499,7 @@ export const features: Feature[] = [
 		hint: 'Double-entry accounts and journals, immutable once posted.',
 		packages: ['smrt-ledgers'],
 		example: still('ledgers'),
-		inTheBox: ['chart of accounts', 'journals', 'entries', 'postings', 'balance enforcement']
+		inTheBox: ['chart of accounts', 'journals', 'entries', 'postings', 'balanced postings']
 	}),
 	feature({
 		id: 'subscriptions',
@@ -516,7 +528,7 @@ export const features: Feature[] = [
 		hint: 'Multi-level bills of materials, routing and production runs.',
 		packages: ['smrt-manufacturing'],
 		example: still('manufacturing'),
-		inTheBox: ['BOM lines', 'routing', 'operations', 'production runs']
+		inTheBox: ['bills of materials', 'routing', 'operations', 'production runs']
 	}),
 	feature({
 		id: 'projects',
@@ -534,7 +546,7 @@ export const features: Feature[] = [
 		hint: 'Cases that join from chat or email and keep their timeline.',
 		packages: ['smrt-support'],
 		example: still('support'),
-		inTheBox: ['cases', 'intake', 'service targets', 'clocks', 'escalation']
+		inTheBox: ['cases', 'intake', 'service targets', 'response clocks', 'escalation']
 	}),
 	feature({
 		id: 'timesheets',
@@ -549,7 +561,7 @@ export const features: Feature[] = [
 		id: 'expenses',
 		section: 'operations',
 		word: 'Expenses',
-		hint: 'Expenses with deduplicated receipts and method-only review.',
+		hint: 'Expenses with receipts, duplicate checks and a review step.',
 		packages: ['smrt-expenses'],
 		example: still('expenses'),
 		inTheBox: ['expenses', 'receipts', 'review', 'reimbursement', 'duplicates']
@@ -587,7 +599,7 @@ export const features: Feature[] = [
 		id: 'affiliates',
 		section: 'marketing',
 		word: 'Affiliates',
-		hint: 'Referral commissions, now a compatibility layer over the sales core.',
+		hint: 'Referral partners and their commissions, built on the sales core.',
 		packages: ['smrt-affiliates', 'smrt-sales'],
 		example: still('affiliates'),
 		inTheBox: ['affiliates', 'referrals', 'commissions', 'payouts']

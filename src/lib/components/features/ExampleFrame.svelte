@@ -125,18 +125,26 @@
 		border-radius: 50%;
 		background: var(--site-ok);
 	}
+	/* Tall entries (dashboards, long forms) scroll inside the frame instead of
+	   pushing "Also in the box" off the first screens. */
 	.live-stage {
 		min-height: 360px;
+		max-height: 680px;
 		min-width: 0;
-		overflow-x: auto;
+		overflow: auto;
 	}
 	/* The frame already names the package and entry; keep the host's mode switch only. */
 	.live-stage :global(.breadcrumbs),
+	.live-stage :global([data-testid='playground-selected-package']),
 	.live-stage :global(.workspace-header:not(:has(.mode-control))) {
 		display: none;
 	}
 	.live-stage :global(.playground-shell) {
 		min-height: 0;
+	}
+	/* A one-card entry should not sit in 480px of white space. */
+	.live-stage :global(.preview-stage) {
+		min-height: 280px;
 	}
 	.placeholder {
 		margin: 0;

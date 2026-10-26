@@ -258,7 +258,7 @@ describe('feature packages', () => {
 		expect(getFeature('email')?.packages[0]).toBe('smrt-messages');
 		expect(getFeature('slack')?.packages[0]).toBe('smrt-messages');
 		expect(getFeature('social')?.packages).toEqual(['smrt-social', 'smrt-messages']);
-		expect(getFeature('social')?.inTheBox).toContain('Tweet');
+		expect(getFeature('social')?.inTheBox).toContain('posts');
 		expect(getFeature('articles')?.packages[0]).toBe('smrt-content');
 		expect(getFeature('realtime')?.packages).toContain('smrt-web');
 		expect(getFeature('flags')?.packages).toEqual(['smrt-features']);

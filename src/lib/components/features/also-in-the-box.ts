@@ -75,7 +75,7 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 
 	// Basics
 	records: [
-		tile('DataTable', 'smrt-ui/data', 'Any collection as a sortable, selectable table.'),
+		tile('ObjectForm', 'smrt-fields/svelte', 'A create or edit form built from a record’s fields.'),
 		tile('CollectionList', 'smrt-ui/data', 'Any collection as a list of cards.')
 	],
 	fields: [
@@ -99,7 +99,9 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 		tile('AccountSecurityPanel', 'smrt-users/svelte', 'Passkeys and sessions for one account.'),
 		tile('UserMenu', 'smrt-users/svelte', 'Who is signed in, and how to sign out.')
 	],
-	tenants: [tile('TenantCard', 'smrt-tenancy/svelte', 'A tenant at a glance.')],
+	tenants: [
+		tile('TenantSwitcher', 'smrt-tenancy/svelte', 'Switch between the tenants a person belongs to.')
+	],
 	reports: [
 		tile('SavedReports', 'smrt-reports/svelte', 'The reports a person has saved.'),
 		tile('ReportPicker', 'smrt-reports/svelte', 'Choose a source, its measures and groupings.'),
@@ -128,7 +130,7 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 	// Content
 	articles: [
 		tile('ArticleList', 'smrt-content/svelte', 'Published articles as cards.'),
-		tile('ContentContributionInbox', 'smrt-content/svelte', 'Contributions waiting for an editor.'),
+		tile('ContentEditor', 'smrt-content/svelte', 'Write an article: body, references and media.'),
 		tile('Markdown', 'smrt-content/svelte', 'A body written in Markdown, rendered.')
 	],
 	assets: [
@@ -158,9 +160,9 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 		tile('SendStatusBadge', 'smrt-messages/svelte', 'Whether a message was sent.')
 	],
 	slack: [
-		tile('AccountCard', 'smrt-messages/svelte', 'One connected account at a glance.'),
-		tile('MessageList', 'smrt-messages/svelte', 'The messages from an account.'),
-		tile('MessageTypeBadge', 'smrt-messages/svelte', 'Which kind of message this is.')
+		tile('AccountCard', 'smrt-messages/svelte', 'A connected Slack workspace at a glance.'),
+		tile('MessageList', 'smrt-messages/svelte', 'The messages pulled from a Slack channel.'),
+		tile('MessageTypeBadge', 'smrt-messages/svelte', 'Marks a message as Slack, email or social.')
 	],
 	social: [
 		tile('SocialAccountSettings', 'smrt-social/svelte', 'Connect and manage social accounts.')
@@ -170,7 +172,7 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 	commerce: [
 		tile('InvoiceEditor', 'smrt-commerce/svelte', 'Build an invoice line by line.'),
 		tile('QuoteEditor', 'smrt-commerce/svelte', 'Draft a quote.'),
-		tile('CustomerDirectory', 'smrt-commerce/svelte', 'Your customers, searchable.')
+		tile('InvoiceCard', 'smrt-commerce/svelte', 'An invoice at a glance: status, amount, due date.')
 	],
 	products: [
 		tile('ProductCard', 'smrt-products/components', 'A product at a glance.'),

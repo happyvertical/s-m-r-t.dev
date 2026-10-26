@@ -102,6 +102,18 @@ describe('showcase template', () => {
 		const { container } = showcase(features.find((item) => item.id === 'blueprint')!);
 		expect(container.querySelector('#also-in-the-box')).toBeNull();
 	});
+
+	it('never repeats the live example as a tile', () => {
+		for (const feature of features) {
+			if (feature.example.kind !== 'playground') continue;
+			const title = resolvePlaygroundSlug(feature.example.entry)!.entryTitle.replace(/\s+/g, '');
+			for (const tile of alsoInTheBox[feature.id] ?? []) {
+				expect(tile.name.toLowerCase(), `${feature.id}: ${tile.name}`).not.toContain(
+					title.toLowerCase()
+				);
+			}
+		}
+	});
 });
 
 describe('section index', () => {
