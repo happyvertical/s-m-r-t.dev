@@ -2,9 +2,8 @@ import { packages, type PackageCategory, type SmrtPackage } from '$lib/data/pack
 
 /**
  * The five-layer application stack. Canonical short names and one-line
- * descriptions for the taxonomy quoted across the homepage hero, the scope
- * map (`#scope`), and anywhere else the stack is named. One source list so
- * the hero mini-map and the full scope map cannot drift apart.
+ * descriptions for the taxonomy quoted on /framework and anywhere else the
+ * stack is named. One source list so those mentions cannot drift apart.
  *
  * Package membership is derived from `packages.ts` categories (never
  * hand-counted): each layer filters the real catalog, so a package added or
@@ -63,7 +62,7 @@ export interface AppLayer {
 	name: string;
 	/** Tight one-line description for the hero lede bullet. */
 	heroLine: string;
-	/** Longer role description for the Section 4 (`#scope`) band. */
+	/** Longer role description for a layer band. */
 	scopeCopy: string;
 	packages: SmrtPackage[];
 	chips: LayerChip[];
@@ -87,55 +86,6 @@ const agentsIncludedPackages = packages.filter(
 const screensAndControlsPackages = packages.filter(
 	(pkg) => pkg.category === 'Web & UI' && !DEV_TOOLING_SLUGS.has(pkg.slug)
 );
-
-/**
- * Packages the five-layer stack doesn't place anywhere: native mobile (still
- * source-only) plus the coding-agent/CI tooling carved out above. Both are
- * documented elsewhere (Mobile capability page; Tooling section) — this
- * count exists so the scope map can reconcile its own arithmetic instead of
- * leaving a visitor to notice the gap between the five bands and the
- * catalog total unassisted.
- */
-export const unlayeredPackageCount =
-	packages.length -
-	foundationsPackages.length -
-	whoCanDoWhatPackages.length -
-	buildingBlockPackages.length -
-	agentsIncludedPackages.length -
-	screensAndControlsPackages.length;
-
-/**
- * The "Ready-made building blocks" noun list. Each noun links to its home —
- * a `/blocks` page, or a package page when a block would repeat
- * another noun's target. Rendered identically in the hero lede and in the
- * Section 4 band copy for that layer: one shared constant, not two texts
- * that can drift.
- */
-export interface LayerNoun {
-	label: string;
-	href: string;
-}
-
-export const buildingBlockNouns: LayerNoun[] = [
-	{ label: 'articles', href: '/blocks/content-and-media' },
-	{ label: 'files', href: '/reference/packages/smrt-assets' },
-	{ label: 'images', href: '/reference/packages/smrt-images' },
-	{ label: 'events', href: '/blocks/facts' },
-	{ label: 'invoices', href: '/blocks/commerce-and-money' },
-	{ label: 'projects', href: '/blocks/operations' },
-	{ label: 'messages', href: '/reference/packages/smrt-messages' },
-	{ label: 'reports', href: '/blocks/insight-and-marketing' }
-];
-
-/**
- * The sentence stem shared by the hero lede and the Section 4 band copy —
- * same words, cased for where each renders: the hero bullet reads "— working
- * parts…" (lowercase, continuing the em dash), the Section 4 band opens the
- * sentence on its own ("Working parts…"). The noun list after it is the one
- * shared constant (`buildingBlockNouns`); only this stem's case differs.
- */
-export const buildingBlocksHeroLede = 'working parts for common needs:';
-export const buildingBlocksScopeLede = 'Working parts for common needs:';
 
 export const appLayers: AppLayer[] = [
 	{
@@ -164,9 +114,6 @@ export const appLayers: AppLayer[] = [
 		id: 'building-blocks',
 		index: 3,
 		name: 'Ready-made building blocks',
-		// Rendered specially at the render site — see `buildingBlockNouns` — but
-		// kept here too so any plain-text listing of the five lines still reads
-		// sensibly on its own.
 		heroLine:
 			'working parts for common needs: articles, files, images, events, invoices, projects, messages, and reports.',
 		scopeCopy:

@@ -1,8 +1,8 @@
 <script lang="ts">
 	// All eight documentation sections at once, each with its key pages and a
-	// link to the section landing. Borrows the homepage scope map's band grammar
-	// (mono index, name, mono count, hairline rules — see `+page.svelte` #scope
-	// and `layers.ts`) so the panel reads as the same site, zoomed out. The
+	// link to the section landing. Uses a band grammar
+	// (mono index, name, mono count, hairline rules) so the panel reads as the
+	// same site, zoomed out. The
 	// current section keeps its place in the map — a stable site map is the
 	// point — and instead gets the accent "you are here" treatment plus a longer
 	// page list.

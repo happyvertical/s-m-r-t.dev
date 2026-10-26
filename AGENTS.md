@@ -66,9 +66,9 @@ it catches `{UndefinedVar}` in templates.
 ## How the content is authored
 
 The site is data-driven, not page-per-file: the guide, reference, and package
-pages are entries in `src/lib/data/`, served by two renderers —
+pages are entries in `src/lib/data/`, served by three renderers —
 `GuidePage.svelte` for the `Guide[]` modules, `PackageWorkbench.svelte` for
-`packages.ts`. Adding one of those means adding a data entry, not a route; the
+`packages.ts`, `BlockPage.svelte` for `blocks.ts` (`/blocks/[slug]`). Adding one of those means adding a data entry, not a route; the
 route's `entries()` prerenders it automatically. Editing a renderer changes
 every page it serves, so check a few before assuming. Landing pages and section
 indexes are ordinary hand-written `+page.svelte` files.
@@ -77,6 +77,10 @@ A new `Guide[]` route family is the exception — it needs a `[slug]` route of i
 own plus registering by hand in `navigation.ts`, `search.ts`, and the sitemap.
 Add the family and let `registration.test.ts` name what you missed; it discovers
 the families, so it knows about yours before you have told it anything.
+
+The blocks family is not a `Guide[]` family, so `registration.test.ts` does not
+see it: register a block by hand in `navigation.ts`, the sitemap, and
+`generate-agent-docs.mjs`. `blocks.test.ts` and `navigation.test.ts` name misses.
 
 ### Nothing regenerates that content, so it goes stale silently
 
