@@ -1,73 +1,23 @@
 <script lang="ts">
 	import SEO from '$lib/components/SEO.svelte';
-	import CodeBlock from '$lib/components/CodeBlock.svelte';
-	import PlannerScreencast from '$lib/components/PlannerScreencast.svelte';
-	import BlockMap from '$lib/components/home/BlockMap.svelte';
-	import FeatureSections from '$lib/components/home/FeatureSections.svelte';
-	import { frameworkModelProjections, homepageModelExample } from '$lib/data/framework';
-	import { SMRT_VERSION } from '$lib/version';
+	import FeatureGraph from '$lib/components/home/FeatureGraph.svelte';
+	import { BUILD_HREF } from '$lib/components/home/graph-layout';
 
-	// Getting Started (#337): four entries, each a getting-started guide. The
-	// last one lands on the agent prompt below, on this page.
-	const startPaths = [
-		{
-			label: 'build-a-boilerplate',
-			body: 'Pick recipes in the browser and export a cookbook file or a prompt for your coding agent. Nothing to install.',
-			href: '/build-a-boilerplate'
-		},
-		{
-			label: 'Start from a cookbook',
-			body: 'smrt cookbook apply turns a cookbook into a project on the smrt-start template, pinned to the current release.',
-			href: '/starters#cookbook'
-		},
-		{
-			label: 'Clone smrt-start',
-			body: 'The canonical template: one owner, local SQLite, a Notes model, an assistant and read-only MCP.',
-			href: '/starters/smrt-start'
-		},
-		{
-			label: 'Hand it to your agent',
-			body: 'Copy a prompt into Claude Code, Codex or another coding agent; it runs the smrt CLI and creates the app.',
-			href: '#agent-prompt'
-		}
+	// The three doors below the map (#361): build-a-boilerplate, the feature
+	// showcases, and the technical documentation.
+	const doors = [
+		{ label: 'Build', note: 'build-a-boilerplate', href: BUILD_HREF, hot: true },
+		{ label: 'Features', note: 'showcases', href: '/features', hot: false },
+		{ label: 'Docs', note: 'for developers and agents', href: '/docs', hot: false }
 	];
-
-	// The prompt a visitor hands to a coding agent (#337). It is modelled on the
-	// planner's own export prompt but starts from a library cookbook instead of
-	// an embedded one. The CLI pin and the cookbook URL's release tag both come
-	// from SMRT_VERSION (pinned-versions.test.ts forbids a typed version), and
-	// the cookbook list is the four the CLI package ships.
-	const cli = `npx -y @happyvertical/smrt-cli@${SMRT_VERSION}`;
-	const agentPrompt = [
-		'Create a new s-m-r-t app. Work in a new, empty directory outside any existing project, run the steps in order, and when you finish report what you ran and what happened, including anything that failed.',
-		'',
-		'1. Prerequisites: Node 26 or newer (`node --version`), git, and pnpm 11 or newer (`npm install -g pnpm` if missing). The smrt CLI runs through npx; nothing needs a token.',
-		'',
-		`2. Learn the CLI: \`${cli} --help\` (read the Cookbook section).`,
-		// smrt#4139: when `smrt onboard` ships, replace step 2 with
-		// `${cli} onboard` and "follow what it prints".
-		'',
-		'3. Choose a cookbook. If I gave you a cookbook file or URL, use that. Otherwise ask me what the app is for and pick the closest of bakery, mechanic, welder, yoga-studio:',
-		`   https://raw.githubusercontent.com/happyvertical/smrt/v${SMRT_VERSION}/packages/cli/cookbooks/<id>.cookbook.json`,
-		'   (For anything else, I can build one at https://s-m-r-t.dev/build-a-boilerplate and give you its prompt.)',
-		'',
-		`4. Validate it, then create the app in ./my-app (a copy of the smrt-start template, smrt packages pinned to ${SMRT_VERSION}):`,
-		`   ${cli} cookbook validate <cookbook>`,
-		`   ${cli} cookbook apply <cookbook> my-app`,
-		'',
-		'5. Set it up (in a subshell, so later commands still run from this directory):',
-		'   (cd my-app && pnpm exec smrt app install)',
-		'',
-		`If a step fails, run \`pnpm exec smrt app doctor\` inside my-app and include its findings. Before changing code, read my-app/README.md and node_modules/@happyvertical/<package>/AGENTS.md for each package you touch. To change recipes, edit the cookbook and run \`${cli} cookbook apply <cookbook> --into my-app\`; do not hand-edit smrt.cookbook.json.`
-	].join('\n');
-
-	// Locked verbatim, character-for-character (approved landing-page
-	// proposal, §3.3) — do not rephrase. Kept as one script-level string
-	// (rather than split across template lines) so the rendered text can't
-	// pick up incidental source-indentation whitespace.
-	const saadlDefinition =
-		'SAADL — Software as Agentic Domain Logic: software whose domain logic exposes the same operations to human users (UI, HTTP, CLI) and to agents (callable tools).';
 </script>
+
+<svelte:head>
+	<link
+		rel="stylesheet"
+		href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap"
+	/>
+</svelte:head>
 
 <SEO
 	title="The s-m-r-t application stack"
@@ -75,497 +25,170 @@
 	url="https://s-m-r-t.dev"
 />
 
-<article class="homepage">
-	<header class="hero">
-		<div class="hero-intro">
-			<h1>The s-m-r-t application stack</h1>
-			<p class="lede">
-				s-m-r-t is a TypeScript stack for agentic software: applications that people and agents use
-				through the same screens, rules and permissions. build-a-boilerplate puts an example
-				application together in your browser for you to play with and customize.
-			</p>
-			<div class="hero-actions">
-				<a class="primary-link primary-link--hero" href="/build-a-boilerplate"
-					>build-a-boilerplate <span aria-hidden="true">→</span></a
-				>
-				<a class="text-link" href="#what-you-get">How it works <span aria-hidden="true">↓</span></a>
-			</div>
-			<div class="hero-shot">
-				<PlannerScreencast />
-			</div>
-			<!--
-				"Blurs the line" (#335): kept because it is true, and said concretely.
-				Each sentence is covered by a /reference/evidence row: agents-included
-				and chat-agents (the application's own agents), agent-doors and policy-checks (tools
-				and checks), in-app-assistant (the shell's assistant). It sits under
-				the recording (#337) so the button stays next to the lede.
-			-->
-			<p class="hero-passage">
-				A s-m-r-t application blurs the line between application and agent. It ships with agents of
-				its own, which run on schedules or in chat as a bound user account, with that account's
-				permissions. Its operations are also tools. The assistant inside it and any agent outside it
-				work the application the way a person does: through the same doors, under the same checks.
-			</p>
-		</div>
+<div class="front">
+	<h1 class="visually-hidden">The s-m-r-t application stack</h1>
+	<FeatureGraph />
 
-		<div class="hero-copy">
-			<!-- A div, not <aside>: inside <main> an aside is a nested complementary landmark (axe: landmark-complementary-is-top-level). -->
-			<div class="saadl-definition">
-				<p><strong>{saadlDefinition}</strong></p>
-				<a class="text-link" href="/reference/saadl"
-					>What is a SAADL? <span aria-hidden="true">→</span></a
-				>
-			</div>
-		</div>
-	</header>
-
-	<section class="outcome-section" id="what-you-get" aria-labelledby="outcome-heading">
-		<div class="section-heading">
-			<h2 id="outcome-heading">A working application, not a template</h2>
-		</div>
-		<p class="section-copy">
-			The starting points cover common businesses: a bakery, a repair shop, a salon, a non-profit,
-			an agency. Each comes with its screens, rules and sample data. Change it and the mock-up
-			changes.
-		</p>
-	</section>
-
-	<!--
-		Slice B (happyvertical/s-m-r-t.dev#321): the six feature sections — the
-		in-app assistant, propose-then-confirm, reports on request, paperwork
-		intake, who can see what, and outside agents — render here, between
-		"What you get" and "Describe the record once", from
-		`src/lib/data/homepage-features.ts` through one component.
-	-->
-	<div class="feature-sections-slot" data-slot="homepage-features">
-		<FeatureSections />
-	</div>
-
-	<section class="model-section" id="one-description" aria-labelledby="model-heading">
-		<div class="section-heading">
-			<h2 id="model-heading">Describe the record once</h2>
-			<p>
-				One class says what a record stores, which actions the web and agents get, and which fields
-				are required, read-only or secret. Storage, forms, API, command line, agent tools and
-				permissions are generated from it.
-			</p>
-		</div>
-		<div class="model-grid">
-			<CodeBlock code={homepageModelExample} filename="src/lib/objects/Article.ts" />
-			<div class="model-aside">
-				<p class="projection-label">Generated from it</p>
-				<ul class="projection-list" aria-label="Surfaces generated from the record description">
-					{#each frameworkModelProjections as projection (projection.label)}
-						<li>
-							<a href={projection.href}>{projection.label} <b aria-hidden="true">→</b></a>
-						</li>
-					{/each}
-				</ul>
-				<a class="text-link" href="/framework"
-					>Framework overview <span aria-hidden="true">→</span></a
-				>
-			</div>
-		</div>
-	</section>
-
-	<section class="blocks-section" id="blocks" aria-labelledby="blocks-heading">
-		<div class="section-heading">
-			<h2 id="blocks-heading">Agentic building blocks</h2>
-			<p>Capabilities you won't build from scratch. Pick them in build-a-boilerplate.</p>
-		</div>
-		<BlockMap layout="compact" />
-	</section>
-
-	<section class="start-section" id="start-here" aria-labelledby="start-heading">
-		<div>
-			<h2 id="start-heading">Getting Started</h2>
-			<p class="start-note">
-				Coding agents: each installed package ships instructions for its exact version, and a
-				read-only development server answers questions about the project.
-				<a href="/tooling">Tooling <span aria-hidden="true">→</span></a>
-			</p>
-		</div>
-		<nav aria-label="Getting started guides">
-			{#each startPaths as path, index (path.href)}
-				<a href={path.href} class:primary-link={index === 0}>
-					<strong>{path.label}</strong>
-					<span>{path.body}</span>
-					<b aria-hidden="true">→</b>
+	<section class="doors" id="doors" aria-label="Where to go next">
+		<div class="in">
+			{#each doors as door (door.href)}
+				<a class="door" class:hot={door.hot} href={door.href}>
+					<b>{door.label}</b><span>{door.note}</span>
 				</a>
 			{/each}
-		</nav>
-		<div class="agent-prompt" id="agent-prompt">
-			<h3>Hand it to your agent</h3>
-			<p>
-				Copy this into your coding agent. It creates the app from one of the library cookbooks, or
-				from a cookbook you give it.
-			</p>
-			<CodeBlock code={agentPrompt} lang="prompt" wrap />
 		</div>
 	</section>
-
-	<p class="evidence-note">
-		Every claim on this page has a source. <a href="/reference/evidence"
-			>See the evidence, claim by claim <span aria-hidden="true">→</span></a
-		>
-	</p>
-</article>
+	<p class="foot">MIT · one version</p>
+</div>
 
 <style>
-	.homepage {
-		width: min(70rem, calc(100% - 3rem));
-		margin: 0 auto;
-		padding: clamp(2.5rem, 7vw, 5.5rem) 0 6rem;
-	}
-
-	.hero {
-		display: grid;
-		grid-template-columns: minmax(0, 1.1fr) minmax(20rem, 0.9fr);
-		gap: clamp(2.5rem, 7vw, 5rem);
-		align-items: center;
-		padding-bottom: clamp(4rem, 9vw, 7rem);
-	}
-
-	.hero-intro {
-		grid-column: 1 / -1;
-		min-width: 0;
-	}
-
-	/* The category H1: visible, small-caps mono, in accent ink (AA on the paper). */
-	.hero-intro h1 {
-		color: var(--site-accent-ink);
-		font: 700 0.85rem var(--site-font-mono);
-		letter-spacing: 0.07em;
-		text-transform: uppercase;
-	}
-
-	.hero-copy {
-		grid-column: 1 / -1;
-	}
-
-	.hero-shot {
-		min-width: 0;
-		margin-top: 1.75rem;
-	}
-
-	.hero-intro .lede {
-		margin-top: 0.9rem;
-		max-width: 34em;
-		color: var(--site-ink);
-		font-size: clamp(1.45rem, 2.4vw, 1.8rem);
-		font-weight: 400;
-		letter-spacing: -0.015em;
+	/*
+	 * The front page keeps its own palette, apart from the site's friendly UI.
+	 * Dark is fire; light is blue flame. The map follows the viewer's
+	 * preference and the site toggle (<html data-color-scheme>).
+	 * `*-ink` tokens are the same hues darkened or lightened until small text
+	 * on the page background passes AA (4.5:1); the plain tokens colour fills
+	 * and strokes only.
+	 */
+	.front {
+		--front-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+		--front-bg: #eef1f5;
+		--front-ink: #14171c;
+		--front-dim: #5b6470;
+		--front-dim-text: #5b6470;
+		--front-line: #c9d1dc;
+		--front-line-1: #b7c6de;
+		--front-red: #1848c8;
+		--front-orange: #1f8fe6;
+		--front-yellow: #38c6ff;
+		--front-orange-ink: #0b62ad;
+		--front-yellow-ink: #0b62ad;
+		--front-hub-ink: #0a2a7a;
+		--front-door-hot-ink: #ffffff;
+		--front-hint-ink: #14171c;
+		background: var(--front-bg);
+		color: var(--front-ink);
+		font-family: var(--front-mono);
 		line-height: 1.4;
-		text-wrap: pretty;
+	}
+	@media (prefers-color-scheme: dark) {
+		:global(html:not([data-color-scheme]):not([data-theme='light'])) .front {
+			--front-bg: #0a0604;
+			--front-ink: #ffe9c4;
+			--front-dim: #8a5a2a;
+			--front-dim-text: #c28a4f;
+			--front-line: #3a2412;
+			--front-line-1: #4a1e10;
+			--front-red: #ff3b1f;
+			--front-orange: #ff8c1a;
+			--front-yellow: #ffd21f;
+			--front-orange-ink: #ff8c1a;
+			--front-yellow-ink: #ffd21f;
+			--front-hub-ink: #3a0d00;
+			--front-door-hot-ink: #3a0d00;
+			--front-hint-ink: #0a0604;
+		}
+	}
+	:global(html[data-color-scheme='dark']) .front,
+	:global(html[data-theme='dark']) .front {
+		--front-bg: #0a0604;
+		--front-ink: #ffe9c4;
+		--front-dim: #8a5a2a;
+		--front-dim-text: #c28a4f;
+		--front-line: #3a2412;
+		--front-line-1: #4a1e10;
+		--front-red: #ff3b1f;
+		--front-orange: #ff8c1a;
+		--front-yellow: #ffd21f;
+		--front-orange-ink: #ff8c1a;
+		--front-yellow-ink: #ffd21f;
+		--front-hub-ink: #3a0d00;
+		--front-door-hot-ink: #3a0d00;
+		--front-hint-ink: #0a0604;
 	}
 
-	.hero-passage {
-		max-width: 44rem;
-		margin-top: 1.25rem;
-		color: var(--site-muted);
-		font-size: 1.0625rem;
-		line-height: 1.6;
-		text-wrap: pretty;
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+		border: 0;
 	}
 
-	.hero-actions {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 0.5rem 1.5rem;
-		margin-top: 1.6rem;
+	.doors {
+		padding: 0 max(16px, env(safe-area-inset-right, 0px)) 64px
+			max(16px, env(safe-area-inset-left, 0px));
 	}
-
-	.hero-actions .text-link {
-		margin-top: 0;
-	}
-
-	.primary-link {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.55rem;
-		min-height: 2.75rem;
-		padding: 0 1.1rem;
-		border-radius: var(--site-radius-md);
-		background: var(--site-accent-strong);
-		color: var(--site-on-accent);
-		font-size: 0.9rem;
-		font-weight: 700;
-		text-decoration: none;
-	}
-
-	.primary-link span {
-		color: inherit;
-	}
-
-	.primary-link--hero {
-		min-height: 3.25rem;
-		padding: 0 1.5rem;
-		font-size: 1rem;
-		box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
-	}
-
-	.primary-link--hero:hover,
-	.primary-link--hero:focus-visible {
-		filter: brightness(1.08);
-	}
-
-	.saadl-definition {
-		max-width: 42rem;
-		padding: 1.1rem 1.25rem;
-		border: 1px solid var(--site-line-strong);
-		border-radius: var(--site-radius-md);
-		background: var(--site-surface);
-	}
-
-	.saadl-definition p {
-		color: var(--site-muted);
-		font-size: 0.9375rem;
-		line-height: 1.6;
-	}
-
-	.saadl-definition strong {
-		color: var(--site-ink);
-	}
-
-	.text-link {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.55rem;
-		min-height: 2.75rem;
-		margin-top: 1.35rem;
-		color: var(--site-ink);
-		font-size: 0.875rem;
-		font-weight: 700;
-		text-underline-offset: 0.3rem;
-	}
-
-	.text-link span {
-		color: var(--site-accent-strong);
-	}
-
-	section {
-		padding: clamp(3.5rem, 8vw, 6rem) 0;
-		border-top: 1px solid var(--site-line);
-		scroll-margin-top: 5.5rem;
-	}
-
-	h2 {
-		font-size: clamp(1.9rem, 4.5vw, 3.4rem);
-		letter-spacing: -0.05em;
-		line-height: 1.05;
-	}
-
-	.section-heading {
-		display: flex;
-		align-items: end;
-		justify-content: space-between;
-		gap: 2rem;
-		margin-bottom: 2rem;
-	}
-
-	.section-heading > p {
-		max-width: 29rem;
-		color: var(--site-muted);
-		font-size: 0.9375rem;
-		line-height: 1.58;
-	}
-
-	.outcome-section .section-heading {
-		margin-bottom: 1.25rem;
-	}
-
-	.section-copy {
-		max-width: 48rem;
-		color: var(--site-muted);
-		font-size: 0.95rem;
-		line-height: 1.65;
-	}
-
-	.model-grid {
+	.in {
+		max-width: 1080px;
+		margin: 0 auto;
 		display: grid;
-		grid-template-columns: minmax(0, 1.25fr) minmax(16rem, 0.75fr);
-		gap: 1.5rem;
-		align-items: start;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 12px;
 	}
-
-	.projection-label {
-		color: var(--site-accent-ink);
-		font: 700 0.75rem var(--site-font-mono);
-		letter-spacing: 0.07em;
-		text-transform: uppercase;
-	}
-
-	.projection-list {
-		margin-top: 0.5rem;
-		border-top: 1px solid var(--site-line);
-		list-style: none;
-	}
-
-	.projection-list li {
-		border-bottom: 1px solid var(--site-line);
-	}
-
-	.projection-list a {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
-		min-height: 2.75rem;
-		padding: 0.5rem 0.25rem;
-		color: var(--site-ink);
-		font-size: 0.875rem;
-		font-weight: 700;
-		text-decoration: none;
-	}
-
-	.projection-list a:hover,
-	.projection-list a:focus-visible {
-		color: var(--site-accent-ink);
-	}
-
-	.projection-list b {
-		color: var(--site-accent-strong);
-		font-weight: 500;
-	}
-
-	.evidence-note {
-		max-width: 60ch;
-		margin-top: 2rem;
-		color: var(--site-muted);
-		font-size: 0.9375rem;
-		line-height: 1.6;
-	}
-
-	.evidence-note a {
-		color: var(--site-ink);
-	}
-
-	.start-section {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.72fr);
-		gap: clamp(2rem, 7vw, 5rem);
-		margin-top: clamp(2rem, 5vw, 4rem);
-		padding-inline: clamp(1.5rem, 5vw, 4rem);
-		border: 1px solid var(--site-line-strong);
-		border-radius: var(--site-radius-lg);
-		background: var(--site-accent-soft);
-	}
-
-	.start-note {
-		max-width: 40rem;
-		margin-top: 1rem;
-		color: var(--site-muted);
-		font-size: 0.9375rem;
-		line-height: 1.65;
-	}
-
-	.start-note a {
-		color: var(--site-ink);
-		font-weight: 700;
-		text-underline-offset: 0.25rem;
-	}
-
-	.start-note a span {
-		color: var(--site-accent-strong);
-	}
-
-	.start-section nav {
-		display: grid;
-		align-content: center;
-		gap: 0.55rem;
-	}
-
-	.start-section nav a {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) auto;
-		gap: 0.2rem 1rem;
-		align-items: center;
-		min-height: 3rem;
-		padding: 0.8rem 0.9rem;
-		border: 1px solid color-mix(in srgb, var(--site-accent-strong) 35%, var(--site-line));
-		border-radius: calc(var(--site-radius-md) - 0.25rem);
-		background: var(--site-surface);
-		color: var(--site-ink);
-		text-decoration: none;
-	}
-
-	.start-section nav a:hover {
-		border-color: var(--site-accent-strong);
-	}
-
-	.start-section nav strong {
-		grid-column: 1;
-		font-size: 0.9rem;
-	}
-
-	.start-section nav span {
-		grid-column: 1;
-		color: var(--site-muted);
-		font-size: 0.8rem;
-		line-height: 1.5;
-	}
-
-	.start-section nav b {
-		grid-column: 2;
-		grid-row: 1 / span 2;
-		color: var(--site-accent-strong);
-		font-weight: 500;
-	}
-
-	.start-section nav a.primary-link {
-		background: var(--site-accent-strong);
-		color: var(--site-on-accent);
-	}
-
-	.start-section nav a.primary-link span,
-	.start-section nav a.primary-link b {
-		color: inherit;
-	}
-
-	.agent-prompt {
-		grid-column: 1 / -1;
+	.door {
 		min-width: 0;
-		scroll-margin-top: 5.5rem;
+		color: var(--front-ink);
+		text-decoration: none;
+		border: 1.5px solid var(--front-line);
+		padding: 40px 24px;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		transition:
+			border-color 0.15s,
+			background 0.15s;
+	}
+	.door b {
+		font-size: 28px;
+		font-weight: 700;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: var(--front-orange-ink);
+	}
+	.door span {
+		color: var(--front-dim-text);
+		font-size: 13px;
+		letter-spacing: 0.06em;
+	}
+	.door:hover {
+		border-color: var(--front-orange);
+		background: color-mix(in srgb, var(--front-orange) 8%, transparent);
+	}
+	.door:focus-visible {
+		outline: 2px solid var(--front-orange-ink);
+		outline-offset: 4px;
+	}
+	.door.hot {
+		background: var(--front-red);
+		border-color: var(--front-red);
+	}
+	.door.hot b,
+	.door.hot span {
+		color: var(--front-door-hot-ink);
+	}
+	.foot {
+		margin: 0;
+		text-align: center;
+		color: var(--front-dim-text);
+		font-size: 12px;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		padding-block: 0 32px;
 	}
 
-	.agent-prompt h3 {
-		font-size: 1rem;
+	@media (prefers-reduced-motion: reduce) {
+		.door {
+			transition: none;
+		}
 	}
-
-	.agent-prompt > p {
-		max-width: 40rem;
-		margin-top: 0.5rem;
-		color: var(--site-muted);
-		font-size: 0.9375rem;
-		line-height: 1.65;
-	}
-
-	@media (max-width: 58rem) {
-		.hero,
-		.model-grid,
-		.start-section {
+	@media (max-width: 767px) {
+		.in {
 			grid-template-columns: 1fr;
-		}
-
-		.hero {
-			gap: 2.5rem;
-		}
-
-		.start-section {
-			gap: 2rem;
-		}
-	}
-
-	@media (max-width: 42rem) {
-		.homepage {
-			width: min(100% - 2rem, 70rem);
-		}
-
-		.section-heading {
-			align-items: flex-start;
-			flex-direction: column;
-			gap: 0.9rem;
 		}
 	}
 </style>
