@@ -20,7 +20,7 @@
 	// Geometry, in viewBox units. The map is 720 wide; every font size is 13 or
 	// more, and the map renders at 620px or wider from a 768px viewport.
 	const WIDTH = 720;
-	const LEAF_W = 210;
+	const LEAF_W = 196;
 	const LEAF_LINE = 19;
 	const LEAF_PAD = 9;
 	const LEAF_GAP = 8;
@@ -28,8 +28,8 @@
 	const BRANCH_W = 112;
 	const BRANCH_LINE = 19;
 	const BRANCH_PAD = 12;
-	const CENTRE_W = 208;
-	const CENTRE_H = 54;
+	const CENTRE_W = 224;
+	const CENTRE_H = 60;
 	const LEFT_BRANCH_X = 236; // left edge of the left branch boxes; their right edge is 24 short of the centre line
 	const RIGHT_BRANCH_X = 372; // left edge of the right branch boxes
 	const WRAP_AT = 22;
@@ -120,13 +120,15 @@
 		const above = group.middle < branches.centreY;
 		const startY = branches.centreY + (above ? -CENTRE_H / 2 : CENTRE_H / 2);
 		const endX = group.side === 'left' ? group.x + BRANCH_W : group.x;
-		return `M${WIDTH / 2},${startY} C${WIDTH / 2},${group.middle} ${endX + (group.side === 'left' ? 12 : -12)},${group.middle} ${endX},${group.middle}`;
+		// Start 20 off the spine so the two wires on a side do not double it.
+		const startX = WIDTH / 2 + (group.side === 'left' ? -20 : 20);
+		return `M${startX},${startY} C${startX},${group.middle} ${endX + (group.side === 'left' ? 12 : -12)},${group.middle} ${endX},${group.middle}`;
 	}
 
 	function branchToLeaf(group: (typeof branches.groups)[number], leafY: number): string {
 		const startX = group.side === 'left' ? group.x : group.x + BRANCH_W;
 		const endX = group.side === 'left' ? LEAF_W : WIDTH - LEAF_W;
-		const mid = (startX + endX) / 2;
+		const mid = startX + (endX - startX) * 0.35;
 		return `M${startX},${group.middle} C${mid},${group.middle} ${mid},${leafY} ${endX},${leafY}`;
 	}
 </script>
@@ -217,9 +219,9 @@
 				y={branches.centreY - CENTRE_H / 2}
 				width={CENTRE_W}
 				height={CENTRE_H}
-				rx="12"
+				rx="14"
 			/>
-			<text text-anchor="middle" x={WIDTH / 2} y={branches.centreY + 6}>{CENTRE_LABEL}</text>
+			<text text-anchor="middle" x={WIDTH / 2} y={branches.centreY + 6.5}>{CENTRE_LABEL}</text>
 		</a>
 	</svg>
 </div>
@@ -282,10 +284,10 @@
 
 	.list-chip {
 		padding: 0.05rem 0.5rem;
-		border: 1px dashed var(--site-ink);
+		border: 1px dashed var(--site-muted);
 		border-radius: 999px;
-		color: var(--site-ink);
-		font: 600 0.75rem var(--site-font-mono);
+		color: var(--site-muted);
+		font: 500 0.75rem var(--site-font-mono);
 	}
 
 	.map {
@@ -324,8 +326,8 @@
 	.wires path {
 		fill: none;
 		stroke: var(--site-muted);
-		stroke-opacity: 0.45;
-		stroke-width: 1.5;
+		stroke-opacity: 0.3;
+		stroke-width: 1.25;
 	}
 
 	.map text {
@@ -359,15 +361,16 @@
 	}
 
 	.leaf.preview rect {
-		stroke: var(--site-ink);
+		stroke: var(--site-muted);
 		stroke-dasharray: 5 3;
 	}
 
 	.leaf .preview-text {
+		fill: var(--site-muted);
 		font-size: 13px;
-		font-weight: 700;
-		letter-spacing: 0.04em;
-		text-transform: uppercase;
+		font-weight: 600;
+		letter-spacing: 0;
+		text-transform: none;
 	}
 
 	.leaf:hover rect,
@@ -397,7 +400,7 @@
 
 	.map .centre text {
 		fill: var(--site-on-accent);
-		font-size: 17px;
+		font-size: 18px;
 		font-weight: 700;
 	}
 
