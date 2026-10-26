@@ -1,9 +1,37 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import { readSmrtVersion } from './scripts/smrt-version.js';
 
+/**
+ * Keep Vite's `vite:asset-import-meta-url` code filter (`/new\s+URL.+import\.meta\.url/s`,
+ * a greedy dot-all scan) from running over `@mlc-ai/web-llm`.
+ *
+ * `smrt-planner` bundles `web-llm` into its `llm.worker`; the module is one
+ * 6.8 MB line, and that filter backtracks across all of it. V8's regexp
+ * backtrack stack is right at its limit there, so about three builds in four
+ * died with "Maximum call stack size exceeded" (#366). web-llm has no
+ * `new URL(..., import.meta.url)` Vite would rewrite (its one is a Node-only
+ * fallback), so spelling `new URL` as `new globalThis.URL` is behaviourally
+ * identical and the filter fails fast. Upstream:
+ * https://github.com/happyvertical/smrt/issues/4376 (Vite's filter is unbounded);
+ * remove once the planner stops bundling web-llm into the worker.
+ */
+function webLlmUrlFilterGuard(): Plugin {
+	return {
+		name: 'site:web-llm-url-filter-guard',
+		enforce: 'pre',
+		transform(code, id) {
+			if (!/[\\/]@mlc-ai[\\/]web-llm[\\/]lib[\\/]index\.js$/.test(id)) return null;
+			return { code: code.replace(/\bnew\s+URL\b/g, 'new globalThis.URL'), map: null };
+		}
+	};
+}
+
 export default defineConfig({
-	plugins: [sveltekit()],
+	plugins: [webLlmUrlFilterGuard(), sveltekit()],
+	worker: {
+		plugins: () => [webLlmUrlFilterGuard()]
+	},
 	define: {
 		__SMRT_VERSION__: JSON.stringify(readSmrtVersion())
 	},
