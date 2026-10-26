@@ -1,4 +1,5 @@
 import { capabilityGuides, foundationGuides } from '$lib/data/guides';
+import { buildingBlocks } from '$lib/data/blocks';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
 import { taskGuides } from '$lib/data/task-guides';
@@ -16,7 +17,7 @@ const staticRoutes = [
 	{ path: '/agents', priority: '0.95', changefreq: 'weekly' },
 	{ path: '/interaction', priority: '0.95', changefreq: 'weekly' },
 	{ path: '/ui', priority: '0.95', changefreq: 'weekly' },
-	{ path: '/modules', priority: '0.95', changefreq: 'weekly' },
+	{ path: '/blocks', priority: '0.95', changefreq: 'weekly' },
 	{ path: '/starters', priority: '0.9', changefreq: 'monthly' },
 	{ path: '/starters/smrt-start', priority: '0.9', changefreq: 'monthly' },
 	{ path: '/foundations', priority: '0.9', changefreq: 'monthly' },
@@ -37,6 +38,7 @@ export const GET: RequestHandler = () => {
 		...staticRoutes.map((route) => entry(route.path, route.priority, route.changefreq)),
 		...foundationGuides.map((guide) => entry(`/foundations/${guide.slug}`, '0.8', 'monthly')),
 		...capabilityGuides.map((guide) => entry(`/capabilities/${guide.slug}`, '0.85', 'weekly')),
+		...buildingBlocks.map((block) => entry(`/blocks/${block.id}`, '0.85', 'monthly')),
 		...taskGuides.map((guide) => entry(`/guides/${guide.slug}`, '0.85', 'monthly')),
 		...toolingGuides.map((guide) => entry(`/tooling/${guide.slug}`, '0.8', 'monthly')),
 		...referenceGuides.map((guide) => entry(`/reference/${guide.slug}`, '0.75', 'monthly')),

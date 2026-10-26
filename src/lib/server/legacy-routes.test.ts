@@ -53,7 +53,8 @@ describe('legacy static routes', () => {
 	it('prerenders the module slugs that never became packages', async () => {
 		const paths = (await moduleEntries()).map(({ slug }) => slug);
 
-		// Every package redirects from /modules/<slug> automatically. These three
+		// Every package redirects from /modules/<slug> automatically (the /modules
+		// index itself redirects to /blocks, asserted below). These three
 		// do not correspond to a package, so they exist only as hand-written
 		// entries and are the ones a cleanup would quietly drop.
 		expect(paths.filter((slug) => !packages.some((pkg) => pkg.slug === slug))).toEqual([
@@ -111,6 +112,17 @@ describe('legacy static routes', () => {
 		}
 		throw new Error('expected a redirect');
 	};
+
+	it('redirects the retired /modules index to /blocks (#355)', async () => {
+		// /modules/<slug> (counted above) still goes to Reference; the index is a
+		// single non-parametrized route, so there is nothing to enumerate.
+		const { load } = await import('../../routes/modules/+page.server');
+
+		expect(redirectTarget(load as () => never), RESTORE_DONT_RENUMBER).toMatchObject({
+			status: 301,
+			location: '/blocks'
+		});
+	});
 
 	it('redirects the legacy /packages and /faq singular pages to Reference', async () => {
 		const { load: packagesLoad } = await import('../../routes/packages/+page.server');

@@ -24,7 +24,7 @@ describe('Reference-owned discovery contracts', () => {
 	});
 
 	it('links package contracts to application stories and applicable guides', () => {
-		expect(packageWorkbench).toContain('href="/modules"');
+		expect(packageWorkbench).toContain('href="/blocks"');
 		expect(packageWorkbench).toContain('taskGuides.filter');
 		expect(packageWorkbench).toContain('guide.packages.includes(pkg.slug)');
 	});

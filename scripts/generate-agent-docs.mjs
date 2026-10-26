@@ -175,6 +175,7 @@ export async function generate(directory = 'build', check = false, source = sour
 	const sections = new Map(
 		[
 			'Stack overview',
+			'Blocks',
 			'Foundations',
 			'Capabilities',
 			'Guides',
@@ -190,7 +191,9 @@ export async function generate(directory = 'build', check = false, source = sour
 			? 'Packages'
 			: page.route.startsWith('/reference/components/')
 				? 'Components'
-				: ['foundations', 'capabilities', 'guides', 'tooling', 'reference'].includes(family)
+				: ['blocks', 'foundations', 'capabilities', 'guides', 'tooling', 'reference'].includes(
+							family
+					  )
 					? family[0].toUpperCase() + family.slice(1)
 					: 'Stack overview';
 		if (!sections.has(section)) sections.set(section, []);

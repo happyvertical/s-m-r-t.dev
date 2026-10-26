@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { agentsTopics } from '$lib/data/agents';
 import { homepageFeatures, homepageMoneyNote } from '$lib/data/homepage-features';
 import { interactionContent } from '$lib/data/interaction';
-import { applicationModuleClusters } from '$lib/data/modules';
 import { homepageFeatureEntries, searchDocs } from '$lib/data/search';
 import { whySmrtClaims } from '$lib/data/why-smrt-claims';
 import { SMRT_VERSION } from '$lib/version';
@@ -42,7 +41,6 @@ function expectWithinCopyLimits(text: string, where: string) {
 
 /** In-page anchors the data links to, by landing route. */
 const knownAnchors: Record<string, Set<string>> = {
-	'/modules': new Set(applicationModuleClusters.map((cluster) => cluster.id)),
 	'/agents': new Set(agentsTopics.map((topic) => topic.slug)),
 	'/interaction': new Set(interactionContent.guides.map((guide) => guide.slug))
 };

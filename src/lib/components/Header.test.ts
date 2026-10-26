@@ -35,7 +35,7 @@ describe('application bar', () => {
 			'Agents',
 			'Interaction',
 			'UI',
-			'Modules',
+			'Blocks',
 			'Tooling',
 			'Playground',
 			'build-a-boilerplate',

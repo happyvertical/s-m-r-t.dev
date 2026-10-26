@@ -1,15 +1,12 @@
 import { cleanup, render, screen } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
-import { appLayers, buildingBlockNouns, layerNames } from '$lib/data/layers';
+import { blockBranches, buildingBlocks } from '$lib/data/blocks';
 import { frameworkModelProjections } from '$lib/data/framework';
 import { homepageFeatures } from '$lib/data/homepage-features';
-import { curatedChipsFor } from '$lib/data/layer-chips';
 import { SMRT_VERSION } from '$lib/version';
 import Page from './+page.svelte';
 
 afterEach(cleanup);
-
-const buildingBlocksIndex = appLayers.findIndex((layer) => layer.id === 'building-blocks');
 
 const follows = (a: Node, b: Node) =>
 	Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
@@ -86,77 +83,6 @@ describe('documentation home page', () => {
 		expect(follows(video!, passage)).toBe(true);
 	});
 
-	it('keeps the mini scope map as the hero visual and moves the five-layer list out of the hero', () => {
-		const { container } = render(Page);
-
-		const miniMapNames = [...container.querySelectorAll('.mini-name')].map(
-			(node) => node.textContent
-		);
-		expect(miniMapNames).toEqual(layerNames);
-		// #337: the mini-map names the layers without counting their packages.
-		expect(container.querySelector('.mini-scope-map .mini-count')).toBeNull();
-		expect(container.querySelector('.hero .layer-lede-list')).toBeNull();
-		// The five layers still read as sentences — once, in the scope section.
-		const bandNames = [...container.querySelectorAll('#scope .layer-band h3')].map(
-			(node) => node.textContent
-		);
-		expect(bandNames).toEqual(layerNames);
-		appLayers.forEach((layer, index) => {
-			if (layer.id === 'building-blocks') return;
-			expect(container.querySelectorAll('#scope .layer-role')[index]?.textContent?.trim()).toBe(
-				layer.scopeCopy
-			);
-		});
-	});
-
-	it('links the shared Ready-made building blocks nouns in the scope map', () => {
-		const { container } = render(Page);
-		const expectedHrefs = buildingBlockNouns.map((noun) => noun.href);
-		const expectedLabels = buildingBlockNouns.map((noun) => noun.label).join(', ');
-
-		const scopeBand = container.querySelectorAll('.layer-band')[buildingBlocksIndex];
-		const scopeRole = scopeBand.querySelector('.layer-role');
-		expect(scopeRole?.textContent).toContain(expectedLabels);
-		expect([...scopeRole!.querySelectorAll('a')].map((link) => link.getAttribute('href'))).toEqual(
-			expectedHrefs
-		);
-	});
-
-	it('renders the curated chips per layer, then an "all N" link with the generated count', () => {
-		const { container } = render(Page);
-		const bands = [...container.querySelectorAll('.layer-band')];
-
-		expect(bands).toHaveLength(appLayers.length);
-		bands.forEach((band, index) => {
-			const layer = appLayers[index];
-			const curated = curatedChipsFor(layer);
-			const chipLinks = [...band.querySelectorAll('.layer-chips li:not(.layer-chips-all) a')];
-
-			expect(chipLinks).toHaveLength(curated.length);
-			chipLinks.forEach((link, chipIndex) => {
-				expect(link.getAttribute('href')).toBe(`/reference/packages/${curated[chipIndex].slug}`);
-				expect(link.textContent).toBe(curated[chipIndex].label);
-				expect(link.getAttribute('target')).toBeNull();
-			});
-
-			// The count is the layer's full membership, not the curated handful.
-			const allLink = band.querySelector('.layer-chips-all a');
-			expect(allLink?.getAttribute('href')).toBe('/reference/packages');
-			expect(allLink?.textContent?.replace(/\s+/g, ' ').trim()).toBe(
-				`all ${layer.packages.length} →`
-			);
-		});
-	});
-
-	it('anchors every hero mini-map band to the full scope map', () => {
-		const { container } = render(Page);
-
-		expect(container.querySelector('#scope')).toBeTruthy();
-		const miniMapLinks = [...container.querySelectorAll('.mini-scope-map a')];
-		expect(miniMapLinks).toHaveLength(appLayers.length);
-		expect(miniMapLinks.every((link) => link.getAttribute('href') === '#scope')).toBe(true);
-	});
-
 	it('follows the approved section order, with the slice B sections before the record description', () => {
 		const { container } = render(Page);
 
@@ -171,12 +97,12 @@ describe('documentation home page', () => {
 			'Rules about data live with the data',
 			'Three doors, and each one is a choice',
 			'Describe the record once',
-			'Five layers, one release',
+			'Agentic building blocks',
 			'Getting Started'
 		]);
 
 		// Slice B of #321 mounts the six feature sections here, between "What
-		// you get" and the scope half of the page: six sections, then the one
+		// you get" and the blocks map: six sections, then the one
 		// money sentence.
 		const slot = container.querySelector('[data-slot="homepage-features"]');
 		expect(slot).toBeTruthy();
@@ -185,7 +111,7 @@ describe('documentation home page', () => {
 		expect(follows(container.querySelector('#what-you-get')!, slot!)).toBe(true);
 		expect(follows(slot!, container.querySelector('#one-description')!)).toBe(true);
 		expect(
-			follows(container.querySelector('#one-description')!, container.querySelector('#scope')!)
+			follows(container.querySelector('#one-description')!, container.querySelector('#blocks')!)
 		).toBe(true);
 	});
 
@@ -198,7 +124,7 @@ describe('documentation home page', () => {
 		for (const [id, heading] of [
 			['what-you-get', 'A working application, not a template'],
 			['one-description', 'Describe the record once'],
-			['scope', 'Five layers, one release'],
+			['blocks', 'Agentic building blocks'],
 			['start-here', 'Getting Started']
 		]) {
 			expect(container.querySelector(`#${id} h2`)?.textContent).toBe(heading);
@@ -231,19 +157,19 @@ describe('documentation home page', () => {
 		}
 	});
 
-	it('drops the scale line and keeps the release statement in the layers subhead (#337)', () => {
+	it('replaces the five-layer scope section with the building blocks map (#356)', () => {
 		const { container } = render(Page);
+		const section = container.querySelector('#blocks')!;
 
-		expect(container.querySelector('.scale-line')).toBeNull();
-		expect(container.textContent).not.toContain('working examples');
-		expect(text(container.querySelector('#scope .section-heading p'))).toBe(
-			'Every package releases together at one version.'
+		expect(section.querySelector('h2')?.textContent).toBe('Agentic building blocks');
+		expect(text(section.querySelector('.section-heading p'))).toBe(
+			"Capabilities you won't build from scratch. Pick them in build-a-boilerplate."
 		);
-		// The catalog footnote names where the unlayered packages are, without
-		// counting them.
-		const footnote = container.querySelector('.scope-reconciliation');
-		expect(text(footnote).trim()).toBe('Tooling and mobile packages are in the full catalog.');
-		expect(footnote?.querySelector('a')?.getAttribute('href')).toBe('/reference/packages');
+		expect(section.querySelectorAll('svg a.leaf')).toHaveLength(buildingBlocks.length);
+		expect(blockBranches).toHaveLength(4);
+		expect(container.querySelector('#scope, .mini-scope-map, .layer-band, .scale-line')).toBeNull();
+		expect(container.textContent).not.toContain('Five layers');
+		expect(container.textContent).not.toContain('working examples');
 	});
 
 	it('shows the trimmed record description with one link per generated surface', () => {

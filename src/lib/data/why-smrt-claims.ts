@@ -220,5 +220,80 @@ export const whySmrtClaims: WhySmrtClaim[] = [
 			label: 'Application MCP release contract',
 			href: `${INSTALLED_TREE}/packages/smrt-app-mcp/AGENTS.md`
 		}
+	},
+	// Building blocks (#352 slice A, #353). One row per `supplied` bullet that
+	// is a claim rather than a description; `blocks.ts` lists the id in
+	// `evidence`. Each row cites exactly one package contract.
+	{
+		id: 'profile-sti',
+		claim:
+			'Profile is a single-table-inheritance base shared by Person, Organization and Bot. Its metadata is a @oneToMany relationship with a generated accessor, and ProfileAsset is the owned-asset join. AuditLog records actor and delegated identity, and FactSubject attaches facts to any record polymorphically. A subclass never publishes more than its parent.',
+		display:
+			'A Person is a kind of Profile, so relationships, metadata, assets, audit history and facts attached to the profile are reachable through one record and its generated tools.',
+		canonical: { label: 'Users and profiles', href: '/foundations/users-and-profiles' },
+		source: {
+			label: 'smrt-profiles release contract',
+			href: `${INSTALLED_TREE}/packages/profiles/AGENTS.md`
+		}
+	},
+	{
+		id: 'jobs-at-least-once',
+		claim:
+			'Job execution is at-least-once, never exactly-once: a timed-out handler keeps running and its job fails without retry. Recovery keys on worker-process liveness, never per-job heartbeat freshness, and a terminal outcome and its event commit in one transaction.',
+		display:
+			'Background work runs at least once, never exactly once. Recovery waits for a worker to be really dead, and each final outcome is written with its own record.',
+		canonical: { label: 'smrt-jobs', href: '/reference/packages/smrt-jobs' },
+		source: {
+			label: 'smrt-jobs release contract',
+			href: `${INSTALLED_TREE}/packages/jobs/AGENTS.md`
+		}
+	},
+	{
+		id: 'webhooks-at-least-once',
+		claim:
+			'Outbound webhooks publish durable model changes from the change feed with tenant and runtime cursors and sign the exact stored payload bytes. HTTP delivery is at least once, and receivers deduplicate the stable delivery id. Generated API, CLI and MCP access is disabled.',
+		display:
+			'Webhook events are signed as stored and delivered at least once; the receiver deduplicates by delivery id.',
+		canonical: { label: 'smrt-webhooks', href: '/reference/packages/smrt-webhooks' },
+		source: {
+			label: 'smrt-webhooks release contract',
+			href: `${INSTALLED_TREE}/packages/webhooks/AGENTS.md`
+		}
+	},
+	{
+		id: 'playbook-steps',
+		claim:
+			'A playbook resolves to a plan the agent executes step by step and never executes as a unit. Each step is authorized independently: at the REST boundary in the browser, or by PrincipalRun.assertToolAllowed() on the server. No stored override has a column for the step list.',
+		display:
+			'An agent’s playbook is a plan, not a permission. Every step is checked on its own where it runs, and no override can change the steps.',
+		canonical: { label: 'Agents', href: '/agents' },
+		source: {
+			label: 'smrt-playbooks release contract',
+			href: `${INSTALLED_TREE}/packages/playbooks/AGENTS.md`
+		}
+	},
+	{
+		id: 'approvals-human-decide',
+		claim:
+			'Only human principals decide an approval; agents and services may request, consume and expire. Every transition is one guarded UPDATE plus one append-only event insert in a single transaction, and policy may only tighten.',
+		display:
+			'Only a person can decide an approval; an agent can ask for one. Each decision is one guarded write with its own ledger entry.',
+		canonical: { label: 'smrt-approvals', href: '/reference/packages/smrt-approvals' },
+		source: {
+			label: 'smrt-approvals release contract',
+			href: `${INSTALLED_TREE}/packages/approvals/AGENTS.md`
+		}
+	},
+	{
+		id: 'learning-boundaries',
+		claim:
+			'Agent learning is an opt-in recall-before and capture-after loop over LearningMemory, off by default. Memory is bound to (agentType, agentInstanceId), so two tenants on one agent class never share it. A DelegationEnvelope carries an immutable principal with depth capped at three, and a worker cannot run under a broader user or tenant.',
+		display:
+			'An agent learns only when switched on and remembers per tenant and instance. It can hand work to another agent only under the same user and tenant.',
+		canonical: { label: 'Learning agents', href: '/capabilities/learning-agents' },
+		source: {
+			label: 'smrt-agents release contract',
+			href: `${INSTALLED_TREE}/packages/agents/AGENTS.md`
+		}
 	}
 ];

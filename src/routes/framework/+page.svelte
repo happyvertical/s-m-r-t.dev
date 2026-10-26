@@ -7,6 +7,7 @@
 		frameworkModelProjections,
 		frameworkTopics
 	} from '$lib/data/framework';
+	import { layerNames } from '$lib/data/layers';
 </script>
 
 <SEO
@@ -31,6 +32,9 @@
 				parallel definitions that can drift.
 			</p>
 		</div>
+		<p class="layers-line">
+			The stack has five layers, released together: {layerNames.join(', ')}.
+		</p>
 	</header>
 
 	<section class="model-example" aria-labelledby="model-example-heading">
@@ -114,8 +118,8 @@
 				<strong>UI</strong>
 				<span>See the controls and shell that make application state and authority visible.</span>
 			</a>
-			<a href="/modules">
-				<strong>Application modules</strong>
+			<a href="/blocks">
+				<strong>Building blocks</strong>
 				<span>Find prebuilt application parts that use the same framework foundation.</span>
 			</a>
 			<a href="/tooling">
@@ -160,6 +164,16 @@
 		gap: 1.5rem;
 		max-width: 58rem;
 		margin-top: 1.75rem;
+	}
+
+	.hero > .layers-line {
+		margin-top: 1.5rem;
+		color: var(--site-muted);
+		font: inherit;
+		font-size: 0.92rem;
+		letter-spacing: normal;
+		line-height: 1.7;
+		text-transform: none;
 	}
 
 	.hero-copy p,

@@ -2,9 +2,8 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import PlannerScreencast from '$lib/components/PlannerScreencast.svelte';
+	import BlockMap from '$lib/components/home/BlockMap.svelte';
 	import FeatureSections from '$lib/components/home/FeatureSections.svelte';
-	import { appLayers, buildingBlockNouns, buildingBlocksScopeLede } from '$lib/data/layers';
-	import { curatedChipsFor } from '$lib/data/layer-chips';
 	import { frameworkModelProjections, homepageModelExample } from '$lib/data/framework';
 	import { SMRT_VERSION } from '$lib/version';
 
@@ -118,17 +117,6 @@
 				>
 			</div>
 		</div>
-
-		<ol class="mini-scope-map" aria-label="The s-m-r-t application stack in five layers">
-			{#each appLayers as layer (layer.id)}
-				<li>
-					<a href="#scope">
-						<span class="mini-index">{String(layer.index).padStart(2, '0')}</span>
-						<span class="mini-name">{layer.name}</span>
-					</a>
-				</li>
-			{/each}
-		</ol>
 	</header>
 
 	<section class="outcome-section" id="what-you-get" aria-labelledby="outcome-heading">
@@ -180,47 +168,12 @@
 		</div>
 	</section>
 
-	<section class="scope-section" id="scope" aria-labelledby="scope-heading">
+	<section class="blocks-section" id="blocks" aria-labelledby="blocks-heading">
 		<div class="section-heading">
-			<h2 id="scope-heading">Five layers, one release</h2>
-			<p>Every package releases together at one version.</p>
+			<h2 id="blocks-heading">Agentic building blocks</h2>
+			<p>Capabilities you won't build from scratch. Pick them in build-a-boilerplate.</p>
 		</div>
-
-		<div class="layer-diagram">
-			{#each appLayers as layer (layer.id)}
-				<div class="layer-band">
-					<div class="layer-band-head">
-						<span class="layer-index">{String(layer.index).padStart(2, '0')}</span>
-						<h3>{layer.name}</h3>
-					</div>
-					<p class="layer-role">
-						{#if layer.id === 'building-blocks'}
-							{buildingBlocksScopeLede}
-							{#each buildingBlockNouns as noun, index (noun.label)}{index > 0 ? ', ' : ''}<a
-									href={noun.href}>{noun.label}</a
-								>{/each}.
-						{:else}
-							{layer.scopeCopy}
-						{/if}
-					</p>
-					<ul class="layer-chips" aria-label={`Examples from ${layer.name}`}>
-						{#each curatedChipsFor(layer) as chip (chip.slug)}
-							<li><a href={`/reference/packages/${chip.slug}`}>{chip.label}</a></li>
-						{/each}
-						<li class="layer-chips-all">
-							<!-- The count is the layer's real membership from packages.ts, never a literal. -->
-							<a href="/reference/packages"
-								>all {layer.packages.length} <span aria-hidden="true">→</span></a
-							>
-						</li>
-					</ul>
-				</div>
-			{/each}
-		</div>
-
-		<p class="scope-reconciliation">
-			Tooling and mobile packages are in the <a href="/reference/packages">full catalog</a>.
-		</p>
+		<BlockMap layout="compact" />
 	</section>
 
 	<section class="start-section" id="start-here" aria-labelledby="start-heading">
@@ -284,6 +237,10 @@
 		font: 700 0.85rem var(--site-font-mono);
 		letter-spacing: 0.07em;
 		text-transform: uppercase;
+	}
+
+	.hero-copy {
+		grid-column: 1 / -1;
 	}
 
 	.hero-shot {
@@ -387,51 +344,6 @@
 		color: var(--site-accent-strong);
 	}
 
-	.mini-scope-map {
-		align-self: start;
-		display: grid;
-		gap: 0;
-		list-style: none;
-		border: 1px solid var(--site-line-strong);
-		border-radius: var(--site-radius-lg);
-		overflow: hidden;
-		background: var(--site-surface);
-	}
-
-	.mini-scope-map li {
-		border-bottom: 1px solid var(--site-line);
-	}
-
-	.mini-scope-map li:last-child {
-		border-bottom: 0;
-	}
-
-	.mini-scope-map a {
-		display: flex;
-		align-items: center;
-		gap: 0.85rem;
-		min-height: 3rem;
-		padding: 0 1.1rem;
-		border-left: 2px solid var(--site-accent-strong);
-		color: var(--site-ink);
-		text-decoration: none;
-	}
-
-	.mini-scope-map a:hover {
-		background: var(--site-accent-soft);
-	}
-
-	.mini-index {
-		color: var(--site-accent-ink);
-		font: 700 0.78rem var(--site-font-mono);
-	}
-
-	.mini-name {
-		flex: 1;
-		font-size: 0.9rem;
-		font-weight: 700;
-	}
-
 	section {
 		padding: clamp(3.5rem, 8vw, 6rem) 0;
 		border-top: 1px solid var(--site-line);
@@ -515,99 +427,6 @@
 	.projection-list b {
 		color: var(--site-accent-strong);
 		font-weight: 500;
-	}
-
-	.layer-diagram {
-		display: grid;
-		gap: 0;
-		border-top: 1px solid var(--site-line-strong);
-	}
-
-	.layer-band {
-		display: grid;
-		grid-template-columns: 14rem minmax(0, 1fr);
-		gap: 1rem 1.5rem;
-		align-items: start;
-		padding: 1.5rem 0;
-		border-bottom: 1px solid var(--site-line-strong);
-	}
-
-	.layer-band-head {
-		display: flex;
-		align-items: baseline;
-		gap: 0.7rem;
-	}
-
-	.layer-index {
-		color: var(--site-accent-ink);
-		font: 700 0.78rem var(--site-font-mono);
-	}
-
-	.layer-band-head h3 {
-		font-size: 1rem;
-	}
-
-	.layer-role {
-		grid-column: 2;
-		max-width: 42rem;
-		color: var(--site-muted);
-		font-size: 0.9375rem;
-		line-height: 1.55;
-	}
-
-	.layer-role a {
-		color: var(--site-ink);
-	}
-
-	.layer-chips {
-		grid-column: 1 / -1;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4rem;
-		margin-top: 0.4rem;
-		list-style: none;
-	}
-
-	.layer-chips a {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.3em;
-		padding: 0.3rem 0.65rem;
-		border: 1px solid var(--site-line-strong);
-		border-radius: 999px;
-		color: var(--site-muted);
-		font: 500 0.8rem/1.2 var(--site-font-sans);
-		text-decoration: none;
-	}
-
-	.layer-chips a:hover,
-	.layer-chips a:focus-visible {
-		border-color: var(--site-accent-strong);
-		color: var(--site-ink);
-	}
-
-	/* "all N →": the generated count, set apart from the examples. */
-	.layer-chips-all a {
-		border-color: transparent;
-		color: var(--site-ink);
-		font-weight: 700;
-		white-space: nowrap;
-	}
-
-	.layer-chips-all a span {
-		color: var(--site-accent-strong);
-	}
-
-	.scope-reconciliation {
-		max-width: 46rem;
-		margin-top: 1.5rem;
-		color: var(--site-muted);
-		font-size: 0.9375rem;
-		line-height: 1.6;
-	}
-
-	.scope-reconciliation a {
-		color: var(--site-ink);
 	}
 
 	.evidence-note {
@@ -722,16 +541,6 @@
 		line-height: 1.65;
 	}
 
-	@media (max-width: 64rem) {
-		.layer-band {
-			grid-template-columns: 1fr;
-		}
-
-		.layer-role {
-			grid-column: 1;
-		}
-	}
-
 	@media (max-width: 58rem) {
 		.hero,
 		.model-grid,
@@ -741,10 +550,6 @@
 
 		.hero {
 			gap: 2.5rem;
-		}
-
-		.mini-scope-map {
-			max-width: 42rem;
 		}
 
 		.start-section {

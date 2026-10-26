@@ -162,7 +162,9 @@ describe('emitted-route inventory (#187 S4)', () => {
 			// #338: the ground-up page became /starters/smrt-start; the SaaS
 			// starter page was retired. Both are guarded in legacy-routes.test.ts.
 			'/starters/ground-up',
-			'/starters/saas'
+			'/starters/saas',
+			// #355: the module-cluster index became /blocks. Guarded in legacy-routes.test.ts.
+			'/modules'
 		];
 		for (const path of knownSingleRedirectRoutes) {
 			expect(
