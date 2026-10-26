@@ -9,7 +9,7 @@ it('keeps JSON-LD inert and updates the head when page metadata changes', async 
 	const { rerender } = render(SEO, {
 		title,
 		description: 'Initial description',
-		url: 'https://s-m-r-t.dev/reference/security'
+		url: 'https://s-m-r-t.dev/docs/reference/security'
 	});
 	const readGraph = () => {
 		const scripts = document.head.querySelectorAll('script[type="application/ld+json"]');
@@ -24,13 +24,13 @@ it('keeps JSON-LD inert and updates the head when page metadata changes', async 
 	await rerender({
 		title: 'Forms',
 		description: 'Updated description',
-		url: 'https://s-m-r-t.dev/capabilities/agent-assisted-forms'
+		url: 'https://s-m-r-t.dev/docs/capabilities/agent-assisted-forms'
 	});
 	expect(
 		readGraph()['@graph'].find((node: Record<string, unknown>) => node['@type'] === 'TechArticle')
 	).toMatchObject({
 		headline: 'Forms',
 		description: 'Updated description',
-		url: 'https://s-m-r-t.dev/capabilities/agent-assisted-forms'
+		url: 'https://s-m-r-t.dev/docs/capabilities/agent-assisted-forms'
 	});
 });

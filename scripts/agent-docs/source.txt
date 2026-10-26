@@ -1,20 +1,22 @@
 # s-m-r-t
 
-> s-m-r-t is an MIT-licensed TypeScript stack for agentic software that people and agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The stack includes an in-app assistant, scheduled agents, approvals, reports on request and row-level data rules. Outside agents connect over MCP or in the browser as a signed-in identity. build-a-boilerplate assembles a working mock-up for a kind of business in the browser and exports the plan as a file.
+> s-m-r-t is an MIT-licensed TypeScript stack for agentic software that people and agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The site has three doors, BUILD, FEATURES and DOCS. FEATURES groups what ships into nine sections (Agents, Basics, Screens, Content, Messaging, Commerce, Operations, Marketing and World), and each feature has a showcase with a live example where the packages ship one. build-a-boilerplate, behind BUILD, assembles a working mock-up for a kind of business in the browser and exports the plan as a file. DOCS holds every technical page, for developers and for agents.
 
 ## Canonical technical documentation
 
-- https://s-m-r-t.dev/ — the s-m-r-t application stack: what an application gets, how one record description becomes every surface, and the five layers
+- https://s-m-r-t.dev/ — the s-m-r-t application stack: a map of nine sections and their features, with three doors, BUILD, FEATURES and DOCS
+- https://s-m-r-t.dev/features — the nine feature sections, each with a showcase page per feature
+- https://s-m-r-t.dev/docs — the documentation index: getting started for developers, these entry points for agents, then every technical section
 - https://s-m-r-t.dev/build-a-boilerplate — assemble a working mock-up for a kind of business in the browser and export the plan as a cookbook file
-- https://s-m-r-t.dev/agents — agents as operators: browser agents, MCP agents and the application’s own scheduled and chat agents, all under the same permissions
-- https://s-m-r-t.dev/reference/saadl — Software as Agentic Domain Logic and human/agent parity
-- https://s-m-r-t.dev/capabilities/agent-legible-applications — manifests, control descriptions, MCP/WebMCP schemas, and bounded runtime awareness
-- https://s-m-r-t.dev/capabilities/agent-assisted-forms — stable control identities, validation, staged changes, and confirmation
-- https://s-m-r-t.dev/capabilities/webmcp — selected browser tools using the signed-in page session
-- https://s-m-r-t.dev/tooling/app-mcp — generated and application MCP for permitted runtime data operations
-- https://s-m-r-t.dev/tooling/dev-mcp — read-only development MCP for workspace, installed-package and, when a development database is configured, system-table knowledge
-- https://s-m-r-t.dev/reference/security — authentication, tenant scope, writable-field policy, and authorization boundaries
-- https://s-m-r-t.dev/reference/evidence — each site claim beside the released source it was verified in
+- https://s-m-r-t.dev/docs/agents — agents as operators: browser agents, MCP agents and the application’s own scheduled and chat agents, all under the same permissions
+- https://s-m-r-t.dev/docs/reference/saadl — Software as Agentic Domain Logic and human/agent parity
+- https://s-m-r-t.dev/docs/capabilities/agent-legible-applications — manifests, control descriptions, MCP/WebMCP schemas, and bounded runtime awareness
+- https://s-m-r-t.dev/docs/capabilities/agent-assisted-forms — stable control identities, validation, staged changes, and confirmation
+- https://s-m-r-t.dev/docs/capabilities/webmcp — selected browser tools using the signed-in page session
+- https://s-m-r-t.dev/docs/tooling/app-mcp — generated and application MCP for permitted runtime data operations
+- https://s-m-r-t.dev/docs/tooling/dev-mcp — read-only development MCP for workspace, installed-package and, when a development database is configured, system-table knowledge
+- https://s-m-r-t.dev/docs/reference/security — authentication, tenant scope, writable-field policy, and authorization boundaries
+- https://s-m-r-t.dev/docs/reference/evidence — each site claim beside the released source it was verified in
 - https://s-m-r-t.dev/playground — component and package demonstrations
 
 ## Released boundaries

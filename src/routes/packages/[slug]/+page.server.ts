@@ -7,5 +7,5 @@ export const prerender = true;
 export const entries = () => packages.map((pkg) => ({ slug: pkg.slug }));
 
 export const load: PageServerLoad = ({ params }) => {
-	redirect(301, `/reference/packages/${params.slug}`);
+	redirect(301, `/docs/reference/packages/${params.slug}`);
 };

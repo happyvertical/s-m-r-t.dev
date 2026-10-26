@@ -24,7 +24,7 @@
 <SEO
 	title="s-m-r-t UI component reference"
 	description="Search every public Svelte component export across the installed @happyvertical/smrt-* packages and inspect its props, bindable state, callback events, import path, examples, and canonical source."
-	url="https://s-m-r-t.dev/reference/components"
+	url="https://s-m-r-t.dev/docs/reference/components"
 />
 
 <ReferenceFamilyBar id="components" />
@@ -76,7 +76,7 @@
 					<ul>
 						{#each entries as component (component.slug)}
 							<li>
-								<a href={`/reference/components/${component.slug}`}>
+								<a href={`/docs/reference/components/${component.slug}`}>
 									<strong>{component.name}</strong>
 									<code>{component.importPath}</code>
 									<span>

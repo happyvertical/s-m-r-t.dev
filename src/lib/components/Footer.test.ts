@@ -10,9 +10,9 @@ describe('footer', () => {
 		render(Footer);
 		const navigation = screen.getByRole('navigation', { name: 'Footer navigation' });
 
-		expect(screen.getByText(`Framework documentation · ${SMRT_VERSION}`)).toBeTruthy();
+		expect(screen.getByText(`Framework documentation · MIT · ${SMRT_VERSION}`)).toBeTruthy();
 		expect(within(navigation).getByRole('link', { name: 'FAQ' }).getAttribute('href')).toBe(
-			'/reference/faq'
+			'/docs/reference/faq'
 		);
 		expect(
 			within(navigation)

@@ -95,7 +95,7 @@
 
 	/**
 	 * `full` (default) renders the component's own eyebrow/title/description —
-	 * used standalone on `/ui`. `compact` drops that header so an embedding
+	 * used standalone on `/docs/ui`. `compact` drops that header so an embedding
 	 * page (the homepage Section 5 card) can supply its own heading without
 	 * duplicating this component's copy.
 	 */

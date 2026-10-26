@@ -9,3 +9,6 @@ pnpm-lock.yaml
 # extension. Prettier's YAML parser rewrites it into a form json.loads rejects,
 # which breaks hv-agent claim/release/audit.
 .agents/
+
+# Approved redesign mocks (#361) are design artifacts, not source; keep them byte-exact.
+design/mocks/

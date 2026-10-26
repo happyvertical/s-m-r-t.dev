@@ -12,7 +12,10 @@ describe('site shell contract', () => {
 		expect(siteShell).toContain("from '@happyvertical/smrt-svelte/workspace'");
 		expect(siteShell).toContain('<AdminShell');
 		expect(siteShell).toContain('{#snippet appBar()}');
-		expect(siteShell).toContain('{#snippet appPanel()}');
+		// The docs panel exists only inside Docs (#365).
+		expect(siteShell).toContain('{#snippet docsPanel()}');
+		expect(siteShell).toContain('appPanel={inDocs ? docsPanel : undefined}');
+		expect(siteShell).toContain('edgeToggles={{ top: inDocs }}');
 	});
 
 	it('does not retain or nest a second application shell', () => {

@@ -17,7 +17,7 @@ export const toolingSurfaceBoundaries = [
 			'Runs in the local workspace. Commands can create files, generate artifacts, inspect manifests, and apply migrations to the configured database.',
 		plainEnglish:
 			'You need to start an app, change its model, generate interfaces, verify it, or operate its development database.',
-		href: '/tooling/development-workflow'
+		href: '/docs/tooling/development-workflow'
 	},
 	{
 		label: 'Knowledge commands',
@@ -26,7 +26,7 @@ export const toolingSurfaceBoundaries = [
 			'Reads workspace files, generated knowledge, installed-package contracts, and git history. It does not inspect live application data.',
 		plainEnglish:
 			'You need a deterministic index, freshness result, change report, or review and architecture context.',
-		href: '/tooling/knowledge'
+		href: '/docs/tooling/knowledge'
 	},
 	{
 		label: 'Development MCP',
@@ -35,7 +35,7 @@ export const toolingSurfaceBoundaries = [
 			'Runs as a local, read-only stdio server. It inspects the workspace and installed packages but cannot access the running application.',
 		plainEnglish:
 			'A coding agent needs structured discovery, diagnostics, generation output, or review context through MCP.',
-		href: '/tooling/dev-mcp'
+		href: '/docs/tooling/dev-mcp'
 	},
 	{
 		label: 'Generated local MCP',
@@ -44,7 +44,7 @@ export const toolingSurfaceBoundaries = [
 			'Runs beside the application and operates live data. It gets credentials from its environment and has no per-request principal, so it stays local.',
 		plainEnglish:
 			'A trusted application agent on the same machine must use generated model operations.',
-		href: '/tooling/app-mcp'
+		href: '/docs/tooling/app-mcp'
 	},
 	{
 		label: 'Hosted application MCP',
@@ -53,7 +53,7 @@ export const toolingSurfaceBoundaries = [
 			'Runs as a stateless HTTP route. A gateway terminates authorization, and the application resolves a principal for each request.',
 		plainEnglish:
 			'A remote application agent needs permitted operations against a deployed application.',
-		href: '/tooling/app-mcp'
+		href: '/docs/tooling/app-mcp'
 	},
 	{
 		label: 'WebMCP',
@@ -62,7 +62,7 @@ export const toolingSurfaceBoundaries = [
 			'Registers tools in the browser page and calls the generated REST surface as the signed-in page user. It is not a separate server.',
 		plainEnglish:
 			'An application agent in the browser must use actions that the current page exposes.',
-		href: '/capabilities/webmcp'
+		href: '/docs/capabilities/webmcp'
 	},
 	{
 		label: 'Agent Plugin',
@@ -71,7 +71,7 @@ export const toolingSurfaceBoundaries = [
 			'Packages the same local Development MCP server with manifests, schemas, and skills. The client keeps credentials outside the package.',
 		plainEnglish:
 			'A compatible coding-agent client can discover the development integration from a package.',
-		href: '/tooling/agent-plugin'
+		href: '/docs/tooling/agent-plugin'
 	}
 ] as const;
 
@@ -107,9 +107,9 @@ export const toolingGuides: Guide[] = [
 					'Use smrt init only to add framework files to an existing SvelteKit project.'
 				],
 				links: [
-					{ label: 'Getting Started', href: '/starters' },
-					{ label: 'Start from a cookbook', href: '/starters#cookbook' },
-					{ label: 'Clone smrt-start', href: '/starters/smrt-start' }
+					{ label: 'Getting Started', href: '/docs/getting-started' },
+					{ label: 'Start from a cookbook', href: '/docs/getting-started#cookbook' },
+					{ label: 'Clone smrt-start', href: '/docs/getting-started/smrt-start' }
 				]
 			},
 			{
@@ -127,7 +127,7 @@ pnpm smrt doctor
 # Before review, check types and produce the static build.
 pnpm check
 pnpm build`,
-				links: [{ label: 'Framework concepts', href: '/framework' }]
+				links: [{ label: 'Framework concepts', href: '/docs/framework' }]
 			},
 			{
 				title: 'Use the CLI as the developer control surface',
@@ -145,7 +145,7 @@ pnpm build`,
 					'smrt db:diff --empty-text-as-null previews how many empty text values become NULL and smrt db:migrate --empty-text-as-null applies it. smrt db:migrate-qualified-names rewrites stored names declared through previousQualifiedNames; it is opt-in and idempotent, and smrt doctor --db counts what remains.'
 				],
 				links: [
-					{ label: 'Deterministic knowledge commands', href: '/tooling/knowledge' },
+					{ label: 'Deterministic knowledge commands', href: '/docs/tooling/knowledge' },
 					{ label: 'Working Playground', href: '/playground' }
 				]
 			},
@@ -159,8 +159,8 @@ pnpm build`,
 					'The runtime manifest supports registration. The separate knowledge artifact supports developer and coding-agent inspection.'
 				],
 				links: [
-					{ label: 'Reference: decorators', href: '/reference/decorators' },
-					{ label: 'Reference: generated interfaces', href: '/reference/interfaces' }
+					{ label: 'Reference: decorators', href: '/docs/reference/decorators' },
+					{ label: 'Reference: generated interfaces', href: '/docs/reference/interfaces' }
 				]
 			},
 			{
@@ -174,7 +174,7 @@ pnpm smrt db:status
 pnpm smrt db:diff
 pnpm smrt db:migrate --dry-run
 pnpm smrt db:migrate`,
-				links: [{ label: 'Reference: configuration', href: '/reference/configuration' }]
+				links: [{ label: 'Reference: configuration', href: '/docs/reference/configuration' }]
 			},
 			{
 				title: 'Give tests the same generated model',
@@ -192,16 +192,16 @@ export default defineConfig({
   }
 });`,
 				links: [
-					{ label: 'Guide: test your application', href: '/guides/testing-your-app' },
-					{ label: 'Reference: testing', href: '/reference/testing' }
+					{ label: 'Guide: test your application', href: '/docs/guides/testing-your-app' },
+					{ label: 'Reference: testing', href: '/docs/reference/testing' }
 				]
 			}
 		],
 		related: [
-			{ label: 'Framework overview', href: '/framework' },
-			{ label: 'Getting Started', href: '/starters' },
-			{ label: 'Testing guide', href: '/guides/testing-your-app' },
-			{ label: 'Generated interfaces reference', href: '/reference/interfaces' }
+			{ label: 'Framework overview', href: '/docs/framework' },
+			{ label: 'Getting Started', href: '/docs/getting-started' },
+			{ label: 'Testing guide', href: '/docs/guides/testing-your-app' },
+			{ label: 'Generated interfaces reference', href: '/docs/reference/interfaces' }
 		]
 	},
 	{
@@ -306,9 +306,9 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 				intro:
 					"A package or app can publish its own scoped smrt-knowledge.json. Discovery prefers a local .smrt/smrt-knowledge.json, then dist/smrt-knowledge.json, then source manifest artifacts, before falling back to raw manifest and documentation scanning. The runtime manifest.json stays focused on object registration; smrt-knowledge.json is the artifact intended for developers and agents. doctor's agent-surface report reads this same artifact in this same order, so it names the same missing-build case: run the app build first if it has nothing to report.",
 				links: [
-					{ label: 'CLI and local workflow', href: '/tooling/development-workflow' },
-					{ label: 'Reference: generated interfaces', href: '/reference/interfaces' },
-					{ label: 'Reference: decorators', href: '/reference/decorators' }
+					{ label: 'CLI and local workflow', href: '/docs/tooling/development-workflow' },
+					{ label: 'Reference: generated interfaces', href: '/docs/reference/interfaces' },
+					{ label: 'Reference: decorators', href: '/docs/reference/decorators' }
 				]
 			},
 			{
@@ -322,8 +322,8 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 					'Authentication, tenant scope, permission, and field policy remain runtime decisions.'
 				],
 				links: [
-					{ label: 'Development MCP runtime boundary', href: '/tooling/dev-mcp' },
-					{ label: 'Reference: security defaults', href: '/reference/security' }
+					{ label: 'Development MCP runtime boundary', href: '/docs/tooling/dev-mcp' },
+					{ label: 'Reference: security defaults', href: '/docs/reference/security' }
 				]
 			},
 			{
@@ -341,14 +341,14 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 				title: 'The same knowledge, two response sizes',
 				intro:
 					'CLI callers request the full detail level, so command output embeds authored documents and complete package records. MCP callers receive the budgeted summary by default and can opt into detail full. The underlying knowledge is identical; only the projection differs.',
-				links: [{ label: 'Using it from an agent: smrt-dev-mcp', href: '/tooling/dev-mcp' }]
+				links: [{ label: 'Using it from an agent: smrt-dev-mcp', href: '/docs/tooling/dev-mcp' }]
 			}
 		],
 		related: [
-			{ label: 'CLI and local workflow', href: '/tooling/development-workflow' },
-			{ label: 'Development MCP', href: '/tooling/dev-mcp' },
-			{ label: 'Framework overview', href: '/framework' },
-			{ label: 'Generated interfaces reference', href: '/reference/interfaces' }
+			{ label: 'CLI and local workflow', href: '/docs/tooling/development-workflow' },
+			{ label: 'Development MCP', href: '/docs/tooling/dev-mcp' },
+			{ label: 'Framework overview', href: '/docs/framework' },
+			{ label: 'Generated interfaces reference', href: '/docs/reference/interfaces' }
 		]
 	},
 	{
@@ -378,10 +378,10 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 					'One server process loads one runtime project. A request for another project fails with runtime_project_mismatch; start a separate server or restart it for that project.'
 				],
 				links: [
-					{ label: 'Generated and application MCP', href: '/tooling/app-mcp' },
+					{ label: 'Generated and application MCP', href: '/docs/tooling/app-mcp' },
 					{
 						label: 'The broader pattern: agent-legible applications',
-						href: '/capabilities/agent-legible-applications'
+						href: '/docs/capabilities/agent-legible-applications'
 					}
 				]
 			},
@@ -396,8 +396,8 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 					'Review and architecture bundles carry the same coverage and diagnostics as the underlying index.'
 				],
 				links: [
-					{ label: 'Knowledge evidence and discovery order', href: '/tooling/knowledge' },
-					{ label: 'Reference: generated interfaces', href: '/reference/interfaces' }
+					{ label: 'Knowledge evidence and discovery order', href: '/docs/tooling/knowledge' },
+					{ label: 'Reference: generated interfaces', href: '/docs/reference/interfaces' }
 				]
 			},
 			{
@@ -527,8 +527,8 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 				intro:
 					'The static tools and prompts catalogs advertise a one-day private cache lifetime. Workspace knowledge resources are also private, but they use a zero lifetime. The server rebuilds them from the current workspace for every request. The transport has no visible invalidation signal to support a longer lifetime.',
 				links: [
-					{ label: 'Shared runtime catalogs', href: '/tooling/app-mcp' },
-					{ label: 'Cache and tenancy safety', href: '/tooling/compatibility' }
+					{ label: 'Shared runtime catalogs', href: '/docs/tooling/app-mcp' },
+					{ label: 'Cache and tenancy safety', href: '/docs/tooling/compatibility' }
 				]
 			},
 			{
@@ -544,21 +544,24 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 					'Use runtime-object or runtime-schema-diff only when declared evidence needs a bounded development-runtime check.'
 				],
 				links: [
-					{ label: 'The commands behind these tools', href: '/tooling/knowledge' },
-					{ label: 'Package reference', href: '/reference/packages/smrt-dev-mcp' }
+					{ label: 'The commands behind these tools', href: '/docs/tooling/knowledge' },
+					{ label: 'Package reference', href: '/docs/reference/packages/smrt-dev-mcp' }
 				]
 			},
 			{
 				title: 'Resources, prompts, and the bundled skill',
 				intro:
 					'Besides tools, the server exposes the composed project knowledge and package-scoped knowledge as resources, and publishes review and architecture prompts. It also ships one harness-agnostic agent skill, smrt-code-review, which get-agent-skill returns as Markdown with YAML frontmatter that skill-unaware harnesses can ignore.',
-				links: [{ label: 'How the skill is packaged', href: '/tooling/agent-plugin' }]
+				links: [{ label: 'How the skill is packaged', href: '/docs/tooling/agent-plugin' }]
 			}
 		],
 		related: [
-			{ label: 'Agent-legible applications', href: '/capabilities/agent-legible-applications' },
-			{ label: 'Knowledge tooling', href: '/tooling/knowledge' },
-			{ label: 'Generated and app MCP', href: '/tooling/app-mcp' }
+			{
+				label: 'Agent-legible applications',
+				href: '/docs/capabilities/agent-legible-applications'
+			},
+			{ label: 'Knowledge tooling', href: '/docs/tooling/knowledge' },
+			{ label: 'Generated and app MCP', href: '/docs/tooling/app-mcp' }
 		]
 	},
 	{
@@ -623,7 +626,7 @@ export const mcpServer = createMcpAppServer({
 import { mcpServer } from '$lib/server/mcp';
 
 export const POST = mountMcpRoute(mcpServer);`,
-				links: [{ label: 'Package reference', href: '/reference/packages/smrt-app-mcp' }]
+				links: [{ label: 'Package reference', href: '/docs/reference/packages/smrt-app-mcp' }]
 			},
 			{
 				title: 'Opt long-running actions into durable tasks',
@@ -662,7 +665,7 @@ class Report extends SmrtObject {
 				title: 'Request metadata is validated, not trusted',
 				intro:
 					'Stock MCP clients send a required Mcp-Method header, and Mcp-Name for a tool call. The mount validates them against the JSON-RPC body and returns the protocol HeaderMismatch error, code -32020 with HTTP 400, for a missing or mismatched header. Header presence is not authentication.',
-				links: [{ label: 'Protocol and conformance detail', href: '/tooling/compatibility' }]
+				links: [{ label: 'Protocol and conformance detail', href: '/docs/tooling/compatibility' }]
 			},
 			{
 				title: 'Policy runs on discovery and on the call',
@@ -713,10 +716,10 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 				links: [
 					{
 						label: 'Task guide: expose your app over MCP',
-						href: '/guides/expose-your-app-over-mcp'
+						href: '/docs/guides/expose-your-app-over-mcp'
 					},
-					{ label: 'Reference: generated interfaces', href: '/reference/interfaces' },
-					{ label: 'Capability: WebMCP in the browser', href: '/capabilities/webmcp' }
+					{ label: 'Reference: generated interfaces', href: '/docs/reference/interfaces' },
+					{ label: 'Capability: WebMCP in the browser', href: '/docs/capabilities/webmcp' }
 				]
 			},
 			{
@@ -730,17 +733,17 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 					'Use hosted application MCP when a remote agent runs outside the browser session.'
 				],
 				links: [
-					{ label: 'WebMCP capability', href: '/capabilities/webmcp' },
-					{ label: 'Reference: generated interfaces', href: '/reference/interfaces' },
-					{ label: 'Reference: security defaults', href: '/reference/security' }
+					{ label: 'WebMCP capability', href: '/docs/capabilities/webmcp' },
+					{ label: 'Reference: generated interfaces', href: '/docs/reference/interfaces' },
+					{ label: 'Reference: security defaults', href: '/docs/reference/security' }
 				]
 			}
 		],
 		related: [
-			{ label: 'Expose an application over MCP', href: '/guides/expose-your-app-over-mcp' },
-			{ label: 'Generated interfaces reference', href: '/reference/interfaces' },
-			{ label: 'Security reference', href: '/reference/security' },
-			{ label: 'Development MCP', href: '/tooling/dev-mcp' }
+			{ label: 'Expose an application over MCP', href: '/docs/guides/expose-your-app-over-mcp' },
+			{ label: 'Generated interfaces reference', href: '/docs/reference/interfaces' },
+			{ label: 'Security reference', href: '/docs/reference/security' },
+			{ label: 'Development MCP', href: '/docs/tooling/dev-mcp' }
 		]
 	},
 	{
@@ -795,7 +798,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 					'Other MCP clients can reach the same content through the get-agent-skill tool.',
 					'It is also published as a prompt and as a resource for native MCP clients.'
 				],
-				links: [{ label: 'Calling it as a tool', href: '/tooling/dev-mcp' }]
+				links: [{ label: 'Calling it as a tool', href: '/docs/tooling/dev-mcp' }]
 			},
 			{
 				title: 'Schemas are pinned for offline validation',
@@ -819,13 +822,13 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 				title: 'How this relates to direct MCP configuration',
 				intro:
 					'Packaging is a distribution convenience, not a different server. Manifest-based and manually configured clients launch the same stdio binary. Both clients receive the same tools, prompts, and resources. Use direct configuration when your client does not support Agent Plugins or needs an absolute launcher path.',
-				links: [{ label: 'Direct stdio configuration', href: '/tooling/dev-mcp' }]
+				links: [{ label: 'Direct stdio configuration', href: '/docs/tooling/dev-mcp' }]
 			}
 		],
 		related: [
-			{ label: 'Development MCP', href: '/tooling/dev-mcp' },
-			{ label: 'Knowledge tooling', href: '/tooling/knowledge' },
-			{ label: 'Compatibility and operations', href: '/tooling/compatibility' }
+			{ label: 'Development MCP', href: '/docs/tooling/dev-mcp' },
+			{ label: 'Knowledge tooling', href: '/docs/tooling/knowledge' },
+			{ label: 'Compatibility and operations', href: '/docs/tooling/compatibility' }
 		]
 	},
 	{
@@ -878,7 +881,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 					'The modern mount rejects legacy protocol handling rather than negotiating down.',
 					'Development tools return structured content beside the original text payload, so text-only clients keep working.'
 				],
-				links: [{ label: 'The current mount', href: '/tooling/app-mcp' }]
+				links: [{ label: 'The current mount', href: '/docs/tooling/app-mcp' }]
 			},
 			{
 				title: 'Optional capabilities stay explicit',
@@ -923,9 +926,9 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 					'The Agent Plugin manifest contains no credentials or remote transport settings.'
 				],
 				links: [
-					{ label: 'Runtime MCP surfaces', href: '/tooling/app-mcp' },
-					{ label: 'Agent Plugin credential boundary', href: '/tooling/agent-plugin' },
-					{ label: 'Reference: security defaults', href: '/reference/security' }
+					{ label: 'Runtime MCP surfaces', href: '/docs/tooling/app-mcp' },
+					{ label: 'Agent Plugin credential boundary', href: '/docs/tooling/agent-plugin' },
+					{ label: 'Reference: security defaults', href: '/docs/reference/security' }
 				]
 			},
 			{
@@ -938,16 +941,16 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 					'Keep issuer metadata, client documents, and gateway policy in deployment source control.'
 				],
 				links: [
-					{ label: 'Reference: security defaults', href: '/reference/security' },
-					{ label: 'Application MCP detail', href: '/tooling/app-mcp' }
+					{ label: 'Reference: security defaults', href: '/docs/reference/security' },
+					{ label: 'Application MCP detail', href: '/docs/tooling/app-mcp' }
 				]
 			}
 		],
 		related: [
-			{ label: 'Runtime MCP surfaces', href: '/tooling/app-mcp' },
-			{ label: 'Development MCP', href: '/tooling/dev-mcp' },
-			{ label: 'Security reference', href: '/reference/security' },
-			{ label: 'Application MCP guide', href: '/guides/expose-your-app-over-mcp' }
+			{ label: 'Runtime MCP surfaces', href: '/docs/tooling/app-mcp' },
+			{ label: 'Development MCP', href: '/docs/tooling/dev-mcp' },
+			{ label: 'Security reference', href: '/docs/reference/security' },
+			{ label: 'Application MCP guide', href: '/docs/guides/expose-your-app-over-mcp' }
 		]
 	}
 ];

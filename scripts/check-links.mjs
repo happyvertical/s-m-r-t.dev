@@ -8,7 +8,8 @@
  * HTML, resolves them against the set of files the build actually emitted,
  * and reports:
  *
- *   1. broken internal links (an `<a href>` that resolves to nothing built)
+ *   1. broken internal links (an `<a href>` that resolves to nothing built:
+ *      neither a page nor another emitted file such as /llms.txt)
  *   2. redirect chains (a redirect page whose target is itself a redirect)
  *   3. pages whose canonical URL is not their own URL, including a missing
  *      `<link rel="canonical">` altogether (reported as "no canonical")
@@ -84,6 +85,14 @@ async function main() {
 		});
 	}
 
+	// Non-HTML files the build emits (llms.txt, llms-full.txt, sitemap.xml,
+	// images): a link to one is not broken just because it is not a page.
+	const emittedFiles = new Set(
+		(await glob('**/*', { cwd: BUILD_DIR, nodir: true, ignore: '**/*.html' })).map(
+			(file) => `/${file.split(path.sep).join('/')}`
+		)
+	);
+
 	const brokenLinks = [];
 	const chains = [];
 	const canonicalMismatches = [];
@@ -96,7 +105,7 @@ async function main() {
 			if (!isInternalPath(href) || href.startsWith('/#')) continue;
 			if (href === '/' || href.startsWith('/#')) continue;
 			const target = href.replace(/\/$/, '') || '/';
-			if (!pages.has(target)) {
+			if (!pages.has(target) && !emittedFiles.has(target)) {
 				brokenLinks.push({ from: ownPath, href: match[1] });
 			}
 		}

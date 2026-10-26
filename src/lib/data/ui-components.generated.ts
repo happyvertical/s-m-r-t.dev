@@ -116,7 +116,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/agents/src/svelte/components/AgentAdminPanel.svelte'
 	},
@@ -193,7 +193,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/agents/src/svelte/components/AgentAdminTabs.svelte'
 	},
@@ -323,7 +323,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/agents/src/svelte/components/AgentDashboard.svelte'
 	},
@@ -381,7 +381,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/agents/src/svelte/components/AgentRunHistory.svelte'
 	},
@@ -457,7 +457,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/agents/src/svelte/components/AgentScheduleForm.svelte'
 	},
@@ -557,7 +557,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/agents/src/svelte/components/AgentScheduleList.svelte'
 	},
@@ -610,7 +610,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/agents/src/svelte/components/AgentSettingsForm.svelte'
 	},
@@ -681,7 +681,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/agents/src/svelte/components/AgentSettingsShell.svelte'
 	},
@@ -720,7 +720,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/agents/src/svelte/components/ScheduleStatusBadge.svelte'
 	},
@@ -753,7 +753,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/analytics/src/svelte/AnalyticsSummary.svelte'
 	},
@@ -792,7 +792,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/analytics/src/svelte/EventsTable.svelte'
 	},
@@ -855,7 +855,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/analytics/src/svelte/PropertyInfo.svelte'
 	},
@@ -888,7 +888,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/analytics/src/svelte/PropertyStatusBadge.svelte'
 	},
@@ -946,7 +946,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/analytics/src/svelte/StatCard.svelte'
 	},
@@ -985,7 +985,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/analytics/src/svelte/TrendBadge.svelte'
 	},
@@ -1068,7 +1068,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/assets/src/svelte/ActionBar.svelte'
 	},
@@ -1210,7 +1210,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/assets/src/svelte/AssetDetail.svelte'
 	},
@@ -1299,7 +1299,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/assets/src/svelte/AssetGrid.svelte'
 	},
@@ -1387,7 +1387,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/assets/src/svelte/AssetList.svelte'
 	},
@@ -1555,7 +1555,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/assets/src/svelte/AssetManager.svelte'
 	},
@@ -1697,7 +1697,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/assets/src/svelte/AssetToolbar.svelte'
 	},
@@ -1812,7 +1812,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/assets/src/svelte/components/AttachmentList.svelte'
 	},
@@ -1933,7 +1933,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/assets/src/svelte/components/AttachmentPanel.svelte'
 	},
@@ -2087,7 +2087,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/assets/src/svelte/components/AttachmentUpload.svelte'
 	},
@@ -2148,7 +2148,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/assets/src/svelte/CreateAssetModal.svelte'
 	},
@@ -2236,7 +2236,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/agent/AgentChat.svelte'
 	},
@@ -2277,7 +2277,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/agent/AgentSelector.svelte'
 	},
@@ -2336,7 +2336,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/agent/AgentSessionPanel.svelte'
 	},
@@ -2425,7 +2425,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/assistant/AssistantChoiceCards.svelte'
 	},
@@ -2550,7 +2550,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/assistant/AssistantComposer.svelte'
 	},
@@ -2850,7 +2850,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/assistant/AssistantDock.svelte'
 	},
@@ -2909,7 +2909,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/assistant/AssistantQuestionForm.svelte'
 	},
@@ -2968,7 +2968,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/assistant/AssistantThreadList.svelte'
 	},
@@ -3014,7 +3014,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/shared/Avatar.svelte'
 	},
@@ -3048,7 +3048,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/assistant/captions/CaptionOverlay.svelte'
 	},
@@ -3124,7 +3124,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/layout/ChatLayout.svelte'
 	},
@@ -3213,7 +3213,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/tabs/ChatTab.svelte'
 	},
@@ -3266,7 +3266,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/tabs/ChatTabList.svelte'
 	},
@@ -3360,7 +3360,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/tabs/ChatTabs.svelte'
 	},
@@ -3413,7 +3413,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/shared/FileUpload.svelte'
 	},
@@ -3749,7 +3749,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/assistant/FloatingAssistant.svelte'
 	},
@@ -3807,7 +3807,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/assistant/captions/HeardCaptions.svelte'
 	},
@@ -3879,7 +3879,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/helper/HelperControlPanel.svelte'
 	},
@@ -3925,7 +3925,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/shared/LinkPreview.svelte'
 	},
@@ -3966,7 +3966,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/layout/MemberList.svelte'
 	},
@@ -4031,7 +4031,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/shared/MentionAutocomplete.svelte'
 	},
@@ -4101,7 +4101,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/messages/MessageInput.svelte'
 	},
@@ -4184,7 +4184,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/messages/MessageItem.svelte'
 	},
@@ -4260,7 +4260,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/messages/MessageList.svelte'
 	},
@@ -4313,7 +4313,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/tabs/MiniChat.svelte'
 	},
@@ -4373,7 +4373,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/shared/ModelPicker.svelte'
 	},
@@ -4414,7 +4414,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/shared/ReactionPicker.svelte'
 	},
@@ -4448,7 +4448,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/shared/ReadReceipts.svelte'
 	},
@@ -4501,7 +4501,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/dialogs/RoomCreateDialog.svelte'
 	},
@@ -4560,7 +4560,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/layout/RoomHeader.svelte'
 	},
@@ -4624,7 +4624,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/layout/RoomList.svelte'
 	},
@@ -4695,7 +4695,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/dialogs/SearchMessages.svelte'
 	},
@@ -4759,7 +4759,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/assistant/captions/SpokenCaptions.svelte'
 	},
@@ -4829,7 +4829,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/messages/ThreadPanel.svelte'
 	},
@@ -4892,7 +4892,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/agent/ToolCallDisplay.svelte'
 	},
@@ -4926,7 +4926,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/chat/src/svelte/components/shared/UserPresence.svelte'
 	},
@@ -5026,7 +5026,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/CustomerDetail.svelte'
 	},
@@ -5199,7 +5199,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/CustomerDirectory.svelte'
 	},
@@ -5342,7 +5342,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/CustomerForm.svelte'
 	},
@@ -5475,7 +5475,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/CustomerSelect.svelte'
 	},
@@ -5607,7 +5607,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/InvoiceActions.svelte'
 	},
@@ -5683,7 +5683,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/InvoiceAllocationFields.svelte'
 	},
@@ -5753,7 +5753,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/InvoiceCard.svelte'
 	},
@@ -5841,7 +5841,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/InvoiceEditor.svelte'
 	},
@@ -5935,7 +5935,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/InvoiceHeader.svelte'
 	},
@@ -6041,7 +6041,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/InvoiceLineItems.svelte'
 	},
@@ -6095,7 +6095,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/InvoiceRecordScreen.svelte'
 	},
@@ -6128,7 +6128,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/InvoiceReview.svelte'
 	},
@@ -6173,7 +6173,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/InvoiceTotals.svelte'
 	},
@@ -6255,7 +6255,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/MoneyInvoiceEditor.svelte'
 	},
@@ -6342,7 +6342,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/PartyContactFields.svelte'
 	},
@@ -6448,7 +6448,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/PricingVersionDecision.svelte'
 	},
@@ -6481,7 +6481,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/PricingVersionSummary.svelte'
 	},
@@ -6669,7 +6669,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/PurchaseOrderEditor.svelte'
 	},
@@ -6774,7 +6774,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/PurchaseOrderHeaderForm.svelte'
 	},
@@ -6855,7 +6855,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/PurchaseSourceSelector.svelte'
 	},
@@ -7011,7 +7011,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/QuoteEditor.svelte'
 	},
@@ -7057,7 +7057,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/QuoteRevisionComparison.svelte'
 	},
@@ -7102,7 +7102,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/QuoteRevisionHistory.svelte'
 	},
@@ -7172,7 +7172,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/UnbilledItems.svelte'
 	},
@@ -7266,7 +7266,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/VendorDetail.svelte'
 	},
@@ -7439,7 +7439,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/VendorDirectory.svelte'
 	},
@@ -7576,7 +7576,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/VendorForm.svelte'
 	},
@@ -7709,7 +7709,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/commerce/src/svelte/components/VendorSelect.svelte'
 	},
@@ -7766,7 +7766,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ArticleCard.svelte'
 	},
@@ -7835,7 +7835,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ArticleList.svelte'
 	},
@@ -7930,7 +7930,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentAgentChat.svelte'
 	},
@@ -8114,7 +8114,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentBodyEditor.svelte'
 	},
@@ -8160,7 +8160,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentBodyRenderer.svelte'
 	},
@@ -8207,7 +8207,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentClaimAuditTool.svelte'
 	},
@@ -8284,7 +8284,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentContributionForm.svelte'
 	},
@@ -8379,7 +8379,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentContributionInbox.svelte'
 	},
@@ -8444,7 +8444,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentContributionPortal.svelte'
 	},
@@ -8490,7 +8490,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/routes/ContentContributionsRoute.svelte'
 	},
@@ -8543,7 +8543,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentContributionTypeManager.svelte'
 	},
@@ -8596,7 +8596,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentContributorManager.svelte'
 	},
@@ -8649,7 +8649,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentCorrectionsTool.svelte'
 	},
@@ -8812,7 +8812,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentEditor.svelte'
 	},
@@ -8864,7 +8864,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/routes/ContentFactsRoute.svelte'
 	},
@@ -8924,7 +8924,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentGovernanceAssignmentEditor.svelte'
 	},
@@ -8971,7 +8971,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentGovernanceManager.svelte'
 	},
@@ -9108,7 +9108,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentGovernancePanel.svelte'
 	},
@@ -9161,7 +9161,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentGovernancePolicyEditor.svelte'
 	},
@@ -9220,7 +9220,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentGovernanceProfileEditor.svelte'
 	},
@@ -9266,7 +9266,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/routes/ContentGovernanceRoute.svelte'
 	},
@@ -9332,7 +9332,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentGovernanceTool.svelte'
 	},
@@ -9439,7 +9439,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentImageBrowser.svelte'
 	},
@@ -9492,7 +9492,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentImageChooser.svelte'
 	},
@@ -9665,7 +9665,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentList.svelte'
 	},
@@ -9732,7 +9732,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentMetadataFields.svelte'
 	},
@@ -9896,7 +9896,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentPictureDrawer.svelte'
 	},
@@ -9950,7 +9950,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentReferencesPanel.svelte'
 	},
@@ -10009,7 +10009,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentReviewStatusTray.svelte'
 	},
@@ -10069,7 +10069,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentStatusFields.svelte'
 	},
@@ -10158,7 +10158,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentTitleField.svelte'
 	},
@@ -10198,7 +10198,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentTransparencyReport.svelte'
 	},
@@ -10245,7 +10245,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentTransparencyTool.svelte'
 	},
@@ -10292,7 +10292,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/ContentVersionsTool.svelte'
 	},
@@ -10344,7 +10344,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/routes/ContentWorkspaceRoute.svelte'
 	},
@@ -10505,7 +10505,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/GovernedContentEditor.svelte'
 	},
@@ -10544,7 +10544,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/components/Markdown.svelte'
 	},
@@ -10584,7 +10584,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/content/src/svelte/routes/PublishedArticleRoute.svelte'
 	},
@@ -10623,7 +10623,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/events/src/svelte/components/MeetingView.svelte'
 	},
@@ -10669,7 +10669,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/fields/src/svelte/components/AdvancedFields.svelte'
 	},
@@ -10752,7 +10752,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/fields/src/svelte/components/FieldPolicyControlPanel.svelte'
 	},
@@ -10829,7 +10829,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/fields/src/svelte/components/FieldPolicyEditor.svelte'
 	},
@@ -10863,7 +10863,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/fields/src/svelte/components/FieldPolicyGearButton.svelte'
 	},
@@ -10927,7 +10927,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/fields/src/svelte/components/FieldPolicyGearProvider.svelte'
 	},
@@ -10969,7 +10969,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/fields/src/svelte/components/FieldPolicyProvider.svelte'
 	},
@@ -11022,7 +11022,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/fields/src/svelte/components/FieldPolicySuggestionQueue.svelte'
 	},
@@ -11063,7 +11063,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/fields/src/svelte/components/FormHelp.svelte'
 	},
@@ -11097,7 +11097,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/fields/src/svelte/components/ModeSwitch.svelte'
 	},
@@ -11226,7 +11226,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/fields/src/svelte/components/ObjectForm.svelte'
 	},
@@ -11260,7 +11260,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/fields/src/svelte/components/ObjectFormSourceProvider.svelte'
 	},
@@ -11349,7 +11349,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/fields/src/svelte/components/PolicyField.svelte'
 	},
@@ -11407,7 +11407,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/images/src/svelte/components/AssetsGallery.svelte'
 	},
@@ -11477,7 +11477,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/images/src/svelte/components/ImageEditor.svelte'
 	},
@@ -11559,7 +11559,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/images/src/svelte/components/ImageUploader.svelte'
 	},
@@ -11611,7 +11611,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/images/src/svelte/components/PhotoCutoutSetup.svelte'
 	},
@@ -11705,7 +11705,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/jobs/src/svelte/components/JobActions.svelte'
 	},
@@ -11823,7 +11823,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/jobs/src/svelte/components/JobDashboard.svelte'
 	},
@@ -11899,7 +11899,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/jobs/src/svelte/components/JobDetail.svelte'
 	},
@@ -12033,7 +12033,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/jobs/src/svelte/components/JobList.svelte'
 	},
@@ -12084,7 +12084,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/jobs/src/svelte/components/JobStats.svelte'
 	},
@@ -12123,7 +12123,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/jobs/src/svelte/components/JobStatusBadge.svelte'
 	},
@@ -12163,7 +12163,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/AccountAvatar.svelte'
 	},
@@ -12240,7 +12240,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/AccountCard.svelte'
 	},
@@ -12316,7 +12316,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/AccountList.svelte'
 	},
@@ -12357,7 +12357,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/AttachmentChip.svelte'
 	},
@@ -12416,7 +12416,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/AttachmentUpload.svelte'
 	},
@@ -12498,7 +12498,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/ComposeForm.svelte'
 	},
@@ -12569,7 +12569,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/EmailAccountManager.svelte'
 	},
@@ -12658,7 +12658,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/EmailFilterManager.svelte'
 	},
@@ -12711,7 +12711,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/FolderNav.svelte'
 	},
@@ -12764,7 +12764,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/ForwardForm.svelte'
 	},
@@ -12785,7 +12785,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/MailboxDemo.svelte'
 	},
@@ -12891,7 +12891,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/MessageCard.svelte'
 	},
@@ -12985,7 +12985,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/MessageDetail.svelte'
 	},
@@ -13061,7 +13061,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/MessageFilters.svelte'
 	},
@@ -13185,7 +13185,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/MessageList.svelte'
 	},
@@ -13237,7 +13237,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/MessageStatusIndicator.svelte'
 	},
@@ -13314,7 +13314,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/MessageToolbar.svelte'
 	},
@@ -13348,7 +13348,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/MessageTypeBadge.svelte'
 	},
@@ -13449,7 +13449,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/MessagingSettingsPanel.svelte'
 	},
@@ -13502,7 +13502,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/RecipientInput.svelte'
 	},
@@ -13566,7 +13566,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/ReplyForm.svelte'
 	},
@@ -13600,7 +13600,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/SendStatusBadge.svelte'
 	},
@@ -13670,7 +13670,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/messages/src/svelte/components/ThreadView.svelte'
 	},
@@ -13729,7 +13729,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/personas/src/svelte/components/DirectiveReviewQueue.svelte'
 	},
@@ -13777,7 +13777,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/planner/src/lib/planner/host/HostPlanner.svelte'
 	},
@@ -13956,7 +13956,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/planner/src/lib/planner/Planner.svelte'
 	},
@@ -14149,7 +14149,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/planner/src/lib/planner/PlannerControls.svelte'
 	},
@@ -14208,7 +14208,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-playground/src/svelte/PlaygroundHost.svelte'
 	},
@@ -14320,7 +14320,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/projects/src/svelte/components/ApprovalActions.svelte'
 	},
@@ -14384,7 +14384,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/projects/src/svelte/AssistanceLauncher.svelte'
 	},
@@ -14484,7 +14484,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/projects/src/svelte/components/BulkActions.svelte'
 	},
@@ -14517,7 +14517,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/projects/src/svelte/DeliveryStatus.svelte'
 	},
@@ -14569,7 +14569,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/projects/src/svelte/DevelopmentBoard.svelte'
 	},
@@ -14608,7 +14608,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/projects/src/svelte/DevelopmentRequestDetail.svelte'
 	},
@@ -14654,7 +14654,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/projects/src/svelte/components/DevelopmentRequestForm.svelte'
 	},
@@ -14699,7 +14699,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/projects/src/svelte/components/DevelopmentRequestList.svelte'
 	},
@@ -14746,7 +14746,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/projects/src/svelte/PreviewApprovalPanel.svelte'
 	},
@@ -14836,7 +14836,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/projects/src/svelte/ProjectBoard.svelte'
 	},
@@ -14936,7 +14936,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/projects/src/svelte/components/RejectDialog.svelte'
 	},
@@ -14969,7 +14969,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/projects/src/svelte/ServiceEvidenceList.svelte'
 	},
@@ -15035,7 +15035,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/reports/src/svelte/MaterializedReportTable.svelte'
 	},
@@ -15126,7 +15126,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/reports/src/svelte/ReportConfirmation.svelte'
 	},
@@ -15209,7 +15209,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/reports/src/svelte/ReportDetail.svelte'
 	},
@@ -15274,7 +15274,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/reports/src/svelte/ReportPicker.svelte'
 	},
@@ -15332,7 +15332,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/reports/src/svelte/ReportResult.svelte'
 	},
@@ -15378,7 +15378,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/reports/src/svelte/RuntimeReportChartWidget.svelte'
 	},
@@ -15454,7 +15454,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/reports/src/svelte/RuntimeReportDetailRoute.svelte'
 	},
@@ -15524,7 +15524,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/reports/src/svelte/RuntimeReportsRoute.svelte'
 	},
@@ -15552,7 +15552,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/reports/src/svelte/RuntimeReportToolResult.svelte'
 	},
@@ -15605,7 +15605,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/reports/src/svelte/RuntimeReportWidgetOptions.svelte'
 	},
@@ -15682,7 +15682,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/reports/src/svelte/SavedReportCard.svelte'
 	},
@@ -15771,7 +15771,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/reports/src/svelte/SavedReports.svelte'
 	},
@@ -15851,7 +15851,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/reports/src/svelte/SavedReportsWidget.svelte'
 	},
@@ -16181,7 +16181,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/app/AppShell.svelte'
 	},
@@ -16246,7 +16246,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/app/OwnerSetupForm.svelte'
 	},
@@ -16280,7 +16280,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/app/RuntimeDiagnosticsWebMcp.svelte'
 	},
@@ -16324,7 +16324,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/app/ShellSettingsPage.svelte'
 	},
@@ -16417,7 +16417,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/audit/AuditList.svelte'
 	},
@@ -16506,7 +16506,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/audit/RecordHistory.svelte'
 	},
@@ -16629,7 +16629,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/board/Board.svelte'
 	},
@@ -16688,7 +16688,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/browser-ai/svelte/components/AILoadingOverlay.svelte'
 	},
@@ -16734,7 +16734,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/browser-ai/svelte/components/CapabilityGate.svelte'
 	},
@@ -16780,7 +16780,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/browser-ai/svelte/components/DownloadProgress.svelte'
 	},
@@ -16839,7 +16839,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/browser-ai/svelte/components/ModelStatusControl.svelte'
 	},
@@ -16867,7 +16867,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/browser-ai/svelte/components/STTTest.svelte'
 	},
@@ -16926,7 +16926,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/browser-ai/svelte/components/VoiceInput.svelte'
 	},
@@ -16996,7 +16996,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/command-palette/CommandPalette.svelte'
 	},
@@ -17043,7 +17043,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/command-palette/CommandPaletteDialog.svelte'
 	},
@@ -17096,7 +17096,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/command-palette/CommandPaletteTrigger.svelte'
 	},
@@ -17214,7 +17214,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/Provider.svelte'
 	},
@@ -17296,7 +17296,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/cookbook/CookbookApp.svelte'
 	},
@@ -17389,7 +17389,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/cookbook/CookbookSectionOverview.svelte'
 	},
@@ -17442,7 +17442,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/cookbook/CookbookSectionPage.svelte'
 	},
@@ -17537,7 +17537,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/AddressInput.svelte'
 	},
@@ -17608,7 +17608,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/CheckboxInput.svelte'
 	},
@@ -17715,7 +17715,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/DateRangeInput.svelte'
 	},
@@ -17798,7 +17798,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/DateTimeInput.svelte'
 	},
@@ -17894,7 +17894,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/FileUpload.svelte'
 	},
@@ -18056,7 +18056,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/Form.svelte'
 	},
@@ -18090,7 +18090,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/FormMicButton.svelte'
 	},
@@ -18148,7 +18148,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/FormScope.svelte'
 	},
@@ -18261,7 +18261,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/MeasurementInput.svelte'
 	},
@@ -18362,7 +18362,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/MoneyInput.svelte'
 	},
@@ -18457,7 +18457,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/NumberInput.svelte'
 	},
@@ -18534,7 +18534,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/PhoneInput.svelte'
 	},
@@ -18647,7 +18647,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/SearchInput.svelte'
 	},
@@ -18730,7 +18730,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/SelectInput.svelte'
 	},
@@ -18819,7 +18819,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/TextareaInput.svelte'
 	},
@@ -18908,7 +18908,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/forms/TextInput.svelte'
 	},
@@ -19012,7 +19012,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/import-export/ImportExport.svelte'
 	},
@@ -19088,7 +19088,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/mcp-apps/McpAppsBridge.svelte'
 	},
@@ -19123,7 +19123,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/module/ModulePanel.svelte'
 	},
@@ -19163,7 +19163,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/notifications/NotificationBell.svelte'
 	},
@@ -19234,7 +19234,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/overview/widgets/ChartWidget.svelte'
 	},
@@ -19305,7 +19305,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/overview/widgets/LineItemsWidget.svelte'
 	},
@@ -19376,7 +19376,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/overview/widgets/MetricWidget.svelte'
 	},
@@ -19447,7 +19447,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/overview/widgets/NoteWidget.svelte'
 	},
@@ -19487,7 +19487,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/overview/OverviewAssistantUndo.svelte'
 	},
@@ -19573,7 +19573,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/overview/OverviewGrid.svelte'
 	},
@@ -19644,7 +19644,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/overview/widgets/RecordListWidget.svelte'
 	},
@@ -19715,7 +19715,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/overview/widgets/RelatedWidget.svelte'
 	},
@@ -19786,7 +19786,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/overview/widgets/ShortcutsWidget.svelte'
 	},
@@ -19857,7 +19857,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/overview/WidgetOptionsForm.svelte'
 	},
@@ -20027,7 +20027,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/screens/DetailScreen.svelte'
 	},
@@ -20141,7 +20141,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/screens/EditForm.svelte'
 	},
@@ -20290,7 +20290,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/screens/ListScreen.svelte'
 	},
@@ -20404,7 +20404,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/screens/RecipeScreens.svelte'
 	},
@@ -20680,7 +20680,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/screens/RecordScreen.svelte'
 	},
@@ -20756,7 +20756,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/settings/SettingsCatalog.svelte'
 	},
@@ -20848,7 +20848,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/sortable/Sortable.svelte'
 	},
@@ -20882,7 +20882,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ActivityBadge.svelte'
 	},
@@ -20910,7 +20910,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ActivityItem.svelte'
 	},
@@ -20950,7 +20950,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ActivityList.svelte'
 	},
@@ -20998,7 +20998,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ActivityTicker.svelte'
 	},
@@ -21033,7 +21033,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ActivityToasts.svelte'
 	},
@@ -21340,7 +21340,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/AdminShell.svelte'
 	},
@@ -21404,7 +21404,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/AppScopePanel.svelte'
 	},
@@ -21457,7 +21457,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/HotkeyInput.svelte'
 	},
@@ -21497,7 +21497,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/PhoneBottomBar.svelte'
 	},
@@ -21531,7 +21531,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/PhoneTopBar.svelte'
 	},
@@ -21565,7 +21565,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ShellCorner.svelte'
 	},
@@ -21653,7 +21653,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ShellDockTool.svelte'
 	},
@@ -21712,7 +21712,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ShellIconButton.svelte'
 	},
@@ -21752,7 +21752,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ShellLayoutEditor.svelte'
 	},
@@ -21805,7 +21805,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ShellNavEditor.svelte'
 	},
@@ -21858,7 +21858,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ShellNavToggle.svelte'
 	},
@@ -21899,7 +21899,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ShellSectionIcon.svelte'
 	},
@@ -21977,7 +21977,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ShellSectionMenu.svelte'
 	},
@@ -22033,7 +22033,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ShellSettingsPanel.svelte'
 	},
@@ -22067,7 +22067,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ShellTitle.svelte'
 	},
@@ -22102,7 +22102,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/ShortcutsOverlay.svelte'
 	},
@@ -22136,7 +22136,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/SystemScopePanel.svelte'
 	},
@@ -22164,7 +22164,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/SystemStatusChips.svelte'
 	},
@@ -22254,7 +22254,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/TenantNav.svelte'
 	},
@@ -22295,7 +22295,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/tools-dock/ToolsDock.svelte'
 	},
@@ -22430,7 +22430,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/workspace/admin-shell/WorkspaceAccountMenu.svelte'
 	},
@@ -22518,7 +22518,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/tenancy/src/svelte/components/TenantCard.svelte'
 	},
@@ -22576,7 +22576,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/tenancy/src/svelte/components/TenantSwitcher.svelte'
 	},
@@ -22659,7 +22659,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/calendar/Calendar.svelte'
 	},
@@ -22816,7 +22816,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/calendar/CalendarView.svelte'
 	},
@@ -22875,7 +22875,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/calendar/DayView.svelte'
 	},
@@ -22949,7 +22949,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/charts/Chart.svelte'
 	},
@@ -23034,7 +23034,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/chat/MessageBubble.svelte'
 	},
@@ -23094,7 +23094,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/chat/ReactionPicker.svelte'
 	},
@@ -23135,7 +23135,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/chat/TypingIndicator.svelte'
 	},
@@ -23266,7 +23266,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/data/CollectionList.svelte'
 	},
@@ -23395,7 +23395,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/data/CollectionToolbar.svelte'
 	},
@@ -23526,7 +23526,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/data/CollectionList.svelte'
 	},
@@ -23973,7 +23973,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/data/DataTable.svelte'
 	},
@@ -24044,7 +24044,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/data/ListSortSelect.svelte'
 	},
@@ -24139,7 +24139,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/data/SortableHeader.svelte'
 	},
@@ -24192,7 +24192,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/display/ConfidenceBadge.svelte'
 	},
@@ -24263,7 +24263,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/display/CurrencyDisplay.svelte'
 	},
@@ -24328,7 +24328,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/display/DateDisplay.svelte'
 	},
@@ -24386,7 +24386,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/display/Icon.svelte'
 	},
@@ -24449,7 +24449,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/display/StatusBadge.svelte'
 	},
@@ -24524,7 +24524,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/feedback/Alert.svelte'
 	},
@@ -24618,7 +24618,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/feedback/ConfirmDialog.svelte'
 	},
@@ -24717,7 +24717,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/feedback/Drawer.svelte'
 	},
@@ -24799,7 +24799,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/feedback/LoadingOverlay.svelte'
 	},
@@ -24885,7 +24885,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/feedback/Meter.svelte'
 	},
@@ -24997,7 +24997,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/feedback/Modal.svelte'
 	},
@@ -25069,7 +25069,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/feedback/PhoneSheet.svelte'
 	},
@@ -25143,7 +25143,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/feedback/Progress.svelte'
 	},
@@ -25211,7 +25211,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/feedback/ProgressBar.svelte'
 	},
@@ -25310,7 +25310,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/feedback/Drawer.svelte'
 	},
@@ -25354,7 +25354,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/feedback/Spinner.svelte'
 	},
@@ -25410,7 +25410,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/feedback/ToastViewport.svelte'
 	},
@@ -25559,7 +25559,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/feedback/WorkingStrip.svelte'
 	},
@@ -25674,7 +25674,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/CameraCapture.svelte'
 	},
@@ -25736,7 +25736,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/Checkbox.svelte'
 	},
@@ -25894,7 +25894,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/Combobox.svelte'
 	},
@@ -25978,7 +25978,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/CountrySelect.svelte'
 	},
@@ -26062,7 +26062,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/CurrencySelect.svelte'
 	},
@@ -26112,7 +26112,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/DatePicker.svelte'
 	},
@@ -26170,7 +26170,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/DictationButton.svelte'
 	},
@@ -26210,7 +26210,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/DictationStatus.svelte'
 	},
@@ -26263,7 +26263,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/ErrorSummary.svelte'
 	},
@@ -26331,7 +26331,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/FormGroup.svelte'
 	},
@@ -26378,7 +26378,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/FieldLabel.svelte'
 	},
@@ -26436,7 +26436,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/Fieldset.svelte'
 	},
@@ -26511,7 +26511,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/FilePicker.svelte'
 	},
@@ -26587,7 +26587,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/Form.svelte'
 	},
@@ -26628,7 +26628,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/FormActionBar.svelte'
 	},
@@ -26696,7 +26696,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/FormGroup.svelte'
 	},
@@ -26746,7 +26746,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/Input.svelte'
 	},
@@ -26792,7 +26792,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/InputGroup.svelte'
 	},
@@ -26873,7 +26873,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/Listbox.svelte'
 	},
@@ -26960,7 +26960,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/MultiSelect.svelte'
 	},
@@ -26991,7 +26991,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/ProvinceSelect.svelte'
 	},
@@ -27035,7 +27035,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/Radio.svelte'
 	},
@@ -27140,7 +27140,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/RadioGroup.svelte'
 	},
@@ -27251,7 +27251,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/RangeSlider.svelte'
 	},
@@ -27409,7 +27409,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/RelationInput.svelte'
 	},
@@ -27486,7 +27486,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/SearchInput.svelte'
 	},
@@ -27585,7 +27585,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/SegmentedControl.svelte'
 	},
@@ -27641,7 +27641,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/Select.svelte'
 	},
@@ -27748,7 +27748,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/SignaturePad.svelte'
 	},
@@ -27834,7 +27834,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/Slider.svelte'
 	},
@@ -27886,7 +27886,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/StagedControlReview.svelte'
 	},
@@ -27954,7 +27954,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/Switch.svelte'
 	},
@@ -28047,7 +28047,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/TagsInput.svelte'
 	},
@@ -28103,7 +28103,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/Textarea.svelte'
 	},
@@ -28153,7 +28153,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/TimePicker.svelte'
 	},
@@ -28247,7 +28247,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/Toggle.svelte'
 	},
@@ -28297,7 +28297,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/ToggleButton.svelte'
 	},
@@ -28332,7 +28332,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/i18n/Trans.svelte'
 	},
@@ -28378,7 +28378,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/layout/ActionGroup.svelte'
 	},
@@ -28412,7 +28412,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/layout/Container.svelte'
 	},
@@ -28484,7 +28484,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/layout/EmptyState.svelte'
 	},
@@ -28512,7 +28512,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/layout/Footer.svelte'
 	},
@@ -28576,7 +28576,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/layout/Grid.svelte'
 	},
@@ -28610,7 +28610,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/layout/Header.svelte'
 	},
@@ -28668,7 +28668,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/layout/Masthead.svelte'
 	},
@@ -28765,7 +28765,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/layout/PageHeader.svelte'
 	},
@@ -28811,7 +28811,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/layout/PageLayout.svelte'
 	},
@@ -28883,7 +28883,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/layout/SummaryCard.svelte'
 	},
@@ -28948,7 +28948,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/memberships/MembershipCard.svelte'
 	},
@@ -29019,7 +29019,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/memberships/MembershipList.svelte'
 	},
@@ -29090,7 +29090,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/nav/FilterChips.svelte'
 	},
@@ -29180,7 +29180,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/nav/Tabs.svelte'
 	},
@@ -29238,7 +29238,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/permissions/PermissionCheck.svelte'
 	},
@@ -29302,7 +29302,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/permissions/PermissionPicker.svelte'
 	},
@@ -29336,7 +29336,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/roles/RoleBadge.svelte'
 	},
@@ -29402,7 +29402,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/roles/RoleSelector.svelte'
 	},
@@ -29448,7 +29448,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/themes/components/ColorSchemeToggle.svelte'
 	},
@@ -29546,7 +29546,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/themes/ThemeProvider.svelte'
 	},
@@ -29592,7 +29592,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/themes/components/ThemeSwitcher.svelte'
 	},
@@ -29655,7 +29655,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/Accordion.svelte'
 	},
@@ -29705,7 +29705,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/AccordionItem.svelte'
 	},
@@ -29758,7 +29758,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/Avatar.svelte'
 	},
@@ -29802,7 +29802,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/Badge.svelte'
 	},
@@ -29897,7 +29897,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/Button.svelte'
 	},
@@ -29955,7 +29955,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/Card.svelte'
 	},
@@ -30045,7 +30045,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/Chip.svelte'
 	},
@@ -30114,7 +30114,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/Disclosure.svelte'
 	},
@@ -30198,7 +30198,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/Dropdown.svelte'
 	},
@@ -30266,7 +30266,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/IconToggle.svelte'
 	},
@@ -30307,7 +30307,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/IconToggleGroup.svelte'
 	},
@@ -30391,7 +30391,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/Dropdown.svelte'
 	},
@@ -30469,7 +30469,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/Pagination.svelte'
 	},
@@ -30570,7 +30570,7 @@ export const uiComponents: UiComponentReference[] = [
 		},
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/Popover.svelte'
 	},
@@ -30623,7 +30623,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/Skeleton.svelte'
 	},
@@ -30670,7 +30670,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/Tooltip.svelte'
 	},
@@ -30729,7 +30729,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/ui/Tree.svelte'
 	},
@@ -30774,7 +30774,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/users/src/svelte/components/AccountSecurityPanel.svelte'
 	},
@@ -30852,7 +30852,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/users/src/svelte/components/InviteUserModal.svelte'
 	},
@@ -30897,7 +30897,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/users/src/svelte/components/MagicLinkForm.svelte'
 	},
@@ -30936,7 +30936,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/users/src/svelte/components/OidcProviderButtons.svelte'
 	},
@@ -30975,7 +30975,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/users/src/svelte/components/PasskeySignInButton.svelte'
 	},
@@ -31020,7 +31020,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/users/src/svelte/components/SignInForm.svelte'
 	},
@@ -31059,7 +31059,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/users/src/svelte/components/SignUpForm.svelte'
 	},
@@ -31104,7 +31104,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/users/src/svelte/components/UserAvatar.svelte'
 	},
@@ -31174,7 +31174,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/users/src/svelte/components/UserCard.svelte'
 	},
@@ -31244,7 +31244,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/users/src/svelte/components/UserForm.svelte'
 	},
@@ -31314,7 +31314,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/users/src/svelte/components/UserList.svelte'
 	},
@@ -31378,7 +31378,7 @@ export const uiComponents: UiComponentReference[] = [
 		demo: null,
 		related: {
 			label: 'UI showcase',
-			href: '/ui'
+			href: '/docs/ui'
 		},
 		source: 'packages/users/src/svelte/components/UserMenu.svelte'
 	}

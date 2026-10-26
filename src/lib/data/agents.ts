@@ -2,7 +2,7 @@ import type { FrameworkTopic } from '$lib/data/framework';
 import { SMRT_VERSION } from '$lib/version';
 
 /**
- * `/agents` copy: what an agent can do with a s-m-r-t application, the
+ * `/docs/agents` copy: what an agent can do with a s-m-r-t application, the
  * four tool surfaces, the read-only exposure default, and the identity every
  * call runs as.
  *
@@ -15,7 +15,7 @@ import { SMRT_VERSION } from '$lib/version';
  * `registration.test.ts` then demands a `[slug]` route, sidebar entries,
  * `guideTracks`, and sitemap registration for it. `FrameworkTopic` has
  * `summary` + `content` instead of `lede` + `sections`, so `agentsTopics`
- * structurally cannot match that predicate — `/agents` stays a hand-written
+ * structurally cannot match that predicate — `/docs/agents` stays a hand-written
  * landing page, the same way `interaction.ts` dodges the same discovery by
  * not exporting its `Guide[]` (see the comment at `interaction.ts:12`).
  */
@@ -173,7 +173,7 @@ export const agentsTopics: FrameworkTopic[] = [
 				links: [
 					{ label: 'Exposure is not authorization', href: '#exposure-is-not-authorization' },
 					{ label: 'Two planes, kept apart', href: '#two-planes' },
-					{ label: 'Security reference', href: '/reference/security' }
+					{ label: 'Security reference', href: '/docs/reference/security' }
 				]
 			}
 		],
@@ -362,9 +362,9 @@ export class Report extends SmrtObject {
 				intro:
 					'Both planes end in the same place: one authenticated application request, resolved as one identity, in one tenant, against one permission set. Nothing else crosses between them. This is the mechanism behind a sentence the front page states without proof: an agent never has more power than the person it works for.',
 				links: [
-					{ label: 'Permissions and security', href: '/framework#permissions-and-security' },
-					{ label: 'Authorization reference', href: '/reference/authorization' },
-					{ label: 'Interaction', href: '/interaction' }
+					{ label: 'Permissions and security', href: '/docs/framework#permissions-and-security' },
+					{ label: 'Authorization reference', href: '/docs/reference/authorization' },
+					{ label: 'Interaction', href: '/docs/interaction' }
 				]
 			}
 		],
@@ -431,7 +431,7 @@ export class Report extends SmrtObject {
 				links: [
 					{
 						label: 'Declare and bind an interaction',
-						href: '/capabilities/webmcp#declare-an-interaction-as-data'
+						href: '/docs/capabilities/webmcp#declare-an-interaction-as-data'
 					}
 				]
 			},

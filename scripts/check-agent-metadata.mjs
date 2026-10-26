@@ -71,7 +71,12 @@ async function main() {
 		);
 	}
 	const samples = origin
-		? ['/', '/reference/security', '/tooling/app-mcp', '/capabilities/agent-legible-applications']
+		? [
+				'/',
+				'/docs/reference/security',
+				'/docs/tooling/app-mcp',
+				'/docs/capabilities/agent-legible-applications'
+			]
 		: paths;
 	for (const path of samples) {
 		const file = origin ? path : path === '/' ? '/index.html' : `${path}.html`;

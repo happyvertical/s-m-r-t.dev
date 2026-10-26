@@ -29,14 +29,14 @@
 <SEO
 	title={`${component.name} · UI component reference`}
 	description={`${component.name} props, state, events, import path, examples, and canonical source.`}
-	url={`https://s-m-r-t.dev/reference/components/${component.slug}`}
+	url={`https://s-m-r-t.dev/docs/reference/components/${component.slug}`}
 />
 
 <ReferenceFamilyBar id="components" />
 
 <article class="component-reference">
 	<header>
-		<a href="/reference/components">← All UI components</a>
+		<a href="/docs/reference/components">← All UI components</a>
 		<p>{component.category}</p>
 		<h1>{component.name}</h1>
 		{#if summaryAuthored}
@@ -156,7 +156,7 @@
 				<strong>{component.related.label}</strong>
 				<span>Read the curated UI story for mechanism and usage guidance.</span>
 			</a>
-			<a href="/reference/packages/{pkg.slug}?tab=components">
+			<a href="/docs/reference/packages/{pkg.slug}?tab=components">
 				<strong>{pkg.slug} package reference</strong>
 				<span>See package status, version, limitations, and all public subpaths.</span>
 			</a>

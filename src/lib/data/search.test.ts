@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { agentsTopics } from '$lib/data/agents';
+import { featurePath, features } from '$lib/data/features';
 import { frameworkTopics } from '$lib/data/framework';
 import { guidePages } from '$lib/data/guide-families';
 import { interactionContent } from '$lib/data/interaction';
-import { buildingBlocks } from '$lib/data/blocks';
 import { searchDocs, searchEntries } from '$lib/data/search';
 
 describe('search index', () => {
@@ -35,13 +35,13 @@ describe('search index', () => {
 	it('ranks an exact heading match above pages that merely mention it', () => {
 		const [first] = searchDocs('Retrieval is not authority');
 		expect(first.kind).toBe('section');
-		expect(first.href).toBe('/reference/ai-and-retrieval#retrieval-is-not-authority');
+		expect(first.href).toBe('/docs/reference/ai-and-retrieval#retrieval-is-not-authority');
 	});
 
 	it('finds a component by name and opens its generated contract page', () => {
 		const [first] = searchDocs('Combobox');
 		expect(first.label).toBe('Combobox');
-		expect(first.href).toMatch(/^\/reference\/components\//);
+		expect(first.href).toMatch(/^\/docs\/reference\/components\//);
 	});
 
 	it('matches on multiple words in any order', () => {
@@ -58,7 +58,7 @@ describe('search index', () => {
 			for (const topic of frameworkTopics) {
 				const entry = searchEntries.find(
 					(candidate) =>
-						candidate.kind === 'section' && candidate.href === `/framework#${topic.slug}`
+						candidate.kind === 'section' && candidate.href === `/docs/framework#${topic.slug}`
 				);
 				expect(entry?.label, `missing entry for /framework#${topic.slug}`).toBe(topic.navTitle);
 			}
@@ -71,7 +71,7 @@ describe('search index', () => {
 				(candidate) =>
 					candidate.kind === 'section' &&
 					candidate.href ===
-						`/framework#${topic.slug}-${item.title
+						`/docs/framework#${topic.slug}-${item.title
 							.toLowerCase()
 							.replace(/[^a-z0-9]+/g, '-')
 							.replace(/(^-|-$)/g, '')}`
@@ -83,14 +83,14 @@ describe('search index', () => {
 			for (const guide of interactionContent.guides) {
 				const entry = searchEntries.find(
 					(candidate) =>
-						candidate.kind === 'section' && candidate.href === `/interaction#${guide.slug}`
+						candidate.kind === 'section' && candidate.href === `/docs/interaction#${guide.slug}`
 				);
 				expect(entry?.label, `missing entry for /interaction#${guide.slug}`).toBe(
 					guide.navTitle ?? guide.title
 				);
 			}
 			const subsectionEntries = searchEntries.filter((candidate) =>
-				candidate.href.startsWith('/interaction#human-agent-communication-')
+				candidate.href.startsWith('/docs/interaction#human-agent-communication-')
 			);
 			expect(subsectionEntries).toHaveLength(0);
 		});
@@ -98,7 +98,8 @@ describe('search index', () => {
 		it('gives every Agents topic and subsection a section-level entry', () => {
 			for (const topic of agentsTopics) {
 				const topicEntry = searchEntries.find(
-					(candidate) => candidate.kind === 'section' && candidate.href === `/agents#${topic.slug}`
+					(candidate) =>
+						candidate.kind === 'section' && candidate.href === `/docs/agents#${topic.slug}`
 				);
 				expect(topicEntry?.label, `missing entry for /agents#${topic.slug}`).toBe(topic.navTitle);
 
@@ -109,7 +110,8 @@ describe('search index', () => {
 						.replace(/(^-|-$)/g, '');
 					const subEntry = searchEntries.find(
 						(candidate) =>
-							candidate.kind === 'section' && candidate.href === `/agents#${topic.slug}-${anchorId}`
+							candidate.kind === 'section' &&
+							candidate.href === `/docs/agents#${topic.slug}-${anchorId}`
 					);
 					expect(subEntry?.label, `missing entry for /agents#${topic.slug}-${anchorId}`).toBe(
 						item.title
@@ -121,27 +123,24 @@ describe('search index', () => {
 		it('resolves an Agents topic heading through fuzzy search', () => {
 			const [first] = searchDocs('Where agents connect');
 			expect(first.kind).toBe('section');
-			expect(first.href).toBe('/agents#where-agents-connect');
+			expect(first.href).toBe('/docs/agents#where-agents-connect');
 		});
 	});
 
-	describe('building blocks', () => {
-		it('gives every block a page entry with its package slugs as keywords', () => {
-			for (const block of buildingBlocks) {
+	describe('features', () => {
+		it('gives every feature a page entry with its package slugs as keywords', () => {
+			for (const item of features) {
 				const entry = searchEntries.find(
-					(candidate) => candidate.kind === 'page' && candidate.href === `/blocks/${block.id}`
+					(candidate) => candidate.kind === 'page' && candidate.href === featurePath(item)
 				);
-				expect(entry?.label, `missing entry for /blocks/${block.id}`).toBe(block.title);
-				expect(entry?.description).toBe(block.capability);
-				expect(entry?.keywords).toEqual(block.packages);
+				expect(entry?.label, `missing entry for ${featurePath(item)}`).toBe(item.word);
+				expect(entry?.description).toBe(item.hint);
+				expect(entry?.keywords).toEqual(item.packages);
 			}
 		});
 
-		it('resolves a block title through search', () => {
-			const block = buildingBlocks[0];
-			expect(searchDocs(block.title).some((entry) => entry.href === `/blocks/${block.id}`)).toBe(
-				true
-			);
+		it('keeps the retired /blocks pages out of the index', () => {
+			expect(searchEntries.some((entry) => entry.href.startsWith('/blocks'))).toBe(false);
 		});
 
 		it('keeps the retired module-cluster entries out of the index', () => {

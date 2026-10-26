@@ -21,7 +21,7 @@ const base: Reference = {
 	items: [],
 	components: [],
 	demo: null,
-	related: { label: 'UI showcase', href: '/ui' },
+	related: { label: 'UI showcase', href: '/docs/ui' },
 	source: 'src/components/forms/SampleControl.svelte'
 };
 

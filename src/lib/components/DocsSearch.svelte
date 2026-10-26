@@ -88,7 +88,7 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<button class="search-trigger" type="button" onclick={show} aria-label="Search documentation">
+<button class="search-trigger" type="button" onclick={show} aria-label="Search docs ⌘ K">
 	<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
 		<circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path>
 	</svg>

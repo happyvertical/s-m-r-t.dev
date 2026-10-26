@@ -4,4 +4,4 @@ import { redirect } from '@sveltejs/kit';
 // so the old URL keeps answering on the static host.
 export const prerender = true;
 
-export const load = () => redirect(301, '/starters');
+export const load = () => redirect(301, '/docs/getting-started');

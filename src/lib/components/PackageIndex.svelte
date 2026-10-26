@@ -11,7 +11,7 @@
 	import { getPlaygroundEntries } from '$lib/data/playgrounds';
 	import { SMRT_VERSION } from '$lib/version';
 
-	let { backHref = '/reference/packages' }: { backHref?: string } = $props();
+	let { backHref = '/docs/reference/packages' }: { backHref?: string } = $props();
 
 	let query = $state('');
 	let activeCategory = $state<'All' | PackageCategory>('All');
@@ -35,7 +35,7 @@
 <SEO
 	title="s-m-r-t packages"
 	description="Browse every s-m-r-t package in one workbench, with package descriptions, component exports, and REST, MCP, WebMCP, and CLI interface guidance."
-	url="https://s-m-r-t.dev/reference/packages"
+	url="https://s-m-r-t.dev/docs/reference/packages"
 />
 
 <ReferenceFamilyBar id="packages" />

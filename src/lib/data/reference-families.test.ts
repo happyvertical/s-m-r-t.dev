@@ -40,7 +40,7 @@ describe('Reference families', () => {
 
 	it('gives every family a route or a generated guide entry', () => {
 		for (const family of referenceFamilies) {
-			const slug = family.href.replace('/reference/', '');
+			const slug = family.href.replace('/docs/reference/', '');
 			if (guideRouteSlugs.has(slug)) {
 				expect(
 					getReferenceGuide(slug),
@@ -70,7 +70,7 @@ describe('Reference families', () => {
 		expect(terminologyIndex).toBeGreaterThan(saadlIndex);
 		expect(getReferenceGuide('terminology')?.related?.[0]).toEqual({
 			label: 'What is a SAADL?',
-			href: '/reference/saadl'
+			href: '/docs/reference/saadl'
 		});
 	});
 });

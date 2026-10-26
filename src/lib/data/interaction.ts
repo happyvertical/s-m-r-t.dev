@@ -13,7 +13,7 @@ const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${INTERACTION_PIN
  * Deliberately not exported. `guide-families.ts` structurally discovers any
  * exported array whose items carry `slug` + `lede` + `sections` — this array
  * has all three — and `registration.test.ts` would then demand a
- * `/interaction/[slug]` route, sidebar entries, a `guideTracks` row in
+ * `/docs/interaction/[slug]` route, sidebar entries, a `guideTracks` row in
  * `search.ts`, and sitemap entries, none of which are correct for a
  * single-route landing page. `interactionContent` below is the safe export:
  * `search.ts`'s `landingTracks` and this page's own renderer both read
@@ -86,14 +86,17 @@ const interactionGuides: Guide[] = [
 		related: [
 			{
 				label: 'UI implementation: rich forms and browser AI',
-				href: '/reference/packages/smrt-svelte'
+				href: '/docs/reference/packages/smrt-svelte'
 			},
 			{
 				label: 'Framework mechanism: agent-legible applications',
-				href: '/capabilities/agent-legible-applications'
+				href: '/docs/capabilities/agent-legible-applications'
 			},
-			{ label: 'Reference contract: generated interfaces', href: '/reference/interfaces' },
-			{ label: 'Related guide: expose your app over MCP', href: '/guides/expose-your-app-over-mcp' }
+			{ label: 'Reference contract: generated interfaces', href: '/docs/reference/interfaces' },
+			{
+				label: 'Related guide: expose your app over MCP',
+				href: '/docs/guides/expose-your-app-over-mcp'
+			}
 		]
 	},
 	{
@@ -158,14 +161,14 @@ const interactionGuides: Guide[] = [
 		related: [
 			{
 				label: 'UI implementation: smrt-ui form controls',
-				href: '/reference/packages/smrt-ui?tab=components'
+				href: '/docs/reference/packages/smrt-ui?tab=components'
 			},
 			{
 				label: 'Framework mechanism: agent-legible applications',
-				href: '/capabilities/agent-legible-applications'
+				href: '/docs/capabilities/agent-legible-applications'
 			},
-			{ label: 'Reference contract: generated interfaces', href: '/reference/interfaces' },
-			{ label: 'Related guide: test your application', href: '/guides/testing-your-app' }
+			{ label: 'Reference contract: generated interfaces', href: '/docs/reference/interfaces' },
+			{ label: 'Related guide: test your application', href: '/docs/guides/testing-your-app' }
 		]
 	},
 	{
@@ -237,7 +240,7 @@ const interactionGuides: Guide[] = [
 		related: [
 			{
 				label: 'UI implementation: canonical success-and-refusal demonstration',
-				href: '/ui#agent-addressable-components'
+				href: '/docs/ui#agent-addressable-components'
 			},
 			{
 				label: 'Playground: agent-aware form demonstration',
@@ -245,13 +248,13 @@ const interactionGuides: Guide[] = [
 			},
 			{
 				label: 'Framework mechanism: agent-assisted forms',
-				href: '/capabilities/agent-assisted-forms'
+				href: '/docs/capabilities/agent-assisted-forms'
 			},
 			{
 				label: 'Reference contract: control interaction registry',
-				href: '/reference/control-interaction'
+				href: '/docs/reference/control-interaction'
 			},
-			{ label: 'Related guide: test your application', href: '/guides/testing-your-app' }
+			{ label: 'Related guide: test your application', href: '/docs/guides/testing-your-app' }
 		]
 	},
 	{
@@ -314,13 +317,16 @@ const interactionGuides: Guide[] = [
 			}
 		],
 		related: [
-			{ label: 'UI implementation: smrt-ui form registry', href: '/reference/packages/smrt-ui' },
+			{
+				label: 'UI implementation: smrt-ui form registry',
+				href: '/docs/reference/packages/smrt-ui'
+			},
 			{
 				label: 'Framework mechanism: agent-assisted forms',
-				href: '/capabilities/agent-assisted-forms'
+				href: '/docs/capabilities/agent-assisted-forms'
 			},
-			{ label: 'Reference contract: authorization model', href: '/reference/authorization' },
-			{ label: 'Related guide: test your application', href: '/guides/testing-your-app' }
+			{ label: 'Reference contract: authorization model', href: '/docs/reference/authorization' },
+			{ label: 'Related guide: test your application', href: '/docs/guides/testing-your-app' }
 		]
 	},
 	{
@@ -387,13 +393,19 @@ const interactionGuides: Guide[] = [
 			}
 		],
 		related: [
-			{ label: 'UI implementation: consent-aware controls', href: '/reference/packages/smrt-ui' },
+			{
+				label: 'UI implementation: consent-aware controls',
+				href: '/docs/reference/packages/smrt-ui'
+			},
 			{
 				label: 'Framework mechanism: awareness is not authority',
-				href: '/capabilities/agent-legible-applications#awareness-is-not-authority'
+				href: '/docs/capabilities/agent-legible-applications#awareness-is-not-authority'
 			},
-			{ label: 'Reference contract: security defaults', href: '/reference/security' },
-			{ label: 'Related guide: expose your app over MCP', href: '/guides/expose-your-app-over-mcp' }
+			{ label: 'Reference contract: security defaults', href: '/docs/reference/security' },
+			{
+				label: 'Related guide: expose your app over MCP',
+				href: '/docs/guides/expose-your-app-over-mcp'
+			}
 		]
 	}
 ];
@@ -405,7 +417,7 @@ export function getInteractionGuide(slug: string): Guide | undefined {
 	return interactionGuides.find((guide) => guide.slug === slug);
 }
 
-/** Ordered content families rendered as stable anchors on `/interaction`. */
+/** Ordered content families rendered as stable anchors on `/docs/interaction`. */
 export function listInteractionGuides(): readonly Guide[] {
 	return interactionGuides;
 }

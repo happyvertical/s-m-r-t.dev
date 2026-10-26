@@ -47,23 +47,25 @@ describe('guide library', () => {
 	});
 
 	it('places starter content in Getting started', () => {
-		expect(getGuideLibraryItem('/starters/smrt-start')?.task.family).toBe('getting-started');
+		expect(getGuideLibraryItem('/docs/getting-started/smrt-start')?.task.family).toBe(
+			'getting-started'
+		);
 		// Retired with smrt-saas-starter (#338): the URLs are redirects, not guides.
-		expect(getGuideLibraryItem('/starters/ground-up')).toBeUndefined();
-		expect(getGuideLibraryItem('/starters/saas')).toBeUndefined();
+		expect(getGuideLibraryItem('/docs/getting-started/ground-up')).toBeUndefined();
+		expect(getGuideLibraryItem('/docs/getting-started/saas')).toBeUndefined();
 	});
 
 	it('uses the step counts from migrated destination pages', () => {
-		expect(getGuideLibraryItem('/starters/smrt-start')?.stepCount).toBe(3);
-		expect(getGuideLibraryItem('/foundations/interfaces')?.stepCount).toBe(3);
+		expect(getGuideLibraryItem('/docs/getting-started/smrt-start')?.stepCount).toBe(3);
+		expect(getGuideLibraryItem('/docs/foundations/interfaces')?.stepCount).toBe(3);
 	});
 
 	it('places the procedural agent guide in Connect agents', () => {
-		expect(getGuideLibraryItem('/guides/expose-your-app-over-mcp')?.task.family).toBe(
+		expect(getGuideLibraryItem('/docs/guides/expose-your-app-over-mcp')?.task.family).toBe(
 			'connect-agents'
 		);
 		expect(guideMigrationDecisions).toContainEqual({
-			source: '/capabilities/agent-legible-applications',
+			source: '/docs/capabilities/agent-legible-applications',
 			decision: 'split',
 			family: 'connect-agents'
 		});
@@ -71,20 +73,20 @@ describe('guide library', () => {
 
 	it('records a content decision for every guide source in this migration', () => {
 		expect(guideMigrationDecisions.map((record) => record.source)).toEqual([
-			'/guides/multi-tenant-lifecycle',
-			'/guides/expose-your-app-over-mcp',
-			'/guides/semantic-search',
-			'/guides/testing-your-app',
-			'/starters',
-			'/starters/ground-up',
-			'/starters/saas',
-			'/foundations/interfaces',
-			'/capabilities/agent-legible-applications'
+			'/docs/guides/multi-tenant-lifecycle',
+			'/docs/guides/expose-your-app-over-mcp',
+			'/docs/guides/semantic-search',
+			'/docs/guides/testing-your-app',
+			'/docs/getting-started',
+			'/docs/getting-started/ground-up',
+			'/docs/getting-started/saas',
+			'/docs/foundations/interfaces',
+			'/docs/capabilities/agent-legible-applications'
 		]);
 	});
 
 	it('uses metadata in guide filtering terms', () => {
-		const tenant = getGuideLibraryItem('/guides/multi-tenant-lifecycle');
+		const tenant = getGuideLibraryItem('/docs/guides/multi-tenant-lifecycle');
 		expect(tenant).toBeDefined();
 		expect(guideLibrarySearchTerms(tenant!)).toEqual(
 			expect.arrayContaining([
@@ -97,11 +99,11 @@ describe('guide library', () => {
 	});
 
 	it('keeps published task guides on their existing routes for issue 187', () => {
-		expect(taskGuides.map((guide) => `/guides/${guide.slug}`)).toEqual([
-			'/guides/multi-tenant-lifecycle',
-			'/guides/expose-your-app-over-mcp',
-			'/guides/semantic-search',
-			'/guides/testing-your-app'
+		expect(taskGuides.map((guide) => `/docs/guides/${guide.slug}`)).toEqual([
+			'/docs/guides/multi-tenant-lifecycle',
+			'/docs/guides/expose-your-app-over-mcp',
+			'/docs/guides/semantic-search',
+			'/docs/guides/testing-your-app'
 		]);
 	});
 });

@@ -6,7 +6,7 @@
 </script>
 
 <nav class="family-bar" aria-label="Reference family">
-	<a class="reference-home" href="/reference">Reference</a>
+	<a class="reference-home" href="/docs/reference">Reference</a>
 	<span aria-hidden="true">/</span>
 	<strong>{current?.label ?? 'Reference'}</strong>
 	<details>

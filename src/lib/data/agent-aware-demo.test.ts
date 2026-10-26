@@ -5,9 +5,9 @@ import { getReferenceGuide } from './reference';
 import { AGENT_AWARE_FORM_ENTRY_ID, sitePlayground } from './site-playground';
 import { uiStories } from './ui-stories';
 
-const UI_DEMO = '/ui#agent-addressable-components';
+const UI_DEMO = '/docs/ui#agent-addressable-components';
 const PLAYGROUND_DEMO = '/playground?entry=agent-aware-form';
-const REFERENCE_CONTRACT = '/reference/control-interaction';
+const REFERENCE_CONTRACT = '/docs/reference/control-interaction';
 
 describe('agent-aware form demonstration discovery', () => {
 	it('registers the canonical scripted demonstration in the Playground', () => {

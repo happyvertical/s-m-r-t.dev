@@ -1,0 +1,326 @@
+<title>s-m-r-t redesign mock</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one screen, one node graph, one colour. Circles sized by level, straight links, loose layout. */
+/* Follows the viewer's preference. Light: paper with a blue flame. Dark: near-black with fire. Same levels either way. */
+:root{
+  --bg:#eef1f5; --ink:#14171c; --dim:#5b6470; --line:#c9d1dc;
+  --red:#1848c8; --orange:#1f8fe6; --yellow:#38c6ff;
+  --hub-ink:#ffffff; --door-hot-ink:#ffffff;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --l1-line:#b7c6de;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0a0604; --ink:#ffe9c4; --dim:#8a5a2a; --line:#3a2412;
+  --red:#ff3b1f; --orange:#ff8c1a; --yellow:#ffd21f; --hub-ink:#3a0d00; --door-hot-ink:#fff3e0; --l1-line:#4a1e10; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0a0604; --ink:#ffe9c4; --dim:#8a5a2a; --line:#3a2412;
+  --red:#ff3b1f; --orange:#ff8c1a; --yellow:#ffd21f; --hub-ink:#3a0d00; --door-hot-ink:#fff3e0; --l1-line:#4a1e10; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--mono);font-size:15px;line-height:1.4;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--orange);outline-offset:4px}
+
+.bar{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+  padding-block:14px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.brand{text-decoration:none;font-weight:700;letter-spacing:.08em;color:var(--orange)}
+.bar nav{display:flex;gap:4px}
+.bar nav a{text-decoration:none;font-weight:500;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;border:1px solid var(--line)}
+.bar nav a:hover{border-color:var(--orange);color:var(--orange)}
+
+.map{position:relative;height:100svh;min-height:560px;overflow:hidden}
+.map svg{position:absolute;inset:0;width:100%;height:100%}
+#fire{position:absolute;pointer-events:none;width:320px;height:320px}
+@media (max-width:767px){#fire{display:none}}
+.lede{position:absolute;left:0;right:0;bottom:max(12px,env(safe-area-inset-bottom,0px));text-align:center;color:var(--dim);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:0;pointer-events:none}
+
+.link{stroke:var(--line);stroke-width:1.2}
+.link.l1{stroke-width:2;stroke:var(--l1-line)}
+.link.l1.on{stroke:var(--orange)}
+.link.l2.on{stroke:var(--yellow)}
+.n{cursor:pointer}
+.n circle{fill:var(--bg);stroke:var(--yellow);stroke-width:1.5;opacity:.85}
+.n.d1 circle{stroke:var(--orange);stroke-width:2;opacity:1}
+.n text{font-family:var(--mono);fill:var(--ink);letter-spacing:.06em;text-transform:uppercase;pointer-events:all;cursor:pointer;paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round}
+.n.d1 text{font-size:15px;font-weight:700;fill:var(--orange);letter-spacing:.14em}
+.n.d2 text{font-size:13px;font-weight:500}
+.n:hover circle,.n.on circle,.n:focus-visible circle{fill:var(--yellow);opacity:1}
+.n.d1:hover circle,.n.d1.on circle,.n.d1:focus-visible circle{fill:var(--orange)}
+.n:hover text,.n.on text,.n:focus-visible text{fill:var(--yellow)}
+.n.d1:hover text,.n.d1.on text,.n.d1:focus-visible text{fill:var(--orange)}
+.hub{cursor:pointer}
+.hub .disc{fill:transparent}
+.hub text{font-family:var(--mono);font-weight:700;font-size:20px;fill:var(--hub-ink);letter-spacing:.18em;pointer-events:none}
+.map.focus .n:not(.on){opacity:.22}
+.map.focus .link:not(.on){opacity:.25}
+.map.ready .n,.map.ready .link{transition:opacity .15s}
+.hint{position:absolute;z-index:5;background:var(--yellow);color:var(--bg);padding:8px 12px;font-size:13px;font-weight:500;letter-spacing:.04em;pointer-events:none;opacity:0;transition:opacity .12s;max-width:300px}
+.hint.show{opacity:1}
+
+.stacks{display:none}
+@media (max-width:767px){
+  .map{height:auto;min-height:0;overflow:visible;padding-top:calc(env(safe-area-inset-top,0px) + 72px);padding-bottom:24px;
+    padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .map svg,.lede,.hint{display:none}
+  .stacks{display:grid;gap:10px}
+  .hubbtn a{display:block;text-align:center;text-decoration:none;background:var(--red);color:var(--door-hot-ink);font-weight:700;letter-spacing:.18em;padding:22px;font-size:20px}
+  .stack{border:1px solid var(--line);padding:14px 16px}
+  .stack h2{font-size:14px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 10px;color:var(--orange)}
+  .stack ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+  .stack li a{display:inline-block;text-decoration:none;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:8px 12px;border:1px solid var(--line)}
+  .stack li small{display:block;color:var(--dim);font-size:11px;text-transform:none;letter-spacing:0;margin-top:2px}
+}
+
+.doors{padding-block:0 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.doors .in{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:767px){.doors .in{grid-template-columns:1fr}}
+.door{min-width:0;text-decoration:none;border:1.5px solid var(--line);padding:40px 24px;display:flex;flex-direction:column;gap:8px;transition:border-color .15s,background .15s}
+.door b{font-size:28px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--orange)}
+.door span{color:var(--dim);font-size:13px;letter-spacing:.06em}
+.door:hover{border-color:var(--orange);background:color-mix(in srgb,var(--orange) 8%,transparent)}
+.door.hot{background:var(--red);border-color:var(--red)}
+.door.hot b,.door.hot span{color:var(--door-hot-ink)}
+.foot{text-align:center;color:var(--dim);font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding-block:0 32px}
+
+</style>
+
+<header class="bar">
+  <a class="brand" href="#">s-m-r-t</a>
+  <nav aria-label="Primary">
+    <a href="#map">Blocks</a>
+    <a href="block.html">Showcase</a>
+    <a href="#docs">Docs</a>
+  </nav>
+</header>
+
+<section class="map" id="map" aria-label="Building blocks">
+  <canvas id="fire" aria-hidden="true"></canvas>
+  <svg id="mapsvg" role="img" aria-label="Graph of building blocks around BUILD"></svg>
+  <div class="hint" id="hint" role="status" aria-live="polite"></div>
+  <p class="lede">Hover a node</p>
+  <div class="stacks" id="stacks" aria-label="Blocks by branch"></div>
+</section>
+
+<section class="doors" id="docs">
+  <div class="in">
+    <a class="door hot" href="#build"><b>Build</b><span>build-a-boilerplate</span></a>
+    <a class="door" href="block.html"><b>Blocks</b><span>showcases</span></a>
+    <a class="door" href="#docs"><b>Docs</b><span>for developers and agents</span></a>
+  </div>
+</section>
+<p class="foot">MIT · one version</p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+// Two levels: section → block. Every section node is an index page; every block is a showcase. One word per node; the hover line is the only sentence.
+const TREE = [
+  { name:'Agents', kids:[
+    ['Tools','Every record\'s operations as callable tools.'],
+    ['Blueprint','A map of the app an agent can read.'],
+    ['Agents','Workers and personas, inside the app.'],
+    ['Forms','An agent proposes. A person confirms.'],
+    ['Memory','Agents learn, up to a gate you control.'],
+    ['Approvals','Some actions wait for a yes.'],
+    ['Ingestion','Intake with evidence and a review inbox.'],
+    ['Jobs','Scheduled and background work.'],
+    ['Webhooks','Events in and out, signed and retried.'],
+    ['Facts','Knowledge with sources and confidence.'],
+  ]},
+  { name:'Basics', kids:[
+    ['Records','Describe a thing once. Everything follows.'],
+    ['Fields','Defaults, visibility and locks, in layers.'],
+    ['Features','Switch capabilities on per tenant or plan.'],
+    ['People','Users, profiles and roles.'],
+    ['Tenants','Each customer kept apart.'],
+    ['Realtime','Pages stay current, offline too.'],
+    ['Reports','Questions declared beside the model.'],
+  ]},
+  { name:'Screens', kids:[
+    ['Shell','The admin shell and its components.'],
+    ['Mobile','Native foundations for iOS and Android.'],
+  ]},
+  { name:'Content', kids:[
+    ['Articles','Articles and pages with versions.'],
+    ['Assets','Files with provenance and processing.'],
+    ['Images','Image records and derivatives.'],
+    ['Voice','Speech and transcription.'],
+    ['Video','Video records and workflows.'],
+    ['Comments','Threads on any record.'],
+  ]},
+  { name:'Messaging', kids:[
+    ['Chat','Rooms and threads, with agents in the room.'],
+    ['Email','Send, receive and thread email.'],
+    ['Slack','Channels and threads, in and out.'],
+    ['Social','Posting to social networks.'],
+  ]},
+  { name:'Commerce', kids:[
+    ['Commerce','Orders, carts and payments.'],
+    ['Products','Catalogue and variants.'],
+    ['Ledgers','Double-entry accounts and journals.'],
+    ['Subscriptions','Plans, renewals and billing.'],
+  ]},
+  { name:'Operations', kids:[
+    ['Inventory','Stock and movements.'],
+    ['Manufacturing','Bills of materials and production.'],
+    ['Projects','Work broken into tasks.'],
+    ['Support','Tickets and replies.'],
+    ['Timesheets','Hours against work.'],
+    ['Expenses','Claims and approvals.'],
+    ['HR','People records and roles.'],
+  ]},
+  { name:'Marketing', kids:[
+    ['Campaigns','Campaigns and audiences.'],
+    ['Ads','Ad placements and zones.'],
+    ['Affiliates','Referral tracking and commissions.'],
+    ['Sales','Leads, deals and commissions.'],
+    ['Analytics','Events and funnels.'],
+    ['Properties','Websites and apps you own.'],
+  ]},
+  { name:'World', kids:[
+    ['Events','Things that happen at a time.'],
+    ['Places','Somewhere, found by address or distance.'],
+    ['Tags','Labels in a hierarchy.'],
+  ]},
+];
+
+// Build node + link lists
+const N=[], L=[]; const hubN={id:'hub',name:'BUILD',d:0,r:46}; N.push(hubN);
+TREE.forEach((b,bi)=>{
+  const bn={id:'b'+bi,name:b.name,d:1,r:16,branch:bi,index:true}; N.push(bn); L.push({source:'hub',target:bn.id,d:1,branch:bi});
+  b.kids.forEach((k,ki)=>{ const kn={id:`b${bi}k${ki}`,name:k[0],hint:k[1],d:2,r:6,branch:bi}; N.push(kn); L.push({source:bn.id,target:kn.id,d:2,branch:bi}); });
+});
+
+const svg=d3.select('#mapsvg'), map=document.getElementById('map'), hint=document.getElementById('hint');
+let W=map.clientWidth||1400, H=map.clientHeight||800, CX=W/2, CY=H/2;
+svg.attr('viewBox',`0 0 ${W} ${H}`);
+// Seed branches at four headings so the layout is stable, then let the simulation settle.
+// Each section gets a slice of the circle proportional to its block count, so big sections aren't squeezed.
+const total=TREE.reduce((a,b)=>a+b.kids.length+2,0); let acc=-100; const slice=TREE.map(b=>{ const span=360*(b.kids.length+2)/total, mid=acc+span/2; acc+=span; return {mid,span}; });
+N.forEach(n=>{ if(n.d===0){n.fx=CX;n.fy=CY;} else if(n.d===1){ const a=slice[n.branch].mid*Math.PI/180; n.x=CX+200*Math.cos(a); n.y=CY+200*Math.sin(a); }
+  else { const b=TREE[n.branch], i=b.kids.findIndex(k=>k[0]===n.name), sl=slice[n.branch]; const a=(sl.mid-sl.span*.42+sl.span*.84*(b.kids.length===1?.5:i/(b.kids.length-1)))*Math.PI/180; const r=330+(i%2)*40; n.x=CX+r*Math.cos(a); n.y=CY+r*Math.sin(a); } });
+const sim=d3.forceSimulation(N)
+  .force('link',d3.forceLink(L).id(d=>d.id).distance(l=>({1:200,2:130}[l.d])).strength(l=>({1:1,2:.5}[l.d])))
+  .force('charge',d3.forceManyBody().strength(d=>({0:-1500,1:-900,2:-140}[d.d])))
+  .force('radial',d3.forceRadial(d=>({0:0,1:200,2:350}[d.d]),CX,CY).strength(d=>({0:1,1:.95,2:.6}[d.d])))
+  .force('collide',d3.forceCollide(d=>d.d===2? 16+d.name.length*3.6 : d.r+({0:30,1:56}[d.d])).iterations(4))
+  .stop();
+for(let i=0;i<400;i++) sim.tick();
+// keep everything inside the frame
+// Settled positions in a unit frame; fit() maps them to whatever the viewport is, so the graph always fills the screen.
+N.forEach(n=>{ n.ux=n.x-CX; n.uy=n.y-CY; });
+const maxDx=Math.max(...N.map(n=>Math.abs(n.ux))), maxDy=Math.max(...N.map(n=>Math.abs(n.uy)));
+function fit(){
+  W=map.clientWidth||1400; H=map.clientHeight||800; CX=W/2; CY=H/2; svg.attr('viewBox',`0 0 ${W} ${H}`);
+  const padX=Math.min(120,W*.09), padT=76, padB=52;
+  const kx=(W/2-padX)/maxDx, ky=Math.min((CY-padT)/maxDy,(H-CY-padB)/maxDy);
+  N.forEach(n=>{ n.x=CX+n.ux*kx; n.y=CY+n.uy*ky; });
+}
+fit();
+const gL=svg.append('g'), gN=svg.append('g');
+// a link from the hub starts at the sun's rim, not its centre, so nothing is drawn over the disc
+const edge=l=>{ if(l.source.d!==0) return [l.source.x,l.source.y]; const dx=l.target.x-l.source.x, dy=l.target.y-l.source.y, k=(hubN.r+6)/Math.hypot(dx,dy); return [l.source.x+dx*k, l.source.y+dy*k]; };
+const linkEls=gL.selectAll('line').data(L).join('line').attr('class',l=>'link l'+l.d).attr('x1',l=>edge(l)[0]).attr('y1',l=>edge(l)[1]).attr('x2',l=>l.target.x).attr('y2',l=>l.target.y);
+const setFocus=(pred)=>{ const any=!!pred; map.classList.toggle('focus',any); nodeEls.classed('on',n=>any&&pred(n)); linkEls.classed('on',l=>any&&pred(l.source)&&pred(l.target)); if(!any)hint.classList.remove('show'); };
+const sub=(n)=>{ // the node, its ancestors and its descendants
+  const ids=new Set([n.id,'b'+n.branch]); if(n.d===1) N.forEach(m=>{ if(m.branch===n.branch) ids.add(m.id); });
+  return m=>ids.has(m.id)||m.id==='hub'; };
+const nodeEls=gN.selectAll('g.n').data(N.filter(n=>n.d>0)).join('g').attr('class',n=>'n d'+n.d+(n.index?' index':'')).attr('transform',n=>`translate(${n.x},${n.y})`)
+  .attr('tabindex',0).attr('role','link').attr('aria-label',n=>n.name+(n.index?' index':'')+(n.hint?': '+n.hint:''));
+nodeEls.append('circle').attr('r',n=>n.r);
+nodeEls.append('text').attr('x',n=>n.x<CX?-(n.r+8):(n.r+8)).attr('y',n=>n.d===1?5:4).attr('text-anchor',n=>n.x<CX?'end':'start').text(n=>n.name);
+nodeEls.on('mouseenter focus',(e,n)=>{ setFocus(sub(n)); if(n.hint){ hint.textContent=n.hint; const r=svg.node().getBoundingClientRect(), m=map.getBoundingClientRect(), sx=r.width/W, sy=r.height/H;
+    const left=(r.left-m.left)+n.x*sx+(n.x<CX? -hint.offsetWidth-(n.r+14)*sx : (n.r+14)*sx); hint.style.left=Math.max(8,Math.min(m.width-hint.offsetWidth-8,left))+'px'; hint.style.top=((r.top-m.top)+n.y*sy+14)+'px'; hint.classList.add('show'); } })
+  .on('mouseleave blur',()=>setFocus(null))
+  .on('click',(e,n)=>location.href=n.d===1||n.index?'block.html#index':'block.html')
+  .on('keydown',(e,n)=>{ if(e.key==='Enter') location.href=n.d===1||n.index?'block.html#index':'block.html'; });
+
+const hub=gN.append('g').attr('class','hub').attr('transform',`translate(${CX},${CY})`).attr('tabindex',0).attr('role','link').attr('aria-label','Build');
+// the sun: a flame ring (stroke displaced by animated turbulence) around the disc. No glow, no rays.
+const defs=svg.append('defs');
+const gSun=defs.append('radialGradient').attr('id','sun');
+gSun.append('stop').attr('offset','0%').attr('stop-color','#fff1a8');
+gSun.append('stop').attr('offset','45%').attr('stop-color','var(--yellow)');
+gSun.append('stop').attr('offset','85%').attr('stop-color','var(--orange)');
+gSun.append('stop').attr('offset','100%').attr('stop-color','var(--red)');
+hub.append('circle').attr('class','disc').attr('r',hubN.r);
+hub.append('text').attr('y',7).attr('text-anchor','middle').text('BUILD');
+hub.on('click',()=>location.hash='build');
+// The sun, drawn on canvas: a churning surface, a tight smoulder at the rim, and the occasional flare that loops out and falls back.
+const fire=document.getElementById('fire'), fx=fire.getContext('2d'); const FS=320, DPR=Math.min(2,devicePixelRatio||1), C=FS/2;
+fire.width=FS*DPR; fire.height=FS*DPR; fx.scale(DPR,DPR);
+function placeFire(){ const r=svg.node().getBoundingClientRect(), m=map.getBoundingClientRect(), sx=r.width/W, sy=r.height/H;
+  fire.style.left=((r.left-m.left)+CX*sx-FS/2)+'px'; fire.style.top=((r.top-m.top)+CY*sy-FS/2)+'px'; fire.style.transform=`scale(${sx})`; }
+const R=hubN.r;
+// palette: fire in dark, blue flame in light; re-read when the preference or the toggle changes
+const PAL={
+  fire:{ core:'#ffe27a', mid:'#ff9a1f', rim:'#d8341a', hot:'255,240,170', warm:'255,120,40', dark:'140,40,10', limb:'255,190,80', sparkHot:'255,200,90', sparkCool:'255,110,30', fade:'255,60,20', flare:['255,80,20','255,150,40','255,235,160'] },
+  blue:{ core:'#f4fbff', mid:'#4fd2ff', rim:'#1848c8', hot:'230,250,255', warm:'80,170,255', dark:'20,50,140', limb:'170,230,255', sparkHot:'200,240,255', sparkCool:'60,140,255', fade:'30,80,220', flare:['40,90,230','90,190,255','235,250,255'] } };
+const isDark=()=>{ const t=document.documentElement.dataset.theme; return t? t==='dark' : matchMedia('(prefers-color-scheme: dark)').matches; };
+let pal=isDark()?PAL.fire:PAL.blue;
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{ pal=isDark()?PAL.fire:PAL.blue; });
+new MutationObserver(()=>{ pal=isDark()?PAL.fire:PAL.blue; }).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+// surface granules: slow-moving soft blobs, clipped to the disc
+const cells=Array.from({length:34},(_,i)=>({a:Math.random()*Math.PI*2, r:Math.random()*R*.95, w:.15+Math.random()*.35, ph:Math.random()*6, sz:9+Math.random()*13, hot:Math.random()<.5}));
+// smoulder: short-lived sparks that barely leave the rim
+const S=[]; function spark(){ S.push({a:Math.random()*Math.PI*2, r:R-2, v:.04+Math.random()*.07, life:1, dec:.008+Math.random()*.008, sz:5+Math.random()*6}); }
+// flares: a loop from the rim that rises then collapses
+const F=[]; let nextFlare=performance.now()+6000;
+function flare(){ const a=Math.random()*Math.PI*2, span=.35+Math.random()*.35, h=R*(.45+Math.random()*.5); F.push({a,span,h,t:0,dur:4+Math.random()*2}); }
+function pt(a,r){ return [C+Math.cos(a)*r, C+Math.sin(a)*r]; }
+let T=0;
+function drawFire(now){
+  T+=.005; fx.clearRect(0,0,FS,FS);
+  // 1. surface
+  fx.save(); fx.beginPath(); fx.arc(C,C,R,0,Math.PI*2); fx.clip();
+  const base=fx.createRadialGradient(C-R*.25,C-R*.25,R*.1,C,C,R); base.addColorStop(0,pal.core); base.addColorStop(.55,pal.mid); base.addColorStop(1,pal.rim);
+  fx.fillStyle=base; fx.fillRect(0,0,FS,FS);
+  fx.globalCompositeOperation='lighter';
+  cells.forEach(c=>{ const a=c.a+T*c.w*.25, r=c.r*(.9+.1*Math.sin(T*c.w+c.ph)); const [x,y]=pt(a,r);
+    const g=fx.createRadialGradient(x,y,0,x,y,c.sz); g.addColorStop(0,c.hot?`rgba(${pal.hot},.28)`:`rgba(${pal.warm},.22)`); g.addColorStop(1,`rgba(${pal.fade},0)`);
+    fx.fillStyle=g; fx.beginPath(); fx.arc(x,y,c.sz,0,Math.PI*2); fx.fill(); });
+  fx.globalCompositeOperation='multiply';
+  cells.forEach((c,i)=>{ if(i%3) return; const a=c.a-T*c.w*.2, r=c.r; const [x,y]=pt(a,r);
+    const g=fx.createRadialGradient(x,y,0,x,y,c.sz*.8); g.addColorStop(0,`rgba(${pal.dark},.2)`); g.addColorStop(1,`rgba(${pal.dark},0)`);
+    fx.fillStyle=g; fx.beginPath(); fx.arc(x,y,c.sz*.8,0,Math.PI*2); fx.fill(); });
+  fx.restore();
+  // 2. limb: a thin bright rim so the edge reads as a sphere
+  fx.globalCompositeOperation='lighter'; fx.lineWidth=2.5; fx.strokeStyle=`rgba(${pal.limb},.55)`; fx.beginPath(); fx.arc(C,C,R-1,0,Math.PI*2); fx.stroke();
+  // 3. smoulder at the rim
+  if(S.length<140) spark();
+  for(let i=S.length-1;i>=0;i--){ const p=S[i]; p.life-=p.dec; if(p.life<=0){S.splice(i,1);continue;} p.r+=p.v; const [x,y]=pt(p.a,p.r), sz=p.sz*(.6+.4*p.life);
+    const g=fx.createRadialGradient(x,y,0,x,y,sz); g.addColorStop(0,`rgba(${p.life>.5?pal.sparkHot:pal.sparkCool},${.5*p.life})`); g.addColorStop(1,`rgba(${pal.fade},0)`);
+    fx.fillStyle=g; fx.beginPath(); fx.arc(x,y,sz,0,Math.PI*2); fx.fill(); }
+  // 4. flares
+  if(now>nextFlare){ flare(); nextFlare=now+20000+Math.random()*25000; }
+  for(let i=F.length-1;i>=0;i--){ const f=F[i]; f.t+=.016/f.dur; if(f.t>=1){F.splice(i,1);continue;}
+    const rise=Math.sin(f.t*Math.PI), h=f.h*rise; const [x0,y0]=pt(f.a,R-2), [x1,y1]=pt(f.a+f.span,R-2), [cx1,cy1]=pt(f.a+f.span*.3,R+h), [cx2,cy2]=pt(f.a+f.span*.7,R+h);
+    fx.lineCap='round'; [[9,`rgba(${pal.flare[0]},${.25*rise})`],[5,`rgba(${pal.flare[1]},${.5*rise})`],[2,`rgba(${pal.flare[2]},${.9*rise})`]].forEach(([w,col])=>{ fx.lineWidth=w; fx.strokeStyle=col; fx.beginPath(); fx.moveTo(x0,y0); fx.bezierCurveTo(cx1,cy1,cx2,cy2,x1,y1); fx.stroke(); }); }
+  fx.globalCompositeOperation='source-over';
+  requestAnimationFrame(drawFire); }
+placeFire();
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches) requestAnimationFrame(drawFire); else drawFire(0);
+function place(){ placeFire(); linkEls.attr('x1',l=>edge(l)[0]).attr('y1',l=>edge(l)[1]).attr('x2',l=>l.target.x).attr('y2',l=>l.target.y);
+  nodeEls.attr('transform',n=>`translate(${n.x},${n.y})`).select('text').attr('x',n=>n.x<CX?-(n.r+8):(n.r+8)).attr('text-anchor',n=>n.x<CX?'end':'start');
+  hub.attr('transform',`translate(${CX},${CY})`); }
+let rt; addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(()=>{ fit(); place(); },120); });
+
+// intro: hub, then links grow outward by level, then nodes
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(!reduce&&window.gsap){
+  const lines=linkEls.nodes(), ns=nodeEls.nodes();
+  lines.forEach(l=>{ const len=Math.hypot(l.x2.baseVal.value-l.x1.baseVal.value,l.y2.baseVal.value-l.y1.baseVal.value); l.style.strokeDasharray=len; l.style.strokeDashoffset=len; });
+  gsap.set(hub.node(),{opacity:0,scale:.5,transformOrigin:'center'}); gsap.set(ns,{opacity:0});
+  const tl=gsap.timeline({defaults:{ease:'power1.out'},onComplete:()=>map.classList.add('ready')});
+  tl.to(hub.node(),{opacity:1,scale:1,duration:.4});
+  [1,2].forEach(d=>{ tl.to(lines.filter(l=>l.classList.contains('l'+d)),{strokeDashoffset:0,duration:.35,stagger:.01},'-=.15')
+                        .to(ns.filter(n=>n.classList.contains('d'+d)),{opacity:1,duration:.25,stagger:.012},'-=.3'); });
+  const finish=()=>{tl.progress(1);map.classList.add('ready');};
+  if(document.hidden)finish(); document.addEventListener('visibilitychange',()=>{if(document.hidden)finish();}); setTimeout(finish,3500);
+}else{map.classList.add('ready');}
+
+document.getElementById('stacks').innerHTML=`<div class="hubbtn"><a href="#build">BUILD</a></div>`+TREE.map(b=>
+  `<div class="stack"><h2>${b.name}</h2><ul>${b.kids.map(k=>`<li><a href="block.html">${k[0]}${k[2]?``:''}</a></li>`).join('')}</ul></div>`).join('');
+</script>

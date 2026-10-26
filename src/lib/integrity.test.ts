@@ -20,111 +20,23 @@
  * coverage need the actual rendered HTML/meta, so they live in the
  * build-output sweep, `scripts/check-links.mjs`, run after `vite build`.
  */
-import { isRedirect } from '@sveltejs/kit';
 import { describe, expect, it } from 'vitest';
 import { isPrimaryNavigationActive, primaryNavigation } from '$lib/data/navigation';
 import { packages } from '$lib/data/packages';
+import {
+	contentRoutes,
+	redirectRoutes,
+	routes,
+	routesByPath,
+	stripQueryAndHash
+} from '$lib/server/route-inventory';
+import { docsMoveRedirectCount } from '$lib/server/legacy-inventory';
 import { entries as componentEntries } from '../routes/components/[...legacy]/+page.server';
 import { entries as docsEntries } from '../routes/docs/[...legacy]/+page.server';
+import { _aliases as docsGuideAliases } from '../routes/docs/guides/[slug]/+page';
+import { entries as blockEntries } from '../routes/blocks/[slug]/+page.server';
 import { entries as moduleEntries } from '../routes/modules/[slug]/+page.server';
 import { entries as packageEntries } from '../routes/packages/[slug]/+page.server';
-import { _aliases as referenceComponentAliases } from '../routes/reference/components/[slug]/+page';
-
-type LoadFn = (_event: { params: Record<string, string> }) => unknown;
-type EntriesFn = () => Array<Record<string, string>> | Promise<Array<Record<string, string>>>;
-type RouteModule = { load?: LoadFn; entries?: EntriesFn };
-
-interface RouteInfo {
-	/** The final URL path, e.g. `/reference/packages/smrt-ui`. */
-	path: string;
-	/** Whether visiting `path` throws a redirect rather than rendering. */
-	isRedirect: boolean;
-	/** The redirect location, when `isRedirect` is true. */
-	target?: string;
-}
-
-const svelteFiles = import.meta.glob('/src/routes/**/+page.svelte');
-const tsLoaders = import.meta.glob<RouteModule>('/src/routes/**/+page.ts', { eager: true });
-const serverLoaders = import.meta.glob<RouteModule>('/src/routes/**/+page.server.ts', {
-	eager: true
-});
-
-function toDir(filePath: string): string {
-	return filePath.replace(/^\/src\/routes/, '').replace(/\/\+page\.(svelte|ts|server\.ts)$/, '');
-}
-
-function toBase(dir: string, dynamic: boolean): string {
-	if (!dynamic) return dir === '' ? '/' : dir;
-	const segments = dir.split('/');
-	const base = segments.slice(0, -1).join('/');
-	return base === '' ? '/' : base;
-}
-
-function joinPath(base: string, slug: string): string {
-	return base === '/' ? `/${slug}` : `${base}/${slug}`;
-}
-
-function tryLoad(load: LoadFn | undefined, params: Record<string, string>): RouteInfo['target'] {
-	if (!load) return undefined;
-	try {
-		load({ params });
-		return undefined;
-	} catch (e) {
-		if (isRedirect(e)) return (e as { location: string }).location;
-		// A thrown 404 (error()) for a bad slug shouldn't happen for entries()-derived
-		// params; surface it rather than swallowing it as "not a redirect".
-		throw e;
-	}
-}
-
-/** Every directory that renders or redirects a `+page.svelte`/`+page.(server.)ts`. */
-const allDirs = new Set<string>([
-	...Object.keys(svelteFiles).map(toDir),
-	...Object.keys(tsLoaders).map(toDir),
-	...Object.keys(serverLoaders).map(toDir)
-]);
-
-const routes: RouteInfo[] = [];
-
-for (const dir of allDirs) {
-	const segments = dir.split('/').filter(Boolean);
-	const lastSegment = segments.at(-1) ?? '';
-	const isCatchAll = lastSegment.startsWith('[...');
-	const isSlug = lastSegment === '[slug]';
-	const dynamic = isCatchAll || isSlug;
-	const base = toBase(dir, dynamic);
-
-	const tsKey = `/src/routes${dir}/+page.ts`;
-	const serverKey = `/src/routes${dir}/+page.server.ts`;
-	const mod = serverLoaders[serverKey] ?? tsLoaders[tsKey];
-
-	if (!dynamic) {
-		const path = base;
-		const target = tryLoad(mod?.load, {});
-		routes.push({ path, isRedirect: target !== undefined, target });
-		continue;
-	}
-
-	const paramName = isCatchAll ? lastSegment.slice(4, -1) : 'slug';
-	if (!mod?.entries) {
-		throw new Error(`${dir} is a dynamic route with no entries() — nothing would prerender.`);
-	}
-	const entries = mod.entries();
-	for (const entry of Array.isArray(entries) ? entries : []) {
-		const value = entry[paramName];
-		const path = joinPath(base, value);
-		const target = tryLoad(mod.load, { [paramName]: value });
-		routes.push({ path, isRedirect: target !== undefined, target });
-	}
-}
-
-const routesByPath = new Map(routes.map((route) => [route.path, route]));
-const contentRoutes = routes.filter((route) => !route.isRedirect);
-const redirectRoutes = routes.filter((route) => route.isRedirect);
-
-function stripQueryAndHash(path: string): string {
-	return path.split('#')[0].split('?')[0];
-}
 
 describe('emitted-route inventory (#187 S4)', () => {
 	it('discovers a plausible number of routes, so nothing below passes vacuously', () => {
@@ -136,6 +48,9 @@ describe('emitted-route inventory (#187 S4)', () => {
 		const componentCount = (await componentEntries()).length;
 		const docsCount = (await docsEntries()).length;
 		const moduleCount = (await moduleEntries()).length;
+		// #361 slice E: the 23 retired #358 /blocks/<slug> pages (the /blocks index is a
+		// single-file redirect, listed below). Guarded in legacy-routes.test.ts.
+		const blockCount = (await blockEntries()).length;
 		const packageCount = (await packageEntries()).length;
 		// The 3 /foundations/* aliases (guarded in legacy-routes.test.ts) plus an
 		// EXPLICIT, hand-maintained list of the small single-file static redirects
@@ -148,12 +63,15 @@ describe('emitted-route inventory (#187 S4)', () => {
 		// new *family* of redirects (multiple entries from one dynamic route)
 		// belongs in legacy-routes.test.ts instead, the way the foundations
 		// aliases were added — do not just widen this list or number.
-		const foundationAliasCount = 3;
-		// Removed /reference/components/<slug> pages (guarded in legacy-routes.test.ts).
-		const referenceComponentAliasCount = Object.keys(referenceComponentAliases).length;
+		// #365: every pre-move URL of the families that moved under /docs —
+		// static pages, every slug, and the foundations and reference-component
+		// aliases the old routes already carried. Guarded in legacy-routes.test.ts.
+		const docsMoveCount = docsMoveRedirectCount();
+		// The two `/docs/guides/<old>` aliases that left the `/docs/[...legacy]`
+		// table for the guides route (#365; guarded in legacy-routes.test.ts).
+		const docsGuideAliasCount = Object.keys(docsGuideAliases).length;
 		const knownSingleRedirectRoutes = [
 			'/components',
-			'/docs',
 			'/sdk',
 			'/saadl',
 			'/themes',
@@ -163,8 +81,11 @@ describe('emitted-route inventory (#187 S4)', () => {
 			// starter page was retired. Both are guarded in legacy-routes.test.ts.
 			'/starters/ground-up',
 			'/starters/saas',
-			// #355: the module-cluster index became /blocks. Guarded in legacy-routes.test.ts.
-			'/modules'
+			// #355 / #361: the module-cluster index was /blocks and is now /features;
+			// the /blocks landing it pointed at redirects there too. Guarded in
+			// legacy-routes.test.ts.
+			'/modules',
+			'/blocks'
 		];
 		for (const path of knownSingleRedirectRoutes) {
 			expect(
@@ -177,7 +98,7 @@ describe('emitted-route inventory (#187 S4)', () => {
 		expect(
 			redirectRoutes.length,
 			'A new redirect-shaped route appeared that is not one of the guarded families ' +
-				'(components, docs, modules, packages, foundations and reference component aliases) or a known single-file ' +
+				'(components, docs, modules, blocks, packages, the #365 /docs moves and docs guide aliases) or a known single-file ' +
 				'static redirect. If it is a real new family, add it to legacy-routes.test.ts the way ' +
 				'the foundations aliases were added; if it is a new single-file redirect, add it to ' +
 				'`knownSingleRedirectRoutes` above. Do not just widen this expectation.'
@@ -185,9 +106,10 @@ describe('emitted-route inventory (#187 S4)', () => {
 			componentCount +
 				docsCount +
 				moduleCount +
+				blockCount +
 				packageCount +
-				foundationAliasCount +
-				referenceComponentAliasCount +
+				docsMoveCount +
+				docsGuideAliasCount +
 				staticSingleRedirectCount
 		);
 	});
@@ -209,12 +131,10 @@ describe('emitted-route inventory (#187 S4)', () => {
 	});
 
 	it('resolves exactly one active primaryNavigation item per emitted content route', () => {
-		// Guides and Starters are deliberately not primaryNavigation destinations
-		// (navigation.test.ts: "uses the approved nine destinations", and
-		// `active('/guides/testing-your-app')` is asserted to be `[]`) — every page
-		// under either family has zero active items by design, not by omission.
-		const noPrimaryDestination = (path: string) =>
-			path === '/guides' || path.startsWith('/guides/') || path.startsWith('/starters');
+		// The three doors (#361) — BUILD, FEATURES, DOCS — cover every content
+		// route except the homepage (the brand link) and the standalone
+		// playground, which belong to no door by design, not by omission.
+		const noPrimaryDestination = (path: string) => path === '/' || path === '/playground';
 
 		for (const route of contentRoutes) {
 			const activeCount = primaryNavigation.filter((item) =>
@@ -264,7 +184,7 @@ describe('href literals resolve to an emitted route (#187 S4)', () => {
 				const target = stripQueryAndHash(href);
 				expect(
 					// Generated after prerender; exhaustive artifact coverage is checked by check:agent-docs.
-					routesByPath.has(target) || target === '/llms.txt',
+					routesByPath.has(target) || target === '/llms.txt' || target === '/llms-full.txt',
 					`${file}: href "${href}" does not resolve to any route in ` +
 						`src/routes (checked "${target}").`
 				).toBe(true);

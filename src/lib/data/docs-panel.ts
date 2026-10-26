@@ -24,18 +24,17 @@ export interface DocsPanelSection {
 
 /**
  * `docsNavigation` group labels do not always match section ids or labels
- * (`Home` vs `why`, `Blocks` vs `blocks`), so the join is by
+ * (`Docs` vs `docs`), so the join is by
  * explicit tuple map rather than by parallel array order. Tuples, not an
  * object literal, so `check:copy` has no property names to classify — these
  * strings are selectors into already-audited data, not new prose.
  */
 const groupLabelBySectionId = new Map<DocumentationSectionId, string>([
-	['why', 'Home'],
+	['docs', 'Docs'],
 	['framework', 'Framework'],
 	['agents', 'Agents'],
 	['interaction', 'Interaction'],
 	['ui', 'UI'],
-	['blocks', 'Blocks'],
 	['tooling', 'Tooling'],
 	['guides', 'Guides'],
 	['reference', 'Reference']

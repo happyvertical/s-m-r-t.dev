@@ -19,15 +19,15 @@ describe('Framework content family', () => {
 			frameworkMigrationDecisions.map((decision) => [decision.source, decision])
 		);
 
-		expect(decisions.get('/foundations')).toMatchObject({
+		expect(decisions.get('/docs/foundations')).toMatchObject({
 			status: 'redirect',
-			href: '/framework'
+			href: '/docs/framework'
 		});
 
 		for (const guide of foundationGuides) {
-			const source = `/foundations/${guide.slug}`;
+			const source = `/docs/foundations/${guide.slug}`;
 			expect(decisions.get(source), `${source} has no migration decision`).toBeDefined();
-			expect(decisions.get(source)?.href).toMatch(/^\/framework#/);
+			expect(decisions.get(source)?.href).toMatch(/^\/docs\/framework#/);
 		}
 	});
 });

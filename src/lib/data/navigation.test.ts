@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { blockBranches, buildingBlocks } from '$lib/data/blocks';
+import { featurePath, featureSections, features } from '$lib/data/features';
 import { taskGuides } from '$lib/data/task-guides';
 import {
 	documentationSectionForPathname,
 	documentationSections,
+	featureNavigation,
+	isDocsPathname,
 	isNavigationGroupActive,
 	isNavigationItemActive,
 	isPrimaryNavigationActive,
@@ -11,60 +13,65 @@ import {
 } from './navigation';
 
 describe('primary navigation', () => {
-	it('uses the approved ten destinations in order', () => {
-		expect(primaryNavigation.map((item) => item.label)).toEqual([
-			'Home',
-			'Framework',
-			'Agents',
-			'Interaction',
-			'UI',
-			'Blocks',
-			'Tooling',
-			'Playground',
-			'build-a-boilerplate',
-			'Reference'
+	it('opens the three doors in order: BUILD · FEATURES · DOCS (#361)', () => {
+		expect(primaryNavigation.map((item) => [item.label, item.href])).toEqual([
+			['Build', '/build-a-boilerplate'],
+			['Features', '/features'],
+			['Docs', '/docs']
 		]);
-		expect(primaryNavigation.some((item) => item.label === 'Guides')).toBe(false);
 	});
 
-	it('keeps section destinations active for their current route families', () => {
+	it('keeps each door active across its route family', () => {
 		const active = (pathname: string) =>
-			primaryNavigation.filter((item) => isPrimaryNavigationActive(item, pathname));
+			primaryNavigation
+				.filter((item) => isPrimaryNavigationActive(item, pathname))
+				.map((item) => item.label);
 
-		expect(active('/foundations/objects-and-collections').map((item) => item.label)).toEqual([
-			'Framework'
-		]);
-		expect(active('/agents').map((item) => item.label)).toEqual(['Agents']);
-		expect(active('/capabilities/webmcp').map((item) => item.label)).toEqual(['Agents']);
-		expect(active('/capabilities/agent-assisted-forms').map((item) => item.label)).toEqual([
-			'Interaction'
-		]);
-		expect(active('/capabilities/application-shell').map((item) => item.label)).toEqual(['UI']);
-		expect(active('/packages/smrt-content').map((item) => item.label)).toEqual(['Reference']);
-		// A6: the canonical `/reference/packages/smrt-ui` belongs to Reference,
-		// not UI — only the `/ui` overview page itself owns the UI section now.
-		expect(active('/reference/packages/smrt-ui').map((item) => item.label)).toEqual(['Reference']);
-		expect(active('/playground').map((item) => item.label)).toEqual(['Playground']);
-		expect(active('/build-a-boilerplate').map((item) => item.label)).toEqual([
-			'build-a-boilerplate'
-		]);
-		expect(active('/guides/testing-your-app')).toEqual([]);
+		expect(active('/build-a-boilerplate')).toEqual(['Build']);
+		expect(active('/features')).toEqual(['Features']);
+		expect(active('/features/agents/approvals')).toEqual(['Features']);
+		for (const pathname of [
+			'/docs',
+			'/docs/foundations/objects-and-collections',
+			'/docs/capabilities/webmcp',
+			'/docs/guides/testing-your-app',
+			'/docs/getting-started/smrt-start',
+			'/docs/reference/packages/smrt-ui'
+		]) {
+			expect(active(pathname), pathname).toEqual(['Docs']);
+		}
+		expect(active('/')).toEqual([]);
+		expect(active('/playground')).toEqual([]);
+		// A lookalike prefix is not inside Docs.
+		expect(active('/docs-other')).toEqual([]);
+	});
+
+	it('scopes the docs panel to /docs', () => {
+		expect(isDocsPathname('/docs')).toBe(true);
+		expect(isDocsPathname('/docs/ui')).toBe(true);
+		expect(isDocsPathname('/')).toBe(false);
+		expect(isDocsPathname('/features/agents')).toBe(false);
+		expect(isDocsPathname('/docsx')).toBe(false);
 	});
 });
 
 describe('contextual navigation', () => {
 	it('resolves every route family to one section', () => {
-		expect(documentationSectionForPathname('/').id).toBe('why');
-		expect(documentationSectionForPathname('/framework').id).toBe('framework');
-		expect(documentationSectionForPathname('/agents').id).toBe('agents');
-		expect(documentationSectionForPathname('/capabilities/webmcp').id).toBe('agents');
-		expect(documentationSectionForPathname('/interaction').id).toBe('interaction');
-		expect(documentationSectionForPathname('/ui').id).toBe('ui');
-		expect(documentationSectionForPathname('/blocks').id).toBe('blocks');
-		expect(documentationSectionForPathname('/blocks/records').id).toBe('blocks');
-		expect(documentationSectionForPathname('/tooling/dev-mcp').id).toBe('tooling');
-		expect(documentationSectionForPathname('/guides/semantic-search').id).toBe('guides');
-		expect(documentationSectionForPathname('/reference/security').id).toBe('reference');
+		expect(documentationSectionForPathname('/docs').id).toBe('docs');
+		expect(documentationSectionForPathname('/docs/getting-started').id).toBe('docs');
+		expect(documentationSectionForPathname('/docs/framework').id).toBe('framework');
+		expect(documentationSectionForPathname('/docs/agents').id).toBe('agents');
+		expect(documentationSectionForPathname('/docs/capabilities/webmcp').id).toBe('agents');
+		expect(documentationSectionForPathname('/docs/interaction').id).toBe('interaction');
+		expect(documentationSectionForPathname('/docs/ui').id).toBe('ui');
+		expect(documentationSectionForPathname('/docs/capabilities/agent-assisted-forms').id).toBe(
+			'interaction'
+		);
+		expect(documentationSectionForPathname('/docs/capabilities/application-shell').id).toBe('ui');
+		expect(documentationSectionForPathname('/docs/foundations/tenants').id).toBe('framework');
+		expect(documentationSectionForPathname('/docs/tooling/dev-mcp').id).toBe('tooling');
+		expect(documentationSectionForPathname('/docs/guides/semantic-search').id).toBe('guides');
+		expect(documentationSectionForPathname('/docs/reference/security').id).toBe('reference');
 	});
 
 	it('uses only group and item levels in every section', () => {
@@ -81,18 +88,18 @@ describe('contextual navigation', () => {
 	});
 
 	it('expands the group that owns the current page', () => {
-		const section = documentationSectionForPathname('/tooling/dev-mcp');
+		const section = documentationSectionForPathname('/docs/tooling/dev-mcp');
 		const activeGroups = section.groups.filter((group) =>
-			isNavigationGroupActive(group, '/tooling/dev-mcp')
+			isNavigationGroupActive(group, '/docs/tooling/dev-mcp')
 		);
 
 		expect(activeGroups.map((group) => group.label)).toEqual(['Developer and coding-agent tools']);
 	});
 
 	it('uses location state for homepage anchors', () => {
-		expect(isNavigationItemActive('/#one-description', '/', '#one-description')).toBe(true);
-		expect(isNavigationItemActive('/', '/', '#one-description')).toBe(false);
-		expect(isNavigationItemActive('/#what-you-get', '/', '#one-description')).toBe(false);
+		expect(isNavigationItemActive('/#doors', '/', '#doors')).toBe(true);
+		expect(isNavigationItemActive('/', '/', '#doors')).toBe(false);
+		expect(isNavigationItemActive('/#features', '/', '#doors')).toBe(false);
 	});
 
 	it('marks exactly one /agents "On this page" anchor active for the current topic', () => {
@@ -104,34 +111,39 @@ describe('contextual navigation', () => {
 		for (const target of onThisPage!.items) {
 			const hash = new URL(target.href, 'https://s-m-r-t.dev').hash;
 			const activeHrefs = onThisPage!.items
-				.filter((item) => isNavigationItemActive(item.href, '/agents', hash))
+				.filter((item) => isNavigationItemActive(item.href, '/docs/agents', hash))
 				.map((item) => item.href);
 
 			expect(activeHrefs).toEqual([target.href]);
 		}
 	});
 
-	it('groups the Blocks section by branch, one item per block', () => {
-		const section = documentationSections.find((candidate) => candidate.id === 'blocks');
-		expect(section?.groups.slice(0, blockBranches.length).map((group) => group.label)).toEqual(
-			blockBranches.map((branch) => branch.title)
+	it('keeps showcases out of the docs panel (#365)', () => {
+		const hrefs = documentationSections.flatMap((section) =>
+			section.groups.flatMap((group) => group.items.map((item) => item.href))
 		);
-		const hrefs = new Set(section!.groups.flatMap((group) => group.items.map((i) => i.href)));
-		for (const block of buildingBlocks) {
-			expect(hrefs.has(`/blocks/${block.id}`), `${block.id} missing from the Blocks section`).toBe(
-				true
-			);
+		expect(hrefs.filter((href) => /^\/(features|blocks)(\/|$)/.test(href))).toEqual([]);
+	});
+
+	it('registers every feature section and showcase, one group per section', () => {
+		expect(featureNavigation.map((group) => group.label)).toEqual(
+			featureSections.map((section) => section.word)
+		);
+		const hrefs = new Set(featureNavigation.flatMap((group) => group.items.map((i) => i.href)));
+		expect(hrefs.size).toBe(featureSections.length + features.length);
+		for (const item of features) {
+			expect(hrefs.has(featurePath(item)), `${item.id} is not registered`).toBe(true);
 		}
 	});
 
 	it('keeps prefix matching for section overview and nested-page links', () => {
-		// Long-standing pattern: a hash-less overview link (e.g. /tooling) stays
+		// Long-standing pattern: a hash-less overview link (e.g. /docs/tooling) stays
 		// active on its own page and on every nested page under it, alongside the
 		// exact-match link for that nested page. Same-page hash anchors must not
 		// change this.
-		expect(isNavigationItemActive('/tooling', '/tooling/dev-mcp', '')).toBe(true);
-		expect(isNavigationItemActive('/tooling/dev-mcp', '/tooling/dev-mcp', '')).toBe(true);
-		expect(isNavigationItemActive('/tooling', '/tooling', '#anything')).toBe(true);
+		expect(isNavigationItemActive('/docs/tooling', '/docs/tooling/dev-mcp', '')).toBe(true);
+		expect(isNavigationItemActive('/docs/tooling/dev-mcp', '/docs/tooling/dev-mcp', '')).toBe(true);
+		expect(isNavigationItemActive('/docs/tooling', '/docs/tooling', '#anything')).toBe(true);
 	});
 
 	it('gives every task guide a family link and a non-Guides contextual link', () => {
@@ -148,7 +160,7 @@ describe('contextual navigation', () => {
 		);
 
 		for (const guide of taskGuides) {
-			const href = `/guides/${guide.slug}`;
+			const href = `/docs/guides/${guide.slug}`;
 			expect(
 				guideFamilyHrefs.has(href),
 				`${href} is missing from its guide-family navigation`

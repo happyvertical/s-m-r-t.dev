@@ -65,26 +65,29 @@ export type GuidePage = (typeof guidePages)[number];
 
 /** Every prerendered `[slug]` route, keyed by the slugs its `entries()` yields. */
 const slugRoutes = Object.entries(
-	import.meta.glob<{ entries?: () => { slug: string }[] }>('/src/routes/*/*/+page.ts', {
+	// Every guide family lives under /docs since #365; the pre-move
+	// `src/routes/<family>/[slug]/` routes are redirect-only `+page.server.ts`
+	// files and so never match this glob.
+	import.meta.glob<{ entries?: () => { slug: string }[] }>('/src/routes/docs/*/*/+page.ts', {
 		eager: true
 	})
 )
 	.filter(([path]) => path.includes('/[slug]/'))
 	.map(([path, module]) => ({
-		// `/src/routes/reference/[slug]/+page.ts` → `/reference`
-		base: `/${path.split('/')[3]}`,
+		// `/src/routes/docs/reference/[slug]/+page.ts` → `/docs/reference`
+		base: path.replace(/^\/src\/routes/, '').replace(/\/\[slug\]\/\+page\.ts$/, ''),
 		slugs: new Set((module.entries?.() ?? []).map((entry) => entry.slug))
 	}))
 	.sort((a, b) => a.slugs.size - b.slugs.size);
 
 /**
- * The URL prefix a family's pages live under — `/reference` for
+ * The URL prefix a family's pages live under — `/docs/reference` for
  * `referenceGuides` — resolved through the route that renders them.
  *
  * The route is the only place a family's URL is actually defined, and its
  * `entries()` maps the family array, so the route that prerenders all of a
  * family's slugs is that family's route. Containment rather than equality
- * because a route may add slugs of its own: `/foundations` also prerenders
+ * because a route may add slugs of its own: `/docs/foundations` also prerenders
  * three renamed aliases that redirect.
  *
  * Pairing runs from the route's side, and one route claims one family — the

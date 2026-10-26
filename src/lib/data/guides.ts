@@ -129,7 +129,7 @@ export const foundationGuides: Guide[] = [
 		related: [
 			{
 				label: 'AI methods, object memory, and semantic search',
-				href: '/reference/ai-and-retrieval'
+				href: '/docs/reference/ai-and-retrieval'
 			}
 		]
 	},
@@ -165,7 +165,7 @@ export const foundationGuides: Guide[] = [
 				],
 				filename: 'org-to-org.ts',
 				code: `import {\n  ProfileCollection,\n  ProfileRelationshipTypeCollection\n} from '@happyvertical/smrt-profiles';\n\nconst types = await ProfileRelationshipTypeCollection.create({ db });\nawait types.getOrCreateBySlug('supplier', { name: 'Supplier', reciprocal: false });\n\nconst profiles = await ProfileCollection.create({ db });\nconst mill = await profiles.get('northern-mill');\nconst shop = await profiles.get('edmonton-shop');\nif (!mill || !shop) throw new Error('missing organization');\n\n// One directional row: the mill supplies the shop. No inverse is written.\nawait mill.addRelationship(shop, 'supplier');\n\n// Read it from the shop's side.\nconst suppliers = await shop.getRelationships({ typeSlug: 'supplier', direction: 'to' });`,
-				links: [{ label: 'Profile relationships', href: '/reference/profile-relationships' }]
+				links: [{ label: 'Profile relationships', href: '/docs/reference/profile-relationships' }]
 			},
 			{
 				title: 'What a relationship does not do',
@@ -186,9 +186,9 @@ export const foundationGuides: Guide[] = [
 			}
 		],
 		related: [
-			{ label: 'Profile relationships', href: '/reference/profile-relationships' },
-			{ label: 'Add people and accounts', href: '/foundations/users-and-profiles' },
-			{ label: 'smrt-profiles', href: '/reference/packages/smrt-profiles' }
+			{ label: 'Profile relationships', href: '/docs/reference/profile-relationships' },
+			{ label: 'Add people and accounts', href: '/docs/foundations/users-and-profiles' },
+			{ label: 'smrt-profiles', href: '/docs/reference/packages/smrt-profiles' }
 		]
 	},
 	{
@@ -297,7 +297,7 @@ export const foundationGuides: Guide[] = [
 				title: 'Postgres can check the same names on every row',
 				intro:
 					'A Postgres application can generate row-level security policies that check the same names. The request context publishes the resolved permissions to the database session. Each policy requires a tenant match and the applicable permission before a row operation. System context and super-admin sessions bypass these checks. Policy generation and application are deliberate steps. SQLite applications keep the catalog and guard but get no data-layer check.',
-				links: [{ label: 'Authorization model', href: '/reference/authorization' }]
+				links: [{ label: 'Authorization model', href: '/docs/reference/authorization' }]
 			},
 			{
 				title: 'Some packages contribute their own permissions',
@@ -306,8 +306,8 @@ export const foundationGuides: Guide[] = [
 			}
 		],
 		related: [
-			{ label: 'Authorization model', href: '/reference/authorization' },
-			{ label: 'Field policy operations', href: '/capabilities/field-policy-operations' }
+			{ label: 'Authorization model', href: '/docs/reference/authorization' },
+			{ label: 'Field policy operations', href: '/docs/capabilities/field-policy-operations' }
 		]
 	},
 	{
@@ -416,7 +416,9 @@ export const capabilityGuides: Guide[] = [
 					title: 'Runtime bridge availability',
 					body: `The current tooling reference is pinned to the released ${TOOLING_PINNED_VERSION} development MCP, which reads workspace and installed-package artifacts only. Treat runtime-environment awareness as available only when the installed development MCP explicitly exposes a runtime integration.`
 				},
-				links: [{ label: 'Development MCP and its runtime boundary', href: '/tooling/dev-mcp' }]
+				links: [
+					{ label: 'Development MCP and its runtime boundary', href: '/docs/tooling/dev-mcp' }
+				]
 			},
 			{
 				title: 'Use the same pattern in the visible interface',
@@ -430,7 +432,7 @@ export const capabilityGuides: Guide[] = [
 				links: [
 					{
 						label: 'Try the agent-assisted form pattern',
-						href: '/capabilities/agent-assisted-forms'
+						href: '/docs/capabilities/agent-assisted-forms'
 					}
 				]
 			},
@@ -457,10 +459,10 @@ export const capabilityGuides: Guide[] = [
 			}
 		],
 		related: [
-			{ label: 'Software as Agentic Domain Logic', href: '/reference/saadl' },
-			{ label: 'Agent-assisted forms', href: '/capabilities/agent-assisted-forms' },
-			{ label: 'The development MCP server', href: '/tooling/dev-mcp' },
-			{ label: 'WebMCP', href: '/capabilities/webmcp' }
+			{ label: 'Software as Agentic Domain Logic', href: '/docs/reference/saadl' },
+			{ label: 'Agent-assisted forms', href: '/docs/capabilities/agent-assisted-forms' },
+			{ label: 'The development MCP server', href: '/docs/tooling/dev-mcp' },
+			{ label: 'WebMCP', href: '/docs/capabilities/webmcp' }
 		]
 	},
 	{
@@ -518,17 +520,20 @@ export const capabilityGuides: Guide[] = [
 			}
 		],
 		related: [
-			{ label: 'Agent-legible applications', href: '/capabilities/agent-legible-applications' },
+			{
+				label: 'Agent-legible applications',
+				href: '/docs/capabilities/agent-legible-applications'
+			},
 			{
 				label: 'Canonical success-and-refusal demonstration',
-				href: '/ui#agent-addressable-components'
+				href: '/docs/ui#agent-addressable-components'
 			},
 			{
 				label: 'Standalone Playground demonstration',
 				href: '/playground?entry=agent-aware-form'
 			},
-			{ label: 'Control interaction contract', href: '/reference/control-interaction' },
-			{ label: 'WebMCP', href: '/capabilities/webmcp' }
+			{ label: 'Control interaction contract', href: '/docs/reference/control-interaction' },
+			{ label: 'WebMCP', href: '/docs/capabilities/webmcp' }
 		]
 	},
 	{
@@ -583,7 +588,7 @@ export const capabilityGuides: Guide[] = [
 		related: [
 			{
 				label: 'The remember() and recall() primitives underneath',
-				href: '/reference/ai-and-retrieval'
+				href: '/docs/reference/ai-and-retrieval'
 			}
 		]
 	},
@@ -778,15 +783,18 @@ export const nextPageIntent = defineIntent({
 				intro:
 					"A generated model tool executes over the generated REST fetchers as the authenticated page user. A declared interaction has no path to REST at all, and a component tool runs only the code its author wrote. If that code calls the application's routes, the same server checks apply; if it does not, there is no server round-trip to fail closed. REST authentication, tenant gates, writable-field rules, sensitive-field policy, and operation permissions are enforced in their existing server boundary rather than copied into browser tool code. The exposure policy above is a capability choice, not an authorization boundary.",
 				links: [
-					{ label: 'Exposure is not authorization', href: '/agents#exposure-is-not-authorization' }
+					{
+						label: 'Exposure is not authorization',
+						href: '/docs/agents#exposure-is-not-authorization'
+					}
 				]
 			}
 		],
 		related: [
-			{ label: 'Agents overview', href: '/agents' },
-			{ label: 'One vocabulary, four projections', href: '/agents#one-vocabulary' },
-			{ label: 'State, not the screen', href: '/agents#state-not-screen' },
-			{ label: 'UI overview', href: '/ui' }
+			{ label: 'Agents overview', href: '/docs/agents' },
+			{ label: 'One vocabulary, four projections', href: '/docs/agents#one-vocabulary' },
+			{ label: 'State, not the screen', href: '/docs/agents#state-not-screen' },
+			{ label: 'UI overview', href: '/docs/ui' }
 		],
 		sources: [
 			{
@@ -1051,10 +1059,10 @@ export const nextPageIntent = defineIntent({
 			}
 		],
 		related: [
-			{ label: 'Build a policy-aware form', href: '/capabilities/policy-aware-forms' },
-			{ label: 'Operate field policies', href: '/capabilities/field-policy-operations' },
-			{ label: 'Field policy API', href: '/reference/field-policies' },
-			{ label: 'Security defaults', href: '/reference/security' }
+			{ label: 'Build a policy-aware form', href: '/docs/capabilities/policy-aware-forms' },
+			{ label: 'Operate field policies', href: '/docs/capabilities/field-policy-operations' },
+			{ label: 'Field policy API', href: '/docs/reference/field-policies' },
+			{ label: 'Security defaults', href: '/docs/reference/security' }
 		]
 	},
 	{
@@ -1132,10 +1140,10 @@ export const nextPageIntent = defineIntent({
 			}
 		],
 		related: [
-			{ label: 'How resolution works', href: '/capabilities/field-policies' },
-			{ label: 'Operate field policies', href: '/capabilities/field-policy-operations' },
-			{ label: 'Field policy API', href: '/reference/field-policies' },
-			{ label: 'smrt-fields package', href: '/reference/packages/smrt-fields' }
+			{ label: 'How resolution works', href: '/docs/capabilities/field-policies' },
+			{ label: 'Operate field policies', href: '/docs/capabilities/field-policy-operations' },
+			{ label: 'Field policy API', href: '/docs/reference/field-policies' },
+			{ label: 'smrt-fields package', href: '/docs/reference/packages/smrt-fields' }
 		]
 	},
 	{
@@ -1254,11 +1262,14 @@ export const nextPageIntent = defineIntent({
 			}
 		],
 		related: [
-			{ label: 'How resolution works', href: '/capabilities/field-policies' },
-			{ label: 'Build a policy-aware form', href: '/capabilities/policy-aware-forms' },
-			{ label: 'Field policy API', href: '/reference/field-policies' },
-			{ label: 'Memberships and permissions', href: '/foundations/memberships-and-permissions' },
-			{ label: 'Security defaults', href: '/reference/security' },
+			{ label: 'How resolution works', href: '/docs/capabilities/field-policies' },
+			{ label: 'Build a policy-aware form', href: '/docs/capabilities/policy-aware-forms' },
+			{ label: 'Field policy API', href: '/docs/reference/field-policies' },
+			{
+				label: 'Memberships and permissions',
+				href: '/docs/foundations/memberships-and-permissions'
+			},
+			{ label: 'Security defaults', href: '/docs/reference/security' },
 			// Dated evidence: smrt-saas-starter at a pinned commit. smrt-start, the
 			// current template, has no field-policy code, so these stay as the only
 			// public end-to-end example (#338).

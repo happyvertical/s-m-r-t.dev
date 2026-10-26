@@ -777,31 +777,31 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'OIDC login against your identity provider',
 					body: 'Declare providers under packages.users.auth.oidc. Mount createOidcLoginHandler and createOidcCallbackHandler from the /sveltekit subpath. Each login creates an independent state, nonce, and PKCE verifier, and the challenge method is always S256. The callback checks state, the RFC 9207 authorization-response issuer, and provider errors. It also checks the JWKS-signed ID token and nonce before it reads claims. When the ID token omits email, the callback uses the UserInfo endpoint.',
-					href: '/foundations/users-and-profiles',
+					href: '/docs/foundations/users-and-profiles',
 					linkLabel: 'See the sign-in flows'
 				},
 				{
 					title: 'First identity binding fails closed',
 					body: 'A new issuer and subject can resolve to a canonical global Person that already has an owning User. Provisioning then stops with OidcProvisioningError code profile_owned. It does not create a new User, OIDC identity, or session. An application with an invitation or approval workflow can supply authorizeProfileOwner to authorize that first binding. A return value of undefined keeps the fail-closed default. A null value rejects the login.',
-					href: '/foundations/users-and-profiles',
+					href: '/docs/foundations/users-and-profiles',
 					linkLabel: 'See the sign-in flows'
 				},
 				{
 					title: 'Terminal device-code sign-in',
 					body: 'TerminalAuthService runs the device-code flow for command-line tools, and createRequest returns a device code, a short user code, and a verification URL. The CLI keeps the device code, and the person types the short user code. The service stores only a hash of the device code, and approval is idempotent. exchangeDeviceCode answers pending, expired, or approved. An approved answer includes a bearer token that resolves to the same session context as a browser cookie. Failed approvals have a per-user rate limit because user codes are short, and the handler reports the limit as 429.',
-					href: '/foundations/users-and-profiles',
+					href: '/docs/foundations/users-and-profiles',
 					linkLabel: 'See the sign-in flows'
 				},
 				{
 					title: 'Password sign-in without an identity provider',
 					body: 'PasswordCredentialService signs in existing, active users with an email and password; it never creates a user. The password lives in its own sensitive object with no generated REST, MCP, or CLI surface. Hashing is scrypt with a per-hash salt, and weaker hashes are upgraded on the next sign-in. Every refusal returns the same 401, so timing does not reveal whether an account exists. Mount the flow with createPasswordCredentialHandlers from the /sveltekit subpath.',
-					href: '/foundations/users-and-profiles',
+					href: '/docs/foundations/users-and-profiles',
 					linkLabel: 'See the sign-in flows'
 				},
 				{
 					title: 'A PIN layered on an enrolled device',
 					body: 'A shared tablet enrolled through the device-code grant holds a device-account bearer session. DeviceCredentialService lets a person sign in on that device with a short PIN. The result is a layered session with authMethod pin and a parentSessionId. The session is valid only while the device session is, never widens tenant scope, and signs out independently. Administering PINs needs users.pin.manage from a non-PIN session.',
-					href: '/foundations/users-and-profiles',
+					href: '/docs/foundations/users-and-profiles',
 					linkLabel: 'See the sign-in flows'
 				},
 				{
@@ -811,19 +811,19 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Sync the permission catalog after migration',
 					body: 'syncPermissionCatalog merges three sources: manifest permissions, custom entries from smrt.config.ts, and definitions added at runtime. It reconciles them into Permission rows. The operation reports created, updated, and unchanged slugs. You can run it on every deploy. It is additive and never deletes a stale permission, grants a role, or emits row-level-security SQL.',
-					href: '/reference/authorization',
+					href: '/docs/reference/authorization',
 					linkLabel: 'Authorization model'
 				},
 				{
 					title: 'Row-level security is generated, not hand-written',
 					body: 'generatePostgresPermissionSql inspects tenant-scoped models whose scope is required and returns the statements for them; applyPostgresPermissionPolicies executes those statements. Each table gets row-level security enabled and forced, plus one policy per action guarded by the shared smrt_rls_bypass, smrt_current_tenant_id, and smrt_has_permission functions. Models it cannot target safely are reported as skipped with a reason rather than silently omitted.',
-					href: '/reference/authorization',
+					href: '/docs/reference/authorization',
 					linkLabel: 'Authorization model'
 				},
 				{
 					title: 'A pinnable discovery contract',
 					body: 'The /app-contract subpath carries the versioned discovery artifact that a CLI or MCP consumer can validate and pin. createDiscoveryConformanceArtifact emits deterministically ordered JSON with a SHA-256 integrity digest, and validateDiscoveryConformanceArtifact checks structure, ordering, and that digest in one call.',
-					href: '/foundations/interfaces',
+					href: '/docs/foundations/interfaces',
 					linkLabel: 'Generated interfaces'
 				}
 			],
@@ -859,13 +859,13 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Relate two organizations',
 					body: 'Organization is a Profile subtype, so an organization relates to another the way a person does. Create a supplier type with getOrCreateBySlug, then call addRelationship on the mill with the shop and the supplier slug. A directional type writes that one row. A reciprocal type with a handler also writes the inverse, and the shipped handlers are friend, spouse, partner, colleague, and sibling. Read the link from either side with getRelationships, date it with addTerm, and name a third profile as its context.',
-					href: '/reference/profile-relationships',
+					href: '/docs/reference/profile-relationships',
 					linkLabel: 'Profile relationships'
 				},
 				{
 					title: 'A relationship is not a tenant link and not a permission',
 					body: 'ProfileRelationship carries one tenantId, and the Tenant record in smrt-users has no profile field. A tenant-to-tenant partnership is something an application builds on top, for example one Organization profile per tenant. Permission resolution never reads a relationship, so relating two profiles changes nothing about access.',
-					href: '/foundations/tenants',
+					href: '/docs/foundations/tenants',
 					linkLabel: 'Decide where data belongs'
 				}
 			],
@@ -959,25 +959,25 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'How resolution works',
 					body: 'Four layers merge low to high: the code seed from @field({ ui }), app rows, the tenant chain, then the signed-in user. A column left empty inherits from the layer below and resetting a customization deletes the row.',
-					href: '/capabilities/field-policies',
+					href: '/docs/capabilities/field-policies',
 					linkLabel: 'Read the field policy guide'
 				},
 				{
 					title: 'Building forms',
 					body: 'PolicyField adopts an existing form incrementally; ObjectForm renders the fields present in both the generated definitions and the resolved policy.',
-					href: '/capabilities/policy-aware-forms',
+					href: '/docs/capabilities/policy-aware-forms',
 					linkLabel: 'Build a policy-aware form'
 				},
 				{
 					title: 'Running it in production',
 					body: 'The form gear, the organization control panel, the two permissions, and the difference between a personal preference and an organization rule.',
-					href: '/capabilities/field-policy-operations',
+					href: '/docs/capabilities/field-policy-operations',
 					linkLabel: 'Operate field policies'
 				},
 				{
 					title: 'API and semantics',
 					body: 'Exported functions and types, the canonical object reference format, the default-value wire contract, write validation, and caching.',
-					href: '/reference/field-policies',
+					href: '/docs/reference/field-policies',
 					linkLabel: 'Field policy API'
 				},
 				{
@@ -1029,19 +1029,19 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Resolve tenant agents, do not list them',
 					body: 'TenantAgent rows are explicit bindings between a tenant and an agent class. Call resolveForTenant on TenantAgentCollection to find what a tenant can run. Supply the tenant id and a function that returns ancestor ids. The resolver merges manifest permission defaults under explicit overrides and walks the tenant tree for inherited agents. Each result identifies its explicit or inherited source tenant. A plain list returns only explicit rows, without inheritance, merged permissions, or provenance.',
-					href: '/foundations/tenants',
+					href: '/docs/foundations/tenants',
 					linkLabel: 'How tenants nest'
 				},
 				{
 					title: 'Delegation cannot widen authority',
 					body: 'A worker invocation carries a delegation envelope with the acting user, tenant, allowed tools, correlation id, and depth. Depth is capped at three, and a requested principal that broadens the parent user, tenant, or on-behalf-of subject is rejected. Tool access is fail-closed: an execution whose allowed-tool list is missing or empty permits no tools at all.',
-					href: '/capabilities/learning-agents',
+					href: '/docs/capabilities/learning-agents',
 					linkLabel: 'Learning and delegation'
 				},
 				{
 					title: 'Scheduling is declared here and run elsewhere',
 					body: 'AgentSchedule records the cron expression, next and last run, concurrency ceiling, timeout, target method, and success and failure counts. The runner that starts these schedules is in smrt-jobs. Thus, an application selects its execution host instead of receiving a background worker with the agent model.',
-					href: '/reference/packages/smrt-jobs',
+					href: '/docs/reference/packages/smrt-jobs',
 					linkLabel: 'smrt-jobs'
 				},
 				{
@@ -1204,13 +1204,13 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Mount the application surface',
 					body: 'createMcpAppServer wraps generated core tools with an application allow-list, public tool patterns, a per-principal tool policy, and workflow assertions. mountMcpRoute serves server/discover, tools/list, and tools/call from the sveltekit subpath; the REST-shaped mountMcpToolsRoute and mountMcpCallRoute aliases are deprecated for one release.',
-					href: '/tooling/app-mcp',
+					href: '/docs/tooling/app-mcp',
 					linkLabel: 'Generated and application MCP'
 				},
 				{
 					title: 'Authorization is terminated in front of it',
 					body: 'The package trusts the principal supplied by the application adapter. It does not implement an OAuth authorization server or validate bearer tokens. A public deployment validates the token at the gateway. The deployment supplies the request principal, tenant, and permissions only after successful validation.',
-					href: '/tooling/compatibility',
+					href: '/docs/tooling/compatibility',
 					linkLabel: 'Compatibility and operations'
 				}
 			]
@@ -1231,19 +1231,19 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'The Development MCP server',
 					body: 'The server reads source, manifests, and authored documentation from a workspace on disk. It never writes files, never executes generated code, and calls no model provider: review and architecture tools return deterministic findings plus a reusable prompt bundle.',
-					href: '/tooling/dev-mcp',
+					href: '/docs/tooling/dev-mcp',
 					linkLabel: 'smrt-dev-mcp'
 				},
 				{
 					title: "Runtime tools use the project's own core",
 					body: 'The standalone installation ships static tooling and the scanner, not smrt-core, SQL drivers, AI, or filesystem providers. Code generation, knowledge and context tools, agent skills, and introspection of a built manifest work without a runtime. Source-scan enrichment and the runtime tools resolve @happyvertical/smrt-core from the selected project; install its dependencies first.',
-					href: '/tooling/dev-mcp',
+					href: '/docs/tooling/dev-mcp',
 					linkLabel: 'smrt-dev-mcp'
 				},
 				{
 					title: 'Coverage instead of a silent empty answer',
 					body: 'Package discovery reads the workspace globs and records the source of each package object. An empty result produces an error-grade diagnostic that names the checked roots and artifact paths. Thus, an unreadable project is not reported as a project without a model.',
-					href: '/tooling/knowledge',
+					href: '/docs/tooling/knowledge',
 					linkLabel: 'Knowledge tooling'
 				}
 			]
@@ -1281,7 +1281,7 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Forms agents can assist with',
 					body: 'Controls can publish their identity, meaning, options, constraints, sensitivity, and current state. An adapter may point to a field or propose a change, while the form keeps consent and secret handling explicit.',
-					href: '/capabilities/agent-assisted-forms',
+					href: '/docs/capabilities/agent-assisted-forms',
 					linkLabel: 'Learn how agent-assisted forms work'
 				},
 				{
@@ -1340,13 +1340,13 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Navigation the manifest already describes',
 					body: 'tenantNavFromManifest turns a manifest into ordered navigation sections. It drops collections, internal and test classes, and items without a REST list route. It also drops single-table-inheritance subtypes that share a parent collection because the polymorphic endpoint already includes them. Pass permittedResources to filter the resources that a role can see. The filter checks the inheritance chain, so a permitted subtype keeps its applicable base link. Sorted output prevents manifest changes from reordering the sidebar.',
-					href: '/capabilities/application-shell',
+					href: '/docs/capabilities/application-shell',
 					linkLabel: 'How the shell is composed'
 				},
 				{
 					title: 'AppShell is the composed entry',
 					body: 'AppShell on the /app subpath wraps Provider, ThemeProvider, the theme CSS, AdminShell, and TenantNav built from the nav you pass. It is browser-only and lives beside /workspace, so the AdminShell barrel stays free of Provider. A dock snippet receives the data-surface registry, so a host places its assistant there without this package importing smrt-chat. Pass layout and onlayoutchange to own shell layout persistence, or neither to store it in user settings.',
-					href: '/capabilities/application-shell',
+					href: '/docs/capabilities/application-shell',
 					linkLabel: 'How the shell is composed'
 				},
 				{
@@ -1356,7 +1356,7 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'AdminShell replaced the first-generation shells',
 					body: 'The public workspace surface is the four-edge AdminShell contract. The earlier WorkspaceShell and RoleShell primitives remain only as migration references. No subpath exports them. Compose new work with AdminShell panels and focus tools. The earlier focus-tool dock stays available on the workspace/legacy subpath during application migration.',
-					href: '/capabilities/application-shell',
+					href: '/docs/capabilities/application-shell',
 					linkLabel: 'How the shell is composed'
 				},
 				{
@@ -1370,7 +1370,7 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'One language snapshot per render',
 					body: 'buildI18nSnapshot resolves server message templates for a locale, including tenant overrides. Provider accepts the result. The browser interpolates variables. A missing key uses the registered English default and then the key itself. Thus, a partly translated application still renders. The matching useI18n store and Trans component are in the UI foundation.',
-					href: '/reference/packages/smrt-ui',
+					href: '/docs/reference/packages/smrt-ui',
 					linkLabel: 'smrt-ui'
 				}
 			],

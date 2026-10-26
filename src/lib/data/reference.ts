@@ -50,10 +50,10 @@ export const referenceGuides: Guide[] = [
 		related: [
 			{
 				label: 'Agent-legible applications',
-				href: '/capabilities/agent-legible-applications'
+				href: '/docs/capabilities/agent-legible-applications'
 			},
-			{ label: 'Connect APIs, tools, and agents', href: '/foundations/interfaces' },
-			{ label: 'The development MCP server', href: '/tooling/dev-mcp' }
+			{ label: 'Connect APIs, tools, and agents', href: '/docs/foundations/interfaces' },
+			{ label: 'The development MCP server', href: '/docs/tooling/dev-mcp' }
 		]
 	},
 	{
@@ -110,9 +110,9 @@ export const referenceGuides: Guide[] = [
 			}
 		],
 		related: [
-			{ label: 'Authorization model', href: '/reference/authorization' },
-			{ label: 'Field policies', href: '/capabilities/field-policies' },
-			{ label: 'Field policy API', href: '/reference/field-policies' }
+			{ label: 'Authorization model', href: '/docs/reference/authorization' },
+			{ label: 'Field policies', href: '/docs/capabilities/field-policies' },
+			{ label: 'Field policy API', href: '/docs/reference/field-policies' }
 		]
 	},
 	{
@@ -198,14 +198,14 @@ export const referenceGuides: Guide[] = [
 		related: [
 			{
 				label: 'Canonical success-and-refusal demonstration',
-				href: '/ui#agent-addressable-components'
+				href: '/docs/ui#agent-addressable-components'
 			},
 			{
 				label: 'Standalone Playground demonstration',
 				href: '/playground?entry=agent-aware-form'
 			},
-			{ label: 'Interaction lifecycle', href: '/interaction#commands-and-lifecycle' },
-			{ label: 'Agent-assisted forms guide', href: '/capabilities/agent-assisted-forms' }
+			{ label: 'Interaction lifecycle', href: '/docs/interaction#commands-and-lifecycle' },
+			{ label: 'Agent-assisted forms guide', href: '/docs/capabilities/agent-assisted-forms' }
 		]
 	},
 	{
@@ -273,7 +273,9 @@ export const referenceGuides: Guide[] = [
 				],
 				filename: 'src/lib/server/register-permissions.ts',
 				code: `import { registerPermissionDefinitions } from '@happyvertical/smrt-users';\n\nconst unregister = registerPermissionDefinitions([\n  {\n    slug: 'invoices.export',\n    category: 'billing',\n    name: 'Export Invoices',\n    description: 'Allows exporting invoices'\n  }\n]);\n\n// The slug is now in catalog.permissions with source 'runtime'\n// and is eligible for syncPermissionCatalog() and the guard.\n// Call unregister() to remove it again.`,
-				links: [{ label: 'Field policy operations', href: '/capabilities/field-policy-operations' }]
+				links: [
+					{ label: 'Field policy operations', href: '/docs/capabilities/field-policy-operations' }
+				]
 			},
 			{
 				title: 'The guard is for the code you write yourself',
@@ -381,10 +383,10 @@ export const referenceGuides: Guide[] = [
 			}
 		],
 		related: [
-			{ label: 'Grant access', href: '/foundations/memberships-and-permissions' },
-			{ label: 'Security defaults', href: '/reference/security' },
-			{ label: 'Field policy operations', href: '/capabilities/field-policy-operations' },
-			{ label: 'smrt-users package', href: '/reference/packages/smrt-users' }
+			{ label: 'Grant access', href: '/docs/foundations/memberships-and-permissions' },
+			{ label: 'Security defaults', href: '/docs/reference/security' },
+			{ label: 'Field policy operations', href: '/docs/capabilities/field-policy-operations' },
+			{ label: 'smrt-users package', href: '/docs/reference/packages/smrt-users' }
 		]
 	},
 	{
@@ -718,10 +720,10 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			}
 		],
 		related: [
-			{ label: 'Decision adoption across packages', href: '/reference/decision-adoption' },
-			{ label: 'Learning agents', href: '/capabilities/learning-agents' },
-			{ label: 'Collections and list()', href: '/reference/collections' },
-			{ label: 'Model your application', href: '/foundations/objects-and-collections' }
+			{ label: 'Decision adoption across packages', href: '/docs/reference/decision-adoption' },
+			{ label: 'Learning agents', href: '/docs/capabilities/learning-agents' },
+			{ label: 'Collections and list()', href: '/docs/reference/collections' },
+			{ label: 'Model your application', href: '/docs/foundations/objects-and-collections' }
 		]
 	},
 	{
@@ -808,7 +810,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				links: [
 					{
 						label: 'Shared decision configuration and evaluate()',
-						href: '/reference/ai-and-retrieval'
+						href: '/docs/reference/ai-and-retrieval'
 					}
 				]
 			},
@@ -878,9 +880,9 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			}
 		],
 		related: [
-			{ label: 'AI methods and detailed decisions', href: '/reference/ai-and-retrieval' },
-			{ label: 'Authorization model', href: '/reference/authorization' },
-			{ label: 'Agents overview', href: '/agents' }
+			{ label: 'AI methods and detailed decisions', href: '/docs/reference/ai-and-retrieval' },
+			{ label: 'Authorization model', href: '/docs/reference/authorization' },
+			{ label: 'Agents overview', href: '/docs/agents' }
 		]
 	},
 	{
@@ -1103,8 +1105,8 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			}
 		],
 		related: [
-			{ label: 'Relationship loading', href: '/reference/relationships' },
-			{ label: 'Field naming', href: '/reference/field-naming' }
+			{ label: 'Relationship loading', href: '/docs/reference/relationships' },
+			{ label: 'Field naming', href: '/docs/reference/field-naming' }
 		]
 	},
 	{
@@ -1178,12 +1180,12 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 					'include takes relationship field names, not target class or table names.',
 					'Loading inside a component that renders per row puts the loop back. Prime the relationship where the query is issued, then read it during render.'
 				],
-				links: [{ label: 'Collections and list()', href: '/reference/collections' }]
+				links: [{ label: 'Collections and list()', href: '/docs/reference/collections' }]
 			}
 		],
 		related: [
-			{ label: 'Collections and list()', href: '/reference/collections' },
-			{ label: 'Profile relationships', href: '/reference/profile-relationships' }
+			{ label: 'Collections and list()', href: '/docs/reference/collections' },
+			{ label: 'Profile relationships', href: '/docs/reference/profile-relationships' }
 		]
 	},
 	{
@@ -1281,16 +1283,16 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 					body: 'These limits come from the shipped type declarations rather than from prose: no Tenant field references a Profile, and no permission layer references ProfileRelationship.'
 				},
 				links: [
-					{ label: 'Authorization model', href: '/reference/authorization' },
-					{ label: 'Decide where data belongs', href: '/foundations/tenants' }
+					{ label: 'Authorization model', href: '/docs/reference/authorization' },
+					{ label: 'Decide where data belongs', href: '/docs/foundations/tenants' }
 				]
 			}
 		],
 		related: [
-			{ label: 'Relationship loading', href: '/reference/relationships' },
-			{ label: 'Decide where data belongs', href: '/foundations/tenants' },
-			{ label: 'Authorization model', href: '/reference/authorization' },
-			{ label: 'smrt-profiles', href: '/reference/packages/smrt-profiles' }
+			{ label: 'Relationship loading', href: '/docs/reference/relationships' },
+			{ label: 'Decide where data belongs', href: '/docs/foundations/tenants' },
+			{ label: 'Authorization model', href: '/docs/reference/authorization' },
+			{ label: 'smrt-profiles', href: '/docs/reference/packages/smrt-profiles' }
 		]
 	},
 	{
@@ -1364,12 +1366,12 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 					'Fields marked sensitive are rejected as filter keys regardless of which spelling is used.',
 					'list({ select }) takes field names and returns rows keyed by those same names, so a projection never leaks column spellings into page code.'
 				],
-				links: [{ label: 'Collections and list()', href: '/reference/collections' }]
+				links: [{ label: 'Collections and list()', href: '/docs/reference/collections' }]
 			}
 		],
 		related: [
-			{ label: 'Collections and list()', href: '/reference/collections' },
-			{ label: 'Relationship loading', href: '/reference/relationships' }
+			{ label: 'Collections and list()', href: '/docs/reference/collections' },
+			{ label: 'Relationship loading', href: '/docs/reference/relationships' }
 		]
 	},
 	{
@@ -1505,11 +1507,11 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			}
 		],
 		related: [
-			{ label: 'How resolution works', href: '/capabilities/field-policies' },
-			{ label: 'Build a policy-aware form', href: '/capabilities/policy-aware-forms' },
-			{ label: 'Operate field policies', href: '/capabilities/field-policy-operations' },
-			{ label: 'smrt-fields package', href: '/reference/packages/smrt-fields' },
-			{ label: 'Security defaults', href: '/reference/security' }
+			{ label: 'How resolution works', href: '/docs/capabilities/field-policies' },
+			{ label: 'Build a policy-aware form', href: '/docs/capabilities/policy-aware-forms' },
+			{ label: 'Operate field policies', href: '/docs/capabilities/field-policy-operations' },
+			{ label: 'smrt-fields package', href: '/docs/reference/packages/smrt-fields' },
+			{ label: 'Security defaults', href: '/docs/reference/security' }
 		]
 	},
 	{
@@ -1558,9 +1560,9 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			}
 		],
 		related: [
-			{ label: 'Package Reference', href: '/reference/packages' },
-			{ label: 'UI Component Reference', href: '/reference/components' },
-			{ label: 'Generated interfaces', href: '/reference/interfaces' }
+			{ label: 'Package Reference', href: '/docs/reference/packages' },
+			{ label: 'UI Component Reference', href: '/docs/reference/components' },
+			{ label: 'Generated interfaces', href: '/docs/reference/interfaces' }
 		]
 	},
 	{
@@ -1600,8 +1602,8 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			}
 		],
 		related: [
-			{ label: 'What is a SAADL?', href: '/reference/saadl' },
-			{ label: 'Generated interfaces', href: '/reference/interfaces' }
+			{ label: 'What is a SAADL?', href: '/docs/reference/saadl' },
+			{ label: 'Generated interfaces', href: '/docs/reference/interfaces' }
 		]
 	}
 ];

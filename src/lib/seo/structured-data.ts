@@ -4,6 +4,7 @@ const websiteId = `${origin}/#website`;
 const sourceId = `${origin}/#source`;
 
 const sectionNames: Record<string, string> = {
+	docs: 'Docs',
 	foundations: 'Foundations',
 	capabilities: 'Capabilities',
 	guides: 'Guides',
@@ -11,11 +12,14 @@ const sectionNames: Record<string, string> = {
 	reference: 'Reference',
 	packages: 'Packages',
 	components: 'Components',
-	starters: 'Starters'
+	'getting-started': 'Getting Started'
 };
 
 export function isDocPath(pathname: string): boolean {
-	return /^\/(foundations|capabilities|guides|tooling|reference|starters)(\/|$)/.test(pathname);
+	// Technical families live under /docs since #365.
+	return /^\/docs\/(foundations|capabilities|guides|tooling|reference|getting-started)(\/|$)/.test(
+		pathname
+	);
 }
 
 /** Escape HTML delimiters, not JSON quotes: the result remains parseable JSON. */

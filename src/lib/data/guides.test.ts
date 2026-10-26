@@ -6,7 +6,7 @@ import { SMRT_VERSION } from '$lib/version';
 
 /**
  * Regression guard for the WebMCP guide correction (2026-09, bundled with the
- * `/agents` section). Before this fix the guide claimed custom model actions
+ * `/docs/agents` section). Before this fix the guide claimed custom model actions
  * "currently return a clear not-wired response" — false as of 0.43.9 — and
  * taught the superseded `collectionDefinitions` + `filter: (_d, tool) =>
  * tool.readOnly` registration path instead of the canonical

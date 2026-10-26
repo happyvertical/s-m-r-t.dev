@@ -52,6 +52,8 @@ const PROSE_PROPERTIES = new Set([
 	'kicker',
 	'heroLine',
 	'highlights',
+	'hint',
+	'inTheBox',
 	'intro',
 	'label',
 	'layer',
@@ -85,6 +87,7 @@ const PROSE_PROPERTIES = new Set([
 	'track',
 	'version-added',
 	'warning',
+	'word',
 	'youDecide'
 ]);
 
@@ -115,14 +118,18 @@ const NON_PROSE_PROPERTIES = new Set([
 	'entryTitle',
 	'evidence',
 	'evidenceId',
+	'example',
 	'exampleResource',
+	'embedded',
 	'family',
+	'feature',
 	'filename',
 	'guide',
 	'guides',
 	'group',
 	'groups',
 	'haystack',
+	'hideEntryList',
 	'href',
 	'icon',
 	'id',
@@ -149,7 +156,9 @@ const NON_PROSE_PROPERTIES = new Set([
 	'plane',
 	'prev',
 	'qualifiedId',
+	'recipes',
 	'records',
+	'reference',
 	'related',
 	'relatedModules',
 	'relatedReference',
@@ -167,6 +176,7 @@ const NON_PROSE_PROPERTIES = new Set([
 	'slugs',
 	'source',
 	'sources',
+	'src',
 	'status',
 	'stepCount',
 	'summarySynthesized',
@@ -227,6 +237,7 @@ const COPY_ATTRIBUTES = new Set([
 ]);
 
 const COMPONENT_NON_COPY_ATTRIBUTES = new Set([
+	'appPanel',
 	'article',
 	'backHref',
 	'backLink',

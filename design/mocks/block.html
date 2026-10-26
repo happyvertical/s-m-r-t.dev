@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Approvals · s-m-r-t block showcase</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Showcase: the site's friendly light UI. Paper, one orange accent, rounded cards, plain type. The fire stays on the map. */
+:root{
+  --paper:#edeff2; --surface:#ffffff; --ink:#14171c; --muted:#5b6470; --line:#dfe3e8;
+  --accent:#e35d12; --accent-soft:#ffe6d4; --accent-ink:#7a2e00;
+  --ok:#0f7a5f; --ok-soft:#d7f2e8; --danger:#c0362c; --warn:#b06a00; --warn-soft:#ffedd0;
+  --font-display:'Inter Tight','Avenir Next',Avenir,'Helvetica Neue',sans-serif;
+  --font-body:'Inter','Avenir Next',Avenir,'Helvetica Neue',sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --r-md:12px; --r-lg:20px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#14171c; --surface:#1c2027; --ink:#edeff2; --muted:#9aa3ae; --line:#2b313a;
+  --accent:#ff7a33; --accent-soft:#3a2010; --accent-ink:#ffd2b8;
+  --ok:#3fbf98; --ok-soft:#10302a; --danger:#ff6b61; --warn:#e8a23a; --warn-soft:#3a2a10; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#14171c; --surface:#1c2027; --ink:#edeff2; --muted:#9aa3ae; --line:#2b313a;
+  --accent:#ff7a33; --accent-soft:#3a2010; --accent-ink:#ffd2b8;
+  --ok:#3fbf98; --ok-soft:#10302a; --danger:#ff6b61; --warn:#e8a23a; --warn-soft:#3a2a10; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+button{font:inherit}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding-block:12px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));
+  background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px)}
+.brand{text-decoration:none;font-family:var(--font-mono);font-weight:500;font-size:18px;color:var(--accent)}
+.bar nav{display:flex;gap:6px}
+.bar nav a{text-decoration:none;font-weight:600;font-size:14px;padding:8px 14px;border-radius:999px}
+.bar nav a:hover{background:var(--surface)}
+.bar nav a.docs{background:var(--ink);color:var(--paper)}
+
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+.index{padding-block:18px 0}
+.index .crumb{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);margin-bottom:10px}
+.index .crumb a{text-decoration:none;font-weight:600;color:var(--accent-ink)}
+.index ul{list-style:none;margin:0;padding:0;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.index li a{display:inline-block;white-space:nowrap;text-decoration:none;font-weight:600;font-size:14px;padding:8px 14px;border:1.5px solid var(--line);border-radius:999px;background:var(--surface)}
+.index li a[aria-current]{background:var(--accent);border-color:transparent;color:#fff}
+
+.hero{padding-block:56px 32px;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:end}
+@media (max-width:767px){.hero{grid-template-columns:1fr;gap:24px;padding-block:36px 24px}}
+.hero .kicker{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink);margin:0 0 10px}
+.hero h1{font-family:var(--font-display);font-weight:800;font-size:clamp(44px,7vw,88px);line-height:.95;letter-spacing:-.03em;margin:0 0 18px}
+.hero p.one{font-size:clamp(19px,2.2vw,24px);line-height:1.35;margin:0;max-width:26ch;text-wrap:balance}
+.hero .saves{min-width:0;background:var(--surface);border-radius:var(--r-lg);padding:22px 24px;border:1px solid var(--line)}
+.hero .saves h2{font-family:var(--font-display);font-size:16px;margin:0 0 10px;letter-spacing:-.01em}
+.hero .saves ul{margin:0;padding-left:18px;color:var(--muted);font-size:15px}
+.hero .saves li+li{margin-top:4px}
+
+.demo{padding-block:16px 40px}
+.demo .frame{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.08)}
+.demo .chrome{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+.demo .chrome i{width:10px;height:10px;border-radius:50%;background:var(--line);display:inline-block}
+.demo .chrome i:first-child{background:var(--accent)}
+.demo .chrome .live{margin-left:auto;display:flex;align-items:center;gap:6px;color:var(--ok);font-weight:500}
+.demo .chrome .live::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.queue{display:grid;grid-template-columns:1.2fr .8fr;min-height:360px}
+@media (max-width:767px){.queue{grid-template-columns:1fr}}
+.pending{padding:18px;border-right:1px solid var(--line);min-width:0}
+@media (max-width:767px){.pending{border-right:0;border-bottom:1px solid var(--line)}}
+.pending h3,.trail h3{font-family:var(--font-display);font-size:14px;letter-spacing:.02em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.card{border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;display:grid;gap:10px;margin-bottom:10px;background:var(--paper)}
+.card .what{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.card .what b{font-weight:600}
+.card .what span{font-family:var(--font-mono);font-size:12px;color:var(--muted);white-space:nowrap}
+.card .who{font-size:14px;color:var(--muted)}
+.card .who em{font-style:normal;color:var(--ink);font-weight:500}
+.card .diff{font-family:var(--font-mono);font-size:13px;display:flex;gap:10px;flex-wrap:wrap}
+.card .diff .from{text-decoration:line-through;color:var(--muted)}
+.card .diff .to{color:var(--accent-ink);background:var(--accent-soft);padding:0 6px;border-radius:4px}
+.card .act{display:flex;gap:8px}
+.card button{border:0;border-radius:999px;padding:8px 16px;font-weight:600;cursor:pointer}
+.card .yes{background:var(--ok);color:#fff}
+.card .no{background:var(--surface);color:var(--ink);border:1.5px solid var(--line)}
+.card.gate{border-color:var(--warn);background:var(--warn-soft)}
+.card.gate .gatenote{font-size:13px;color:var(--warn);font-weight:500}
+.empty{color:var(--muted);font-size:14px;padding:24px 0;text-align:center}
+.trail{padding:18px;min-width:0}
+.trail ol{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.trail li{display:grid;grid-template-columns:auto 1fr;gap:10px;font-size:14px;align-items:start}
+.trail li .dot{width:10px;height:10px;border-radius:50%;margin-top:6px}
+.trail li.ok .dot{background:var(--ok)} .trail li.no .dot{background:var(--danger)} .trail li.sys .dot{background:var(--line)}
+.trail li time{display:block;font-family:var(--font-mono);font-size:11px;color:var(--muted)}
+.demo .caption{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:12px;font-size:14px;color:var(--muted)}
+.demo .caption code{font-family:var(--font-mono);font-size:12px;background:var(--surface);border:1px solid var(--line);padding:1px 6px;border-radius:4px}
+
+.box{padding-block:8px 48px}
+.box h2{font-family:var(--font-display);font-weight:800;font-size:clamp(24px,3vw,32px);letter-spacing:-.02em;margin:0 0 18px}
+.box p.lede{display:none}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:767px){.tiles{grid-template-columns:1fr}}
+.tile{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;display:flex;flex-direction:column}
+.tile .pic{aspect-ratio:16/10;max-width:100%;background:var(--paper);padding:18px;display:grid;place-items:center}
+.tile .pic>div{width:100%}
+.tile .meta{padding:14px 18px 18px}
+.tile .meta b{display:block;font-family:var(--font-display);font-size:17px;margin-bottom:2px}
+.tile .meta span{font-size:14px;color:var(--muted)}
+.mini-gate{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12px}
+.mini-gate .row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
+.mini-gate .row:last-child{border:0}
+.mini-gate .pill{font-family:var(--font-mono);font-size:10px;padding:2px 8px;border-radius:999px;background:var(--warn-soft);color:var(--warn)}
+.mini-gate .pill.auto{background:var(--ok-soft);color:var(--ok)}
+.mini-toast{background:var(--ink);color:var(--paper);border-radius:10px;padding:12px 14px;font-size:13px;display:flex;gap:10px;align-items:center;max-width:280px}
+.mini-toast i{width:8px;height:8px;border-radius:50%;background:var(--ok);display:inline-block}
+.mini-tool{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;font-family:var(--font-mono);font-size:11px;line-height:1.6;color:var(--muted)}
+.mini-tool b{color:var(--ink);font-weight:500}
+.mini-tool .k{color:var(--accent-ink)}
+
+.cta{padding-block:8px 64px}
+.cta .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:767px){.cta .row{grid-template-columns:1fr}}
+.big{min-width:0;display:flex;flex-direction:column;gap:6px;text-decoration:none;border-radius:var(--r-lg);padding:28px 28px 26px;background:var(--surface);border:1.5px solid var(--line);transition:transform .2s,box-shadow .2s}
+.big:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(0,0,0,.08)}
+.big b{font-family:var(--font-display);font-weight:800;font-size:30px;letter-spacing:-.02em;line-height:1}
+.big span{color:var(--muted);font-size:15px}
+.big.src b::after{content:" ↗";font-weight:600;color:var(--muted)}
+.cta .use{margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:var(--accent);color:#fff;border-radius:var(--r-lg);padding:20px 24px}
+.cta .use p{margin:0;font-size:16px}
+.cta .use a{text-decoration:none;font-family:var(--font-mono);font-weight:500;background:#fff;color:var(--accent-ink);padding:12px 20px;border-radius:999px;white-space:nowrap}
+
+.pn{display:flex;justify-content:space-between;gap:16px;padding-block:0 48px;font-size:14px}
+.pn a{text-decoration:none;color:var(--muted)}
+.pn a b{display:block;color:var(--ink);font-family:var(--font-display);font-size:18px}
+.pn a.next{text-align:right}
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="index.html">s-m-r-t</a>
+  <nav aria-label="Primary">
+    <a href="index.html#map">Blocks</a>
+    <a class="docs" href="#">Docs</a>
+  </nav>
+</header>
+
+<main class="wrap">
+  <nav class="index" id="index" aria-label="Agents blocks">
+    <div class="crumb"><a href="index.html#map">Build</a> › <a href="#index">Agents</a> › Approvals</div>
+    <ul>
+      <li><a href="#">Tools</a></li>
+      <li><a href="#">Blueprint</a></li>
+      <li><a href="#">Agents</a></li>
+      <li><a href="#">Forms</a></li>
+      <li><a href="#">Memory</a></li>
+      <li><a href="#" aria-current="page">Approvals</a></li>
+      <li><a href="#">Ingestion</a></li>
+      <li><a href="#">Jobs</a></li>
+      <li><a href="#">Webhooks</a></li>
+      <li><a href="#">Facts</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <p class="kicker">Agents</p>
+      <h1>Approvals</h1>
+      <p class="one">Some actions wait for a yes.</p>
+    </div>
+    <aside class="saves" aria-label="What you don't build">
+      <h2>In the box</h2>
+      <ul>
+        <li>The queue</li>
+        <li>The request card</li>
+        <li>The decision trail</li>
+        <li>The gate: which actions need a yes</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="demo" aria-label="Working example">
+    <div class="frame">
+      <div class="chrome"><i></i><i></i><i></i> Acme Corp · Approvals <span class="live">live example</span></div>
+      <div class="queue">
+        <div class="pending">
+          <h3>Waiting for you</h3>
+          <div id="pending"></div>
+        </div>
+        <div class="trail">
+          <h3>Decision trail</h3>
+          <ol id="trail"></ol>
+        </div>
+      </div>
+    </div>
+    <p class="caption"><span>Real <code>ApprovalQueue</code> component, example data. Try it.</span><button id="reset" style="border:0;background:none;color:var(--accent-ink);font-weight:600;cursor:pointer;padding:0">Reset example</button></p>
+  </section>
+
+  <section class="box">
+    <h2>Also in the box</h2>
+    <div class="tiles">
+      <div class="tile">
+        <div class="pic"><div class="mini-gate">
+          <div class="row"><span>Restock nick-nacks</span><span class="pill auto">auto</span></div>
+          <div class="row"><span>Refund an order</span><span class="pill">needs a yes</span></div>
+          <div class="row"><span>Discontinue a doodad</span><span class="pill">needs a yes</span></div>
+        </div></div>
+        <div class="meta"><b>Gate</b><span>Which actions wait. Agents hit the same gate.</span></div>
+      </div>
+      <div class="tile">
+        <div class="pic"><div class="mini-toast"><i></i>Approved · 40 widgets refunded to Maya Chen</div></div>
+        <div class="meta"><b>Notice</b><span>The requester hears back.</span></div>
+      </div>
+      <div class="tile">
+        <div class="pic"><div class="mini-tool">
+          <b>tool</b> <span class="k">approvals.request</span><br>
+          <b>effect</b> propose<br>
+          <b>then</b> a person confirms<br>
+          <b>refused</b> when the field is protected
+        </div></div>
+        <div class="meta"><b>Agent request</b><span>Same door, same yes.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="row">
+      <a class="big" href="#"><b>Reference</b><span>for developers and agents</span></a>
+      <a class="big src" href="https://github.com/happyvertical/smrt"><b>Source</b><span>MIT</span></a>
+    </div>
+    <div class="use">
+      <p>Tick <strong>Approvals</strong> when you build-a-boilerplate.</p>
+      <a href="index.html#build">build-a-boilerplate</a>
+    </div>
+  </section>
+
+  <nav class="pn" aria-label="Neighbouring blocks">
+    <a href="#"><span>Previous</span><b>Memory</b></a>
+    <a class="next" href="#"><span>Next</span><b>Ingestion</b></a>
+  </nav>
+</main>
+
+<script>
+const seed = [
+  { id:'r1', what:'Refund 40 widgets', amount:'$1,280.00', who:'Sam in Returns', via:'web', from:'paid', to:'refunded', gate:false },
+  { id:'r2', what:'Reprice the deluxe gizmo', amount:'SKU GZ-200', who:'pricing agent', via:'mcp', from:'$49.00', to:'$54.00', gate:false },
+  { id:'r3', what:'Discontinue the left-handed doodad', amount:'SKU DD-7', who:'cleanup agent', via:'cli', from:'active', to:'discontinued', gate:true },
+];
+const pendingEl = document.getElementById('pending'), trailEl = document.getElementById('trail');
+let items, trail;
+function reset(){ items = seed.map(x=>({...x})); trail = [{k:'ok', t:'08:51', s:'Approved restock of 200 nick-nacks · by Priya'},{k:'sys', t:'09:12', s:'3 requests waiting'}]; render(); }
+function stamp(){ const d=new Date(); return d.toTimeString().slice(0,5); }
+function decide(id, yes){
+  const it = items.find(x=>x.id===id); items = items.filter(x=>x.id!==id);
+  trail.unshift({k: yes?'ok':'no', t: stamp(), s: (yes?'Approved ':'Declined ')+it.what.toLowerCase()+' · by you'});
+  render();
+}
+function render(){
+  pendingEl.replaceChildren();
+  if (!items.length) { const e=document.createElement('p'); e.className='empty'; e.textContent='All clear. New requests from people and agents land here.'; pendingEl.append(e); }
+  items.forEach(it=>{
+    const c=document.createElement('div'); c.className='card'+(it.gate?' gate':'');
+    const what=document.createElement('div'); what.className='what';
+    const b=document.createElement('b'); b.textContent=it.what; const s=document.createElement('span'); s.textContent=it.amount; what.append(b,s);
+    const who=document.createElement('div'); who.className='who'; who.append('Requested by '); const em=document.createElement('em'); em.textContent=it.who; who.append(em, ` via ${it.via}`);
+    const diff=document.createElement('div'); diff.className='diff'; const f=document.createElement('span'); f.className='from'; f.textContent=it.from; const t=document.createElement('span'); t.className='to'; t.textContent=it.to; diff.append(f,'→',t);
+    c.append(what, who, diff);
+    if (it.gate){ const n=document.createElement('div'); n.className='gatenote'; n.textContent='Destructive action. Only an owner can approve this one.'; c.append(n); }
+    const act=document.createElement('div'); act.className='act';
+    const y=document.createElement('button'); y.className='yes'; y.textContent='Approve'; y.onclick=()=>decide(it.id,true);
+    const n=document.createElement('button'); n.className='no'; n.textContent='Decline'; n.onclick=()=>decide(it.id,false);
+    act.append(y,n); c.append(act); pendingEl.append(c);
+  });
+  trailEl.replaceChildren(...trail.map(e=>{ const li=document.createElement('li'); li.className=e.k; const d=document.createElement('span'); d.className='dot'; const w=document.createElement('div'); w.textContent=e.s; const tm=document.createElement('time'); tm.textContent=e.t; w.append(tm); li.append(d,w); return li; }));
+}
+document.getElementById('reset').onclick=reset; reset();
+</script>
+</body>
+</html>

@@ -104,7 +104,7 @@
 			<footer>
 				<strong>Packages used in this guide</strong>
 				<div>
-					{#each guide.packages as pkg (pkg)}<a href={`/reference/packages/${pkg}`}
+					{#each guide.packages as pkg (pkg)}<a href={`/docs/reference/packages/${pkg}`}
 							>@happyvertical/{pkg}</a
 						>{/each}
 				</div>

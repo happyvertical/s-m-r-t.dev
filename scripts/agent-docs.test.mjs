@@ -28,10 +28,13 @@ test('semantic Markdown preserves code, tables, links, escaping and excludes exe
 	const document = new JSDOM(
 		`<main><h1>A * title</h1><nav>Excluded nav</nav><script>excluded()</script><style>excluded{}</style><p>A [literal] <a href="child">link</a> and <code>{ x: 1 }</code></p><pre><code class="language-ts">const x = { value: &#96;ok&#96; };\n\nnext();</code></pre><table><tr><th>Key</th><th>Value</th></tr><tr><td>a|b</td><td>c</td></tr></table></main>`
 	).window.document;
-	const result = markdown(document.querySelector('main'), 'https://s-m-r-t.dev/reference/parent');
+	const result = markdown(
+		document.querySelector('main'),
+		'https://s-m-r-t.dev/docs/reference/parent'
+	);
 	assert.match(result, /# A \\\* title/);
 	assert.match(result, /A \\\[literal\\\]/);
-	assert.match(result, /\[link\]\(<https:\/\/s-m-r-t.dev\/reference\/child>\)/);
+	assert.match(result, /\[link\]\(<https:\/\/s-m-r-t.dev\/docs\/reference\/child>\)/);
 	assert.match(result, /` \{ x: 1 \} `/);
 	assert.match(result, /```ts\nconst x = \{ value: `ok` \};\n\nnext\(\);\n```/);
 	assert.match(result, /\| a\\\|b \| c \|/);
@@ -39,7 +42,7 @@ test('semantic Markdown preserves code, tables, links, escaping and excludes exe
 });
 
 test('all canonical pages match sitemap and exact decoded metadata', async () => {
-	const directory = await fixture(['/', '/reference/api']);
+	const directory = await fixture(['/', '/docs/reference/api']);
 	await writeFile(
 		path.join(directory, 'old.html'),
 		'<meta http-equiv="refresh" content="0;url=/">'
@@ -91,12 +94,12 @@ for (const [name, mutate, error] of [
 test('generates complete artifacts, preserves prose, includes full curated text and rejects stale output', async () => {
 	const routes = [
 		'/',
-		'/reference/api',
-		'/reference/packages',
-		'/reference/components',
-		'/reference/faq',
-		'/reference/packages/example',
-		'/reference/components/example'
+		'/docs/reference/api',
+		'/docs/reference/packages',
+		'/docs/reference/components',
+		'/docs/reference/faq',
+		'/docs/reference/packages/example',
+		'/docs/reference/components/example'
 	];
 	const directory = await fixture(routes);
 	const source = path.join(directory, 'source.txt');

@@ -166,7 +166,12 @@ export async function generate(directory = 'build', check = false, source = sour
 	const curated = [...prose.slice(start, end).matchAll(/https:\/\/s-m-r-t\.dev([^\s]*)/g)].map(
 		(match) => match[1] || '/'
 	);
-	curated.push('/reference/api', '/reference/packages', '/reference/components', '/reference/faq');
+	curated.push(
+		'/docs/reference/api',
+		'/docs/reference/packages',
+		'/docs/reference/components',
+		'/docs/reference/faq'
+	);
 	const selected = [...new Set(curated)].map((route) => {
 		const page = pages.find((page) => page.route === route);
 		if (!page) throw new Error(`Missing curated page: ${route}`);
@@ -175,7 +180,8 @@ export async function generate(directory = 'build', check = false, source = sour
 	const sections = new Map(
 		[
 			'Stack overview',
-			'Blocks',
+			'Features',
+			'Docs',
 			'Foundations',
 			'Capabilities',
 			'Guides',
@@ -186,14 +192,22 @@ export async function generate(directory = 'build', check = false, source = sour
 		].map((section) => [section, []])
 	);
 	for (const page of pages) {
-		const family = page.route.split('/')[1];
-		const section = page.route.startsWith('/reference/packages/')
+		// Technical families live under /docs since #365: /docs/<family>/….
+		const segments = page.route.split('/');
+		const family = segments[1] === 'docs' ? (segments[2] ?? 'docs') : segments[1];
+		const section = page.route.startsWith('/docs/reference/packages/')
 			? 'Packages'
-			: page.route.startsWith('/reference/components/')
+			: page.route.startsWith('/docs/reference/components/')
 				? 'Components'
-				: ['blocks', 'foundations', 'capabilities', 'guides', 'tooling', 'reference'].includes(
-							family
-					  )
+				: [
+							'features',
+							'docs',
+							'foundations',
+							'capabilities',
+							'guides',
+							'tooling',
+							'reference'
+					  ].includes(family)
 					? family[0].toUpperCase() + family.slice(1)
 					: 'Stack overview';
 		if (!sections.has(section)) sections.set(section, []);
@@ -211,7 +225,7 @@ export async function generate(directory = 'build', check = false, source = sour
 		[
 			'llms.txt',
 			prose.slice(0, start) +
-				'## Reading this documentation\n\nUse [llms-full.txt](https://s-m-r-t.dev/llms-full.txt) for curated full-page context. Every canonical page has a Markdown copy at its path plus `.md` (for example `/reference/api.md`); the homepage is `/index.md`. Project inquiries: [HappyVertical](https://happyvertical.com/llms.txt).\n\n' +
+				'## Reading this documentation\n\nUse [llms-full.txt](https://s-m-r-t.dev/llms-full.txt) for curated full-page context. Every canonical page has a Markdown copy at its path plus `.md` (for example `/docs/reference/api.md`); the homepage is `/index.md`. Project inquiries: [HappyVertical](https://happyvertical.com/llms.txt).\n\n' +
 				directoryText +
 				'\n\n' +
 				prose.slice(end)
