@@ -83,13 +83,17 @@ describe('sun frame logic', () => {
 });
 
 describe('SunCanvas', () => {
-	function stub(reduced: boolean) {
+	function stub(reduced: boolean, desktop = true) {
 		const ctx = fakeContext();
 		vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(ctx as never);
 		vi.stubGlobal(
 			'matchMedia',
 			vi.fn((query: string) => ({
-				matches: reduced && query.includes('reduced-motion'),
+				matches: query.includes('reduced-motion')
+					? reduced
+					: query.includes('min-width')
+						? desktop
+						: false,
 				media: query,
 				addEventListener: () => {},
 				removeEventListener: () => {}
@@ -118,5 +122,13 @@ describe('SunCanvas', () => {
 		expect(raf).toHaveBeenCalled();
 		expect(canvas.width).toBe(640);
 		expect(ctx.scale).toHaveBeenCalledWith(2, 2);
+	});
+
+	it('does not draw or animate below the desktop width, where the sun is hidden', () => {
+		const { ctx, raf } = stub(false, false);
+		render(SunCanvas);
+
+		expect(raf).not.toHaveBeenCalled();
+		expect(ctx.clearRect).not.toHaveBeenCalled();
 	});
 });

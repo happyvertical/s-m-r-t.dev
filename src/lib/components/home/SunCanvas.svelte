@@ -28,6 +28,8 @@
 		});
 
 		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+		// FeatureGraph hides the sun below this width; draw nothing while hidden.
+		const desktop = window.matchMedia('(min-width: 768px)');
 		let raf = 0;
 		const loop = (now: number) => {
 			sun.frame(now);
@@ -35,6 +37,8 @@
 		};
 		const run = () => {
 			cancelAnimationFrame(raf);
+			raf = 0;
+			if (!desktop.matches || document.hidden) return;
 			// Reduced motion: one still frame, redrawn only when the palette changes.
 			if (reduced.matches) sun.frame(performance.now());
 			else raf = requestAnimationFrame(loop);
@@ -42,13 +46,17 @@
 		run();
 
 		reduced.addEventListener('change', run);
+		desktop.addEventListener('change', run);
+		document.addEventListener('visibilitychange', run);
 		const stopWatching = watchScheme((next) => {
 			scheme = next;
-			if (reduced.matches) sun.frame(performance.now());
+			if (reduced.matches && desktop.matches) sun.frame(performance.now());
 		});
 		return () => {
 			cancelAnimationFrame(raf);
 			reduced.removeEventListener('change', run);
+			desktop.removeEventListener('change', run);
+			document.removeEventListener('visibilitychange', run);
 			stopWatching();
 		};
 	});
