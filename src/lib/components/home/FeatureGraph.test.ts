@@ -270,6 +270,71 @@ describe('group selection (#373)', () => {
 	});
 });
 
+describe('warp (#373)', () => {
+	function media(desktop: boolean, reduced: boolean) {
+		vi.stubGlobal(
+			'matchMedia',
+			vi.fn((query: string) => ({
+				matches: query.includes('reduced-motion')
+					? reduced
+					: query.includes('min-width')
+						? desktop
+						: false,
+				media: query,
+				addEventListener: () => {},
+				removeEventListener: () => {}
+			}))
+		);
+	}
+	const pressBuild = (container: Element) =>
+		container
+			.querySelector('svg a.hub')!
+			.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+
+	it('navigates directly on phones and under reduced motion, with no flag', async () => {
+		const { goto } = await import('$app/navigation');
+		for (const [desktop, reduced] of [
+			[false, false],
+			[true, true]
+		]) {
+			vi.mocked(goto).mockClear();
+			media(desktop, reduced);
+			const { container, unmount } = render(FeatureGraph);
+			pressBuild(container);
+			expect(goto).toHaveBeenCalledWith('/build-a-boilerplate');
+			expect(sessionStorage.getItem('smrt:warp')).toBeNull();
+			expect(container.querySelector('section.map')?.classList.contains('warping')).toBe(false);
+			unmount();
+		}
+	});
+
+	it('streaks the stars and fades the map first on desktop, then sets the flag and navigates', async () => {
+		const { goto } = await import('$app/navigation');
+		vi.mocked(goto).mockClear().mockResolvedValue(undefined);
+		media(true, false);
+		let now = 0;
+		const frames: FrameRequestCallback[] = [];
+		vi.spyOn(performance, 'now').mockImplementation(() => now);
+		vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => frames.push(cb));
+		vi.stubGlobal('cancelAnimationFrame', () => {});
+		const { container } = render(FeatureGraph);
+		frames.length = 0;
+
+		pressBuild(container);
+		await vi.waitFor(() =>
+			expect(container.querySelector('section.map')?.classList.contains('warping')).toBe(true)
+		);
+		expect(goto).not.toHaveBeenCalled();
+		now = 600;
+		frames.shift()!(now);
+		expect(goto).not.toHaveBeenCalled();
+		now = 1300;
+		frames.shift()!(now);
+		expect(goto).toHaveBeenCalledWith('/build-a-boilerplate');
+		expect(sessionStorage.getItem('smrt:warp')).not.toBeNull();
+	});
+});
+
 describe('fitGraph', () => {
 	it('stretches to the viewport and keeps every node inside it', () => {
 		for (const [w, h] of [

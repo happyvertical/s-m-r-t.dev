@@ -6,6 +6,7 @@
 		buildHref,
 		isMappable,
 		loadSelection,
+		markWarp,
 		saveSelection,
 		splitSelection
 	} from '$lib/build-handoff';
@@ -13,6 +14,7 @@
 	import { isSetOn, toggleSet } from '$lib/group-selection';
 	import type { FeatureSectionId } from '$lib/data/features';
 	import { fitGraph, HUB_RADIUS, type PlacedNode } from './graph-layout';
+	import { WARP_RAMP_MS } from './stars';
 	import Starfield from './Starfield.svelte';
 	import SunCanvas from './SunCanvas.svelte';
 	import { SUN_SIZE } from './sun';
@@ -127,16 +129,48 @@
 		event.preventDefault();
 		void goto(node.href);
 	}
+	// BUILD with the desktop map showing: the stars streak outward (speed ramps
+	// over WARP_RAMP_MS) while the graph and the sun fade, then the planner
+	// opens. Phones and reduced motion navigate directly.
+	let warp = $state<number | null>(null);
 	function onHubClick(event: MouseEvent) {
 		event.preventDefault();
-		void goto(buildTarget);
+		if (warp !== null) return;
+		const target = buildTarget;
+		const animate =
+			window.matchMedia('(min-width: 768px)').matches &&
+			!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		if (!animate) {
+			void goto(target);
+			return;
+		}
+		const start = performance.now();
+		warp = 0;
+		const step = (now: number) => {
+			const progress = Math.min(1, (now - start) / WARP_RAMP_MS);
+			warp = progress;
+			if (progress < 1) {
+				requestAnimationFrame(step);
+				return;
+			}
+			markWarp();
+			goto(target).catch(() => (warp = null));
+		};
+		requestAnimationFrame(step);
 	}
 </script>
 
 <svelte:window onkeydown={onWindowKeydown} />
 
-<section class="map" class:focus={lit !== null} id="map" aria-label="Features" bind:this={map}>
-	<Starfield />
+<section
+	class="map"
+	class:focus={lit !== null}
+	class:warping={warp !== null}
+	id="map"
+	aria-label="Features"
+	bind:this={map}
+>
+	<Starfield {warp} />
 	<div
 		class="sun-slot"
 		style:left="{graph.cx - SUN_SIZE / 2}px"
@@ -285,6 +319,15 @@
 		height: calc(100svh - var(--site-header-height, 3.5rem));
 		min-height: 560px;
 		overflow: hidden;
+	}
+	/* BUILD pressed: the graph and the sun fade while the stars streak. */
+	.map.warping svg,
+	.map.warping .sun-slot,
+	.map.warping .lede,
+	.map.warping .hint {
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.9s ease-in;
 	}
 	.sun-slot {
 		position: absolute;
