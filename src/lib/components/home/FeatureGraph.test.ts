@@ -242,4 +242,24 @@ describe('fitGraph', () => {
 		expect(off.getAttribute('aria-label')).toContain('not in the planner yet');
 		expect(container.querySelector('svg a.hub .badge')).toBeNull();
 	});
+
+	it('clears the selection with the Clear control and with Escape', async () => {
+		const { container } = render(FeatureGraph);
+		expect(container.querySelector('button.clear')).toBeNull();
+		const pick = () =>
+			mappable([...container.querySelectorAll('svg a.n.d2')])[0].dispatchEvent(
+				new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true })
+			);
+		pick();
+		await vi.waitFor(() => expect(container.querySelector('svg a.hub .badge')).not.toBeNull());
+		(container.querySelector('button.clear') as HTMLButtonElement).click();
+		await vi.waitFor(() => expect(container.querySelector('svg a.hub .badge')).toBeNull());
+		expect(JSON.parse(sessionStorage.getItem('smrt-map-selection')!)).toEqual([]);
+
+		pick();
+		await vi.waitFor(() => expect(container.querySelector('svg a.hub .badge')).not.toBeNull());
+		window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+		await vi.waitFor(() => expect(container.querySelector('svg a.hub .badge')).toBeNull());
+		expect(container.querySelector('button.clear')).toBeNull();
+	});
 });

@@ -31,6 +31,14 @@
 	const notYet = ' · not in the planner yet';
 	const isSelected = (node: PlacedNode) => isFeature(node) && selected.has(featureId(node));
 
+	function clear() {
+		selected.clear();
+		saveSelection(selected);
+	}
+	function onWindowKeydown(event: KeyboardEvent) {
+		if (event.key === 'Escape' && selected.size && !event.defaultPrevented) clear();
+	}
+
 	function toggle(node: PlacedNode) {
 		const id = featureId(node);
 		if (!selected.delete(id)) selected.add(id);
@@ -95,6 +103,8 @@
 		void goto(buildTarget);
 	}
 </script>
+
+<svelte:window onkeydown={onWindowKeydown} />
 
 <section class="map" class:focus={lit !== null} id="map" aria-label="Features" bind:this={map}>
 	<div
@@ -185,7 +195,12 @@
 	>
 		{focused ? `${focused.hint}${isUnmapped(focused) ? notYet : ''}` : ''}
 	</div>
-	<p class="lede">Hover a node</p>
+	<p class="lede">
+		Hover a node
+		{#if selected.size}
+			<button type="button" class="clear" onclick={clear}>Clear</button>
+		{/if}
+	</p>
 
 	<div class="stacks">
 		<div class="hubbtn"><a href={buildTarget}
@@ -391,6 +406,24 @@
 		text-transform: uppercase;
 		margin: 0;
 		pointer-events: none;
+	}
+	.clear {
+		pointer-events: auto;
+		margin-left: 1rem;
+		padding: 4px 10px;
+		background: none;
+		border: 1px solid var(--front-line);
+		color: var(--front-ink);
+		font: inherit;
+		letter-spacing: inherit;
+		text-transform: inherit;
+		cursor: pointer;
+	}
+	.clear:hover,
+	.clear:focus-visible {
+		background: var(--front-yellow);
+		color: var(--front-hint-ink);
+		outline: none;
 	}
 
 	.stacks {
