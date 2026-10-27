@@ -210,8 +210,10 @@
 
 	<div class="stacks">
 		<div class="hubbtn">
-			<a href={buildTarget} aria-label={count ? `BUILD, ${count} selected` : undefined}
-				>BUILD{#if count}<span class="badge" aria-hidden="true">{count}</span>{/if}</a
+			<a href={buildTarget}
+				>BUILD{#if count}<span class="badge" aria-hidden="true">{count}</span><span class="sr"
+						>, {count} selected</span
+					>{/if}</a
 			>
 			{#if selected.size}
 				<button type="button" class="clear" onclick={clear}>Clear selection</button>
@@ -488,6 +490,14 @@
 			letter-spacing: 0.18em;
 			padding: 22px;
 			font-size: 20px;
+		}
+		.hubbtn .sr {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
 		}
 		.hubbtn .clear {
 			display: block;

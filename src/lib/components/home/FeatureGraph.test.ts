@@ -269,10 +269,8 @@ describe('fitGraph', () => {
 		expect(container.querySelectorAll('.stacks li input')).toHaveLength(features.length);
 		box.click();
 		await vi.waitFor(() => expect(container.querySelector('.hubbtn .badge')).not.toBeNull());
-		expect(container.querySelector('.hubbtn a')?.textContent).toMatch(/^BUILD\s*1$/);
-		expect(container.querySelector('.hubbtn a')?.getAttribute('aria-label')).toBe(
-			'BUILD, 1 selected'
-		);
+		expect(container.querySelector('.hubbtn a')?.textContent).toMatch(/^BUILD\s*1, 1 selected$/);
+		expect(container.querySelector('.hubbtn a .sr')?.textContent).toBe(', 1 selected');
 		(container.querySelector('.hubbtn button.clear') as HTMLButtonElement).click();
 		await vi.waitFor(() => expect(container.querySelector('.hubbtn .badge')).toBeNull());
 		box.click();
