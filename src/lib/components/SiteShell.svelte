@@ -14,9 +14,8 @@
 	let {
 		pathname,
 		hash = '',
-		footer = true,
 		children
-	}: { pathname: string; hash?: string; footer?: boolean; children: Snippet } = $props();
+	}: { pathname: string; hash?: string; children: Snippet } = $props();
 	const shell = createDocsShellState();
 	const scrollMemory = createShellScrollMemory();
 	// The docs panel (the section map) lives only inside Docs (#365). Leaving
@@ -93,7 +92,7 @@
 			<div class="route-content" id="main-content" tabindex="-1">
 				{@render children()}
 			</div>
-			{#if footer}<Footer />{/if}
+			<Footer />
 		</div>
 	</AdminShell>
 </AppTheme>

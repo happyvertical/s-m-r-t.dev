@@ -124,7 +124,6 @@ const NON_PROSE_PROPERTIES = new Set([
 	'family',
 	'feature',
 	'filename',
-	'footer',
 	'guide',
 	'guides',
 	'group',

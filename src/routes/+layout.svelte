@@ -8,6 +8,7 @@
 	import '$lib/styles/variables.css';
 	import '@happyvertical/smrt-ui/themes/styles/all.css';
 	import { Provider } from '@happyvertical/smrt-svelte';
+	import PlannerShell from '$lib/components/PlannerShell.svelte';
 	import SiteShell from '$lib/components/SiteShell.svelte';
 
 	let { children } = $props();
@@ -41,8 +42,12 @@
 <Provider>
 	{#if isStandalone}
 		{@render children()}
+	{:else if isPlanner}
+		<PlannerShell pathname={page.url.pathname}>
+			{@render children()}
+		</PlannerShell>
 	{:else}
-		<SiteShell pathname={page.url.pathname} hash={page.url.hash} footer={!isPlanner}>
+		<SiteShell pathname={page.url.pathname} hash={page.url.hash}>
 			{@render children()}
 		</SiteShell>
 	{/if}

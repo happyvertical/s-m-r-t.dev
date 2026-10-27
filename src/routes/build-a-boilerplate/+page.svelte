@@ -85,8 +85,8 @@
 />
 
 <div class="planner-page">
-	<h1 class="planner-page__title">build-a-boilerplate</h1>
 	<section class="planner-host" aria-label="build-a-boilerplate">
+		<h1 class="planner-page__title">build-a-boilerplate</h1>
 		{#if selected.length && noticeOpen && (notice.on || notice.off)}
 			<div class="planner-notice" role="status">
 				<p>
@@ -136,7 +136,7 @@
 	/* The planner fills the screen below the site header and only its own
 	   regions scroll, so the page never does. */
 	.planner-page {
-		height: calc(100svh - var(--site-header-height));
+		height: 100%;
 		overflow: hidden;
 		background: var(--site-paper);
 		color: var(--site-ink);
@@ -162,7 +162,7 @@
 	/* The framework's AdminShell sizes itself to the whole viewport (100svh,
 	   100dvh on phones), which would run under the site header and the notice.
 	   Sized to the frame instead. Upstream ask: a height prop or variable on the
-	   shell (smrt#TBD, see issue #371). */
+	   shell (smrt#4416). */
 	.planner-frame > :global(.smrt-theme-root),
 	.planner-frame :global(.smrt-admin-shell) {
 		height: 100%;
