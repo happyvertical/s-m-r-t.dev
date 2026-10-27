@@ -42,54 +42,14 @@
 
 <style>
 	/*
-	 * The front page keeps its own palette, apart from the site's friendly UI.
-	 * Dark is fire; light is blue flame. The map follows the viewer's
-	 * preference and the site toggle (<html data-color-scheme>).
-	 * `*-ink` tokens are the same hues darkened or lightened until small text
-	 * on the page background passes AA (4.5:1); the plain tokens colour fills
-	 * and strokes only.
+	 * The front page is space in both colour schemes (#373): near-black with
+	 * stars and a fire sun. The site's light/dark toggle applies to every other
+	 * page, not this one. `*-ink` tokens are the same hues lightened until small
+	 * text on the page background passes AA (4.5:1); the plain tokens colour
+	 * fills and strokes only.
 	 */
 	.front {
 		--front-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
-		--front-bg: #eef1f5;
-		--front-ink: #14171c;
-		--front-dim: #5b6470;
-		--front-dim-text: #5b6470;
-		--front-line: #c9d1dc;
-		--front-line-1: #b7c6de;
-		--front-red: #1848c8;
-		--front-orange: #1f8fe6;
-		--front-yellow: #38c6ff;
-		--front-orange-ink: #0b62ad;
-		--front-yellow-ink: #0b62ad;
-		--front-hub-ink: #0a2a7a;
-		--front-door-hot-ink: #ffffff;
-		--front-hint-ink: #14171c;
-		background: var(--front-bg);
-		color: var(--front-ink);
-		font-family: var(--front-mono);
-		line-height: 1.4;
-	}
-	@media (prefers-color-scheme: dark) {
-		:global(html:not([data-color-scheme]):not([data-theme='light'])) .front {
-			--front-bg: #0a0604;
-			--front-ink: #ffe9c4;
-			--front-dim: #8a5a2a;
-			--front-dim-text: #c28a4f;
-			--front-line: #3a2412;
-			--front-line-1: #4a1e10;
-			--front-red: #ff3b1f;
-			--front-orange: #ff8c1a;
-			--front-yellow: #ffd21f;
-			--front-orange-ink: #ff8c1a;
-			--front-yellow-ink: #ffd21f;
-			--front-hub-ink: #3a0d00;
-			--front-door-hot-ink: #3a0d00;
-			--front-hint-ink: #0a0604;
-		}
-	}
-	:global(html[data-color-scheme='dark']) .front,
-	:global(html[data-theme='dark']) .front {
 		--front-bg: #0a0604;
 		--front-ink: #ffe9c4;
 		--front-dim: #8a5a2a;
@@ -104,6 +64,10 @@
 		--front-hub-ink: #3a0d00;
 		--front-door-hot-ink: #3a0d00;
 		--front-hint-ink: #0a0604;
+		background: var(--front-bg);
+		color: var(--front-ink);
+		font-family: var(--front-mono);
+		line-height: 1.4;
 	}
 
 	.visually-hidden {

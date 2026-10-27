@@ -10,7 +10,9 @@
 		primaryNavigation
 	} from '$lib/data/navigation';
 
-	let { pathname }: { pathname: string } = $props();
+	// `space` is the front page's header (#373): the map is space in both colour
+	// schemes, so the bar takes the dark scheme's tokens there and nowhere else.
+	let { pathname, space = false }: { pathname: string; space?: boolean } = $props();
 	let menuOpen = $state(false);
 	const shell = useAdminShell();
 	const theme = getThemeContext();
@@ -38,110 +40,154 @@
 
 <a class="skip-link" href="#main-content">Skip to content</a>
 
-<div class="app-bar">
-	<a href="/" class="brand" aria-label="s-m-r-t documentation home">
-		<img src={brandMark} alt="" width="30" height="30" />
-		<span>s-m-r-t</span>
-	</a>
+<div class="header-root" class:space>
+	<div class="app-bar">
+		<a href="/" class="brand" aria-label="s-m-r-t documentation home">
+			<img src={brandMark} alt="" width="30" height="30" />
+			<span>s-m-r-t</span>
+		</a>
 
-	{#if inDocs}
-		<button
-			class="panel-toggle"
-			type="button"
-			aria-label={`Sections: ${panelOpen ? 'close' : 'open'} documentation navigation`}
-			aria-expanded={panelOpen}
-			aria-controls="smrt-admin-shell-top-panel"
-			onclick={toggleDocumentationPanel}
-		>
-			<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-				<path d="M4 5.5h16M4 12h16M4 18.5h10"></path>
-			</svg>
-			<span>Sections</span>
-		</button>
-	{/if}
-
-	<nav class="desktop-navigation" aria-label="Primary navigation">
-		{#each primaryNavigation as item (item.href)}
-			<a
-				href={item.href}
-				aria-current={isPrimaryNavigationActive(item, pathname) ? 'page' : undefined}
-				>{item.label}</a
-			>
-		{/each}
-	</nav>
-
-	<div class="search"><DocsSearch /></div>
-
-	<div class="actions">
-		<Tooltip text="Open the s-m-r-t source on GitHub" placement="bottom">
-			<a
-				class="icon-action"
-				href="https://github.com/happyvertical/smrt"
-				target="_blank"
-				rel="noreferrer"
-				aria-label="Open the s-m-r-t source on GitHub"
-			>
-				<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-					<circle cx="12" cy="12" r="9"></circle>
-					<path
-						d="M9 19c-1-2-2-2-3-2M15 19v-3c0-1 0-2-1-2 3 0 5-1 5-4 0-1 0-2-1-3 0-1 0-2 0-2s-1 0-3 1c-2-1-4-1-6 0-2-1-3-1-3-1s0 1 0 2c-1 1-1 2-1 3 0 3 2 4 5 4-1 0-1 1-1 2v3"
-					></path>
-				</svg>
-			</a>
-		</Tooltip>
-
-		<Tooltip text={schemeActionLabel} placement="bottom">
+		{#if inDocs}
 			<button
-				class="icon-action"
+				class="panel-toggle"
 				type="button"
-				aria-label={schemeActionLabel}
-				data-next-color-scheme={nextScheme}
-				onclick={() => theme.toggleColorScheme()}
+				aria-label={`Sections: ${panelOpen ? 'close' : 'open'} documentation navigation`}
+				aria-expanded={panelOpen}
+				aria-controls="smrt-admin-shell-top-panel"
+				onclick={toggleDocumentationPanel}
 			>
-				{#if nextScheme === 'light'}
+				<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+					<path d="M4 5.5h16M4 12h16M4 18.5h10"></path>
+				</svg>
+				<span>Sections</span>
+			</button>
+		{/if}
+
+		<nav class="desktop-navigation" aria-label="Primary navigation">
+			{#each primaryNavigation as item (item.href)}
+				<a
+					href={item.href}
+					aria-current={isPrimaryNavigationActive(item, pathname) ? 'page' : undefined}
+					>{item.label}</a
+				>
+			{/each}
+		</nav>
+
+		<div class="search"><DocsSearch /></div>
+
+		<div class="actions">
+			<Tooltip text="Open the s-m-r-t source on GitHub" placement="bottom">
+				<a
+					class="icon-action"
+					href="https://github.com/happyvertical/smrt"
+					target="_blank"
+					rel="noreferrer"
+					aria-label="Open the s-m-r-t source on GitHub"
+				>
 					<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-						<circle cx="12" cy="12" r="3.5"></circle>
+						<circle cx="12" cy="12" r="9"></circle>
 						<path
-							d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+							d="M9 19c-1-2-2-2-3-2M15 19v-3c0-1 0-2-1-2 3 0 5-1 5-4 0-1 0-2-1-3 0-1 0-2 0-2s-1 0-3 1c-2-1-4-1-6 0-2-1-3-1-3-1s0 1 0 2c-1 1-1 2-1 3 0 3 2 4 5 4-1 0-1 1-1 2v3"
 						></path>
 					</svg>
-				{:else}
-					<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-						<path d="M20 15.5A8.4 8.4 0 0 1 8.5 4a8.5 8.5 0 1 0 11.5 11.5Z"></path>
-					</svg>
-				{/if}
-			</button>
-		</Tooltip>
+				</a>
+			</Tooltip>
+
+			<Tooltip text={schemeActionLabel} placement="bottom">
+				<button
+					class="icon-action"
+					type="button"
+					aria-label={schemeActionLabel}
+					data-next-color-scheme={nextScheme}
+					onclick={() => theme.toggleColorScheme()}
+				>
+					{#if nextScheme === 'light'}
+						<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+							<circle cx="12" cy="12" r="3.5"></circle>
+							<path
+								d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+							></path>
+						</svg>
+					{:else}
+						<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+							<path d="M20 15.5A8.4 8.4 0 0 1 8.5 4a8.5 8.5 0 1 0 11.5 11.5Z"></path>
+						</svg>
+					{/if}
+				</button>
+			</Tooltip>
+		</div>
+
+		<button
+			class="menu-toggle"
+			type="button"
+			aria-label={`${menuOpen ? 'Close' : 'Open'} primary navigation`}
+			aria-expanded={menuOpen}
+			aria-controls="mobile-primary-navigation"
+			onclick={togglePrimaryNavigation}
+		>
+			<svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true">
+				{#if menuOpen}<path d="m5 5 14 14M19 5 5 19"></path>{:else}<path d="M4 7h16M4 12h16M4 17h16"
+					></path>{/if}
+			</svg>
+		</button>
 	</div>
 
-	<button
-		class="menu-toggle"
-		type="button"
-		aria-label={`${menuOpen ? 'Close' : 'Open'} primary navigation`}
-		aria-expanded={menuOpen}
-		aria-controls="mobile-primary-navigation"
-		onclick={togglePrimaryNavigation}
-	>
-		<svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true">
-			{#if menuOpen}<path d="m5 5 14 14M19 5 5 19"></path>{:else}<path d="M4 7h16M4 12h16M4 17h16"
-				></path>{/if}
-		</svg>
-	</button>
+	{#if menuOpen}
+		<nav id="mobile-primary-navigation" class="mobile-navigation" aria-label="Primary navigation">
+			{#each primaryNavigation as item (item.href)}
+				<a
+					href={item.href}
+					aria-current={isPrimaryNavigationActive(item, pathname) ? 'page' : undefined}
+					onclick={() => (menuOpen = false)}>{item.label}</a
+				>
+			{/each}
+		</nav>
+	{/if}
 </div>
 
-{#if menuOpen}
-	<nav id="mobile-primary-navigation" class="mobile-navigation" aria-label="Primary navigation">
-		{#each primaryNavigation as item (item.href)}
-			<a
-				href={item.href}
-				aria-current={isPrimaryNavigationActive(item, pathname) ? 'page' : undefined}
-				onclick={() => (menuOpen = false)}>{item.label}</a
-			>
-		{/each}
-	</nav>
-{/if}
-
 <style>
+	.header-root {
+		display: contents;
+	}
+	/* The dark scheme's values, scoped to the bar on the front page. */
+	.header-root.space {
+		--smrt-color-primary: #ff7a1a;
+		--smrt-color-on-primary: #1a0e02;
+		--smrt-color-primary-container: #2a1a0c;
+		--smrt-color-on-primary-container: #ffb784;
+		--smrt-color-surface: #121417;
+		--smrt-color-on-surface: #c9cdd3;
+		--smrt-color-surface-variant: #181b1f;
+		--smrt-color-on-surface-variant: #9aa3af;
+		--smrt-color-surface-container: #121417;
+		--smrt-color-surface-container-low: #0e1013;
+		--smrt-color-surface-container-high: #181b1f;
+		--smrt-color-surface-container-highest: #1f242b;
+		--smrt-color-surface-container-lowest: #0a0c10;
+		--smrt-color-background: #0b0c0e;
+		--smrt-color-on-background: #c9cdd3;
+		--smrt-color-outline: #70747b;
+		--smrt-color-outline-variant: #23272e;
+		--site-paper: #0a0604;
+		--site-paper-deep: #121417;
+		--site-surface: #121417;
+		--site-ink: #c9cdd3;
+		--site-muted: #9aa3af;
+		--site-line: color-mix(in srgb, #23272e 55%, transparent);
+		--site-line-strong: #23272e;
+		--site-accent: #ff7a1a;
+		--site-accent-strong: #ff7a1a;
+		--site-accent-soft: #2a1a0c;
+		--site-accent-ink: #ff7a1a;
+		--site-on-accent: #1a0e02;
+		color: var(--site-ink);
+	}
+	/* The shell paints the bar's edge; match the map's space behind it. */
+	:global(.smrt-admin-shell__edge--top:has(.header-root.space)) {
+		background: #0a0604;
+		border-color: #23272e;
+	}
+
 	.skip-link {
 		position: fixed;
 		inset-block-start: 0.4rem;

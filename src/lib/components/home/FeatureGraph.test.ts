@@ -188,6 +188,153 @@ describe('FeatureGraph', () => {
 	});
 });
 
+describe('group selection (#373)', () => {
+	const sectionNode = (container: Element, word: string) =>
+		[...container.querySelectorAll('svg a.n.d1')].find(
+			(a) => a.querySelector('text')?.textContent === word
+		) as SVGAElement;
+	const click = (el: Element) =>
+		el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+	const badge = (container: Element) =>
+		container.querySelector('svg a.hub .badge text')?.textContent;
+	const everyday = (section: string) => features.filter((f) => f.section === section && f.everyday);
+
+	it('toggles the everyday set on a section circle click and clears the whole section on the next', async () => {
+		const { goto } = await import('$app/navigation');
+		vi.mocked(goto).mockClear();
+		const { container } = render(FeatureGraph);
+		const node = sectionNode(container, 'Content');
+
+		click(node.querySelector('circle.dot')!);
+		await vi.waitFor(() => expect(node.classList.contains('set')).toBe(true));
+		expect(goto).not.toHaveBeenCalled();
+		expect(container.querySelectorAll('svg a.n.d2.sel')).toHaveLength(everyday('content').length);
+		expect(node.getAttribute('aria-label')).toMatch(/section, selected: /);
+		expect(badge(container)).toBe(
+			String(everyday('content').filter((f) => f.recipes.length).length)
+		);
+
+		// A niche feature on top; the next click clears the lot, niche included.
+		const nicheId = features.find((f) => f.section === 'content' && !f.everyday)!.id;
+		const niche = [...container.querySelectorAll('svg a.n.d2')].find(
+			(a) => a.getAttribute('href') === `/features/content/${nicheId}`
+		)!;
+		click(niche.querySelector('circle.dot')!);
+		await vi.waitFor(() => expect(niche.classList.contains('sel')).toBe(true));
+		click(node.querySelector('circle.dot')!);
+		await vi.waitFor(() => expect(node.classList.contains('set')).toBe(false));
+		expect(container.querySelectorAll('svg a.n.d2.sel')).toHaveLength(0);
+	});
+
+	it('toggles with Space on a focused section circle and opens the index from the label', async () => {
+		const { goto } = await import('$app/navigation');
+		const { container } = render(FeatureGraph);
+		const node = sectionNode(container, 'Agents');
+
+		node.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true }));
+		await vi.waitFor(() => expect(node.classList.contains('set')).toBe(true));
+		click(node.querySelector('text')!);
+		expect(goto).toHaveBeenCalledWith(node.getAttribute('href'));
+	});
+
+	it('marks niche features in the hover text and gives a selected one the niche treatment', async () => {
+		const { container } = render(FeatureGraph);
+		const nicheF = features.find((f) => f.recipes.length && !f.everyday)!;
+		const everydayF = features.find((f) => f.recipes.length && f.everyday)!;
+		const find = (id: string) =>
+			[...container.querySelectorAll('svg a.n.d2')].find((a) =>
+				a.getAttribute('href')!.endsWith(`/${id}`)
+			)!;
+
+		expect(find(nicheF.id).getAttribute('aria-label')).toContain(' · niche');
+		expect(find(everydayF.id).getAttribute('aria-label')).not.toContain('niche');
+		click(find(nicheF.id).querySelector('circle.dot')!);
+		await vi.waitFor(() => expect(find(nicheF.id).classList.contains('sel')).toBe(true));
+		expect(find(nicheF.id).classList.contains('niche')).toBe(true);
+		expect(find(nicheF.id).querySelector('circle.ring')).not.toBeNull();
+	});
+
+	it('gives each phone stack an Everyday set checkbox that drives the same rule', async () => {
+		const { container } = render(FeatureGraph);
+		const boxes = container.querySelectorAll<HTMLInputElement>('.stack .set input');
+		expect(boxes).toHaveLength(9);
+
+		boxes[1].click();
+		await vi.waitFor(() => expect(boxes[1].checked).toBe(true));
+		expect(container.querySelectorAll('.stack')[1].querySelectorAll('li.sel')).toHaveLength(
+			everyday('basics').length
+		);
+		boxes[1].click();
+		await vi.waitFor(() => expect(boxes[1].checked).toBe(false));
+		expect(container.querySelectorAll('.stack li.sel')).toHaveLength(0);
+	});
+});
+
+describe('warp (#373)', () => {
+	function media(desktop: boolean, reduced: boolean) {
+		vi.stubGlobal(
+			'matchMedia',
+			vi.fn((query: string) => ({
+				matches: query.includes('reduced-motion')
+					? reduced
+					: query.includes('min-width')
+						? desktop
+						: false,
+				media: query,
+				addEventListener: () => {},
+				removeEventListener: () => {}
+			}))
+		);
+	}
+	const pressBuild = (container: Element) =>
+		container
+			.querySelector('svg a.hub')!
+			.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+
+	it('navigates directly on phones and under reduced motion, with no flag', async () => {
+		const { goto } = await import('$app/navigation');
+		for (const [desktop, reduced] of [
+			[false, false],
+			[true, true]
+		]) {
+			vi.mocked(goto).mockClear();
+			media(desktop, reduced);
+			const { container, unmount } = render(FeatureGraph);
+			pressBuild(container);
+			expect(goto).toHaveBeenCalledWith('/build-a-boilerplate');
+			expect(sessionStorage.getItem('smrt:warp')).toBeNull();
+			expect(container.querySelector('section.map')?.classList.contains('warping')).toBe(false);
+			unmount();
+		}
+	});
+
+	it('streaks the stars and fades the map first on desktop, then sets the flag and navigates', async () => {
+		const { goto } = await import('$app/navigation');
+		vi.mocked(goto).mockClear().mockResolvedValue(undefined);
+		media(true, false);
+		let now = 0;
+		const frames: ((_time: number) => void)[] = [];
+		vi.spyOn(performance, 'now').mockImplementation(() => now);
+		vi.stubGlobal('requestAnimationFrame', (cb: (_time: number) => void) => frames.push(cb));
+		vi.stubGlobal('cancelAnimationFrame', () => {});
+		const { container } = render(FeatureGraph);
+		frames.length = 0;
+
+		pressBuild(container);
+		await vi.waitFor(() =>
+			expect(container.querySelector('section.map')?.classList.contains('warping')).toBe(true)
+		);
+		expect(goto).not.toHaveBeenCalled();
+		now = 600;
+		frames.shift()!(now);
+		expect(goto).not.toHaveBeenCalled();
+		now = 1300;
+		frames.shift()!(now);
+		expect(goto).toHaveBeenCalledWith('/build-a-boilerplate');
+		expect(sessionStorage.getItem('smrt:warp')).not.toBeNull();
+	});
+});
+
 describe('fitGraph', () => {
 	it('stretches to the viewport and keeps every node inside it', () => {
 		for (const [w, h] of [

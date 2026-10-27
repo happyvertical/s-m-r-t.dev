@@ -85,7 +85,7 @@
 <AppTheme>
 	<AdminShell state={shell} edgeToggles={{ top: inDocs }} appPanel={inDocs ? docsPanel : undefined}>
 		{#snippet appBar()}
-			<Header {pathname} />
+			<Header {pathname} space={pathname === '/'} />
 		{/snippet}
 
 		<div class="site-content">

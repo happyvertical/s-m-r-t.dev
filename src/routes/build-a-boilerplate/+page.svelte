@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import SEO from '$lib/components/SEO.svelte';
-	import { noticeFor, parseFeatures, recipesFor, seedFor } from '$lib/build-handoff';
+	import { noticeFor, parseFeatures, recipesFor, seedFor, takeWarp } from '$lib/build-handoff';
 
 	// This page is called build-a-boilerplate; the package keeps its name.
 	// `Planner` is the complete planner: the framework's own cookbook-driven
@@ -32,6 +32,34 @@
 	// The one-line landing notice: what the selection switched on, no model
 	// needed. The visitor can dismiss it.
 	let noticeOpen = $state(true);
+
+	// Arriving from the map's warp (#373): the planner grows from a point to
+	// full size, and the notice waits until it has. Reduced motion, Back, a
+	// reload and a shared link skip it.
+	const GROW_MS = 1100;
+	let host: HTMLElement | undefined = $state();
+	let arriving = $state(false);
+	let grown = $state(true);
+	const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	function grow(node: HTMLElement) {
+		if (typeof node.animate !== 'function') return;
+		arriving = true;
+		grown = false;
+		const finish = () => {
+			arriving = false;
+			grown = true;
+		};
+		node
+			.animate(
+				[
+					{ transform: 'scale(0.04)', opacity: 0 },
+					{ opacity: 1, offset: 0.33 },
+					{ transform: 'scale(1)', opacity: 1 }
+				],
+				{ duration: GROW_MS, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'backwards' }
+			)
+			.finished.then(finish, finish);
+	}
 	const notice = $derived(noticeFor(selected));
 
 	async function onready({ controller, openAssistant }: PlannerHandle) {
@@ -64,6 +92,8 @@
 	onMount(() => {
 		let cancelled = false;
 		selected = parseFeatures(window.location.search);
+		// Read and clear even when motion is reduced, so the flag never lingers.
+		if (takeWarp() && !reducedMotion() && host) grow(host);
 		import('@happyvertical/smrt-planner').then(
 			(planner) => {
 				if (!cancelled) Planner = planner.Planner;
@@ -84,10 +114,10 @@
 	url="https://s-m-r-t.dev/build-a-boilerplate"
 />
 
-<div class="planner-page">
-	<section class="planner-host" aria-label="build-a-boilerplate">
+<div class="planner-page" class:arriving>
+	<section class="planner-host" aria-label="build-a-boilerplate" bind:this={host}>
 		<h1 class="planner-page__title">build-a-boilerplate</h1>
-		{#if selected.length && noticeOpen && (notice.on || notice.off)}
+		{#if grown && selected.length && noticeOpen && (notice.on || notice.off)}
 			<div class="planner-notice" role="status">
 				<p>
 					{#if notice.on}<span>{notice.on}</span>{/if}
@@ -140,6 +170,10 @@
 		overflow: hidden;
 		background: var(--site-paper);
 		color: var(--site-ink);
+	}
+	/* While the planner grows in it is still on the map's night sky. */
+	.planner-page.arriving {
+		background: #0a0604;
 	}
 	.planner-page__title {
 		position: absolute;

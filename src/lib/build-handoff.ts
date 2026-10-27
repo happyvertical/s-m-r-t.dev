@@ -117,3 +117,33 @@ export function seedFor(ids: string[]): {
 		]
 	};
 }
+
+/**
+ * The warp hand-off (#373): the map sets this flag just before it navigates, so
+ * the planner page grows in only when the visitor arrives from the map. The
+ * page reads and clears it, so Back, reload and a shared link never replay it.
+ * The value is a timestamp, so a flag left behind by an aborted navigation
+ * expires.
+ */
+export const WARP_KEY = 'smrt:warp';
+const WARP_MAX_AGE_MS = 15_000;
+
+export function markWarp(now = Date.now()): void {
+	try {
+		sessionStorage.setItem(WARP_KEY, String(now));
+	} catch {
+		// Storage can be blocked; the planner then simply appears.
+	}
+}
+
+/** True once, when the map just warped here; clears the flag either way. */
+export function takeWarp(now = Date.now()): boolean {
+	try {
+		const raw = sessionStorage.getItem(WARP_KEY);
+		sessionStorage.removeItem(WARP_KEY);
+		const at = Number(raw);
+		return raw !== null && Number.isFinite(at) && now - at >= 0 && now - at <= WARP_MAX_AGE_MS;
+	} catch {
+		return false;
+	}
+}

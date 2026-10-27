@@ -1,13 +1,16 @@
 import { recipes } from '@happyvertical/smrt-planner/core';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import {
 	buildHref,
 	isMappable,
+	markWarp,
 	noticeFor,
 	parseFeatures,
 	recipesFor,
 	seedFor,
-	splitSelection
+	splitSelection,
+	takeWarp,
+	WARP_KEY
 } from './build-handoff';
 import { features } from '$lib/data/features';
 
@@ -57,5 +60,24 @@ describe('build hand-off', () => {
 			off: `Not in the planner yet: ${off.word}`
 		});
 		expect(noticeFor([])).toEqual({ on: null, off: null });
+	});
+});
+
+describe('warp flag', () => {
+	beforeEach(() => sessionStorage.clear());
+
+	it('is true once after the map sets it, then cleared', () => {
+		expect(takeWarp()).toBe(false);
+		markWarp();
+		expect(sessionStorage.getItem(WARP_KEY)).not.toBeNull();
+		expect(takeWarp()).toBe(true);
+		expect(sessionStorage.getItem(WARP_KEY)).toBeNull();
+		expect(takeWarp()).toBe(false);
+	});
+
+	it('expires a flag an aborted navigation left behind', () => {
+		markWarp(1_000);
+		expect(takeWarp(1_000 + 60_000)).toBe(false);
+		expect(sessionStorage.getItem(WARP_KEY)).toBeNull();
 	});
 });

@@ -23,35 +23,20 @@ export interface SunPalette {
 	flare: [string, string, string];
 }
 
-/** Dark scheme: fire. Light scheme: blue flame (white-hot, cyan, blue). */
-export const sunPalettes = {
-	fire: {
-		core: '#ffe27a',
-		mid: '#ff9a1f',
-		rim: '#d8341a',
-		hot: '255,240,170',
-		warm: '255,120,40',
-		dark: '140,40,10',
-		limb: '255,190,80',
-		sparkHot: '255,200,90',
-		sparkCool: '255,110,30',
-		fade: '255,60,20',
-		flare: ['255,80,20', '255,150,40', '255,235,160']
-	},
-	blue: {
-		core: '#f4fbff',
-		mid: '#4fd2ff',
-		rim: '#1848c8',
-		hot: '230,250,255',
-		warm: '80,170,255',
-		dark: '20,50,140',
-		limb: '170,230,255',
-		sparkHot: '200,240,255',
-		sparkCool: '60,140,255',
-		fade: '30,80,220',
-		flare: ['40,90,230', '90,190,255', '235,250,255']
-	}
-} satisfies Record<string, SunPalette>;
+/** Fire, in both colour schemes: the map is space (#373). */
+export const firePalette: SunPalette = {
+	core: '#ffe27a',
+	mid: '#ff9a1f',
+	rim: '#d8341a',
+	hot: '255,240,170',
+	warm: '255,120,40',
+	dark: '140,40,10',
+	limb: '255,190,80',
+	sparkHot: '255,200,90',
+	sparkCool: '255,110,30',
+	fade: '255,60,20',
+	flare: ['255,80,20', '255,150,40', '255,235,160']
+};
 
 /** Side of the square sun canvas, in CSS pixels; room for the tallest flare. */
 export const SUN_SIZE = 320;
@@ -93,8 +78,7 @@ export interface SunOptions {
 	size: number;
 	/** Disc radius, in CSS pixels. */
 	radius: number;
-	/** Read on every frame, so a scheme change shows on the next one. */
-	palette: () => SunPalette;
+	palette?: SunPalette;
 	random?: () => number;
 }
 
@@ -132,7 +116,7 @@ export function createSun({
 	ctx: fx,
 	size,
 	radius: R,
-	palette,
+	palette: pal = firePalette,
 	random = Math.random
 }: SunOptions): Sun {
 	const C = size / 2;
@@ -175,7 +159,6 @@ export function createSun({
 	}
 
 	function frame(now: number) {
-		const pal = palette();
 		nextFlare ??= now + FIRST_FLARE_MS;
 		// Flares run on the clock, not on the frame count, so 120 Hz screens
 		// do not shorten them.

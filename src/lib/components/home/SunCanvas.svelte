@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { currentScheme, watchScheme, type Scheme } from './scheme';
 	import { HUB_RADIUS } from './graph-layout';
-	import { createSun, SUN_SIZE, sunPalettes } from './sun';
+	import { createSun, SUN_SIZE } from './sun';
 
 	// Positioned by its parent: the canvas fills a wrapper centred on the hub, so
 	// it follows the hub on resize.
@@ -19,13 +18,7 @@
 		canvas.height = size * dpr;
 		ctx.scale(dpr, dpr);
 
-		let scheme: Scheme = currentScheme();
-		const sun = createSun({
-			ctx,
-			size,
-			radius,
-			palette: () => (scheme === 'dark' ? sunPalettes.fire : sunPalettes.blue)
-		});
+		const sun = createSun({ ctx, size, radius });
 
 		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 		// FeatureGraph hides the sun below this width; draw nothing while hidden.
@@ -39,7 +32,7 @@
 			cancelAnimationFrame(raf);
 			raf = 0;
 			if (!desktop.matches || document.hidden) return;
-			// Reduced motion: one still frame, redrawn only when the palette changes.
+			// Reduced motion: one still frame, drawn once.
 			if (reduced.matches) sun.frame(performance.now());
 			else raf = requestAnimationFrame(loop);
 		};
@@ -48,16 +41,11 @@
 		reduced.addEventListener('change', run);
 		desktop.addEventListener('change', run);
 		document.addEventListener('visibilitychange', run);
-		const stopWatching = watchScheme((next) => {
-			scheme = next;
-			if (reduced.matches && desktop.matches) sun.frame(performance.now());
-		});
 		return () => {
 			cancelAnimationFrame(raf);
 			reduced.removeEventListener('change', run);
 			desktop.removeEventListener('change', run);
 			document.removeEventListener('visibilitychange', run);
-			stopWatching();
 		};
 	});
 </script>
