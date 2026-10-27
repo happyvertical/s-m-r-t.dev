@@ -287,3 +287,29 @@ describe('feature register', () => {
 		expect(getFeature('nope')).toBeUndefined();
 	});
 });
+
+describe('everyday sets (#373)', () => {
+	it('gives every section one to five everyday features', () => {
+		for (const section of sectionIds) {
+			const count = featuresInSection(section).filter((feature) => feature.everyday).length;
+			expect(count, `${section} everyday features`).toBeGreaterThanOrEqual(1);
+			expect(count, `${section} everyday features`).toBeLessThanOrEqual(5);
+		}
+	});
+
+	it('names the approved set', () => {
+		const everyday = (section: FeatureSectionId) =>
+			featuresInSection(section)
+				.filter((feature) => feature.everyday)
+				.map((feature) => feature.id);
+		expect(everyday('agents')).toEqual(['tools', 'blueprint', 'agents', 'approvals', 'jobs']);
+		expect(everyday('basics')).toEqual(['records', 'fields', 'people', 'tenants', 'reports']);
+		expect(everyday('screens')).toEqual(['shell']);
+		expect(everyday('content')).toEqual(['articles', 'assets', 'images', 'comments']);
+		expect(everyday('messaging')).toEqual(['chat', 'email']);
+		expect(everyday('commerce')).toEqual(['commerce', 'products', 'ledgers']);
+		expect(everyday('operations')).toEqual(['inventory', 'projects', 'support']);
+		expect(everyday('marketing')).toEqual(['campaigns', 'sales', 'analytics']);
+		expect(everyday('world')).toEqual(['events', 'places', 'tags']);
+	});
+});

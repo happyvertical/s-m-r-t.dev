@@ -77,6 +77,11 @@ export interface Feature {
 	inTheBox: string[];
 	/** Planner recipe ids this feature switches on. */
 	recipes: string[];
+	/**
+	 * In the section's everyday set (#373): what most builders in the section
+	 * reach for. Clicking a section on the map toggles that set; the rest are niche.
+	 */
+	everyday: boolean;
 }
 
 /**
@@ -123,6 +128,7 @@ interface FeatureSeed {
 	example: FeatureExample;
 	inTheBox: string[];
 	recipes?: string[];
+	everyday?: boolean;
 }
 
 function feature(seed: FeatureSeed): Feature {
@@ -131,7 +137,8 @@ function feature(seed: FeatureSeed): Feature {
 		...seed,
 		reference: packageReferenceUrl(primary),
 		source: packageSourceUrl(primary),
-		recipes: seed.recipes ?? []
+		recipes: seed.recipes ?? [],
+		everyday: seed.everyday ?? false
 	};
 }
 
@@ -194,6 +201,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'tools',
 		section: 'agents',
+		everyday: true,
 		word: 'Tools',
 		hint: 'One record declaration yields MCP, CLI and in-page tools.',
 		packages: ['smrt-app-mcp', 'smrt-core', 'smrt-web', 'smrt-mcp-apps', 'smrt-mcp-openai'],
@@ -203,6 +211,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'blueprint',
 		section: 'agents',
+		everyday: true,
 		word: 'Blueprint',
 		hint: 'A coding agent reads your records and interfaces without running anything.',
 		packages: ['smrt-scanner', 'smrt-dev-mcp'],
@@ -218,6 +227,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'agents',
 		section: 'agents',
+		everyday: true,
 		word: 'Agents',
 		hint: 'Scheduled and conversational agents run as a bound user with listed tools.',
 		packages: ['smrt-agents', 'smrt-personas', 'smrt-playbooks', 'smrt-prompts'],
@@ -245,6 +255,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'approvals',
 		section: 'agents',
+		everyday: true,
 		word: 'Approvals',
 		hint: 'Decision gates stored as data, with quorum, expiry and history.',
 		packages: ['smrt-approvals'],
@@ -264,6 +275,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'jobs',
 		section: 'agents',
+		everyday: true,
 		word: 'Jobs',
 		hint: 'Background work and cron schedules on a durable queue with retries.',
 		packages: ['smrt-jobs'],
@@ -294,6 +306,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'records',
 		section: 'basics',
+		everyday: true,
 		word: 'Records',
 		hint: 'One class describes a record; storage, migrations and interfaces follow.',
 		packages: ['smrt-core', 'smrt-types'],
@@ -303,6 +316,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'fields',
 		section: 'basics',
+		everyday: true,
 		word: 'Fields',
 		hint: 'Per-field labels, defaults, visibility and locks, layered by app, tenant, user.',
 		packages: ['smrt-fields'],
@@ -322,6 +336,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'people',
 		section: 'basics',
+		everyday: true,
 		word: 'People',
 		hint: 'Accounts, sign-in, profiles and roles, with one session model.',
 		packages: ['smrt-users', 'smrt-profiles', 'smrt-secrets', 'smrt-preferences'],
@@ -332,6 +347,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'tenants',
 		section: 'basics',
+		everyday: true,
 		word: 'Tenants',
 		hint: 'Tenants nest; scoped collections decide who sees which records.',
 		packages: ['smrt-tenancy', 'smrt-sites'],
@@ -356,6 +372,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'reports',
 		section: 'basics',
+		everyday: true,
 		word: 'Reports',
 		hint: 'Declared or asked-for reports, refreshed on schedule, rechecked against permissions.',
 		packages: ['smrt-reports'],
@@ -368,6 +385,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'shell',
 		section: 'screens',
+		everyday: true,
 		word: 'Shell',
 		hint: 'A themed application shell with navigation, panels, hotkeys and a palette.',
 		packages: ['smrt-svelte', 'smrt-ui', 'smrt-playground', 'smrt-languages'],
@@ -388,6 +406,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'articles',
 		section: 'content',
+		everyday: true,
 		word: 'Articles',
 		hint: 'Drafts, review, publication and corrections, each with a version.',
 		packages: ['smrt-content'],
@@ -397,6 +416,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'assets',
 		section: 'content',
+		everyday: true,
 		word: 'Assets',
 		hint: 'Files with versions and provenance behind a provider-neutral store.',
 		packages: ['smrt-assets', 'smrt-assets-local', 'smrt-assets-ergot'],
@@ -407,6 +427,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'images',
 		section: 'content',
+		everyday: true,
 		word: 'Images',
 		hint: 'Images with dimensions, alt text, variants and local adjustments.',
 		packages: ['smrt-images'],
@@ -434,6 +455,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'comments',
 		section: 'content',
+		everyday: true,
 		word: 'Comments',
 		hint: 'A discussion attached to any record, with mentions.',
 		packages: ['smrt-comments'],
@@ -446,6 +468,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'chat',
 		section: 'messaging',
+		everyday: true,
 		word: 'Chat',
 		hint: 'Rooms, threads and sessions that people and agents write into.',
 		packages: ['smrt-chat'],
@@ -456,6 +479,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'email',
 		section: 'messaging',
+		everyday: true,
 		word: 'Email',
 		hint: 'Email accounts and messages with send status and retries.',
 		packages: ['smrt-messages'],
@@ -486,6 +510,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'commerce',
 		section: 'commerce',
+		everyday: true,
 		word: 'Commerce',
 		hint: 'Contracts, orders, invoices and payments with rules on every status change.',
 		packages: ['smrt-commerce'],
@@ -508,6 +533,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'products',
 		section: 'commerce',
+		everyday: true,
 		word: 'Products',
 		hint: 'Products, materials, variant axes and SKUs your subtypes extend.',
 		packages: ['smrt-products'],
@@ -518,6 +544,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'ledgers',
 		section: 'commerce',
+		everyday: true,
 		word: 'Ledgers',
 		hint: 'Double-entry accounts and journals, immutable once posted.',
 		packages: ['smrt-ledgers'],
@@ -539,6 +566,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'inventory',
 		section: 'operations',
+		everyday: true,
 		word: 'Inventory',
 		hint: 'Stock levels derived from an append-only movement log.',
 		packages: ['smrt-inventory'],
@@ -558,6 +586,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'projects',
 		section: 'operations',
+		everyday: true,
 		word: 'Projects',
 		hint: 'Repositories, issues and pull requests synced from a provider.',
 		packages: ['smrt-projects'],
@@ -568,6 +597,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'support',
 		section: 'operations',
+		everyday: true,
 		word: 'Support',
 		hint: 'Cases that join from chat or email and keep their timeline.',
 		packages: ['smrt-support'],
@@ -608,6 +638,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'campaigns',
 		section: 'marketing',
+		everyday: true,
 		word: 'Campaigns',
 		hint: 'Budgets, lifecycle, channel links and immutable metric snapshots.',
 		packages: ['smrt-marketing'],
@@ -635,6 +666,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'sales',
 		section: 'marketing',
+		everyday: true,
 		word: 'Sales',
 		hint: 'CRM, referrals and a commissions core with payout settlement.',
 		packages: ['smrt-sales'],
@@ -645,6 +677,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'analytics',
 		section: 'marketing',
+		everyday: true,
 		word: 'Analytics',
 		hint: 'Properties, events and reports for GA4, Plausible and Matomo.',
 		packages: ['smrt-analytics'],
@@ -666,6 +699,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'events',
 		section: 'world',
+		everyday: true,
 		word: 'Events',
 		hint: 'Events nest without limit, repeat as series and carry participants.',
 		packages: ['smrt-events'],
@@ -676,6 +710,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'places',
 		section: 'world',
+		everyday: true,
 		word: 'Places',
 		hint: 'A place hierarchy with coordinates, geocoding and proximity search.',
 		packages: ['smrt-places'],
@@ -685,6 +720,7 @@ export const features: Feature[] = [
 	feature({
 		id: 'tags',
 		section: 'world',
+		everyday: true,
 		word: 'Tags',
 		hint: 'A tag hierarchy with context-scoped slugs and multilingual aliases.',
 		packages: ['smrt-tags'],

@@ -9,7 +9,9 @@
 		saveSelection,
 		splitSelection
 	} from '$lib/build-handoff';
-	import { featureSections, featuresInSection } from '$lib/data/features';
+	import { featureSections, featuresInSection, getFeature } from '$lib/data/features';
+	import { isSetOn, toggleSet } from '$lib/group-selection';
+	import type { FeatureSectionId } from '$lib/data/features';
 	import { fitGraph, HUB_RADIUS, type PlacedNode } from './graph-layout';
 	import Starfield from './Starfield.svelte';
 	import SunCanvas from './SunCanvas.svelte';
@@ -36,7 +38,26 @@
 	const featureId = (node: PlacedNode) => node.id.replace(/^feature:/, '');
 	const isUnmapped = (node: PlacedNode) => isFeature(node) && !isMappable(featureId(node));
 	const notYet = ' · not in the planner yet';
+	const niche = ' · niche';
 	const isSelected = (node: PlacedNode) => isFeature(node) && selected.has(featureId(node));
+	const sectionOf = (node: PlacedNode) =>
+		(isFeature(node)
+			? getFeature(featureId(node))?.section
+			: node.id.replace(/^section:/, '')) as FeatureSectionId;
+	const isNiche = (node: PlacedNode) =>
+		isFeature(node) && getFeature(featureId(node))?.everyday === false;
+	// Sentence added to the hover text and the accessible name of a feature.
+	const suffix = (node: PlacedNode) =>
+		`${isNiche(node) ? niche : ''}${isUnmapped(node) ? notYet : ''}`;
+	// A section circle is lit while its whole everyday set is selected.
+	const isSectionOn = (node: PlacedNode) => node.depth === 1 && isSetOn(selected, sectionOf(node));
+
+	function toggleSection(section: FeatureSectionId) {
+		const next = toggleSet(selected, section);
+		selected.clear();
+		for (const id of next) selected.add(id);
+		saveSelection(selected);
+	}
 
 	function clear() {
 		selected.clear();
@@ -88,18 +109,19 @@
 		hintEl.style.top = `${y + 14}px`;
 	});
 
-	// Circle and label keep their own handlers: the circle of a feature selects
-	// it, everything else (and every label) opens the page.
+	// Circle and label keep their own handlers: a feature's circle selects it, a
+	// section's circle toggles its everyday set, and every label opens the page.
 	function onCircleClick(event: MouseEvent, node: PlacedNode) {
 		event.preventDefault();
 		if (isFeature(node)) toggle(node);
-		else void goto(node.href);
+		else toggleSection(sectionOf(node));
 	}
 	// Space selects; Enter is the link's own click and opens.
 	function onNodeKeydown(event: KeyboardEvent, node: PlacedNode) {
-		if (event.key !== ' ' || !isFeature(node)) return;
+		if (event.key !== ' ') return;
 		event.preventDefault();
-		toggle(node);
+		if (isFeature(node)) toggle(node);
+		else toggleSection(sectionOf(node));
 	}
 	function onLabelClick(event: MouseEvent, node: PlacedNode) {
 		event.preventDefault();
@@ -144,10 +166,13 @@
 						class:on={lit?.has(node.id)}
 						class:sel={isSelected(node)}
 						class:unmapped={isUnmapped(node)}
+						class:niche={isNiche(node)}
+						class:set={isSectionOn(node)}
 						href={node.href}
-						aria-label="{node.word}{node.depth === 1 ? ' section' : ''}{isSelected(node)
+						aria-label="{node.word}{node.depth === 1 ? ' section' : ''}{isSelected(node) ||
+						isSectionOn(node)
 							? ', selected'
-							: ''}: {node.hint}{isUnmapped(node) ? notYet : ''}"
+							: ''}: {node.hint}{suffix(node)}"
 						onkeydown={(event) => onNodeKeydown(event, node)}
 						onmouseenter={() => (focused = node)}
 						onfocus={() => (focused = node)}
@@ -201,7 +226,7 @@
 		role="status"
 		aria-live="polite"
 	>
-		{focused ? `${focused.hint}${isUnmapped(focused) ? notYet : ''}` : ''}
+		{focused ? `${focused.hint}${suffix(focused)}` : ''}
 	</div>
 	<p class="lede">
 		Hover a node
@@ -224,6 +249,15 @@
 		{#each featureSections as section (section.id)}
 			<div class="stack">
 				<h2><a href="/features/{section.id}">{section.word}</a></h2>
+				<label class="set">
+					<input
+						type="checkbox"
+						checked={isSetOn(selected, section.id)}
+						aria-label="Everyday set for {section.word}"
+						onchange={() => toggleSection(section.id)}
+					/>
+					Everyday set
+				</label>
 				<ul>
 					{#each featuresInSection(section.id) as feature (feature.id)}
 						<li class:sel={selected.has(feature.id)} class:unmapped={!isMappable(feature.id)}>
@@ -322,6 +356,18 @@
 		stroke-width: 2.5;
 		opacity: 1;
 		pointer-events: none;
+	}
+	/* A selected niche feature: a dashed ring around the filled dot. */
+	.n.sel.niche:not(.unmapped) circle.ring {
+		stroke-dasharray: 4 3;
+	}
+	/* A section whose whole everyday set is selected is lit. */
+	.n.d1.set .dot {
+		fill: var(--front-orange);
+		opacity: 1;
+	}
+	.n.d1.set text {
+		fill: var(--front-orange-ink);
 	}
 	.n.sel .dot {
 		fill: var(--front-yellow);
@@ -536,6 +582,23 @@
 		.stack h2 a {
 			color: var(--front-orange-ink);
 			text-decoration: none;
+		}
+		.stack .set {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			min-height: 44px;
+			margin: -4px 0 6px;
+			font-size: 13px;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			color: var(--front-ink);
+		}
+		.stack .set input {
+			width: 20px;
+			height: 20px;
+			margin: 0;
+			accent-color: var(--front-orange);
 		}
 		.stack ul {
 			list-style: none;
