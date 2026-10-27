@@ -265,7 +265,7 @@
 			: ''}
 	</div>
 	<p class="lede">
-		Hover a node
+		Click a section for its everyday set · click a feature to add or drop it
 		{#if selected.size}
 			<button type="button" class="clear" onclick={clear}>Clear</button>
 		{/if}
@@ -564,7 +564,7 @@
 		}
 		svg,
 		.sun-slot,
-		:global(.stars),
+		.map :global(.stars),
 		.lede,
 		.hint {
 			display: none;
