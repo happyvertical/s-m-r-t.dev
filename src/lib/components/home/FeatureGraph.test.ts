@@ -119,7 +119,8 @@ describe('FeatureGraph', () => {
 		expect(goto).not.toHaveBeenCalled();
 		expect(node.querySelector('circle.ring')).not.toBeNull();
 		expect(node.getAttribute('aria-label')).toMatch(/, selected: /);
-		expect(container.querySelector('svg a.hub text')?.textContent).toBe('BUILD · 1');
+		expect(container.querySelector('svg a.hub > text')?.textContent).toBe('BUILD');
+		expect(container.querySelector('svg a.hub .badge text')?.textContent).toBe('1');
 		expect(JSON.parse(sessionStorage.getItem('smrt-map-selection')!)).toHaveLength(1);
 
 		node
@@ -138,7 +139,7 @@ describe('FeatureGraph', () => {
 			);
 		}
 		await vi.waitFor(() =>
-			expect(container.querySelector('svg a.hub text')?.textContent).toBe('BUILD · 3')
+			expect(container.querySelector('svg a.hub .badge text')?.textContent).toBe('3')
 		);
 		const href = container.querySelector('svg a.hub')!.getAttribute('href')!;
 		expect(href).toMatch(/^\/build-a-boilerplate\?features=[a-z-]+(,[a-z-]+){2}$/);
@@ -146,7 +147,7 @@ describe('FeatureGraph', () => {
 
 		const again = render(FeatureGraph);
 		await vi.waitFor(() =>
-			expect(again.container.querySelector('svg a.hub text')?.textContent).toBe('BUILD · 3')
+			expect(again.container.querySelector('svg a.hub .badge text')?.textContent).toBe('3')
 		);
 		expect(again.container.querySelectorAll('svg a.n.sel')).toHaveLength(3);
 	});

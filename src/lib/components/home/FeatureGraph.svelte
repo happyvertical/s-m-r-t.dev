@@ -162,7 +162,13 @@
 				onclick={onHubClick}
 			>
 				<circle r={HUB_RADIUS} />
-				<text y="7" text-anchor="middle">{count ? `BUILD · ${count}` : 'BUILD'}</text>
+				<text y="7" text-anchor="middle">BUILD</text>
+				{#if count}
+					<g class="badge" transform="translate({HUB_RADIUS * 0.74},{HUB_RADIUS * 0.74})">
+						<circle r="13" />
+						<text y="4.5" text-anchor="middle">{count}</text>
+					</g>
+				{/if}
 			</a>
 		</g>
 	</svg>
@@ -178,7 +184,9 @@
 	<p class="lede">Hover a node</p>
 
 	<div class="stacks">
-		<div class="hubbtn"><a href={buildTarget}>{count ? `BUILD · ${count}` : 'BUILD'}</a></div>
+		<div class="hubbtn"><a href={buildTarget}
+				>BUILD{#if count}<span class="badge" aria-hidden="true">{count}</span>{/if}</a
+			></div>
 		{#each featureSections as section (section.id)}
 			<div class="stack">
 				<h2><a href="/features/{section.id}">{section.word}</a></h2>
@@ -312,6 +320,16 @@
 		stroke-width: 3;
 		stroke-dasharray: 4 3;
 	}
+	.hub .badge circle {
+		fill: var(--front-ink);
+		stroke: var(--front-bg);
+		stroke-width: 2;
+	}
+	.hub .badge text {
+		font-size: 13px;
+		letter-spacing: 0;
+		fill: var(--front-bg);
+	}
 	.hub text {
 		font-family: var(--front-mono);
 		font-weight: 700;
@@ -402,6 +420,17 @@
 			letter-spacing: 0.18em;
 			padding: 22px;
 			font-size: 20px;
+		}
+		.hubbtn .badge {
+			display: inline-block;
+			min-width: 1.6em;
+			margin-left: 0.8em;
+			padding: 2px 6px;
+			border-radius: 999px;
+			background: var(--front-ink);
+			color: var(--front-bg);
+			font-size: 14px;
+			letter-spacing: 0;
 		}
 		.stack {
 			border: 1px solid var(--front-line);
