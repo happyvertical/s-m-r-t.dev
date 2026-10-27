@@ -23,11 +23,11 @@
 		await tick(); // let the new page's <title> land before reading it
 		matomo?.pageView(to.url, document.title);
 	});
-	// The playground and build-a-boilerplate bring their own chrome: the planner
-	// runs inside the framework's `AppShell` (see `build-a-boilerplate/+page.svelte`).
-	const isStandalone = $derived(
-		page.url.pathname === '/playground' ||
-			page.url.pathname === '/build-a-boilerplate' ||
+	// The playground brings its own chrome. build-a-boilerplate keeps the site
+	// header and drops the footer: the planner fills the screen below it.
+	const isStandalone = $derived(page.url.pathname === '/playground');
+	const isPlanner = $derived(
+		page.url.pathname === '/build-a-boilerplate' ||
 			page.url.pathname.startsWith('/build-a-boilerplate/')
 	);
 </script>
@@ -42,7 +42,7 @@
 	{#if isStandalone}
 		{@render children()}
 	{:else}
-		<SiteShell pathname={page.url.pathname} hash={page.url.hash}>
+		<SiteShell pathname={page.url.pathname} hash={page.url.hash} footer={!isPlanner}>
 			{@render children()}
 		</SiteShell>
 	{/if}

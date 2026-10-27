@@ -37,9 +37,9 @@
 		await openAssistant?.();
 	}
 
-	// The way back to the documentation, rendered by the planner at the start
-	// of its own header beside the brand.
-	const backLink = { href: '/', label: 'Back to documentation' };
+	// The way back to the map, rendered by the planner at the start of its own
+	// header beside the brand; the site header above it holds the rest.
+	const backLink = { href: '/', label: 'Back to the map' };
 
 	// On-device inference first: the AI page offers to download a small model
 	// (WebLLM) into the visitor's browser, so nothing leaves their device and
@@ -79,7 +79,7 @@
 	url="https://s-m-r-t.dev/build-a-boilerplate"
 />
 
-<div class="planner-page" id="main-content">
+<div class="planner-page">
 	<h1 class="planner-page__title">build-a-boilerplate</h1>
 	<section class="planner-host" aria-label="build-a-boilerplate">
 		{#if Planner}
@@ -111,10 +111,10 @@
 </div>
 
 <style>
-	/* The planner is the page: its shell sizes itself to the viewport and
-	   only its own regions scroll, so the page never does. */
+	/* The planner fills the screen below the site header and only its own
+	   regions scroll, so the page never does. */
 	.planner-page {
-		height: 100svh;
+		height: calc(100svh - var(--site-header-height));
 		overflow: hidden;
 		background: var(--site-paper);
 		color: var(--site-ink);
