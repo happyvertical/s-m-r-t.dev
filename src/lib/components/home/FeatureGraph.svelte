@@ -2,7 +2,13 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { SvelteSet } from 'svelte/reactivity';
-	import { buildHref, loadSelection, saveSelection } from '$lib/build-handoff';
+	import {
+		buildHref,
+		isMappable,
+		loadSelection,
+		saveSelection,
+		splitSelection
+	} from '$lib/build-handoff';
 	import { featureSections, featuresInSection } from '$lib/data/features';
 	import { fitGraph, HUB_RADIUS, type PlacedNode } from './graph-layout';
 	import SunCanvas from './SunCanvas.svelte';
@@ -22,17 +28,28 @@
 	// prerendered page is the empty selection; kept in sessionStorage so a
 	// showcase visit and Back return to it.
 	const selected = new SvelteSet<string>();
-	const count = $derived(selected.size);
+	// Only features the planner has a recipe for count toward BUILD (smrt#4409).
+	const count = $derived(splitSelection(selected).mapped.length);
 	const buildTarget = $derived(buildHref(selected));
 	const isFeature = (node: PlacedNode) => node.depth === 2;
 	const featureId = (node: PlacedNode) => node.id.replace(/^feature:/, '');
+	const isUnmapped = (node: PlacedNode) => isFeature(node) && !isMappable(featureId(node));
+	const notYet = ' · not in the planner yet';
 	const isSelected = (node: PlacedNode) => isFeature(node) && selected.has(featureId(node));
 
-	function toggle(node: PlacedNode) {
-		const id = featureId(node);
+	function clear() {
+		selected.clear();
+		saveSelection(selected);
+	}
+	function onWindowKeydown(event: KeyboardEvent) {
+		if (event.key === 'Escape' && selected.size && !event.defaultPrevented) clear();
+	}
+
+	function toggleId(id: string) {
 		if (!selected.delete(id)) selected.add(id);
 		saveSelection(selected);
 	}
+	const toggle = (node: PlacedNode) => toggleId(featureId(node));
 
 	// The focused node, its section and, for a section, all of its features.
 	const lit = $derived.by(() => {
@@ -93,6 +110,8 @@
 	}
 </script>
 
+<svelte:window onkeydown={onWindowKeydown} />
+
 <section class="map" class:focus={lit !== null} id="map" aria-label="Features" bind:this={map}>
 	<div
 		class="sun-slot"
@@ -122,10 +141,11 @@
 						class="n d{node.depth}"
 						class:on={lit?.has(node.id)}
 						class:sel={isSelected(node)}
+						class:unmapped={isUnmapped(node)}
 						href={node.href}
 						aria-label="{node.word}{node.depth === 1 ? ' section' : ''}{isSelected(node)
 							? ', selected'
-							: ''}: {node.hint}"
+							: ''}: {node.hint}{isUnmapped(node) ? notYet : ''}"
 						onkeydown={(event) => onNodeKeydown(event, node)}
 						onmouseenter={() => (focused = node)}
 						onfocus={() => (focused = node)}
@@ -162,7 +182,13 @@
 				onclick={onHubClick}
 			>
 				<circle r={HUB_RADIUS} />
-				<text y="7" text-anchor="middle">{count ? `BUILD · ${count}` : 'BUILD'}</text>
+				<text y="7" text-anchor="middle">BUILD</text>
+				{#if count}
+					<g class="badge" transform="translate({HUB_RADIUS * 0.74},{HUB_RADIUS * 0.74})">
+						<circle r="13" />
+						<text y="4.5" text-anchor="middle">{count}</text>
+					</g>
+				{/if}
 			</a>
 		</g>
 	</svg>
@@ -173,18 +199,42 @@
 		role="status"
 		aria-live="polite"
 	>
-		{focused?.hint ?? ''}
+		{focused ? `${focused.hint}${isUnmapped(focused) ? notYet : ''}` : ''}
 	</div>
-	<p class="lede">Hover a node</p>
+	<p class="lede">
+		Hover a node
+		{#if selected.size}
+			<button type="button" class="clear" onclick={clear}>Clear</button>
+		{/if}
+	</p>
 
 	<div class="stacks">
-		<div class="hubbtn"><a href={buildTarget}>{count ? `BUILD · ${count}` : 'BUILD'}</a></div>
+		<div class="hubbtn">
+			<a href={buildTarget}
+				>BUILD{#if count}<span class="badge" aria-hidden="true">{count}</span><span class="sr"
+						>, {count} selected</span
+					>{/if}</a
+			>
+			{#if selected.size}
+				<button type="button" class="clear" onclick={clear}>Clear selection</button>
+			{/if}
+		</div>
 		{#each featureSections as section (section.id)}
 			<div class="stack">
 				<h2><a href="/features/{section.id}">{section.word}</a></h2>
 				<ul>
 					{#each featuresInSection(section.id) as feature (feature.id)}
-						<li><a href="/features/{section.id}/{feature.id}">{feature.word}</a></li>
+						<li class:sel={selected.has(feature.id)} class:unmapped={!isMappable(feature.id)}>
+							<input
+								type="checkbox"
+								checked={selected.has(feature.id)}
+								aria-label="Select {feature.word} for BUILD{isMappable(feature.id)
+									? ''
+									: ', not in the planner yet'}"
+								onchange={() => toggleId(feature.id)}
+							/>
+							<a href="/features/{section.id}/{feature.id}">{feature.word}</a>
+						</li>
 					{/each}
 				</ul>
 			</div>
@@ -275,6 +325,16 @@
 		fill: var(--front-yellow);
 		opacity: 1;
 	}
+	/* Selected but not in the planner yet: a hollow ring, nothing filled. */
+	.n.sel.unmapped .dot {
+		fill: var(--front-bg);
+		stroke-dasharray: 3 3;
+	}
+	.n.sel.unmapped:hover .dot,
+	.n.sel.unmapped.on .dot,
+	.n.sel.unmapped:focus-visible .dot {
+		fill: var(--front-yellow);
+	}
 	.n:hover circle,
 	.n.on circle,
 	.n:focus-visible circle {
@@ -311,6 +371,16 @@
 		stroke: var(--front-ink);
 		stroke-width: 3;
 		stroke-dasharray: 4 3;
+	}
+	.hub .badge circle {
+		fill: var(--front-ink);
+		stroke: var(--front-bg);
+		stroke-width: 2;
+	}
+	.hub .badge text {
+		font-size: 13px;
+		letter-spacing: 0;
+		fill: var(--front-bg);
 	}
 	.hub text {
 		font-family: var(--front-mono);
@@ -360,6 +430,24 @@
 		margin: 0;
 		pointer-events: none;
 	}
+	.clear {
+		pointer-events: auto;
+		margin-left: 1rem;
+		padding: 4px 10px;
+		background: none;
+		border: 1px solid var(--front-line);
+		color: var(--front-ink);
+		font: inherit;
+		letter-spacing: inherit;
+		text-transform: inherit;
+		cursor: pointer;
+	}
+	.clear:hover,
+	.clear:focus-visible {
+		background: var(--front-yellow);
+		color: var(--front-hint-ink);
+		outline: none;
+	}
 
 	.stacks {
 		display: none;
@@ -403,6 +491,34 @@
 			padding: 22px;
 			font-size: 20px;
 		}
+		.hubbtn .sr {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+		.hubbtn .clear {
+			display: block;
+			margin: 8px 0 0 auto;
+			padding: 10px 14px;
+			min-height: 44px;
+			font-size: 13px;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+		}
+		.hubbtn .badge {
+			display: inline-block;
+			min-width: 1.6em;
+			margin-left: 0.8em;
+			padding: 2px 6px;
+			border-radius: 999px;
+			background: var(--front-ink);
+			color: var(--front-bg);
+			font-size: 14px;
+			letter-spacing: 0;
+		}
 		.stack {
 			border: 1px solid var(--front-line);
 			padding: 14px 16px;
@@ -426,6 +542,25 @@
 			flex-wrap: wrap;
 			gap: 8px;
 		}
+		.stack li {
+			display: flex;
+			align-items: center;
+			border: 1px solid var(--front-line);
+		}
+		.stack li.sel {
+			border-color: var(--front-yellow);
+			background: color-mix(in srgb, var(--front-yellow) 18%, transparent);
+		}
+		.stack li.sel.unmapped {
+			border-style: dashed;
+			background: none;
+		}
+		.stack li input {
+			width: 20px;
+			height: 20px;
+			margin: 0 0 0 12px;
+			accent-color: var(--front-orange);
+		}
 		.stack li a {
 			display: inline-block;
 			color: var(--front-ink);
@@ -433,8 +568,7 @@
 			font-size: 13px;
 			letter-spacing: 0.06em;
 			text-transform: uppercase;
-			padding: 8px 12px;
-			border: 1px solid var(--front-line);
+			padding: 12px 12px 12px 8px;
 		}
 	}
 </style>

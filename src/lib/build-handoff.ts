@@ -62,20 +62,57 @@ export function saveSelection(ids: Iterable<string>): void {
 	}
 }
 
+/** A feature the planner can switch on: it has at least one recipe (smrt#4409). */
+export function isMappable(id: string): boolean {
+	return (getFeature(id)?.recipes.length ?? 0) > 0;
+}
+
+/** The selection split by whether the planner has a recipe for each feature. */
+export function splitSelection(ids: Iterable<string>): { mapped: string[]; unmapped: string[] } {
+	const selected = normalizeSelection(ids);
+	return {
+		mapped: selected.filter(isMappable),
+		unmapped: selected.filter((id) => !isMappable(id))
+	};
+}
+
+const wordFor = (id: string) => getFeature(id)?.word ?? id;
+
+/** The sentence the landing notice shows; `null` when nothing was selected. */
+export function noticeFor(ids: string[]): { on: string | null; off: string | null } {
+	const { mapped, unmapped } = splitSelection(ids);
+	return {
+		on: mapped.length ? `Switched on: ${mapped.map(wordFor).join(', ')}` : null,
+		off: unmapped.length ? `Not in the planner yet: ${unmapped.map(wordFor).join(', ')}` : null
+	};
+}
+
 /** Plain earlier turns for the planner's assistant; the visitor replies next. */
 export function seedFor(ids: string[]): {
 	id: string;
 	messages: { role: 'user' | 'assistant'; content: string }[];
 } {
-	const picked = ids.map((id) => getFeature(id)?.word ?? id);
-	const list = picked.join(', ');
+	const { mapped, unmapped } = splitSelection(ids);
+	const picked = [...mapped, ...unmapped].map(wordFor).join(', ');
+	const parts: string[] = [];
+	if (mapped.length) {
+		parts.push(
+			`The recipes behind ${mapped.map(wordFor).join(', ')} are switched on in your plan.`
+		);
+	}
+	if (unmapped.length) {
+		parts.push(
+			`The planner has no recipe yet for ${unmapped.map(wordFor).join(', ')}, so ${unmapped.length === 1 ? 'it is' : 'they are'} not in your plan. Say so if it comes up.`
+		);
+	}
+	const total = mapped.length + unmapped.length;
 	return {
 		id: `map-selection:${ids.join(',')}`,
 		messages: [
-			{ role: 'user', content: `I picked these features on the SMRT map: ${list}.` },
+			{ role: 'user', content: `I picked these features on the SMRT map: ${picked}.` },
 			{
 				role: 'assistant',
-				content: `The recipes behind ${list} are switched on in your plan, where the planner has them. Tell me what your app is for and who uses it, and I will ask what I still need to know about ${picked.length === 1 ? 'it' : 'them'}.`
+				content: `${parts.join(' ')} Tell me what your app is for and who uses it, and I will ask what I still need to know about ${total === 1 ? 'it' : 'them'}.`
 			}
 		]
 	};

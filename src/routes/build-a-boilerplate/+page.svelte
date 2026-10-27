@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import SEO from '$lib/components/SEO.svelte';
-	import { parseFeatures, recipesFor, seedFor } from '$lib/build-handoff';
+	import { noticeFor, parseFeatures, recipesFor, seedFor } from '$lib/build-handoff';
 
 	// This page is called build-a-boilerplate; the package keeps its name.
 	// `Planner` is the complete planner: the framework's own cookbook-driven
@@ -29,6 +29,11 @@
 		selected.length ? seedFor(selected) : undefined
 	);
 
+	// The one-line landing notice: what the selection switched on, no model
+	// needed. The visitor can dismiss it.
+	let noticeOpen = $state(true);
+	const notice = $derived(noticeFor(selected));
+
 	async function onready({ controller, openAssistant }: PlannerHandle) {
 		const ids = recipesFor(selected);
 		if (ids.length) await controller.run({ name: 'add_recipes', input: { ids } });
@@ -37,9 +42,9 @@
 		await openAssistant?.();
 	}
 
-	// The way back to the documentation, rendered by the planner at the start
-	// of its own header beside the brand.
-	const backLink = { href: '/', label: 'Back to documentation' };
+	// The way back to the map, rendered by the planner at the start of its own
+	// header beside the brand; the site header above it holds the rest.
+	const backLink = { href: '/', label: 'Back to the map' };
 
 	// On-device inference first: the AI page offers to download a small model
 	// (WebLLM) into the visitor's browser, so nothing leaves their device and
@@ -79,42 +84,59 @@
 	url="https://s-m-r-t.dev/build-a-boilerplate"
 />
 
-<div class="planner-page" id="main-content">
-	<h1 class="planner-page__title">build-a-boilerplate</h1>
+<div class="planner-page">
 	<section class="planner-host" aria-label="build-a-boilerplate">
-		{#if Planner}
-			<Planner
-				basePath="/build-a-boilerplate"
-				persistence="self"
-				themeControls
-				defaultTitle="build-a-boilerplate"
-				{inference}
-				{backLink}
-				{initialConversation}
-				{onready}
-			/>
-		{:else if loadError}
-			<p class="planner-status" role="alert">build-a-boilerplate could not load: {loadError}</p>
-		{:else}
-			<p class="planner-status" role="status">Loading build-a-boilerplate…</p>
-			<p class="planner-status">
-				Add recipes or packages and an app mock-up assembles around them: navigation, list views,
-				forms and help per model. Its Export tab gives you two ways out: download the cookbook and
-				run smrt cookbook apply on the file to create a project, or copy a prompt that has your
-				coding agent build the app from it.
-			</p>
-			<noscript
-				><p class="planner-status">Enable JavaScript to use this interactive mock-up.</p></noscript
-			>
+		<h1 class="planner-page__title">build-a-boilerplate</h1>
+		{#if selected.length && noticeOpen && (notice.on || notice.off)}
+			<div class="planner-notice" role="status">
+				<p>
+					{#if notice.on}<span>{notice.on}</span>{/if}
+					{#if notice.off}<span>{notice.off}</span>{/if}
+				</p>
+				<button type="button" aria-label="Dismiss" onclick={() => (noticeOpen = false)}>
+					<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+						<path d="M6 6l12 12M18 6L6 18" />
+					</svg>
+				</button>
+			</div>
 		{/if}
+		<div class="planner-frame">
+			{#if Planner}
+				<Planner
+					basePath="/build-a-boilerplate"
+					persistence="self"
+					themeControls
+					defaultTitle="build-a-boilerplate"
+					{inference}
+					{backLink}
+					{initialConversation}
+					{onready}
+				/>
+			{:else if loadError}
+				<p class="planner-status" role="alert">build-a-boilerplate could not load: {loadError}</p>
+			{:else}
+				<p class="planner-status" role="status">Loading build-a-boilerplate…</p>
+				<p class="planner-status">
+					Add recipes or packages and an app mock-up assembles around them: navigation, list views,
+					forms and help per model. Its Export tab gives you two ways out: download the cookbook and
+					run smrt cookbook apply on the file to create a project, or copy a prompt that has your
+					coding agent build the app from it.
+				</p>
+				<noscript
+					><p class="planner-status">
+						Enable JavaScript to use this interactive mock-up.
+					</p></noscript
+				>
+			{/if}
+		</div>
 	</section>
 </div>
 
 <style>
-	/* The planner is the page: its shell sizes itself to the viewport and
-	   only its own regions scroll, so the page never does. */
+	/* The planner fills the screen below the site header and only its own
+	   regions scroll, so the page never does. */
 	.planner-page {
-		height: 100svh;
+		height: 100%;
 		overflow: hidden;
 		background: var(--site-paper);
 		color: var(--site-ink);
@@ -130,6 +152,59 @@
 	.planner-host {
 		height: 100%;
 		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+	}
+	.planner-frame {
+		flex: 1;
+		min-height: 0;
+	}
+	/* The framework's AdminShell sizes itself to the whole viewport (100svh,
+	   100dvh on phones), which would run under the site header and the notice.
+	   Sized to the frame instead. Upstream ask: a height prop or variable on the
+	   shell (smrt#4416). */
+	.planner-frame > :global(.smrt-theme-root),
+	.planner-frame :global(.smrt-admin-shell) {
+		height: 100%;
+		block-size: 100%;
+		min-block-size: 0;
+	}
+	.planner-notice {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.5rem 1rem;
+		background: var(--site-paper);
+		color: var(--site-ink);
+		border-bottom: 1px solid var(--site-line, currentColor);
+		font-size: 0.9rem;
+	}
+	.planner-notice p {
+		flex: 1;
+		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem 1.25rem;
+	}
+	.planner-notice span:last-child:not(:first-child) {
+		color: var(--site-muted);
+	}
+	.planner-notice button {
+		display: grid;
+		place-items: center;
+		min-width: 44px;
+		min-height: 44px;
+		margin: -0.5rem -0.5rem -0.5rem 0;
+		background: none;
+		border: 0;
+		color: inherit;
+		cursor: pointer;
+	}
+	.planner-notice svg {
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 2;
+		stroke-linecap: round;
 	}
 	.planner-status {
 		padding: 1.5rem 1rem;

@@ -8,6 +8,7 @@
 	import '$lib/styles/variables.css';
 	import '@happyvertical/smrt-ui/themes/styles/all.css';
 	import { Provider } from '@happyvertical/smrt-svelte';
+	import PlannerShell from '$lib/components/PlannerShell.svelte';
 	import SiteShell from '$lib/components/SiteShell.svelte';
 
 	let { children } = $props();
@@ -23,11 +24,11 @@
 		await tick(); // let the new page's <title> land before reading it
 		matomo?.pageView(to.url, document.title);
 	});
-	// The playground and build-a-boilerplate bring their own chrome: the planner
-	// runs inside the framework's `AppShell` (see `build-a-boilerplate/+page.svelte`).
-	const isStandalone = $derived(
-		page.url.pathname === '/playground' ||
-			page.url.pathname === '/build-a-boilerplate' ||
+	// The playground brings its own chrome. build-a-boilerplate keeps the site
+	// header and drops the footer: the planner fills the screen below it.
+	const isStandalone = $derived(page.url.pathname === '/playground');
+	const isPlanner = $derived(
+		page.url.pathname === '/build-a-boilerplate' ||
 			page.url.pathname.startsWith('/build-a-boilerplate/')
 	);
 </script>
@@ -41,6 +42,10 @@
 <Provider>
 	{#if isStandalone}
 		{@render children()}
+	{:else if isPlanner}
+		<PlannerShell pathname={page.url.pathname}>
+			{@render children()}
+		</PlannerShell>
 	{:else}
 		<SiteShell pathname={page.url.pathname} hash={page.url.hash}>
 			{@render children()}

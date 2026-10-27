@@ -158,6 +158,10 @@ Then one line below.
 - smrt#2071: the `smrt` preset's light primary / on-primary pair is 3.6:1,
   short of AA; `variables.css` carries `--site-accent-ink` and
   `--site-on-accent` until it passes. Tracked here in #332.
+- smrt#4415: `Planner` nests a `main` in the AdminShell's `main`, and axe
+  finds contrast and name mismatches inside it on `/build-a-boilerplate`.
+- smrt#4416: `AdminShell` is fixed at `100svh`; `build-a-boilerplate/+page.svelte`
+  sizes it to the frame under the site header. Tracked here in #371.
 
 ## Agent lifecycle posture
 

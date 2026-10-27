@@ -43,6 +43,12 @@ afterEach(() => {
 const rim = (line: Element, cx: number, cy: number) =>
 	Math.hypot(Number(line.getAttribute('x1')) - cx, Number(line.getAttribute('y1')) - cy);
 
+const mappable = (nodes: Element[]) =>
+	nodes.filter((a) => {
+		const word = a.querySelector('text')?.textContent;
+		return features.some((f) => f.word === word && f.recipes.length > 0);
+	});
+
 describe('FeatureGraph', () => {
 	it('renders the hub, nine sections and forty-nine features', () => {
 		const { container } = render(FeatureGraph);
@@ -109,7 +115,7 @@ describe('FeatureGraph', () => {
 	it('selects on circle click, opens on label click, and counts on the hub', async () => {
 		const { goto } = await import('$app/navigation');
 		const { container } = render(FeatureGraph);
-		const node = container.querySelector('svg a.n.d2') as SVGAElement;
+		const node = mappable([...container.querySelectorAll('svg a.n.d2')])[0] as SVGAElement;
 
 		expect(node.getAttribute('aria-label')).toMatch(/: .+/);
 		node
@@ -119,7 +125,8 @@ describe('FeatureGraph', () => {
 		expect(goto).not.toHaveBeenCalled();
 		expect(node.querySelector('circle.ring')).not.toBeNull();
 		expect(node.getAttribute('aria-label')).toMatch(/, selected: /);
-		expect(container.querySelector('svg a.hub text')?.textContent).toBe('BUILD · 1');
+		expect(container.querySelector('svg a.hub > text')?.textContent).toBe('BUILD');
+		expect(container.querySelector('svg a.hub .badge text')?.textContent).toBe('1');
 		expect(JSON.parse(sessionStorage.getItem('smrt-map-selection')!)).toHaveLength(1);
 
 		node
@@ -131,14 +138,14 @@ describe('FeatureGraph', () => {
 
 	it('selects with Space and restores the selection after a round trip', async () => {
 		const { container, unmount } = render(FeatureGraph);
-		const nodes = [...container.querySelectorAll('svg a.n.d2')];
+		const nodes = mappable([...container.querySelectorAll('svg a.n.d2')]);
 		for (const node of nodes.slice(0, 3)) {
 			node.dispatchEvent(
 				new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true })
 			);
 		}
 		await vi.waitFor(() =>
-			expect(container.querySelector('svg a.hub text')?.textContent).toBe('BUILD · 3')
+			expect(container.querySelector('svg a.hub .badge text')?.textContent).toBe('3')
 		);
 		const href = container.querySelector('svg a.hub')!.getAttribute('href')!;
 		expect(href).toMatch(/^\/build-a-boilerplate\?features=[a-z-]+(,[a-z-]+){2}$/);
@@ -146,7 +153,7 @@ describe('FeatureGraph', () => {
 
 		const again = render(FeatureGraph);
 		await vi.waitFor(() =>
-			expect(again.container.querySelector('svg a.hub text')?.textContent).toBe('BUILD · 3')
+			expect(again.container.querySelector('svg a.hub .badge text')?.textContent).toBe('3')
 		);
 		expect(again.container.querySelectorAll('svg a.n.sel')).toHaveLength(3);
 	});
@@ -154,19 +161,19 @@ describe('FeatureGraph', () => {
 	it('shows one hover sentence and lights the section', async () => {
 		const { container } = render(FeatureGraph);
 		const node = [...container.querySelectorAll('svg a.n.d2')].find(
-			(a) => a.querySelector('text')?.textContent === 'Approvals'
+			(a) => a.querySelector('text')?.textContent === 'Chat'
 		)!;
 		node.dispatchEvent(new MouseEvent('mouseenter'));
 
 		await vi.waitFor(() => {
 			expect(container.querySelector('.hint')?.textContent?.trim()).toBe(
-				features.find((f) => f.id === 'approvals')!.hint
+				features.find((f) => f.id === 'chat')!.hint
 			);
 		});
 		const lit = [...container.querySelectorAll('svg a.n.on')].map(
 			(a) => a.querySelector('text')?.textContent
 		);
-		expect(lit).toEqual(expect.arrayContaining(['Agents', 'Approvals']));
+		expect(lit).toEqual(expect.arrayContaining(['Chat']));
 		expect(container.querySelector('section.map')?.classList.contains('focus')).toBe(true);
 	});
 
@@ -214,5 +221,60 @@ describe('fitGraph', () => {
 		const biggest = counts.indexOf(Math.max(...counts));
 		const smallest = counts.indexOf(Math.min(...counts));
 		expect(spans[biggest]).toBeGreaterThan(spans[smallest]);
+	});
+
+	it('marks features without a recipe, shows a hollow ring and leaves the count alone', async () => {
+		const { container } = render(FeatureGraph);
+		const nodes = [...container.querySelectorAll('svg a.n.d2')];
+		const off = nodes.find((a) => a.classList.contains('unmapped')) as SVGAElement;
+		expect(nodes.filter((a) => a.classList.contains('unmapped'))).toHaveLength(
+			features.filter((f) => f.recipes.length === 0).length
+		);
+
+		off.dispatchEvent(new MouseEvent('mouseenter'));
+		await vi.waitFor(() =>
+			expect(container.querySelector('.hint')?.textContent).toContain('· not in the planner yet')
+		);
+		off
+			.querySelector('circle.dot')!
+			.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+		await vi.waitFor(() => expect(off.classList.contains('sel')).toBe(true));
+		expect(off.getAttribute('aria-label')).toContain('not in the planner yet');
+		expect(container.querySelector('svg a.hub .badge')).toBeNull();
+	});
+
+	it('clears the selection with the Clear control and with Escape', async () => {
+		const { container } = render(FeatureGraph);
+		expect(container.querySelector('button.clear')).toBeNull();
+		const pick = () =>
+			mappable([...container.querySelectorAll('svg a.n.d2')])[0].dispatchEvent(
+				new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true })
+			);
+		pick();
+		await vi.waitFor(() => expect(container.querySelector('svg a.hub .badge')).not.toBeNull());
+		(container.querySelector('button.clear') as HTMLButtonElement).click();
+		await vi.waitFor(() => expect(container.querySelector('svg a.hub .badge')).toBeNull());
+		expect(JSON.parse(sessionStorage.getItem('smrt-map-selection')!)).toEqual([]);
+
+		pick();
+		await vi.waitFor(() => expect(container.querySelector('svg a.hub .badge')).not.toBeNull());
+		window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+		await vi.waitFor(() => expect(container.querySelector('svg a.hub .badge')).toBeNull());
+		expect(container.querySelector('button.clear')).toBeNull();
+	});
+
+	it('selects from the phone stacks and shows the same badge', async () => {
+		const { container } = render(FeatureGraph);
+		const box = container.querySelector('.stacks li:not(.unmapped) input') as HTMLInputElement;
+		expect(container.querySelectorAll('.stacks li input')).toHaveLength(features.length);
+		box.click();
+		await vi.waitFor(() => expect(container.querySelector('.hubbtn .badge')).not.toBeNull());
+		expect(container.querySelector('.hubbtn a')?.textContent).toMatch(/^BUILD\s*1, 1 selected$/);
+		expect(container.querySelector('.hubbtn a .sr')?.textContent).toBe(', 1 selected');
+		(container.querySelector('.hubbtn button.clear') as HTMLButtonElement).click();
+		await vi.waitFor(() => expect(container.querySelector('.hubbtn .badge')).toBeNull());
+		box.click();
+		await vi.waitFor(() => expect(container.querySelector('.hubbtn .badge')).not.toBeNull());
+		expect(container.querySelector('.stacks li.sel')).not.toBeNull();
 	});
 });
