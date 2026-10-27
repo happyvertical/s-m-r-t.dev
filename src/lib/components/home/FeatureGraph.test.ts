@@ -265,7 +265,7 @@ describe('fitGraph', () => {
 
 	it('selects from the phone stacks and shows the same badge', async () => {
 		const { container } = render(FeatureGraph);
-		const box = container.querySelector('.stacks li input') as HTMLInputElement;
+		const box = container.querySelector('.stacks li:not(.unmapped) input') as HTMLInputElement;
 		expect(container.querySelectorAll('.stacks li input')).toHaveLength(features.length);
 		box.click();
 		await vi.waitFor(() => expect(container.querySelector('.hubbtn .badge')).not.toBeNull());
