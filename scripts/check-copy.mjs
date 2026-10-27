@@ -290,6 +290,7 @@ const COMPONENT_NON_COPY_ATTRIBUTES = new Set([
 	'type',
 	'url',
 	'variant',
+	'space',
 	'visual',
 	'warp'
 ]);
