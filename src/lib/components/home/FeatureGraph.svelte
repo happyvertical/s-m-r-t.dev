@@ -11,6 +11,7 @@
 	} from '$lib/build-handoff';
 	import { featureSections, featuresInSection } from '$lib/data/features';
 	import { fitGraph, HUB_RADIUS, type PlacedNode } from './graph-layout';
+	import Starfield from './Starfield.svelte';
 	import SunCanvas from './SunCanvas.svelte';
 	import { SUN_SIZE } from './sun';
 
@@ -113,6 +114,7 @@
 <svelte:window onkeydown={onWindowKeydown} />
 
 <section class="map" class:focus={lit !== null} id="map" aria-label="Features" bind:this={map}>
+	<Starfield />
 	<div
 		class="sun-slot"
 		style:left="{graph.cx - SUN_SIZE / 2}px"
@@ -471,6 +473,7 @@
 		}
 		svg,
 		.sun-slot,
+		:global(.stars),
 		.lede,
 		.hint {
 			display: none;

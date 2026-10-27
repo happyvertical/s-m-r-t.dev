@@ -1,15 +1,7 @@
 import { cleanup, render } from '@testing-library/svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import SunCanvas from './SunCanvas.svelte';
-import {
-	createSun,
-	DRIFT,
-	FIRST_FLARE_MS,
-	FLARE_GAP_MS,
-	MAX_SPARKS,
-	sunPalettes,
-	type SunPalette
-} from './sun';
+import { createSun, DRIFT, FIRST_FLARE_MS, FLARE_GAP_MS, MAX_SPARKS, firePalette } from './sun';
 
 function fakeContext() {
 	const gradient = { addColorStop: vi.fn() };
@@ -42,9 +34,9 @@ afterEach(() => {
 });
 
 describe('sun frame logic', () => {
-	const make = (palette: () => SunPalette = () => sunPalettes.fire) => {
+	const make = () => {
 		const ctx = fakeContext();
-		return { ctx, sun: createSun({ ctx: ctx as never, size: 320, radius: 46, palette }) };
+		return { ctx, sun: createSun({ ctx: ctx as never, size: 320, radius: 46 }) };
 	};
 
 	it('drifts the surface by .005 per frame and caps the rim smoulder', () => {
@@ -70,15 +62,10 @@ describe('sun frame logic', () => {
 		expect(sun.state.flares).toBe(0);
 	});
 
-	it('reads the palette on every frame', () => {
-		let palette = sunPalettes.fire;
-		const { ctx, sun } = make(() => palette);
-		const stops = () => ctx.createRadialGradient().addColorStop.mock.calls.flat();
+	it('is fire in both colour schemes: one palette, no blue flame', () => {
+		const { ctx, sun } = make();
 		sun.frame(0);
-		expect(stops()).toContain(sunPalettes.fire.core);
-		palette = sunPalettes.blue;
-		sun.frame(16);
-		expect(stops()).toContain(sunPalettes.blue.core);
+		expect(ctx.createRadialGradient().addColorStop.mock.calls.flat()).toContain(firePalette.core);
 	});
 });
 
