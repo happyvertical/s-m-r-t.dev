@@ -210,9 +210,12 @@
 
 	<div class="stacks">
 		<div class="hubbtn">
-			<a href={buildTarget}
+			<a href={buildTarget} aria-label={count ? `BUILD, ${count} selected` : undefined}
 				>BUILD{#if count}<span class="badge" aria-hidden="true">{count}</span>{/if}</a
 			>
+			{#if selected.size}
+				<button type="button" class="clear" onclick={clear}>Clear selection</button>
+			{/if}
 		</div>
 		{#each featureSections as section (section.id)}
 			<div class="stack">
@@ -485,6 +488,15 @@
 			letter-spacing: 0.18em;
 			padding: 22px;
 			font-size: 20px;
+		}
+		.hubbtn .clear {
+			display: block;
+			margin: 8px 0 0 auto;
+			padding: 10px 14px;
+			min-height: 44px;
+			font-size: 13px;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
 		}
 		.hubbtn .badge {
 			display: inline-block;

@@ -270,6 +270,13 @@ describe('fitGraph', () => {
 		box.click();
 		await vi.waitFor(() => expect(container.querySelector('.hubbtn .badge')).not.toBeNull());
 		expect(container.querySelector('.hubbtn a')?.textContent).toMatch(/^BUILD\s*1$/);
+		expect(container.querySelector('.hubbtn a')?.getAttribute('aria-label')).toBe(
+			'BUILD, 1 selected'
+		);
+		(container.querySelector('.hubbtn button.clear') as HTMLButtonElement).click();
+		await vi.waitFor(() => expect(container.querySelector('.hubbtn .badge')).toBeNull());
+		box.click();
+		await vi.waitFor(() => expect(container.querySelector('.hubbtn .badge')).not.toBeNull());
 		expect(container.querySelector('.stacks li.sel')).not.toBeNull();
 	});
 });
