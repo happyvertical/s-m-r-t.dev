@@ -260,7 +260,9 @@
 		role="status"
 		aria-live="polite"
 	>
-		{focused ? `${focused.hint}${suffix(focused)}` : ''}
+		{focused
+			? `${focused.hint}${isNiche(focused) ? niche : ''}${isUnmapped(focused) ? notYet : ''}`
+			: ''}
 	</div>
 	<p class="lede">
 		Hover a node

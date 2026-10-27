@@ -16,7 +16,7 @@ export function everydayIds(section: FeatureSectionId): string[] {
 
 /** True when every everyday feature of the section is selected. */
 export function isSetOn(
-	selected: { has(id: string): boolean },
+	selected: { has(_id: string): boolean },
 	section: FeatureSectionId
 ): boolean {
 	const ids = everydayIds(section);

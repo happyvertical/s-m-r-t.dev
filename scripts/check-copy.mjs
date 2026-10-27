@@ -118,6 +118,7 @@ const NON_PROSE_PROPERTIES = new Set([
 	'entryTitle',
 	'evidence',
 	'evidenceId',
+	'everyday',
 	'example',
 	'exampleResource',
 	'embedded',
@@ -289,7 +290,8 @@ const COMPONENT_NON_COPY_ATTRIBUTES = new Set([
 	'type',
 	'url',
 	'variant',
-	'visual'
+	'visual',
+	'warp'
 ]);
 
 const IMPERATIVE_VERBS = new Set([

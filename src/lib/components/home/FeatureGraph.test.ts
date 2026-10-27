@@ -313,9 +313,9 @@ describe('warp (#373)', () => {
 		vi.mocked(goto).mockClear().mockResolvedValue(undefined);
 		media(true, false);
 		let now = 0;
-		const frames: FrameRequestCallback[] = [];
+		const frames: ((_time: number) => void)[] = [];
 		vi.spyOn(performance, 'now').mockImplementation(() => now);
-		vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => frames.push(cb));
+		vi.stubGlobal('requestAnimationFrame', (cb: (_time: number) => void) => frames.push(cb));
 		vi.stubGlobal('cancelAnimationFrame', () => {});
 		const { container } = render(FeatureGraph);
 		frames.length = 0;
