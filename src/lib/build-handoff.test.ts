@@ -1,6 +1,14 @@
 import { recipes } from '@happyvertical/smrt-planner/core';
 import { describe, expect, it } from 'vitest';
-import { buildHref, parseFeatures, recipesFor, seedFor } from './build-handoff';
+import {
+	buildHref,
+	isMappable,
+	noticeFor,
+	parseFeatures,
+	recipesFor,
+	seedFor,
+	splitSelection
+} from './build-handoff';
 import { features } from '$lib/data/features';
 
 describe('feature recipes', () => {
@@ -29,5 +37,25 @@ describe('build hand-off', () => {
 		const seed = seedFor(['chat', 'commerce']);
 		expect(seed.id).toBe('map-selection:chat,commerce');
 		expect(seed.messages[0].content).toContain('Chat, Commerce');
+	});
+
+	it('marks every feature without a recipe as not in the planner yet', () => {
+		const empty = features.filter((feature) => feature.recipes.length === 0);
+		expect(empty.length).toBeGreaterThan(0);
+		for (const feature of empty) expect(isMappable(feature.id), feature.id).toBe(false);
+		const { mapped, unmapped } = splitSelection(features.map((feature) => feature.id));
+		expect(unmapped).toEqual(empty.map((feature) => feature.id));
+		expect(mapped.length + unmapped.length).toBe(features.length);
+	});
+
+	it('names the unmapped features to the assistant and in the notice', () => {
+		const off = features.find((feature) => feature.recipes.length === 0)!;
+		const seed = seedFor(['chat', off.id]);
+		expect(seed.messages[1].content).toContain(`no recipe yet for ${off.word}`);
+		expect(noticeFor(['chat', off.id])).toEqual({
+			on: 'Switched on: Chat',
+			off: `Not in the planner yet: ${off.word}`
+		});
+		expect(noticeFor([])).toEqual({ on: null, off: null });
 	});
 });

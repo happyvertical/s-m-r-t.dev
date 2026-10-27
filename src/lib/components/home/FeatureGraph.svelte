@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { SvelteSet } from 'svelte/reactivity';
-	import { buildHref, loadSelection, saveSelection } from '$lib/build-handoff';
+	import { buildHref, isMappable, loadSelection, saveSelection, splitSelection } from '$lib/build-handoff';
 	import { featureSections, featuresInSection } from '$lib/data/features';
 	import { fitGraph, HUB_RADIUS, type PlacedNode } from './graph-layout';
 	import SunCanvas from './SunCanvas.svelte';
@@ -22,10 +22,13 @@
 	// prerendered page is the empty selection; kept in sessionStorage so a
 	// showcase visit and Back return to it.
 	const selected = new SvelteSet<string>();
-	const count = $derived(selected.size);
+	// Only features the planner has a recipe for count toward BUILD (smrt#4409).
+	const count = $derived(splitSelection(selected).mapped.length);
 	const buildTarget = $derived(buildHref(selected));
 	const isFeature = (node: PlacedNode) => node.depth === 2;
 	const featureId = (node: PlacedNode) => node.id.replace(/^feature:/, '');
+	const isUnmapped = (node: PlacedNode) => isFeature(node) && !isMappable(featureId(node));
+	const notYet = ' · not in the planner yet';
 	const isSelected = (node: PlacedNode) => isFeature(node) && selected.has(featureId(node));
 
 	function toggle(node: PlacedNode) {
@@ -122,10 +125,11 @@
 						class="n d{node.depth}"
 						class:on={lit?.has(node.id)}
 						class:sel={isSelected(node)}
+						class:unmapped={isUnmapped(node)}
 						href={node.href}
 						aria-label="{node.word}{node.depth === 1 ? ' section' : ''}{isSelected(node)
 							? ', selected'
-							: ''}: {node.hint}"
+							: ''}: {node.hint}{isUnmapped(node) ? notYet : ''}"
 						onkeydown={(event) => onNodeKeydown(event, node)}
 						onmouseenter={() => (focused = node)}
 						onfocus={() => (focused = node)}
@@ -179,7 +183,7 @@
 		role="status"
 		aria-live="polite"
 	>
-		{focused?.hint ?? ''}
+		{focused ? `${focused.hint}${isUnmapped(focused) ? notYet : ''}` : ''}
 	</div>
 	<p class="lede">Hover a node</p>
 
@@ -282,6 +286,16 @@
 	.n.sel .dot {
 		fill: var(--front-yellow);
 		opacity: 1;
+	}
+	/* Selected but not in the planner yet: a hollow ring, nothing filled. */
+	.n.sel.unmapped .dot {
+		fill: var(--front-bg);
+		stroke-dasharray: 3 3;
+	}
+	.n.sel.unmapped:hover .dot,
+	.n.sel.unmapped.on .dot,
+	.n.sel.unmapped:focus-visible .dot {
+		fill: var(--front-yellow);
 	}
 	.n:hover circle,
 	.n.on circle,

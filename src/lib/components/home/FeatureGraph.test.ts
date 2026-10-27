@@ -43,6 +43,12 @@ afterEach(() => {
 const rim = (line: Element, cx: number, cy: number) =>
 	Math.hypot(Number(line.getAttribute('x1')) - cx, Number(line.getAttribute('y1')) - cy);
 
+const mappable = (nodes: Element[]) =>
+	nodes.filter((a) => {
+		const word = a.querySelector('text')?.textContent;
+		return features.some((f) => f.word === word && f.recipes.length > 0);
+	});
+
 describe('FeatureGraph', () => {
 	it('renders the hub, nine sections and forty-nine features', () => {
 		const { container } = render(FeatureGraph);
@@ -109,7 +115,7 @@ describe('FeatureGraph', () => {
 	it('selects on circle click, opens on label click, and counts on the hub', async () => {
 		const { goto } = await import('$app/navigation');
 		const { container } = render(FeatureGraph);
-		const node = container.querySelector('svg a.n.d2') as SVGAElement;
+		const node = mappable([...container.querySelectorAll('svg a.n.d2')])[0] as SVGAElement;
 
 		expect(node.getAttribute('aria-label')).toMatch(/: .+/);
 		node
@@ -132,7 +138,7 @@ describe('FeatureGraph', () => {
 
 	it('selects with Space and restores the selection after a round trip', async () => {
 		const { container, unmount } = render(FeatureGraph);
-		const nodes = [...container.querySelectorAll('svg a.n.d2')];
+		const nodes = mappable([...container.querySelectorAll('svg a.n.d2')]);
 		for (const node of nodes.slice(0, 3)) {
 			node.dispatchEvent(
 				new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true })
@@ -155,19 +161,19 @@ describe('FeatureGraph', () => {
 	it('shows one hover sentence and lights the section', async () => {
 		const { container } = render(FeatureGraph);
 		const node = [...container.querySelectorAll('svg a.n.d2')].find(
-			(a) => a.querySelector('text')?.textContent === 'Approvals'
+			(a) => a.querySelector('text')?.textContent === 'Chat'
 		)!;
 		node.dispatchEvent(new MouseEvent('mouseenter'));
 
 		await vi.waitFor(() => {
 			expect(container.querySelector('.hint')?.textContent?.trim()).toBe(
-				features.find((f) => f.id === 'approvals')!.hint
+				features.find((f) => f.id === 'chat')!.hint
 			);
 		});
 		const lit = [...container.querySelectorAll('svg a.n.on')].map(
 			(a) => a.querySelector('text')?.textContent
 		);
-		expect(lit).toEqual(expect.arrayContaining(['Agents', 'Approvals']));
+		expect(lit).toEqual(expect.arrayContaining(['Chat']));
 		expect(container.querySelector('section.map')?.classList.contains('focus')).toBe(true);
 	});
 
@@ -215,5 +221,25 @@ describe('fitGraph', () => {
 		const biggest = counts.indexOf(Math.max(...counts));
 		const smallest = counts.indexOf(Math.min(...counts));
 		expect(spans[biggest]).toBeGreaterThan(spans[smallest]);
+	});
+
+	it('marks features without a recipe, shows a hollow ring and leaves the count alone', async () => {
+		const { container } = render(FeatureGraph);
+		const nodes = [...container.querySelectorAll('svg a.n.d2')];
+		const off = nodes.find((a) => a.classList.contains('unmapped')) as SVGAElement;
+		expect(nodes.filter((a) => a.classList.contains('unmapped'))).toHaveLength(
+			features.filter((f) => f.recipes.length === 0).length
+		);
+
+		off.dispatchEvent(new MouseEvent('mouseenter'));
+		await vi.waitFor(() =>
+			expect(container.querySelector('.hint')?.textContent).toContain('· not in the planner yet')
+		);
+		off
+			.querySelector('circle.dot')!
+			.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+		await vi.waitFor(() => expect(off.classList.contains('sel')).toBe(true));
+		expect(off.getAttribute('aria-label')).toContain('not in the planner yet');
+		expect(container.querySelector('svg a.hub .badge')).toBeNull();
 	});
 });
