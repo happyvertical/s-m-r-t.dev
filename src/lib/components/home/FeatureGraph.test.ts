@@ -262,4 +262,14 @@ describe('fitGraph', () => {
 		await vi.waitFor(() => expect(container.querySelector('svg a.hub .badge')).toBeNull());
 		expect(container.querySelector('button.clear')).toBeNull();
 	});
+
+	it('selects from the phone stacks and shows the same badge', async () => {
+		const { container } = render(FeatureGraph);
+		const box = container.querySelector('.stacks li input') as HTMLInputElement;
+		expect(container.querySelectorAll('.stacks li input')).toHaveLength(features.length);
+		box.click();
+		await vi.waitFor(() => expect(container.querySelector('.hubbtn .badge')).not.toBeNull());
+		expect(container.querySelector('.hubbtn a')?.textContent).toMatch(/^BUILD\s*1$/);
+		expect(container.querySelector('.stacks li.sel')).not.toBeNull();
+	});
 });

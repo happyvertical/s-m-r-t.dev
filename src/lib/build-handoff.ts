@@ -96,7 +96,9 @@ export function seedFor(ids: string[]): {
 	const picked = [...mapped, ...unmapped].map(wordFor).join(', ');
 	const parts: string[] = [];
 	if (mapped.length) {
-		parts.push(`The recipes behind ${mapped.map(wordFor).join(', ')} are switched on in your plan.`);
+		parts.push(
+			`The recipes behind ${mapped.map(wordFor).join(', ')} are switched on in your plan.`
+		);
 	}
 	if (unmapped.length) {
 		parts.push(

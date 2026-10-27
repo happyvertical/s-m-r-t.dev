@@ -2,7 +2,13 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { SvelteSet } from 'svelte/reactivity';
-	import { buildHref, isMappable, loadSelection, saveSelection, splitSelection } from '$lib/build-handoff';
+	import {
+		buildHref,
+		isMappable,
+		loadSelection,
+		saveSelection,
+		splitSelection
+	} from '$lib/build-handoff';
 	import { featureSections, featuresInSection } from '$lib/data/features';
 	import { fitGraph, HUB_RADIUS, type PlacedNode } from './graph-layout';
 	import SunCanvas from './SunCanvas.svelte';
@@ -39,11 +45,11 @@
 		if (event.key === 'Escape' && selected.size && !event.defaultPrevented) clear();
 	}
 
-	function toggle(node: PlacedNode) {
-		const id = featureId(node);
+	function toggleId(id: string) {
 		if (!selected.delete(id)) selected.add(id);
 		saveSelection(selected);
 	}
+	const toggle = (node: PlacedNode) => toggleId(featureId(node));
 
 	// The focused node, its section and, for a section, all of its features.
 	const lit = $derived.by(() => {
@@ -203,15 +209,27 @@
 	</p>
 
 	<div class="stacks">
-		<div class="hubbtn"><a href={buildTarget}
+		<div class="hubbtn">
+			<a href={buildTarget}
 				>BUILD{#if count}<span class="badge" aria-hidden="true">{count}</span>{/if}</a
-			></div>
+			>
+		</div>
 		{#each featureSections as section (section.id)}
 			<div class="stack">
 				<h2><a href="/features/{section.id}">{section.word}</a></h2>
 				<ul>
 					{#each featuresInSection(section.id) as feature (feature.id)}
-						<li><a href="/features/{section.id}/{feature.id}">{feature.word}</a></li>
+						<li class:sel={selected.has(feature.id)} class:unmapped={!isMappable(feature.id)}>
+							<input
+								type="checkbox"
+								checked={selected.has(feature.id)}
+								aria-label="Select {feature.word} for BUILD{isMappable(feature.id)
+									? ''
+									: ', not in the planner yet'}"
+								onchange={() => toggleId(feature.id)}
+							/>
+							<a href="/features/{section.id}/{feature.id}">{feature.word}</a>
+						</li>
 					{/each}
 				</ul>
 			</div>
@@ -502,6 +520,25 @@
 			flex-wrap: wrap;
 			gap: 8px;
 		}
+		.stack li {
+			display: flex;
+			align-items: center;
+			border: 1px solid var(--front-line);
+		}
+		.stack li.sel {
+			border-color: var(--front-yellow);
+			background: color-mix(in srgb, var(--front-yellow) 18%, transparent);
+		}
+		.stack li.sel.unmapped {
+			border-style: dashed;
+			background: none;
+		}
+		.stack li input {
+			width: 20px;
+			height: 20px;
+			margin: 0 0 0 12px;
+			accent-color: var(--front-orange);
+		}
 		.stack li a {
 			display: inline-block;
 			color: var(--front-ink);
@@ -509,8 +546,7 @@
 			font-size: 13px;
 			letter-spacing: 0.06em;
 			text-transform: uppercase;
-			padding: 8px 12px;
-			border: 1px solid var(--front-line);
+			padding: 12px 12px 12px 8px;
 		}
 	}
 </style>
