@@ -38,6 +38,24 @@ export const firePalette: SunPalette = {
 	flare: ['255,80,20', '255,150,40', '255,235,160']
 };
 
+/**
+ * The sun in the light scheme's daytime sky: the same churning surface in
+ * warmer, paler colours (the mock's `PAL.day`).
+ */
+export const dayPalette: SunPalette = {
+	core: '#fff7c2',
+	mid: '#ffc24a',
+	rim: '#f07a1e',
+	hot: '255,250,210',
+	warm: '255,170,60',
+	dark: '220,110,30',
+	limb: '255,220,140',
+	sparkHot: '255,230,150',
+	sparkCool: '255,160,60',
+	fade: '255,140,40',
+	flare: ['255,120,30', '255,190,70', '255,245,200']
+};
+
 /** Side of the square sun canvas, in CSS pixels; room for the tallest flare. */
 export const SUN_SIZE = 320;
 /** Surface drift per frame. */
@@ -79,6 +97,8 @@ export interface SunOptions {
 	/** Disc radius, in CSS pixels. */
 	radius: number;
 	palette?: SunPalette;
+	/** A very soft warm haze round the disc (the daytime sun); none by default. */
+	haze?: boolean;
 	random?: () => number;
 }
 
@@ -117,6 +137,7 @@ export function createSun({
 	size,
 	radius: R,
 	palette: pal = firePalette,
+	haze = false,
 	random = Math.random
 }: SunOptions): Sun {
 	const C = size / 2;
@@ -167,6 +188,15 @@ export function createSun({
 		state.T += DRIFT;
 		state.frames += 1;
 		fx.clearRect(0, 0, size, size);
+
+		// 0. haze: daytime only, one soft warm falloff outside the rim
+		if (haze) {
+			const glow = fx.createRadialGradient(C, C, R, C, C, R * 2.2);
+			glow.addColorStop(0, 'rgba(255,220,140,.45)');
+			glow.addColorStop(1, 'rgba(255,220,140,0)');
+			fx.fillStyle = glow;
+			fx.fillRect(0, 0, size, size);
+		}
 
 		// 1. surface
 		fx.save();
