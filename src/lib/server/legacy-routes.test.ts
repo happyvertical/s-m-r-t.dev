@@ -204,7 +204,7 @@ describe('legacy static routes', () => {
 		// `legacy-features.ts`: that table is the only record of those URLs, so a
 		// cleanup there 404s a live URL without a build warning.
 		expect(Object.keys(legacySectionTargets), RESTORE_DONT_RENUMBER).toHaveLength(9);
-		expect(Object.keys(legacyFeatureTargets), RESTORE_DONT_RENUMBER).toHaveLength(49);
+		expect(Object.keys(legacyFeatureTargets), RESTORE_DONT_RENUMBER).toHaveLength(51);
 
 		const liveSections = new Set(featureSections.map((section) => section.id));
 		for (const [section, target] of Object.entries(legacySectionTargets)) {

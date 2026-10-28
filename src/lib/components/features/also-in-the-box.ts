@@ -76,11 +76,6 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 		)
 	],
 
-	people: [
-		tile('SignInForm', 'smrt-users/svelte', 'Sign in.'),
-		tile('AccountSecurityPanel', 'smrt-users/svelte', 'Passkeys and sessions for one account.'),
-		tile('UserMenu', 'smrt-users/svelte', 'Who is signed in, and how to sign out.')
-	],
 	reports: [
 		tile('SavedReports', 'smrt-reports/svelte', 'The reports a person has saved.'),
 		tile('ReportPicker', 'smrt-reports/svelte', 'Choose a source, its measures and groupings.'),
@@ -159,8 +154,11 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 		tile('ExpenseReceiptCapture', 'smrt-expenses/svelte', 'Attach a receipt.'),
 		tile('ExpenseForm', 'smrt-expenses/svelte', 'Enter an expense.')
 	],
-	hr: [
+	employees: [
 		tile('EmployeeList', 'smrt-human-resources/svelte', 'Everyone you employ.'),
+		tile('EmployeeForm', 'smrt-human-resources/svelte', 'Hire someone or change their terms.')
+	],
+	qualifications: [
 		tile('PersonQualifications', 'smrt-human-resources/svelte', 'One person’s qualifications.'),
 		tile(
 			'ExpiringQualificationsList',

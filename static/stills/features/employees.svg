@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-labelledby="title-hr">
-  <title id="title-hr">Gizmo line team — Employment · Acme Corp, an illustration</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-labelledby="title-employees">
+  <title id="title-employees">Gizmo line team — Employment · Acme Corp, an illustration</title>
   <style>
     .bg { fill: #fbf8f3; }
     .card { fill: #ffffff; stroke: #e3dbd0; }
@@ -19,6 +19,6 @@
     <text x="40" y="150" class="head">Person</text><text x="280" y="150" class="head">Position</text><text x="470" y="150" class="head">Since</text>
     <line x1="40" x2="600" y1="208" y2="208" class="rule"/><text x="40" y="194" class="cell">Priya N.</text><text x="280" y="194" class="cell">Line lead</text><text x="470" y="194" class="cell">2023-04-01</text>
     <line x1="40" x2="600" y1="252" y2="252" class="rule"/><text x="40" y="238" class="cell">Marcus O.</text><text x="280" y="238" class="cell">Assembler</text><text x="470" y="238" class="cell">2024-09-16</text>
-    <line x1="40" x2="600" y1="296" y2="296" class="rule"/><text x="40" y="282" class="cell">Lena K.</text><text x="280" y="282" class="cell">QA · forklift certified</text><text x="470" y="282" class="cell">2025-02-03</text>
+    <line x1="40" x2="600" y1="296" y2="296" class="rule"/><text x="40" y="282" class="cell">Lena K.</text><text x="280" y="282" class="cell">QA</text><text x="470" y="282" class="cell">2025-02-03</text>
   </g>
 </svg>

@@ -22,7 +22,7 @@ export const _aliases: Record<string, string> = {
 	'jobs-and-automation': '/docs/reference/packages/smrt-jobs',
 	facts: '/docs/reference/packages/smrt-facts',
 	records: '/docs/foundations/objects-and-collections',
-	'people-and-permissions': '/features/team/people',
+	'people-and-permissions': '/features/team/roles',
 	'live-data': '/docs/capabilities/live-data',
 	reports: '/features/grow/reports',
 	'content-and-media': '/features/publish',

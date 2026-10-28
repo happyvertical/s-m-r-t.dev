@@ -158,14 +158,24 @@ const cards = {
 			['Doodad courier', 'duplicate of #318', '$18.50']
 		]
 	},
-	hr: {
+	employees: {
 		kicker: 'Employment · Acme Corp',
 		title: 'Gizmo line team',
 		columns: ['Person', 'Position', 'Since'],
 		rows: [
 			['Priya N.', 'Line lead', '2023-04-01'],
 			['Marcus O.', 'Assembler', '2024-09-16'],
-			['Lena K.', 'QA · forklift certified', '2025-02-03']
+			['Lena K.', 'QA', '2025-02-03']
+		]
+	},
+	qualifications: {
+		kicker: 'Qualifications · Acme Corp',
+		title: 'Held by the gizmo line team',
+		columns: ['Person', 'Qualification', 'Expires'],
+		rows: [
+			['Lena K.', 'Forklift licence', '2026-12-01'],
+			['Marcus O.', 'First aid', '2027-03-15'],
+			['Priya N.', 'Widget press safety', '2026-11-09']
 		]
 	},
 	campaigns: {

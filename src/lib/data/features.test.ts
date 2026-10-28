@@ -51,7 +51,7 @@ const lockedMap: Record<FeatureSectionId, string[]> = {
 	sell: ['Customers', 'Orders', 'Invoices', 'Products', 'Quotes', 'Subscriptions', 'Payments'],
 	buy: ['Vendors', 'Purchase orders', 'Expenses', 'Inventory'],
 	make: ['Assemblies', 'Production', 'Stock'],
-	team: ['People', 'Roles', 'Timesheets', 'HR', 'Approvals'],
+	team: ['Employees', 'Timesheets', 'Qualifications', 'Approvals', 'Roles'],
 	publish: ['Articles', 'Images', 'Video', 'Voice', 'Comments', 'Social'],
 	talk: ['Chat', 'Email', 'Slack', 'Support'],
 	grow: ['Campaigns', 'Analytics', 'Reports', 'Ads', 'Affiliates'],
@@ -199,7 +199,6 @@ describe('feature examples', () => {
 			'quotes',
 			'vendors',
 			'purchase-orders',
-			'people',
 			'roles',
 			'images',
 			'articles',
@@ -300,7 +299,7 @@ describe('everyday sets (#373)', () => {
 		expect(everyday('sell')).toEqual(['customers', 'orders', 'invoices', 'products']);
 		expect(everyday('buy')).toEqual(['vendors', 'purchase-orders']);
 		expect(everyday('make')).toEqual(['assemblies', 'production']);
-		expect(everyday('team')).toEqual(['people', 'roles']);
+		expect(everyday('team')).toEqual(['employees', 'timesheets']);
 		expect(everyday('publish')).toEqual(['articles', 'images']);
 		expect(everyday('talk')).toEqual(['chat', 'email']);
 		expect(everyday('grow')).toEqual(['campaigns', 'analytics', 'reports']);

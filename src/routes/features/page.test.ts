@@ -10,7 +10,8 @@ afterEach(cleanup);
 describe('/features routes', () => {
 	it('prerenders every section and every feature', () => {
 		const isLegacy = (entry: Record<string, string>) =>
-			!featureSections.some((section) => section.id === entry.section);
+			!featureSections.some((section) => section.id === entry.section) ||
+			(entry.feature !== undefined && !features.some((feature) => feature.id === entry.feature));
 		const sections = sectionEntries() as Record<string, string>[];
 		const pages = featureEntries() as Record<string, string>[];
 		expect(sections.filter((entry) => !isLegacy(entry))).toEqual(
