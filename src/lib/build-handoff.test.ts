@@ -28,18 +28,18 @@ describe('feature recipes', () => {
 
 describe('build hand-off', () => {
 	it('round-trips a selection through the build query', () => {
-		const href = buildHref(['chat', 'commerce', 'nope', 'chat']);
-		expect(href).toBe('/build-a-boilerplate?features=chat,commerce');
-		expect(parseFeatures(href.slice(href.indexOf('?')))).toEqual(['chat', 'commerce']);
+		const href = buildHref(['chat', 'customers', 'nope', 'chat']);
+		expect(href).toBe('/build-a-boilerplate?features=customers,chat');
+		expect(parseFeatures(href.slice(href.indexOf('?')))).toEqual(['customers', 'chat']);
 		expect(buildHref([])).toBe('/build-a-boilerplate');
 		expect(parseFeatures('?features=x,y')).toEqual([]);
 	});
 
 	it('collects each recipe once and seeds the assistant with the feature names', () => {
 		expect(recipesFor(['chat', 'chat'])).toEqual(['chat.assistant', 'chat.rooms']);
-		const seed = seedFor(['chat', 'commerce']);
-		expect(seed.id).toBe('map-selection:chat,commerce');
-		expect(seed.messages[0].content).toContain('Chat, Commerce');
+		const seed = seedFor(['customers', 'chat']);
+		expect(seed.id).toBe('map-selection:customers,chat');
+		expect(seed.messages[0].content).toContain('Customers, Chat');
 	});
 
 	it('marks every feature without a recipe as not in the planner yet', () => {

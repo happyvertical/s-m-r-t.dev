@@ -36,17 +36,6 @@ const cards = {
 			['gizmos.list', 'MCP (public)', 'read']
 		]
 	},
-	blueprint: {
-		kicker: 'Manifest · Acme Corp',
-		title: 'Objects the scanner found',
-		columns: ['Object', 'Fields', 'Relationships'],
-		rows: [
-			['Widget', '7', 'belongs to Gizmo'],
-			['Gizmo', '5', 'has many Widgets'],
-			['Gadget', '9', 'has many Doodads'],
-			['NickNack', '4', '—']
-		]
-	},
 	memory: {
 		kicker: 'Agent memory · Acme Corp',
 		title: 'Restock assistant',
@@ -65,76 +54,6 @@ const cards = {
 			['Reorder 400 gizmos', '1 of 2', 'in 6 hours'],
 			['Retire nick-nack SKU NK-07', '0 of 1', 'tomorrow'],
 			['Raise doodad price 4%', '2 of 2 · approved', '—']
-		]
-	},
-	ingestion: {
-		kicker: 'Intake · Acme Corp',
-		title: 'Documents received',
-		columns: ['Source', 'Document', 'Proposal'],
-		rows: [
-			['email', 'Gizmo invoice #4471', 'Expense · awaiting review'],
-			['watch folder', 'Widget spec v3.pdf', 'Asset · proposed'],
-			['webhook', 'Doodad delivery note', 'Stock receipt · proposed']
-		]
-	},
-	webhooks: {
-		kicker: 'Outbound deliveries · Acme Corp',
-		title: 'widget.saved',
-		columns: ['Endpoint', 'Attempt', 'Status'],
-		rows: [
-			['warehouse.acme.test', '1', 'delivered'],
-			['erp.acme.test', '2', 'delivered'],
-			['partner.gizmos.test', '3', 'retrying']
-		]
-	},
-	facts: {
-		kicker: 'Facts · Acme Corp',
-		title: 'About gadget GD-200',
-		columns: ['Fact', 'Sources', 'Confidence'],
-		rows: [
-			['Weighs 1.2 kg', '3', '0.95'],
-			['Ships from the Leeds depot', '2', '0.81'],
-			['Pairs with doodad DD-9', '1 · corrected', '0.63']
-		]
-	},
-	flags: {
-		kicker: 'Feature switches · Acme Corp',
-		title: 'Overrides by tenant',
-		columns: ['Flag', 'Default', 'Acme North'],
-		rows: [
-			['gizmo-bundles', 'off', 'on'],
-			['doodad-preorders', 'on', 'on'],
-			['nick-nack-returns', 'off', 'off']
-		]
-	},
-	realtime: {
-		kicker: 'Live collection · Acme Corp',
-		title: 'Widget stock, updating',
-		columns: ['Widget', 'On hand', 'Changed'],
-		rows: [
-			['WG-100', '1,240', 'just now'],
-			['WG-110', '318', '4 s ago'],
-			['WG-120', '0 · reorder', '12 s ago']
-		]
-	},
-	shell: {
-		kicker: 'Application shell · Acme Corp',
-		title: 'Inventory › Widgets',
-		columns: ['Rail', 'Panel', 'Palette'],
-		rows: [
-			['Inventory', 'Widget WG-100', '⌘K  Go to…'],
-			['Orders', 'Detail · Edit', 'Reorder widgets'],
-			['Reports', 'History', 'Open gizmo report']
-		]
-	},
-	mobile: {
-		kicker: 'Mobile · Acme Corp',
-		title: 'Shared Kotlin core',
-		columns: ['Screen', 'Android', 'iOS'],
-		rows: [
-			['Widget scan', 'Compose', 'SwiftUI'],
-			['Offline queue', '3 pending writes', '3 pending writes'],
-			['Session', 'PKCE · signed in', 'PKCE · signed in']
 		]
 	},
 	voice: {
@@ -188,16 +107,6 @@ const cards = {
 			['Doodad', '—', 'DD-9']
 		]
 	},
-	ledgers: {
-		kicker: 'Journal · Acme Corp',
-		title: 'Invoice INV-2026-0142 posted',
-		columns: ['Account', 'Debit', 'Credit'],
-		rows: [
-			['Accounts receivable', '$2,400.00', ''],
-			['Widget sales', '', '$2,200.00'],
-			['Sales tax payable', '', '$200.00']
-		]
-	},
 	subscriptions: {
 		kicker: 'Plans · Acme Corp',
 		title: 'Gizmo Care',
@@ -217,16 +126,6 @@ const cards = {
 			['transfer', 'Leeds → Bristol', '−120'],
 			['reserve', 'Bristol', '−40'],
 			['adjust', 'Leeds depot', '−2']
-		]
-	},
-	manufacturing: {
-		kicker: 'Bill of materials · Acme Corp',
-		title: 'Gadget GD-200',
-		columns: ['Line', 'Qty', 'Operation'],
-		rows: [
-			['Gizmo GZ-20', '1', 'assemble · 6 min'],
-			['Doodad DD-9', '4', 'fit · 2 min'],
-			['Nick-nack NK-07', '2', 'finish · 3 min']
 		]
 	},
 	support: {
@@ -299,26 +198,6 @@ const cards = {
 			['Acme newsletter', '9', '$108.00']
 		]
 	},
-	sales: {
-		kicker: 'CRM · Acme Corp',
-		title: 'Pipeline',
-		columns: ['Opportunity', 'Stage', 'Value'],
-		rows: [
-			['Northwind · 2,000 widgets', 'proposal', '$40,000'],
-			['Harbor Co · gizmo bundle', 'negotiation', '$12,500'],
-			['Riverside · doodad refill', 'won', '$3,200']
-		]
-	},
-	properties: {
-		kicker: 'Properties · Acme Corp',
-		title: 'acme.test zones',
-		columns: ['Zone', 'Parent', 'Placements'],
-		rows: [
-			['header', '—', '1'],
-			['sidebar', '—', '2'],
-			['sidebar › gizmo promo', 'sidebar', '1']
-		]
-	},
 	places: {
 		kicker: 'Places · Acme Corp',
 		title: 'Leeds depot',
@@ -329,14 +208,64 @@ const cards = {
 			['Widget shelf 4', 'room', '—']
 		]
 	},
-	tags: {
-		kicker: 'Tags · Acme Corp',
-		title: 'Product taxonomy',
-		columns: ['Tag', 'Context', 'Aliases'],
+	orders: {
+		kicker: 'Orders · Acme Corp',
+		title: 'Open orders',
+		columns: ['Order', 'Customer', 'Status'],
 		rows: [
-			['widgets', 'catalog', 'Widgets · Baubles (fr)'],
-			['widgets › heavy-duty', 'catalog', '—'],
-			['gizmos', 'catalog', 'Gizmos · Trucs (fr)']
+			['SO-1042 · 12 widgets', 'Acme North', 'shipped'],
+			['SO-1043 · 40 doodads', 'Gadget Hut', 'packing'],
+			['SO-1044 · 3 gizmos', 'Nick-Nack Row', 'in cart']
+		]
+	},
+	payments: {
+		kicker: 'Payments · Acme Corp',
+		title: 'Received this week',
+		columns: ['Payment', 'Pays', 'Amount'],
+		rows: [
+			['Acme North · card', 'INV-2207', '$480.00'],
+			['Gadget Hut · transfer', 'INV-2209, INV-2210', '$1,125.00'],
+			['Nick-Nack Row · card', 'INV-2212 · part', '$60.00']
+		]
+	},
+	assemblies: {
+		kicker: 'Assemblies · Acme Corp',
+		title: 'Gadget GD-200',
+		columns: ['Part', 'Quantity', 'Step'],
+		rows: [
+			['Widget WG-100', '2', 'Mount'],
+			['Gizmo GZ-10', '1', 'Wire'],
+			['Doodad DD-9', '4', 'Fasten']
+		]
+	},
+	production: {
+		kicker: 'Production · Acme Corp',
+		title: 'Runs this week',
+		columns: ['Run', 'Makes', 'Status'],
+		rows: [
+			['PR-310', '50 gadgets GD-200', 'in progress · step 2 of 3'],
+			['PR-311', '200 widgets WG-100', 'planned'],
+			['PR-309', '20 gizmos GZ-10', 'done']
+		]
+	},
+	stock: {
+		kicker: 'Stock · Acme Corp',
+		title: 'On hand, Leeds depot',
+		columns: ['Item', 'On hand', 'Reserved'],
+		rows: [
+			['Widget WG-100', '1,240', '300'],
+			['Gizmo GZ-10', '86', '12'],
+			['Doodad DD-9', '2,400', '0']
+		]
+	},
+	tasks: {
+		kicker: 'Tasks · Acme Corp',
+		title: 'Gadget relaunch board',
+		columns: ['Task', 'Owner', 'Column'],
+		rows: [
+			['Order new gizmo housings', 'Priya', 'In progress'],
+			['Update widget spec sheet', 'Sam', 'To do'],
+			['Photograph doodad range', 'Lee', 'Done']
 		]
 	}
 };
