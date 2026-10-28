@@ -5,7 +5,7 @@
 
 <SEO
 	title="Features"
-	description="Nine sections of capabilities you do not build from scratch."
+	description="Nine groups of capabilities you do not build from scratch."
 	url="https://s-m-r-t.dev/features"
 />
 
@@ -13,7 +13,7 @@
 	<header class="hero">
 		<p class="kicker">Build</p>
 		<h1>Features</h1>
-		<p class="one">Nine sections of what you do not build from scratch.</p>
+		<p class="one">Nine groups of what you do not build from scratch.</p>
 	</header>
 
 	<ul class="tiles">

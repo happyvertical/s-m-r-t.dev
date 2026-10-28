@@ -19,7 +19,7 @@
 	import SunCanvas from './SunCanvas.svelte';
 	import { SUN_SIZE } from './sun';
 
-	/** Full-screen map: the BUILD sun, nine sections, forty-nine features. */
+	/** Full-screen map: the BUILD sun, nine groups, forty-one features. */
 	let size = $state({ width: 1400, height: 800 });
 	const graph = $derived(fitGraph(size.width, size.height));
 	const nodes = $derived(graph.nodes.filter((node) => node.depth > 0));
@@ -203,7 +203,7 @@
 						class:niche={isNiche(node)}
 						class:set={isSectionOn(node)}
 						href={node.href}
-						aria-label="{node.word}{node.depth === 1 ? ' section' : ''}{isSelected(node) ||
+						aria-label="{node.word}{node.depth === 1 ? ' group' : ''}{isSelected(node) ||
 						isSectionOn(node)
 							? ', selected'
 							: ''}: {node.hint}{suffix(node)}"
@@ -265,7 +265,7 @@
 			: ''}
 	</div>
 	<p class="lede">
-		Click a section for its everyday set · click a feature to add or drop it
+		Click a group for its everyday set · click a feature to add or drop it
 		{#if selected.size}
 			<button type="button" class="clear" onclick={clear}>Clear</button>
 		{/if}
