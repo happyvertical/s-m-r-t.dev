@@ -294,6 +294,7 @@ export const features: Feature[] = [
 		word: 'Assemblies',
 		hint: 'What goes into a finished item: parts, quantities and steps.',
 		packages: ['smrt-manufacturing'],
+		recipes: ['manufacturing.assemblies'],
 		example: still('assemblies'),
 		inTheBox: ['bills of materials', 'routing', 'operations', 'labour estimates']
 	}),
@@ -304,6 +305,7 @@ export const features: Feature[] = [
 		word: 'Production',
 		hint: 'Runs that turn parts into finished goods, step by step.',
 		packages: ['smrt-manufacturing', 'smrt-commerce'],
+		recipes: ['manufacturing.production'],
 		example: still('production'),
 		inTheBox: ['production runs', 'completions', 'production orders', 'materials consumed']
 	}),
@@ -319,11 +321,6 @@ export const features: Feature[] = [
 	}),
 
 	// Team
-	// Employees and Qualifications have no recipe yet: the planner exposes no
-	// human-resources entry. `human-resources.people` is pending upstream in
-	// smrt#4438 (the recipe) and smrt#4440 (UI-only exposure); until both ship
-	// the two keep the "not in the planner yet" notice. Qualifications will
-	// share that recipe, since it is the same package.
 	feature({
 		id: 'employees',
 		section: 'team',
@@ -331,6 +328,7 @@ export const features: Feature[] = [
 		word: 'Employees',
 		hint: 'Who works here, in what position, with dated history.',
 		packages: ['smrt-human-resources'],
+		recipes: ['human-resources.people'],
 		example: still('employees'),
 		inTheBox: ['employment', 'terms', 'positions', 'worker types', 'leave status']
 	}),
@@ -351,6 +349,7 @@ export const features: Feature[] = [
 		word: 'Qualifications',
 		hint: 'Licences and certificates people hold, and when each expires.',
 		packages: ['smrt-human-resources'],
+		recipes: ['human-resources.qualifications'],
 		example: still('qualifications'),
 		inTheBox: ['qualifications', 'held certificates', 'expiry dates', 'renewals', 'suspensions']
 	}),
@@ -472,6 +471,7 @@ export const features: Feature[] = [
 		word: 'Support',
 		hint: 'Cases that start from chat or email and keep their timeline.',
 		packages: ['smrt-support'],
+		recipes: ['support.tickets'],
 		example: still('support'),
 		inTheBox: ['cases', 'intake', 'service targets', 'response clocks', 'escalation']
 	}),
@@ -530,6 +530,7 @@ export const features: Feature[] = [
 		word: 'Affiliates',
 		hint: 'Referral partners and the commissions they earn.',
 		packages: ['smrt-sales'],
+		recipes: ['affiliates.referrals'],
 		example: still('affiliates'),
 		inTheBox: ['referrers', 'referral programs', 'commissions', 'commission payouts']
 	}),

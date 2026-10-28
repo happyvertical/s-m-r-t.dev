@@ -14841,6 +14841,71 @@ export const uiComponents: UiComponentReference[] = [
 		source: 'packages/projects/src/svelte/ProjectBoard.svelte'
 	},
 	{
+		slug: 'project-questions-and-decisions',
+		name: 'ProjectQuestionsAndDecisions',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'ProjectQuestionsAndDecisions is part of the projects · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'questions',
+				code: 'ProjectQuestionView[]',
+				status: false,
+				description: 'Authorized question projections to display and resolve.'
+			},
+			{
+				name: 'decisions',
+				code: 'ProjectDecisionView[]',
+				status: false,
+				description: 'Authorized decision projections with their available choices.'
+			},
+			{
+				name: 'busy',
+				code: 'boolean',
+				status: false,
+				description: 'Disable resolution submissions while the host saves a change.'
+			},
+			{
+				name: 'onanswer',
+				code: '(input: ProjectQuestionAnswerInput) => void | Promise<void>',
+				status: false,
+				description: 'Save an explicit owner answer with the observed revision.'
+			},
+			{
+				name: 'ondecide',
+				code: '(input: ProjectDecisionResolveInput) => void | Promise<void>',
+				status: false,
+				description: 'Save a selected outcome and rationale with the observed revision.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onanswer',
+				code: '(input: ProjectQuestionAnswerInput) => void | Promise<void>',
+				status: false,
+				description: 'Save an explicit owner answer with the observed revision.'
+			},
+			{
+				name: 'ondecide',
+				code: '(input: ProjectDecisionResolveInput) => void | Promise<void>',
+				status: false,
+				description: 'Save a selected outcome and rationale with the observed revision.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/docs/ui'
+		},
+		source: 'packages/projects/src/svelte/ProjectQuestionsAndDecisions.svelte'
+	},
+	{
 		slug: 'reject-dialog',
 		name: 'RejectDialog',
 		family: 'smrt-projects-svelte',
@@ -16151,7 +16216,7 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'boolean',
 				status: false,
 				description:
-					'Render the shell chrome (default). `false` mounts only the Provider and ThemeProvider around `children`: no navigation, sidebars, header, or footer, so a host can show the first-run setup route chrome-free.'
+					'Render the shell chrome (default). `false` mounts only the Provider and ThemeProvider around `children`, retaining the canonical shell and layout contexts: no navigation, sidebars, header, or footer. Hosts can compose their own chrome and still render ShellSettingsPage against the same state.'
 			},
 			{
 				name: 'children',
@@ -23365,6 +23430,12 @@ export const uiComponents: UiComponentReference[] = [
 				description: 'Registers this toolbar only when explicitly supplied.'
 			},
 			{
+				name: 'density',
+				code: "'comfortable' | 'touch'",
+				status: false,
+				description: 'Target density; omit to inherit the ThemeProvider setting.'
+			},
+			{
 				name: 'class',
 				code: 'string',
 				status: false,
@@ -24148,7 +24219,7 @@ export const uiComponents: UiComponentReference[] = [
 		name: 'ConfidenceBadge',
 		family: 'smrt-ui-display',
 		category: 'Display and status',
-		importPath: '@happyvertical/smrt-ui',
+		importPath: '@happyvertical/smrt-ui/display',
 		summary:
 			'ConfidenceBadge - Displays AI confidence level indicator Shows a visual indicator for confidence scores (0-100). Useful for OCR results, AI predictions, etc. Accessibility: Uses role="meter" with aria-valuenow for screen readers',
 		summarySynthesized: false,
@@ -24201,7 +24272,7 @@ export const uiComponents: UiComponentReference[] = [
 		name: 'CurrencyDisplay',
 		family: 'smrt-ui-display',
 		category: 'Display and status',
-		importPath: '@happyvertical/smrt-ui',
+		importPath: '@happyvertical/smrt-ui/display',
 		summary:
 			'CurrencyDisplay - Formats and displays monetary values Displays formatted currency with configurable unit. Use `unit="cents"` (default) when amount is in the currency\'s minor units, or `unit="dollars"` when it is already in major units. Accepts ISO 4217 currency codes, normalized by trimming whitespace and uppercasing before locale formatting. Unsupported codes render an accessible inline error instead of throwing during a collection render.',
 		summarySynthesized: false,
@@ -24272,7 +24343,7 @@ export const uiComponents: UiComponentReference[] = [
 		name: 'DateDisplay',
 		family: 'smrt-ui-display',
 		category: 'Display and status',
-		importPath: '@happyvertical/smrt-ui',
+		importPath: '@happyvertical/smrt-ui/display',
 		summary:
 			'DateDisplay - Formats and displays dates Supports various format options and relative time display.',
 		summarySynthesized: false,
@@ -24333,11 +24404,82 @@ export const uiComponents: UiComponentReference[] = [
 		source: 'packages/smrt-ui/src/components/display/DateDisplay.svelte'
 	},
 	{
+		slug: 'document-viewer',
+		name: 'DocumentViewer',
+		family: 'smrt-ui-display',
+		category: 'Display and status',
+		importPath: '@happyvertical/smrt-ui/display',
+		summary: 'DocumentViewer is part of the display and status component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'src',
+				code: 'string',
+				status: true,
+				description: 'URL of the file; read with `fetch`.'
+			},
+			{
+				name: 'mimeType',
+				code: 'string',
+				status: false,
+				description: "`application/pdf` or `image/*`. Omitted, the response's Content-Type decides."
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: true,
+				description: 'Names the document for assistive technology (the image alt, the page canvas).'
+			},
+			{
+				name: 'fetch',
+				code: 'typeof globalThis.fetch',
+				status: false,
+				description:
+					"Reads the file; inject the app's authenticated fetch. Default: global `fetch`."
+			},
+			{
+				name: 'openPdf',
+				code: 'OpenPdf',
+				status: false,
+				description: 'Opens PDF bytes. Default: pdf.js via `createPdfJsOpener()`.'
+			},
+			{
+				name: 'labels',
+				code: 'Partial<DocumentViewerLabels>',
+				status: false,
+				description: 'Text overrides; defaults come from the `ui` i18n catalog.'
+			},
+			{
+				name: 'id',
+				code: 'string',
+				status: false,
+				description: 'DOM id of the component root.'
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'CSS class to apply to the component root.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/docs/ui'
+		},
+		source: 'packages/smrt-ui/src/components/display/DocumentViewer.svelte'
+	},
+	{
 		slug: 'icon',
 		name: 'Icon',
 		family: 'smrt-ui-display',
 		category: 'Display and status',
-		importPath: '@happyvertical/smrt-ui',
+		importPath: '@happyvertical/smrt-ui/display',
 		summary: 'Props for Icon component',
 		summarySynthesized: false,
 		slot: null,
@@ -24395,7 +24537,7 @@ export const uiComponents: UiComponentReference[] = [
 		name: 'StatusBadge',
 		family: 'smrt-ui-display',
 		category: 'Display and status',
-		importPath: '@happyvertical/smrt-ui',
+		importPath: '@happyvertical/smrt-ui/display',
 		summary:
 			'StatusBadge - Generic status indicator badge Provides pre-defined color schemes for common status domains (invoice, project, etc.) or an explicit semantic tone for custom status vocabulary.',
 		summarySynthesized: false,
@@ -26963,6 +27105,169 @@ export const uiComponents: UiComponentReference[] = [
 			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/MultiSelect.svelte'
+	},
+	{
+		slug: 'numeric-keypad',
+		name: 'NumericKeypad',
+		family: 'smrt-ui-forms',
+		category: 'Forms and controls',
+		importPath: '@happyvertical/smrt-ui/forms',
+		summary: 'NumericKeypad is part of the forms and controls component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'value',
+				code: 'string | number | null',
+				status: false,
+				description: 'Typed text; a number is accepted and re-written as text on the next key.'
+			},
+			{
+				name: 'mode',
+				code: "'number' | 'money'",
+				status: false,
+				description: "`money` follows the currency's minor-unit exponent. Default `number`."
+			},
+			{
+				name: 'min',
+				code: 'number',
+				status: false,
+				description: 'Smallest acceptable value (major units); below it the keypad shows an error.'
+			},
+			{
+				name: 'max',
+				code: 'number',
+				status: false,
+				description: 'Largest acceptable value (major units).'
+			},
+			{
+				name: 'clampToMax',
+				code: 'boolean',
+				status: false,
+				description: 'Refuse a key press that would take the value above `max`.'
+			},
+			{
+				name: 'maxDecimals',
+				code: 'number',
+				status: false,
+				description:
+					"Digits after the point; 0 is integer-only. Default 0, or the currency's in money mode."
+			},
+			{
+				name: 'maxLength',
+				code: 'number',
+				status: false,
+				description: 'Longest typed text, counting the point.'
+			},
+			{
+				name: 'currency',
+				code: 'string',
+				status: false,
+				description:
+					'ISO 4217 code for money mode (sets the minor-unit exponent). Default exponent 2.'
+			},
+			{
+				name: 'minorUnitExponent',
+				code: 'number',
+				status: false,
+				description: 'Override the money minor-unit exponent.'
+			},
+			{
+				name: 'prefix',
+				code: 'string',
+				status: false,
+				description: 'Shown before the display value (a currency symbol).'
+			},
+			{
+				name: 'unit',
+				code: 'string',
+				status: false,
+				description: 'Shown after the display value (a unit such as `pcs`).'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Accessible name; defaults to the `labels.region` text.'
+			},
+			{
+				name: 'onChange',
+				code: '(detail: NumericKeypadDetail) => void',
+				status: false,
+				description: 'Called after every change with the parsed entry.'
+			},
+			{
+				name: 'onSubmit',
+				code: '(detail: NumericKeypadDetail) => void',
+				status: false,
+				description: 'Called by the confirm key / Enter; supplying it shows the confirm key.'
+			},
+			{
+				name: 'submitLabel',
+				code: 'string',
+				status: false,
+				description: 'Confirm key text; defaults to the catalog\'s "Confirm".'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Ignores input and disables every key.'
+			},
+			{
+				name: 'name',
+				code: 'string',
+				status: false,
+				description: 'Field name: posts the typed text (number) or integer minor units (money).'
+			},
+			{
+				name: 'labels',
+				code: 'Partial<NumericKeypadLabels>',
+				status: false,
+				description: 'Text overrides; defaults come from the `ui` i18n catalog.'
+			},
+			{
+				name: 'id',
+				code: 'string',
+				status: false,
+				description: 'DOM id of the component root.'
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'CSS class to apply to the component root.'
+			},
+			{
+				name: 'interaction',
+				code: 'ControlInteractionOptions | false',
+				status: false,
+				description: 'Interaction options or false to disable registration.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onChange',
+				code: '(detail: NumericKeypadDetail) => void',
+				status: false,
+				description: 'Called after every change with the parsed entry.'
+			},
+			{
+				name: 'onSubmit',
+				code: '(detail: NumericKeypadDetail) => void',
+				status: false,
+				description: 'Called by the confirm key / Enter; supplying it shows the confirm key.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/docs/ui'
+		},
+		source: 'packages/smrt-ui/src/components/forms/NumericKeypad.svelte'
 	},
 	{
 		slug: 'province-select',
@@ -31660,10 +31965,10 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2881,
-	totalProps: 3047,
+	describedProps: 2916,
+	totalProps: 3082,
 	authoredSummaries: 153,
-	totalComponents: 407
+	totalComponents: 410
 };
 
 export const uiComponentGroups = [
