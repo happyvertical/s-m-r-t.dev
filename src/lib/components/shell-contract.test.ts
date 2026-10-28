@@ -16,6 +16,9 @@ describe('site shell contract', () => {
 		expect(siteShell).toContain('{#snippet docsPanel()}');
 		expect(siteShell).toContain('appPanel={inDocs ? docsPanel : undefined}');
 		expect(siteShell).toContain('edgeToggles={{ top: inDocs }}');
+		// The front page has no site header (#381).
+		expect(siteShell).toContain('appBar={onFront ? undefined : appBar}');
+		expect(siteShell).toContain('brandInSlot={onFront}');
 	});
 
 	it('does not retain or nest a second application shell', () => {

@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { HUB_RADIUS } from './graph-layout';
-	import { createSun, SUN_SIZE } from './sun';
+	import { createSun, dayPalette, firePalette, SUN_SIZE } from './sun';
+
+	/** `day` is the light scheme's sun: gold palette and a soft haze, no rays. */
+	let { day = false }: { day?: boolean } = $props();
 
 	// Positioned by its parent: the canvas fills a wrapper centred on the hub, so
 	// it follows the hub on resize.
@@ -18,7 +21,11 @@
 		canvas.height = size * dpr;
 		ctx.scale(dpr, dpr);
 
-		const sun = createSun({ ctx, size, radius });
+		const sun = createSun(
+			day
+				? { ctx, size, radius, palette: dayPalette, haze: true }
+				: { ctx, size, radius, palette: firePalette }
+		);
 
 		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 		// FeatureGraph hides the sun below this width; draw nothing while hidden.

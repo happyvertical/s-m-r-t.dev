@@ -1,7 +1,18 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { tryGetThemeContext } from '@happyvertical/smrt-ui/themes';
 	import SEO from '$lib/components/SEO.svelte';
 	import FeatureGraph from '$lib/components/home/FeatureGraph.svelte';
 	import { BUILD_HREF } from '$lib/components/home/graph-layout';
+
+	// The light scheme is a daytime sky (#381); the dark scheme is space. Without
+	// a provider, or before the scheme settles, the page is space.
+	const theme = tryGetThemeContext();
+	let mounted = $state(false);
+	onMount(() => {
+		mounted = true;
+	});
+	const sky = $derived(mounted && theme !== null && !theme.state.isDark);
 
 	// The three doors below the map (#361): build-a-boilerplate, the feature
 	// showcases, and the technical documentation.
@@ -25,7 +36,7 @@
 	url="https://s-m-r-t.dev"
 />
 
-<div class="front">
+<div class="front" class:sky>
 	<h1 class="visually-hidden">The s-m-r-t application stack</h1>
 	<FeatureGraph />
 
@@ -42,9 +53,9 @@
 
 <style>
 	/*
-	 * The front page is space in both colour schemes (#373): near-black with
-	 * stars and a fire sun. The site's light/dark toggle applies to every other
-	 * page, not this one. `*-ink` tokens are the same hues lightened until small
+	 * The front page follows the colour scheme (#381): space in dark (near-black
+	 * with stars and a fire sun), a daytime sky in light (`.sky`, below, with
+	 * its own blue tokens and no orange but the sun). `*-ink` tokens are the same hues lightened until small
 	 * text on the page background passes AA (4.5:1); the plain tokens colour
 	 * fills and strokes only.
 	 */
@@ -68,6 +79,24 @@
 		color: var(--front-ink);
 		font-family: var(--front-mono);
 		line-height: 1.4;
+	}
+
+	/* The light scheme's tokens: sky blues, nothing orange. */
+	.front.sky {
+		--front-bg: #eaf5ff;
+		--front-ink: #1d3557;
+		--front-dim: #6b88a8;
+		--front-dim-text: #4d6785;
+		--front-line: #b9d4ee;
+		--front-line-1: #9bbbdc;
+		--front-red: #2384cc;
+		--front-orange: #3aa0e8;
+		--front-yellow: #7cc4f7;
+		--front-orange-ink: #2384cc;
+		--front-yellow-ink: #2384cc;
+		--front-hub-ink: #3a0d00;
+		--front-door-hot-ink: #fff;
+		--front-hint-ink: #fff;
 	}
 
 	.visually-hidden {

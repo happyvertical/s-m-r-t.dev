@@ -21,6 +21,7 @@
 	// The docs panel (the section map) lives only inside Docs (#365). Leaving
 	// Docs with it open closes it, so it never hangs over a feature page.
 	const inDocs = $derived(isDocsPathname(pathname));
+	const onFront = $derived(pathname === '/');
 	$effect(() => {
 		if (!inDocs && shell.panels.top === 'expanded') shell.collapsePanel('top');
 	});
@@ -78,16 +79,24 @@
 	});
 </script>
 
+{#snippet appBar()}
+	<Header {pathname} />
+{/snippet}
+
 {#snippet docsPanel()}
 	<DocsPanelSections {pathname} {hash} />
 {/snippet}
 
 <AppTheme>
-	<AdminShell state={shell} edgeToggles={{ top: inDocs }} appPanel={inDocs ? docsPanel : undefined}>
-		{#snippet appBar()}
-			<Header {pathname} space={pathname === '/'} />
-		{/snippet}
-
+	<!-- The front page has no site header (#381): without an appBar snippet and
+	     with the brand slot claimed, the shell renders no top band at all. -->
+	<AdminShell
+		state={shell}
+		edgeToggles={{ top: inDocs }}
+		appPanel={inDocs ? docsPanel : undefined}
+		appBar={onFront ? undefined : appBar}
+		brandInSlot={onFront}
+	>
 		<div class="site-content">
 			<div class="route-content" id="main-content" tabindex="-1">
 				{@render children()}

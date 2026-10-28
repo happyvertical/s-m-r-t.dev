@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
+	import { tryGetThemeContext } from '@happyvertical/smrt-ui/themes';
 	import { SvelteSet } from 'svelte/reactivity';
 	import {
 		buildHref,
@@ -13,20 +14,32 @@
 	import { featureSections, featuresInSection, getFeature } from '$lib/data/features';
 	import { isSetOn, toggleSet } from '$lib/group-selection';
 	import type { FeatureSectionId } from '$lib/data/features';
+	import FrontControls from './FrontControls.svelte';
 	import { fitGraph, HUB_RADIUS, type PlacedNode } from './graph-layout';
+	import SkyMap from './SkyMap.svelte';
 	import { WARP_RAMP_MS } from './stars';
 	import Starfield from './Starfield.svelte';
 	import SunCanvas from './SunCanvas.svelte';
 	import { SUN_SIZE } from './sun';
 
-	/** Full-screen map: the BUILD sun, nine groups, forty-one features. */
+	/**
+	 * Full-screen map: the BUILD sun, nine groups, forty-one features. Space in
+	 * the dark scheme (circles around the sun), a daytime sky with one cumulus
+	 * cloud per group in the light scheme (#381); one selection behind both.
+	 */
+	// The theme provider settles the scheme in an effect after hydration, so the
+	// renderer is chosen one frame after mount: nothing flashes the wrong scheme.
+	// Without a provider (a bare render) the map is space.
+	const theme = tryGetThemeContext();
+	let ready = $state(false);
+	const sky = $derived(ready && theme !== null && !theme.state.isDark);
 	let size = $state({ width: 1400, height: 800 });
 	const graph = $derived(fitGraph(size.width, size.height));
 	const nodes = $derived(graph.nodes.filter((node) => node.depth > 0));
 	const hub = $derived(graph.nodes[0]);
 
 	let map: HTMLElement;
-	let hintEl: HTMLElement;
+	let hintEl = $state<HTMLElement>();
 	let focused = $state<PlacedNode | null>(null);
 
 	// Features picked for build-a-boilerplate (#367). Read after mount so the
@@ -88,6 +101,7 @@
 
 	onMount(() => {
 		for (const id of loadSelection()) selected.add(id);
+		const frame = requestAnimationFrame(() => (ready = true));
 		const measure = () => {
 			const { clientWidth, clientHeight } = map;
 			if (clientWidth > 0 && clientHeight > 0) size = { width: clientWidth, height: clientHeight };
@@ -95,11 +109,17 @@
 		measure();
 		if (typeof ResizeObserver === 'undefined') {
 			window.addEventListener('resize', measure);
-			return () => window.removeEventListener('resize', measure);
+			return () => {
+				cancelAnimationFrame(frame);
+				window.removeEventListener('resize', measure);
+			};
 		}
 		const observer = new ResizeObserver(measure);
 		observer.observe(map);
-		return () => observer.disconnect();
+		return () => {
+			cancelAnimationFrame(frame);
+			observer.disconnect();
+		};
 	});
 
 	// Place the hover sentence beside the node, inside the map.
@@ -133,9 +153,44 @@
 	// over WARP_RAMP_MS) while the graph and the sun fade, then the planner
 	// opens. Phones and reduced motion navigate directly.
 	let warp = $state<number | null>(null);
+	// The light scheme's flight (#381): the map fades, the clouds rush past and
+	// a white-out takes the screen; the planner grows in from it. 0 at rest.
+	let flight = $state(0);
+	const FLIGHT_MS = 1500;
+	// One animation at a time: its frame handle is kept so it can be stopped when
+	// the map is destroyed or the scheme swaps under it; a stopped run never
+	// navigates.
+	let raf = 0;
+	function stopRun() {
+		cancelAnimationFrame(raf);
+		raf = 0;
+		flight = 0;
+		warp = null;
+	}
+	function run(duration: number, set: (_progress: number) => void, target: string) {
+		const start = performance.now();
+		const step = (now: number) => {
+			const progress = Math.min(1, (now - start) / duration);
+			set(progress);
+			if (progress < 1) {
+				raf = requestAnimationFrame(step);
+				return;
+			}
+			raf = 0;
+			markWarp();
+			goto(target).catch(stopRun);
+		};
+		raf = requestAnimationFrame(step);
+	}
+	onMount(() => stopRun);
+	// Swapping renderers mid-run ends the run: the other one has nothing to draw.
+	$effect(() => {
+		void sky;
+		untrack(stopRun);
+	});
 	function onHubClick(event: MouseEvent) {
 		event.preventDefault();
-		if (warp !== null) return;
+		if (warp !== null || flight > 0) return;
 		const target = buildTarget;
 		const animate =
 			window.matchMedia('(min-width: 768px)').matches &&
@@ -144,19 +199,13 @@
 			void goto(target);
 			return;
 		}
-		const start = performance.now();
+		if (sky) {
+			flight = 0.0001;
+			run(FLIGHT_MS, (progress) => (flight = Math.max(0.0001, progress)), target);
+			return;
+		}
 		warp = 0;
-		const step = (now: number) => {
-			const progress = Math.min(1, (now - start) / WARP_RAMP_MS);
-			warp = progress;
-			if (progress < 1) {
-				requestAnimationFrame(step);
-				return;
-			}
-			markWarp();
-			goto(target).catch(() => (warp = null));
-		};
-		requestAnimationFrame(step);
+		run(WARP_RAMP_MS, (progress) => (warp = progress), target);
 	}
 </script>
 
@@ -166,110 +215,133 @@
 	class="map"
 	class:focus={lit !== null}
 	class:warping={warp !== null}
+	class:sky
+	class:pending={!ready}
 	id="map"
 	aria-label="Features"
 	bind:this={map}
 >
-	<Starfield {warp} />
-	<div
-		class="sun-slot"
-		style:left="{graph.cx - SUN_SIZE / 2}px"
-		style:top="{graph.cy - SUN_SIZE / 2}px"
-	>
-		<SunCanvas />
-	</div>
-	<svg viewBox="0 0 {size.width} {size.height}" aria-label="Features around BUILD" role="group">
-		<g>
-			{#each graph.links as link (link.target.id)}
-				<line
-					class="link l{link.depth}"
-					class:on={lit?.has(link.source.id) && lit.has(link.target.id)}
-					x1={link.x1}
-					y1={link.y1}
-					x2={link.target.x}
-					y2={link.target.y}
-				/>
-			{/each}
-		</g>
-		<g>
-			{#each nodes as node (node.id)}
-				{@const right = node.x >= graph.cx}
-				<g transform="translate({node.x},{node.y})">
-					<a
-						class="n d{node.depth}"
-						class:on={lit?.has(node.id)}
-						class:sel={isSelected(node)}
-						class:unmapped={isUnmapped(node)}
-						class:niche={isNiche(node)}
-						class:set={isSectionOn(node)}
-						href={node.href}
-						aria-label="{node.word}{node.depth === 1 ? ' group' : ''}{isSelected(node) ||
-						isSectionOn(node)
-							? ', selected'
-							: ''}: {node.hint}{suffix(node)}"
-						onkeydown={(event) => onNodeKeydown(event, node)}
-						onmouseenter={() => (focused = node)}
-						onfocus={() => (focused = node)}
-						onmouseleave={() => (focused = null)}
-						onblur={() => (focused = null)}
-					>
-						{#if isSelected(node)}
-							<circle class="ring" r={node.r + 5} />
-						{/if}
-						<circle
-							class="dot"
-							r={node.r}
-							onclick={(event) => onCircleClick(event, node)}
-							role="presentation"
-						/>
-						<text
-							x={right ? node.r + 8 : -(node.r + 8)}
-							y={node.depth === 1 ? 5 : 4}
-							text-anchor={right ? 'start' : 'end'}
-							onclick={(event) => onLabelClick(event, node)}
-							role="presentation">{node.word}</text
+	<FrontControls
+		{count}
+		{buildTarget}
+		{sky}
+		busy={flight > 0 || warp !== null}
+		onbuild={onHubClick}
+	/>
+	{#if sky}
+		<SkyMap
+			{size}
+			{selected}
+			{count}
+			{buildTarget}
+			{flight}
+			ontogglefeature={toggleId}
+			ontogglegroup={toggleSection}
+			onbuild={onHubClick}
+			onclear={clear}
+		/>
+	{:else}
+		<Starfield {warp} />
+		<div
+			class="sun-slot"
+			style:left="{graph.cx - SUN_SIZE / 2}px"
+			style:top="{graph.cy - SUN_SIZE / 2}px"
+		>
+			<SunCanvas />
+		</div>
+		<svg viewBox="0 0 {size.width} {size.height}" aria-label="Features around BUILD" role="group">
+			<g>
+				{#each graph.links as link (link.target.id)}
+					<line
+						class="link l{link.depth}"
+						class:on={lit?.has(link.source.id) && lit.has(link.target.id)}
+						x1={link.x1}
+						y1={link.y1}
+						x2={link.target.x}
+						y2={link.target.y}
+					/>
+				{/each}
+			</g>
+			<g>
+				{#each nodes as node (node.id)}
+					{@const right = node.x >= graph.cx}
+					<g transform="translate({node.x},{node.y})">
+						<a
+							class="n d{node.depth}"
+							class:on={lit?.has(node.id)}
+							class:sel={isSelected(node)}
+							class:unmapped={isUnmapped(node)}
+							class:niche={isNiche(node)}
+							class:set={isSectionOn(node)}
+							href={node.href}
+							aria-label="{node.word}{node.depth === 1 ? ' group' : ''}{isSelected(node) ||
+							isSectionOn(node)
+								? ', selected'
+								: ''}: {node.hint}{suffix(node)}"
+							onkeydown={(event) => onNodeKeydown(event, node)}
+							onmouseenter={() => (focused = node)}
+							onfocus={() => (focused = node)}
+							onmouseleave={() => (focused = null)}
+							onblur={() => (focused = null)}
 						>
-					</a>
-				</g>
-			{/each}
-		</g>
-		<g transform="translate({hub.x},{hub.y})">
-			<a
-				class="hub"
-				href={buildTarget}
-				aria-label={count
-					? `BUILD · ${count}: build-a-boilerplate with ${count} selected`
-					: 'BUILD: build-a-boilerplate'}
-				onclick={onHubClick}
-			>
-				<circle r={HUB_RADIUS} />
-				<text y="7" text-anchor="middle">BUILD</text>
-				{#if count}
-					<g class="badge" transform="translate({HUB_RADIUS * 0.74},{HUB_RADIUS * 0.74})">
-						<circle r="13" />
-						<text y="4.5" text-anchor="middle">{count}</text>
+							{#if isSelected(node)}
+								<circle class="ring" r={node.r + 5} />
+							{/if}
+							<circle
+								class="dot"
+								r={node.r}
+								onclick={(event) => onCircleClick(event, node)}
+								role="presentation"
+							/>
+							<text
+								x={right ? node.r + 8 : -(node.r + 8)}
+								y={node.depth === 1 ? 5 : 4}
+								text-anchor={right ? 'start' : 'end'}
+								onclick={(event) => onLabelClick(event, node)}
+								role="presentation">{node.word}</text
+							>
+						</a>
 					</g>
-				{/if}
-			</a>
-		</g>
-	</svg>
-	<div
-		class="hint"
-		class:show={focused !== null}
-		bind:this={hintEl}
-		role="status"
-		aria-live="polite"
-	>
-		{focused
-			? `${focused.hint}${isNiche(focused) ? niche : ''}${isUnmapped(focused) ? notYet : ''}`
-			: ''}
-	</div>
-	<p class="lede">
-		Click a group for its everyday set · click a feature to add or drop it
-		{#if selected.size}
-			<button type="button" class="clear" onclick={clear}>Clear</button>
-		{/if}
-	</p>
+				{/each}
+			</g>
+			<g transform="translate({hub.x},{hub.y})">
+				<a
+					class="hub"
+					href={buildTarget}
+					aria-label={count
+						? `BUILD · ${count}: build-a-boilerplate with ${count} selected`
+						: 'BUILD: build-a-boilerplate'}
+					onclick={onHubClick}
+				>
+					<circle r={HUB_RADIUS} />
+					<text y="7" text-anchor="middle">BUILD</text>
+					{#if count}
+						<g class="badge" transform="translate({HUB_RADIUS * 0.74},{HUB_RADIUS * 0.74})">
+							<circle r="13" />
+							<text y="4.5" text-anchor="middle">{count}</text>
+						</g>
+					{/if}
+				</a>
+			</g>
+		</svg>
+		<div
+			class="hint"
+			class:show={focused !== null}
+			bind:this={hintEl}
+			role="status"
+			aria-live="polite"
+		>
+			{focused
+				? `${focused.hint}${isNiche(focused) ? niche : ''}${isUnmapped(focused) ? notYet : ''}`
+				: ''}
+		</div>
+		<p class="lede">
+			Click a group for its everyday set · click a feature to add or drop it
+			{#if selected.size}
+				<button type="button" class="clear" onclick={clear}>Clear</button>
+			{/if}
+		</p>
+	{/if}
 
 	<div class="stacks">
 		<div class="hubbtn">
@@ -317,10 +389,20 @@
 <style>
 	.map {
 		position: relative;
-		/* The shell's app bar sits above; the map fills the rest of the screen. */
-		height: calc(100svh - var(--site-header-height, 3.5rem));
+		/* No site header on the front page (#381): the map is the whole screen. */
+		height: 100svh;
 		min-height: 560px;
 		overflow: hidden;
+	}
+	/* Until the theme has settled the renderer is not chosen; show nothing rather
+	   than the wrong scheme. Without script the prerendered space map shows. */
+	.map.pending {
+		opacity: 0;
+	}
+	@media (scripting: none) {
+		.map.pending {
+			opacity: 1;
+		}
 	}
 	/* BUILD pressed: the graph and the sun fade while the stars streak. */
 	.map.warping svg,
@@ -559,8 +641,12 @@
 			height: auto;
 			min-height: 0;
 			overflow: visible;
-			padding: 16px max(16px, env(safe-area-inset-right, 0px)) 24px
+			/* The top controls sit in the first 56px. */
+			padding: 64px max(16px, env(safe-area-inset-right, 0px)) 24px
 				max(16px, env(safe-area-inset-left, 0px));
+		}
+		.map > :global(.sky) {
+			display: none;
 		}
 		svg,
 		.sun-slot,

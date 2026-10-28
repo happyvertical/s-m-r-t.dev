@@ -92,6 +92,21 @@ const PROSE_PROPERTIES = new Set([
 ]);
 
 const NON_PROSE_PROPERTIES = new Set([
+	// Front-page map props (#381): state and callbacks, not prose.
+	'appBar',
+	'brandInSlot',
+	'buildTarget',
+	'busy',
+	'count',
+	'day',
+	'flight',
+	'onbuild',
+	'onclear',
+	'ontogglefeature',
+	'ontogglegroup',
+	'selected',
+	'size',
+	'sky',
 	'authoredSummaries',
 	'base',
 	'basePath',

@@ -24,15 +24,6 @@ afterEach(() => {
 });
 
 describe('application bar', () => {
-	it('takes the space treatment on the front page only (#373)', () => {
-		const { container, unmount } = render(Harness, { props: { pathname: '/' } });
-		expect(container.querySelector('.header-root.space')).not.toBeNull();
-		unmount();
-		const other = render(Harness, { props: { pathname: '/features' } });
-		expect(other.container.querySelector('.header-root')).not.toBeNull();
-		expect(other.container.querySelector('.header-root.space')).toBeNull();
-	});
-
 	it('renders the approved primary navigation and active state', () => {
 		render(Harness, { props: { pathname: '/docs/ui' } });
 		const nav = screen.getByRole('navigation', { name: 'Primary navigation' });
