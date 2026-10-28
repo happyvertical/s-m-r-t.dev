@@ -16653,6 +16653,13 @@ export const uiComponents: UiComponentReference[] = [
 					'Whether cards may be repositioned within their current lane. Defaults to `true`; set `false` for adapters whose persistence layer only supports column/status transitions.'
 			},
 			{
+				name: 'laneWidth',
+				code: 'string',
+				status: false,
+				description:
+					'Lane width as any CSS length (e.g. `"15rem"`). Sets the `--smrt-board-lane-width` custom property, which a host may also set from CSS. Defaults to `min(18rem, 82vw)`.'
+			},
+			{
 				name: 'optimistic',
 				code: 'boolean',
 				status: false,
@@ -17943,6 +17950,12 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'boolean',
 				status: false,
 				description: 'Require at least one file for native form validation'
+			},
+			{
+				name: 'density',
+				code: "'comfortable' | 'touch'",
+				status: false,
+				description: 'Target density; omit to inherit the ThemeProvider setting.'
 			}
 		],
 		sources: [],
@@ -21546,7 +21559,8 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'iconComponent',
 				code: 'Component<{ name: string; size?: number; }>',
 				status: false,
-				description: 'Renders `iconName`s that are not built-in shell icons.'
+				description:
+					"Renders icon names (`icon` as a string, or `iconName`) that are not built-in shell icons, the same contract as `TenantNav`'s `iconComponent`: built-in names draw as shell icons, any other name goes to it with `size`."
 			},
 			{
 				name: 'label',
@@ -24580,7 +24594,7 @@ export const uiComponents: UiComponentReference[] = [
 				description: 'Optional custom label (defaults to status value)'
 			}
 		],
-		sources: [],
+		sources: ["Omit<HTMLAttributes<HTMLSpanElement>, 'class' | 'children'>"],
 		sections: [],
 		items: [],
 		components: [],
@@ -24839,6 +24853,12 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'string',
 				status: false,
 				description: 'Accessibility label for the drawer dialog.'
+			},
+			{
+				name: 'density',
+				code: "'comfortable' | 'touch'",
+				status: false,
+				description: 'Target density; omit to inherit the ThemeProvider setting.'
 			}
 		],
 		sources: [],
@@ -25119,6 +25139,12 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'string',
 				status: false,
 				description: 'ARIA described by ID'
+			},
+			{
+				name: 'density',
+				code: "'comfortable' | 'touch'",
+				status: false,
+				description: 'Target density; omit to inherit the ThemeProvider setting.'
 			}
 		],
 		sources: [],
@@ -25432,6 +25458,12 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'string',
 				status: false,
 				description: 'Accessibility label for the drawer dialog.'
+			},
+			{
+				name: 'density',
+				code: "'comfortable' | 'touch'",
+				status: false,
+				description: 'Target density; omit to inherit the ThemeProvider setting.'
 			}
 		],
 		sources: [],
@@ -28722,6 +28754,46 @@ export const uiComponents: UiComponentReference[] = [
 		source: 'packages/smrt-ui/src/components/layout/Container.svelte'
 	},
 	{
+		slug: 'description-list',
+		name: 'DescriptionList',
+		family: 'smrt-ui-layout',
+		category: 'Layout',
+		importPath: '@happyvertical/smrt-ui/layout',
+		summary: 'DescriptionList is part of the layout component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'items',
+				code: 'DescriptionListItem[]',
+				status: false,
+				description: 'Term/description pairs, rendered before any `children`.'
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description: 'Extra `<dt>`/`<dd>` content, rendered after `items`.'
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'CSS classes appended to the list.'
+			}
+		],
+		sources: ["Omit<HTMLAttributes<HTMLDListElement>, 'class'>"],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/docs/ui'
+		},
+		source: 'packages/smrt-ui/src/components/layout/DescriptionList.svelte'
+	},
+	{
 		slug: 'empty-state',
 		name: 'EmptyState',
 		family: 'smrt-ui-layout',
@@ -29119,6 +29191,70 @@ export const uiComponents: UiComponentReference[] = [
 			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/layout/PageLayout.svelte'
+	},
+	{
+		slug: 'stack',
+		name: 'Stack',
+		family: 'smrt-ui-layout',
+		category: 'Layout',
+		importPath: '@happyvertical/smrt-ui/layout',
+		summary: 'Stack is part of the layout component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'direction',
+				code: "'vertical' | 'horizontal'",
+				status: false,
+				description: 'Stacking axis: `vertical` (a column) or `horizontal` (a row).'
+			},
+			{
+				name: 'gap',
+				code: 'Gap',
+				status: false,
+				description: 'Space between children, from the spacing tokens.'
+			},
+			{
+				name: 'align',
+				code: 'Align',
+				status: false,
+				description: 'Cross-axis alignment. Omit for the browser default (stretch).'
+			},
+			{
+				name: 'justify',
+				code: 'Justify',
+				status: false,
+				description: 'Main-axis distribution. Omit for the start of the axis.'
+			},
+			{
+				name: 'wrap',
+				code: 'boolean',
+				status: false,
+				description: 'Let children wrap onto further lines when they do not fit.'
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'CSS classes appended to the stack.'
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description: 'Stacked content.'
+			}
+		],
+		sources: ["Omit<HTMLAttributes<HTMLDivElement>, 'class'>"],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/docs/ui'
+		},
+		source: 'packages/smrt-ui/src/components/layout/Stack.svelte'
 	},
 	{
 		slug: 'summary-card',
@@ -30399,6 +30535,12 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'string',
 				status: false,
 				description: 'Additional CSS class names.'
+			},
+			{
+				name: 'density',
+				code: "'comfortable' | 'touch'",
+				status: false,
+				description: 'Target density; omit to inherit the ThemeProvider setting.'
 			}
 		],
 		sources: [],
@@ -31965,10 +32107,10 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2916,
-	totalProps: 3082,
+	describedProps: 2932,
+	totalProps: 3098,
 	authoredSummaries: 153,
-	totalComponents: 410
+	totalComponents: 412
 };
 
 export const uiComponentGroups = [

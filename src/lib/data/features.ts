@@ -228,6 +228,7 @@ export const features: Feature[] = [
 		word: 'Subscriptions',
 		hint: 'Recurring plans, what each plan includes, and usage charges.',
 		packages: ['smrt-subscriptions'],
+		recipes: ['subscriptions.plans'],
 		example: still('subscriptions'),
 		inTheBox: ['plans', 'plan versions', 'plan features', 'usage charges', 'spending limits']
 	}),
@@ -359,6 +360,7 @@ export const features: Feature[] = [
 		word: 'Approvals',
 		hint: 'Who has to say yes before something happens, kept as history.',
 		packages: ['smrt-approvals'],
+		recipes: ['approvals.requests'],
 		example: still('approvals'),
 		inTheBox: ['approval requests', 'decision history', 'policies', 'quorum', 'expiry']
 	}),
@@ -381,6 +383,7 @@ export const features: Feature[] = [
 		word: 'Articles',
 		hint: 'Drafts, review, publication and corrections, each with a version.',
 		packages: ['smrt-content'],
+		recipes: ['content.articles'],
 		example: playground('contribution-inbox'),
 		inTheBox: ['articles', 'drafts', 'contributions', 'reviews', 'versions']
 	}),
@@ -401,6 +404,7 @@ export const features: Feature[] = [
 		word: 'Video',
 		hint: 'A video production from composition down to each shot.',
 		packages: ['smrt-video'],
+		recipes: ['video.library'],
 		example: still('video'),
 		inTheBox: ['compositions', 'sequences', 'scenes', 'shots', 'scripts']
 	}),
@@ -410,6 +414,7 @@ export const features: Feature[] = [
 		word: 'Voice',
 		hint: 'Voice profiles, sample clips and the speech generated from them.',
 		packages: ['smrt-voice'],
+		recipes: ['voice.profiles'],
 		example: still('voice'),
 		inTheBox: ['voice profiles', 'voice outputs', 'voice samples', 'transcription']
 	}),
@@ -429,6 +434,7 @@ export const features: Feature[] = [
 		word: 'Social',
 		hint: 'Posts for YouTube, X, Threads and Bluesky, each with a status.',
 		packages: ['smrt-social', 'smrt-messages'],
+		recipes: ['social.posts'],
 		example: still('social'),
 		inTheBox: ['social accounts', 'posts', 'connected accounts', 'publish dates', 'post analytics']
 	}),
@@ -462,6 +468,7 @@ export const features: Feature[] = [
 		word: 'Slack',
 		hint: 'Slack accounts and messages, handled like email.',
 		packages: ['smrt-messages'],
+		recipes: ['messages.slack'],
 		example: playground('account-list'),
 		inTheBox: ['Slack accounts', 'Slack messages', 'channels', 'threads', 'reactions']
 	}),
@@ -484,6 +491,7 @@ export const features: Feature[] = [
 		word: 'Campaigns',
 		hint: 'Each campaign’s budget, channels and results, period by period.',
 		packages: ['smrt-marketing'],
+		recipes: ['marketing.campaigns'],
 		example: still('campaigns'),
 		inTheBox: ['campaigns', 'budgets', 'channels', 'snapshots', 'pacing']
 	}),
@@ -521,6 +529,7 @@ export const features: Feature[] = [
 		word: 'Ads',
 		hint: 'Ad delivery with a priority order and weighted variations.',
 		packages: ['smrt-ads'],
+		recipes: ['ads.campaigns'],
 		example: still('ads'),
 		inTheBox: ['ad groups', 'formats', 'delivery tiers', 'variations', 'ad events']
 	}),
@@ -574,6 +583,7 @@ export const features: Feature[] = [
 		word: 'Places',
 		hint: 'Places inside places, with coordinates, address lookup and nearby search.',
 		packages: ['smrt-places'],
+		recipes: ['places.locations'],
 		example: still('places'),
 		inTheBox: ['places', 'place types', 'address lookup', 'nearby search', 'photos and files']
 	}),
