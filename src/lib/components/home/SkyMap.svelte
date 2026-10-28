@@ -329,10 +329,10 @@
 	.sky {
 		--sk-ink: #1d3557;
 		--sk-dim: #4d6785;
-		--sk-pill: #1e8fe0;
-		--sk-pill-hover: #1676bd;
-		--sk-pill-on: #1676bd;
-		--sk-accent: #1e8fe0;
+		--sk-pill: #3aa0e8;
+		--sk-pill-hover: #2384cc;
+		--sk-pill-on: #2384cc;
+		--sk-accent: #3aa0e8;
 		position: absolute;
 		inset: 0;
 		font-family: var(--front-mono, ui-monospace, Menlo, monospace);
@@ -384,7 +384,7 @@
 	/* Simple buttons: one border and one text colour, the same active or not.
 	   Selection shows only as fill opacity and a touch of brightness. */
 	.title rect {
-		fill: rgba(255, 255, 255, 0.15);
+		fill: rgba(255, 255, 255, 0.3);
 		stroke: var(--sk-pill);
 		stroke-width: 1.5;
 		transition: fill 0.15s;
@@ -422,7 +422,7 @@
 		outline: none;
 	}
 	.chip rect {
-		fill: rgba(255, 255, 255, 0.25);
+		fill: rgba(255, 255, 255, 0.4);
 		stroke: rgba(29, 53, 87, 0.35);
 		transition: fill 0.15s;
 	}

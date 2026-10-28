@@ -77,7 +77,7 @@
 	}
 	.bar.day {
 		--btn-ink: #1d3557;
-		--btn-hover: #1676bd;
+		--btn-hover: #2384cc;
 	}
 	.left {
 		left: max(16px, env(safe-area-inset-left, 0px));
