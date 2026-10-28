@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { featureSections } from '$lib/data/features';
+import { legacyFeatureTargets, legacySectionTargets } from '$lib/legacy-features';
 import { packages } from '$lib/data/packages';
 import { foundationGuides } from '$lib/data/guides';
 import { capabilityGuides } from '$lib/data/guides';
@@ -193,6 +195,32 @@ describe('legacy static routes', () => {
 			const route = routesByPath.get(target);
 			expect(route, `/blocks/${slug} -> ${target} does not prerender.`).toBeDefined();
 			expect(route?.isRedirect, `/blocks/${slug} -> ${target} is a redirect chain.`).toBe(false);
+		}
+	});
+
+	it('prerenders a 301 for every retired pre-#375 /features page (#375)', () => {
+		// #375 regrouped the map from the package tree to Sell, Buy, Make, ... and
+		// froze the nine old sections and forty-nine old features in
+		// `legacy-features.ts`: that table is the only record of those URLs, so a
+		// cleanup there 404s a live URL without a build warning.
+		expect(Object.keys(legacySectionTargets), RESTORE_DONT_RENUMBER).toHaveLength(9);
+		expect(Object.keys(legacyFeatureTargets), RESTORE_DONT_RENUMBER).toHaveLength(49);
+
+		const liveSections = new Set(featureSections.map((section) => section.id));
+		for (const [section, target] of Object.entries(legacySectionTargets)) {
+			expect(liveSections.has(section as never), `${section} is a live group again`).toBe(false);
+			const route = routesByPath.get(`/features/${section}`);
+			expect(route?.status, `/features/${section}`).toBe(301);
+			expect(route?.target).toBe(target);
+		}
+		for (const [key, target] of Object.entries(legacyFeatureTargets)) {
+			const route = routesByPath.get(`/features/${key}`);
+			expect(route?.status, `/features/${key}`).toBe(301);
+			expect(route?.target).toBe(target);
+			// Each target is a live page, never another redirect.
+			const destination = routesByPath.get(target);
+			expect(destination, `/features/${key} -> ${target} does not prerender.`).toBeDefined();
+			expect(destination?.isRedirect, `/features/${key} -> ${target} chains.`).toBe(false);
 		}
 	});
 

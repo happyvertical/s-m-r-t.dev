@@ -46,7 +46,7 @@ describe('application bar', () => {
 	});
 
 	it('offers the docs panel toggle only inside Docs (#365)', () => {
-		render(Harness, { props: { pathname: '/features/agents' } });
+		render(Harness, { props: { pathname: '/features/assistant' } });
 		expect(
 			screen.queryByRole('button', { name: 'Sections: open documentation navigation' })
 		).toBeNull();

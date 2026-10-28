@@ -34,6 +34,7 @@ import { docsMoveRedirectCount } from '$lib/server/legacy-inventory';
 import { entries as componentEntries } from '../routes/components/[...legacy]/+page.server';
 import { entries as docsEntries } from '../routes/docs/[...legacy]/+page.server';
 import { _aliases as docsGuideAliases } from '../routes/docs/guides/[slug]/+page';
+import { legacyFeatureTargets, legacySectionTargets } from '$lib/legacy-features';
 import { entries as blockEntries } from '../routes/blocks/[slug]/+page.server';
 import { entries as moduleEntries } from '../routes/modules/[slug]/+page.server';
 import { entries as packageEntries } from '../routes/packages/[slug]/+page.server';
@@ -52,6 +53,10 @@ describe('emitted-route inventory (#187 S4)', () => {
 		// single-file redirect, listed below). Guarded in legacy-routes.test.ts.
 		const blockCount = (await blockEntries()).length;
 		const packageCount = (await packageEntries()).length;
+		// #375: the 9 retired `/features/<section>` and 49 retired
+		// `/features/<section>/<feature>` pages. Guarded in legacy-routes.test.ts.
+		const legacyFeatureCount =
+			Object.keys(legacySectionTargets).length + Object.keys(legacyFeatureTargets).length;
 		// The 3 /foundations/* aliases (guarded in legacy-routes.test.ts) plus an
 		// EXPLICIT, hand-maintained list of the small single-file static redirects
 		// below — they aren't dynamic-entries families, so they aren't guarded
@@ -98,7 +103,7 @@ describe('emitted-route inventory (#187 S4)', () => {
 		expect(
 			redirectRoutes.length,
 			'A new redirect-shaped route appeared that is not one of the guarded families ' +
-				'(components, docs, modules, blocks, packages, the #365 /docs moves and docs guide aliases) or a known single-file ' +
+				'(components, docs, modules, blocks, retired features, packages, the #365 /docs moves and docs guide aliases) or a known single-file ' +
 				'static redirect. If it is a real new family, add it to legacy-routes.test.ts the way ' +
 				'the foundations aliases were added; if it is a new single-file redirect, add it to ' +
 				'`knownSingleRedirectRoutes` above. Do not just widen this expectation.'
@@ -107,6 +112,7 @@ describe('emitted-route inventory (#187 S4)', () => {
 				docsCount +
 				moduleCount +
 				blockCount +
+				legacyFeatureCount +
 				packageCount +
 				docsMoveCount +
 				docsGuideAliasCount +
