@@ -338,7 +338,7 @@ describe('the user’s-side rule (#375)', () => {
 	it('maps recipes only where one exists in the installed planner catalog', () => {
 		// Verified by build-handoff.test.ts against the catalog; here only the
 		// features the issue says have no recipe yet must stay empty.
-		for (const id of ['assemblies', 'production', 'subscriptions', 'agents', 'support', 'affiliates']) {
+		for (const id of ['assemblies', 'production', 'subscriptions', 'support', 'affiliates']) {
 			expect(getFeature(id)?.recipes, `${id} has no planner recipe yet`).toEqual([]);
 		}
 	});

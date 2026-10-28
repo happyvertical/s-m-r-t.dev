@@ -186,7 +186,7 @@ export const features: Feature[] = [
 		word: 'Orders',
 		hint: 'What a customer bought, from cart to delivery.',
 		packages: ['smrt-commerce'],
-		recipes: ['commerce.sales'],
+		recipes: ['commerce.sales', 'commerce.wholesale', 'commerce.fulfillment'],
 		example: still('orders'),
 		inTheBox: ['orders', 'carts', 'wholesale orders', 'line items', 'fulfillments']
 	}),
@@ -210,7 +210,7 @@ export const features: Feature[] = [
 		packages: ['smrt-products'],
 		recipes: ['products.simple', 'products.clothing', 'products.ingredients'],
 		example: still('products'),
-		inTheBox: ['products', 'materials', 'variant axes', 'SKUs']
+		inTheBox: ['products', 'materials', 'variants', 'SKUs']
 	}),
 	feature({
 		id: 'quotes',
@@ -229,7 +229,7 @@ export const features: Feature[] = [
 		hint: 'Recurring plans, what each plan includes, and usage charges.',
 		packages: ['smrt-subscriptions'],
 		example: still('subscriptions'),
-		inTheBox: ['plans', 'plan versions', 'entitlements', 'usage charges', 'policies']
+		inTheBox: ['plans', 'plan versions', 'plan features', 'usage charges', 'spending limits']
 	}),
 	feature({
 		id: 'payments',
@@ -239,7 +239,7 @@ export const features: Feature[] = [
 		packages: ['smrt-commerce'],
 		recipes: ['commerce.invoicing'],
 		example: still('payments'),
-		inTheBox: ['payments', 'allocations', 'saved payment methods', 'payment intents', 'payouts']
+		inTheBox: ['payments', 'allocations', 'saved payment methods', 'payment intents', 'refunds']
 	}),
 
 	// Buy
@@ -252,7 +252,7 @@ export const features: Feature[] = [
 		packages: ['smrt-commerce', 'smrt-profiles'],
 		recipes: ['commerce.vendors'],
 		example: playground('vendor-directory'),
-		inTheBox: ['vendors', 'contacts', 'lead times', 'minimum orders', 'payout addresses']
+		inTheBox: ['vendors', 'contacts', 'lead times', 'minimum orders', 'payout details']
 	}),
 	feature({
 		id: 'purchase-orders',
@@ -283,7 +283,7 @@ export const features: Feature[] = [
 		packages: ['smrt-inventory'],
 		recipes: ['inventory.stock'],
 		example: still('inventory'),
-		inTheBox: ['locations', 'stock levels', 'movements', 'reservations', 'transfers']
+		inTheBox: ['locations', 'stock levels', 'movements', 'transfers', 'reservations']
 	}),
 
 	// Make
@@ -295,7 +295,7 @@ export const features: Feature[] = [
 		hint: 'What goes into a finished item: parts, quantities and steps.',
 		packages: ['smrt-manufacturing'],
 		example: still('assemblies'),
-		inTheBox: ['bills of materials', 'routing', 'operations']
+		inTheBox: ['bills of materials', 'routing', 'operations', 'labour estimates']
 	}),
 	feature({
 		id: 'production',
@@ -305,17 +305,17 @@ export const features: Feature[] = [
 		hint: 'Runs that turn parts into finished goods, step by step.',
 		packages: ['smrt-manufacturing', 'smrt-commerce'],
 		example: still('production'),
-		inTheBox: ['production runs', 'production orders', 'routing', 'operations']
+		inTheBox: ['production runs', 'completions', 'production orders', 'materials consumed']
 	}),
 	feature({
 		id: 'stock',
 		section: 'make',
 		word: 'Stock',
-		hint: 'Parts and finished goods on hand, counted per location.',
+		hint: 'Lots and serials traced from receipt to the finished item.',
 		packages: ['smrt-inventory'],
 		recipes: ['inventory.stock'],
 		example: still('stock'),
-		inTheBox: ['stock levels', 'locations', 'movements', 'reservations']
+		inTheBox: ['lots', 'serial numbers', 'cycle counts', 'corrections']
 	}),
 
 	// Team
@@ -358,7 +358,7 @@ export const features: Feature[] = [
 		hint: 'Employment terms, positions and leave, with dated history.',
 		packages: ['smrt-human-resources'],
 		example: still('hr'),
-		inTheBox: ['employment', 'terms', 'qualifications', 'positions', 'leave']
+		inTheBox: ['employment', 'terms', 'qualifications', 'positions', 'leave status']
 	}),
 	feature({
 		id: 'approvals',
@@ -367,7 +367,7 @@ export const features: Feature[] = [
 		hint: 'Who has to say yes before something happens, kept as history.',
 		packages: ['smrt-approvals'],
 		example: still('approvals'),
-		inTheBox: ['approval requests', 'event ledger', 'policies', 'quorum', 'expiry']
+		inTheBox: ['approval requests', 'decision history', 'policies', 'quorum', 'expiry']
 	}),
 
 	// Publish
@@ -390,7 +390,7 @@ export const features: Feature[] = [
 		packages: ['smrt-images', 'smrt-assets', 'smrt-assets-local', 'smrt-assets-ergot'],
 		recipes: ['assets.library'],
 		example: playground('image-editor'),
-		inTheBox: ['images', 'variants', 'alt text', 'adjustments', 'categorization']
+		inTheBox: ['images', 'thumbnails', 'alt text', 'adjustments', 'categorization']
 	}),
 	feature({
 		id: 'video',
@@ -405,10 +405,10 @@ export const features: Feature[] = [
 		id: 'voice',
 		section: 'publish',
 		word: 'Voice',
-		hint: 'Voice profiles and generated speech, kept as records.',
+		hint: 'Voice profiles, sample clips and the speech generated from them.',
 		packages: ['smrt-voice'],
 		example: still('voice'),
-		inTheBox: ['voice profiles', 'voice outputs', 'speech providers', 'transcription']
+		inTheBox: ['voice profiles', 'voice outputs', 'voice samples', 'transcription']
 	}),
 	feature({
 		id: 'comments',
@@ -418,16 +418,16 @@ export const features: Feature[] = [
 		packages: ['smrt-comments'],
 		recipes: ['comments.records'],
 		example: still('comments'),
-		inTheBox: ['comments', 'record discussions', 'mentions', 'moderation', 'notifications']
+		inTheBox: ['comments', 'record discussions', 'mentions', 'mention alerts']
 	}),
 	feature({
 		id: 'social',
 		section: 'publish',
 		word: 'Social',
-		hint: 'Social accounts, and posts with a schedule and a status.',
+		hint: 'Posts for YouTube, X, Threads and Bluesky, each with a status.',
 		packages: ['smrt-social', 'smrt-messages'],
 		example: still('social'),
-		inTheBox: ['social accounts', 'posts', 'OAuth', 'scheduling', 'post analytics']
+		inTheBox: ['social accounts', 'posts', 'connected accounts', 'publish dates', 'post analytics']
 	}),
 
 	// Talk
@@ -438,7 +438,7 @@ export const features: Feature[] = [
 		word: 'Chat',
 		hint: 'Rooms and threads that people and agents write into.',
 		packages: ['smrt-chat'],
-		recipes: ['chat.assistant', 'chat.rooms'],
+		recipes: ['chat.rooms'],
 		example: playground('room-list'),
 		inTheBox: ['rooms', 'threads', 'reactions', 'agent sessions', 'allowed tools']
 	}),
@@ -449,7 +449,7 @@ export const features: Feature[] = [
 		word: 'Email',
 		hint: 'Email accounts and messages, with send status and retries.',
 		packages: ['smrt-messages'],
-		recipes: ['messages.mailbox', 'messages.notifications'],
+		recipes: ['messages.mailbox'],
 		example: playground('mailbox'),
 		inTheBox: ['email accounts', 'messages', 'send status', 'attachments', 'mailbox sync']
 	}),
@@ -478,7 +478,7 @@ export const features: Feature[] = [
 		section: 'grow',
 		everyday: true,
 		word: 'Campaigns',
-		hint: 'Budgets, channels and frozen metric snapshots for each push.',
+		hint: 'Each campaign’s budget, channels and results, period by period.',
 		packages: ['smrt-marketing'],
 		example: still('campaigns'),
 		inTheBox: ['campaigns', 'budgets', 'channels', 'snapshots', 'pacing']
@@ -499,11 +499,17 @@ export const features: Feature[] = [
 		section: 'grow',
 		everyday: true,
 		word: 'Reports',
-		hint: 'Reports you declare or ask for, refreshed on a schedule.',
+		hint: 'Reports kept ready on a schedule, or asked for on the spot.',
 		packages: ['smrt-reports'],
 		recipes: ['reports.runtime', 'reports.materialized'],
 		example: playground('report-detail'),
-		inTheBox: ['declared reports', 'runtime reports', 'saved views', 'scheduled refresh', 'exports']
+		inTheBox: [
+			'scheduled reports',
+			'reports on request',
+			'saved views',
+			'scheduled refresh',
+			'exports'
+		]
 	}),
 	feature({
 		id: 'ads',
@@ -519,9 +525,9 @@ export const features: Feature[] = [
 		section: 'grow',
 		word: 'Affiliates',
 		hint: 'Referral partners and the commissions they earn.',
-		packages: ['smrt-affiliates', 'smrt-sales'],
+		packages: ['smrt-sales'],
 		example: still('affiliates'),
-		inTheBox: ['affiliates', 'referrals', 'commissions', 'payouts']
+		inTheBox: ['referrers', 'referral programs', 'commissions', 'commission payouts']
 	}),
 
 	// Plan
@@ -530,11 +536,11 @@ export const features: Feature[] = [
 		section: 'plan',
 		everyday: true,
 		word: 'Projects',
-		hint: 'Repositories, issues and pull requests synced from a provider.',
+		hint: 'Projects, their boards and the work tracked on them.',
 		packages: ['smrt-projects'],
 		recipes: ['projects.tracker'],
 		example: playground('project-board'),
-		inTheBox: ['projects', 'repositories', 'issues', 'pull requests', 'boards']
+		inTheBox: ['projects', 'boards', 'repositories', 'labels']
 	}),
 	feature({
 		id: 'tasks',
@@ -545,13 +551,13 @@ export const features: Feature[] = [
 		packages: ['smrt-projects'],
 		recipes: ['projects.tracker'],
 		example: still('tasks'),
-		inTheBox: ['issues', 'boards', 'time entries', 'development requests']
+		inTheBox: ['issues', 'assignees', 'labels', 'comments']
 	}),
 	feature({
 		id: 'events',
 		section: 'plan',
 		word: 'Events',
-		hint: 'Events nest, repeat as series and carry participants.',
+		hint: 'Events inside events, repeating series, and who takes part.',
 		packages: ['smrt-events'],
 		recipes: ['events.calendar'],
 		example: playground('meeting-view'),
@@ -561,10 +567,10 @@ export const features: Feature[] = [
 		id: 'places',
 		section: 'plan',
 		word: 'Places',
-		hint: 'A place hierarchy with coordinates, geocoding and nearby search.',
+		hint: 'Places inside places, with coordinates, address lookup and nearby search.',
 		packages: ['smrt-places'],
 		example: still('places'),
-		inTheBox: ['places', 'place types', 'geocoding', 'proximity search', 'owned assets']
+		inTheBox: ['places', 'place types', 'address lookup', 'nearby search', 'photos and files']
 	}),
 
 	// Assistant
@@ -575,6 +581,7 @@ export const features: Feature[] = [
 		word: 'Agents',
 		hint: 'Scheduled and chat agents that act as a user, with listed tools.',
 		packages: ['smrt-agents', 'smrt-personas', 'smrt-playbooks', 'smrt-prompts'],
+		recipes: ['chat.assistant'],
 		example: playground('agent-dashboard'),
 		inTheBox: ['agents', 'personas', 'schedules', 'playbooks', 'prompts']
 	}),
@@ -586,7 +593,7 @@ export const features: Feature[] = [
 		hint: 'What an agent may do in your application, named and limited.',
 		packages: ['smrt-app-mcp', 'smrt-core', 'smrt-web', 'smrt-mcp-apps', 'smrt-mcp-openai'],
 		example: still('tools'),
-		inTheBox: ['tools', 'allow-lists', 'scopes', 'safe denials', 'in-page tools']
+		inTheBox: ['tools', 'allow-lists', 'scopes', 'clear refusals']
 	}),
 	feature({
 		id: 'memory',
@@ -638,6 +645,7 @@ export const toolingPackageSlugs: string[] = [
  * package page; `legacyFeatureTargets` sends the retired feature URLs there.
  */
 export const offMapPackageSlugs: string[] = [
+	'smrt-affiliates',
 	'smrt-scanner',
 	'smrt-dev-mcp',
 	'smrt-ingestion',

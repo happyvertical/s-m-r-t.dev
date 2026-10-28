@@ -36,7 +36,7 @@ describe('build hand-off', () => {
 	});
 
 	it('collects each recipe once and seeds the assistant with the feature names', () => {
-		expect(recipesFor(['chat', 'chat'])).toEqual(['chat.assistant', 'chat.rooms']);
+		expect(recipesFor(['chat', 'chat'])).toEqual(['chat.rooms']);
 		const seed = seedFor(['customers', 'chat']);
 		expect(seed.id).toBe('map-selection:customers,chat');
 		expect(seed.messages[0].content).toContain('Customers, Chat');
