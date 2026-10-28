@@ -89,11 +89,11 @@
 		--front-dim-text: #4d6785;
 		--front-line: #b9d4ee;
 		--front-line-1: #9bbbdc;
-		--front-red: #2f6fc4;
-		--front-orange: #3b82d6;
-		--front-yellow: #5aa4ec;
-		--front-orange-ink: #1f4f94;
-		--front-yellow-ink: #1f4f94;
+		--front-red: #1676bd;
+		--front-orange: #1e8fe0;
+		--front-yellow: #5ab8f5;
+		--front-orange-ink: #1676bd;
+		--front-yellow-ink: #1676bd;
 		--front-hub-ink: #3a0d00;
 		--front-door-hot-ink: #fff;
 		--front-hint-ink: #fff;

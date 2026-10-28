@@ -39,21 +39,21 @@ export const firePalette: SunPalette = {
 };
 
 /**
- * The sun in the light scheme's daytime sky: the same churning surface in
- * warmer, paler colours (the mock's `PAL.day`).
+ * The sun in the light scheme's daytime sky: a sun seen through the
+ * atmosphere, bright gold with no red rim (the mock's `PAL.day`).
  */
 export const dayPalette: SunPalette = {
-	core: '#fff7c2',
-	mid: '#ffc24a',
-	rim: '#f07a1e',
-	hot: '255,250,210',
-	warm: '255,170,60',
-	dark: '220,110,30',
-	limb: '255,220,140',
-	sparkHot: '255,230,150',
-	sparkCool: '255,160,60',
-	fade: '255,140,40',
-	flare: ['255,120,30', '255,190,70', '255,245,200']
+	core: '#fffdf0',
+	mid: '#ffe978',
+	rim: '#ffcf3d',
+	hot: '255,255,235',
+	warm: '255,236,150',
+	dark: '245,190,60',
+	limb: '255,248,210',
+	sparkHot: '255,250,220',
+	sparkCool: '255,225,120',
+	fade: '255,220,120',
+	flare: ['255,210,90', '255,235,160', '255,255,235']
 };
 
 /** Side of the square sun canvas, in CSS pixels; room for the tallest flare. */
@@ -82,6 +82,11 @@ type Ctx = Pick<
 	| 'moveTo'
 	| 'bezierCurveTo'
 	| 'createRadialGradient'
+	| 'createLinearGradient'
+	| 'ellipse'
+	| 'lineTo'
+	| 'quadraticCurveTo'
+	| 'roundRect'
 > & {
 	fillStyle: unknown;
 	strokeStyle: unknown;
@@ -99,6 +104,8 @@ export interface SunOptions {
 	palette?: SunPalette;
 	/** A very soft warm haze round the disc (the daytime sun); none by default. */
 	haze?: boolean;
+	/** A friendly face in sunglasses on the disc (the daytime sun); none by default. */
+	face?: boolean;
 	random?: () => number;
 }
 
@@ -138,6 +145,7 @@ export function createSun({
 	radius: R,
 	palette: pal = firePalette,
 	haze = false,
+	face = false,
 	random = Math.random
 }: SunOptions): Sun {
 	const C = size / 2;
@@ -192,8 +200,8 @@ export function createSun({
 		// 0. haze: daytime only, one soft warm falloff outside the rim
 		if (haze) {
 			const glow = fx.createRadialGradient(C, C, R, C, C, R * 2.2);
-			glow.addColorStop(0, 'rgba(255,220,140,.45)');
-			glow.addColorStop(1, 'rgba(255,220,140,0)');
+			glow.addColorStop(0, 'rgba(255,240,180,.5)');
+			glow.addColorStop(1, 'rgba(255,240,180,0)');
 			fx.fillStyle = glow;
 			fx.fillRect(0, 0, size, size);
 		}
@@ -244,6 +252,53 @@ export function createSun({
 		fx.beginPath();
 		fx.arc(C, C, R - 1, 0, Math.PI * 2);
 		fx.stroke();
+
+		// 2b. the face, over the limb: sunglasses, a grin and faint cheeks
+		if (face) {
+			fx.globalCompositeOperation = 'source-over';
+			const ink = '#2b1a08';
+			const ly = C - R * 0.22;
+			const lr = R * 0.26;
+			fx.lineCap = 'round';
+			for (const sg of [-1, 1]) {
+				const lx = C + sg * R * 0.33;
+				fx.fillStyle = ink;
+				fx.beginPath();
+				fx.roundRect(lx - lr, ly - lr * 0.8, lr * 2, lr * 1.6, lr * 0.7);
+				fx.fill();
+				const glass = fx.createLinearGradient(lx - lr, ly - lr, lx + lr, ly + lr);
+				glass.addColorStop(0, 'rgba(255,255,255,.55)');
+				glass.addColorStop(0.5, 'rgba(255,255,255,.05)');
+				glass.addColorStop(1, 'rgba(255,255,255,0)');
+				fx.fillStyle = glass;
+				fx.beginPath();
+				fx.roundRect(lx - lr, ly - lr * 0.8, lr * 2, lr * 1.6, lr * 0.7);
+				fx.fill();
+			}
+			fx.strokeStyle = ink;
+			fx.lineWidth = 3;
+			fx.beginPath();
+			fx.moveTo(C - R * 0.07, ly - lr * 0.2);
+			fx.quadraticCurveTo(C, ly - lr * 0.55, C + R * 0.07, ly - lr * 0.2);
+			fx.stroke();
+			fx.beginPath();
+			fx.moveTo(C - R * 0.59, ly - lr * 0.3);
+			fx.lineTo(C - R * 0.9, ly - lr * 0.6);
+			fx.moveTo(C + R * 0.59, ly - lr * 0.3);
+			fx.lineTo(C + R * 0.9, ly - lr * 0.6);
+			fx.stroke();
+			fx.lineWidth = 4;
+			fx.beginPath();
+			fx.arc(C, C + R * 0.12, R * 0.5, Math.PI * 0.18, Math.PI * 0.82);
+			fx.stroke();
+			fx.fillStyle = 'rgba(255,90,60,.35)';
+			for (const sg of [-1, 1]) {
+				fx.beginPath();
+				fx.ellipse(C + sg * R * 0.62, C + R * 0.3, R * 0.13, R * 0.08, 0, 0, Math.PI * 2);
+				fx.fill();
+			}
+			fx.globalCompositeOperation = 'lighter';
+		}
 
 		// 3. smoulder at the rim
 		if (sparks.length < MAX_SPARKS) spark();

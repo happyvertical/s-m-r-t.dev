@@ -292,9 +292,12 @@
 				onclick={onbuild}
 			>
 				<circle r={HUB_RADIUS} />
-				<text y="7" text-anchor="middle">BUILD</text>
+				<!-- The face fills the disc, so the label sits just below it; the hit
+				     target is the disc plus the label. -->
+				<rect class="labelhit" x="-60" y="50" width="120" height="36" />
+				<text class="label" y="76" text-anchor="middle">BUILD</text>
 				{#if count}
-					<g class="badge" transform="translate({HUB_RADIUS * 0.74},{HUB_RADIUS * 0.74})">
+					<g class="badge" transform="translate(58,70)">
 						<circle r="13" />
 						<text y="4.5" text-anchor="middle">{count}</text>
 					</g>
@@ -329,10 +332,10 @@
 	.sky {
 		--sk-ink: #1d3557;
 		--sk-dim: #4d6785;
-		--sk-pill: #2f6fc4;
-		--sk-pill-hover: #2558a8;
-		--sk-pill-on: #1f4f94;
-		--sk-accent: #3b82d6;
+		--sk-pill: #1e8fe0;
+		--sk-pill-hover: #1676bd;
+		--sk-pill-on: #1676bd;
+		--sk-accent: #1e8fe0;
 		position: absolute;
 		inset: 0;
 		font-family: var(--front-mono, ui-monospace, Menlo, monospace);
@@ -395,7 +398,7 @@
 	}
 	.title.all rect {
 		fill: rgba(255, 255, 255, 0.92);
-		filter: brightness(1.06);
+		filter: brightness(1.06) drop-shadow(0 3px 4px rgba(29, 53, 87, 0.28));
 	}
 	.title:focus,
 	.chip:focus {
@@ -444,7 +447,7 @@
 	}
 	.chip.sel rect {
 		fill: rgba(255, 255, 255, 0.95);
-		filter: brightness(1.06);
+		filter: brightness(1.06) drop-shadow(0 2px 3px rgba(29, 53, 87, 0.28));
 	}
 
 	.hub {
@@ -459,10 +462,13 @@
 		stroke-width: 3;
 		stroke-dasharray: 4 3;
 	}
+	.hub .labelhit {
+		fill: transparent;
+	}
 	.hub text {
 		font-weight: 700;
-		font-size: 20px;
-		fill: #3a0d00;
+		font-size: 18px;
+		fill: var(--sk-pill-on);
 		letter-spacing: 0.18em;
 		pointer-events: none;
 	}
