@@ -336,18 +336,28 @@ describe('the user’s-side rule (#375)', () => {
 
 	it('maps recipes only where one exists in the installed planner catalog', () => {
 		// Every id is verified against the catalog by build-handoff.test.ts; here
-		// only the feature still without a recipe must stay empty, and the six
-		// that gained one in smrt 0.57.35 must stay mapped.
-		expect(getFeature('subscriptions')?.recipes, 'subscriptions has no planner recipe yet').toEqual(
-			[]
-		);
+		// the features that gained a recipe in smrt 0.57.35 and 0.57.36 must stay
+		// mapped, and the two Will deferred (Tools, Memory) must stay empty.
+		for (const id of ['tools', 'memory']) {
+			expect(getFeature(id)?.recipes, `${id} has no planner recipe yet`).toEqual([]);
+		}
 		const mapped: Record<string, string> = {
 			support: 'support.tickets',
 			affiliates: 'affiliates.referrals',
 			assemblies: 'manufacturing.assemblies',
 			production: 'manufacturing.production',
 			employees: 'human-resources.people',
-			qualifications: 'human-resources.qualifications'
+			qualifications: 'human-resources.qualifications',
+			articles: 'content.articles',
+			subscriptions: 'subscriptions.plans',
+			approvals: 'approvals.requests',
+			video: 'video.library',
+			voice: 'voice.profiles',
+			social: 'social.posts',
+			slack: 'messages.slack',
+			campaigns: 'marketing.campaigns',
+			ads: 'ads.campaigns',
+			places: 'places.locations'
 		};
 		for (const [id, recipe] of Object.entries(mapped)) {
 			expect(getFeature(id)?.recipes, `${id} maps to ${recipe}`).toEqual([recipe]);
