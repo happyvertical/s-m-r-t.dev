@@ -237,6 +237,7 @@ export const features: Feature[] = [
 		word: 'Payments',
 		hint: 'Money received, matched to the invoices it pays.',
 		packages: ['smrt-commerce'],
+		recipes: ['commerce.invoicing'],
 		example: still('payments'),
 		inTheBox: ['payments', 'allocations', 'saved payment methods', 'payment intents', 'payouts']
 	}),
