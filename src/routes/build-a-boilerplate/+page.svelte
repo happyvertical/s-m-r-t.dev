@@ -171,9 +171,13 @@
 		background: var(--site-paper);
 		color: var(--site-ink);
 	}
-	/* While the planner grows in it is still on the map's night sky. */
+	/* While the planner grows in it is still on the map's night sky, or on the
+	   white-out the light scheme's flight ends in (#381). */
 	.planner-page.arriving {
 		background: #0a0604;
+	}
+	:global(html[data-color-scheme='light']) .planner-page.arriving {
+		background: #fff;
 	}
 	.planner-page__title {
 		position: absolute;

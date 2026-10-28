@@ -11,7 +11,7 @@
 <AppTheme>
 	<AdminShell state={shell} edgeToggles={{ top: true }}>
 		{#snippet appBar()}
-			<Header {pathname} space={pathname === '/'} />
+			<Header {pathname} />
 		{/snippet}
 		<p>Content</p>
 	</AdminShell>

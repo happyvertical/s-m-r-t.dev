@@ -3,6 +3,7 @@
 	import { getThemeContext } from '@happyvertical/smrt-ui/themes';
 	import { useAdminShell } from '@happyvertical/smrt-svelte/workspace';
 	import brandMark from '$lib/assets/smrt-mark.svg';
+	import ColorSchemeToggle from '$lib/components/ColorSchemeToggle.svelte';
 	import DocsSearch from '$lib/components/DocsSearch.svelte';
 	import {
 		isDocsPathname,
@@ -10,17 +11,16 @@
 		primaryNavigation
 	} from '$lib/data/navigation';
 
-	// `space` is the front page's header (#373): the map is space in both colour
-	// schemes, so the bar takes the dark scheme's tokens there and nowhere else.
-	let { pathname, space = false }: { pathname: string; space?: boolean } = $props();
+	let { pathname }: { pathname: string } = $props();
 	let menuOpen = $state(false);
 	const shell = useAdminShell();
 	const theme = getThemeContext();
 	const panelOpen = $derived(shell.panels.top === 'expanded');
 	// The section-map toggle exists only inside Docs, where the panel does.
 	const inDocs = $derived(isDocsPathname(pathname));
-	const nextScheme = $derived(theme.state.isDark ? 'light' : 'dark');
-	const schemeActionLabel = $derived(`Switch to ${nextScheme} color scheme`);
+	const schemeActionLabel = $derived(
+		`Switch to ${theme.state.isDark ? 'light' : 'dark'} color scheme`
+	);
 
 	$effect(() => {
 		void pathname;
@@ -40,7 +40,7 @@
 
 <a class="skip-link" href="#main-content">Skip to content</a>
 
-<div class="header-root" class:space>
+<div class="header-root">
 	<div class="app-bar">
 		<a href="/" class="brand" aria-label="s-m-r-t documentation home">
 			<img src={brandMark} alt="" width="30" height="30" />
@@ -94,26 +94,7 @@
 			</Tooltip>
 
 			<Tooltip text={schemeActionLabel} placement="bottom">
-				<button
-					class="icon-action"
-					type="button"
-					aria-label={schemeActionLabel}
-					data-next-color-scheme={nextScheme}
-					onclick={() => theme.toggleColorScheme()}
-				>
-					{#if nextScheme === 'light'}
-						<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-							<circle cx="12" cy="12" r="3.5"></circle>
-							<path
-								d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
-							></path>
-						</svg>
-					{:else}
-						<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-							<path d="M20 15.5A8.4 8.4 0 0 1 8.5 4a8.5 8.5 0 1 0 11.5 11.5Z"></path>
-						</svg>
-					{/if}
-				</button>
+				<ColorSchemeToggle class="icon-action" />
 			</Tooltip>
 		</div>
 
@@ -149,45 +130,6 @@
 	.header-root {
 		display: contents;
 	}
-	/* The dark scheme's values, scoped to the bar on the front page. */
-	.header-root.space {
-		--smrt-color-primary: #ff7a1a;
-		--smrt-color-on-primary: #1a0e02;
-		--smrt-color-primary-container: #2a1a0c;
-		--smrt-color-on-primary-container: #ffb784;
-		--smrt-color-surface: #121417;
-		--smrt-color-on-surface: #c9cdd3;
-		--smrt-color-surface-variant: #181b1f;
-		--smrt-color-on-surface-variant: #9aa3af;
-		--smrt-color-surface-container: #121417;
-		--smrt-color-surface-container-low: #0e1013;
-		--smrt-color-surface-container-high: #181b1f;
-		--smrt-color-surface-container-highest: #1f242b;
-		--smrt-color-surface-container-lowest: #0a0c10;
-		--smrt-color-background: #0b0c0e;
-		--smrt-color-on-background: #c9cdd3;
-		--smrt-color-outline: #70747b;
-		--smrt-color-outline-variant: #23272e;
-		--site-paper: #0a0604;
-		--site-paper-deep: #121417;
-		--site-surface: #121417;
-		--site-ink: #c9cdd3;
-		--site-muted: #9aa3af;
-		--site-line: color-mix(in srgb, #23272e 55%, transparent);
-		--site-line-strong: #23272e;
-		--site-accent: #ff7a1a;
-		--site-accent-strong: #ff7a1a;
-		--site-accent-soft: #2a1a0c;
-		--site-accent-ink: #ff7a1a;
-		--site-on-accent: #1a0e02;
-		color: var(--site-ink);
-	}
-	/* The shell paints the bar's edge; match the map's space behind it. */
-	:global(.smrt-admin-shell__edge--top:has(.header-root.space)) {
-		background: #0a0604;
-		border-color: #23272e;
-	}
-
 	.skip-link {
 		position: fixed;
 		inset-block-start: 0.4rem;
@@ -302,7 +244,7 @@
 
 	.panel-toggle,
 	.menu-toggle,
-	.icon-action {
+	.actions :global(.icon-action) {
 		min-width: 44px;
 		min-height: 44px;
 		display: inline-flex;
@@ -324,13 +266,13 @@
 
 	.panel-toggle[aria-expanded='true'],
 	.panel-toggle:hover,
-	.icon-action:hover,
+	.actions :global(.icon-action:hover),
 	.menu-toggle:hover {
 		color: var(--site-ink);
 	}
 
 	.panel-toggle svg,
-	.icon-action svg,
+	.actions :global(.icon-action svg),
 	.menu-toggle svg {
 		fill: none;
 		stroke: currentColor;
@@ -339,7 +281,7 @@
 		stroke-width: 1.8;
 	}
 
-	.icon-action svg path:first-child {
+	.actions :global(.icon-action svg path:first-child) {
 		fill: currentColor;
 		stroke: none;
 	}

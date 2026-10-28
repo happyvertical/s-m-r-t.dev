@@ -56,8 +56,8 @@ describe('FeatureGraph', () => {
 		expect(container.querySelectorAll('svg a.hub')).toHaveLength(1);
 		expect(container.querySelectorAll('svg a.n.d1')).toHaveLength(9);
 		expect(container.querySelectorAll('svg a.n.d2')).toHaveLength(41);
-		expect(container.querySelectorAll('svg circle')).toHaveLength(1 + 9 + 41);
-		expect(container.querySelectorAll('svg line')).toHaveLength(9 + 41);
+		expect(container.querySelectorAll('section.map > svg circle')).toHaveLength(1 + 9 + 41);
+		expect(container.querySelectorAll('section.map > svg line')).toHaveLength(9 + 41);
 		expect(featureSections).toHaveLength(9);
 		expect(features).toHaveLength(41);
 	});
@@ -90,7 +90,7 @@ describe('FeatureGraph', () => {
 	it('refits to the map when it resizes, without moving the rim', () => {
 		const { container } = render(FeatureGraph);
 		const map = container.querySelector('section.map') as HTMLElement;
-		const svg = container.querySelector('svg')!;
+		const svg = container.querySelector('section.map > svg')!;
 		const before = svg.getAttribute('viewBox');
 		const hubBefore = container
 			.querySelector('svg a.hub')!
