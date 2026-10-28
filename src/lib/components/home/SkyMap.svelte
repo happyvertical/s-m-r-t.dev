@@ -395,7 +395,7 @@
 	}
 	.title.all rect {
 		fill: rgba(255, 255, 255, 0.92);
-		filter: brightness(1.06) drop-shadow(0 3px 4px rgba(29, 53, 87, 0.28));
+		filter: brightness(1.06) drop-shadow(0 4px 6px rgba(29, 53, 87, 0.4));
 	}
 	.title:focus,
 	.chip:focus {
@@ -444,7 +444,7 @@
 	}
 	.chip.sel rect {
 		fill: rgba(255, 255, 255, 0.95);
-		filter: brightness(1.06) drop-shadow(0 2px 3px rgba(29, 53, 87, 0.28));
+		filter: brightness(1.06) drop-shadow(0 3px 5px rgba(29, 53, 87, 0.4));
 	}
 
 	.hub {
