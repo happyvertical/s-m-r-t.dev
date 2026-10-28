@@ -56,7 +56,7 @@ export interface Feature {
 	/** Slug; the route segment under /features/<section>/. */
 	id: string;
 	section: FeatureSectionId;
-	/** The one word on the map node; two only where the name is two (HR is one). */
+	/** The one word on the map node; two only where the name is two. */
 	word: string;
 	/** The hover sentence and the showcase sentence, at most 12 words. */
 	hint: string;
@@ -149,7 +149,7 @@ const sectionSeeds: SectionSeed[] = [
 	{
 		id: 'team',
 		word: 'Team',
-		hint: 'People, roles, hours and approvals for the people who work here.'
+		hint: 'Employees, hours, qualifications, approvals and roles for the people who work here.'
 	},
 	{
 		id: 'publish',
@@ -319,31 +319,25 @@ export const features: Feature[] = [
 	}),
 
 	// Team
+	// Employees and Qualifications have no recipe yet: the planner exposes no
+	// human-resources entry. `human-resources.people` is pending upstream in
+	// smrt#4438 (the recipe) and smrt#4440 (UI-only exposure); until both ship
+	// the two keep the "not in the planner yet" notice. Qualifications will
+	// share that recipe, since it is the same package.
 	feature({
-		id: 'people',
+		id: 'employees',
 		section: 'team',
 		everyday: true,
-		word: 'People',
-		hint: 'Accounts, sign-in and profiles for everyone who uses the application.',
-		packages: ['smrt-users', 'smrt-profiles', 'smrt-secrets', 'smrt-preferences'],
-		recipes: ['users.sign-in', 'profiles.audit-log'],
-		example: playground('user-list'),
-		inTheBox: ['users', 'sessions', 'passkeys', 'profiles']
-	}),
-	feature({
-		id: 'roles',
-		section: 'team',
-		everyday: true,
-		word: 'Roles',
-		hint: 'Who may see and change what.',
-		packages: ['smrt-users', 'smrt-profiles'],
-		recipes: ['users.roles-and-permissions'],
-		example: playground('permission-picker'),
-		inTheBox: ['roles', 'permissions', 'groups', 'memberships']
+		word: 'Employees',
+		hint: 'Who works here, in what position, with dated history.',
+		packages: ['smrt-human-resources'],
+		example: still('employees'),
+		inTheBox: ['employment', 'terms', 'positions', 'worker types', 'leave status']
 	}),
 	feature({
 		id: 'timesheets',
 		section: 'team',
+		everyday: true,
 		word: 'Timesheets',
 		hint: 'Hours worked, punches and timecards; approved hours lock.',
 		packages: ['smrt-timesheets'],
@@ -352,13 +346,13 @@ export const features: Feature[] = [
 		inTheBox: ['time entries', 'punches', 'timecards', 'periods', 'approvals']
 	}),
 	feature({
-		id: 'hr',
+		id: 'qualifications',
 		section: 'team',
-		word: 'HR',
-		hint: 'Employment terms, positions and leave, with dated history.',
+		word: 'Qualifications',
+		hint: 'Licences and certificates people hold, and when each expires.',
 		packages: ['smrt-human-resources'],
-		example: still('hr'),
-		inTheBox: ['employment', 'terms', 'qualifications', 'positions', 'leave status']
+		example: still('qualifications'),
+		inTheBox: ['qualifications', 'held certificates', 'expiry dates', 'renewals', 'suspensions']
 	}),
 	feature({
 		id: 'approvals',
@@ -368,6 +362,16 @@ export const features: Feature[] = [
 		packages: ['smrt-approvals'],
 		example: still('approvals'),
 		inTheBox: ['approval requests', 'decision history', 'policies', 'quorum', 'expiry']
+	}),
+	feature({
+		id: 'roles',
+		section: 'team',
+		word: 'Roles',
+		hint: 'Who may see and change what.',
+		packages: ['smrt-users', 'smrt-profiles'],
+		recipes: ['users.roles-and-permissions'],
+		example: playground('permission-picker'),
+		inTheBox: ['roles', 'permissions', 'groups', 'memberships']
 	}),
 
 	// Publish
@@ -647,6 +651,8 @@ export const toolingPackageSlugs: string[] = [
 export const offMapPackageSlugs: string[] = [
 	'smrt-affiliates',
 	'smrt-scanner',
+	'smrt-secrets',
+	'smrt-preferences',
 	'smrt-dev-mcp',
 	'smrt-ingestion',
 	'smrt-webhooks',
