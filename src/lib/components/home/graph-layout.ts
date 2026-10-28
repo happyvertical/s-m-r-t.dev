@@ -1,6 +1,6 @@
 /**
  * Layout of the front-page feature graph (#363). The hub (BUILD), nine section
- * nodes and forty-nine feature nodes are settled once, offline, by d3-force in
+ * nodes and forty-one feature nodes are settled once, offline, by d3-force in
  * a unit frame centred on the hub. `fitGraph` then stretches the settled frame
  * to whatever size the map has, so the graph fills the screen and refits on
  * resize without running the simulation again. Constants follow the approved

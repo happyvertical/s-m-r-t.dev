@@ -99,7 +99,7 @@ describe('showcase template', () => {
 			expect(tiles.length, id).toBeLessThanOrEqual(3);
 			for (const tile of tiles) expect(tile.from).toMatch(/^@happyvertical\/smrt-/);
 		}
-		const { container } = showcase(features.find((item) => item.id === 'blueprint')!);
+		const { container } = showcase(features.find((item) => item.id === 'orders')!);
 		expect(container.querySelector('#also-in-the-box')).toBeNull();
 	});
 

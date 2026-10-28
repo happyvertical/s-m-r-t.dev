@@ -46,7 +46,7 @@ describe('Why s-m-r-t discovery surfaces', () => {
 			'> s-m-r-t is an MIT-licensed TypeScript stack for agentic software that people and agents use through the same screens, rules and permissions.'
 		);
 		expect(llms).toContain('BUILD, FEATURES and DOCS');
-		expect(llms).toContain('nine sections');
+		expect(llms).toContain('nine groups');
 		expect(llms).toContain('assembles a working mock-up for a kind of business');
 		expect(llms).not.toMatch(/\bblocks?\b/i);
 		expect(llms).not.toContain('Build a boilerplate');

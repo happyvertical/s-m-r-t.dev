@@ -19,6 +19,7 @@ import {
 	getFeatureSection,
 	packageReferenceUrl,
 	packageSourceUrl,
+	offMapPackageSlugs,
 	toolingPackageSlugs,
 	type FeatureSectionId
 } from '$lib/data/features';
@@ -45,28 +46,17 @@ const bannedPhrases: RegExp[] = [
 	/world models/i
 ];
 
-/** The locked 9 × 49 list from #361, in map order. */
+/** The 9 × 41 list from #375, in map order. */
 const lockedMap: Record<FeatureSectionId, string[]> = {
-	agents: [
-		'Tools',
-		'Blueprint',
-		'Agents',
-		'Forms',
-		'Memory',
-		'Approvals',
-		'Ingestion',
-		'Jobs',
-		'Webhooks',
-		'Facts'
-	],
-	basics: ['Records', 'Fields', 'Flags', 'People', 'Tenants', 'Realtime', 'Reports'],
-	screens: ['Shell', 'Mobile'],
-	content: ['Articles', 'Assets', 'Images', 'Voice', 'Video', 'Comments'],
-	messaging: ['Chat', 'Email', 'Slack', 'Social'],
-	commerce: ['Commerce', 'Products', 'Ledgers', 'Subscriptions'],
-	operations: ['Inventory', 'Manufacturing', 'Projects', 'Support', 'Timesheets', 'Expenses', 'HR'],
-	marketing: ['Campaigns', 'Ads', 'Affiliates', 'Sales', 'Analytics', 'Properties'],
-	world: ['Events', 'Places', 'Tags']
+	sell: ['Customers', 'Orders', 'Invoices', 'Products', 'Quotes', 'Subscriptions', 'Payments'],
+	buy: ['Vendors', 'Purchase orders', 'Expenses', 'Inventory'],
+	make: ['Assemblies', 'Production', 'Stock'],
+	team: ['People', 'Roles', 'Timesheets', 'HR', 'Approvals'],
+	publish: ['Articles', 'Images', 'Video', 'Voice', 'Comments', 'Social'],
+	talk: ['Chat', 'Email', 'Slack', 'Support'],
+	grow: ['Campaigns', 'Analytics', 'Reports', 'Ads', 'Affiliates'],
+	plan: ['Projects', 'Tasks', 'Events', 'Places'],
+	assistant: ['Agents', 'Tools', 'Memory']
 };
 
 function wordCount(sentence: string): number {
@@ -83,15 +73,15 @@ function expectOneSentence(text: string, label: string, maxWords: number) {
 describe('feature sections', () => {
 	it('are the nine locked sections, in map order', () => {
 		expect(sectionIds).toEqual([
-			'agents',
-			'basics',
-			'screens',
-			'content',
-			'messaging',
-			'commerce',
-			'operations',
-			'marketing',
-			'world'
+			'sell',
+			'buy',
+			'make',
+			'team',
+			'publish',
+			'talk',
+			'grow',
+			'plan',
+			'assistant'
 		]);
 	});
 
@@ -115,8 +105,8 @@ describe('feature sections', () => {
 });
 
 describe('features', () => {
-	it('are the locked 49, each under its section in map order', () => {
-		expect(features).toHaveLength(49);
+	it('are the locked 41, each under its section in map order', () => {
+		expect(features).toHaveLength(41);
 		for (const section of featureSections) {
 			expect(
 				featuresInSection(section.id).map((item) => item.word),
@@ -140,7 +130,7 @@ describe('features', () => {
 
 	it('carry every field of the locked shape', () => {
 		for (const item of features) {
-			expect(item.word, `${item.id} word`).toMatch(/^[A-Z][A-Za-z]*$/);
+			expect(item.word, `${item.id} word`).toMatch(/^[A-Z][A-Za-z]*( [a-z]+)?$/);
 			expectOneSentence(item.hint, `${item.id} hint`, 12);
 			expect(Array.isArray(item.packages), `${item.id} packages`).toBe(true);
 			expect(typeof item.reference, `${item.id} reference`).toBe('string');
@@ -202,25 +192,25 @@ describe('feature examples', () => {
 	});
 
 	it('use a live playground wherever one shows the feature', () => {
-		// Locked in #362: the proposal names these packages as shipping entries.
+		// Playground entries the installed packages ship for the #375 list.
 		for (const id of [
-			'agents',
-			'forms',
-			'jobs',
-			'records',
-			'fields',
+			'customers',
+			'invoices',
+			'quotes',
+			'vendors',
+			'purchase-orders',
 			'people',
-			'tenants',
-			'articles',
-			'assets',
+			'roles',
 			'images',
+			'articles',
 			'chat',
 			'email',
 			'slack',
-			'commerce',
-			'projects',
 			'analytics',
-			'events'
+			'reports',
+			'projects',
+			'events',
+			'agents'
 		]) {
 			expect(getFeature(id)?.example.kind, `${id} should mount a playground`).toBe('playground');
 		}
@@ -238,30 +228,35 @@ describe('feature packages', () => {
 				item.packages.length
 			);
 		}
-		for (const slug of toolingPackageSlugs) {
-			expect(packageSlugs.has(slug), `tooling names unknown package ${slug}`).toBe(true);
+		for (const slug of [...toolingPackageSlugs, ...offMapPackageSlugs]) {
+			expect(packageSlugs.has(slug), `tooling or off-map names unknown package ${slug}`).toBe(true);
 		}
 	});
 
 	it('place every published package in at least one feature or under Tooling', () => {
-		const covered = new Set([...features.flatMap((item) => item.packages), ...toolingPackageSlugs]);
+		const covered = new Set([
+			...features.flatMap((item) => item.packages),
+			...toolingPackageSlugs,
+			...offMapPackageSlugs
+		]);
 		const missing = packages.map((pkg) => pkg.slug).filter((slug) => !covered.has(slug));
 		expect(
 			missing,
-			`Published packages absent from every feature and from toolingPackageSlugs: ${missing.join(', ')}. ` +
-				'Add each to a feature in features.ts, or to toolingPackageSlugs if it is a developer tool.'
+			`Published packages absent from every feature, toolingPackageSlugs and offMapPackageSlugs: ${missing.join(', ')}. ` +
+				'Add each to a feature in features.ts, to toolingPackageSlugs if it is a developer tool, or to offMapPackageSlugs if it is plumbing.'
 		).toEqual([]);
 	});
 
-	it('keep the epic’s package assignments for Messaging and Articles', () => {
+	it('keep the package assignments for Talk, Publish and Sell', () => {
 		expect(getFeature('chat')?.packages[0]).toBe('smrt-chat');
 		expect(getFeature('email')?.packages[0]).toBe('smrt-messages');
 		expect(getFeature('slack')?.packages[0]).toBe('smrt-messages');
 		expect(getFeature('social')?.packages).toEqual(['smrt-social', 'smrt-messages']);
 		expect(getFeature('social')?.inTheBox).toContain('posts');
 		expect(getFeature('articles')?.packages[0]).toBe('smrt-content');
-		expect(getFeature('realtime')?.packages).toContain('smrt-web');
-		expect(getFeature('flags')?.packages).toEqual(['smrt-features']);
+		for (const id of ['customers', 'orders', 'quotes', 'invoices', 'payments']) {
+			expect(getFeature(id)?.packages, id).toContain('smrt-commerce');
+		}
 	});
 });
 
@@ -282,8 +277,8 @@ describe('feature register', () => {
 	});
 
 	it('resolves lookups by id', () => {
-		expect(getFeature('approvals')?.section).toBe('agents');
-		expect(getFeatureSection('world')?.word).toBe('World');
+		expect(getFeature('approvals')?.section).toBe('team');
+		expect(getFeatureSection('assistant')?.word).toBe('Assistant');
 		expect(getFeature('nope')).toBeUndefined();
 	});
 });
@@ -302,14 +297,49 @@ describe('everyday sets (#373)', () => {
 			featuresInSection(section)
 				.filter((feature) => feature.everyday)
 				.map((feature) => feature.id);
-		expect(everyday('agents')).toEqual(['tools', 'blueprint', 'agents', 'approvals', 'jobs']);
-		expect(everyday('basics')).toEqual(['records', 'fields', 'people', 'tenants', 'reports']);
-		expect(everyday('screens')).toEqual(['shell']);
-		expect(everyday('content')).toEqual(['articles', 'assets', 'images', 'comments']);
-		expect(everyday('messaging')).toEqual(['chat', 'email']);
-		expect(everyday('commerce')).toEqual(['commerce', 'products', 'ledgers']);
-		expect(everyday('operations')).toEqual(['inventory', 'projects', 'support']);
-		expect(everyday('marketing')).toEqual(['campaigns', 'sales', 'analytics']);
-		expect(everyday('world')).toEqual(['events', 'places', 'tags']);
+		expect(everyday('sell')).toEqual(['customers', 'orders', 'invoices', 'products']);
+		expect(everyday('buy')).toEqual(['vendors', 'purchase-orders']);
+		expect(everyday('make')).toEqual(['assemblies', 'production']);
+		expect(everyday('team')).toEqual(['people', 'roles']);
+		expect(everyday('publish')).toEqual(['articles', 'images']);
+		expect(everyday('talk')).toEqual(['chat', 'email']);
+		expect(everyday('grow')).toEqual(['campaigns', 'analytics', 'reports']);
+		expect(everyday('plan')).toEqual(['projects', 'tasks']);
+		expect(everyday('assistant')).toEqual(['agents', 'tools']);
+	});
+});
+
+describe('the user’s-side rule (#375)', () => {
+	it('keeps agentic plumbing off the map', () => {
+		const offMap = [
+			'blueprint',
+			'forms',
+			'ingestion',
+			'webhooks',
+			'facts',
+			'records',
+			'fields',
+			'flags',
+			'tenants',
+			'realtime',
+			'shell',
+			'mobile',
+			'tags',
+			'jobs',
+			'ledgers',
+			'properties',
+			'manufacturing',
+			'commerce',
+			'sales'
+		];
+		for (const id of offMap) expect(getFeature(id), `${id} is back on the map`).toBeUndefined();
+	});
+
+	it('maps recipes only where one exists in the installed planner catalog', () => {
+		// Verified by build-handoff.test.ts against the catalog; here only the
+		// features the issue says have no recipe yet must stay empty.
+		for (const id of ['assemblies', 'production', 'subscriptions', 'support', 'affiliates']) {
+			expect(getFeature(id)?.recipes, `${id} has no planner recipe yet`).toEqual([]);
+		}
 	});
 });

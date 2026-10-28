@@ -77,13 +77,20 @@ means adding a data entry, not a route; the route's `entries()` prerenders it.
 Editing a renderer changes every page it serves, so check a few before assuming.
 Landing pages and the section indexes are ordinary hand-written `+page.svelte`.
 
-**Features -> sections -> showcases.** `src/lib/data/features.ts` holds the nine
-sections and their features (word, hint, packages, reference, source, example,
-inTheBox). The front page graph (`components/home/`), the section index
-(`/features/[section]`) and the showcase (`/features/[section]/[feature]`,
-`components/features/Showcase.svelte`) are all generated from it. A live example
-is a real playground entry from `playgrounds.ts`; otherwise a still from
-`scripts/generate-feature-stills.mjs`. `features.test.ts` guards the shape.
+**Features -> groups -> showcases.** `src/lib/data/features.ts` holds the nine
+groups (Sell, Buy, Make, Team, Publish, Talk, Grow, Plan, Assistant) and their
+features (word, hint, everyday, packages, reference, source, example, inTheBox,
+recipes). Groups are named for what a person is doing and features for words
+people already use; agentic plumbing stays in `/docs`. A
+feature maps to planner **recipe ids** that exist in the installed catalog, not
+to a package, and one with none keeps the "not in the planner yet" notice.
+The front page graph
+(`components/home/`), the group index (`/features/[section]`) and the showcase
+(`/features/[section]/[feature]`, `components/features/Showcase.svelte`) are all
+generated from it. A live example is a real playground entry from
+`playgrounds.ts`; otherwise a still from `scripts/generate-feature-stills.mjs`.
+`features.test.ts` guards the shape. Pre-#375 `/features/...` URLs are frozen in
+`src/lib/legacy-features.ts`.
 
 A new `Guide[]` route family needs a `[slug]` route of its own plus registering
 by hand in `navigation.ts`, `search.ts`, and the sitemap. Add the family and let
@@ -105,7 +112,8 @@ merge, because a hash comparison is not qualified to reject prose.
 
 `src/routes/docs/[...legacy]/`, `src/routes/components/[...legacy]/`,
 `src/routes/blocks/` (the retired #358 landing and 23 block pages, each a 301 to a
-feature or section),
+feature or group), the retired pre-#375 `/features/<section>[/<feature>]` pages
+(58, in `src/lib/legacy-features.ts`),
 `src/routes/modules/[slug]/`, `src/routes/packages/[slug]/`, `src/routes/packages/`,
 and `src/routes/faq/` prerender 301 redirects for URLs the site used to serve.
 The site is static, so a path with no prerendered redirect is a hard 404 in

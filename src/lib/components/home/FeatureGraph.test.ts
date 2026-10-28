@@ -50,16 +50,16 @@ const mappable = (nodes: Element[]) =>
 	});
 
 describe('FeatureGraph', () => {
-	it('renders the hub, nine sections and forty-nine features', () => {
+	it('renders the hub, nine groups and forty-one features', () => {
 		const { container } = render(FeatureGraph);
 
 		expect(container.querySelectorAll('svg a.hub')).toHaveLength(1);
 		expect(container.querySelectorAll('svg a.n.d1')).toHaveLength(9);
-		expect(container.querySelectorAll('svg a.n.d2')).toHaveLength(49);
-		expect(container.querySelectorAll('svg circle')).toHaveLength(1 + 9 + 49);
-		expect(container.querySelectorAll('svg line')).toHaveLength(9 + 49);
+		expect(container.querySelectorAll('svg a.n.d2')).toHaveLength(41);
+		expect(container.querySelectorAll('svg circle')).toHaveLength(1 + 9 + 41);
+		expect(container.querySelectorAll('svg line')).toHaveLength(9 + 41);
 		expect(featureSections).toHaveLength(9);
-		expect(features).toHaveLength(49);
+		expect(features).toHaveLength(41);
 	});
 
 	it('links sections to their index and features to their showcase', () => {
@@ -177,14 +177,14 @@ describe('FeatureGraph', () => {
 		expect(container.querySelector('section.map')?.classList.contains('focus')).toBe(true);
 	});
 
-	it('stacks a BUILD button and nine sections with feature chips for phones', () => {
+	it('stacks a BUILD button and nine groups with feature chips for phones', () => {
 		const { container } = render(FeatureGraph);
 
 		expect(container.querySelector('.stacks .hubbtn a')?.getAttribute('href')).toBe(
 			'/build-a-boilerplate'
 		);
 		expect(container.querySelectorAll('.stacks .stack')).toHaveLength(9);
-		expect(container.querySelectorAll('.stacks .stack li a')).toHaveLength(49);
+		expect(container.querySelectorAll('.stacks .stack li a')).toHaveLength(41);
 	});
 });
 
@@ -203,21 +203,21 @@ describe('group selection (#373)', () => {
 		const { goto } = await import('$app/navigation');
 		vi.mocked(goto).mockClear();
 		const { container } = render(FeatureGraph);
-		const node = sectionNode(container, 'Content');
+		const node = sectionNode(container, 'Publish');
 
 		click(node.querySelector('circle.dot')!);
 		await vi.waitFor(() => expect(node.classList.contains('set')).toBe(true));
 		expect(goto).not.toHaveBeenCalled();
-		expect(container.querySelectorAll('svg a.n.d2.sel')).toHaveLength(everyday('content').length);
-		expect(node.getAttribute('aria-label')).toMatch(/section, selected: /);
+		expect(container.querySelectorAll('svg a.n.d2.sel')).toHaveLength(everyday('publish').length);
+		expect(node.getAttribute('aria-label')).toMatch(/group, selected: /);
 		expect(badge(container)).toBe(
-			String(everyday('content').filter((f) => f.recipes.length).length)
+			String(everyday('publish').filter((f) => f.recipes.length).length)
 		);
 
 		// A niche feature on top; the next click clears the lot, niche included.
-		const nicheId = features.find((f) => f.section === 'content' && !f.everyday)!.id;
+		const nicheId = features.find((f) => f.section === 'publish' && !f.everyday)!.id;
 		const niche = [...container.querySelectorAll('svg a.n.d2')].find(
-			(a) => a.getAttribute('href') === `/features/content/${nicheId}`
+			(a) => a.getAttribute('href') === `/features/publish/${nicheId}`
 		)!;
 		click(niche.querySelector('circle.dot')!);
 		await vi.waitFor(() => expect(niche.classList.contains('sel')).toBe(true));
@@ -229,7 +229,7 @@ describe('group selection (#373)', () => {
 	it('toggles with Space on a focused section circle and opens the index from the label', async () => {
 		const { goto } = await import('$app/navigation');
 		const { container } = render(FeatureGraph);
-		const node = sectionNode(container, 'Agents');
+		const node = sectionNode(container, 'Assistant');
 
 		node.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true }));
 		await vi.waitFor(() => expect(node.classList.contains('set')).toBe(true));
@@ -262,7 +262,7 @@ describe('group selection (#373)', () => {
 		boxes[1].click();
 		await vi.waitFor(() => expect(boxes[1].checked).toBe(true));
 		expect(container.querySelectorAll('.stack')[1].querySelectorAll('li.sel')).toHaveLength(
-			everyday('basics').length
+			everyday('buy').length
 		);
 		boxes[1].click();
 		await vi.waitFor(() => expect(boxes[1].checked).toBe(false));
@@ -343,7 +343,7 @@ describe('fitGraph', () => {
 			[2400, 900]
 		]) {
 			const placed = fitGraph(w, h);
-			expect(placed.nodes).toHaveLength(59);
+			expect(placed.nodes).toHaveLength(51);
 			for (const node of placed.nodes) {
 				expect(node.x).toBeGreaterThanOrEqual(0);
 				expect(node.x).toBeLessThanOrEqual(w);

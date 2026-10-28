@@ -29,7 +29,7 @@ describe('primary navigation', () => {
 
 		expect(active('/build-a-boilerplate')).toEqual(['Build']);
 		expect(active('/features')).toEqual(['Features']);
-		expect(active('/features/agents/approvals')).toEqual(['Features']);
+		expect(active('/features/team/approvals')).toEqual(['Features']);
 		for (const pathname of [
 			'/docs',
 			'/docs/foundations/objects-and-collections',
@@ -50,7 +50,7 @@ describe('primary navigation', () => {
 		expect(isDocsPathname('/docs')).toBe(true);
 		expect(isDocsPathname('/docs/ui')).toBe(true);
 		expect(isDocsPathname('/')).toBe(false);
-		expect(isDocsPathname('/features/agents')).toBe(false);
+		expect(isDocsPathname('/features/assistant')).toBe(false);
 		expect(isDocsPathname('/docsx')).toBe(false);
 	});
 });

@@ -28,7 +28,34 @@ const tile = (name: string, from: string, line: string): FeatureComponent => ({
 
 /** Keyed by feature id. Missing key = no component tiles for that feature. */
 export const alsoInTheBox: Record<string, FeatureComponent[]> = {
-	// Agents
+	customers: [
+		tile('CustomerForm', 'smrt-commerce/svelte', 'Create or edit a customer.'),
+		tile('CustomerSelect', 'smrt-commerce/svelte', 'Pick a customer in any form.')
+	],
+	invoices: [tile('InvoiceEditor', 'smrt-commerce/svelte', 'Build an invoice line by line.')],
+	quotes: [tile('QuoteEditor', 'smrt-commerce/svelte', 'Draft a quote.')],
+	vendors: [
+		tile('VendorForm', 'smrt-commerce/svelte', 'Create or edit a vendor.'),
+		tile('VendorSelect', 'smrt-commerce/svelte', 'Pick a vendor in any form.')
+	],
+	'purchase-orders': [
+		tile('PurchaseOrderEditor', 'smrt-commerce/svelte', 'Order from a vendor, line by line.')
+	],
+	assemblies: [
+		tile('BomEditor', 'smrt-manufacturing/svelte', 'Edit a bill of materials.'),
+		tile('BomStructureTree', 'smrt-manufacturing/svelte', 'A product’s parts, level by level.')
+	],
+	production: [
+		tile('ProductionRunList', 'smrt-manufacturing/svelte', 'Production runs and their state.')
+	],
+	stock: [
+		tile('StockLevels', 'smrt-inventory/svelte', 'What is on hand, by location.'),
+		tile('MovementHistory', 'smrt-inventory/svelte', 'Every movement, in order.'),
+		tile('AdjustStockForm', 'smrt-inventory/svelte', 'Correct a count.')
+	],
+	roles: [tile('RoleBadge', 'smrt-ui', 'A person’s role, at a glance.')],
+	tasks: [tile('DevelopmentBoard', 'smrt-projects/svelte', 'Requests moving across a board.')],
+
 	tools: [
 		tile(
 			'ToolCallDisplay',
@@ -41,13 +68,6 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 		tile('AgentRunHistory', 'smrt-agents/svelte', 'Every run an agent has made.'),
 		tile('ScheduleStatusBadge', 'smrt-agents/svelte', 'Whether a schedule is on, at a glance.')
 	],
-	forms: [
-		tile(
-			'StagedControlReview',
-			'smrt-ui/forms',
-			'Where a person reviews what an agent proposed, then applies it.'
-		)
-	],
 	memory: [
 		tile(
 			'DirectiveReviewQueue',
@@ -55,52 +75,11 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 			'Directives an agent proposed, waiting for a person.'
 		)
 	],
-	ingestion: [
-		tile('IntakeInbox', 'smrt-ingestion/svelte', 'Documents that have arrived.'),
-		tile('IntakeReview', 'smrt-ingestion/svelte', 'One document, and what was read from it.'),
-		tile('EvidenceViewer', 'smrt-ingestion/svelte', 'The original beside what was extracted.')
-	],
-	jobs: [
-		tile('JobList', 'smrt-jobs/svelte', 'Every job and where it stands.'),
-		tile('JobDetail', 'smrt-jobs/svelte', 'One job, its attempts and its result.'),
-		tile('JobStatusBadge', 'smrt-jobs/svelte', 'Queued, running, failed or done.')
-	],
-	webhooks: [
-		tile(
-			'WebhookAdmin',
-			'smrt-webhooks/svelte',
-			'Subscriptions and their deliveries, for an administrator.'
-		)
-	],
 
-	// Basics
-	records: [
-		tile('ObjectForm', 'smrt-fields/svelte', 'A create or edit form built from a record’s fields.'),
-		tile('CollectionList', 'smrt-ui/data', 'Any collection as a list of cards.')
-	],
-	fields: [
-		tile('FieldPolicyEditor', 'smrt-fields/svelte', 'Edit labels, defaults and locks for a layer.'),
-		tile(
-			'FieldPolicySuggestionQueue',
-			'smrt-fields/svelte',
-			'Suggested policy changes, waiting for review.'
-		),
-		tile(
-			'FieldPolicyGearButton',
-			'smrt-fields/svelte',
-			'A gear beside a field that opens its policy.'
-		)
-	],
-	flags: [
-		tile('FeatureSettingsPanel', 'smrt-features/svelte', 'Switch a feature on or off for a tenant.')
-	],
 	people: [
 		tile('SignInForm', 'smrt-users/svelte', 'Sign in.'),
 		tile('AccountSecurityPanel', 'smrt-users/svelte', 'Passkeys and sessions for one account.'),
 		tile('UserMenu', 'smrt-users/svelte', 'Who is signed in, and how to sign out.')
-	],
-	tenants: [
-		tile('TenantSwitcher', 'smrt-tenancy/svelte', 'Switch between the tenants a person belongs to.')
 	],
 	reports: [
 		tile('SavedReports', 'smrt-reports/svelte', 'The reports a person has saved.'),
@@ -112,31 +91,10 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 		)
 	],
 
-	// Screens
-	shell: [
-		tile('AppShell', 'smrt-svelte/app', 'Navigation, panels and a dock around your pages.'),
-		tile(
-			'AdminShell',
-			'smrt-svelte/workspace',
-			'A workspace shell with a rail, panels and content.'
-		),
-		tile(
-			'CommandPalette',
-			'smrt-svelte/command-palette',
-			'Jump to any page or record from the keyboard.'
-		)
-	],
-
-	// Content
 	articles: [
 		tile('ArticleList', 'smrt-content/svelte', 'Published articles as cards.'),
 		tile('ContentEditor', 'smrt-content/svelte', 'Write an article: body, references and media.'),
 		tile('Markdown', 'smrt-content/svelte', 'A body written in Markdown, rendered.')
-	],
-	assets: [
-		tile('AssetManager', 'smrt-assets/svelte', 'Browse, upload and organise files.'),
-		tile('AssetDetail', 'smrt-assets/svelte', 'One file and its details.'),
-		tile('AttachmentPanel', 'smrt-assets/svelte', 'Files attached to any record.')
 	],
 	images: [
 		tile('ImageUploader', 'smrt-images/svelte', 'Add an image to a record.'),
@@ -148,7 +106,6 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 		tile('ModerationQueue', 'smrt-comments/svelte', 'Comments waiting for a moderator.')
 	],
 
-	// Messaging
 	chat: [
 		tile('MessageList', 'smrt-chat/svelte', 'The messages in a room.'),
 		tile('MessageInput', 'smrt-chat/svelte', 'The box people type into.'),
@@ -168,12 +125,6 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 		tile('SocialAccountSettings', 'smrt-social/svelte', 'Connect and manage social accounts.')
 	],
 
-	// Commerce
-	commerce: [
-		tile('InvoiceEditor', 'smrt-commerce/svelte', 'Build an invoice line by line.'),
-		tile('QuoteEditor', 'smrt-commerce/svelte', 'Draft a quote.'),
-		tile('InvoiceCard', 'smrt-commerce/svelte', 'An invoice at a glance: status, amount, due date.')
-	],
 	products: [
 		tile('ProductCard', 'smrt-products/components', 'A product at a glance.'),
 		tile('ProductForm', 'smrt-products/components', 'Create or edit a product.')
@@ -184,16 +135,10 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 		tile('UsageThresholds', 'smrt-subscriptions/svelte', 'Usage against each limit.')
 	],
 
-	// Operations
 	inventory: [
 		tile('StockLevels', 'smrt-inventory/svelte', 'What is on hand, by location.'),
 		tile('MovementHistory', 'smrt-inventory/svelte', 'Every movement, in order.'),
 		tile('AdjustStockForm', 'smrt-inventory/svelte', 'Correct a count.')
-	],
-	manufacturing: [
-		tile('BomEditor', 'smrt-manufacturing/svelte', 'Edit a bill of materials.'),
-		tile('BomStructureTree', 'smrt-manufacturing/svelte', 'A product’s parts, level by level.'),
-		tile('ProductionRunList', 'smrt-manufacturing/svelte', 'Production runs and their state.')
 	],
 	projects: [
 		tile('DevelopmentBoard', 'smrt-projects/svelte', 'Requests moving across a board.'),
@@ -224,7 +169,6 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 		)
 	],
 
-	// Marketing
 	campaigns: [
 		tile('CampaignList', 'smrt-marketing/svelte', 'Every campaign and its state.'),
 		tile('BudgetPacing', 'smrt-marketing/svelte', 'Spend against budget.'),
@@ -234,19 +178,12 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 		tile('ReferralLinkManager', 'smrt-sales/svelte', 'Create and manage referral links.'),
 		tile('ReferrerEarningsSummary', 'smrt-sales/svelte', 'What a referrer has earned.')
 	],
-	sales: [
-		tile('SalesDashboard', 'smrt-sales/svelte', 'Sales at a glance.'),
-		tile('OpportunityBoard', 'smrt-sales/svelte', 'Opportunities moving across a board.'),
-		tile('CommissionBreakdown', 'smrt-sales/svelte', 'How a commission was worked out.')
-	],
 	analytics: [
 		tile('StatCard', 'smrt-analytics/svelte', 'One number, with context.'),
 		tile('TrendBadge', 'smrt-analytics/svelte', 'Up, down or flat.'),
 		tile('EventsTable', 'smrt-analytics/svelte', 'Events as they were recorded.')
 	],
 
-	// World
 	events: [tile('CalendarView', 'smrt-ui/calendar', 'Events laid out on a calendar.')],
-	places: [tile('AddressInput', 'smrt-svelte/forms', 'An address field.')],
-	tags: [tile('TagsInput', 'smrt-ui/forms', 'Pick or create tags in a field.')]
+	places: [tile('AddressInput', 'smrt-svelte/forms', 'An address field.')]
 };

@@ -4,36 +4,37 @@ import type { PageServerLoad } from './$types';
 export const prerender = true;
 
 /**
- * The 23 #358 building-block pages and where each went in the #361 redesign:
- * the block's closest feature showcase, or the section index when the old
- * block spanned several features. Frozen here because the data it was read
+ * The 23 #358 building-block pages and where each went in the #361 redesign
+ * and again after the #375 regrouping: the block's closest feature showcase,
+ * group index or Docs page. Targets are the final page, never the retired
+ * `/features/<section>/<feature>` redirect. Frozen here because the data it was read
  * from (`blocks.ts`) is gone; `legacy-routes.test.ts` checks every target
  * still prerenders.
  */
 export const _aliases: Record<string, string> = {
-	'agent-tools': '/features/agents/tools',
-	'agent-legible-applications': '/features/agents/blueprint',
-	'agents-included': '/features/agents/agents',
-	'agent-assisted-forms': '/features/agents/forms',
-	'learning-agents': '/features/agents/memory',
-	'approvals-and-governance': '/features/agents/approvals',
-	ingestion: '/features/agents/ingestion',
-	'jobs-and-automation': '/features/agents/jobs',
-	facts: '/features/agents/facts',
-	records: '/features/basics/records',
-	'people-and-permissions': '/features/basics/people',
-	'live-data': '/features/basics/realtime',
-	reports: '/features/basics/reports',
-	'content-and-media': '/features/content',
-	messaging: '/features/messaging',
-	'commerce-and-money': '/features/commerce',
-	operations: '/features/operations',
-	'insight-and-marketing': '/features/marketing',
-	events: '/features/world/events',
-	places: '/features/world/places',
-	tags: '/features/world/tags',
-	'screens-and-shell': '/features/screens/shell',
-	mobile: '/features/screens/mobile'
+	'agent-tools': '/features/assistant/tools',
+	'agent-legible-applications': '/docs/capabilities/agent-legible-applications',
+	'agents-included': '/features/assistant/agents',
+	'agent-assisted-forms': '/docs/capabilities/agent-assisted-forms',
+	'learning-agents': '/features/assistant/memory',
+	'approvals-and-governance': '/features/team/approvals',
+	ingestion: '/docs/reference/packages/smrt-ingestion',
+	'jobs-and-automation': '/docs/reference/packages/smrt-jobs',
+	facts: '/docs/reference/packages/smrt-facts',
+	records: '/docs/foundations/objects-and-collections',
+	'people-and-permissions': '/features/team/people',
+	'live-data': '/docs/capabilities/live-data',
+	reports: '/features/grow/reports',
+	'content-and-media': '/features/publish',
+	messaging: '/features/talk',
+	'commerce-and-money': '/features/sell',
+	operations: '/features/plan',
+	'insight-and-marketing': '/features/grow',
+	events: '/features/plan/events',
+	places: '/features/plan/places',
+	tags: '/docs/reference/packages/smrt-tags',
+	'screens-and-shell': '/docs/capabilities/application-shell',
+	mobile: '/docs/capabilities/mobile'
 };
 
 export const entries = () => Object.keys(_aliases).map((slug) => ({ slug }));
