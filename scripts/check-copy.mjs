@@ -96,6 +96,7 @@ const NON_PROSE_PROPERTIES = new Set([
 	'appBar',
 	'brandInSlot',
 	'buildTarget',
+	'busy',
 	'count',
 	'day',
 	'flight',

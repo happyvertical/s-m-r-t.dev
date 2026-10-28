@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import { tryGetThemeContext } from '@happyvertical/smrt-ui/themes';
 	import { SvelteSet } from 'svelte/reactivity';
 	import {
@@ -157,21 +157,37 @@
 	// a white-out takes the screen; the planner grows in from it. 0 at rest.
 	let flight = $state(0);
 	const FLIGHT_MS = 1500;
-	function fly(target: string) {
+	// One animation at a time: its frame handle is kept so it can be stopped when
+	// the map is destroyed or the scheme swaps under it; a stopped run never
+	// navigates.
+	let raf = 0;
+	function stopRun() {
+		cancelAnimationFrame(raf);
+		raf = 0;
+		flight = 0;
+		warp = null;
+	}
+	function run(duration: number, set: (_progress: number) => void, target: string) {
 		const start = performance.now();
-		flight = 0.0001;
 		const step = (now: number) => {
-			const progress = Math.min(1, (now - start) / FLIGHT_MS);
-			flight = Math.max(0.0001, progress);
+			const progress = Math.min(1, (now - start) / duration);
+			set(progress);
 			if (progress < 1) {
-				requestAnimationFrame(step);
+				raf = requestAnimationFrame(step);
 				return;
 			}
+			raf = 0;
 			markWarp();
-			goto(target).catch(() => (flight = 0));
+			goto(target).catch(stopRun);
 		};
-		requestAnimationFrame(step);
+		raf = requestAnimationFrame(step);
 	}
+	onMount(() => stopRun);
+	// Swapping renderers mid-run ends the run: the other one has nothing to draw.
+	$effect(() => {
+		void sky;
+		untrack(stopRun);
+	});
 	function onHubClick(event: MouseEvent) {
 		event.preventDefault();
 		if (warp !== null || flight > 0) return;
@@ -184,22 +200,12 @@
 			return;
 		}
 		if (sky) {
-			fly(target);
+			flight = 0.0001;
+			run(FLIGHT_MS, (progress) => (flight = Math.max(0.0001, progress)), target);
 			return;
 		}
-		const start = performance.now();
 		warp = 0;
-		const step = (now: number) => {
-			const progress = Math.min(1, (now - start) / WARP_RAMP_MS);
-			warp = progress;
-			if (progress < 1) {
-				requestAnimationFrame(step);
-				return;
-			}
-			markWarp();
-			goto(target).catch(() => (warp = null));
-		};
-		requestAnimationFrame(step);
+		run(WARP_RAMP_MS, (progress) => (warp = progress), target);
 	}
 </script>
 
@@ -215,7 +221,13 @@
 	aria-label="Features"
 	bind:this={map}
 >
-	<FrontControls {count} {buildTarget} {sky} onbuild={onHubClick} />
+	<FrontControls
+		{count}
+		{buildTarget}
+		{sky}
+		busy={flight > 0 || warp !== null}
+		onbuild={onHubClick}
+	/>
 	{#if sky}
 		<SkyMap
 			{size}

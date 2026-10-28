@@ -8,19 +8,22 @@
 		count,
 		buildTarget,
 		sky,
+		busy,
 		onbuild
 	}: {
 		count: number;
 		buildTarget: string;
 		/** The light scheme: ink-blue controls instead of cream. */
 		sky: boolean;
+		/** BUILD is under way: the controls are inert until the page changes. */
+		busy: boolean;
 		onbuild: (_event: MouseEvent) => void;
 	} = $props();
 </script>
 
 <a class="skip-link" href="#main-content">Skip to content</a>
 
-<nav class="bar left" class:day={sky} aria-label="Primary navigation">
+<nav class="bar left" inert={busy} class:day={sky} aria-label="Primary navigation">
 	<a class="btn" href={buildTarget} onclick={onbuild}
 		>Build{#if count}<span class="count" aria-hidden="true">{count}</span><span class="sr"
 				>, {count} selected</span
@@ -29,7 +32,7 @@
 	<a class="btn" href="/features">Features</a>
 	<a class="btn" href="/docs">Docs</a>
 </nav>
-<div class="bar right" class:day={sky}>
+<div class="bar right" inert={busy} class:day={sky}>
 	<ColorSchemeToggle class="btn icon" />
 	<a
 		class="btn icon"

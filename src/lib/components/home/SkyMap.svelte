@@ -91,6 +91,9 @@
 		flightNow = flight;
 	});
 
+	// Set by onMount: draws one frame when the loop is not running (reduced motion).
+	let redrawStill: (() => void) | undefined;
+
 	onMount(() => {
 		const skyCtx = skyCanvas.getContext('2d');
 		const cloudCtx = cloudCanvas.getContext('2d');
@@ -140,6 +143,10 @@
 			if (reduced.matches) draw(performance.now());
 			else raf = requestAnimationFrame(loop);
 		};
+		redrawStill = () => {
+			// Under reduced motion no loop runs, so a resize must repaint by hand.
+			if (reduced.matches && desktop.matches && !document.hidden) draw(performance.now());
+		};
 		const onMove = (event: MouseEvent) => {
 			mouseX = event.clientX / window.innerWidth - 0.5;
 			mouseY = event.clientY / window.innerHeight - 0.5;
@@ -150,6 +157,7 @@
 		desktop.addEventListener('change', run);
 		document.addEventListener('visibilitychange', run);
 		return () => {
+			redrawStill = undefined;
 			cancelAnimationFrame(raf);
 			window.removeEventListener('mousemove', onMove);
 			reduced.removeEventListener('change', run);
@@ -158,6 +166,12 @@
 		};
 	});
 
+	$effect(() => {
+		void size.width;
+		void size.height;
+		void scale;
+		redrawStill?.();
+	});
 	// A still frame when the map resizes under reduced motion is drawn by `run`
 	// on the media change only; a resize re-measures on the next frame otherwise.
 	const flying = $derived(flight > 0);

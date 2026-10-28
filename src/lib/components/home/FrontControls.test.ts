@@ -11,6 +11,7 @@ describe('front page controls (#381)', () => {
 				count: 3,
 				buildTarget: '/build-a-boilerplate?features=a',
 				sky: true,
+				busy: false,
 				onbuild: vi.fn()
 			}
 		});

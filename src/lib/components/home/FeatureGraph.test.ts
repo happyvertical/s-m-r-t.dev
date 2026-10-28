@@ -270,6 +270,9 @@ describe('group selection (#373)', () => {
 	});
 });
 
+// jsdom does not reflect `inert` as an attribute; Svelte sets the property.
+const inert = (el: Element) => (el as HTMLElement).inert === true || el.hasAttribute('inert');
+
 describe('warp (#373)', () => {
 	function media(desktop: boolean, reduced: boolean) {
 		vi.stubGlobal(
@@ -332,6 +335,27 @@ describe('warp (#373)', () => {
 		frames.shift()!(now);
 		expect(goto).toHaveBeenCalledWith('/build-a-boilerplate');
 		expect(sessionStorage.getItem('smrt:warp')).not.toBeNull();
+	});
+	it('makes the top controls inert while BUILD runs and cancels the run on destroy', async () => {
+		const { goto } = await import('$app/navigation');
+		vi.mocked(goto).mockClear().mockResolvedValue(undefined);
+		media(true, false);
+		const frames: ((_time: number) => void)[] = [];
+		const cancel = vi.fn();
+		vi.stubGlobal('requestAnimationFrame', (cb: (_time: number) => void) => frames.push(cb));
+		vi.stubGlobal('cancelAnimationFrame', cancel);
+		const { container, unmount } = render(FeatureGraph);
+		const nav = container.querySelector('nav.bar')!;
+		expect(inert(nav)).toBe(false);
+
+		pressBuild(container);
+		await vi.waitFor(() => expect(inert(nav)).toBe(true));
+		expect(inert(container.querySelector('.bar.right')!)).toBe(true);
+
+		cancel.mockClear();
+		unmount();
+		expect(cancel).toHaveBeenCalled();
+		expect(goto).not.toHaveBeenCalled();
 	});
 });
 
