@@ -335,10 +335,22 @@ describe('the user’s-side rule (#375)', () => {
 	});
 
 	it('maps recipes only where one exists in the installed planner catalog', () => {
-		// Verified by build-handoff.test.ts against the catalog; here only the
-		// features the issue says have no recipe yet must stay empty.
-		for (const id of ['assemblies', 'production', 'subscriptions', 'support', 'affiliates']) {
-			expect(getFeature(id)?.recipes, `${id} has no planner recipe yet`).toEqual([]);
+		// Every id is verified against the catalog by build-handoff.test.ts; here
+		// only the feature still without a recipe must stay empty, and the six
+		// that gained one in smrt 0.57.35 must stay mapped.
+		expect(getFeature('subscriptions')?.recipes, 'subscriptions has no planner recipe yet').toEqual(
+			[]
+		);
+		const mapped: Record<string, string> = {
+			support: 'support.tickets',
+			affiliates: 'affiliates.referrals',
+			assemblies: 'manufacturing.assemblies',
+			production: 'manufacturing.production',
+			employees: 'human-resources.people',
+			qualifications: 'human-resources.qualifications'
+		};
+		for (const [id, recipe] of Object.entries(mapped)) {
+			expect(getFeature(id)?.recipes, `${id} maps to ${recipe}`).toEqual([recipe]);
 		}
 	});
 });
