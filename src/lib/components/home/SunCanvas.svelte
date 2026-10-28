@@ -3,7 +3,7 @@
 	import { HUB_RADIUS } from './graph-layout';
 	import { createSun, dayPalette, firePalette, SUN_SIZE } from './sun';
 
-	/** `day` is the light scheme's sun: gold palette, soft haze and a face in sunglasses, no rays. */
+	/** `day` is the light scheme's sun: gold palette and a soft haze, no rays. */
 	let { day = false }: { day?: boolean } = $props();
 
 	// Positioned by its parent: the canvas fills a wrapper centred on the hub, so
@@ -23,7 +23,7 @@
 
 		const sun = createSun(
 			day
-				? { ctx, size, radius, palette: dayPalette, haze: true, face: true }
+				? { ctx, size, radius, palette: dayPalette, haze: true }
 				: { ctx, size, radius, palette: firePalette }
 		);
 

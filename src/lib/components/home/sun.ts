@@ -82,11 +82,6 @@ type Ctx = Pick<
 	| 'moveTo'
 	| 'bezierCurveTo'
 	| 'createRadialGradient'
-	| 'createLinearGradient'
-	| 'ellipse'
-	| 'lineTo'
-	| 'quadraticCurveTo'
-	| 'roundRect'
 > & {
 	fillStyle: unknown;
 	strokeStyle: unknown;
@@ -104,8 +99,6 @@ export interface SunOptions {
 	palette?: SunPalette;
 	/** A very soft warm haze round the disc (the daytime sun); none by default. */
 	haze?: boolean;
-	/** A friendly face in sunglasses on the disc (the daytime sun); none by default. */
-	face?: boolean;
 	random?: () => number;
 }
 
@@ -145,7 +138,6 @@ export function createSun({
 	radius: R,
 	palette: pal = firePalette,
 	haze = false,
-	face = false,
 	random = Math.random
 }: SunOptions): Sun {
 	const C = size / 2;
@@ -252,53 +244,6 @@ export function createSun({
 		fx.beginPath();
 		fx.arc(C, C, R - 1, 0, Math.PI * 2);
 		fx.stroke();
-
-		// 2b. the face, over the limb: sunglasses, a grin and faint cheeks
-		if (face) {
-			fx.globalCompositeOperation = 'source-over';
-			const ink = '#2b1a08';
-			const ly = C - R * 0.22;
-			const lr = R * 0.26;
-			fx.lineCap = 'round';
-			for (const sg of [-1, 1]) {
-				const lx = C + sg * R * 0.33;
-				fx.fillStyle = ink;
-				fx.beginPath();
-				fx.roundRect(lx - lr, ly - lr * 0.8, lr * 2, lr * 1.6, lr * 0.7);
-				fx.fill();
-				const glass = fx.createLinearGradient(lx - lr, ly - lr, lx + lr, ly + lr);
-				glass.addColorStop(0, 'rgba(255,255,255,.55)');
-				glass.addColorStop(0.5, 'rgba(255,255,255,.05)');
-				glass.addColorStop(1, 'rgba(255,255,255,0)');
-				fx.fillStyle = glass;
-				fx.beginPath();
-				fx.roundRect(lx - lr, ly - lr * 0.8, lr * 2, lr * 1.6, lr * 0.7);
-				fx.fill();
-			}
-			fx.strokeStyle = ink;
-			fx.lineWidth = 3;
-			fx.beginPath();
-			fx.moveTo(C - R * 0.07, ly - lr * 0.2);
-			fx.quadraticCurveTo(C, ly - lr * 0.55, C + R * 0.07, ly - lr * 0.2);
-			fx.stroke();
-			fx.beginPath();
-			fx.moveTo(C - R * 0.59, ly - lr * 0.3);
-			fx.lineTo(C - R * 0.9, ly - lr * 0.6);
-			fx.moveTo(C + R * 0.59, ly - lr * 0.3);
-			fx.lineTo(C + R * 0.9, ly - lr * 0.6);
-			fx.stroke();
-			fx.lineWidth = 4;
-			fx.beginPath();
-			fx.arc(C, C + R * 0.12, R * 0.5, Math.PI * 0.18, Math.PI * 0.82);
-			fx.stroke();
-			fx.fillStyle = 'rgba(255,90,60,.35)';
-			for (const sg of [-1, 1]) {
-				fx.beginPath();
-				fx.ellipse(C + sg * R * 0.62, C + R * 0.3, R * 0.13, R * 0.08, 0, 0, Math.PI * 2);
-				fx.fill();
-			}
-			fx.globalCompositeOperation = 'lighter';
-		}
 
 		// 3. smoulder at the rim
 		if (sparks.length < MAX_SPARKS) spark();

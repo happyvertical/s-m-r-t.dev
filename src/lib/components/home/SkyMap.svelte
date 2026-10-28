@@ -292,12 +292,9 @@
 				onclick={onbuild}
 			>
 				<circle r={HUB_RADIUS} />
-				<!-- The face fills the disc, so the label sits just below it; the hit
-				     target is the disc plus the label. -->
-				<rect class="labelhit" x="-60" y="50" width="120" height="36" />
-				<text class="label" y="76" text-anchor="middle">BUILD</text>
+				<text y="7" text-anchor="middle">BUILD</text>
 				{#if count}
-					<g class="badge" transform="translate(58,70)">
+					<g class="badge" transform="translate({HUB_RADIUS * 0.74},{HUB_RADIUS * 0.74})">
 						<circle r="13" />
 						<text y="4.5" text-anchor="middle">{count}</text>
 					</g>
@@ -462,13 +459,10 @@
 		stroke-width: 3;
 		stroke-dasharray: 4 3;
 	}
-	.hub .labelhit {
-		fill: transparent;
-	}
 	.hub text {
 		font-weight: 700;
-		font-size: 18px;
-		fill: var(--sk-pill-on);
+		font-size: 20px;
+		fill: #3a0d00;
 		letter-spacing: 0.18em;
 		pointer-events: none;
 	}
