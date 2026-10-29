@@ -29974,6 +29974,13 @@ export const uiComponents: UiComponentReference[] = [
 					"Force runtime generation of the full CSS variable set onto the wrapper's inline style (the legacy delivery path). Defaults to `true` for custom registered themes — they have no static stylesheet — and `false` for built-in presets, whose variables ship as static CSS (`themes/styles/<preset>.css`) selected by the `data-theme` / `data-color-scheme` attributes. Leave unset unless you cannot import the static stylesheet for a built-in preset."
 			},
 			{
+				name: 'scope',
+				code: "'document' | 'local'",
+				status: false,
+				description:
+					"Where the theme attributes land. `document` (the default for a root provider) also stamps `data-theme`, `data-color-scheme`, the `dark` class, `color-scheme`, `data-contrast`, `data-density` and `data-smrt-theme-changing` onto `<html>`. `local` themes only this provider's own wrapper and never touches the document. A provider nested inside another `ThemeProvider` is `local` by default, so an embedded widget cannot retheme its host page (#4485)."
+			},
+			{
 				name: 'children',
 				code: 'Snippet',
 				status: true,
@@ -32107,8 +32114,8 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2932,
-	totalProps: 3098,
+	describedProps: 2933,
+	totalProps: 3099,
 	authoredSummaries: 153,
 	totalComponents: 412
 };
