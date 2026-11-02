@@ -40,8 +40,9 @@ export default defineConfig({
 		// their package.json has no `svelte` field, so Vite's dev dep scanner
 		// prebundles them with esbuild, which has no .svelte loader and crashes
 		// (`vite build` is unaffected). Serve them unbundled so the svelte plugin
-		// compiles them. Upstream: ship a `svelte` field / exclude in the packages
-		// (https://github.com/happyvertical/smrt/issues/3843).
+		// compiles them. Upstream: ship a `svelte` field, or the condition on every
+		// subpath that reaches .svelte (https://github.com/happyvertical/smrt/issues/3843,
+		// reopened at 0.57.47: the condition is only on `./svelte`).
 		exclude: [
 			'@happyvertical/smrt-agents',
 			'@happyvertical/smrt-analytics',
@@ -63,13 +64,13 @@ export default defineConfig({
 			'@happyvertical/smrt-planner',
 			'@happyvertical/smrt-playground'
 		],
-		// `smrt-planner` (excluded above) imports `smrt-core/cookbook/engine`,
-		// whose `utils/naming` default-imports the CommonJS `pluralize`. Served
-		// unbundled, that import has no default export and the planner's
-		// client-side load fails in dev (`vite build` is unaffected). Prebundle
-		// just that one package. Upstream: https://github.com/happyvertical/smrt/issues/4054
-		// (removal tracked in #310).
-		include: ['@happyvertical/smrt-planner > @happyvertical/smrt-core > pluralize']
+		// `@happyvertical/utils` (reached through smrt-ui, excluded above) default-
+		// imports the CommonJS `pluralize`. Served unbundled, that import has no
+		// default export and the planner's client-side load fails in dev (`vite
+		// build` is unaffected). Prebundle just that one package. smrt-core stopped
+		// importing it in 0.57.47 (smrt#4054); utils still does:
+		// https://github.com/happyvertical/sdk/issues/1484 (removal tracked in #310).
+		include: ['@happyvertical/smrt-ui > @happyvertical/utils > pluralize']
 	},
 	server: {
 		port: 5183

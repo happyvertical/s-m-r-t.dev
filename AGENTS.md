@@ -155,8 +155,8 @@ Then one line below.
 - smrt#3843: packages whose `playground.js` lazy-imports `.svelte` lack a
   `svelte` field, so Vite dev prebundling crashes; `vite.config.ts`
   `optimizeDeps.exclude` serves them unbundled. Tracked here in #310.
-- smrt#4054: smrt-core default-imports CommonJS `pluralize`, which fails when
-  served unbundled in dev; `vite.config.ts` `optimizeDeps.include` prebundles
+- sdk#1484 (was smrt#4054): `@happyvertical/utils` default-imports CommonJS
+  `pluralize`, which fails unbundled in dev; `optimizeDeps.include` prebundles
   it. Tracked here in #310.
 - smrt#4374: `PlaygroundHost` in embedded mode renders a nested `main`, so axe
   reports `landmark-main-is-top-level`/`landmark-no-duplicate-main`/
