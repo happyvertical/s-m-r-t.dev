@@ -2646,6 +2646,20 @@ export const uiComponents: UiComponentReference[] = [
 					'Trusted host selection of a component for a tool result. Unknown results retain their ordinary message text and optional toolCall snippet. This seam only renders: it grants no tool execution or confirmation authority.'
 			},
 			{
+				name: 'messageFormat',
+				code: "'text' | 'markdown'",
+				status: false,
+				description:
+					"How an assistant message's text renders (#4505). `'text'` (default) shows it verbatim, as before. `'markdown'` renders paragraphs, headings (`#`–`###`), lists, fenced and inline code, bold/italic and http(s) links through the package's escaping renderer (`renderAssistantMarkdown`): all input HTML is escaped, so model text can never inject markup. Applies to stored assistant messages and the streaming reply; user, system and tool messages stay plain text."
+			},
+			{
+				name: 'renderMessage',
+				code: 'Snippet<[{ message: AssistantMessage; streaming: boolean; }]>',
+				status: false,
+				description:
+					"Host renderer for an assistant message's text (#4505), used instead of `messageFormat` inside the message bubble. `streaming` is `true` for the in-progress reply, whose `message` is a stand-in with the text so far (`id` `'assistant-dock-streaming'`). Attachments, question forms and the `toolCall` region still render around it."
+			},
+			{
 				name: 'oncontroller',
 				code: '(controller: AssistantDockController) => void',
 				status: false,
@@ -3507,6 +3521,20 @@ export const uiComponents: UiComponentReference[] = [
 				status: false,
 				description:
 					'Trusted host selection of a component for a tool result. Unknown results retain their ordinary message text and optional toolCall snippet. This seam only renders: it grants no tool execution or confirmation authority.'
+			},
+			{
+				name: 'messageFormat',
+				code: "'text' | 'markdown'",
+				status: false,
+				description:
+					"How an assistant message's text renders (#4505). `'text'` (default) shows it verbatim, as before. `'markdown'` renders paragraphs, headings (`#`–`###`), lists, fenced and inline code, bold/italic and http(s) links through the package's escaping renderer (`renderAssistantMarkdown`): all input HTML is escaped, so model text can never inject markup. Applies to stored assistant messages and the streaming reply; user, system and tool messages stay plain text."
+			},
+			{
+				name: 'renderMessage',
+				code: 'Snippet<[{ message: AssistantMessage; streaming: boolean; }]>',
+				status: false,
+				description:
+					"Host renderer for an assistant message's text (#4505), used instead of `messageFormat` inside the message bubble. `streaming` is `true` for the in-progress reply, whose `message` is a stand-in with the text so far (`id` `'assistant-dock-streaming'`). Attachments, question forms and the `toolCall` region still render around it."
 			},
 			{
 				name: 'oncontroller',
@@ -19232,11 +19260,50 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'number',
 				status: false,
 				description: 'Maximum number of recent notifications requested from the provider.'
+			},
+			{
+				name: 'iconOnly',
+				code: 'boolean',
+				status: false,
+				description: 'Show a bell icon with an unread dot/count instead of the text label.'
+			},
+			{
+				name: 'placement',
+				code: "'below' | 'beside'",
+				status: false,
+				description:
+					"`'below'` (default) opens under the trigger; `'beside'` opens at its inline end."
+			},
+			{
+				name: 'variant',
+				code: "ComponentProps<typeof Button>['variant']",
+				status: false,
+				description: 'Trigger button variant.'
+			},
+			{
+				name: 'open',
+				code: 'boolean',
+				status: false,
+				description:
+					'Whether the panel is open. Bindable, so a host can close it (or open it) itself; the bell still toggles it from the trigger and closes it on light dismiss (#4566).'
+			},
+			{
+				name: 'onopenchange',
+				code: '(open: boolean) => void',
+				status: false,
+				description: 'Called after the panel opens or closes, with the new state.'
 			}
 		],
 		sources: [],
 		sections: [],
-		items: [],
+		items: [
+			{
+				name: 'onopenchange',
+				code: '(open: boolean) => void',
+				status: false,
+				description: 'Called after the panel opens or closes, with the new state.'
+			}
+		],
 		components: [],
 		demo: null,
 		related: {
@@ -21181,6 +21248,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'Snippet<[{ compact: boolean; }]>',
 				status: false,
 				description: 'Custom brand content, receiving whether it is in the compact rail.'
+			},
+			{
+				name: 'brandEnd',
+				code: 'Snippet<[{ compact: boolean; }]>',
+				status: false,
+				description:
+					'Content rendered beside the brand (e.g. a notification bell), outside the home link, in the top band and the left-rail header. Adds a `.smrt-admin-shell__brand-row` wrapper only when given.'
 			},
 			{
 				name: 'subtitle',
@@ -24592,6 +24666,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'string',
 				status: false,
 				description: 'Optional custom label (defaults to status value)'
+			},
+			{
+				name: 'case',
+				code: "'capitalize' | 'as-is'",
+				status: false,
+				description:
+					"`'capitalize'` (default) title-cases the label via CSS; `'as-is'` leaves it untouched."
 			}
 		],
 		sources: ["Omit<HTMLAttributes<HTMLSpanElement>, 'class' | 'children'>"],
@@ -32114,8 +32195,8 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2933,
-	totalProps: 3099,
+	describedProps: 2944,
+	totalProps: 3110,
 	authoredSummaries: 153,
 	totalComponents: 412
 };
