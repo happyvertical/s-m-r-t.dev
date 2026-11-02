@@ -182,6 +182,13 @@ tofu destroy -var-file=production.tfvars
 
 **Warning**: This will delete the S3 buckets and all content!
 
+## URL rewriting
+
+`modules/havesmrt/url-rewrite.js` is the viewer-request CloudFront Function for
+both environments. A path without an extension is served as `<path>.html`, and
+`<path>/` gets a 301 to `<path>` with its query string, because the site has no
+directory index pages (#339). Change the file, then `tofu apply` publishes it.
+
 ## Agent document delivery
 
 The build emits `/llms.txt`, `/llms-full.txt`, and a `.md` sibling of each

@@ -113,28 +113,13 @@ resource "aws_s3_bucket_public_access_block" "site" {
   restrict_public_buckets = true
 }
 
-# CloudFront function to handle URL rewriting (add .html extension)
+# CloudFront function to handle URL rewriting: <path> -> <path>.html, and a 301
+# from <path>/ to <path> (the site has no directory index pages; #339).
 resource "aws_cloudfront_function" "url_rewrite" {
   name    = "havesmrt-${var.environment}-url-rewrite"
   runtime = "cloudfront-js-2.0"
   publish = true
-  code    = <<-EOF
-    function handler(event) {
-      var request = event.request;
-      var uri = request.uri;
-
-      // If URI ends with '/' add index.html
-      if (uri.endsWith('/')) {
-        request.uri += 'index.html';
-      }
-      // If URI doesn't have an extension, add .html
-      else if (!uri.includes('.')) {
-        request.uri += '.html';
-      }
-
-      return request;
-    }
-  EOF
+  code    = file("${path.module}/url-rewrite.js")
 }
 
 # CloudFront Origin Access Control
