@@ -40,6 +40,10 @@ pnpm app:open               # in a second terminal: the one-time owner setup pag
 	const applyLibrary = `${cli} cookbook apply \\
   https://raw.githubusercontent.com/happyvertical/smrt/v${SMRT_VERSION}/packages/cli/cookbooks/bakery.cookbook.json \\
   bakery`;
+
+	// `smrt kitchen` serves the planner on localhost and applies the cookbook
+	// the person sends from it. The first run caches the planner (about 70 MB).
+	const kitchen = `${cli} kitchen my-app      # opens http://127.0.0.1:<port>/ in the browser`;
 </script>
 
 <SEO
@@ -86,7 +90,18 @@ pnpm app:open               # in a second terminal: the one-time owner setup pag
 			URL; this one is the bakery at the release tag.
 		</p>
 		<CodeBlock code={applyLibrary} language="bash" filename="terminal" />
+		<p>
+			<code>smrt kitchen</code> is the same path without a file. It serves build-a-boilerplate on localhost,
+			opens the browser and waits. Shape the application there, then choose Send to kitchen: kitchen validates
+			the cookbook, applies it into the directory and installs the packages. The first run downloads the
+			planner, about 70 MB, into a local cache.
+		</p>
+		<CodeBlock code={kitchen} language="bash" filename="terminal" />
 		<ul>
+			<li>
+				<code>--no-open</code> prints the kitchen address instead of opening the browser;
+				<code>--port</code> picks the port.
+			</li>
 			<li><code>--dry-run</code> prints what apply would do without writing anything.</li>
 			<li>
 				<code>--into my-app</code> applies an edited cookbook to an existing project. Edit the
