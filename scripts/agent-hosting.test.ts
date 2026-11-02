@@ -5,19 +5,46 @@ import { checkMetadata } from './check-agent-metadata.mjs';
 import { serializeJsonLd, structuredData } from '../src/lib/seo/structured-data';
 
 describe('agent static hosting', () => {
-	it('preserves text and Markdown paths through the deployed CloudFront rewrite', () => {
+	// The viewer-request function tofu deploys to both distributions.
+	const rewrite = (request: object) =>
+		runInNewContext(
+			`${readFileSync('infra/modules/havesmrt/url-rewrite.js', 'utf8')}\nhandler(${JSON.stringify({ request })})`
+		);
+
+	it('loads the CloudFront rewrite from the file main.tf deploys', () => {
 		const terraform = readFileSync('infra/modules/havesmrt/main.tf', 'utf8');
-		const source = terraform.match(/code\s*=\s*<<-EOF\n([\s\S]*?)\n\s*EOF/)![1];
+		expect(terraform).toContain('code    = file("${path.module}/url-rewrite.js")');
+	});
+	it('preserves text and Markdown paths through the deployed CloudFront rewrite', () => {
 		for (const path of [
 			'/llms.txt',
 			'/llms-full.txt',
 			'/index.md',
 			'/docs/reference/security.md'
 		]) {
-			expect(
-				runInNewContext(`${source}\nhandler({request: {uri: ${JSON.stringify(path)}}}).uri`)
-			).toBe(path);
+			expect(rewrite({ uri: path, querystring: {} }).uri).toBe(path);
 		}
+	});
+	it('serves pages as <path>.html and the root as index.html', () => {
+		expect(rewrite({ uri: '/', querystring: {} }).uri).toBe('/index.html');
+		expect(rewrite({ uri: '/build-a-boilerplate', querystring: {} }).uri).toBe(
+			'/build-a-boilerplate.html'
+		);
+	});
+	it('301s a trailing slash to the page, keeping the query string (#339)', () => {
+		const response = rewrite({
+			uri: '/docs/getting-started/',
+			querystring: {
+				features: { value: 'chat,email' },
+				x: { value: '', multiValue: [{ value: '1' }, { value: '2' }] },
+				flag: { value: '' }
+			}
+		});
+		expect(response.statusCode).toBe(301);
+		expect(response.headers.location.value).toBe(
+			'/docs/getting-started?features=chat,email&x=1&x=2&flag'
+		);
+		expect(rewrite({ uri: '//', querystring: {} }).headers.location.value).toBe('/');
 	});
 	it('sets explicit text MIME types for both deployment buckets', () => {
 		const workflow = readFileSync('.github/workflows/build-deploy.yaml', 'utf8');
