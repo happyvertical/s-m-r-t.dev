@@ -45,6 +45,10 @@ describe('agent static hosting', () => {
 			'/docs/getting-started?features=chat,email&x=1&x=2&flag'
 		);
 		expect(rewrite({ uri: '//', querystring: {} }).headers.location.value).toBe('/');
+		// Never a protocol-relative Location: //evil.com/ would leave the site.
+		for (const uri of ['//evil.com/', '///evil.com//']) {
+			expect(rewrite({ uri, querystring: {} }).headers.location.value).toBe('/evil.com');
+		}
 	});
 	it('sets explicit text MIME types for both deployment buckets', () => {
 		const workflow = readFileSync('.github/workflows/build-deploy.yaml', 'utf8');
