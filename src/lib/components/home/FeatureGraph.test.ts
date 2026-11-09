@@ -449,3 +449,74 @@ describe('fitGraph', () => {
 		expect(container.querySelector('.stacks li.sel')).not.toBeNull();
 	});
 });
+
+describe('asteroids (#392)', () => {
+	const press = (el: Element) =>
+		el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+	const reduce = (reduced: boolean) =>
+		vi.stubGlobal(
+			'matchMedia',
+			vi.fn((query: string) => ({
+				matches: query.includes('reduced-motion') && reduced,
+				media: query,
+				addEventListener: () => {},
+				removeEventListener: () => {}
+			}))
+		);
+
+	it('draws every unselected feature as a rock and no group as one', () => {
+		const { container } = render(FeatureGraph);
+		expect(container.querySelectorAll('svg a.n.d2 path.rock')).toHaveLength(41);
+		expect(container.querySelectorAll('svg a.n.d1 path.rock')).toHaveLength(0);
+		expect(container.querySelectorAll('svg .bursts path')).toHaveLength(0);
+	});
+
+	it('blows the rock apart on select, then clears the burst and reforms on deselect', async () => {
+		vi.useFakeTimers();
+		try {
+			const { container } = render(FeatureGraph);
+			const node = mappable([...container.querySelectorAll('svg a.n.d2')])[0];
+			press(node.querySelector('circle.dot')!);
+			await vi.waitFor(() => expect(node.querySelector('path.rock')).toBeNull());
+			expect(container.querySelectorAll('svg .bursts path.flash')).toHaveLength(1);
+			expect(container.querySelectorAll('svg .bursts path.shard').length).toBeGreaterThanOrEqual(7);
+
+			await vi.advanceTimersByTimeAsync(800);
+			expect(container.querySelectorAll('svg .bursts path')).toHaveLength(0);
+
+			press(node.querySelector('circle.dot')!);
+			await vi.waitFor(() => expect(node.querySelector('path.rock')).not.toBeNull());
+			expect(container.querySelectorAll('svg .bursts path')).toHaveLength(0);
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+
+	it('bursts once per feature a group click adds', async () => {
+		const { container } = render(FeatureGraph);
+		press(container.querySelector('svg a.n.d1 circle.dot')!);
+		await vi.waitFor(() =>
+			expect(container.querySelectorAll('svg a.n.d2.sel').length).toBeGreaterThan(0)
+		);
+		expect(container.querySelectorAll('svg .bursts path.flash')).toHaveLength(
+			container.querySelectorAll('svg a.n.d2.sel').length
+		);
+	});
+
+	it('does not burst under reduced motion or for a restored selection', async () => {
+		reduce(true);
+		const first = render(FeatureGraph);
+		const node = mappable([...first.container.querySelectorAll('svg a.n.d2')])[0];
+		press(node.querySelector('circle.dot')!);
+		await vi.waitFor(() => expect(node.classList.contains('sel')).toBe(true));
+		expect(first.container.querySelectorAll('svg .bursts path')).toHaveLength(0);
+		first.unmount();
+
+		reduce(false);
+		const again = render(FeatureGraph);
+		await vi.waitFor(() =>
+			expect(again.container.querySelectorAll('svg a.n.d2.sel')).toHaveLength(1)
+		);
+		expect(again.container.querySelectorAll('svg .bursts path')).toHaveLength(0);
+	});
+});
