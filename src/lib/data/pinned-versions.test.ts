@@ -72,7 +72,7 @@ describe('version numbers in page copy', () => {
 		expect(found('No task lifecycle is available in 0.40.61.')).toEqual(['0.40.61']);
 		expect(found('https://github.com/happyvertical/smrt/blob/v0.40.61')).toEqual(['0.40.61']);
 		expect(found("version: '0.1.0',")).toEqual(['0.1.0']);
-		expect(found('at s-m-r-t 0.40.61: static ui hints')).toEqual(['0.40.61']);
+		expect(found('at smrt 0.40.61: static ui hints')).toEqual(['0.40.61']);
 
 		// A release *line* is prose about a range, not a claim about a release.
 		expect(found('first appeared in the 0.40.5x line and is not part of 0.39.x')).toEqual([]);

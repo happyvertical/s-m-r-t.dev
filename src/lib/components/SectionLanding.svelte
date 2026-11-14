@@ -8,7 +8,7 @@
 </script>
 
 <SEO
-	title={`s-m-r-t ${section.label}`}
+	title={`smrt ${section.label}`}
 	description={section.description}
 	url={`${SITE_ORIGIN}${section.href}`}
 />

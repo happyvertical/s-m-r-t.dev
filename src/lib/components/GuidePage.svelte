@@ -32,7 +32,7 @@
 			<h1>{guide.title}</h1>
 			<p class="lede">{guide.lede}</p>
 			{#if guide.pinnedVersion}
-				<p class="pinned">Verified against s-m-r-t {guide.pinnedVersion}</p>
+				<p class="pinned">Verified against smrt {guide.pinnedVersion}</p>
 			{/if}
 		</header>
 

@@ -34,7 +34,7 @@ Use these technical nouns with the specified meanings:
 | application logic    | Rules that define application behavior, decisions, and data operations. Do not use “business logic” in public copy. |
 | component            | A reusable user-interface unit.                                                                                     |
 | control              | An interactive user-interface element with declared behavior and policy.                                            |
-| framework            | The combined SMRT packages, conventions, and generated surfaces.                                                    |
+| framework            | The combined smrt packages, conventions, and generated surfaces.                                                    |
 | guide family         | A group of task-oriented guides for one subject.                                                                    |
 | interaction registry | A catalog of controls and the operations that an adapter can request.                                               |
 | package              | A published software unit in the `@happyvertical/smrt-*` namespace.                                                 |

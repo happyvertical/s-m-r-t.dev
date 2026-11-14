@@ -10,7 +10,7 @@ const llms = readFileSync('scripts/agent-docs/source.txt', 'utf8').replaceAll(
 	SITE_ORIGIN
 );
 
-describe('Why s-m-r-t discovery surfaces', () => {
+describe('Why smrt discovery surfaces', () => {
 	it('uses the canonical homepage in navigation, search, and the sitemap', async () => {
 		// The homepage is not a docs page (#365), so it is registered for the
 		// palette only, outside the docs panel.
@@ -26,12 +26,12 @@ describe('Why s-m-r-t discovery surfaces', () => {
 			href: '/',
 			kind: 'page'
 		});
-		// The visible nav label moved from "Why s-m-r-t?" to "Home", but the old
+		// The visible nav label moved from "Why smrt?" to "Home", but the old
 		// queries stay discoverable via keywords so a returning visitor's habit
 		// still works.
-		expect(searchDocs('why s-m-r-t')[0]).toMatchObject({ label: 'Home', href: '/' });
 		expect(searchDocs('why smrt')[0]).toMatchObject({ label: 'Home', href: '/' });
-		// The visible H1 ("The s-m-r-t application stack") and the lede's subject
+		expect(searchDocs('why smrt')[0]).toMatchObject({ label: 'Home', href: '/' });
+		// The visible H1 ("The smrt application stack") and the lede's subject
 		// are registered as keywords so the page's own words find it.
 		expect(searchDocs('application stack')[0]).toMatchObject({ label: 'Home', href: '/' });
 		expect(searchDocs('agentic software')[0]).toMatchObject({ label: 'Home', href: '/' });
@@ -47,7 +47,7 @@ describe('Why s-m-r-t discovery surfaces', () => {
 		// description, and it names the three doors and the features -> sections
 		// shape of the site (#361, #366).
 		expect(llms).toContain(
-			'> s-m-r-t is an MIT-licensed TypeScript stack for agentic software that people and agents use through the same screens, rules and permissions.'
+			'> smrt is an MIT-licensed TypeScript stack for agentic software that people and agents use through the same screens, rules and permissions.'
 		);
 		expect(llms).toContain('BUILD, FEATURES and DOCS');
 		expect(llms).toContain('nine groups');

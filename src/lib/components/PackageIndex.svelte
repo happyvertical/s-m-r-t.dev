@@ -34,8 +34,8 @@
 </script>
 
 <SEO
-	title="s-m-r-t packages"
-	description="Browse every s-m-r-t package in one workbench, with package descriptions, component exports, and REST, MCP, WebMCP, and CLI interface guidance."
+	title="smrt packages"
+	description="Browse every smrt package in one workbench, with package descriptions, component exports, and REST, MCP, WebMCP, and CLI interface guidance."
 	url={siteUrl('/docs/reference/packages')}
 />
 

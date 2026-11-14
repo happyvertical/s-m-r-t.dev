@@ -1,4 +1,4 @@
-# Epic — s-m-r-t.dev → SMRT 0.37.x + SAADL homepage
+# Epic — s-m-r-t.dev → smrt 0.37.x + SAADL homepage
 
 **Goal.** Bring the demo site in line with the current framework (0.29.34 → 0.37.2) and
 ship the new SAADL positioning: new hero, homepage copy, and the human/agent duality
@@ -59,7 +59,7 @@ and pinned `^0.29.34`; (2) the homepage predates the SAADL framing and slightly 
 
 - Eyebrow: `v0.37.2 · SAADL framework`
 - Headline: **Built for human users and agent operators.**
-- Subhead: Define your domain once — a single `@smrt()` TypeScript class — and SMRT
+- Subhead: Define your domain once — a single `@smrt()` TypeScript class — and smrt
   generates the database schema, REST API, CLI, and MCP server. Swap AI provider or
   database with one field; auth, multi-tenancy, billing, and durable jobs come included.
 - CTAs: `Start from the SaaS starter` · `Read the docs`
@@ -101,7 +101,7 @@ launch blurb')` returns the model's text. Your object's own methods are passed t
 
 SAADL — Software as Agentic Domain Logic: software whose domain logic exposes the same
 operations to human users (UI, HTTP, CLI) and to software agents (callable tools).
-s-m-r-t is a SAADL framework.
+smrt is a SAADL framework.
 
 ### Microcopy
 

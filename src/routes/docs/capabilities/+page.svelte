@@ -6,8 +6,8 @@
 </script>
 
 <SEO
-	title="s-m-r-t capabilities"
-	description="Learn how s-m-r-t makes applications agent-legible through manifests, runtime registries, semantic controls, generated tools, and permission-aware capabilities."
+	title="smrt capabilities"
+	description="Learn how smrt makes applications agent-legible through manifests, runtime registries, semantic controls, generated tools, and permission-aware capabilities."
 	url={siteUrl('/docs/capabilities')}
 />
 

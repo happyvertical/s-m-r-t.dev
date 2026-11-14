@@ -156,19 +156,19 @@ if (targets.length === 0) {
 if (checkOnly) {
 	const invalid = targets.filter((target) => !/^\d+\.\d+\.\d+(?:[-+].+)?$/.test(target.current));
 	if (invalid.length > 0) {
-		console.error('SMRT dependencies must use exact versions:');
+		console.error('smrt dependencies must use exact versions:');
 		for (const target of invalid) console.error(`  - ${target.name}: ${target.current}`);
 		process.exit(1);
 	}
 
 	const versions = [...new Set(targets.map((target) => target.current))];
 	if (versions.length > 1) {
-		console.error(`SMRT dependencies must move in lockstep; found: ${versions.join(', ')}`);
+		console.error(`smrt dependencies must move in lockstep; found: ${versions.join(', ')}`);
 		process.exit(1);
 	}
 
 	console.log(
-		`SMRT dependency contract is coherent at ${versions[0]} (${targets.length} packages).`
+		`smrt dependency contract is coherent at ${versions[0]} (${targets.length} packages).`
 	);
 	process.exit(0);
 }

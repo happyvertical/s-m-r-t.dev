@@ -1,14 +1,14 @@
 # Initial Concept
 
 I'd like to build a showcase and documentation site for my ../smrt framework.
-it should be branded "s-m-r-t"
+it should be branded "smrt"
 tone should be to-the-point, a tiny bit of dry wit here and there is fine
 
 It should have
 documentation for the foundational bits objects, collection, agent, smrt-cli etc
 a smrt-svelte component browser with examples
 documentation for the foundational modules
-a faq, first question being "what does s-m-r-t" stand for and the answer should just show a unlabelled link to https://www.youtube.com/watch?v=ls5BFzuxGw4
+a faq, first question being "what does smrt" stand for and the answer should just show a unlabelled link to https://www.youtube.com/watch?v=ls5BFzuxGw4
 
 some principles are
 
@@ -19,11 +19,11 @@ some principles are
 
 ---
 
-# Product Guide: s-m-r-t Showcase & Documentation
+# Product Guide: smrt Showcase & Documentation
 
 ## Product Vision
 
-A high-performance, branded showcase and documentation hub for the s-m-r-t framework. The site serves as both a persuasive marketing tool for enterprise adoption and a definitive technical resource for developers. It embodies the framework's core principles: adaptability through abstraction, brevity of declaration, and seamless scalability.
+A high-performance, branded showcase and documentation hub for the smrt framework. The site serves as both a persuasive marketing tool for enterprise adoption and a definitive technical resource for developers. It embodies the framework's core principles: adaptability through abstraction, brevity of declaration, and seamless scalability.
 
 ## Target Users
 
@@ -34,16 +34,16 @@ A high-performance, branded showcase and documentation hub for the s-m-r-t frame
 ## Key Goals
 
 - **Drive Adoption:** Demonstrate the "startup to enterprise" ease of use.
-- **Centralize Knowledge:** Provide a single, authoritative source of truth for the entire s-m-r-t ecosystem.
+- **Centralize Knowledge:** Provide a single, authoritative source of truth for the entire smrt ecosystem.
 - **Showcase UI:** Provide an interactive browser for `smrt-svelte` components with live examples.
 
 ## Core Features
 
 - **Interactive Component Browser:** A dedicated space to explore and interact with `smrt-svelte` components.
 - **Documentation Hub:** Comprehensive guides for foundational bits (objects, collection, agent, smrt-cli) and modules.
-- **Live Playground:** An interactive sandbox for users to experiment with s-m-r-t code in real-time.
+- **Live Playground:** An interactive sandbox for users to experiment with smrt code in real-time.
 - **Global Search:** Fast, intuitive search across all documentation, API references, and component examples.
-- **FAQ:** A concise section for common queries, featuring the definitive answer to what s-m-r-t stands for.
+- **FAQ:** A concise section for common queries, featuring the definitive answer to what smrt stands for.
 
 ## Strategic Principles
 

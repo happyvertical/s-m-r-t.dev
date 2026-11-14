@@ -2,17 +2,23 @@
 	import { page } from '$app/state';
 </script>
 
-<svelte:head><title>{page.status} | s-m-r-t</title></svelte:head>
+<svelte:head><title>{page.status} | smrt</title></svelte:head>
 
 <main class="error-page">
 	<p>{page.status}</p>
 	<h1>
-		{page.status === 404
-			? 'That object is not in the manifest.'
-			: 'The runtime hit an unexpected edge.'}
+		{page.status === 404 ? "We couldn't find that page." : 'Something went wrong on our side.'}
 	</h1>
-	<span>{page.error?.message ?? 'Try the package index or return to the starting point.'}</span>
-	<div><a href="/">Home</a><a href="/docs/reference/packages">Packages →</a></div>
+	<span>
+		{page.status === 404
+			? 'The link may be out of date, or the page may have moved. The features map and the docs are good places to pick things back up.'
+			: (page.error?.message ?? 'Try again in a moment, or head back to the home page.')}
+	</span>
+	<div>
+		<a href="/">Home</a><a href="/features">Features</a><a href="/docs">Docs</a><a
+			href="/docs/reference/packages">Packages →</a
+		>
+	</div>
 </main>
 
 <style>
@@ -46,6 +52,7 @@
 	}
 	.error-page div {
 		display: flex;
+		flex-wrap: wrap;
 		gap: 24px;
 		margin-top: 38px;
 	}

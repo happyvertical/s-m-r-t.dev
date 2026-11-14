@@ -2,21 +2,21 @@
 
 ## Overview
 
-This track establishes the core infrastructure for the `s-m-r-t` showcase and documentation site. It focuses on the technical foundation: SvelteKit integration, a custom "Swiss Design" theme using Vanilla CSS Modules, and a dynamic documentation pipeline that pulls content from `s-m-r-t` dependencies.
+This track establishes the core infrastructure for the `smrt` showcase and documentation site. It focuses on the technical foundation: SvelteKit integration, a custom "Swiss Design" theme using Vanilla CSS Modules, and a dynamic documentation pipeline that pulls content from `smrt` dependencies.
 
 ## Key Objectives
 
 - Initialize a SvelteKit project with TypeScript.
 - Integrate `smrt-svelte` and establish the base theme.
 - Create a reusable documentation layout following the clinical, sparse prose style.
-- Implement a pipeline to render documentation directly from `s-m-r-t` package contents.
+- Implement a pipeline to render documentation directly from `smrt` package contents.
 - Implement the "FAQ" with the specific brand-compliant answer for the name meaning.
 
 ## Technical Requirements
 
 - **Framework:** SvelteKit.
 - **Styling:** Vanilla CSS Modules (no utility frameworks).
-- **Branding:** `s-m-r-t` name in monospace.
+- **Branding:** `smrt` name in monospace.
 - **Content:** Markdown processing for docs pulled from dependencies.
 
 ## Success Criteria

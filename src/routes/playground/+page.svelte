@@ -14,8 +14,8 @@
 </script>
 
 <SEO
-	title="s-m-r-t component playground"
-	description="Search and try foundation controls and package-owned s-m-r-t working views with mock or live data where supported."
+	title="smrt component playground"
+	description="Search and try foundation controls and package-owned smrt working views with mock or live data where supported."
 	url={siteUrl('/playground')}
 />
 

@@ -108,7 +108,7 @@ export const foundationGuides: Guide[] = [
 				intro:
 					'Name the class after the thing people recognize: Item, Article, Place, Invoice, or Agent. Fields and useful behavior stay together.',
 				points: [
-					'Field defaults tell s-m-r-t what to store.',
+					'Field defaults tell smrt what to store.',
 					'Decorators add relationships, tenant scope, and public interfaces.',
 					'The collection provides list, get, count, create, and related queries.'
 				],
@@ -350,7 +350,7 @@ export const foundationGuides: Guide[] = [
 		title: 'Choose which interfaces each object should have',
 		lede: 'REST, MCP, WebMCP, and CLI can share one model description while exposing different operations to different audiences.',
 		plainEnglish:
-			'You choose what people, agents, browsers, and operators can do. s-m-r-t generates the repetitive route, tool, schema, and command wiring.',
+			'You choose what people, agents, browsers, and operators can do. smrt generates the repetitive route, tool, schema, and command wiring.',
 		packages: ['smrt-core', 'smrt-app-mcp', 'smrt-app-cli', 'smrt-web'],
 		visual: 'surfaces',
 		sections: [
@@ -385,7 +385,7 @@ export const capabilityGuides: Guide[] = [
 		navTitle: 'Agent-legible applications',
 		eyebrow: 'Framework approach',
 		title: 'Build an application agents can understand',
-		lede: 's-m-r-t describes the application at several layers. An agent can inspect declared domain logic, understand visible controls, and discover permitted operations. An exposed runtime bridge also lets the agent observe the active environment.',
+		lede: 'smrt describes the application at several layers. An agent can inspect declared domain logic, understand visible controls, and discover permitted operations. An exposed runtime bridge also lets the agent observe the active environment.',
 		plainEnglish:
 			'An agent receives bounded descriptions of the model, interface, and callable actions. The runtime bridge can also provide an active-environment view. The agent does not have to infer these details from files or rendered pixels.',
 		packages: ['smrt-core', 'smrt-dev-mcp', 'smrt-ui', 'smrt-app-mcp'],
@@ -470,7 +470,7 @@ export const capabilityGuides: Guide[] = [
 		navTitle: 'Agent-assisted forms',
 		eyebrow: 'New UI capability',
 		title: 'Let an agent help with a form',
-		lede: 's-m-r-t controls describe their identity, permitted operations, and page location to an adapter. The adapter can support chat, voice, tutorials, or tests. The description does not give the adapter unchecked page access.',
+		lede: 'smrt controls describe their identity, permitted operations, and page location to an adapter. The adapter can support chat, voice, tutorials, or tests. The description does not give the adapter unchecked page access.',
 		plainEnglish:
 			'An agent can find a field, explain it, highlight it, check it, or propose a value. The user still confirms changes, and secret or read-only fields remain protected.',
 		packages: ['smrt-ui', 'smrt-svelte', 'smrt-chat'],
@@ -516,7 +516,7 @@ export const capabilityGuides: Guide[] = [
 			{
 				title: 'Know where the boundary is today',
 				intro:
-					'The standardized controls, registry, safety policy, s-m-r-t Svelte form bridge, and interactive playground example are included. A product chooses and connects the chat or voice adapter that exposes these commands. The installation of both packages does not let smrt-chat control every form.'
+					'The standardized controls, registry, safety policy, smrt Svelte form bridge, and interactive playground example are included. A product chooses and connects the chat or voice adapter that exposes these commands. The installation of both packages does not let smrt-chat control every form.'
 			}
 		],
 		related: [
@@ -541,7 +541,7 @@ export const capabilityGuides: Guide[] = [
 		navTitle: 'Learning agents',
 		eyebrow: 'New capability',
 		title: 'Agents learn—with boundaries',
-		lede: 's-m-r-t agents can recall useful strategies, measure outcomes, develop tenant-specific personas, and propose better instructions without silently rewriting their own authority.',
+		lede: 'smrt agents can recall useful strategies, measure outcomes, develop tenant-specific personas, and propose better instructions without silently rewriting their own authority.',
 		plainEnglish:
 			'Learning is opt-in. Before a run, an agent recalls confident memories. After the run, success strengthens them and failure weakens them. Human feedback can become a proposed persona update, but approval is a separate permissioned action.',
 		packages: ['smrt-agents', 'smrt-personas', 'smrt-prompts', 'smrt-chat'],
@@ -597,7 +597,7 @@ export const capabilityGuides: Guide[] = [
 		navTitle: 'Mobile',
 		eyebrow: 'New capability',
 		title: 'A real mobile foundation, not a webview',
-		lede: 's-m-r-t now shares offline behavior, authentication, network contracts, evidence capture, and presentation state across native Android and iOS apps.',
+		lede: 'smrt now shares offline behavior, authentication, network contracts, evidence capture, and presentation state across native Android and iOS apps.',
 		plainEnglish:
 			'smrt-mobile is Kotlin Multiplatform shared logic. smrt-android supplies Compose UI and Android adapters; smrt-ios supplies SwiftUI and Apple adapters. Your product keeps native UI while the hard stateful behavior stays consistent.',
 		packages: ['smrt-mobile', 'smrt-mobile-contract', 'smrt-android', 'smrt-ios', 'smrt-users'],
@@ -668,7 +668,7 @@ export const capabilityGuides: Guide[] = [
 		navTitle: 'WebMCP',
 		eyebrow: 'New capability',
 		title: 'Your web app becomes an agent tool surface',
-		lede: 's-m-r-t generates WebMCP tools from the model actions and field metadata that MCP uses. It registers the tools with the browser. In-page agents can then discover and invoke the tools.',
+		lede: 'smrt generates WebMCP tools from the model actions and field metadata that MCP uses. It registers the tools with the browser. In-page agents can then discover and invoke the tools.',
 		plainEnglish:
 			'In a browser with WebMCP support, your page can advertise useful application actions to an AI agent. Those actions still run as the signed-in page user through the generated REST API, so existing authentication, tenant, permission, and field policies remain in charge.',
 		packages: ['smrt-web', 'smrt-core', 'smrt-app-mcp', 'smrt-svelte'],
@@ -819,9 +819,9 @@ export const nextPageIntent = defineIntent({
 		navTitle: 'Reports',
 		eyebrow: 'New package',
 		title: 'Reports are durable read models',
-		lede: 'smrt-reports turns repeated aggregate questions into materialized, tenant-aware s-m-r-t models that can rebuild, refresh incrementally, and run on a schedule.',
+		lede: 'smrt-reports turns repeated aggregate questions into materialized, tenant-aware smrt models that can rebuild, refresh incrementally, and run on a schedule.',
 		plainEnglish:
-			'Define how rows group and which measures to calculate. s-m-r-t compiles the aggregate, stores the result in an ordinary report table, and tracks refresh runs, watermarks, locks, and schedules.',
+			'Define how rows group and which measures to calculate. smrt compiles the aggregate, stores the result in an ordinary report table, and tracks refresh runs, watermarks, locks, and schedules.',
 		packages: ['smrt-reports', 'smrt-jobs', 'smrt-tenancy'],
 		visual: 'reports',
 		sections: [
@@ -835,7 +835,7 @@ export const nextPageIntent = defineIntent({
 			{
 				title: 'Incremental refresh recomputes affected groups',
 				intro:
-					'A source watermark finds changed rows. s-m-r-t recomputes the groups those rows belong to and removes empty groups, avoiding the correctness traps of applying aggregate deltas blindly.'
+					'A source watermark finds changed rows. smrt recomputes the groups those rows belong to and removes empty groups, avoiding the correctness traps of applying aggregate deltas blindly.'
 			},
 			{
 				title: 'Operations are visible and recoverable',
@@ -861,7 +861,7 @@ export const nextPageIntent = defineIntent({
 		navTitle: 'AdminShell',
 		eyebrow: 'New capability',
 		title: 'The admin app shell is already designed',
-		lede: 'AppShell composes Provider, ThemeProvider, and AdminShell into one root layout. AdminShell gives s-m-r-t applications a responsive four-edge workspace with tenant navigation, settings, focus tools, status, and live activity feeds.',
+		lede: 'AppShell composes Provider, ThemeProvider, and AdminShell into one root layout. AdminShell gives smrt applications a responsive four-edge workspace with tenant navigation, settings, focus tools, status, and live activity feeds.',
 		plainEnglish:
 			'The shell owns application chrome so each domain package can focus on its working surface. A manifest can build tenant navigation on the server; live jobs and changes can feed activity without coupling the shell to a transport.',
 		packages: ['smrt-svelte', 'smrt-ui', 'smrt-template-sveltekit'],
@@ -884,7 +884,7 @@ export const nextPageIntent = defineIntent({
   const settingsHref = '/settings';
 
   const nav: ShellNavItem[] = [
-    { href: '/', label: 'Items', description: 'The example s-m-r-t object' },
+    { href: '/', label: 'Items', description: 'The example smrt object' },
     { href: settingsHref, label: 'Settings', description: 'Workspace layout and shortcuts' }
   ];
 
@@ -896,7 +896,7 @@ export const nextPageIntent = defineIntent({
 </script>
 
 <AppShell
-  title="s-m-r-t app"
+  title="smrt app"
   {webmcp}
   {nav}
   currentHref={page.url.pathname}
@@ -954,7 +954,7 @@ export const nextPageIntent = defineIntent({
 			{
 				title: 'Projection avoids unnecessary hydration',
 				intro:
-					'list({ select }) validates logical s-m-r-t field names, maps them to database columns, blocks sensitive and permission-gated fields, and returns precisely typed plain rows.',
+					'list({ select }) validates logical smrt field names, maps them to database columns, blocks sensitive and permission-gated fields, and returns precisely typed plain rows.',
 				filename: 'list-open-tasks.ts',
 				code: `const rows = await tasks.list({\n  select: ['id', 'title', 'accountId'] as const,\n  where: { status: 'open' },\n  orderBy: 'created_at DESC',\n  limit: 50\n});\n\n// Array<{ id; title; accountId }>, not Task[]`
 			},
@@ -1129,7 +1129,7 @@ export const nextPageIntent = defineIntent({
 			{
 				title: 'Replace an input without inventing a wire type',
 				intro:
-					'The built-in inputs cover text, integer, decimal, boolean, datetime, JSON, and reference identifiers. s-m-r-t has no select wire type. A field with fixed choices keeps its persisted type, which is usually text. The application registers a select-like renderer for that field. A field-specific registration wins over a wire-type registration.',
+					'The built-in inputs cover text, integer, decimal, boolean, datetime, JSON, and reference identifiers. smrt has no select wire type. A field with fixed choices keeps its persisted type, which is usually text. The application registers a select-like renderer for that field. A field-specific registration wins over a wire-type registration.',
 				points: [
 					'createFieldInputRegistry returns a registry scoped to one application root rather than a global.',
 					'Reference fields stay identifier inputs on purpose until an application supplies a chooser.',
@@ -1250,7 +1250,7 @@ export const nextPageIntent = defineIntent({
 				intro:
 					'Field policy adoption is additive. PolicyField outside a provider renders its children without changes. Existing forms continue to operate until you wrap them. Each step below is useful by itself. A project can stop after any step.',
 				points: [
-					'1. Add @happyvertical/smrt-fields at the same exact version as the rest of your s-m-r-t packages. It pins smrt-core, smrt-tenancy, smrt-ui, and smrt-users to that version, and mixing versions installs a second copy of the object registry.',
+					'1. Add @happyvertical/smrt-fields at the same exact version as the rest of your smrt packages. It pins smrt-core, smrt-tenancy, smrt-ui, and smrt-users to that version, and mixing versions installs a second copy of the object registry.',
 					'2. Add it to consumer.packages in smrt.config.ts. The smrt() preset in vite.config.ts consumes exactly that list and merges the package manifest into the generated registration. An application that calls smrtConsumer directly passes the same array as its packages option. _smrt_field_policies then migrates with the rest of the schema. Installation of the dependency alone does not create the table.',
 					'3. Seed presentation in code: add ui hints to the fields that deserve them, and remember the cold-start rule once you mark the first field.',
 					'4. Grant fields.policy.manage to administrator roles and fields.policy.personalize to everyone who should be able to adjust their own forms.',

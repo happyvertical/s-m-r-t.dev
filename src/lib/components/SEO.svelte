@@ -25,9 +25,7 @@
 		article
 	}: SEOProps = $props();
 
-	const fullTitle = $derived(
-		title === 's-m-r-t Framework' ? title : `${title} | s-m-r-t Framework`
-	);
+	const fullTitle = $derived(title === 'smrt framework' ? title : `${title} | smrt`);
 	const jsonLd = $derived(jsonLdScript(title, description, url));
 </script>
 
@@ -46,7 +44,7 @@
 	<meta property="og:title" content={fullTitle} />
 	<meta property="og:description" content={description} />
 	<meta property="og:image" content={image} />
-	<meta property="og:site_name" content="s-m-r-t Framework" />
+	<meta property="og:site_name" content="smrt" />
 
 	{#if article}
 		{#if article.publishedTime}

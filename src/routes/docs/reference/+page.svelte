@@ -78,8 +78,8 @@
 </script>
 
 <SEO
-	title="s-m-r-t reference"
-	description="Search s-m-r-t API contracts, packages, UI components, configuration, decorators, collections, generated interfaces, security, field policies, terminology, versions, and FAQ content."
+	title="smrt reference"
+	description="Search smrt API contracts, packages, UI components, configuration, decorators, collections, generated interfaces, security, field policies, terminology, versions, and FAQ content."
 	url={siteUrl('/docs/reference')}
 />
 

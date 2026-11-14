@@ -4,6 +4,8 @@
 	--container-width: 1200px;
 	--site-header-height: 3.5rem;
 	--site-font-sans: var(--smrt-font-family, 'Avenir Next', Avenir, 'Helvetica Neue', sans-serif);
+	/* The wordmark face, loaded in app.html beside Inter and JetBrains Mono. */
+	--site-font-wordmark: 'Gabarito', var(--site-font-sans);
 	--site-font-mono: var(
 		--smrt-font-family-mono,
 		'SFMono-Regular',

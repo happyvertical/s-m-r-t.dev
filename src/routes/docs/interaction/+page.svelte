@@ -69,7 +69,7 @@
 				<h2>{guide.title}</h2>
 				<span>{guide.lede}</span>
 				{#if guide.pinnedVersion}
-					<b>Verified against s-m-r-t {guide.pinnedVersion}</b>
+					<b>Verified against smrt {guide.pinnedVersion}</b>
 				{/if}
 			</header>
 

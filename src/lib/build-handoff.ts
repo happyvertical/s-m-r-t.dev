@@ -109,7 +109,7 @@ export function seedFor(ids: string[]): {
 	return {
 		id: `map-selection:${ids.join(',')}`,
 		messages: [
-			{ role: 'user', content: `I picked these features on the SMRT map: ${picked}.` },
+			{ role: 'user', content: `I picked these features on the smrt map: ${picked}.` },
 			{
 				role: 'assistant',
 				content: `${parts.join(' ')} Tell me what your app is for and who uses it, and I will ask what I still need to know about ${total === 1 ? 'it' : 'them'}.`

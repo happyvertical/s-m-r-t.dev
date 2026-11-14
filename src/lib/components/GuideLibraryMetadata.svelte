@@ -27,7 +27,7 @@
 		</div>
 		<div>
 			<dt>Framework support</dt>
-			<dd>s-m-r-t {guide.task.supportRange}</dd>
+			<dd>smrt {guide.task.supportRange}</dd>
 		</div>
 		<div>
 			<dt>Prerequisites</dt>

@@ -1,10 +1,10 @@
-# s-m-r-t
+# smrt
 
-> s-m-r-t is an MIT-licensed TypeScript stack for agentic software that people and agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The site has three doors, BUILD, FEATURES and DOCS. FEATURES groups what ships by what a person is trying to do, into nine groups (Sell, Buy, Make, Team, Publish, Talk, Grow, Plan and Assistant), and each feature has a showcase with a live example where the packages ship one. build-a-boilerplate, behind BUILD, assembles a working mock-up for a kind of business in the browser and exports the plan as a file. DOCS holds every technical page, for developers and for agents.
+> smrt is an MIT-licensed TypeScript stack for agentic software that people and agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The site has three doors, BUILD, FEATURES and DOCS. FEATURES groups what ships by what a person is trying to do, into nine groups (Sell, Buy, Make, Team, Publish, Talk, Grow, Plan and Assistant), and each feature has a showcase with a live example where the packages ship one. build-a-boilerplate, behind BUILD, assembles a working mock-up for a kind of business in the browser and exports the plan as a file. DOCS holds every technical page, for developers and for agents.
 
 ## Canonical technical documentation
 
-- {{SITE_ORIGIN}}/ — the s-m-r-t application stack: a map of nine groups and their features, with three doors, BUILD, FEATURES and DOCS
+- {{SITE_ORIGIN}}/ — the smrt application stack: a map of nine groups and their features, with three doors, BUILD, FEATURES and DOCS
 - {{SITE_ORIGIN}}/features — the nine feature sections, each with a showcase page per feature
 - {{SITE_ORIGIN}}/docs — the documentation index: getting started for developers, these entry points for agents, then every technical section
 - {{SITE_ORIGIN}}/build-a-boilerplate — assemble a working mock-up for a kind of business in the browser and export the plan as a cookbook file
@@ -21,7 +21,7 @@
 
 ## Released boundaries
 
-This site documents the installed s-m-r-t release. The framework supports a shared domain model and manifest. It generates REST, CLI, MCP, and selected WebMCP surfaces. Agent-assisted form controls support explain, validate, staged-change, and confirmed-apply flows. Application MCP surfaces include allow-lists and policy checks. These explicit surfaces do not expose every model method or field.
+This site documents the installed smrt release. The framework supports a shared domain model and manifest. It generates REST, CLI, MCP, and selected WebMCP surfaces. Agent-assisted form controls support explain, validate, staged-change, and confirmed-apply flows. Application MCP surfaces include allow-lists and policy checks. These explicit surfaces do not expose every model method or field.
 
 Generated runtime operations still resolve through the application’s principal, tenant scope, field policy, writable-field rules, permissions, and any required confirmation. Development MCP is a separate, read-only development plane; it never executes the project’s application entry and never reads record payloads, principals, or credentials. Awareness is not authority: discovery never grants permission.
 

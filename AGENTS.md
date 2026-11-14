@@ -22,9 +22,9 @@
 
 <!-- hv-managed-policy:end -->
 
-# s-m-r-t.dev — SMRT framework documentation site
+# s-m-r-t.dev — smrt framework documentation site
 
-The public documentation site for the SMRT framework, and the primary test bed for
+The public documentation site for the smrt framework, and the primary test bed for
 `@happyvertical/smrt-svelte`. Framework functionality should be demonstrable here.
 
 ## Golden Rule: Always Fix Upstream

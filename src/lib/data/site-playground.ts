@@ -6,7 +6,7 @@ export const AGENT_AWARE_FORM_ENTRY_ID = `${SITE_HOST}:agent-aware-form`;
 export const sitePlayground: SmrtPlaygroundModule = {
 	packageName: SITE_HOST,
 	displayName: 'Documentation demonstrations',
-	description: 'Site-owned demonstrations that compose released s-m-r-t package behavior.',
+	description: 'Site-owned demonstrations that compose released smrt package behavior.',
 	entries: [
 		{
 			id: 'agent-aware-form',

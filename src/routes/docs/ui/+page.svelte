@@ -9,7 +9,7 @@
 
 <SEO
 	title="UI showcase"
-	description="Explore the SMRT component system through human and agent interaction stories, released examples, and explicit failure boundaries."
+	description="Explore the smrt component system through human and agent interaction stories, released examples, and explicit failure boundaries."
 	url={siteUrl('/docs/ui')}
 />
 
@@ -18,7 +18,7 @@
 		<p class="hero-kicker">Component system showcase</p>
 		<h1>Interfaces for people. Contracts for agents.</h1>
 		<p class="hero-lede">
-			SMRT components stay ordinary, accessible interface elements. Applications can also expose
+			smrt components stay ordinary, accessible interface elements. Applications can also expose
 			their meaning and operations to a governed agent caller.
 		</p>
 

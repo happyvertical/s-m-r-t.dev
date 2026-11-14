@@ -164,13 +164,13 @@ const whyItem: NavigationItem = {
 		'One application model supplies storage, forms, APIs, commands, permissions, and agent tools.',
 	keywords: [
 		'smrt',
-		's-m-r-t',
+		'smrt',
 		'why',
 		// Former nav label and its spelling variants: this item was "Why
-		// s-m-r-t?" before the homepage rebuild, and these exact-phrase
+		// smrt?" before the homepage rebuild, and these exact-phrase
 		// aliases keep those queries resolving here now that the visible
 		// label is "Home".
-		'why s-m-r-t',
+		'why smrt',
 		'why smrt',
 		'agent-native',
 		'agent-legible',

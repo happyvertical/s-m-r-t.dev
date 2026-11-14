@@ -43,7 +43,7 @@ describe('update-smrt --check', () => {
 				'@happyvertical/smrt-core': '^0.40.63',
 				'@happyvertical/smrt-svelte': '0.40.63'
 			})
-		).toThrow(/SMRT dependencies must use exact versions/);
+		).toThrow(/smrt dependencies must use exact versions/);
 	});
 
 	it.each(['file:../smrt-core', 'link:../smrt-core', 'workspace:*'])(
@@ -54,7 +54,7 @@ describe('update-smrt --check', () => {
 					'@happyvertical/smrt-core': spec,
 					'@happyvertical/smrt-svelte': '0.40.63'
 				})
-			).toThrow(/SMRT dependencies must use exact versions/);
+			).toThrow(/smrt dependencies must use exact versions/);
 		}
 	);
 
@@ -71,14 +71,14 @@ describe('update-smrt --check', () => {
 				'@happyvertical/smrt-core': '0.40.63',
 				'@happyvertical/smrt-planner': '0.1.0'
 			})
-		).toThrow(/SMRT dependencies must move in lockstep/);
+		).toThrow(/smrt dependencies must move in lockstep/);
 		for (const spec of ['^0.40.63', 'link:../smrt-planner']) {
 			expect(() =>
 				check({
 					'@happyvertical/smrt-core': '0.40.63',
 					'@happyvertical/smrt-planner': spec
 				})
-			).toThrow(/SMRT dependencies must use exact versions/);
+			).toThrow(/smrt dependencies must use exact versions/);
 		}
 	});
 
@@ -88,7 +88,7 @@ describe('update-smrt --check', () => {
 				'@happyvertical/smrt-core': '0.40.62',
 				'@happyvertical/smrt-svelte': '0.40.63'
 			})
-		).toThrow(/SMRT dependencies must move in lockstep/);
+		).toThrow(/smrt dependencies must move in lockstep/);
 	});
 });
 

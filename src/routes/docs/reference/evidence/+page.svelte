@@ -13,7 +13,7 @@
 
 <SEO
 	title="Evidence"
-	description="Each claim the s-m-r-t site makes about the framework, with the page that explains it and the released source it was checked against."
+	description="Each claim the smrt site makes about the framework, with the page that explains it and the released source it was checked against."
 	url={siteUrl('/docs/reference/evidence')}
 />
 
@@ -28,7 +28,7 @@
 			source it was checked against.
 		</p>
 		<p class="pinned">
-			Package sources are the AGENTS.md contracts shipped in s-m-r-t
+			Package sources are the AGENTS.md contracts shipped in smrt
 			<span class="version">{SMRT_VERSION}</span>; the site row links a commit of this repository.
 		</p>
 	</header>

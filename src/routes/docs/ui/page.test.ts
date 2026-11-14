@@ -34,7 +34,7 @@ describe('/docs/ui', () => {
 
 	it('operates controller-backed DataTable mechanisms through shared state', async () => {
 		const { container } = render(Page);
-		const table = screen.getByRole('table', { name: 'Released SMRT UI surfaces' });
+		const table = screen.getByRole('table', { name: 'Released smrt UI surfaces' });
 
 		expect(within(table).getByText('DataTable')).toBeTruthy();
 		expect(screen.getByText('0', { selector: '.state-summary strong' })).toBeTruthy();

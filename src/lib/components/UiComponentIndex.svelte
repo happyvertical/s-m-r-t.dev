@@ -23,7 +23,7 @@
 </script>
 
 <SEO
-	title="s-m-r-t UI component reference"
+	title="smrt UI component reference"
 	description="Search every public Svelte component export across the installed @happyvertical/smrt-* packages and inspect its props, bindable state, callback events, import path, examples, and canonical source."
 	url={siteUrl('/docs/reference/components')}
 />

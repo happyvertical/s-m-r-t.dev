@@ -20,7 +20,7 @@
 			title: 'Starting out',
 			items: [
 				{
-					q: 'What is s-m-r-t?',
+					q: 'What is smrt?',
 					a: 'A TypeScript application framework built around useful domain objects. It supplies persistence, manifests, generated REST/MCP/CLI interfaces, users, tenants, agents, web data, native-mobile foundations, and a broad set of domain packages.'
 				},
 				{
@@ -75,16 +75,16 @@
 				},
 				{
 					q: 'What does WebMCP expose?',
-					a: 's-m-r-t generates browser tool descriptors for exposed collection actions and registers them with document.modelContext. CRUD tools execute through the normal REST client as the signed-in page user, preserving authentication, tenant, permission, and field policy.'
+					a: 'smrt generates browser tool descriptors for exposed collection actions and registers them with document.modelContext. CRUD tools execute through the normal REST client as the signed-in page user, preserving authentication, tenant, permission, and field policy.'
 				}
 			]
 		},
 		{
-			title: 'Why s-m-r-t',
+			title: 'Why smrt',
 			items: [
 				{
 					q: 'Why build one application for both people and agents?',
-					a: 'Building two systems — a person-facing application and a separate, reduced set of endpoints or bots for software — means keeping two descriptions of the same operations in sync by hand, and the second one tends to drift and shrink over time. A s-m-r-t application describes each operation once; people reach it through pages, HTTP, or the command line, and agents reach the identical operation as a callable tool, so there is no second definition to fall behind.'
+					a: 'Building two systems — a person-facing application and a separate, reduced set of endpoints or bots for software — means keeping two descriptions of the same operations in sync by hand, and the second one tends to drift and shrink over time. A smrt application describes each operation once; people reach it through pages, HTTP, or the command line, and agents reach the identical operation as a callable tool, so there is no second definition to fall behind.'
 				},
 				{
 					q: 'What is SAADL, and how is it pronounced?',
@@ -102,13 +102,13 @@
 					link: { label: 'Human-agent interaction', href: '/docs/interaction' }
 				},
 				{
-					q: 'Is this site itself built with s-m-r-t?',
+					q: 'Is this site itself built with smrt?',
 					a: `Yes. ${SITE_HOST} runs on the same released @happyvertical/smrt-* packages it documents — the component playground, the agent-aware form demo, and the data table on this site are the actual packages, not mockups.`,
 					link: { label: 'Component playground', href: '/playground' }
 				},
 				{
-					q: 'Why is it spelled s-m-r-t?',
-					a: "I can't help myself. As I was planning a framework for software that develops and runs itself, a certain scene from The Simpsons was prominently in mind."
+					q: 'How is the name written?',
+					a: `Lowercase, four letters: smrt. That holds at the start of a sentence too. The hyphens you see in ${SITE_HOST} belong to the site's address, and the packages are published as @happyvertical/smrt-*.`
 				}
 			]
 		}
@@ -116,8 +116,8 @@
 </script>
 
 <SEO
-	title="s-m-r-t FAQ"
-	description="Clear answers about s-m-r-t, SAADL applications, users, tenants, generated interfaces, agent-assisted forms, learning agents, mobile, WebMCP, and live data."
+	title="smrt FAQ"
+	description="Clear answers about smrt, SAADL applications, users, tenants, generated interfaces, agent-assisted forms, learning agents, mobile, WebMCP, and live data."
 	url={siteUrl('/docs/reference/faq')}
 />
 
