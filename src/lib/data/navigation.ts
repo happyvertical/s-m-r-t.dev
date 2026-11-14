@@ -164,14 +164,15 @@ const whyItem: NavigationItem = {
 		'One application model supplies storage, forms, APIs, commands, permissions, and agent tools.',
 	keywords: [
 		'smrt',
-		'smrt',
+		's-m-r-t',
 		'why',
 		// Former nav label and its spelling variants: this item was "Why
 		// smrt?" before the homepage rebuild, and these exact-phrase
 		// aliases keep those queries resolving here now that the visible
-		// label is "Home".
+		// label is "Home". The hyphenated spelling stays as an alias because
+		// people still search for it.
 		'why smrt',
-		'why smrt',
+		'why s-m-r-t',
 		'agent-native',
 		'agent-legible',
 		'governed',

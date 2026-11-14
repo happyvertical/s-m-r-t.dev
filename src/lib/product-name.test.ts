@@ -49,6 +49,10 @@ const EXCEPTIONS: { test: (_file: string) => boolean; why: string }[] = [
 		test: (f) => f === 'COMPONENT_MAP.md' || f === 'COMPONENT_RENAME_PLAN.md',
 		why: 'historical records of the `<SMRT>` provider component and SMRT-prefixed component names'
 	},
+	{
+		test: (f) => f === 'src/lib/data/navigation.ts',
+		why: 'search aliases keep the old hyphenated spelling because people still search for it'
+	},
 	{ test: (f) => f.startsWith('.github/'), why: 'workflows' },
 	{ test: (f) => f.startsWith('infra/'), why: 'CloudFront and Terraform configuration' },
 	{ test: (f) => f.startsWith('.claude/'), why: 'local agent tooling settings' },

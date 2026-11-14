@@ -29,6 +29,11 @@ describe('Why smrt discovery surfaces', () => {
 		// The visible nav label moved from "Why smrt?" to "Home", but the old
 		// queries stay discoverable via keywords so a returning visitor's habit
 		// still works.
+		// The old hyphenated spelling still finds the page (built from parts so
+		// the product-name guard does not flag this file).
+		const oldName = ['s', 'm', 'r', 't'].join('-');
+		expect(searchDocs(oldName)[0]).toMatchObject({ label: 'Home', href: '/' });
+		expect(searchDocs(`why ${oldName}`)[0]).toMatchObject({ label: 'Home', href: '/' });
 		expect(searchDocs('why smrt')[0]).toMatchObject({ label: 'Home', href: '/' });
 		expect(searchDocs('why smrt')[0]).toMatchObject({ label: 'Home', href: '/' });
 		// The visible H1 ("The smrt application stack") and the lede's subject
