@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import { onMount } from 'svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { noticeFor, parseFeatures, recipesFor, seedFor, takeWarp } from '$lib/build-handoff';
@@ -111,7 +112,7 @@
 <SEO
 	title="build-a-boilerplate"
 	description="Add recipes or packages and an app mock-up assembles around them: navigation, list views, forms and help per model. Its Export tab gives you two ways out: download the cookbook and run smrt cookbook apply on the file to create a project, or copy a prompt that has your coding agent build the app from it."
-	url="https://s-m-r-t.dev/build-a-boilerplate"
+	url={siteUrl('/build-a-boilerplate')}
 />
 
 <div class="planner-page" class:arriving>

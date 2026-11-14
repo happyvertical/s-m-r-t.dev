@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import { SvelteSet } from 'svelte/reactivity';
 	import SEO from '$lib/components/SEO.svelte';
 	import { packages } from '$lib/data/packages';
@@ -79,7 +80,7 @@
 <SEO
 	title="s-m-r-t reference"
 	description="Search s-m-r-t API contracts, packages, UI components, configuration, decorators, collections, generated interfaces, security, field policies, terminology, versions, and FAQ content."
-	url="https://s-m-r-t.dev/docs/reference"
+	url={siteUrl('/docs/reference')}
 />
 
 <article class="reference-index">

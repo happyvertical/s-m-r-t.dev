@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import SEO from '$lib/components/SEO.svelte';
 	import { interactionContent } from '$lib/data/interaction';
 </script>
@@ -6,7 +7,7 @@
 <SEO
 	title="Human-Agent Interaction"
 	description="Learn how persons and application agents communicate, discover controls, stage changes, preserve input sources, and keep authority explicit."
-	url="https://s-m-r-t.dev/docs/interaction"
+	url={siteUrl('/docs/interaction')}
 />
 
 <article class="interaction-index">

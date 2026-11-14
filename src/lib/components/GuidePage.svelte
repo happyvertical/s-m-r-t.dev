@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SITE_ORIGIN } from '$lib/site';
 	import Callout from '$lib/components/Callout.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import GuideDiagram from '$lib/components/GuideDiagram.svelte';
@@ -21,11 +22,7 @@
 	const libraryItem = $derived(getGuideLibraryItem(`${backHref}/${guide.slug}`));
 </script>
 
-<SEO
-	title={guide.title}
-	description={guide.lede}
-	url={`https://s-m-r-t.dev${backHref}/${guide.slug}`}
-/>
+<SEO title={guide.title} description={guide.lede} url={`${SITE_ORIGIN}${backHref}/${guide.slug}`} />
 
 <article class="guide-page">
 	<div class="guide-main">

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SITE_ORIGIN } from '$lib/site';
 	import SEO from '$lib/components/SEO.svelte';
 	import { getDocumentationSection, type DocumentationSectionId } from '$lib/data/navigation';
 
@@ -9,7 +10,7 @@
 <SEO
 	title={`s-m-r-t ${section.label}`}
 	description={section.description}
-	url={`https://s-m-r-t.dev${section.href}`}
+	url={`${SITE_ORIGIN}${section.href}`}
 />
 
 <article class="section-landing">

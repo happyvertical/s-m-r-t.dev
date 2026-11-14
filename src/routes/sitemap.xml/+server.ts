@@ -5,11 +5,12 @@ import { referenceGuides } from '$lib/data/reference';
 import { taskGuides } from '$lib/data/task-guides';
 import { toolingGuides } from '$lib/data/tooling';
 import { uiComponents } from '$lib/data/ui-components.generated';
+import { SITE_ORIGIN } from '$lib/site';
 import type { RequestHandler } from './$types';
 
 export const prerender = true;
 
-const baseUrl = 'https://s-m-r-t.dev';
+const baseUrl = SITE_ORIGIN;
 
 const staticRoutes = [
 	{ path: '', priority: '1.0', changefreq: 'weekly' },

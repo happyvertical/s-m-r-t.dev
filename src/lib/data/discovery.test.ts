@@ -1,10 +1,14 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { SITE_ORIGIN } from '$lib/site';
 import { searchItems } from '$lib/data/navigation';
 import { searchDocs } from '$lib/data/search';
 import { GET as sitemap } from '../../routes/sitemap.xml/+server';
 
-const llms = readFileSync('scripts/agent-docs/source.txt', 'utf8');
+const llms = readFileSync('scripts/agent-docs/source.txt', 'utf8').replaceAll(
+	'{{SITE_ORIGIN}}',
+	SITE_ORIGIN
+);
 
 describe('Why s-m-r-t discovery surfaces', () => {
 	it('uses the canonical homepage in navigation, search, and the sitemap', async () => {
@@ -34,7 +38,7 @@ describe('Why s-m-r-t discovery surfaces', () => {
 		expect(searchDocs('features map')[0]).toMatchObject({ label: 'Home', href: '/' });
 
 		const sitemapXml = await (await sitemap({} as never)).text();
-		expect(sitemapXml).toContain('<loc>https://s-m-r-t.dev</loc>');
+		expect(sitemapXml).toContain(`<loc>${SITE_ORIGIN}</loc>`);
 		expect(sitemapXml).not.toContain('/why-smrt');
 	});
 
@@ -50,13 +54,13 @@ describe('Why s-m-r-t discovery surfaces', () => {
 		expect(llms).toContain('assembles a working mock-up for a kind of business');
 		expect(llms).not.toMatch(/\bblocks?\b/i);
 		expect(llms).not.toContain('Build a boilerplate');
-		expect(llms).toContain('https://s-m-r-t.dev/build-a-boilerplate');
-		expect(llms).toContain('https://s-m-r-t.dev/docs —');
-		expect(llms).toContain('https://s-m-r-t.dev/docs/agents');
-		expect(llms).toContain('https://s-m-r-t.dev/docs/reference/evidence');
+		expect(llms).toContain(SITE_ORIGIN + '/build-a-boilerplate');
+		expect(llms).toContain(SITE_ORIGIN + '/docs —');
+		expect(llms).toContain(SITE_ORIGIN + '/docs/agents');
+		expect(llms).toContain(SITE_ORIGIN + '/docs/reference/evidence');
 		expect(llms).toContain('Awareness is not authority');
-		expect(llms).toContain('https://s-m-r-t.dev/docs/capabilities/agent-legible-applications');
-		expect(llms).toContain('https://s-m-r-t.dev/docs/tooling/app-mcp');
+		expect(llms).toContain(SITE_ORIGIN + '/docs/capabilities/agent-legible-applications');
+		expect(llms).toContain(SITE_ORIGIN + '/docs/tooling/app-mcp');
 		expect(llms).toContain(
 			'Runtime provenance in the development MCP: read-only and only when configured'
 		);

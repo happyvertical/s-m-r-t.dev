@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SITE_ORIGIN, siteUrl } from '$lib/site';
 	import { jsonLdScript } from '$lib/seo/structured-data';
 	interface SEOProps {
 		title: string;
@@ -18,8 +19,8 @@
 	let {
 		title,
 		description,
-		url = 'https://s-m-r-t.dev',
-		image = 'https://s-m-r-t.dev/og-image.png',
+		url = SITE_ORIGIN,
+		image = siteUrl('/og-image.png'),
 		type = 'website',
 		article
 	}: SEOProps = $props();

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import FrameworkTopic from '$lib/components/FrameworkTopic.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import AgentAwareFormDemo from '$lib/ui-showcase/AgentAwareFormDemo.svelte';
@@ -14,7 +15,7 @@
 <SEO
 	title="Agents and the s-m-r-t application"
 	description="What an agent can do with a s-m-r-t application: the four tool surfaces, the read-only exposure default, and the identity every call runs as."
-	url="https://s-m-r-t.dev/docs/agents"
+	url={siteUrl('/docs/agents')}
 />
 
 <article class="agents-page">

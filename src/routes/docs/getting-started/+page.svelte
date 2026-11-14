@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { SMRT_VERSION } from '$lib/version';
@@ -49,7 +50,7 @@ pnpm app:open               # in a second terminal: the one-time owner setup pag
 <SEO
 	title="Getting Started"
 	description="Three ways to a s-m-r-t project on the smrt-start template: build-a-boilerplate (which also exports a prompt for your coding agent), smrt cookbook apply, or a clone of smrt-start."
-	url="https://s-m-r-t.dev/docs/getting-started"
+	url={siteUrl('/docs/getting-started')}
 />
 
 <article class="starter-index">

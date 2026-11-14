@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SITE_HOST, siteUrl } from '$lib/site';
 	import ReferenceFamilyBar from '$lib/components/ReferenceFamilyBar.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 
@@ -102,7 +103,7 @@
 				},
 				{
 					q: 'Is this site itself built with s-m-r-t?',
-					a: 'Yes. s-m-r-t.dev runs on the same released @happyvertical/smrt-* packages it documents — the component playground, the agent-aware form demo, and the data table on this site are the actual packages, not mockups.',
+					a: `Yes. ${SITE_HOST} runs on the same released @happyvertical/smrt-* packages it documents — the component playground, the agent-aware form demo, and the data table on this site are the actual packages, not mockups.`,
 					link: { label: 'Component playground', href: '/playground' }
 				},
 				{
@@ -117,7 +118,7 @@
 <SEO
 	title="s-m-r-t FAQ"
 	description="Clear answers about s-m-r-t, SAADL applications, users, tenants, generated interfaces, agent-assisted forms, learning agents, mobile, WebMCP, and live data."
-	url="https://s-m-r-t.dev/docs/reference/faq"
+	url={siteUrl('/docs/reference/faq')}
 />
 
 <ReferenceFamilyBar id="faq" />

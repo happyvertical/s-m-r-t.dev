@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import { uiStories, uiStoryGroups } from '$lib/data/ui-stories';
 	import AgentAwareFormDemo from '$lib/ui-showcase/AgentAwareFormDemo.svelte';
 	import UILiveShellState from '$lib/ui-showcase/UILiveShellState.svelte';
@@ -9,7 +10,7 @@
 <SEO
 	title="UI showcase"
 	description="Explore the SMRT component system through human and agent interaction stories, released examples, and explicit failure boundaries."
-	url="https://s-m-r-t.dev/docs/ui"
+	url={siteUrl('/docs/ui')}
 />
 
 <div class="ui-showcase">

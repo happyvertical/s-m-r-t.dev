@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SITE_ORIGIN } from '$lib/site';
 	/**
 	 * A section index (#364): the section word, its sentence, its features as
 	 * big tiles (word, sentence, still), and Reference/Source for the section.
@@ -21,7 +22,7 @@
 <SEO
 	title={`${section.word} features`}
 	description={section.hint}
-	url={`https://s-m-r-t.dev${featureSectionPath(section)}`}
+	url={`${SITE_ORIGIN}${featureSectionPath(section)}`}
 />
 
 <div class="index">

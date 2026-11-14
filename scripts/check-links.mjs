@@ -40,10 +40,10 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { glob } from 'glob';
+import { SITE_ORIGIN } from '../src/lib/site.js';
 
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BUILD_DIR = path.join(PROJECT_ROOT, 'build');
-const SITE_ORIGIN = 'https://s-m-r-t.dev';
 
 // See the allowlist note above. Both are empty: no allowlists remain.
 const CANONICAL_ALLOWLIST = /(?!)/; // #187 S3: /packages* and /faq are now redirects; nothing to allow.

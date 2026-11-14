@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SITE_ORIGIN } from '$lib/site';
 	import { afterNavigate } from '$app/navigation';
 	import Callout from '$lib/components/Callout.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
@@ -93,7 +94,7 @@
 	}
 </script>
 
-<SEO title={pkg.name} description={pkg.summary} url={`https://s-m-r-t.dev${packageHref}`} />
+<SEO title={pkg.name} description={pkg.summary} url={`${SITE_ORIGIN}${packageHref}`} />
 
 <ReferenceFamilyBar id="packages" />
 

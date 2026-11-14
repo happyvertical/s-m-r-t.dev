@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import SEO from '$lib/components/SEO.svelte';
 	import {
 		TOOLING_PINNED_VERSION,
@@ -25,7 +26,7 @@
 <SEO
 	title="s-m-r-t developer tooling"
 	description="Use s-m-r-t tools to build, inspect, test, and operate applications. Keep development MCP, generated MCP, hosted application MCP, and WebMCP separate."
-	url="https://s-m-r-t.dev/docs/tooling"
+	url={siteUrl('/docs/tooling')}
 />
 
 <article class="tooling-index">

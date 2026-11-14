@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import SEO from '$lib/components/SEO.svelte';
 	import { foundationGuides } from '$lib/data/guides';
 </script>
@@ -6,7 +7,7 @@
 <SEO
 	title="s-m-r-t application foundations"
 	description="Learn how s-m-r-t objects, tenants, users, profiles, memberships, permissions, pages, data, and generated interfaces fit together."
-	url="https://s-m-r-t.dev/docs/foundations"
+	url={siteUrl('/docs/foundations')}
 />
 
 <article class="index-page">

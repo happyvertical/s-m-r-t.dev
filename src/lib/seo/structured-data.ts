@@ -1,4 +1,5 @@
-const origin = 'https://s-m-r-t.dev';
+import { SITE_ORIGIN as origin } from '$lib/site';
+
 const organizationId = `${origin}/#organization`;
 const websiteId = `${origin}/#website`;
 const sourceId = `${origin}/#source`;
