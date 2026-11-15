@@ -24,7 +24,8 @@
 		"update:smrt": "node scripts/update-smrt.mjs",
 		"lint": "prettier --check . && eslint . && pnpm run check:templates",
 		"format": "prettier --write .",
-		"test": "pnpm run check:smrt && pnpm run check:copy && pnpm run check:ui-reference && vitest",
+		"test": "pnpm run check:smrt && pnpm run check:copy && pnpm run check:ui-reference && vitest run",
+		"test:watch": "vitest",
 		"check:agent-docs": "node scripts/generate-agent-docs.mjs --check"
 	},
 	"devDependencies": {
