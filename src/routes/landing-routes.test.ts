@@ -85,14 +85,14 @@ describe('/ (the landing page, #397 and #411)', () => {
 
 		expect(cards.map((card) => [text(card.querySelector('b')), card.getAttribute('href')])).toEqual(
 			[
-				['An assistant that sees the page', '/docs/reference/components/assistant-dock'],
+				['An assistant on the page', '/features/assistant'],
 				['Page tools', '/docs/capabilities/webmcp'],
 				['Agents on a schedule', '/features/assistant/agents'],
 				['Approvals', '/features/team/approvals'],
 				['Reports on request', '/docs/capabilities/reports'],
 				['AI usage', '/docs/capabilities/ai-usage'],
-				['Inference tuning', '/docs/capabilities/inference-tuning'],
-				['Ingestion', '/docs/capabilities/ingestion']
+				['Choose your models', '/docs/capabilities/inference-tuning'],
+				['Incoming files and email', '/docs/capabilities/ingestion']
 			]
 		);
 		for (const card of cards) {
@@ -109,7 +109,7 @@ describe('/ (the landing page, #397 and #411)', () => {
 		).toEqual([
 			['agent memory', '/features/assistant/memory'],
 			['search by meaning', '/docs/guides/semantic-search'],
-			['voice on the device', '/docs/reference/packages/smrt-svelte']
+			['voice on the device', '/docs/ui#voice-and-browser-ai']
 		]);
 	});
 
@@ -118,9 +118,13 @@ describe('/ (the landing page, #397 and #411)', () => {
 		const intros = [...container.querySelectorAll('.band .head p')].map(text);
 
 		expect(intros).toHaveLength(5);
-		expect(intros[0]).toContain('what agents do inside a smrt app');
+		expect(intros[0].trim()).toBe(
+			'Here is what agents can do inside a smrt app, and how you stay in charge of them. An agent works as a user, with that user’s permissions and nothing more.'
+		);
 		expect(intros[1]).toContain('the everyday parts');
-		expect(intros[2].trim()).toMatch(/^You write a model once, as a TypeScript class\./);
+		expect(intros[2].trim()).toMatch(
+			/^You describe each thing in your app once, as a TypeScript class called a model\./
+		);
 		// "That class" pointed at the hero panel while this section sat directly under it.
 		expect(intros.join(' ')).not.toContain('That class');
 	});
@@ -191,7 +195,6 @@ describe('/ (the landing page, #397 and #411)', () => {
 			new Set([
 				'/docs/getting-started',
 				'/demo',
-				'/docs/reference/components/assistant-dock',
 				'/docs/capabilities/webmcp',
 				'/features/assistant/agents',
 				'/features/team/approvals',
@@ -201,7 +204,7 @@ describe('/ (the landing page, #397 and #411)', () => {
 				'/docs/capabilities/ingestion',
 				'/features/assistant/memory',
 				'/docs/guides/semantic-search',
-				'/docs/reference/packages/smrt-svelte',
+				'/docs/ui#voice-and-browser-ai',
 				...featureSections.map((section) => `/features/${section.id}`),
 				'/features',
 				'/build-a-boilerplate',

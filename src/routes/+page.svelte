@@ -68,21 +68,23 @@
 	];
 
 	// The agentic section (#411). Each line was checked against the installed
-	// packages at the pinned release (smrt-chat for the dock and its approval
-	// holds, smrt-svelte and smrt-web for page tools, smrt-agents and
-	// smrt-personas for schedules, smrt-reports for runtime reports, smrt-core
-	// for usage rows and tiers) or, where the package is not a dependency of this
-	// site (smrt-approvals, smrt-inference, smrt-ingestion), against the page
-	// the card links to.
+	// packages at the pinned release (smrt-chat for the dock, the page registry
+	// it reads its browser tools from, and its approval holds, which run the
+	// saved call once as the original requester; smrt-svelte and smrt-web for
+	// page tools; smrt-agents and smrt-personas for schedules; smrt-reports for
+	// runtime reports; smrt-core for usage rows and the four tiers, each bound
+	// to one model) or, where the package is not a dependency of this site
+	// (smrt-approvals, smrt-inference for model lists, smrt-ingestion), against
+	// that package's README at the same release.
 	const agentic = [
 		{
-			name: 'An assistant that sees the page',
-			line: 'A chat dock that knows what is on the page and acts through the page’s own tools. Anything destructive waits for a person.',
-			href: '/docs/reference/components/assistant-dock'
+			name: 'An assistant on the page',
+			line: 'A chat dock that works with the page you’re on, through that page’s own tools. Anything destructive waits for a person.',
+			href: '/features/assistant'
 		},
 		{
 			name: 'Page tools',
-			line: 'In a browser with WebMCP support, an agent works with the page as the signed-in person. Read-only until you allow more, and a form change is staged for a person to apply.',
+			line: 'In a browser that supports page tools (WebMCP), an agent works with the page as the signed-in person. Read-only until you allow more, and a person applies any form change.',
 			href: '/docs/capabilities/webmcp'
 		},
 		{
@@ -92,7 +94,7 @@
 		},
 		{
 			name: 'Approvals',
-			line: 'Who has to say yes before something happens, kept as history. The assistant’s destructive requests wait here too, and a yes runs one once, as the person who asked.',
+			line: 'Decide who has to say yes, and keep a record of every answer. The assistant’s destructive requests wait for a yes too. Each yes runs that one request, once, as the person who asked.',
 			href: '/features/team/approvals'
 		},
 		{
@@ -106,13 +108,13 @@
 			href: '/docs/capabilities/ai-usage'
 		},
 		{
-			name: 'Inference tuning',
-			line: 'Your code asks for a tier, not a model. Bind each tier to a model, or to a list of models, and a call that fails moves to the next one.',
+			name: 'Choose your models',
+			line: 'Your code asks for a quality level, called a tier, from cheap to best. You pick the AI model behind each one. Add one package, smrt-inference, and a failed call moves on to the next model in your list.',
 			href: '/docs/capabilities/inference-tuning'
 		},
 		{
-			name: 'Ingestion',
-			line: 'Uploads and email are kept as evidence, read when you ask, and turned into suggestions. A reviewer decides. It ships as a preview, with automation off.',
+			name: 'Incoming files and email',
+			line: 'Each one is kept as evidence, read when you ask, and turned into suggestions. A reviewer decides. This ships as a preview, with automation off.',
 			href: '/docs/capabilities/ingestion'
 		}
 	];
@@ -120,7 +122,7 @@
 	const alsoAgentic = [
 		{ name: 'agent memory', href: '/features/assistant/memory' },
 		{ name: 'search by meaning', href: '/docs/guides/semantic-search' },
-		{ name: 'voice on the device', href: '/docs/reference/packages/smrt-svelte' }
+		{ name: 'voice on the device', href: '/docs/ui#voice-and-browser-ai' }
 	];
 
 	let asking = $state<'person' | 'agent'>('person');
@@ -226,13 +228,13 @@
 		</div>
 	</section>
 
-	<section class="band" aria-labelledby="agentic-features">
+	<section class="band lead" aria-labelledby="agentic-features">
 		<div class="wrap">
 			<div class="head">
 				<h2 id="agentic-features">Agentic features, out of the box.</h2>
 				<p>
-					This is what agents do inside a smrt app. Each one works as a user, with that user’s
-					permissions and nothing more.
+					Here is what agents can do inside a smrt app, and how you stay in charge of them. An agent
+					works as a user, with that user’s permissions and nothing more.
 				</p>
 			</div>
 			<ul class="agentic">
@@ -288,8 +290,9 @@
 			<div class="head">
 				<h2 id="every-way-in">One model, every way in.</h2>
 				<p>
-					You write a model once, as a TypeScript class. smrt reads it and generates the rest, so
-					the screen a person uses and the tool an agent calls come from the same model.
+					You describe each thing in your app once, as a TypeScript class called a model. smrt reads
+					it and generates the rest, so the screen a person uses and the tool an agent calls come
+					from the same model.
 				</p>
 			</div>
 			<ul class="ways-in">
@@ -746,7 +749,7 @@
 	}
 	.feat b {
 		font-family: var(--site-font-display);
-		font-size: 1.1rem;
+		font-size: 1.25rem;
 		font-weight: 700;
 		letter-spacing: -0.01em;
 		line-height: 1.25;
@@ -776,6 +779,11 @@
 	.list a {
 		color: var(--site-accent);
 		text-decoration: none;
+	}
+	/* These sit inside a sentence, so color alone must not mark them as links. */
+	.also a {
+		text-decoration: underline;
+		text-underline-offset: 0.15em;
 	}
 	.also a:hover,
 	.more a:hover,
@@ -883,6 +891,35 @@
 		.agentic,
 		.groups {
 			grid-template-columns: minmax(0, 1fr);
+		}
+		/* Eight cards in one column: keep them compact so the section stays
+		   under two phone screens and the next one is within reach. */
+		.lead {
+			padding-block: 40px;
+		}
+		.lead .head {
+			gap: 8px;
+			margin-bottom: 20px;
+		}
+		.lead .head p {
+			font-size: 1rem;
+		}
+		.also {
+			margin-top: 16px;
+		}
+		.agentic {
+			gap: 8px;
+		}
+		.feat {
+			gap: 2px;
+			padding: 11px 14px 12px;
+		}
+		.feat b {
+			font-size: 1.1rem;
+		}
+		.feat span {
+			font-size: 0.88rem;
+			line-height: 1.4;
 		}
 	}
 </style>
