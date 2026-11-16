@@ -1,3 +1,4 @@
+import { movedHref } from '$lib/data/doc-moves';
 import { cleanup, render, screen, within } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
@@ -71,10 +72,10 @@ describe('docs sidebar', () => {
 	});
 
 	it.each([
-		'/docs/ui/application-shell',
-		'/docs/ui/policy-aware-forms',
-		'/docs/ui/field-policy-layers',
-		'/docs/ui/field-policy-operations'
+		movedHref('applicationShell'),
+		movedHref('policyAwareForms'),
+		movedHref('fieldPolicyLayers'),
+		movedHref('fieldPolicyOperations')
 	])('lists %s under UI and marks it the current page', (pathname) => {
 		expect(documentationSectionForPathname(pathname).id).toBe('ui');
 		render(DocsSidebar, { props: { pathname } });

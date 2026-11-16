@@ -68,6 +68,30 @@ const landedFamilies: readonly string[] = [
 const isLanded = (newPath: string): boolean =>
 	landedFamilies.some((family) => newPath.startsWith(family));
 
+/**
+ * Stable ids for the moved pages, each naming the page by its frozen OLD
+ * address (a `docMoves` key). Prose links ask for a page by id through
+ * `movedHref`, so renaming a page never touches a link: change the page's
+ * `docMoves` value and its guide's `slug`.
+ */
+export const movedPages = {
+	collectionReads: '/docs/capabilities/collections',
+	connectInterfaces: '/docs/foundations/interfaces',
+	fieldPolicyLayers: '/docs/capabilities/field-policies',
+	applicationShell: '/docs/capabilities/application-shell',
+	policyAwareForms: '/docs/capabilities/policy-aware-forms',
+	fieldPolicyOperations: '/docs/capabilities/field-policy-operations'
+} as const;
+
+export type MovedPageKey = keyof typeof movedPages;
+
+/** The current address of a moved page, with an optional `#fragment`. */
+export function movedHref(key: MovedPageKey, hash = ''): string {
+	const target = docMoves[movedPages[key]];
+	if (target === undefined) throw new Error(`movedPages.${key} is not in docMoves`);
+	return hash === '' ? target : `${target}#${hash.replace(/^#/, '')}`;
+}
+
 /** Where a moved page now lives, or `undefined` when `oldPath` never moved. */
 export function movedPath(oldPath: string): string | undefined {
 	if (!Object.hasOwn(docMoves, oldPath)) return undefined;

@@ -9,7 +9,7 @@
  * to the Docs page that already documents it.
  */
 
-import { capabilityPath } from '$lib/data/doc-moves';
+import { movedHref } from '$lib/data/doc-moves';
 
 /** Old section id → its new group, or the Docs page when no group fits. */
 export const legacySectionTargets: Record<string, string> = {
@@ -43,7 +43,7 @@ export const legacyFeatureTargets: Record<string, string> = {
 	'basics/tenants': '/docs/foundations/tenants',
 	'basics/realtime': '/docs/capabilities/live-data',
 	'basics/reports': '/features/grow/reports',
-	'screens/shell': capabilityPath('application-shell'),
+	'screens/shell': movedHref('applicationShell'),
 	'screens/mobile': '/docs/capabilities/mobile',
 	'content/articles': '/features/publish/articles',
 	'content/assets': '/features/publish/images',

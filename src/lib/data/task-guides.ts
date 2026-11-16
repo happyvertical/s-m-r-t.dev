@@ -1,3 +1,4 @@
+import { movedHref } from '$lib/data/doc-moves';
 import type { GuideDifficulty, TaskGuide, TaskGuideFamilyId } from '$lib/data/guides';
 
 /**
@@ -101,7 +102,7 @@ export const guideMigrationDecisions: GuideMigrationRecord[] = [
 		family: 'getting-started'
 	},
 	{
-		source: '/docs/foundations/connect-interfaces',
+		source: movedHref('connectInterfaces'),
 		decision: 'split',
 		family: 'add-interfaces'
 	},
@@ -1117,7 +1118,7 @@ export const GET = async ({ url, locals }) => {
 				links: [
 					{
 						label: 'Foundation: collections and reads',
-						href: '/docs/capabilities/collection-reads'
+						href: movedHref('collectionReads')
 					},
 					{ label: 'Reference: security defaults', href: '/docs/reference/security' }
 				]
@@ -1546,7 +1547,7 @@ interface MigrationGuideDestination {
 
 const migrationGuideDestinations = new Map<string, MigrationGuideDestination>([
 	['start-with-smrt-start', { href: '/docs/getting-started/smrt-start', stepCount: 3 }],
-	['add-generated-interfaces', { href: '/docs/foundations/connect-interfaces', stepCount: 3 }]
+	['add-generated-interfaces', { href: movedHref('connectInterfaces'), stepCount: 3 }]
 ]);
 
 function guideLibraryItem(

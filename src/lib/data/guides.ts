@@ -1,3 +1,4 @@
+import { movedHref } from '$lib/data/doc-moves';
 import type { GuideCallout } from '$lib/data/callouts';
 import { TOOLING_PINNED_VERSION } from '$lib/data/tooling';
 import { SMRT_VERSION } from '$lib/version';
@@ -307,7 +308,7 @@ export const foundationGuides: Guide[] = [
 		],
 		related: [
 			{ label: 'Authorization model', href: '/docs/reference/authorization' },
-			{ label: 'Field policy operations', href: '/docs/ui/field-policy-operations' }
+			{ label: 'Field policy operations', href: movedHref('fieldPolicyOperations') }
 		]
 	},
 	{
@@ -1059,8 +1060,8 @@ export const nextPageIntent = defineIntent({
 			}
 		],
 		related: [
-			{ label: 'Build a policy-aware form', href: '/docs/ui/policy-aware-forms' },
-			{ label: 'Operate field policies', href: '/docs/ui/field-policy-operations' },
+			{ label: 'Build a policy-aware form', href: movedHref('policyAwareForms') },
+			{ label: 'Operate field policies', href: movedHref('fieldPolicyOperations') },
 			{ label: 'Field policy API', href: '/docs/reference/field-policies' },
 			{ label: 'Security defaults', href: '/docs/reference/security' }
 		]
@@ -1140,8 +1141,8 @@ export const nextPageIntent = defineIntent({
 			}
 		],
 		related: [
-			{ label: 'How resolution works', href: '/docs/ui/field-policy-layers' },
-			{ label: 'Operate field policies', href: '/docs/ui/field-policy-operations' },
+			{ label: 'How resolution works', href: movedHref('fieldPolicyLayers') },
+			{ label: 'Operate field policies', href: movedHref('fieldPolicyOperations') },
 			{ label: 'Field policy API', href: '/docs/reference/field-policies' },
 			{ label: 'smrt-fields package', href: '/docs/reference/packages/smrt-fields' }
 		]
@@ -1262,8 +1263,8 @@ export const nextPageIntent = defineIntent({
 			}
 		],
 		related: [
-			{ label: 'How resolution works', href: '/docs/ui/field-policy-layers' },
-			{ label: 'Build a policy-aware form', href: '/docs/ui/policy-aware-forms' },
+			{ label: 'How resolution works', href: movedHref('fieldPolicyLayers') },
+			{ label: 'Build a policy-aware form', href: movedHref('policyAwareForms') },
 			{ label: 'Field policy API', href: '/docs/reference/field-policies' },
 			{
 				label: 'Memberships and permissions',

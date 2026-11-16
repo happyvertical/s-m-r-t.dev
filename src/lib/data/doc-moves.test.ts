@@ -6,6 +6,9 @@ import {
 	movedSlugs,
 	capabilityPath,
 	docMoves,
+	movedPages,
+	type MovedPageKey,
+	movedHref,
 	foundationPath,
 	movedPath,
 	referencePath,
@@ -69,8 +72,19 @@ describe('path helpers', () => {
 	});
 
 	it('reads capability homes from the placement table', () => {
-		expect(capabilityHome('application-shell')).toBe('ui');
+		const slugOf = (href: string) => href.split('/').at(-1) as string;
+		expect(capabilityHome(slugOf(movedHref('applicationShell')))).toBe('ui');
 		expect(capabilityHome({ slug: 'webmcp' })).toBe('agents-and-interaction');
-		expect(capabilityHome('collection-reads')).toBeUndefined();
+		expect(capabilityHome(slugOf(movedHref('collectionReads')))).toBeUndefined();
+	});
+});
+
+describe('movedHref', () => {
+	it('resolves every id to its docMoves target, with an optional fragment', () => {
+		for (const [key, old] of Object.entries(movedPages)) {
+			expect(movedHref(key as MovedPageKey)).toBe(docMoves[old]);
+			expect(movedHref(key as MovedPageKey, 'x')).toBe(`${docMoves[old]}#x`);
+		}
+		expect(Object.values(movedPages).sort()).toEqual(Object.keys(docMoves).sort());
 	});
 });

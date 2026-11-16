@@ -23,7 +23,9 @@ const COPY_IGNORES = [
 	'**/*.test.*',
 	'**/*.spec.*',
 	'src/routes/**/+page.server.ts',
-	'src/routes/**/+server.ts'
+	'src/routes/**/+server.ts',
+	// An address table (docMoves, movedPages): URLs and ids, no prose.
+	'src/lib/data/doc-moves.ts'
 ];
 
 /**
@@ -119,6 +121,8 @@ const PROSE_PROPERTIES = new Set([
 ]);
 
 const NON_PROSE_PROPERTIES = new Set([
+	// A function that builds a page address (search.ts guideTracks).
+	'pathOf',
 	// Front-page map props (#381): state and callbacks, not prose.
 	'appBar',
 	'brandInSlot',

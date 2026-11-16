@@ -1,3 +1,4 @@
+import { movedHref } from '$lib/data/doc-moves';
 import type { GuideCallout } from '$lib/data/callouts';
 import { SMRT_VERSION } from '$lib/version';
 
@@ -823,7 +824,7 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'A pinnable discovery contract',
 					body: 'The /app-contract subpath carries the versioned discovery artifact that a CLI or MCP consumer can validate and pin. createDiscoveryConformanceArtifact emits deterministically ordered JSON with a SHA-256 integrity digest, and validateDiscoveryConformanceArtifact checks structure, ordering, and that digest in one call.',
-					href: '/docs/foundations/connect-interfaces',
+					href: movedHref('connectInterfaces'),
 					linkLabel: 'Generated interfaces'
 				}
 			],
@@ -959,19 +960,19 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'How resolution works',
 					body: 'Four layers merge low to high: the code seed from @field({ ui }), app rows, the tenant chain, then the signed-in user. A column left empty inherits from the layer below and resetting a customization deletes the row.',
-					href: '/docs/ui/field-policy-layers',
+					href: movedHref('fieldPolicyLayers'),
 					linkLabel: 'Read the field policy guide'
 				},
 				{
 					title: 'Building forms',
 					body: 'PolicyField adopts an existing form incrementally; ObjectForm renders the fields present in both the generated definitions and the resolved policy.',
-					href: '/docs/ui/policy-aware-forms',
+					href: movedHref('policyAwareForms'),
 					linkLabel: 'Build a policy-aware form'
 				},
 				{
 					title: 'Running it in production',
 					body: 'The form gear, the organization control panel, the two permissions, and the difference between a personal preference and an organization rule.',
-					href: '/docs/ui/field-policy-operations',
+					href: movedHref('fieldPolicyOperations'),
 					linkLabel: 'Operate field policies'
 				},
 				{
@@ -1340,13 +1341,13 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Navigation the manifest already describes',
 					body: 'tenantNavFromManifest turns a manifest into ordered navigation sections. It drops collections, internal and test classes, and items without a REST list route. It also drops single-table-inheritance subtypes that share a parent collection because the polymorphic endpoint already includes them. Pass permittedResources to filter the resources that a role can see. The filter checks the inheritance chain, so a permitted subtype keeps its applicable base link. Sorted output prevents manifest changes from reordering the sidebar.',
-					href: '/docs/ui/application-shell',
+					href: movedHref('applicationShell'),
 					linkLabel: 'How the shell is composed'
 				},
 				{
 					title: 'AppShell is the composed entry',
 					body: 'AppShell on the /app subpath wraps Provider, ThemeProvider, the theme CSS, AdminShell, and TenantNav built from the nav you pass. It is browser-only and lives beside /workspace, so the AdminShell barrel stays free of Provider. A dock snippet receives the data-surface registry, so a host places its assistant there without this package importing smrt-chat. Pass layout and onlayoutchange to own shell layout persistence, or neither to store it in user settings.',
-					href: '/docs/ui/application-shell',
+					href: movedHref('applicationShell'),
 					linkLabel: 'How the shell is composed'
 				},
 				{
@@ -1356,7 +1357,7 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'AdminShell replaced the first-generation shells',
 					body: 'The public workspace surface is the four-edge AdminShell contract. The earlier WorkspaceShell and RoleShell primitives remain only as migration references. No subpath exports them. Compose new work with AdminShell panels and focus tools. The earlier focus-tool dock stays available on the workspace/legacy subpath during application migration.',
-					href: '/docs/ui/application-shell',
+					href: movedHref('applicationShell'),
 					linkLabel: 'How the shell is composed'
 				},
 				{

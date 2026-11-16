@@ -1,3 +1,4 @@
+import { movedHref } from '$lib/data/doc-moves';
 import { describe, expect, it } from 'vitest';
 import { featurePath, featureSections, features } from '$lib/data/features';
 import { taskGuides } from '$lib/data/task-guides';
@@ -70,7 +71,7 @@ describe('contextual navigation', () => {
 		expect(documentationSectionForPathname('/docs/capabilities/agent-assisted-forms').id).toBe(
 			'framework'
 		);
-		expect(documentationSectionForPathname('/docs/ui/application-shell').id).toBe('ui');
+		expect(documentationSectionForPathname(movedHref('applicationShell')).id).toBe('ui');
 		expect(documentationSectionForPathname('/docs/foundations/tenants').id).toBe('framework');
 		expect(documentationSectionForPathname('/docs/tooling/dev-mcp').id).toBe('tooling');
 		expect(documentationSectionForPathname('/docs/guides/semantic-search').id).toBe('guides');
