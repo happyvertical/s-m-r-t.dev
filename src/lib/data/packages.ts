@@ -1150,8 +1150,8 @@ export const packages: SmrtPackage[] = [
 					body: 'The fluent builder composes delay(), priority(), retries(), queue(), and timeout() before enqueue(); bg() is the short form for background work. Delivery is at least once. timeoutBehavior chooses fail, warn, or kill, so idempotency belongs in the job method.'
 				},
 				{
-					title: 'Schedules use local wall-clock time',
-					body: 'ScheduleRunner fires forward once: cron matching uses local time, is not timezone-aware, and does not backfill missed runs. Worker liveness uses a process-global live set, an off-loop ticker, and lease recovery. ForgeDeliveryCollection and ForgeProjectionRuntime provide durable projections and dead-letter replay.'
+					title: 'Schedules run in the time zone of their row',
+					body: 'ScheduleRunner fires forward once: it arms the next future time and does not backfill missed runs. Cron matches the wall clock of the IANA timezone stored on the schedule row, which defaults to UTC, and not the time zone of the host. Worker liveness uses a process-global live set, an off-loop ticker, and lease recovery. ForgeDeliveryCollection and ForgeProjectionRuntime provide durable projections and dead-letter replay.'
 				},
 				{
 					title: 'Say which methods a job may call',
@@ -1964,7 +1964,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Service billing and repository sync retain correction paths',
-					body: 'ServiceTimeEntry, ServiceChargeSnapshot, and ServiceCompensationSnapshot are owned by smrt-timesheets and re-exported here unchanged, on the same tables. SubscriptionServiceCommercialResolver prices client work through smrt-subscriptions; provider compensation is a separate resolver and snapshot. The time-entry Svelte components are re-exported from smrt-timesheets too. Repository, issue, and pull-request sync supports GitHub, GitLab, Bitbucket, and Azure. incorporateFeedback can preview or roll back Living Spec changes, while Project.analyzeHealth evaluates the synchronized project.'
+					body: 'ServiceTimeEntry, ServiceChargeSnapshot, and ServiceCompensationSnapshot are owned by smrt-timesheets and re-exported here unchanged, on the same tables. SubscriptionServiceCommercialResolver prices client work through smrt-subscriptions; provider compensation is a separate resolver and snapshot. The time-entry Svelte components are re-exported from smrt-timesheets too. GitHub is the primary sync provider. The GitLab, Bitbucket, and Azure provider types are declared, but the package marks them as planned. incorporateFeedback can preview or roll back Living Spec changes, while Project.analyzeHealth evaluates the synchronized project.'
 				},
 				{
 					title: 'Issues do not need a repository',
