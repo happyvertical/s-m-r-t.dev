@@ -99,8 +99,8 @@ describe('doc-moves.ts holds addresses only (it is exempt from check-copy)', () 
 		const source = Object.values(raw)[0]
 			.replace(/\/\*[\s\S]*?\*\//g, '')
 			.replace(/^\s*\/\/.*$/gm, '');
-		const literals = [...source.matchAll(/'([^'\\\n]*)'|`([^`\\]*)`/g)].map(
-			(match) => (match[1] ?? match[2]).replace(/\$\{[^}]*\}/g, '')
+		const literals = [...source.matchAll(/'([^'\\\n]*)'|`([^`\\]*)`/g)].map((match) =>
+			(match[1] ?? match[2]).replace(/\$\{[^}]*\}/g, '')
 		);
 		expect(literals.length).toBeGreaterThan(10);
 		const prose = literals.filter((text) => !/^[A-Za-z0-9#/:._-]*$/.test(text));
