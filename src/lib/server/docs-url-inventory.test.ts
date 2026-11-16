@@ -7,7 +7,7 @@ import { routesByPath, stripQueryAndHash } from './route-inventory';
 
 // Both counts may only grow. A smaller number means a served /docs URL was
 // dropped from the frozen list; restore it instead of lowering the number.
-const FROZEN_PAGES = 558;
+const FROZEN_PAGES = 561;
 const FROZEN_REDIRECTS = 15;
 
 describe('frozen /docs url inventory (#399)', () => {
@@ -89,6 +89,10 @@ describe('renamed and moved pages (#399 items 3 and 4)', () => {
 		for (const path of [
 			'/capabilities/collection-reads',
 			'/capabilities/field-policy-layers',
+			// #412: first published under /docs, so no pre-#365 stub.
+			'/capabilities/ai-usage',
+			'/capabilities/inference-tuning',
+			'/capabilities/ingestion',
 			'/foundations/connect-interfaces'
 		]) {
 			expect(routesByPath.has(path), path).toBe(false);

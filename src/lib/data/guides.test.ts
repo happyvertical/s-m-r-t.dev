@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { capabilityGuides, foundationGuides } from '$lib/data/guides';
+import { getPackage } from '$lib/data/packages';
 import { SMRT_VERSION } from '$lib/version';
 
 /**
@@ -75,5 +76,47 @@ describe('retired MCP tier and plane terminology (#197)', () => {
 		expect(guideText).not.toMatch(/\bTier[\s-]?[12]\b/i);
 		expect(guideText).not.toMatch(/development plane/i);
 		expect(guideText).not.toMatch(/runtime plane/i);
+	});
+});
+
+/**
+ * #412: the AI usage, inference tuning and ingestion pages. The ingestion page
+ * must keep saying what upstream says: it is a preview, a reviewer decides, and
+ * automation is disabled. A reword that drops that would oversell the package.
+ */
+describe('AI usage, inference tuning and ingestion capability pages (#412)', () => {
+	const slugs = ['ai-usage', 'inference-tuning', 'ingestion'];
+	const text = (slug: string) =>
+		JSON.stringify(capabilityGuides.find((guide) => guide.slug === slug) ?? '');
+
+	it.each(slugs)('%s is a capability page pinned to the installed release', (slug) => {
+		const guide = capabilityGuides.find((entry) => entry.slug === slug);
+		expect(guide).toBeTruthy();
+		expect(guide?.pinnedVersion).toBe(SMRT_VERSION);
+		expect(guide?.sources?.length).toBeGreaterThan(0);
+	});
+
+	it.each(slugs)('%s links only package pages that exist', (slug) => {
+		// GuidePage links every entry to /docs/reference/packages/<name>, and the
+		// site has no page for smrt-inference.
+		const guide = capabilityGuides.find((entry) => entry.slug === slug);
+		for (const name of guide?.packages ?? []) expect(getPackage(name), name).toBeTruthy();
+	});
+
+	it('says usage recording is on by default and transcripts are not', () => {
+		expect(text('ai-usage')).toContain('On by default');
+		expect(text('ai-usage')).toContain('off by default');
+	});
+
+	it('says tiers change nothing until they are bound', () => {
+		expect(text('inference-tuning')).toContain('change nothing until you bind them');
+	});
+
+	it('describes ingestion as a reviewed preview with automation disabled', () => {
+		const ingestion = text('ingestion');
+		expect(ingestion).toContain('automation disabled');
+		expect(ingestion).toContain('did not meet its quality gates');
+		expect(ingestion).toContain('A reviewer decides');
+		expect(ingestion).not.toMatch(/fully automat|automatically (applies|approves)/i);
 	});
 });
