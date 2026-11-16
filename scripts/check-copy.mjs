@@ -446,7 +446,7 @@ const TIER_A_ERRORS = [
 	},
 	{
 		id: 'wording-product-name-case',
-		pattern: /\bSMRT\b|\bS-M-R-T\b/gu,
+		pattern: /\bSMRT\b|\bSmrt\b|\bS-M-R-T\b/gu,
 		message: 'Write the product name in lowercase: smrt.',
 		// Generated from upstream component descriptions.
 		skipFiles: /\.generated\./u

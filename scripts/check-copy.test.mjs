@@ -21,19 +21,27 @@ const passage = (text, file = STRICT_FILE) => [{ file, line: 1, text }];
 
 describe('copy checker tiers', () => {
 	it('fails a Tier A wording violation on a welcome page', () => {
-		for (const text of [
-			'smrt runs software agents for you.',
-			'smrt builds business software from your models.',
-			'An AI decision engine for your team.',
-			'A domain-specific toolkit.',
-			'SM' + 'RT is the framework.',
-			'Try Build a boilerplate today.',
-			'Install smrt 0.55.16 to get started.',
-			'Put business logic in the model.'
-		]) {
+		const cases = [
+			['smrt runs software agents for you.', 'wording-software-agents'],
+			['smrt builds business software from your models.', 'wording-builds-business-software'],
+			['An AI decision engine for your team.', 'wording-ai-decision-engine'],
+			['A domain-specific toolkit.', 'wording-domain-specific'],
+			['SM' + 'RT is the framework.', 'wording-product-name-case'],
+			['Try Build a boilerplate today.', 'wording-build-a-boilerplate'],
+			['Install smrt 0.55.16 to get started.', 'wording-version-number'],
+			['Put business logic in the model.', 'prohibited-business-logic']
+		];
+		for (const [text, id] of cases) {
 			const findings = auditPassages(passage(text, WELCOME_FILE));
-			expect(findings.filter((item) => item.severity === 'error')).not.toHaveLength(0);
+			expect(findings).toEqual(
+				expect.arrayContaining([expect.objectContaining({ severity: 'error', id })])
+			);
 		}
+	});
+
+	it('lets a pinned reference page cite an smrt version', () => {
+		const findings = auditPassages(passage('Checked against smrt 0.55.16.', STRICT_FILE));
+		expect(findings.map((item) => item.id)).not.toContain('wording-version-number');
 	});
 
 	it('fails a Tier A wording violation on a reference page too', () => {

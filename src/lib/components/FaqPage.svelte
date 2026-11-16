@@ -42,7 +42,7 @@
 			items: [
 				{
 					q: 'Can an agent help someone complete a form?',
-					a: "Yes. Standard controls can publish their identity, meaning, options, constraints and state to a chat, voice, tutorial or test adapter. An agent can point to a field or stage a proposed value. By default it's always refused when it tries to apply, clear or undo one: only a person can confirm that, with a real local click. Secret controls stay unavailable."
+					a: 'Yes. Standard controls can publish their identity, meaning, options, constraints and state to a chat, voice, tutorial or test adapter. An agent can point to a field or stage a proposed value. By default, an agent is always refused when it tries to apply, clear or undo one: only a person can confirm that, with a real local click. Secret controls stay unavailable.'
 				},
 				{
 					q: 'Are users and tenants included?',
