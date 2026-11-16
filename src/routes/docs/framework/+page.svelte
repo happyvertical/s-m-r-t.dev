@@ -12,8 +12,8 @@
 </script>
 
 <SEO
-	title="smrt framework"
-	description="Learn how one smrt application model supplies persistence, collections, identity, permissions, generated interfaces, and stable descriptions for persons and agents."
+	title="Framework"
+	description="How one smrt application model supplies persistence, collections, identity, permissions, generated interfaces and stable descriptions for people and agents."
 	url={siteUrl('/docs/framework')}
 />
 
@@ -23,13 +23,13 @@
 		<h1>One application definition supplies every interface.</h1>
 		<div class="hero-copy">
 			<p>
-				smrt-core supplies the model, collection, registry, persistence, and generation foundation.
-				A model describes the fields, relationships, operations, and interface choices for one kind
-				of record.
+				smrt-core supplies the foundation: models, collections, the registry, persistence and
+				generation. A model describes the fields, relationships, operations and interface choices
+				for one kind of record.
 			</p>
 			<p>
-				The framework uses that shared description for storage, collections, forms, APIs, commands,
-				tools, and permission names. Application modules use the same foundation. They do not add
+				smrt uses that one description for storage, collections, forms, APIs, commands, tools and
+				permission names. Application modules build on the same foundation, so they don't add
 				parallel definitions that can drift.
 			</p>
 		</div>
@@ -43,8 +43,8 @@
 			<p>Model to surfaces</p>
 			<h2 id="model-example-heading">Describe the record once.</h2>
 			<span>
-				This Article model selects four REST actions and one MCP action. It disables CLI access.
-				Field metadata also marks one required value, one read-only value, and one sensitive value.
+				This Article model picks four REST actions and one MCP action, and turns CLI access off. Its
+				field metadata also marks one required value, one read-only value and one sensitive value.
 			</span>
 		</div>
 		<div class="model-grid">
@@ -73,8 +73,8 @@
 			<p>Concept families</p>
 			<h2 id="families-heading">Follow the framework from meaning to operation.</h2>
 			<span>
-				These pages explain concepts and guarantees. The Reference section holds exhaustive
-				contracts and API details.
+				These pages explain the concepts and the guarantees. For the exhaustive contracts and API
+				details, go to the Reference section.
 			</span>
 		</div>
 		<ol>
@@ -100,20 +100,20 @@
 	<section class="boundaries" aria-labelledby="boundaries-heading">
 		<div class="section-heading">
 			<p>Continue by task</p>
-			<h2 id="boundaries-heading">Use the section that owns the next question.</h2>
+			<h2 id="boundaries-heading">Pick the section that answers your next question.</h2>
 		</div>
 		<div>
 			<a href="/docs/reference">
 				<strong>Reference</strong>
-				<span>Look up complete interface, permission, security, and package contracts.</span>
+				<span>Look up the complete interface, permission, security and package contracts.</span>
 			</a>
 			<a href="/docs/guides">
 				<strong>Guides</strong>
-				<span>Follow task procedures for setup, integration, migration, and testing.</span>
+				<span>Follow step-by-step procedures for setup, integration, migration and testing.</span>
 			</a>
 			<a href="/docs/interaction">
 				<strong>Interaction</strong>
-				<span>Understand how persons and application agents communicate and share control.</span>
+				<span>See how people and application agents communicate and share control.</span>
 			</a>
 			<a href="/docs/ui">
 				<strong>UI</strong>
@@ -121,7 +121,7 @@
 			</a>
 			<a href="/features">
 				<strong>Features</strong>
-				<span>Find prebuilt application parts that use the same framework foundation.</span>
+				<span>Find prebuilt application parts that sit on the same framework foundation.</span>
 			</a>
 			<a href="/docs/tooling">
 				<strong>Tooling</strong>

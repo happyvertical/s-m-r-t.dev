@@ -7,22 +7,22 @@
 		{
 			label: 'Getting Started',
 			href: '/docs/getting-started',
-			description: 'Pick a starting point: a cookbook, smrt-start, or an existing project.'
+			description: 'Choose where to start: a cookbook, smrt-start, or a project you already have.'
 		},
 		{
 			label: 'smrt-start',
 			href: '/docs/getting-started/smrt-start',
-			description: 'Scaffold a SvelteKit application with the framework already wired in.'
+			description: 'Start a SvelteKit app with smrt already wired in.'
 		},
 		{
 			label: 'build-a-boilerplate',
 			href: '/build-a-boilerplate',
-			description: 'Assemble a working mock-up in the browser and export it as a cookbook.'
+			description: 'Put together a working mock-up in the browser, then export it as a cookbook.'
 		},
 		{
 			label: 'Task guides',
 			href: '/docs/guides',
-			description: 'Follow one procedure to one complete result.'
+			description: 'Each guide takes you through one job, start to finish.'
 		}
 	];
 
@@ -30,45 +30,46 @@
 		{
 			label: 'llms.txt',
 			href: '/llms.txt',
-			description: 'The site directory for language models, one line per page.'
+			description: 'A directory of the whole site for language models, one line per page.'
 		},
 		{
 			label: 'Agent docs',
 			href: '/llms-full.txt',
 			description:
-				'Curated full-page context. Every page also has a Markdown copy at its path plus .md.'
+				'Curated pages in full, for context. Every page also has a Markdown copy at its address plus .md.'
 		},
 		{
 			label: 'Application MCP',
 			href: '/docs/tooling/app-mcp',
-			description: 'Generated and hosted MCP for permitted runtime data operations.'
+			description: 'Generated and hosted MCP for the data operations your app permits at runtime.'
 		},
 		{
 			label: 'Development MCP',
 			href: '/docs/tooling/dev-mcp',
-			description: 'Read-only workspace and installed-package knowledge for coding agents.'
+			description:
+				'Read-only knowledge of your workspace and installed packages, for coding agents.'
 		},
 		{
 			label: 'Evidence',
 			href: '/docs/reference/evidence',
-			description: 'Each site claim beside the released source it was verified in.'
+			description: 'Each claim on this site, next to the released source it was checked against.'
 		}
 	];
 </script>
 
 <SEO
-	title="smrt docs"
-	description="Documentation for developers and agents: getting started, the machine-readable entry points, and every technical section of the smrt framework."
+	title="Docs"
+	description="Docs for developers and agents: where to get started, the machine-readable entry points, and every technical section of the smrt framework."
 	url={siteUrl('/docs')}
 />
 
 <article class="docs-landing">
 	<header>
 		<p class="kicker">Docs</p>
-		<h1>Documentation for developers and agents</h1>
+		<h1>Docs for you, and for your agent.</h1>
 		<span class="lede"
-			>Start building on the left. Point an agent at the entry points on the right. Every technical
-			section follows below.</span
+			>Here to build? Start on the left. Working with an agent? Point it at the entry points on the
+			right. Every technical section is further down.</span
 		>
 	</header>
 

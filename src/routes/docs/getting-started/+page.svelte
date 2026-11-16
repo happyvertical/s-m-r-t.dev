@@ -11,17 +11,17 @@
 	const paths = [
 		{
 			label: 'build-a-boilerplate',
-			body: 'Pick recipes in the browser and export a cookbook file, or a prompt for your coding agent. Nothing to install.',
+			body: 'Pick your recipes in the browser, then export a cookbook file or a prompt for your coding agent. Nothing to install.',
 			href: '/build-a-boilerplate'
 		},
 		{
 			label: 'Start from a cookbook',
-			body: 'smrt cookbook apply turns a cookbook file into a project on the smrt-start template, pinned to the current release.',
+			body: 'Already have a cookbook file? smrt cookbook apply turns it into a project on the smrt-start template, pinned to the current release.',
 			href: '#cookbook'
 		},
 		{
 			label: 'Clone smrt-start',
-			body: 'The template on its own: one owner, local SQLite, a Note model, an assistant and read-only MCP.',
+			body: 'Just the template, on its own. You get one owner, local SQLite, a Note model, an assistant and read-only MCP.',
 			href: '/docs/getting-started/smrt-start'
 		}
 	];
@@ -50,17 +50,17 @@ pnpm app:open               # in a second terminal: the one-time owner setup pag
 
 <SEO
 	title="Getting Started"
-	description="Three ways to a smrt project on the smrt-start template: build-a-boilerplate (which also exports a prompt for your coding agent), smrt cookbook apply, or a clone of smrt-start."
+	description="Three ways to start a smrt project on the smrt-start template: plan it in build-a-boilerplate (which can also export a prompt for your coding agent), run smrt cookbook apply, or clone smrt-start."
 	url={siteUrl('/docs/getting-started')}
 />
 
 <article class="starter-index">
 	<header>
 		<p>Getting Started</p>
-		<h1>Three ways to a running application.</h1>
+		<h1>Three ways to a running app.</h1>
 		<span
-			>Each one ends with a SvelteKit project on the smrt-start template, with the smrt packages
-			installed. Pick by how you want to begin.</span
+			>Whichever you choose, you end up with a SvelteKit project on the smrt-start template, with
+			the smrt packages installed. Pick the one that suits how you like to start.</span
 		>
 	</header>
 
@@ -77,41 +77,44 @@ pnpm app:open               # in a second terminal: the one-time owner setup pag
 	<section id="cookbook">
 		<h2>Start from a cookbook</h2>
 		<p>
-			A cookbook is a JSON file naming the recipes an application is made of. build-a-boilerplate
-			exports one. The smrt CLI ships four of its own: bakery, mechanic, welder and yoga-studio.
+			A cookbook is a JSON file that names the recipes your app is made of. build-a-boilerplate
+			exports one for you, and the smrt CLI comes with four of its own: bakery, mechanic, welder and
+			yoga-studio.
 		</p>
 		<p>
-			<code>smrt cookbook apply</code> copies the smrt-start template, adds the packages the recipes
-			need, pins every smrt package to the CLI's own release ({SMRT_VERSION}), and writes the
-			cookbook to <code>smrt.cookbook.json</code>. Nothing else changes, and no sample data is
-			created. You need Node 26 or newer, git and pnpm 11; no account or token.
+			<code>smrt cookbook apply</code> copies the smrt-start template, adds the packages your
+			recipes need, pins every smrt package to the CLI's own release ({SMRT_VERSION}), and writes
+			the cookbook to <code>smrt.cookbook.json</code>. That's the whole job: nothing else changes,
+			and it doesn't create any sample data. You'll need Node 26 or newer, git and pnpm 11. You
+			don't need an account or a token.
 		</p>
 		<CodeBlock code={applyFile} language="bash" filename="terminal" />
 		<p>
-			A library cookbook has no name of its own, so give the directory. The file can be a path or a
-			URL; this one is the bakery at the release tag.
+			A library cookbook doesn't have a name of its own, so tell it which directory to use. The file
+			can be a path or a URL; this one is the bakery at the release tag.
 		</p>
 		<CodeBlock code={applyLibrary} language="bash" filename="terminal" />
 		<p>
-			<code>smrt kitchen</code> is the same path without a file. It serves build-a-boilerplate on localhost,
-			opens the browser and waits. Shape the application there, then choose Send to kitchen: kitchen validates
-			the cookbook, applies it into the directory and installs the packages. The first run downloads the
-			planner, about 70 MB, into a local cache.
+			No file yet? <code>smrt kitchen</code> is the same path without one. It serves build-a-boilerplate
+			on localhost, opens your browser and waits for you. Shape your app there, then choose Send to kitchen:
+			kitchen validates the cookbook, applies it into the directory and installs the packages. The first
+			run downloads the planner, about 70 MB, into a local cache.
 		</p>
 		<CodeBlock code={kitchen} language="bash" filename="terminal" />
 		<ul>
 			<li>
-				<code>--no-open</code> prints the kitchen address instead of opening the browser;
-				<code>--port</code> picks the port.
+				<code>--no-open</code> prints the kitchen address instead of opening your browser;
+				<code>--port</code> lets you pick the port.
 			</li>
-			<li><code>--dry-run</code> prints what apply would do without writing anything.</li>
+			<li><code>--dry-run</code> prints what apply would do, without writing anything.</li>
 			<li>
-				<code>--into my-app</code> applies an edited cookbook to an existing project. Edit the
-				cookbook and re-apply; do not hand-edit <code>smrt.cookbook.json</code>.
+				<code>--into my-app</code> applies an edited cookbook to a project you already have. When
+				you want a change, edit the cookbook and re-apply; don't hand-edit
+				<code>smrt.cookbook.json</code>.
 			</li>
 			<li>
 				<code>pnpm app:setup</code> builds, creates the local database and issues a one-time owner
-				invitation; <code>pnpm app:open</code> opens the page that claims it.
+				invitation; <code>pnpm app:open</code> opens the page where you claim it.
 			</li>
 		</ul>
 	</section>
@@ -119,8 +122,8 @@ pnpm app:open               # in a second terminal: the one-time owner setup pag
 	<aside>
 		<h2>Coding agents</h2>
 		<p>
-			Each installed <code>@happyvertical/smrt-*</code> package ships an <code>AGENTS.md</code>
-			written for its exact version, under <code>node_modules</code>.
+			Working with a coding agent? Each installed <code>@happyvertical/smrt-*</code> package ships
+			an <code>AGENTS.md</code> written for its exact version, under <code>node_modules</code>.
 			<a href="/docs/tooling">Developer tooling</a>
 			covers the rest.
 		</p>

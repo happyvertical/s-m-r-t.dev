@@ -5,18 +5,18 @@
 </script>
 
 <SEO
-	title="smrt application foundations"
-	description="Learn how smrt objects, tenants, users, profiles, memberships, permissions, pages, data, and generated interfaces fit together."
+	title="Application foundations"
+	description="How smrt objects, tenants, users, profiles, memberships, permissions, pages, data and generated interfaces fit together."
 	url={siteUrl('/docs/foundations')}
 />
 
 <article class="index-page">
 	<header>
 		<p>Application foundations</p>
-		<h1>Understand how the common parts fit together.</h1>
+		<h1>How the common parts fit together.</h1>
 		<span
-			>These guides explain the connected parts already present in a smrt app. The narrative moves
-			from your product model through ownership, identity, access, pages, and external interfaces.</span
+			>These guides explain the connected parts that are already in a smrt app. They run in order,
+			from your product model through ownership, identity, access, pages and external interfaces.</span
 		>
 	</header>
 

@@ -21,7 +21,7 @@
 			items: [
 				{
 					q: 'What is smrt?',
-					a: 'A TypeScript application framework built around useful domain objects. It supplies persistence, manifests, generated REST/MCP/CLI interfaces, users, tenants, agents, web data, native-mobile foundations, and a broad set of domain packages.'
+					a: 'A TypeScript framework for agentic software, built around useful domain objects. It gives you persistence, manifests, generated REST, MCP and CLI interfaces, users, tenants, agents, web data, native-mobile foundations and a broad set of domain packages.'
 				},
 				{
 					q: 'What is a SAADL?',
@@ -29,11 +29,11 @@
 				},
 				{
 					q: 'Do I need every package?',
-					a: 'No. Start with smrt-core, then add packages by capability or domain. They share conventions, but the stack is intentionally modular.'
+					a: 'No. Start with smrt-core, then add packages as you need a capability or a domain. They share conventions, but the stack is modular on purpose.'
 				},
 				{
 					q: 'Which database should I use?',
-					a: 'SQLite is excellent for development and local-first tools, Postgres is the normal production choice—especially when using row-level security—and DuckDB fits analytical workloads.'
+					a: 'SQLite is a good fit for development and local-first tools. Postgres is the usual choice in production, especially if you use row-level security. DuckDB suits analytical workloads.'
 				}
 			]
 		},
@@ -42,19 +42,19 @@
 			items: [
 				{
 					q: 'Can an agent help someone complete a form?',
-					a: 'Yes. Standard controls can publish their identity, meaning, options, constraints, and state to a chat, voice, tutorial, or test adapter. An agent may point to a field or stage a proposed value, but applying, clearing, or undoing is always refused for an agent by default — only a human, through a real local click, can confirm one — and secret controls remain unavailable.'
+					a: 'Yes. Standard controls can publish their identity, meaning, options, constraints and state to a chat, voice, tutorial or test adapter. An agent can point to a field or stage a proposed value. By default, an agent is always refused when it tries to apply, clear or undo one: only a person can confirm that, with a real local click. Secret controls stay unavailable.'
 				},
 				{
 					q: 'Are users and tenants included?',
-					a: 'Yes. smrt-users includes sessions, memberships, hierarchical tenants, roles, permissions, access requests, and SvelteKit integration. smrt-tenancy enforces data scope on decorated models.'
+					a: 'Yes. smrt-users covers sessions, memberships, hierarchical tenants, roles, permissions, access requests and SvelteKit integration. smrt-tenancy enforces data scope on the models you decorate.'
 				},
 				{
 					q: 'How do tenant relationships work?',
-					a: 'Parent/child tenants describe organization. Memberships connect a user to a tenant with one role. Profile relationships describe domain links between people, organizations, or agents. They are separate on purpose.'
+					a: 'Parent and child tenants describe how an organization is arranged. A membership connects a user to a tenant with one role. Profile relationships describe domain links between people, organizations or agents. The three are kept separate on purpose.'
 				},
 				{
 					q: 'Can permissions differ between REST, MCP, WebMCP, and CLI?',
-					a: 'Yes. Each model declares which operations each interface exposes. Manifest-derived permission slugs and runtime principal checks keep interface policy connected to authorization.'
+					a: 'Yes. Each model declares which operations each interface exposes. Permission slugs derived from the manifest, and runtime checks on the principal, keep interface policy tied to authorization.'
 				}
 			]
 		},
@@ -63,19 +63,19 @@
 			items: [
 				{
 					q: 'What does it mean that agents learn?',
-					a: 'Learning is opt-in. Agents recall confident, scoped memories before work and reinforce or decay them from outcomes afterward. Personas can propose instruction changes, but activating those changes requires a separate permissioned human approval.'
+					a: 'Learning is opt-in. Before work, agents recall confident, scoped memories. Afterward, they reinforce or decay those memories based on the outcome. Personas can propose changes to their instructions, but turning those changes on takes a separate, permissioned human approval.'
 				},
 				{
 					q: 'Is smrt-mobile a JavaScript wrapper?',
-					a: 'No. Shared behavior is Kotlin Multiplatform; Android uses Compose and native adapters, while iOS uses SwiftUI and Apple frameworks. The shared layer covers offline queues, packs, auth, networking, evidence, and presenter state.'
+					a: 'No. The shared behavior is Kotlin Multiplatform. Android uses Compose and native adapters, and iOS uses SwiftUI and Apple frameworks. The shared layer covers offline queues, packs, auth, networking, evidence and presenter state.'
 				},
 				{
 					q: 'What is hydration in smrt-web?',
-					a: 'SvelteKit server results seed generated browser collections so the client does not repeat the initial fetch. Live updates, persisted cache versioning, and the offline outbox continue from that initial state.'
+					a: "SvelteKit server results seed the generated browser collections, so the client doesn't repeat the first fetch. Live updates, persisted cache versioning and the offline outbox carry on from that starting state."
 				},
 				{
 					q: 'What does WebMCP expose?',
-					a: 'smrt generates browser tool descriptors for exposed collection actions and registers them with document.modelContext. CRUD tools execute through the normal REST client as the signed-in page user, preserving authentication, tenant, permission, and field policy.'
+					a: 'smrt generates browser tool descriptors for the collection actions you expose and registers them with document.modelContext. CRUD tools run through the normal REST client as the signed-in page user, so authentication, tenant, permission and field policy all still apply.'
 				}
 			]
 		},
@@ -84,7 +84,7 @@
 			items: [
 				{
 					q: 'Why build one application for both people and agents?',
-					a: 'Building two systems — a person-facing application and a separate, reduced set of endpoints or bots for software — means keeping two descriptions of the same operations in sync by hand, and the second one tends to drift and shrink over time. A smrt application describes each operation once; people reach it through pages, HTTP, or the command line, and agents reach the identical operation as a callable tool, so there is no second definition to fall behind.'
+					a: "Build two systems, an app for people and a separate, smaller set of endpoints or bots for software, and you keep two descriptions of the same operations in sync by hand. The second one tends to drift and shrink over time. A smrt application describes each operation once. People reach it through pages, HTTP or the command line, and agents reach the identical operation as a callable tool, so there's no second definition to fall behind."
 				},
 				{
 					q: 'What is SAADL, and how is it pronounced?',
@@ -93,22 +93,18 @@
 				},
 				{
 					q: 'Can an agent do anything a signed-in person cannot?',
-					a: 'No. An agent can do only what three lists all allow: what the signed-in person may do, what its kind of agent may ever do, and what its assigned role permits. The check runs from the moment an agent reads a description to the stored record itself — a description does not by itself grant a session, a tenant, or a permission.',
+					a: "No. An agent can do only what three lists all allow: what the signed-in person may do, what its kind of agent may ever do, and what its assigned role permits. The check runs from the moment an agent reads a description all the way to the stored record itself. A description doesn't grant a session, a tenant or a permission by itself.",
 					link: { label: 'Security defaults', href: '/docs/reference/security' }
 				},
 				{
 					q: "Does asking in chat skip the application's rules?",
-					a: 'No. However a request arrives — a click, a typed command, or a natural-language chat message — it enters through the same declared control or operation, and the same tenant, permission, and field-policy checks apply.',
+					a: 'No. However a request arrives, whether a click, a typed command or a chat message in plain language, it comes in through the same declared control or operation, and the same tenant, permission and field-policy checks apply.',
 					link: { label: 'Human-agent interaction', href: '/docs/interaction' }
 				},
 				{
 					q: 'Is this site itself built with smrt?',
-					a: `Yes. ${SITE_HOST} runs on the same released @happyvertical/smrt-* packages it documents — the component playground, the agent-aware form demo, and the data table on this site are the actual packages, not mockups.`,
+					a: `Yes. ${SITE_HOST} runs on the same released @happyvertical/smrt-* packages it documents. The component playground, the agent-aware form demo and the data table on this site are the real packages, not mockups.`,
 					link: { label: 'Component playground', href: '/playground' }
-				},
-				{
-					q: 'How is the name written?',
-					a: `Lowercase, four letters: smrt. That holds at the start of a sentence too. The hyphens you see in ${SITE_HOST} belong to the site's address, and the packages are published as @happyvertical/smrt-*.`
 				}
 			]
 		}
@@ -116,8 +112,8 @@
 </script>
 
 <SEO
-	title="smrt FAQ"
-	description="Clear answers about smrt, SAADL applications, users, tenants, generated interfaces, agent-assisted forms, learning agents, mobile, WebMCP, and live data."
+	title="FAQ"
+	description="Short answers about smrt, SAADL applications, users, tenants, generated interfaces, agent-assisted forms, learning agents, mobile, WebMCP and live data."
 	url={siteUrl('/docs/reference/faq')}
 />
 
@@ -126,9 +122,10 @@
 <article class="faq-page">
 	<header>
 		<p>FAQ</p>
-		<h1>Get oriented</h1>
+		<h1>Get your bearings.</h1>
 		<span
-			>Short answers to common questions about the application model and newer framework features.</span
+			>Short answers to the questions that come up most, about how a smrt application is put
+			together and what the newer features do.</span
 		>
 	</header>
 	<div class="faq-groups">
@@ -153,7 +150,7 @@
 		{/each}
 	</div>
 	<footer>
-		<p>Still looking for a concept?</p>
+		<p>Didn't find what you were after?</p>
 		<a href="/docs/reference/packages">Search all packages <span>→</span></a>
 	</footer>
 </article>

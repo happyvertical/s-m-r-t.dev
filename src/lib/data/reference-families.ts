@@ -59,7 +59,7 @@ export const referenceFamilies: ReferenceFamily[] = [
 		id: 'interfaces',
 		label: 'Generated interfaces',
 		href: '/docs/reference/interfaces',
-		description: 'See how one model becomes human and agent interfaces.',
+		description: 'See how one model becomes interfaces for people and for agents.',
 		keywords: ['generated', 'interfaces', 'REST', 'MCP', 'WebMCP', 'CLI']
 	},
 	{
@@ -80,7 +80,8 @@ export const referenceFamilies: ReferenceFamily[] = [
 		id: 'terminology',
 		label: 'Terminology and SAADL',
 		href: '/docs/reference/terminology',
-		description: 'Use the canonical terms after the framework concept introduction.',
+		description:
+			'Look up the canonical terms once you have read the framework concept introduction.',
 		keywords: ['terminology', 'SAADL', 'Software as Agentic Domain Logic']
 	},
 	{

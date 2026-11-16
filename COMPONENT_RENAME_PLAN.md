@@ -2,16 +2,16 @@
 
 ## Current Issues
 
-1. Inconsistent naming: some components have "SMRT" prefix, others don't
+1. Inconsistent naming: some components have the `SMRT` prefix, others don't
 2. Form components have both `SMRTTextInput` and `Input` variants
-3. "SMRT" branding in component names is redundant (they're from smrt-svelte)
+3. The `SMRT` prefix in component names is redundant (they're from smrt-svelte)
 4. No clear pattern for specialized vs. basic components
 
 ## Naming Conventions
 
 ### General Principles
 
-1. **Remove "SMRT" prefix** - Component library name implies origin
+1. **Remove the `SMRT` prefix** - Component library name implies origin
 2. **Add "Input" suffix** for form inputs - Makes it clear they're form fields
 3. **Keep specialized names descriptive** - e.g., `ConfirmDialog`, `DateDisplay`
 4. **Category folders organize components** - /forms, /display, /feedback, etc.
@@ -197,7 +197,7 @@ The smrt-svelte component library has been updated to v2.0 with cleaner, more co
 
 ## What Changed
 
-### Forms (remove SMRT, add Input suffix)
+### Forms (remove `SMRT`, add Input suffix)
 
 - `SMRTTextInput` → `TextInput`
 - `SMRTSelect` → `SelectInput`

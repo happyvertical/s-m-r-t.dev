@@ -12,7 +12,7 @@
 
 <SEO
 	title="Tools"
-	description="Tools that plan and start a smrt application: build-a-boilerplate in the browser, and the command line and agent tooling in the docs."
+	description="Tools for planning and starting a smrt app: build-a-boilerplate in the browser, plus the command line and agent tooling in the docs."
 	url={siteUrl('/tools')}
 />
 
@@ -53,8 +53,8 @@
 		<div class="head">
 			<h2 id="tooling-docs">For the terminal and for your agent.</h2>
 			<p>
-				The command line, the scanner and the MCP servers are documented under
-				<a href="/docs/tooling">Tooling</a>.
+				You'll find the command line, the scanner and the MCP servers under
+				<a href="/docs/tooling">Tooling</a> in the docs.
 			</p>
 		</div>
 		<ul class="list">

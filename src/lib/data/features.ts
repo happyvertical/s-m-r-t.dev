@@ -297,7 +297,7 @@ export const features: Feature[] = [
 		packages: ['smrt-manufacturing'],
 		recipes: ['manufacturing.assemblies'],
 		example: still('assemblies'),
-		inTheBox: ['bills of materials', 'routing', 'operations', 'labour estimates']
+		inTheBox: ['bills of materials', 'routing', 'operations', 'labor estimates']
 	}),
 	feature({
 		id: 'production',
@@ -348,7 +348,7 @@ export const features: Feature[] = [
 		id: 'qualifications',
 		section: 'team',
 		word: 'Qualifications',
-		hint: 'Licences and certificates people hold, and when each expires.',
+		hint: 'Licenses and certificates people hold, and when each expires.',
 		packages: ['smrt-human-resources'],
 		recipes: ['human-resources.qualifications'],
 		example: still('qualifications'),

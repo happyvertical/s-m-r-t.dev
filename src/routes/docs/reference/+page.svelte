@@ -78,7 +78,7 @@
 </script>
 
 <SEO
-	title="smrt reference"
+	title="Reference"
 	description="Search smrt API contracts, packages, UI components, configuration, decorators, collections, generated interfaces, security, field policies, terminology, versions, and FAQ content."
 	url={siteUrl('/docs/reference')}
 />
@@ -88,8 +88,8 @@
 		<p>Reference</p>
 		<h1>Look up the exact contract.</h1>
 		<span>
-			Search packages, UI components, props, generated surfaces, and framework terms. Use a section
-			story or a guide when you need an explanation or a procedure.
+			Search packages, UI components, props, generated surfaces and framework terms. If you want an
+			explanation or a procedure, a section story or a guide is the better place to start.
 		</span>
 		<div class="reference-search" role="search">
 			<label for="reference-query">Search Reference</label>
@@ -124,7 +124,7 @@
 				</ul>
 			{:else}
 				<p class="empty-search">
-					No Reference entry matches “{query}”. Try a package, export, prop, or contract name.
+					No Reference entry matches “{query}”. Try a package, export, prop or contract name.
 				</p>
 			{/if}
 		</section>

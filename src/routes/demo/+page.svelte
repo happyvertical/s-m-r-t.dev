@@ -26,7 +26,7 @@
 </svelte:head>
 
 <SEO
-	title="The smrt demo"
+	title="Demo"
 	description="A map of what ships with smrt. FEATURES groups it by what a person is trying to do, into nine groups (Sell, Buy, Make, Team, Publish, Talk, Grow, Plan and Assistant), and each feature has a showcase with a live example where the packages ship one. Pick features on the map and send them to build-a-boilerplate, which assembles a working mock-up for a kind of business in the browser and exports the plan as a file."
 	url={siteUrl('/demo')}
 />
@@ -153,6 +153,11 @@
 	.door.hot {
 		background: var(--front-red);
 		border-color: var(--front-red);
+	}
+	/* White on the plain sky blue is about 4.0:1; mixing in the ink token lifts it past 4.5:1. */
+	.front.sky .door.hot {
+		background: color-mix(in srgb, var(--front-red) 75%, var(--front-ink));
+		border-color: color-mix(in srgb, var(--front-red) 75%, var(--front-ink));
 	}
 	.door.hot b,
 	.door.hot span {

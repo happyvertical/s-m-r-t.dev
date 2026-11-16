@@ -18,8 +18,8 @@
 		<p class="hero-kicker">Component system showcase</p>
 		<h1>Interfaces for people. Contracts for agents.</h1>
 		<p class="hero-lede">
-			smrt components stay ordinary, accessible interface elements. Applications can also expose
-			their meaning and operations to a governed agent caller.
+			smrt components are ordinary, accessible interface elements, and they stay that way. Your app
+			can also expose their meaning and operations to a governed agent caller.
 		</p>
 
 		<div class="thesis-grid">
@@ -54,13 +54,13 @@
 		</div>
 		<p>
 			An interaction story names what a person sees, what an agent can discover and operate, where
-			confirmation occurs, and how the component refuses unsafe work. A batteries-included story
-			names what a consumer gets from the installed package, how the capability is turned on, and
-			the boundary it enforces.
+			confirmation happens, and how the component refuses unsafe work. A batteries-included story
+			names what you get from the installed package, how you turn the capability on, and the
+			boundary it enforces.
 		</p>
 		<p>
-			This page curates the system. Package pages remain the API reference, and the Playground holds
-			standalone interactive previews.
+			This page is the curated tour. Package pages are still the API reference, and the Playground
+			holds the standalone interactive previews.
 		</p>
 	</section>
 
@@ -195,8 +195,8 @@
 		<p class="section-kicker">Implementation rule</p>
 		<h2 id="closing-title">Keep intelligence out of the primitive</h2>
 		<p>
-			A component exposes meaning, state, and operations. The application supplies the model,
-			adapter, permissions, confirmation rules, and durable side effects.
+			A component exposes meaning, state and operations. Your application supplies the model,
+			adapter, permissions, confirmation rules and durable side effects.
 		</p>
 		<a href="/docs/interaction"
 			>Continue to the interaction contract <span aria-hidden="true">→</span></a

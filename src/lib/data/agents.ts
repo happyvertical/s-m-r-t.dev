@@ -360,7 +360,7 @@ export class Report extends SmrtObject {
 			{
 				title: 'They meet only at the boundary',
 				intro:
-					'Both planes end in the same place: one authenticated application request, resolved as one identity, in one tenant, against one permission set. Nothing else crosses between them. This is the mechanism behind a sentence the front page states without proof: an agent never has more power than the person it works for.',
+					'Both planes end in the same place: one authenticated application request, resolved as one identity, in one tenant, against one permission set. Nothing else crosses between them. This is the mechanism behind a simple rule: an agent never has more power than the person it works for.',
 				links: [
 					{ label: 'Permissions and security', href: '/docs/framework#permissions-and-security' },
 					{ label: 'Authorization reference', href: '/docs/reference/authorization' },

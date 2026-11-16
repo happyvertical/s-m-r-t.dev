@@ -102,7 +102,7 @@
 		</div>
 	</section>
 
-	<nav class="pn" aria-label="Neighbouring features">
+	<nav class="pn" aria-label="Neighboring features">
 		{#if previous}
 			<a href={featurePath(previous)} rel="prev"><span>Previous</span><b>{previous.word}</b></a>
 		{:else}

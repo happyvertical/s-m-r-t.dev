@@ -26,6 +26,33 @@ const COPY_IGNORES = [
 	'src/routes/**/+server.ts'
 ];
 
+/**
+ * The strict boundary, in ONE place. Tier B (the ASD-STE100-style rules) runs
+ * only on these paths: the generated reference pages for packages, components
+ * and the API. Every other scanned file gets the relaxed voice and Tier A only.
+ * An entry ending in `/**` matches everything under that directory; any other
+ * entry matches one file. Moving the boundary is an edit to this list.
+ */
+export const STRICT_COPY_GLOBS = [
+	'src/routes/docs/reference/api/**',
+	'src/routes/docs/reference/components/**',
+	'src/routes/docs/reference/packages/**',
+	'src/lib/data/reference.ts',
+	'src/lib/data/packages.ts',
+	'src/lib/data/ui-components.generated.ts',
+	'src/lib/data/ui-stories.ts',
+	'src/lib/components/PackageIndex.svelte',
+	'src/lib/components/PackageWorkbench.svelte',
+	'src/lib/components/UiComponentIndex.svelte',
+	'src/lib/components/UiComponentReference.svelte'
+];
+
+export function isStrictCopyFile(file) {
+	return STRICT_COPY_GLOBS.some((entry) =>
+		entry.endsWith('/**') ? file.startsWith(entry.slice(0, -2)) : file === entry
+	);
+}
+
 const PROSE_PROPERTIES = new Set([
 	'actsAs',
 	'ariaLabel',
@@ -388,15 +415,61 @@ const IMPERATIVE_VERBS = new Set([
 	'write'
 ]);
 
-const PROHIBITED_TERMS = [
+// Tier A: fixed wording and mechanical rules. They run on every scanned file.
+// `skipFiles` exempts files whose copy is generated from upstream packages.
+const TIER_A_ERRORS = [
 	{
 		id: 'prohibited-business-logic',
 		pattern: /\bbusiness(?:[\s-]+)logic\b/giu,
 		message: 'Use the approved project term "application logic".'
+	},
+	{
+		id: 'wording-software-agents',
+		pattern: /\bsoftware agents?\b/giu,
+		message: 'Say "agents", never "software agents".'
+	},
+	{
+		id: 'wording-builds-business-software',
+		pattern: /\bbuilds?\s+business\s+software\b/giu,
+		message: 'Say that smrt builds software, or agentic software, not "business software".'
+	},
+	{
+		id: 'wording-ai-decision-engine',
+		pattern: /\bAI decision engines?\b/giu,
+		message: 'Do not call smrt an "AI decision engine".'
+	},
+	{
+		id: 'wording-domain-specific',
+		pattern: /\bdomain-specific\b/giu,
+		message: 'Do not use "domain-specific".',
+		skipFiles: /\.generated\./u
+	},
+	{
+		id: 'wording-product-name-case',
+		pattern: /\bSMRT\b|\bSmrt\b|\bS-M-R-T\b/gu,
+		message: 'Write the product name in lowercase: smrt.',
+		// Generated from upstream component descriptions.
+		skipFiles: /\.generated\./u
+	},
+	{
+		id: 'wording-build-a-boilerplate',
+		pattern: /\bBuild[ -]a[ -]boilerplate\b|\bbuild a boilerplate\b/gu,
+		message: 'Write the planner feature as "build-a-boilerplate": lowercase, with hyphens.'
+	},
+	{
+		id: 'wording-version-number',
+		// An smrt release number. Versions of other tools (Node, pnpm, a schema)
+		// are facts about those tools and stay allowed.
+		pattern: /\bsmrt(?:-[a-z]+)*(?:@|\s+(?:v|version\s+|release\s+)?)v?\d+\.\d+\.\d+\b/giu,
+		message: 'Do not write an smrt version number in page copy. Render SMRT_VERSION instead.',
+		// Pinned reference pages cite audited versions on purpose.
+		skipStrict: true
 	}
 ];
 
-const ADVISORY_PHRASES = [
+// Tier B: ASD-STE100-style rules. They run only on STRICT_COPY_GLOBS files.
+// Tier B advisory phrases.
+const TIER_B_PHRASES = [
 	{
 		id: 'phrase-in-order-to',
 		pattern: /\bin order to\b/giu,
@@ -431,7 +504,11 @@ const ADVISORY_PHRASES = [
 		id: 'ambiguous-pronoun',
 		pattern: /\b(?:this|it) (?:allows?|enables?|makes?|means?|provides?|supports?)\b/giu,
 		message: 'Replace the pronoun with its specific noun when the reference is not explicit.'
-	},
+	}
+];
+
+// Tier A advisory: American English spelling.
+const TIER_A_SPELLING = [
 	{
 		id: 'spelling-catalog',
 		pattern: /\bcatalogues?\b/giu,
@@ -1727,23 +1804,30 @@ function finding({ severity, id, message, passage, text = passage.text }) {
 	};
 }
 
+function applyRules(rules, severity, passage, findings, strict) {
+	for (const rule of rules) {
+		if (rule.skipFiles?.test(passage.file)) continue;
+		if (rule.skipStrict && strict) continue;
+		if (rule.pattern.test(passage.text)) {
+			findings.push(finding({ severity, id: rule.id, message: rule.message, passage }));
+		}
+		rule.pattern.lastIndex = 0;
+	}
+}
+
 export function auditPassages(passages) {
 	const findings = [];
 
 	for (const passage of passages) {
-		for (const rule of PROHIBITED_TERMS) {
-			if (rule.pattern.test(passage.text)) {
-				findings.push(finding({ severity: 'error', ...rule, passage }));
-			}
-			rule.pattern.lastIndex = 0;
-		}
+		const strict = isStrictCopyFile(passage.file);
 
-		for (const rule of ADVISORY_PHRASES) {
-			if (rule.pattern.test(passage.text)) {
-				findings.push(finding({ severity: 'warning', ...rule, passage }));
-			}
-			rule.pattern.lastIndex = 0;
-		}
+		// Tier A: fixed wording and mechanical rules, every scanned file.
+		applyRules(TIER_A_ERRORS, 'error', passage, findings, strict);
+		applyRules(TIER_A_SPELLING, 'warning', passage, findings, strict);
+
+		// Tier B: ASD-STE100-style rules, strict reference paths only.
+		if (!strict) continue;
+		applyRules(TIER_B_PHRASES, 'warning', passage, findings, strict);
 
 		const sentences = splitSentences(passage.text);
 		if (sentences.length > 6) {
@@ -1866,7 +1950,7 @@ function printHumanReport(result) {
 		`Copy check scanned ${result.files.length} files and ${result.passageCount} prose passages: ${result.errors.length} errors, ${result.warnings.length} warnings.`
 	);
 	console.log(
-		'Automated success does not prove full ASD-STE100 conformity. Record a manual review on each documentation pull request.'
+		'Tier A (fixed wording) runs on every page; Tier B (ASD-STE100-style) runs only on STRICT_COPY_GLOBS. See docs/writing-standard.md. Record the reviewed pages on each copy pull request.'
 	);
 }
 
