@@ -2,7 +2,7 @@ import type { Guide } from '$lib/data/guides';
 import { SMRT_VERSION } from '$lib/version';
 
 /**
- * Released s-m-r-t version the pinned reference pages were verified against. It
+ * Released smrt version the pinned reference pages were verified against. It
  * is a deliberate audit anchor rather than the built version: when it moves,
  * re-read the canonical sources listed on each page and re-run the checks
  * behind them.
@@ -42,7 +42,7 @@ export const referenceGuides: Guide[] = [
 					'A chatbot beside an application is not automatically SAADL. Neither is an agent-only tool or a generated UI. The defining property is parity: human and agent operations resolve through the same domain logic and security boundaries.'
 			},
 			{
-				title: 'Why s-m-r-t uses this shape',
+				title: 'Why smrt uses this shape',
 				intro:
 					'One model reduces duplicated code and review. It keeps the codebase map current and makes infrastructure replaceable. Security improvements can then flow from shared framework packages into each application.'
 			}
@@ -393,10 +393,10 @@ export const referenceGuides: Guide[] = [
 		slug: 'have-sdk',
 		navTitle: 'HAVE SDK',
 		eyebrow: 'Underlying SDK',
-		title: 'The adapter layer beneath s-m-r-t',
+		title: 'The adapter layer beneath smrt',
 		lede: 'The HAppy VErtical SDK provides stable getX() interfaces for infrastructure such as AI, databases, caches, secrets, and files.',
 		plainEnglish:
-			's-m-r-t uses small adapter packages so changing a database, model provider, cache, or file store is primarily a configuration decision instead of an application rewrite.',
+			'smrt uses small adapter packages so changing a database, model provider, cache, or file store is primarily a configuration decision instead of an application rewrite.',
 		packages: [],
 		sections: [
 			{
@@ -412,9 +412,9 @@ export const referenceGuides: Guide[] = [
 					'Vendor SDKs remain optional peer dependencies where possible. The application depends on the adapter contract and adds the concrete database, model, cache, secret, or file provider it actually deploys.'
 			},
 			{
-				title: 'The SDK also works without s-m-r-t',
+				title: 'The SDK also works without smrt',
 				intro:
-					'The adapter packages are independently useful. s-m-r-t composes them into its model, agent, persistence, and web runtimes, but ordinary TypeScript applications can call them directly.'
+					'The adapter packages are independently useful. smrt composes them into its model, agent, persistence, and web runtimes, but ordinary TypeScript applications can call them directly.'
 			}
 		]
 	},
@@ -1499,7 +1499,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: 'Version prerequisite',
 				intro:
-					'@happyvertical/smrt-fields is released in lockstep with the other packages and pins smrt-core, smrt-tenancy, smrt-ui, and smrt-users to its exact version. Install it at the same version as the other s-m-r-t packages. A mismatch installs a second object registry, and policy resolution stops recognizing your objects.',
+					'@happyvertical/smrt-fields is released in lockstep with the other packages and pins smrt-core, smrt-tenancy, smrt-ui, and smrt-users to its exact version. Install it at the same version as the other smrt packages. A mismatch installs a second object registry, and policy resolution stops recognizing your objects.',
 				points: [
 					'smrt-users is a required runtime dependency, not an optional one: the permission catalog and operation guard back every write and gear action.',
 					'The usage-learning loop is available in the released smrt-fields package.'

@@ -1,11 +1,10 @@
 <script lang="ts">
-	import brandMark from '$lib/assets/smrt-mark.svg';
 	import { SMRT_VERSION } from '$lib/version';
 </script>
 
 <footer>
 	<div class="footer-inner">
-		<p class="brand"><img src={brandMark} alt="" width="28" height="28" /><span>s-m-r-t</span></p>
+		<p class="brand">smrt</p>
 		<p>Framework documentation · MIT · {SMRT_VERSION}</p>
 		<nav aria-label="Footer navigation">
 			<a href="/docs/reference/faq">FAQ</a>
@@ -32,18 +31,12 @@
 	}
 
 	.brand {
-		display: flex;
-		align-items: center;
-		gap: 8px;
 		color: var(--site-ink);
-		font-family: var(--site-font-mono);
+		font-family: var(--site-font-wordmark);
+		font-size: 1.25rem;
 		font-weight: 800;
-	}
-
-	.brand img {
-		width: 28px;
-		height: 28px;
-		object-fit: contain;
+		letter-spacing: -0.04em;
+		line-height: 1;
 	}
 
 	footer nav {

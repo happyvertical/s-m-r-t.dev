@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import ReferenceFamilyBar from '$lib/components/ReferenceFamilyBar.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 
@@ -39,9 +40,9 @@
 </script>
 
 <SEO
-	title="s-m-r-t API reference"
+	title="smrt API reference"
 	description="Find generated REST, MCP, WebMCP, CLI, authorization, field-policy, configuration, and decorator contracts."
-	url="https://s-m-r-t.dev/docs/reference/api"
+	url={siteUrl('/docs/reference/api')}
 />
 
 <ReferenceFamilyBar id="api" />

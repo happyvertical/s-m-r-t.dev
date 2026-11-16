@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import FrameworkTopic from '$lib/components/FrameworkTopic.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import AgentAwareFormDemo from '$lib/ui-showcase/AgentAwareFormDemo.svelte';
@@ -12,9 +13,9 @@
 </script>
 
 <SEO
-	title="Agents and the s-m-r-t application"
-	description="What an agent can do with a s-m-r-t application: the four tool surfaces, the read-only exposure default, and the identity every call runs as."
-	url="https://s-m-r-t.dev/docs/agents"
+	title="Agents and the smrt application"
+	description="What an agent can do with a smrt application: the four tool surfaces, the read-only exposure default, and the identity every call runs as."
+	url={siteUrl('/docs/agents')}
 />
 
 <article class="agents-page">
@@ -24,7 +25,7 @@
 			<h1>Agents work with borrowed authority.</h1>
 			<div class="hero-lede">
 				<p>
-					A s-m-r-t application can offer its operations to agents: an agent in the browser page, an
+					a smrt application can offer its operations to agents: an agent in the browser page, an
 					agent connected over MCP, or one of the application's own scheduled and chat agents. Each
 					connects through a defined door, and every door is a choice the application makes.
 				</p>

@@ -2,7 +2,7 @@ import type { FrameworkTopic } from '$lib/data/framework';
 import { SMRT_VERSION } from '$lib/version';
 
 /**
- * `/docs/agents` copy: what an agent can do with a s-m-r-t application, the
+ * `/docs/agents` copy: what an agent can do with a smrt application, the
  * four tool surfaces, the read-only exposure default, and the identity every
  * call runs as.
  *
@@ -139,7 +139,7 @@ export const agentsTopics: FrameworkTopic[] = [
 		eyebrow: 'Agents 01',
 		title: 'Four ways in, on two levels of trust',
 		summary:
-			'An agent reaches a s-m-r-t application through one of four defined surfaces. Three live in the browser page and act as the person using it. The fourth runs on the server and is never visible to the browser.',
+			'An agent reaches a smrt application through one of four defined surfaces. Three live in the browser page and act as the person using it. The fourth runs on the server and is never visible to the browser.',
 		plainEnglish:
 			'Before asking what an agent may do, ask where it stands. An agent in the page works as the signed-in person. An agent on the server works as a user account an operator assigned to it.',
 		pinnedVersion: SMRT_VERSION,
@@ -499,7 +499,7 @@ export class Report extends SmrtObject {
   const settingsHref = '/settings';
 
   const nav: ShellNavItem[] = [
-    { href: '/', label: 'Items', description: 'The example s-m-r-t object' },
+    { href: '/', label: 'Items', description: 'The example smrt object' },
     { href: settingsHref, label: 'Settings', description: 'Workspace layout and shortcuts' },
   ];
 
@@ -513,7 +513,7 @@ export class Report extends SmrtObject {
 </script>
 
 <AppShell
-  title="s-m-r-t app"
+  title="smrt app"
   {webmcp}
   {nav}
   currentHref={page.url.pathname}

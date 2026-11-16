@@ -39,7 +39,7 @@
 		href="https://github.com/happyvertical/smrt"
 		target="_blank"
 		rel="noreferrer"
-		aria-label="Open the s-m-r-t source on GitHub"
+		aria-label="Open the smrt source on GitHub"
 	>
 		<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
 			<circle cx="12" cy="12" r="9"></circle>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	/**
 	 * /reference/evidence — the release-audit ledger (#321 slice E). Every row in
 	 * `why-smrt-claims.ts` renders here with its row id as the anchor, so a "Sources" link elsewhere on the site can point at
@@ -12,8 +13,8 @@
 
 <SEO
 	title="Evidence"
-	description="Each claim the s-m-r-t site makes about the framework, with the page that explains it and the released source it was checked against."
-	url="https://s-m-r-t.dev/docs/reference/evidence"
+	description="Each claim the smrt site makes about the framework, with the page that explains it and the released source it was checked against."
+	url={siteUrl('/docs/reference/evidence')}
 />
 
 <ReferenceFamilyBar id="evidence" />
@@ -27,7 +28,7 @@
 			source it was checked against.
 		</p>
 		<p class="pinned">
-			Package sources are the AGENTS.md contracts shipped in s-m-r-t
+			Package sources are the AGENTS.md contracts shipped in smrt
 			<span class="version">{SMRT_VERSION}</span>; the site row links a commit of this repository.
 		</p>
 	</header>

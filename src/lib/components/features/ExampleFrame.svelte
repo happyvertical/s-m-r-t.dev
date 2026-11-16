@@ -45,7 +45,7 @@
 					embedded
 					hideEntryList
 					selectedEntryId={resolved.qualifiedId}
-					title="s-m-r-t playground"
+					title="smrt playground"
 				/>
 			{:else}
 				<p class="placeholder" role="status">Loading the live example…</p>

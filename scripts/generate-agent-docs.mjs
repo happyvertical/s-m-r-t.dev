@@ -2,8 +2,8 @@ import { readFile, writeFile, readdir, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { JSDOM } from 'jsdom';
+import { SITE_ORIGIN as origin } from '../src/lib/site.js';
 
-const origin = 'https://s-m-r-t.dev';
 const sourcePath = fileURLToPath(new URL('./agent-docs/source.txt', import.meta.url));
 const escape = (value) => value.replace(/([\\`*_[\]<>|])/g, '\\$1');
 const clean = (value) => value.replace(/\s+/g, ' ').trim();
@@ -159,13 +159,15 @@ export async function collectPages(directory) {
 
 export async function generate(directory = 'build', check = false, source = sourcePath) {
 	const pages = await collectPages(directory);
-	const prose = await readFile(source, 'utf8');
+	const prose = (await readFile(source, 'utf8')).replaceAll('{{SITE_ORIGIN}}', origin);
 	const start = prose.indexOf('## Canonical technical documentation');
 	const end = prose.indexOf('## Released boundaries');
 	if (start < 0 || end < 0) throw new Error('Missing source prose boundaries');
-	const curated = [...prose.slice(start, end).matchAll(/https:\/\/s-m-r-t\.dev([^\s]*)/g)].map(
-		(match) => match[1] || '/'
-	);
+	const curated = [
+		...prose
+			.slice(start, end)
+			.matchAll(new RegExp(`${origin.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^\\s]*)`, 'g'))
+	].map((match) => match[1] || '/');
 	curated.push(
 		'/docs/reference/api',
 		'/docs/reference/packages',
@@ -225,7 +227,9 @@ export async function generate(directory = 'build', check = false, source = sour
 		[
 			'llms.txt',
 			prose.slice(0, start) +
-				'## Reading this documentation\n\nUse [llms-full.txt](https://s-m-r-t.dev/llms-full.txt) for curated full-page context. Every canonical page has a Markdown copy at its path plus `.md` (for example `/docs/reference/api.md`); the homepage is `/index.md`. Project inquiries: [HappyVertical](https://happyvertical.com/llms.txt).\n\n' +
+				'## Reading this documentation\n\nUse [llms-full.txt](' +
+				origin +
+				'/llms-full.txt) for curated full-page context. Every canonical page has a Markdown copy at its path plus `.md` (for example `/docs/reference/api.md`); the homepage is `/index.md`. Project inquiries: [HappyVertical](https://happyvertical.com/llms.txt).\n\n' +
 				directoryText +
 				'\n\n' +
 				prose.slice(end)

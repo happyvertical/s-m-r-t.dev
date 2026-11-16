@@ -54,13 +54,13 @@ describe('application bar', () => {
 
 	it('gives the GitHub and color-scheme actions names, tooltips, and touch targets', () => {
 		render(Harness);
-		const github = screen.getByRole('link', { name: 'Open the s-m-r-t source on GitHub' });
+		const github = screen.getByRole('link', { name: 'Open the smrt source on GitHub' });
 		const scheme = screen.getByRole('button', { name: 'Switch to dark color scheme' });
 
 		expect(github.classList.contains('icon-action')).toBe(true);
 		expect(scheme.classList.contains('icon-action')).toBe(true);
 		expect(scheme.getAttribute('data-next-color-scheme')).toBe('dark');
-		expect(screen.getByRole('tooltip', { name: 'Open the s-m-r-t source on GitHub' })).toBeTruthy();
+		expect(screen.getByRole('tooltip', { name: 'Open the smrt source on GitHub' })).toBeTruthy();
 		expect(screen.getByRole('tooltip', { name: 'Switch to dark color scheme' })).toBeTruthy();
 	});
 

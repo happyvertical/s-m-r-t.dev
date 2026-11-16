@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import SEO from '$lib/components/SEO.svelte';
 	import { documentationSections } from '$lib/data/navigation';
 
@@ -56,9 +57,9 @@
 </script>
 
 <SEO
-	title="s-m-r-t docs"
-	description="Documentation for developers and agents: getting started, the machine-readable entry points, and every technical section of the s-m-r-t framework."
-	url="https://s-m-r-t.dev/docs"
+	title="smrt docs"
+	description="Documentation for developers and agents: getting started, the machine-readable entry points, and every technical section of the smrt framework."
+	url={siteUrl('/docs')}
 />
 
 <article class="docs-landing">

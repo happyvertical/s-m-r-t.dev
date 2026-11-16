@@ -15,7 +15,7 @@
 	<PlaygroundHost
 		{modules}
 		{selectedEntryId}
-		title="s-m-r-t playground"
+		title="smrt playground"
 		subtitle="Package-owned components and working views"
 	/>
 {:else}
@@ -23,7 +23,7 @@
 		<PlaygroundHost
 			{modules}
 			{selectedEntryId}
-			title="s-m-r-t playground"
+			title="smrt playground"
 			subtitle="Package-owned components and working views"
 		/>
 	</div>

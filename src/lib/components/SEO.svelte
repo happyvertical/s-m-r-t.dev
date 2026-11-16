@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SITE_ORIGIN, siteUrl } from '$lib/site';
 	import { jsonLdScript } from '$lib/seo/structured-data';
 	interface SEOProps {
 		title: string;
@@ -18,15 +19,13 @@
 	let {
 		title,
 		description,
-		url = 'https://s-m-r-t.dev',
-		image = 'https://s-m-r-t.dev/og-image.png',
+		url = SITE_ORIGIN,
+		image = siteUrl('/og-image.png'),
 		type = 'website',
 		article
 	}: SEOProps = $props();
 
-	const fullTitle = $derived(
-		title === 's-m-r-t Framework' ? title : `${title} | s-m-r-t Framework`
-	);
+	const fullTitle = $derived(title === 'smrt framework' ? title : `${title} | smrt`);
 	const jsonLd = $derived(jsonLdScript(title, description, url));
 </script>
 
@@ -45,7 +44,7 @@
 	<meta property="og:title" content={fullTitle} />
 	<meta property="og:description" content={description} />
 	<meta property="og:image" content={image} />
-	<meta property="og:site_name" content="s-m-r-t Framework" />
+	<meta property="og:site_name" content="smrt" />
 
 	{#if article}
 		{#if article.publishedTime}

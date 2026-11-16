@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { SMRT_VERSION } from '$lib/version';
@@ -48,8 +49,8 @@ pnpm app:open               # in a second terminal: the one-time owner setup pag
 
 <SEO
 	title="Getting Started"
-	description="Three ways to a s-m-r-t project on the smrt-start template: build-a-boilerplate (which also exports a prompt for your coding agent), smrt cookbook apply, or a clone of smrt-start."
-	url="https://s-m-r-t.dev/docs/getting-started"
+	description="Three ways to a smrt project on the smrt-start template: build-a-boilerplate (which also exports a prompt for your coding agent), smrt cookbook apply, or a clone of smrt-start."
+	url={siteUrl('/docs/getting-started')}
 />
 
 <article class="starter-index">
@@ -57,7 +58,7 @@ pnpm app:open               # in a second terminal: the one-time owner setup pag
 		<p>Getting Started</p>
 		<h1>Three ways to a running application.</h1>
 		<span
-			>Each one ends with a SvelteKit project on the smrt-start template, with the s-m-r-t packages
+			>Each one ends with a SvelteKit project on the smrt-start template, with the smrt packages
 			installed. Pick by how you want to begin.</span
 		>
 	</header>
@@ -80,7 +81,7 @@ pnpm app:open               # in a second terminal: the one-time owner setup pag
 		</p>
 		<p>
 			<code>smrt cookbook apply</code> copies the smrt-start template, adds the packages the recipes
-			need, pins every s-m-r-t package to the CLI's own release ({SMRT_VERSION}), and writes the
+			need, pins every smrt package to the CLI's own release ({SMRT_VERSION}), and writes the
 			cookbook to <code>smrt.cookbook.json</code>. Nothing else changes, and no sample data is
 			created. You need Node 26 or newer, git and pnpm 11; no account or token.
 		</p>

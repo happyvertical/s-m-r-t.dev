@@ -1,12 +1,13 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import SEO from '$lib/components/SEO.svelte';
 	import { foundationGuides } from '$lib/data/guides';
 </script>
 
 <SEO
-	title="s-m-r-t application foundations"
-	description="Learn how s-m-r-t objects, tenants, users, profiles, memberships, permissions, pages, data, and generated interfaces fit together."
-	url="https://s-m-r-t.dev/docs/foundations"
+	title="smrt application foundations"
+	description="Learn how smrt objects, tenants, users, profiles, memberships, permissions, pages, data, and generated interfaces fit together."
+	url={siteUrl('/docs/foundations')}
 />
 
 <article class="index-page">
@@ -14,9 +15,8 @@
 		<p>Application foundations</p>
 		<h1>Understand how the common parts fit together.</h1>
 		<span
-			>These guides explain the connected parts already present in a s-m-r-t app. The narrative
-			moves from your product model through ownership, identity, access, pages, and external
-			interfaces.</span
+			>These guides explain the connected parts already present in a smrt app. The narrative moves
+			from your product model through ownership, identity, access, pages, and external interfaces.</span
 		>
 	</header>
 

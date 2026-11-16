@@ -2,7 +2,7 @@
 
 **Last Updated**: 2026-01-12
 **Status**: Active Development
-**SMRT Version**: v0.19.0 (29 modules, 100 components)
+**smrt Version**: v0.19.0 (29 modules, 100 components)
 
 ## ✅ Completed
 
@@ -18,7 +18,7 @@
 
 ### Pages & Routes
 
-- [x] Homepage with SMRT value propositions and examples
+- [x] Homepage with smrt value propositions and examples
 - [x] Component library landing page (/components)
 - [x] Modules landing page (/modules) with all 28 modules organized in 8 categories
 - [x] Layout structure (Header, Footer, Grid system)
@@ -63,9 +63,9 @@
 - [x] smrt-analytics - Server-side analytics tracking with GA4 and Plausible integration
 - [x] smrt-ads - Ad management with waterfall priority, zone targeting, and A/B testing
 - [x] smrt-gnode - Federation library for federated local knowledge bases with P2P discovery
-- [x] smrt-cli - Auto-generated CLI commands for SMRT objects
+- [x] smrt-cli - Auto-generated CLI commands for smrt objects
 - [x] smrt-dev-mcp - Model Context Protocol server for Claude Code integration
-- [x] smrt-vitest - Testing utilities for SMRT objects with Vitest
+- [x] smrt-vitest - Testing utilities for smrt objects with Vitest
 - [x] smrt-svelte - Svelte 5 component library with 100+ components and reactive stores
 - [x] browser-ai - Browser-based AI with WebGPU acceleration and ONNX models
 - [x] template-site-static-json - Static site template with JSON data source
@@ -363,7 +363,7 @@ s-m-r-t.dev/
 
 ## 💡 Development Notes
 
-### Working with SMRT Components
+### Working with smrt Components
 
 All components are imported from `@happyvertical/smrt-svelte`. The package is built from `../smrt/packages/smrt-svelte/`.
 
@@ -417,7 +417,7 @@ Each component page must include:
 4. Complete props table with types, defaults, and descriptions
 5. TypeScript interface definition
 6. Accessibility notes (if applicable)
-7. SMRT mode behavior (voice input, AI integration)
+7. smrt mode behavior (voice input, AI integration)
 
 ### Module Documentation Standards
 

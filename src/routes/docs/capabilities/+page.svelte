@@ -1,13 +1,14 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import SEO from '$lib/components/SEO.svelte';
 	import { capabilityGuides } from '$lib/data/guides';
 	import { SMRT_VERSION } from '$lib/version';
 </script>
 
 <SEO
-	title="s-m-r-t capabilities"
-	description="Learn how s-m-r-t makes applications agent-legible through manifests, runtime registries, semantic controls, generated tools, and permission-aware capabilities."
-	url="https://s-m-r-t.dev/docs/capabilities"
+	title="smrt capabilities"
+	description="Learn how smrt makes applications agent-legible through manifests, runtime registries, semantic controls, generated tools, and permission-aware capabilities."
+	url={siteUrl('/docs/capabilities')}
 />
 
 <article class="capability-index">

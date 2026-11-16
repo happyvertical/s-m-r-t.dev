@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import GuideLibraryMetadata from '$lib/components/GuideLibraryMetadata.svelte';
 	import SEO from '$lib/components/SEO.svelte';
@@ -37,7 +38,7 @@ export class Note extends SmrtObject {
 <SEO
 	title="Clone smrt-start"
 	description="smrt-start is the public MIT template that smrt cookbook apply copies by default. Clone it for a small working application: one owner, local SQLite, a Note model, an assistant and read-only MCP."
-	url="https://s-m-r-t.dev/docs/getting-started/smrt-start"
+	url={siteUrl('/docs/getting-started/smrt-start')}
 />
 
 <article class="starter-page">
@@ -86,7 +87,7 @@ export class Note extends SmrtObject {
 			A clone keeps the template's own package pins, lockfile, git history and remote. <a
 				href="/docs/getting-started#cookbook">smrt cookbook apply</a
 			>
-			gives the same template with every s-m-r-t package pinned to the current release ({SMRT_VERSION}).
+			gives the same template with every smrt package pinned to the current release ({SMRT_VERSION}).
 			A clone stays on the version the template last moved to until you bump it. The older
 			<code>@happyvertical/smrt-template-sveltekit</code> package is still published; it is not the starting
 			point.

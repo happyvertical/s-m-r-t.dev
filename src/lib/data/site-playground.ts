@@ -1,11 +1,12 @@
 import type { SmrtPlaygroundModule } from '@happyvertical/smrt-playground';
+import { SITE_HOST } from '$lib/site';
 
-export const AGENT_AWARE_FORM_ENTRY_ID = 's-m-r-t.dev:agent-aware-form';
+export const AGENT_AWARE_FORM_ENTRY_ID = `${SITE_HOST}:agent-aware-form`;
 
 export const sitePlayground: SmrtPlaygroundModule = {
-	packageName: 's-m-r-t.dev',
+	packageName: SITE_HOST,
 	displayName: 'Documentation demonstrations',
-	description: 'Site-owned demonstrations that compose released s-m-r-t package behavior.',
+	description: 'Site-owned demonstrations that compose released smrt package behavior.',
 	entries: [
 		{
 			id: 'agent-aware-form',

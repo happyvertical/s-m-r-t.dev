@@ -1,4 +1,5 @@
-const origin = 'https://s-m-r-t.dev';
+import { SITE_ORIGIN as origin } from '$lib/site';
+
 const organizationId = `${origin}/#organization`;
 const websiteId = `${origin}/#website`;
 const sourceId = `${origin}/#source`;
@@ -43,14 +44,14 @@ export function structuredData(title: string, description: string, url: string) 
 		{
 			'@type': 'WebSite',
 			'@id': websiteId,
-			name: 's-m-r-t',
+			name: 'smrt',
 			url: origin,
 			publisher: { '@id': organizationId }
 		},
 		{
 			'@type': 'SoftwareSourceCode',
 			'@id': sourceId,
-			name: 's-m-r-t',
+			name: 'smrt',
 			codeRepository: 'https://github.com/happyvertical/smrt',
 			license: 'https://opensource.org/license/mit',
 			programmingLanguage: 'TypeScript',

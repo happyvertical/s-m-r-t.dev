@@ -6,23 +6,23 @@
 
 ## Executive Summary
 
-s-m-r-t.dev is the official documentation and marketing site for the SMRT framework - a full-stack TypeScript framework that abstracts away implementation details for databases, REST APIs, MCP tools, and CLI commands through simple object definitions.
+s-m-r-t.dev is the official documentation and marketing site for the smrt framework - a full-stack TypeScript framework that abstracts away implementation details for databases, REST APIs, MCP tools, and CLI commands through simple object definitions.
 
 ## Product Vision
 
 Create a comprehensive, developer-friendly documentation site that:
 
-- Showcases SMRT's core value propositions (no vendor lock, adaptability, brevity, scalability)
+- Showcases smrt's core value propositions (no vendor lock, adaptability, brevity, scalability)
 - Provides complete API documentation with interactive examples
-- Enables developers to quickly understand and adopt SMRT
-- Serves as a reference for all SMRT components, objects, agents, and collections
+- Enables developers to quickly understand and adopt smrt
+- Serves as a reference for all smrt components, objects, agents, and collections
 
 ## Goals & Success Metrics
 
 ### Primary Goals
 
-1. **Complete Documentation Coverage**: 100% of SMRT components, objects, agents, and modules documented with working examples
-2. **Fast Time-to-Value**: Developers can find and implement SMRT solutions within 5 minutes
+1. **Complete Documentation Coverage**: 100% of smrt components, objects, agents, and modules documented with working examples
+2. **Fast Time-to-Value**: Developers can find and implement smrt solutions within 5 minutes
 3. **Production-Ready Infrastructure**: Reliable hosting on AWS with <2s page load times globally
 
 ### Success Metrics
@@ -73,7 +73,7 @@ Create a comprehensive, developer-friendly documentation site that:
 
 **Requirements**:
 
-- [x] Hero section with SMRT value propositions
+- [x] Hero section with smrt value propositions
 - [x] Four core tenets (No vendor lock, Adaptability, Brevity, Scalability)
 - [x] Simple example showcasing basic SmrtObject usage
 - [x] Advanced example with decorators
@@ -116,13 +116,13 @@ Create a comprehensive, developer-friendly documentation site that:
 4. Complete props table with types, defaults, and descriptions
 5. TypeScript interface definition
 6. Accessibility notes (if applicable)
-7. SMRT mode behavior (voice input, AI integration)
+7. smrt mode behavior (voice input, AI integration)
 
-### 3. SMRT Modules Documentation
+### 3. smrt Modules Documentation
 
 **Status**: 📝 Not Started
 
-**Overview**: Document all 28 SMRT modules with comprehensive examples and tutorials. Each module will be analyzed by a dedicated subagent to ensure deep understanding and accurate documentation.
+**Overview**: Document all 28 smrt modules with comprehensive examples and tutorials. Each module will be analyzed by a dedicated subagent to ensure deep understanding and accurate documentation.
 
 **Approach**: Use Task tool with Explore subagent for each module to:
 
@@ -142,7 +142,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Code generators (REST/MCP/Swagger)
 - [ ] Vite plugin configuration
 - [ ] Manifest generation
-- [ ] Tutorial: Building your first SMRT object
+- [ ] Tutorial: Building your first smrt object
 - [ ] Tutorial: Generating REST APIs
 - [ ] Tutorial: Setting up MCP tools
 - [ ] Advanced: Custom generators
@@ -153,7 +153,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Core type definitions
 - [ ] Using types in your project
 - [ ] TypeScript integration
-- [ ] Tutorial: Type-safe SMRT development
+- [ ] Tutorial: Type-safe smrt development
 
 **smrt-config**:
 
@@ -388,7 +388,7 @@ Create a comprehensive, developer-friendly documentation site that:
 - [ ] Vitest plugin overview
 - [ ] Cross-package testing
 - [ ] Manifest loading
-- [ ] Tutorial: Testing SMRT projects
+- [ ] Tutorial: Testing smrt projects
 - [ ] Example: Integration tests
 
 #### 3.7 UI Components & Frontend (2 modules)
@@ -396,12 +396,12 @@ Create a comprehensive, developer-friendly documentation site that:
 **smrt-svelte**:
 
 - [ ] Component library overview
-- [ ] Component Browser: All SMRT Svelte components organized by category (Forms, UI, Layout, Display, Feedback, etc.)
+- [ ] Component Browser: All smrt Svelte components organized by category (Forms, UI, Layout, Display, Feedback, etc.)
 - [ ] Auth components
 - [ ] User management UI
 - [ ] Tenant switching
 - [ ] Roles and permissions UI
-- [ ] Tutorial: Adding SMRT UI to SvelteKit
+- [ ] Tutorial: Adding smrt UI to SvelteKit
 - [ ] Example: Admin dashboard
 - [ ] Example: User portal
 - [ ] (Note: Detailed component docs in Section 2)
@@ -432,7 +432,7 @@ Create a comprehensive, developer-friendly documentation site that:
 **template-sveltekit**:
 
 - [ ] SvelteKit template overview
-- [ ] SMRT integration
+- [ ] smrt integration
 - [ ] Best practices
 - [ ] Tutorial: Starting a new project
 - [ ] Tutorial: Deployment guide
@@ -748,7 +748,7 @@ Interface definition
 
 ARIA, keyboard support notes
 
-## SMRT Mode (if applicable)
+## smrt Mode (if applicable)
 
 Voice input, AI integration behavior
 ```
@@ -764,7 +764,7 @@ Voice input, AI integration behavior
 
 ## Dependencies & External Systems
 
-### SMRT Monorepo
+### smrt Monorepo
 
 - **Location**: `../smrt`
 - **Required Packages**:
@@ -809,7 +809,7 @@ Voice input, AI integration behavior
 
 **Subagent-Driven Documentation**:
 
-To ensure comprehensive and accurate documentation for all 28 SMRT modules, we will use a subagent-driven approach:
+To ensure comprehensive and accurate documentation for all 28 smrt modules, we will use a subagent-driven approach:
 
 1. **Discovery Phase**: For each module, launch an Explore subagent with "very thorough" mode
 2. **Analysis**: Subagent analyzes:
@@ -877,9 +877,9 @@ For each component:
 4. Add TypeScript definitions
 5. Test on mobile
 
-### Phase 3: SMRT Modules Documentation
+### Phase 3: smrt Modules Documentation
 
-**Goal**: Comprehensive documentation for all 28 SMRT modules using subagent-driven approach
+**Goal**: Comprehensive documentation for all 28 smrt modules using subagent-driven approach
 
 **Approach**:
 
@@ -909,7 +909,7 @@ For each component:
 
 ### Phase 4: Core Documentation
 
-**Goal**: Document SMRT framework concepts
+**Goal**: Document smrt framework concepts
 
 1. Objects documentation (SmrtObject, fields, relationships, AI methods)
 2. Agents documentation (concepts, architecture, dispatch, MCP integration)
@@ -964,7 +964,7 @@ For each component:
 **Content**:
 
 - [ ] All components documented with working examples (17 components)
-- [ ] All SMRT modules documented with tutorials and examples (28 modules)
+- [ ] All smrt modules documented with tutorials and examples (28 modules)
   - [ ] Core Foundation modules (4/4)
   - [ ] User & Access Management modules (2/2)
   - [ ] Domain Models & Data modules (9/9)
@@ -1007,9 +1007,9 @@ For each component:
 
 ### Content Updates
 
-- Component docs: Update when SMRT components change
+- Component docs: Update when smrt components change
 - Module docs: Update with each module release
-- API docs: Update with each SMRT release
+- API docs: Update with each smrt release
 - Examples: Add based on community feedback
 - Tutorial updates: Refresh when best practices evolve
 
@@ -1112,7 +1112,7 @@ Each module that includes UI components should have its own component browser at
 **Modules with Component Browsers:**
 
 - **smrt-users**: UserCard, UserAvatar, UserList, UserForm, UserMenu, InviteUser, TenantCard, TenantSwitcher, RoleBadge, RoleSelector, PermissionCheck, MembershipCard, MembershipList
-- **smrt-svelte**: All SMRT Svelte form components, UI components, layout components, display components, feedback components
+- **smrt-svelte**: All smrt Svelte form components, UI components, layout components, display components, feedback components
 - **browser-ai**: STT/TTS control components, voice input buttons, transcription displays (if applicable)
 - **Other modules**: Add component browsers as module-specific UI components are developed
 
@@ -1125,7 +1125,7 @@ Each component page must follow the same standards as Section 2 (Component Docum
 4. Complete props table
 5. TypeScript interface definition
 6. Accessibility notes
-7. SMRT mode behavior (if applicable)
+7. smrt mode behavior (if applicable)
 
 ### Key Technologies
 
@@ -1158,9 +1158,9 @@ Each component page must follow the same standards as Section 2 (Component Docum
 
 ### Related Resources
 
-- SMRT Monorepo: `../smrt`
-- SMRT Svelte Components: `../smrt/packages/smrt-svelte`
-- SMRT Docs: `../smrt/docs`
+- smrt Monorepo: `../smrt`
+- smrt Svelte Components: `../smrt/packages/smrt-svelte`
+- smrt Docs: `../smrt/docs`
 - Infrastructure README: `/infra/README.md`
 - GitHub Actions Workflow: `.github/workflows/build-deploy.yaml`
 
@@ -1181,11 +1181,11 @@ Each component page must follow the same standards as Section 2 (Component Docum
 
 **Agents & Automation (2)**: 20. smrt-agents - Agent framework for autonomous actors 21. smrt-gnode - Federation library for local knowledge bases
 
-**Developer Tools & CLI (3)**: 22. smrt-cli - Developer CLI for SMRT framework 23. smrt-dev-mcp - Development MCP server 24. smrt-vitest - Vitest plugin for cross-package testing
+**Developer Tools & CLI (3)**: 22. smrt-cli - Developer CLI for smrt framework 23. smrt-dev-mcp - Development MCP server 24. smrt-vitest - Vitest plugin for cross-package testing
 
-**UI Components & Frontend (2)**: 25. smrt-svelte - Svelte 5 components for SMRT 26. browser-ai - Framework-agnostic browser AI (STT, TTS, LLM)
+**UI Components & Frontend (2)**: 25. smrt-svelte - Svelte 5 components for smrt 26. browser-ai - Framework-agnostic browser AI (STT, TTS, LLM)
 
-**Project Templates (2)**: 27. template-site-static-json - Static site template with JSON storage 28. template-sveltekit - SvelteKit project template with SMRT
+**Project Templates (2)**: 27. template-site-static-json - Static site template with JSON storage 28. template-sveltekit - SvelteKit project template with smrt
 
 ---
 

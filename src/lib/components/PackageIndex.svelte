@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import ReferenceFamilyBar from '$lib/components/ReferenceFamilyBar.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import {
@@ -33,9 +34,9 @@
 </script>
 
 <SEO
-	title="s-m-r-t packages"
-	description="Browse every s-m-r-t package in one workbench, with package descriptions, component exports, and REST, MCP, WebMCP, and CLI interface guidance."
-	url="https://s-m-r-t.dev/docs/reference/packages"
+	title="smrt packages"
+	description="Browse every smrt package in one workbench, with package descriptions, component exports, and REST, MCP, WebMCP, and CLI interface guidance."
+	url={siteUrl('/docs/reference/packages')}
 />
 
 <ReferenceFamilyBar id="packages" />

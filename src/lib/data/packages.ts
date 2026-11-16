@@ -662,7 +662,7 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Foundation',
 		'smrt-core',
-		'The object model, persistence layer, AI operations, manifests, and generated interfaces at the center of every s-m-r-t app.',
+		'The object model, persistence layer, AI operations, manifests, and generated interfaces at the center of every smrt app.',
 		{
 			kind: 'runtime',
 			status: 'foundation',
@@ -693,7 +693,7 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Foundation',
 		'smrt-config',
-		'One configuration layer for s-m-r-t packages, runtime settings, safe exports, and secret-aware loading.',
+		'One configuration layer for smrt packages, runtime settings, safe exports, and secret-aware loading.',
 		{ kind: 'runtime' }
 	),
 	definePackage(
@@ -705,7 +705,7 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Foundation',
 		'smrt-scanner',
-		'Fast OXC-based source scanning that turns decorated classes into the s-m-r-t manifest.',
+		'Fast OXC-based source scanning that turns decorated classes into the smrt manifest.',
 		{
 			kind: 'tooling',
 			highlights: [
@@ -1192,7 +1192,7 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Agents & runtime',
 		'smrt-app-mcp',
-		'App-runtime MCP server scaffolding and transport adapters for exposing a s-m-r-t application over HTTP.',
+		'App-runtime MCP server scaffolding and transport adapters for exposing a smrt application over HTTP.',
 		{
 			kind: 'runtime',
 			highlights: [
@@ -1428,7 +1428,7 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Web & UI',
 		'smrt-app-cli',
-		'A reusable branded CLI factory for s-m-r-t apps with decorator-driven resources and a stdio MCP bridge.',
+		'A reusable branded CLI factory for smrt apps with decorator-driven resources and a stdio MCP bridge.',
 		{ kind: 'tooling' }
 	),
 	definePackage(
@@ -1546,7 +1546,7 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Content & media',
 		'smrt-assets-local',
-		'Local image metadata and variant processing for the s-m-r-t asset runtime.',
+		'Local image metadata and variant processing for the smrt asset runtime.',
 		{ kind: 'runtime' }
 	),
 	definePackage(
@@ -2014,7 +2014,7 @@ export const packages: SmrtPackage[] = [
 			notice: {
 				variant: 'warning',
 				title: 'Stubs only — do not build on this yet',
-				body: 'Every method is a placeholder. discoverPeers() and exchangePeers() on Federation return empty arrays, PeerExchangeProtocol.exchange() returns an empty array, and WebFingerProtocol.discover() returns null. The package registers no s-m-r-t models, and the stub source imports nothing — though installing it still pulls the smrt-core and SDK dependencies it declares. It is published so the intended shape is visible, not because it works.'
+				body: 'Every method is a placeholder. discoverPeers() and exchangePeers() on Federation return empty arrays, PeerExchangeProtocol.exchange() returns an empty array, and WebFingerProtocol.discover() returns null. The package registers no smrt models, and the stub source imports nothing — though installing it still pulls the smrt-core and SDK dependencies it declares. It is published so the intended shape is visible, not because it works.'
 			},
 			highlights: [
 				'Ships today: the GnodePeer, FederationConfig, and WebFingerResponse types',
@@ -2063,13 +2063,13 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Mobile',
 		'smrt-android',
-		'Compose shell, s-m-r-t theme, and Android adapters for barcode, speech, on-device AI, secure auth, and storage.',
+		'Compose shell, smrt theme, and Android adapters for barcode, speech, on-device AI, secure auth, and storage.',
 		{ kind: 'mobile', status: 'private' }
 	),
 	definePackage(
 		'Mobile',
 		'smrt-ios',
-		'SwiftUI shell, s-m-r-t theme, and iOS adapters for VisionKit, Speech, Foundation Models, Keychain, and native storage.',
+		'SwiftUI shell, smrt theme, and iOS adapters for VisionKit, Speech, Foundation Models, Keychain, and native storage.',
 		{ kind: 'mobile', status: 'private' }
 	),
 
@@ -2224,7 +2224,7 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Agents & runtime',
 		'smrt-mcp-openai',
-		'Optional OpenAI navigation, settings, context, messages, and composer mentions for authorized s-m-r-t MCP Apps.',
+		'Optional OpenAI navigation, settings, context, messages, and composer mentions for authorized smrt MCP Apps.',
 		{
 			kind: 'runtime',
 			status: 'new',
@@ -2234,7 +2234,7 @@ export const packages: SmrtPackage[] = [
 				body: 'The package tests against a synthetic host. Its README states that this does not prove desktop, web, iOS, or Android support, and that actual host acceptance remains open.'
 			},
 			highlights: [
-				'Ordinary s-m-r-t apps do not import this package',
+				'Ordinary smrt apps do not import this package',
 				'Server helpers wrap existing app-MCP workflows; they add no second server and no authorization policy',
 				'Browser helpers depend on the portable smrt-mcp-apps bridge and fall back to inline layouts and plain links'
 			],
@@ -2259,7 +2259,7 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Web & UI',
 		'smrt-app-runtime',
-		'Validated local, self-hosted, and cloud runtime composition for s-m-r-t applications, with a SvelteKit entry for server hooks.',
+		'Validated local, self-hosted, and cloud runtime composition for smrt applications, with a SvelteKit entry for server hooks.',
 		{
 			kind: 'runtime',
 			highlights: [
@@ -2288,7 +2288,7 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Web & UI',
 		'smrt-workbench',
-		'A shared developer workbench for s-m-r-t packages and consumer projects: package metadata, route modules, previews, scripts, docs, and manifests in one browser host.',
+		'A shared developer workbench for smrt packages and consumer projects: package metadata, route modules, previews, scripts, docs, and manifests in one browser host.',
 		{
 			kind: 'tooling',
 			components: ['WorkbenchHost'],
@@ -2315,7 +2315,7 @@ export const packages: SmrtPackage[] = [
 	definePackage(
 		'Web & UI',
 		'smrt-planner',
-		'The s-m-r-t app planner as a mountable Svelte component with cookbooks, recipes, layout, theme, and export tabs, a typed command set, and a plan snapshot.',
+		'The smrt app planner as a mountable Svelte component with cookbooks, recipes, layout, theme, and export tabs, a typed command set, and a plan snapshot.',
 		{
 			kind: 'tooling',
 			status: 'new',

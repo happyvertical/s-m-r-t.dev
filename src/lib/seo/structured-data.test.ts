@@ -3,7 +3,7 @@ import { isDocPath, serializeJsonLd, structuredData } from './structured-data';
 
 describe('agent structured data', () => {
 	it('identifies the website, organization and released source on the home page', () => {
-		const graph = structuredData('s-m-r-t', 'Stack', 'https://s-m-r-t.dev')['@graph'];
+		const graph = structuredData('smrt', 'Stack', 'https://s-m-r-t.dev')['@graph'];
 		expect(graph.map((node) => node['@type'])).toEqual([
 			'Organization',
 			'WebSite',

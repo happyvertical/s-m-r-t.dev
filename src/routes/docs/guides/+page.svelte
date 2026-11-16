@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import SEO from '$lib/components/SEO.svelte';
 	import type { TaskGuideFamilyId } from '$lib/data/guides';
 	import {
@@ -25,9 +26,9 @@
 </script>
 
 <SEO
-	title="s-m-r-t guides"
-	description="Task-oriented s-m-r-t guides organized into six scalable guide families."
-	url="https://s-m-r-t.dev/docs/guides"
+	title="smrt guides"
+	description="Task-oriented smrt guides organized into six scalable guide families."
+	url={siteUrl('/docs/guides')}
 />
 
 <article class="guide-index">

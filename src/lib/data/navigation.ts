@@ -4,6 +4,7 @@ import { featurePath, featureSectionPath, featureSections, features } from '$lib
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
 import { referenceFamilies } from '$lib/data/reference-families';
+import { SITE_ORIGIN } from '$lib/site';
 import { taskGuides } from '$lib/data/task-guides';
 import { toolingGuides } from '$lib/data/tooling';
 
@@ -166,11 +167,12 @@ const whyItem: NavigationItem = {
 		's-m-r-t',
 		'why',
 		// Former nav label and its spelling variants: this item was "Why
-		// s-m-r-t?" before the homepage rebuild, and these exact-phrase
+		// smrt?" before the homepage rebuild, and these exact-phrase
 		// aliases keep those queries resolving here now that the visible
-		// label is "Home".
-		'why s-m-r-t',
+		// label is "Home". The hyphenated spelling stays as an alias because
+		// people still search for it.
 		'why smrt',
+		'why s-m-r-t',
 		'agent-native',
 		'agent-legible',
 		'governed',
@@ -531,7 +533,7 @@ export function isPrimaryNavigationActive(item: PrimaryNavigationItem, pathname:
 }
 
 export function isNavigationItemActive(href: string, pathname: string, hash = ''): boolean {
-	const url = new URL(href, 'https://s-m-r-t.dev');
+	const url = new URL(href, SITE_ORIGIN);
 	if (url.pathname === '/') {
 		return pathname === '/' && (url.hash ? url.hash === hash : hash === '');
 	}

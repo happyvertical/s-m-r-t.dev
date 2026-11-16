@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import FrameworkTopic from '$lib/components/FrameworkTopic.svelte';
 	import SEO from '$lib/components/SEO.svelte';
@@ -11,9 +12,9 @@
 </script>
 
 <SEO
-	title="s-m-r-t Framework"
-	description="Learn how one s-m-r-t application model supplies persistence, collections, identity, permissions, generated interfaces, and stable descriptions for persons and agents."
-	url="https://s-m-r-t.dev/docs/framework"
+	title="smrt framework"
+	description="Learn how one smrt application model supplies persistence, collections, identity, permissions, generated interfaces, and stable descriptions for persons and agents."
+	url={siteUrl('/docs/framework')}
 />
 
 <article class="framework-page">

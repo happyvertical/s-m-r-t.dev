@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { afterNavigate } from '$app/navigation';
+	import { asset } from '$app/paths';
 	import { page } from '$app/state';
 	import { tick } from 'svelte';
 	import { initMatomo } from '$lib/analytics/matomo';
-	import favicon from '$lib/assets/favicon-32.png';
 	import '$lib/styles/reset.css';
 	import '$lib/styles/variables.css';
 	import '@happyvertical/smrt-ui/themes/styles/all.css';
@@ -35,7 +35,12 @@
 
 <svelte:head>
 	<link rel="alternate" type="text/plain" href="/llms.txt" />
-	<link rel="icon" href={favicon} />
+	<!-- Files in static/. The "s" is outlined Gabarito 800 (#396), so no icon waits on a webfont. -->
+	<link rel="icon" type="image/svg+xml" href={asset('/favicon.svg')} />
+	<link rel="icon" type="image/png" sizes="32x32" href={asset('/favicon-32.png')} />
+	<link rel="icon" type="image/png" sizes="16x16" href={asset('/favicon-16.png')} />
+	<link rel="apple-touch-icon" href={asset('/apple-touch-icon.png')} />
+	<link rel="manifest" href={asset('/manifest.webmanifest')} />
 	<meta name="theme-color" content="#141812" />
 </svelte:head>
 

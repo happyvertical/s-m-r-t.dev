@@ -2,7 +2,6 @@
 	import { Tooltip } from '@happyvertical/smrt-ui/ui';
 	import { getThemeContext } from '@happyvertical/smrt-ui/themes';
 	import { useAdminShell } from '@happyvertical/smrt-svelte/workspace';
-	import brandMark from '$lib/assets/smrt-mark.svg';
 	import ColorSchemeToggle from '$lib/components/ColorSchemeToggle.svelte';
 	import DocsSearch from '$lib/components/DocsSearch.svelte';
 	import {
@@ -42,10 +41,7 @@
 
 <div class="header-root">
 	<div class="app-bar">
-		<a href="/" class="brand" aria-label="s-m-r-t documentation home">
-			<img src={brandMark} alt="" width="30" height="30" />
-			<span>s-m-r-t</span>
-		</a>
+		<a href="/" class="brand" aria-label="smrt documentation home">smrt</a>
 
 		{#if inDocs}
 			<button
@@ -76,13 +72,13 @@
 		<div class="search"><DocsSearch /></div>
 
 		<div class="actions">
-			<Tooltip text="Open the s-m-r-t source on GitHub" placement="bottom">
+			<Tooltip text="Open the smrt source on GitHub" placement="bottom">
 				<a
 					class="icon-action"
 					href="https://github.com/happyvertical/smrt"
 					target="_blank"
 					rel="noreferrer"
-					aria-label="Open the s-m-r-t source on GitHub"
+					aria-label="Open the smrt source on GitHub"
 				>
 					<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
 						<circle cx="12" cy="12" r="9"></circle>
@@ -157,89 +153,19 @@
 		gap: clamp(0.55rem, 1.25vw, 1.15rem);
 	}
 
+	/* The wordmark is the whole mark (#396): Gabarito 800, lowercase, set tight. */
 	.brand {
 		flex: 0 0 auto;
+		min-height: 44px;
 		display: flex;
 		align-items: center;
-		gap: 0.45rem;
 		color: var(--site-ink);
-		text-decoration: none;
-	}
-
-	.brand img {
-		width: 30px;
-		height: 30px;
-		object-fit: contain;
-		/* Static ember glow: the resting state, and the reduced-motion fallback. */
-		filter: drop-shadow(0 0 2px rgba(255, 211, 61, 0.28))
-			drop-shadow(0 0 5px rgba(240, 91, 43, 0.3)) drop-shadow(0 1px 8px rgba(201, 56, 30, 0.22));
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.brand img {
-			animation: brand-ember 3.6s ease-in-out infinite;
-		}
-	}
-
-	/*
-	 * Ember flicker for the brand mark. Three drop-shadow layers in the mark's
-	 * own palette — yellow core (#ffd33d), orange body (#f05b2b), deep-red
-	 * falloff (#c9381e) — drift through irregular keyframe stops so each layer
-	 * peaks out of phase. Radii stay under 10px and opacities under 0.4 to keep
-	 * it at "ember" volume; the 0% and 100% frames match the static filter above
-	 * so the loop has no seam and reduced-motion users see the same resting glow.
-	 */
-	@keyframes brand-ember {
-		0%,
-		100% {
-			filter: drop-shadow(0 0 2px rgba(255, 211, 61, 0.28))
-				drop-shadow(0 0 5px rgba(240, 91, 43, 0.3)) drop-shadow(0 1px 8px rgba(201, 56, 30, 0.22));
-		}
-		26% {
-			filter: drop-shadow(0 0 3px rgba(255, 211, 61, 0.34))
-				drop-shadow(0 0 6px rgba(240, 91, 43, 0.24)) drop-shadow(0 1px 9px rgba(201, 56, 30, 0.26));
-		}
-		43% {
-			filter: drop-shadow(0 0 2px rgba(255, 211, 61, 0.22))
-				drop-shadow(0 0 4px rgba(240, 91, 43, 0.34)) drop-shadow(0 1px 7px rgba(201, 56, 30, 0.18));
-		}
-		62% {
-			filter: drop-shadow(0 0 3px rgba(255, 211, 61, 0.38))
-				drop-shadow(0 0 7px rgba(240, 91, 43, 0.28)) drop-shadow(0 2px 9px rgba(201, 56, 30, 0.3));
-		}
-		81% {
-			filter: drop-shadow(0 0 2px rgba(255, 211, 61, 0.25))
-				drop-shadow(0 0 5px rgba(240, 91, 43, 0.22)) drop-shadow(0 1px 7px rgba(201, 56, 30, 0.2));
-		}
-	}
-
-	/*
-	 * VARIANT B — steady warm breathe. A genuinely different direction: no
-	 * flicker, just one slow inhale/exhale of the same palette, for tastes that
-	 * find any flicker too busy in a persistent header. To try it, replace
-	 * `brand-ember 3.6s` with `brand-breathe 5.5s` in the animation shorthand
-	 * above and uncomment this keyframes block.
-	 *
-	 * @keyframes brand-breathe {
-	 * 	0%,
-	 * 	100% {
-	 * 		filter: drop-shadow(0 0 2px rgba(255, 211, 61, 0.24))
-	 * 			drop-shadow(0 0 4px rgba(240, 91, 43, 0.26))
-	 * 			drop-shadow(0 1px 7px rgba(201, 56, 30, 0.18));
-	 * 	}
-	 * 	50% {
-	 * 		filter: drop-shadow(0 0 3px rgba(255, 211, 61, 0.34))
-	 * 			drop-shadow(0 0 6px rgba(240, 91, 43, 0.32))
-	 * 			drop-shadow(0 1px 9px rgba(201, 56, 30, 0.26));
-	 * 	}
-	 * }
-	 */
-
-	.brand span {
-		font-family: var(--site-font-mono);
-		font-size: 0.86rem;
+		font-family: var(--site-font-wordmark);
+		font-size: 1.5rem;
 		font-weight: 800;
-		letter-spacing: -0.045em;
+		letter-spacing: -0.04em;
+		line-height: 1;
+		text-decoration: none;
 	}
 
 	.panel-toggle,
@@ -384,12 +310,6 @@
 
 		.search {
 			min-width: 44px;
-		}
-	}
-
-	@media (max-width: 24rem) {
-		.brand span {
-			display: none;
 		}
 	}
 

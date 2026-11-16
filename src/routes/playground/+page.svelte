@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import AppTheme from '$lib/components/AppTheme.svelte';
 	import PlaygroundEmbed from '$lib/components/PlaygroundEmbed.svelte';
 	import SEO from '$lib/components/SEO.svelte';
@@ -13,9 +14,9 @@
 </script>
 
 <SEO
-	title="s-m-r-t component playground"
-	description="Search and try foundation controls and package-owned s-m-r-t working views with mock or live data where supported."
-	url="https://s-m-r-t.dev/playground"
+	title="smrt component playground"
+	description="Search and try foundation controls and package-owned smrt working views with mock or live data where supported."
+	url={siteUrl('/playground')}
 />
 
 <AppTheme>

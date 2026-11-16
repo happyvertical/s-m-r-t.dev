@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SITE_ORIGIN } from '$lib/site';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import ReferenceFamilyBar from '$lib/components/ReferenceFamilyBar.svelte';
 	import SEO from '$lib/components/SEO.svelte';
@@ -29,7 +30,7 @@
 <SEO
 	title={`${component.name} · UI component reference`}
 	description={`${component.name} props, state, events, import path, examples, and canonical source.`}
-	url={`https://s-m-r-t.dev/docs/reference/components/${component.slug}`}
+	url={`${SITE_ORIGIN}/docs/reference/components/${component.slug}`}
 />
 
 <ReferenceFamilyBar id="components" />

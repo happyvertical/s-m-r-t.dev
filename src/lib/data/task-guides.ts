@@ -1,7 +1,7 @@
 import type { GuideDifficulty, TaskGuide, TaskGuideFamilyId } from '$lib/data/guides';
 
 /**
- * Released s-m-r-t version every step in this section was executed against.
+ * Released smrt version every step in this section was executed against.
  *
  * Deliberately a literal, and deliberately not `SMRT_VERSION`. These pages
  * claim their commands were run and their output observed, so the badge has to
@@ -25,7 +25,7 @@ export const taskGuideFamilies: TaskGuideFamily[] = [
 	{
 		id: 'getting-started',
 		label: 'Getting started',
-		description: 'Choose a starter and run your first s-m-r-t application.'
+		description: 'Choose a starter and run your first smrt application.'
 	},
 	{
 		id: 'build-foundation',
@@ -318,7 +318,7 @@ export const taskGuides: TaskGuide[] = [
 		task: {
 			family: 'build-foundation',
 			purpose: 'Create a tenant boundary and prove that scoped data stays isolated.',
-			prerequisites: ['A s-m-r-t application', 'A configured SQLite or PostgreSQL database'],
+			prerequisites: ['a smrt application', 'A configured SQLite or PostgreSQL database'],
 			difficulty: 'Intermediate',
 			supportRange: TASK_GUIDES_PINNED_VERSION,
 			concepts: ['Tenant hierarchy', 'Membership', 'Role', 'Tenant context', 'Row isolation'],
@@ -622,7 +622,7 @@ it('refuses a foreign filter', async () => {
 			family: 'connect-agents',
 			purpose: 'Expose selected application operations to an MCP client.',
 			prerequisites: [
-				'A scanned s-m-r-t model',
+				'A scanned smrt model',
 				'An MCP client',
 				'An application authentication plan'
 			],
@@ -968,7 +968,7 @@ export const POST = mountMcpRoute(mcpServer);
 		task: {
 			family: 'add-modules',
 			purpose: 'Add semantic search to records that contain meaningful text.',
-			prerequisites: ['A s-m-r-t collection', 'Records with text fields', 'An embedding provider'],
+			prerequisites: ['a smrt collection', 'Records with text fields', 'An embedding provider'],
 			difficulty: 'Intermediate',
 			supportRange: TASK_GUIDES_PINNED_VERSION,
 			concepts: ['Embedding', 'Semantic search', 'Candidate limit', 'Tenant filter'],
@@ -1148,7 +1148,7 @@ const db = await getDatabase({
 		slug: 'testing-your-app',
 		navTitle: 'Test your application',
 		eyebrow: 'Task guide',
-		title: 'Test a s-m-r-t application',
+		title: 'Test a smrt application',
 		lede: 'Install the Vitest plugin. Give each test its own rolled-back database. Use one configuration to cover the model, tenant boundary, generated surfaces, and components.',
 		plainEnglish:
 			'Tests run against the real models and the real database rather than mocks. Each test gets a private database inside a transaction, so tests can run in parallel and leave nothing behind.',
@@ -1156,7 +1156,7 @@ const db = await getDatabase({
 		task: {
 			family: 'operate-and-ship',
 			purpose: 'Test models, tenant boundaries, generated interfaces, and Svelte components.',
-			prerequisites: ['A s-m-r-t application', 'Vitest', 'A generated model manifest'],
+			prerequisites: ['a smrt application', 'Vitest', 'A generated model manifest'],
 			difficulty: 'Intermediate',
 			supportRange: TASK_GUIDES_PINNED_VERSION,
 			concepts: ['Isolated database', 'Tenant boundary', 'Generated interface', 'Component test'],
@@ -1182,10 +1182,10 @@ const db = await getDatabase({
 			{
 				title: 'Install the plugin and write the config',
 				intro:
-					'@happyvertical/smrt-vitest is the required entry point for testing a s-m-r-t project. Its Vite plugin scans your sources, builds the manifest the models need, and registers classes from every @happyvertical/smrt-* dependency. Without it, tests fail with "No field metadata found" or an unregistered-class error, because the decorators never produced field metadata for the test run.',
+					'@happyvertical/smrt-vitest is the required entry point for testing a smrt project. Its Vite plugin scans your sources, builds the manifest the models need, and registers classes from every @happyvertical/smrt-* dependency. Without it, tests fail with "No field metadata found" or an unregistered-class error, because the decorators never produced field metadata for the test run.',
 				points: [
 					'The plugin regenerates the manifest once, at Vitest startup.',
-					'It also discovers the manifests of your installed s-m-r-t packages.',
+					'It also discovers the manifests of your installed smrt packages.',
 					'On Vite 8 it restores legacy decorator transformation, which rolldown otherwise skips.',
 					'It sets test.retry to 2 under CI and 0 locally; override with SMRT_VITEST_RETRY.'
 				],
@@ -1210,7 +1210,7 @@ export default defineConfig({
 				lang: 'bash',
 				code: `pnpm add -D @happyvertical/smrt-vitest
 
-# Every s-m-r-t package ships in lockstep. Match the version your app already
+# Every smrt package ships in lockstep. Match the version your app already
 # depends on rather than taking whatever "latest" resolves to today.`
 			},
 			{
@@ -1514,7 +1514,7 @@ jobs:
 			{
 				title: 'The failures that are worth recognising',
 				intro:
-					'Most confusing test failures in a s-m-r-t project come from the manifest or from module state rather than from the assertion that reported them. These four account for nearly all of it.',
+					'Most confusing test failures in a smrt project come from the manifest or from module state rather than from the assertion that reported them. These four account for nearly all of it.',
 				points: [
 					'"No field metadata found" or an unregistered class means the plugin is missing from this config, or the scan globs never reached your sources.',
 					'Watch mode can keep the manifest generated at startup. A new field can then appear to be ignored. Restart Vitest after you add classes or fields.',

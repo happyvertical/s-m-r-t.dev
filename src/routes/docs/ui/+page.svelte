@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import { uiStories, uiStoryGroups } from '$lib/data/ui-stories';
 	import AgentAwareFormDemo from '$lib/ui-showcase/AgentAwareFormDemo.svelte';
 	import UILiveShellState from '$lib/ui-showcase/UILiveShellState.svelte';
@@ -8,8 +9,8 @@
 
 <SEO
 	title="UI showcase"
-	description="Explore the SMRT component system through human and agent interaction stories, released examples, and explicit failure boundaries."
-	url="https://s-m-r-t.dev/docs/ui"
+	description="Explore the smrt component system through human and agent interaction stories, released examples, and explicit failure boundaries."
+	url={siteUrl('/docs/ui')}
 />
 
 <div class="ui-showcase">
@@ -17,7 +18,7 @@
 		<p class="hero-kicker">Component system showcase</p>
 		<h1>Interfaces for people. Contracts for agents.</h1>
 		<p class="hero-lede">
-			SMRT components stay ordinary, accessible interface elements. Applications can also expose
+			smrt components stay ordinary, accessible interface elements. Applications can also expose
 			their meaning and operations to a governed agent caller.
 		</p>
 

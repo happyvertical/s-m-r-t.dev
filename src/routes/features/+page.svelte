@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import SEO from '$lib/components/SEO.svelte';
 	import { featureSectionPath, featureSections, featuresInSection } from '$lib/data/features';
 </script>
@@ -6,7 +7,7 @@
 <SEO
 	title="Features"
 	description="Nine groups of capabilities you do not build from scratch."
-	url="https://s-m-r-t.dev/features"
+	url={siteUrl('/features')}
 />
 
 <div class="landing">

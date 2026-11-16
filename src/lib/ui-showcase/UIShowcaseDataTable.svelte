@@ -186,7 +186,7 @@
 			canExpand={() => true}
 			expandedContent={expandedSurface}
 			{controller}
-			caption="Released SMRT UI surfaces"
+			caption="Released smrt UI surfaces"
 		/>
 	</div>
 

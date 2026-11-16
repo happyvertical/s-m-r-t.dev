@@ -525,7 +525,7 @@ export const uiStories: UIStory[] = [
 			'DataTable'
 		],
 		highlights: [
-			'Material, Glass, Studio, SMRT, and HappyVertical presets',
+			'Material, Glass, Studio, smrt, and HappyVertical presets',
 			'Light and dark color schemes',
 			'Static preset stylesheets generated from the same tokens',
 			'Optional self-hosted font files',

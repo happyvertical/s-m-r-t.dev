@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteUrl } from '$lib/site';
 	import ReferenceFamilyBar from '$lib/components/ReferenceFamilyBar.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { uiComponentGroups, uiComponents, uiCoverage } from '$lib/data/ui-components.generated';
@@ -22,9 +23,9 @@
 </script>
 
 <SEO
-	title="s-m-r-t UI component reference"
+	title="smrt UI component reference"
 	description="Search every public Svelte component export across the installed @happyvertical/smrt-* packages and inspect its props, bindable state, callback events, import path, examples, and canonical source."
-	url="https://s-m-r-t.dev/docs/reference/components"
+	url={siteUrl('/docs/reference/components')}
 />
 
 <ReferenceFamilyBar id="components" />

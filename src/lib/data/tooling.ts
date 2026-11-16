@@ -1,7 +1,7 @@
 import type { Guide } from '$lib/data/guides';
 
 /**
- * Released s-m-r-t version every claim in this section was verified against.
+ * Released smrt version every claim in this section was verified against.
  * When this moves, re-read the canonical sources listed on each page.
  */
 export const TOOLING_PINNED_VERSION = '0.55.16';
@@ -270,7 +270,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 			{
 				title: 'Consumer apps can inspect what they installed',
 				intro:
-					'A consumer application may author no framework package of its own, so workspace discovery alone cannot describe the SMRT surface it runs. schemaVersion 3 adds installedPackages: an enumerated, deduplicated view of installed @happyvertical/smrt-* and known SDK packages, available directly through --scope installed.',
+					'A consumer application may author no framework package of its own, so workspace discovery alone cannot describe the smrt surface it runs. schemaVersion 3 adds installedPackages: an enumerated, deduplicated view of installed @happyvertical/smrt-* and known SDK packages, available directly through --scope installed.',
 				points: [
 					'Each installed package records its version, isInstalledDependency, and agentDocSha256 for the shipped AGENTS.md.',
 					'The documentation hash is the drift signal; a version change alone does not imply that the agent contract changed.',
@@ -770,7 +770,7 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 				code: `{
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "smrt-dev-mcp",
-  "description": "Development MCP server and SMRT code-review skill."
+  "description": "Development MCP server and smrt code-review skill."
 }`
 			},
 			{

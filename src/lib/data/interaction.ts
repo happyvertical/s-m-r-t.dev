@@ -1,7 +1,7 @@
 import type { Guide } from '$lib/data/guides';
 
 /**
- * Released s-m-r-t version used to verify the interaction contract and examples.
+ * Released smrt version used to verify the interaction contract and examples.
  * Move this pin only after the installed control, form, chat, and voice surfaces
  * have been checked again.
  */

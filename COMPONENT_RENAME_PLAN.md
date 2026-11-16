@@ -1,4 +1,4 @@
-# s-m-r-t Component Naming Convention & Migration Plan
+# smrt Component Naming Convention & Migration Plan
 
 ## Current Issues
 

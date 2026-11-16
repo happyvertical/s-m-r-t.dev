@@ -18,16 +18,16 @@
 			"automergeType": "pr"
 		},
 		{
-			"description": "Advance the exact-pinned SMRT framework as one validated consumer update",
+			"description": "Advance the exact-pinned smrt framework as one validated consumer update",
 			"matchPackageNames": ["@happyvertical/smrt-*"],
-			"groupName": "SMRT framework",
+			"groupName": "smrt framework",
 			"groupSlug": "smrt-framework",
 			"rangeStrategy": "pin",
 			"minimumReleaseAge": "1 day",
 			"schedule": ["at any time"]
 		},
 		{
-			"description": "Automerge green SMRT minor and patch consumer updates",
+			"description": "Automerge green smrt minor and patch consumer updates",
 			"matchPackageNames": ["@happyvertical/smrt-*"],
 			"matchUpdateTypes": ["minor", "patch"],
 			"automerge": true,

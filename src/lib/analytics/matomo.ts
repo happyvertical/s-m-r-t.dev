@@ -7,10 +7,12 @@
  * serve the same build artifact and must never report.
  */
 
+import { SITE_HOST } from '$lib/site';
+
 export const MATOMO_URL = 'https://matomo.happyvertical.com/';
 // Site 31 on matomo.happyvertical.com (#346). null disables tracking.
 export const MATOMO_SITE_ID: string | null = '31';
-export const MATOMO_HOSTNAME = 's-m-r-t.dev';
+export const MATOMO_HOSTNAME = SITE_HOST;
 
 type PaqCommand = [string, ...unknown[]];
 

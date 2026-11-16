@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SITE_ORIGIN } from '$lib/site';
 	/**
 	 * One feature showcase (#364). The order is locked by the redesign and
 	 * pinned by `Showcase.test.ts`: section strip, kicker, name, one sentence,
@@ -29,7 +30,7 @@
 <SEO
 	title={`${feature.word} · ${section.word} features`}
 	description={feature.hint}
-	url={`https://s-m-r-t.dev${featurePath(feature)}`}
+	url={`${SITE_ORIGIN}${featurePath(feature)}`}
 />
 
 <div class="showcase">

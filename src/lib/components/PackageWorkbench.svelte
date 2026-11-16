@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SITE_ORIGIN } from '$lib/site';
 	import { afterNavigate } from '$app/navigation';
 	import Callout from '$lib/components/Callout.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
@@ -54,7 +55,7 @@
 		])
 	);
 	const sourceInstallCode =
-		'# Distributed from the s-m-r-t source tree\n# See the package README for Gradle/SPM setup';
+		'# Distributed from the smrt source tree\n# See the package README for Gradle/SPM setup';
 	const sourceDirectory = $derived(
 		[
 			'smrt-android',
@@ -93,7 +94,7 @@
 	}
 </script>
 
-<SEO title={pkg.name} description={pkg.summary} url={`https://s-m-r-t.dev${packageHref}`} />
+<SEO title={pkg.name} description={pkg.summary} url={`${SITE_ORIGIN}${packageHref}`} />
 
 <ReferenceFamilyBar id="packages" />
 
@@ -197,7 +198,7 @@
 								<p class="overview-note">{pkg.surfaceNote}</p>
 							{:else}
 								<p class="overview-note">
-									This package is one focused part of the s-m-r-t stack. Its decorated models
+									This package is one focused part of the smrt stack. Its decorated models
 									participate in the same manifest, tenancy, persistence, and generated-interface
 									conventions as the rest of the framework.
 								</p>
