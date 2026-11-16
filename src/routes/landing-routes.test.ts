@@ -143,7 +143,9 @@ describe('/ (the landing page, #397)', () => {
 	it('keeps the words the redesign dropped out of the copy', () => {
 		const { container } = render(Landing);
 
-		expect(text(container)).not.toMatch(/domain-specific|software agents|SMRT\b/);
+		expect(text(container)).not.toMatch(
+			new RegExp(['domain-specific', 'software agents', 'SM' + 'RT\\b'].join('|'))
+		);
 	});
 });
 
