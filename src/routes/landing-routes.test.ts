@@ -120,6 +120,21 @@ describe('/ (the landing page, #397)', () => {
 		expect(text(container.querySelector('.same'))).toContain('widgets.read');
 	});
 
+	it('announces the switch through a status line, not the panels', async () => {
+		const { container } = render(Landing);
+		const panel = within(container.querySelector('.panel') as HTMLElement);
+		const status = panel.getByRole('status');
+
+		expect(text(status)).toBe('Showing what a person sees');
+		expect(container.querySelector('.answer')?.closest('[aria-live]')).toBeNull();
+		expect(container.querySelector('.answer [aria-live], .answer[aria-live]')).toBeNull();
+
+		await fireEvent.click(panel.getByRole('button', { name: 'An agent' }));
+		expect(text(status)).toBe('Showing what an agent sees');
+		await fireEvent.click(panel.getByRole('button', { name: 'A person' }));
+		expect(text(status)).toBe('Showing what a person sees');
+	});
+
 	it('links only to routes and files the build emits', () => {
 		const { container } = render(Landing);
 		const hrefs = [...container.querySelectorAll('a')].map((a) => a.getAttribute('href'));
@@ -143,6 +158,7 @@ describe('/ (the landing page, #397)', () => {
 	it('keeps the words the redesign dropped out of the copy', () => {
 		const { container } = render(Landing);
 
+		// The string is split because the product-name guard flags the uppercase spelling in source.
 		expect(text(container)).not.toMatch(
 			new RegExp(['domain-specific', 'software agents', 'SM' + 'RT\\b'].join('|'))
 		);

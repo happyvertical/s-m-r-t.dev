@@ -123,7 +123,10 @@
 						>
 					</div>
 				</div>
-				<div class="answer" aria-live="polite">
+				<p class="sr" role="status">
+					{asking === 'person' ? 'Showing what a person sees' : 'Showing what an agent sees'}
+				</p>
+				<div class="answer">
 					<div class="screen" hidden={asking !== 'person'}>
 						<table>
 							<caption>
@@ -225,10 +228,7 @@
 		<div class="wrap">
 			<div class="head">
 				<h2 id="three-ways">Three ways to a running app.</h2>
-				<p>
-					They all end in the same place: a real project on your machine, with nothing to sign up
-					for.
-				</p>
+				<p>They all end in the same place: a real project on your machine.</p>
 			</div>
 			<ul class="ways">
 				<li class="way">

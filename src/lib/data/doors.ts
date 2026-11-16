@@ -29,12 +29,6 @@ export const doors: readonly Door[] = [
 	{ id: 'docs', label: 'Docs', note: 'for developers and agents', href: DOCS_PATH, hot: false }
 ];
 
-export function getDoor(id: Door['id']): Door {
-	const door = doors.find((candidate) => candidate.id === id);
-	if (!door) throw new Error(`Door not found: ${id}`);
-	return door;
-}
-
 export interface PrimaryLink {
 	label: string;
 	href: string;
