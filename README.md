@@ -1,73 +1,61 @@
-# sv
+# s-m-r-t.dev
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+This is the documentation site for the smrt framework, published at
+[s-m-r-t.dev](https://s-m-r-t.dev). It's a SvelteKit site built with
+`adapter-static`: every page is prerendered at build time, so what ships is
+plain static files.
 
-## Creating a project
+The framework itself lives in
+[happyvertical/smrt](https://github.com/happyvertical/smrt).
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Run it
+
+You need Node 26 and pnpm. The install enforces the Node version, so on an older
+Node it fails instead of warning.
 
 ```sh
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+pnpm install
+pnpm run dev
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Test, lint and build
 
 ```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+pnpm test        # dependency, copy and reference checks, then the unit tests
+pnpm run check   # type check
+pnpm run lint    # prettier, eslint and the template check
+pnpm run build   # static site into build/
 ```
 
-## Building
+A pull request runs `test`, `check` and `build`, but not `lint`. Lint only runs
+on `main` after a merge, so run it yourself before you open one.
 
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
-
-## Agent-readable documentation
-
-`pnpm run build` generates `build/llms.txt`, a curated `build/llms-full.txt`, and
-Markdown for every canonical page (`/path.md`, with `/index.md` for the homepage).
-The generator reads the prerendered HTML and sitemap, so titles, descriptions,
-code examples, tables, and prose share the browser's source. It fails when a
-canonical page is missing from the sitemap or a sitemap URL has no built page.
-Redirect aliases are intentionally excluded. These post-build files live in `build/`;
-SvelteKit’s `vite preview` serves its internal output, so inspect the text files
-with a static server pointed at `build/` or on the deployed site. Interactive tools export their
-server-rendered documentation; running a mock-up still requires JavaScript.
-
-The reviewed summary and permission boundaries live in
-`scripts/agent-docs/source.txt`; its canonical links select the curated full-text
-pages, supplemented by the API, package, component, and FAQ indexes. Edit page
-content at its normal source, then rebuild; do not edit files in `build/`.
-
-Every content page includes JSON-LD from its existing SEO metadata. Shared site,
-organization, and source identities are supplemented by articles and breadcrumbs
-on documentation routes. The layout advertises `/llms.txt`.
-
-After building, run:
+The build also writes `llms.txt`, `llms-full.txt` and a Markdown copy of every
+page into `build/`. `scripts/agent-docs/source.txt` holds the reviewed summary
+and picks the full-text pages. Edit pages at their source, never in `build/`;
+`vite preview` doesn't serve these files, so point a static server at `build/`.
+After building, check them and the built links with:
 
 ```sh
+pnpm run check:links
 pnpm run check:agent-docs
 node scripts/check-agent-metadata.mjs
 ```
 
-To verify a deployed site (HTTP status, MIME types, every Markdown path, and
-representative server-rendered metadata without JavaScript):
+## How it deploys
 
-```sh
-node scripts/check-agent-metadata.mjs --origin https://s-m-r-t.dev
-```
+`.github/workflows/build-deploy.yaml` does it. A push to `main` that touches the
+site builds once, syncs `build/` to the staging S3 bucket, clears the CloudFront
+cache and checks [staging.s-m-r-t.dev](https://staging.s-m-r-t.dev). If that
+passes, the same build goes to production the same way. You can also deploy
+either environment by running the workflow by hand.
+
+The buckets, CloudFront distributions, DNS and certificates are OpenTofu
+configuration in `infra/`. See [infra/README.md](infra/README.md).
+
+## Writing and contributing
+
+- [docs/writing-standard.md](docs/writing-standard.md) is the voice guide. Read
+  it before you change any copy.
+- [AGENTS.md](AGENTS.md) holds the contribution rules: how content is authored,
+  the dependency policy, and what must stay green.
