@@ -49,7 +49,7 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 		tile('ProductionRunList', 'smrt-manufacturing/svelte', 'Production runs and their state.')
 	],
 	stock: [
-		tile('StockLevels', 'smrt-inventory/svelte', 'What is on hand, by location.'),
+		tile('StockLevels', 'smrt-inventory/svelte', 'What’s on hand, by location.'),
 		tile('MovementHistory', 'smrt-inventory/svelte', 'Every movement, in order.'),
 		tile('AdjustStockForm', 'smrt-inventory/svelte', 'Correct a count.')
 	],
@@ -82,7 +82,7 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 		tile(
 			'ReportConfirmation',
 			'smrt-reports/svelte',
-			'A person confirms the exact report before it is saved.'
+			'A person confirms the exact report before it’s saved.'
 		)
 	],
 
@@ -131,7 +131,7 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 	],
 
 	inventory: [
-		tile('StockLevels', 'smrt-inventory/svelte', 'What is on hand, by location.'),
+		tile('StockLevels', 'smrt-inventory/svelte', 'What’s on hand, by location.'),
 		tile('MovementHistory', 'smrt-inventory/svelte', 'Every movement, in order.'),
 		tile('AdjustStockForm', 'smrt-inventory/svelte', 'Correct a count.')
 	],

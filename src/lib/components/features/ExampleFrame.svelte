@@ -66,11 +66,11 @@
 <p class="caption">
 	{#if example.kind === 'playground' && resolved}
 		<span
-			>Real <code>{resolved.entryTitle}</code> preview from
-			<code>{resolved.packageName.replace('@happyvertical/', '')}</code>, example data. Try it.</span
+			>The real <code>{resolved.entryTitle}</code> preview from
+			<code>{resolved.packageName.replace('@happyvertical/', '')}</code>, with example data. Try it.</span
 		>
 	{:else}
-		<span>An illustration with example data. This package has no live example yet.</span>
+		<span>An illustration with example data. This package doesn't have a live example yet.</span>
 	{/if}
 </p>
 
