@@ -43,17 +43,17 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 	],
 	assemblies: [
 		tile('BomEditor', 'smrt-manufacturing/svelte', 'Edit a bill of materials.'),
-		tile('BomStructureTree', 'smrt-manufacturing/svelte', 'A product’s parts, level by level.')
+		tile('BomStructureTree', 'smrt-manufacturing/svelte', "A product's parts, level by level.")
 	],
 	production: [
 		tile('ProductionRunList', 'smrt-manufacturing/svelte', 'Production runs and their state.')
 	],
 	stock: [
-		tile('StockLevels', 'smrt-inventory/svelte', 'What’s on hand, by location.'),
+		tile('StockLevels', 'smrt-inventory/svelte', "What's on hand, by location."),
 		tile('MovementHistory', 'smrt-inventory/svelte', 'Every movement, in order.'),
 		tile('AdjustStockForm', 'smrt-inventory/svelte', 'Correct a count.')
 	],
-	roles: [tile('RoleBadge', 'smrt-ui', 'A person’s role, at a glance.')],
+	roles: [tile('RoleBadge', 'smrt-ui', "A person's role, at a glance.")],
 	tasks: [tile('DevelopmentBoard', 'smrt-projects/svelte', 'Requests moving across a board.')],
 
 	tools: [
@@ -82,7 +82,7 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 		tile(
 			'ReportConfirmation',
 			'smrt-reports/svelte',
-			'A person confirms the exact report before it’s saved.'
+			"A person confirms the exact report before it's saved."
 		)
 	],
 
@@ -93,7 +93,7 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 	],
 	images: [
 		tile('ImageUploader', 'smrt-images/svelte', 'Add an image to a record.'),
-		tile('AssetsGallery', 'smrt-images/svelte', 'A gallery of a record’s images.')
+		tile('AssetsGallery', 'smrt-images/svelte', "A gallery of a record's images.")
 	],
 	voice: [tile('VoiceInput', 'smrt-svelte/browser-ai/svelte', 'Speak instead of type.')],
 	comments: [
@@ -131,7 +131,7 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 	],
 
 	inventory: [
-		tile('StockLevels', 'smrt-inventory/svelte', 'What’s on hand, by location.'),
+		tile('StockLevels', 'smrt-inventory/svelte', "What's on hand, by location."),
 		tile('MovementHistory', 'smrt-inventory/svelte', 'Every movement, in order.'),
 		tile('AdjustStockForm', 'smrt-inventory/svelte', 'Correct a count.')
 	],
@@ -159,7 +159,7 @@ export const alsoInTheBox: Record<string, FeatureComponent[]> = {
 		tile('EmployeeForm', 'smrt-human-resources/svelte', 'Hire someone or change their terms.')
 	],
 	qualifications: [
-		tile('PersonQualifications', 'smrt-human-resources/svelte', 'One person’s qualifications.'),
+		tile('PersonQualifications', 'smrt-human-resources/svelte', "One person's qualifications."),
 		tile(
 			'ExpiringQualificationsList',
 			'smrt-human-resources/svelte',

@@ -158,7 +158,7 @@
 	<section class="boundaries" aria-labelledby="boundaries-heading">
 		<div class="section-heading">
 			<p>Continue by task</p>
-			<h2 id="boundaries-heading">Use the section that owns the next question.</h2>
+			<h2 id="boundaries-heading">Pick the section that answers your next question.</h2>
 		</div>
 		<div>
 			<a href="/docs/interaction">
