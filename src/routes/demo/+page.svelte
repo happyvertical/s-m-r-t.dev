@@ -154,6 +154,11 @@
 		background: var(--front-red);
 		border-color: var(--front-red);
 	}
+	/* White on the plain sky blue is about 4.0:1; mixing in the ink token lifts it past 4.5:1. */
+	.front.sky .door.hot {
+		background: color-mix(in srgb, var(--front-red) 75%, var(--front-ink));
+		border-color: color-mix(in srgb, var(--front-red) 75%, var(--front-ink));
+	}
 	.door.hot b,
 	.door.hot span {
 		color: var(--front-door-hot-ink);
