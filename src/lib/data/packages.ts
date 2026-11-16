@@ -115,7 +115,7 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 	{
 		title: 'Text and structured input',
 		description:
-			'Collect free text, selected options, related records, multiple values, tags, dates, times, files, and dictated speech.',
+			'Collect free text, selected options, related records, multiple values, tags, dates, times, files, dictated speech, and quantities or money on a keypad.',
 		importPath: '@happyvertical/smrt-ui/forms',
 		components: [
 			'Input',
@@ -134,7 +134,8 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 			'TimePicker',
 			'FilePicker',
 			'DictationButton',
-			'DictationStatus'
+			'DictationStatus',
+			'NumericKeypad'
 		]
 	},
 	{
@@ -261,6 +262,8 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 			'Container',
 			'PageLayout',
 			'Grid',
+			'Stack',
+			'DescriptionList',
 			'ActionGroup',
 			'Header',
 			'Footer',
@@ -278,9 +281,16 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 	},
 	{
 		title: 'Display and status',
-		description: 'Render common values and compact status consistently.',
+		description: 'Render common values and compact status consistently, and view a PDF or image on a touch screen.',
 		importPath: '@happyvertical/smrt-ui',
-		components: ['ConfidenceBadge', 'CurrencyDisplay', 'DateDisplay', 'Icon', 'StatusBadge']
+		components: [
+			'ConfidenceBadge',
+			'CurrencyDisplay',
+			'DateDisplay',
+			'DocumentViewer',
+			'Icon',
+			'StatusBadge'
+		]
 	},
 	{
 		title: 'Calendar',
@@ -684,6 +694,22 @@ export const packages: SmrtPackage[] = [
 					body: 'smrt() from @happyvertical/smrt-core/vite applies the decorator config and composes smrtConsumer and smrtPlugin with the SvelteKit conventions. The consumed packages are the declared list under consumer.packages in smrt.config.ts; a missing or malformed list fails the build. smrtPlugin and smrtConsumer remain public for custom setups. Generated routes resolve collections through the runtime exported from $lib/server/smrt; a hand-written getCollection export is deprecated.'
 				},
 				{
+					title: 'Data shape rules',
+					body: 'smrt requires a field only when its own code would be wrong or unsafe without it, and each such field states why. The app decides every other part of a table. An app hardens a smrt class with a subclass that overrides fields. A subclass with the same name replaces the class everywhere in the app. Migrate changes the database to match the code when that loses no data. It stops when it would lose or invent data, such as a field declared required while existing rows are empty.'
+				},
+				{
+					title: 'Migrate is all or nothing',
+					body: 'Migrate works out every change first. If any change stops, it applies none and reports what stopped and what it held back. Migrate also stops when a package it saw last time is missing. smrt does not start new code against a database that was not migrated for that build.'
+				},
+				{
+					title: 'Models from data',
+					body: 'runtimeModelEntry turns a definition into a manifest entry, and registerRuntimeModel registers it. The model then has storage, REST, MCP, and method surfaces without a class or a rebuild. planRuntimeModelDDL returns additive statements only. The host runs them in its own transaction, because smrt does not create the tables.'
+				},
+				{
+					title: 'App models and cookbook tools',
+					body: 'createAppModelEditor from the /app-models entry adds fields and lists to a cookbook with versioned, tracked edits. createCookbookToolService from /cookbook/tools supplies recipe tools, and an app customization set when given modelEditorFor. Removing a field or list, and undo, always need durable owner approval. Removing a list keeps its table and data.'
+				},
+				{
 					title: 'Move a model or close its surface without a subclass',
 					body: 'A class that moves between packages declares its old qualified names in previousQualifiedNames, and lookups by the old name keep resolving. smrt db:migrate-qualified-names rewrites stored names on request. ObjectRegistry.registerOverride closes the generated API, MCP, or CLI surface of a package model, or makes its tenancy required, at startup. Only complete closures are supported; reopening throws. The browser entry builds and evaluates without Node-only modules.'
 				}
@@ -1024,6 +1050,10 @@ export const packages: SmrtPackage[] = [
 					body: 'executeAsPrincipal creates a PrincipalRun and checks assertToolAllowed and assertOperation before work proceeds. This is agent execution authority, distinct from smrt-users assertOperationPermission. A data surface can expose data.discover, data.inspect, and data.query through createDataSurfaceTools; report surfaces separately expose reports.query, refresh, drilldown, and export.'
 				},
 				{
+					title: 'A missing AI provider skips the run',
+					body: 'When execute() meets an AI_UNAVAILABLE error, the run ends as skipped. The agent does not retry it and does not rethrow it. The agent stops its interests, and learning neither reinforces nor decays. A direct run() call throws the error and marks it not retryable.'
+				},
+				{
 					title: 'The host owns the process, not the agent',
 					body: 'Signal handling is optional. An agent with manageProcessSignals set to true installs SIGTERM and SIGINT handlers. These handlers shut down and exit. The default false value registers nothing, which is suitable for a server or job runner. Do not enable this option for multiple agents unless the host coordinates shutdown. The first handler to finish exits the process.'
 				},
@@ -1213,7 +1243,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'The AssistantDock and its routes',
-					body: 'AssistantDock reads the mounted descriptors of a host data-surface registry; with none it is plain chat. mountAssistantRoutes from the /sveltekit subpath serves the dock from one catch-all route. The principal comes from event.locals, and threads only from the actor keyed session room. runAssistantTurn runs one turn over the tool loop with server tools and declared browser tools. A browser tool call suspends the turn; the browser resumes it with results, which reach the model marked untrusted. Destructive browser calls always wait for the person.'
+					body: 'AssistantDock reads the mounted descriptors of a host data-surface registry; with none it is plain chat. mountAssistantRoutes from the /sveltekit subpath serves the dock from one catch-all route. The principal comes from event.locals, and threads only from the actor keyed session room. runAssistantTurn runs one turn over the tool loop with server tools and declared browser tools. A browser tool call suspends the turn; the browser resumes it with results, which reach the model marked untrusted. Destructive browser calls always wait for the person. The routes also hold destructive server tools for the owner's approval by default, and the turn stops until the owner decides. Each turn is recorded as a run. When AI is off or not set up, the routes answer 503 with the ai_unavailable code.'
 				},
 				{
 					title: 'Report and overview tools for the assistant',
@@ -1483,6 +1513,10 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Operate production schema changes deliberately',
 					body: 'db:migrate --postgres-safe orders dependencies, uses concurrent-index mode, applies lock and statement timeouts, and probes orphan foreign keys. doctor --db and db:status --parity compare the live schema. db:rollback executes only a reconstructible down migration or refuses; --mark-only changes migration bookkeeping without changing schema. db:prune supports dry-run and skip controls for retention work. SQLite type changes rebuild the table. db:migrate-qualified-names rewrites stored deprecated qualified names on request, and --empty-text-as-null converts empty text to NULL during a column change.'
+				},
+				{
+					title: 'A blocked migrate applies nothing',
+					body: 'db:migrate works out every change before it writes. Any blocker stops the whole run. The command applies nothing and lists each blocker and what it held back. Fix the blocker, then rerun the full migration. A dry run prints the same refusal and exits 1.'
 				},
 				{
 					title: 'Which database a db command uses',
