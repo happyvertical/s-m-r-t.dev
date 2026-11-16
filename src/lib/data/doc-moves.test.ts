@@ -90,20 +90,44 @@ describe('movedHref', () => {
 });
 
 describe('doc-moves.ts holds addresses only (it is exempt from check-copy)', () => {
-	it('has no string literal that is not a path, slug, or id', () => {
-		const raw = import.meta.glob('./doc-moves.ts', {
-			query: '?raw',
-			import: 'default',
-			eager: true
-		}) as Record<string, string>;
-		const source = Object.values(raw)[0]
-			.replace(/\/\*[\s\S]*?\*\//g, '')
-			.replace(/^\s*\/\/.*$/gm, '');
-		const literals = [...source.matchAll(/'([^'\\\n]*)'|"([^"\\\n]*)"|`([^`\\]*)`/g)].map((match) =>
-			(match[1] ?? match[2] ?? match[3]).replace(/\$\{[^}]*\}/g, '')
-		);
-		expect(literals.length).toBeGreaterThan(10);
-		const prose = literals.filter((text) => !/^[A-Za-z0-9#/:._-]*$/.test(text));
-		expect(prose).toEqual([]);
+	const raw = import.meta.glob('./doc-moves.ts', {
+		query: '?raw',
+		import: 'default',
+		eager: true
+	}) as Record<string, string>;
+
+	// Every string literal must be a path (starts with `/`), an id declared in
+	// `movedPages`, or a slug / home name from the capability placement map
+	// (the last segment of a moved path, a capability guide slug, or a home).
+	const allowedWords = new Set<string>([
+		'',
+		'#',
+		'ui',
+		'agents-and-interaction',
+		// Code tokens, not copy: a `typeof` check and the one thrown error id.
+		'string',
+		'movedPages-missing:',
+		...Object.keys(movedPages),
+		...Object.keys(docMoves).map((path) => path.split('/').at(-1) ?? ''),
+		...capabilityGuides.map((guide) => guide.slug)
+	]);
+
+	function findProse(source: string): string[] {
+		const code = source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+		return [...code.matchAll(/'([^'\\\n]*)'|"([^"\\\n]*)"|`([^`\\]*)`/g)]
+			.map((match) => (match[1] ?? match[2] ?? match[3]).replace(/\$\{[^}]*\}/g, ''))
+			.filter((text) => !text.startsWith('/') && !allowedWords.has(text));
+	}
+
+	it('has no string literal that is not a path or a declared id', () => {
+		const source = Object.values(raw)[0];
+		expect(source.length).toBeGreaterThan(0);
+		expect(findProse(source)).toEqual([]);
+	});
+
+	it('fails a planted bare word', () => {
+		expect(findProse("const label = 'Overview';")).toEqual(['Overview']);
+		expect(findProse('const label = "Overview";')).toEqual(['Overview']);
+		expect(findProse("const path = '/docs/ui/x'; const id = 'collectionReads';")).toEqual([]);
 	});
 });
