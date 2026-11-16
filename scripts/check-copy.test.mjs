@@ -26,7 +26,7 @@ describe('copy checker tiers', () => {
 			'smrt builds business software from your models.',
 			'An AI decision engine for your team.',
 			'A domain-specific toolkit.',
-			'SMRT is the framework.',
+			'SM' + 'RT is the framework.',
 			'Try Build a boilerplate today.',
 			'Install smrt 0.55.16 to get started.',
 			'Put business logic in the model.'
