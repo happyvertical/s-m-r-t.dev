@@ -42,6 +42,16 @@ pnpm run check:agent-docs
 node scripts/check-agent-metadata.mjs
 ```
 
+Every content page carries JSON-LD built from its SEO metadata, with articles
+and breadcrumbs added on documentation routes, and the layout advertises
+`/llms.txt`. The metadata check fails when a canonical page is missing from the
+sitemap or a sitemap URL has no built page. Redirect aliases are left out on
+purpose. To check a deployed site:
+
+```sh
+node scripts/check-agent-metadata.mjs --origin https://s-m-r-t.dev
+```
+
 ## How it deploys
 
 `.github/workflows/build-deploy.yaml` does it. A push to `main` that touches the

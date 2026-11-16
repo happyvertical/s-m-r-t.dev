@@ -6,7 +6,7 @@ import { routesByPath, stripQueryAndHash } from './route-inventory';
 
 // Both counts may only grow. A smaller number means a served /docs URL was
 // dropped from the frozen list; restore it instead of lowering the number.
-const FROZEN_PAGES = 550;
+const FROZEN_PAGES = 552;
 const FROZEN_REDIRECTS = 15;
 
 describe('frozen /docs url inventory (#399)', () => {
@@ -34,6 +34,18 @@ describe('frozen /docs url inventory (#399)', () => {
 			else if (destination.isRedirect) problems.push(`${path} -> ${route.target}: redirect chain`);
 		}
 		expect(problems).toEqual([]);
+	});
+});
+
+describe('moved pages (#399 part 1)', () => {
+	it.each([
+		['/docs/agents', '/docs/framework/agents'],
+		['/docs/interaction', '/docs/framework/interaction']
+	])('%s answers 301 to %s', (from, to) => {
+		const route = routesByPath.get(from);
+		expect(route?.isRedirect).toBe(true);
+		expect(route?.status).toBe(301);
+		expect(stripQueryAndHash(route?.target ?? '')).toBe(to);
 	});
 });
 

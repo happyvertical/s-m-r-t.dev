@@ -51,7 +51,7 @@
 		void pathname;
 		void hash;
 		if (!nav) return;
-		const scroller = nav.closest('aside') ?? nav;
+		const scroller = nav.closest('.docs-aside') ?? nav;
 		const link = nav.querySelector<HTMLElement>('.pages a[aria-current]');
 		if (!link) return;
 		const frame = scroller.getBoundingClientRect();

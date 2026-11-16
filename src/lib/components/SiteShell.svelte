@@ -106,9 +106,9 @@
 			     take #main-content as the page. -->
 			<div class="route-frame" data-docs={inDocs ? 'true' : undefined}>
 				{#if inDocs}
-					<aside class="docs-aside">
+					<div class="docs-aside">
 						<DocsSidebar {pathname} {hash} />
-					</aside>
+					</div>
 				{/if}
 				<div class="route-content" id="main-content" tabindex="-1">
 					{@render children()}

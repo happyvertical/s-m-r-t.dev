@@ -56,20 +56,20 @@ describe('site shell docs sidebar', () => {
 		render(Harness, { props: { pathname } });
 
 		expect(sidebar()).toBeNull();
-		expect(document.querySelector('aside.docs-aside')).toBeNull();
+		expect(document.querySelector('div.docs-aside')).toBeNull();
 	});
 
 	// The skip link, the focus move after navigation and the generated agent
 	// docs all take #main-content as the page, so the sidebar stays beside it.
-	it('keeps the sidebar in an aside beside the route content, not inside it', () => {
+	it('keeps the sidebar in a wrapper beside the route content, not inside it', () => {
 		render(Harness, { props: { pathname: '/docs/tooling' } });
 		const nav = sidebar() as HTMLElement;
 		const content = document.getElementById('main-content') as HTMLElement;
 
-		expect(nav.closest('aside')).toBeTruthy();
+		expect(nav.closest('.docs-aside')).toBeTruthy();
 		expect(content.contains(nav)).toBe(false);
 		expect(content.textContent).toContain('Route content');
-		expect(nav.closest('aside')?.nextElementSibling).toBe(content);
+		expect(nav.closest('.docs-aside')?.nextElementSibling).toBe(content);
 		expect(document.querySelector('footer')?.closest('.route-frame')).toBeNull();
 	});
 
