@@ -281,7 +281,8 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 	},
 	{
 		title: 'Display and status',
-		description: 'Render common values and compact status consistently, and view a PDF or image on a touch screen.',
+		description:
+			'Render common values and compact status consistently, and view a PDF or image on a touch screen.',
 		importPath: '@happyvertical/smrt-ui',
 		components: [
 			'ConfidenceBadge',
@@ -1243,7 +1244,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'The AssistantDock and its routes',
-					body: 'AssistantDock reads the mounted descriptors of a host data-surface registry; with none it is plain chat. mountAssistantRoutes from the /sveltekit subpath serves the dock from one catch-all route. The principal comes from event.locals, and threads only from the actor keyed session room. runAssistantTurn runs one turn over the tool loop with server tools and declared browser tools. A browser tool call suspends the turn; the browser resumes it with results, which reach the model marked untrusted. Destructive browser calls always wait for the person. The routes also hold destructive server tools for the owner's approval by default, and the turn stops until the owner decides. Each turn is recorded as a run. When AI is off or not set up, the routes answer 503 with the ai_unavailable code.'
+					body: 'AssistantDock reads the mounted descriptors of a host data-surface registry; with none it is plain chat. mountAssistantRoutes from the /sveltekit subpath serves the dock from one catch-all route. The principal comes from event.locals, and threads only from the actor keyed session room. runAssistantTurn runs one turn over the tool loop with server tools and declared browser tools. A browser tool call suspends the turn; the browser resumes it with results, which reach the model marked untrusted. Destructive browser calls always wait for the person. The routes also hold destructive server tools for owner approval by default, and the turn stops until the owner decides. Each turn is recorded as a run. When AI is off or not set up, the routes answer 503 with the ai_unavailable code.'
 				},
 				{
 					title: 'Report and overview tools for the assistant',
