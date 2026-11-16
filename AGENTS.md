@@ -45,6 +45,10 @@ All 24 installed `@happyvertical/smrt-*` packages ship an `AGENTS.md` inside
 it is the authority on that package's API, and no summary here could stay true.
 The site builds directly against `smrt-ui`, `smrt-svelte`, `smrt-playground`.
 
+The look is the site's own smrt-ui theme, `src/lib/themes/site-theme.ts`;
+`--site-*` in `variables.css` reads it. After an edit,
+`pnpm exec vitest run -u src/lib/themes` rewrites `site-theme.css`.
+
 ## Setup and validation
 
 **`engines.node` is `>=26.0.0` and `.npmrc` sets `engine-strict=true`.** On an
@@ -163,9 +167,6 @@ Then one line below.
   `landmark-unique` on live-example showcases. Tracked here in #368.
 - smrt#4375: `AgentScheduleList` rows are `role=button` holding buttons (axe
   `nested-interactive`) on the Agents showcase. Tracked here in #368.
-- smrt#2071: the `smrt` preset's light primary / on-primary pair is 3.6:1,
-  short of AA; `variables.css` carries `--site-accent-ink` and
-  `--site-on-accent` until it passes. Tracked here in #332.
 - smrt#4415: `Planner` nests a `main` in the AdminShell's `main`, and axe
   finds contrast and name mismatches inside it on `/build-a-boilerplate`.
 - smrt#4416: `AdminShell` is fixed at `100svh`; `build-a-boilerplate/+page.svelte`

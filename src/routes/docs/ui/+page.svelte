@@ -249,7 +249,7 @@
 		margin: 0.75rem 0 1rem;
 		font-size: clamp(2.6rem, 7vw, 6.25rem);
 		line-height: 0.95;
-		letter-spacing: -0.055em;
+		letter-spacing: -0.03em;
 	}
 
 	.hero-lede {
@@ -338,7 +338,7 @@
 		margin: 0.35rem 0 0;
 		font-size: clamp(1.7rem, 4vw, 3.25rem);
 		line-height: 1.05;
-		letter-spacing: -0.035em;
+		letter-spacing: -0.03em;
 	}
 
 	.orientation > p {

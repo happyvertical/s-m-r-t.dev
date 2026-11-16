@@ -91,7 +91,7 @@
 		margin-top: 10px;
 		font-size: clamp(2.15rem, 5vw, 3.25rem);
 		font-weight: 680;
-		letter-spacing: -0.04em;
+		letter-spacing: -0.03em;
 		line-height: 1.08;
 	}
 	.lede {

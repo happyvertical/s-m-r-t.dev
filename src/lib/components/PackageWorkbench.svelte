@@ -698,10 +698,8 @@
 
 	.tabs button:hover,
 	.tabs button.active {
-		--site-ink: #11150f;
-		--site-paper: #f3efe5;
-		background: var(--site-ink);
-		color: var(--site-paper);
+		background: var(--site-fill);
+		color: var(--site-on-fill);
 	}
 
 	.panel[hidden] {

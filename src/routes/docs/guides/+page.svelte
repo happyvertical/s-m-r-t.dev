@@ -137,7 +137,7 @@
 	h1 {
 		margin-top: 11px;
 		font-size: clamp(2.15rem, 5vw, 3.25rem);
-		letter-spacing: -0.04em;
+		letter-spacing: -0.03em;
 		line-height: 1.08;
 	}
 	header > span {

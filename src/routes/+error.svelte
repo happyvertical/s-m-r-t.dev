@@ -41,7 +41,7 @@
 		max-width: 720px;
 		margin-top: 14px;
 		font-size: clamp(2.1rem, 5vw, 3.25rem);
-		letter-spacing: -0.04em;
+		letter-spacing: -0.03em;
 		line-height: 1.08;
 	}
 	.error-page > span {

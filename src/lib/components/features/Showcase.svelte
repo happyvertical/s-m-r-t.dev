@@ -136,7 +136,7 @@
 		font-size: 0.8125rem;
 	}
 	.crumb a {
-		color: var(--site-accent-ink);
+		color: var(--site-accent);
 		font-weight: 600;
 		text-decoration: none;
 	}
@@ -168,9 +168,9 @@
 		border-color: var(--site-accent);
 	}
 	.strip li a[aria-current] {
-		background: var(--site-accent);
+		background: var(--site-fill);
 		border-color: transparent;
-		color: var(--site-on-accent);
+		color: var(--site-on-fill);
 	}
 
 	/* Name, sentence, In the box */
@@ -183,7 +183,7 @@
 	}
 	.kicker {
 		margin: 0 0 10px;
-		color: var(--site-accent-ink);
+		color: var(--site-accent);
 		font: 500 0.75rem var(--site-font-mono);
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
@@ -274,7 +274,7 @@
 		border: 1px solid var(--site-line-strong);
 		border-radius: 10px;
 		background: var(--site-surface);
-		color: var(--site-accent-ink);
+		color: var(--site-accent);
 		font: 500 0.8125rem/1.5 var(--site-font-mono);
 		overflow-wrap: anywhere;
 	}
@@ -351,8 +351,8 @@
 		margin-top: 16px;
 		padding: 20px 24px;
 		border-radius: var(--site-radius-lg);
-		background: var(--site-accent);
-		color: var(--site-on-accent);
+		background: var(--site-fill);
+		color: var(--site-on-fill);
 	}
 	.use p {
 		margin: 0;
@@ -360,8 +360,8 @@
 	.use a {
 		padding: 12px 20px;
 		border-radius: 999px;
-		background: var(--site-on-accent);
-		color: var(--site-accent);
+		background: var(--site-on-fill);
+		color: var(--site-fill);
 		font: 500 0.9375rem var(--site-font-mono);
 		text-decoration: none;
 		white-space: nowrap;
@@ -370,7 +370,7 @@
 		text-decoration: underline;
 	}
 	.use a:focus-visible {
-		outline-color: var(--site-on-accent);
+		outline-color: var(--site-on-fill);
 	}
 
 	/* Previous / next */

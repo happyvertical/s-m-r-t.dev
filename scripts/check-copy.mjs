@@ -272,6 +272,7 @@ const COMPONENT_NON_COPY_ATTRIBUTES = new Set([
 	'homeHref',
 	'inference',
 	'initialConversation',
+	'inlineVariables',
 	'layout',
 	'layoutEditing',
 	'oncookbookchange',

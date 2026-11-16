@@ -153,7 +153,7 @@
 		max-width: 760px;
 		margin-top: 12px;
 		font-size: clamp(2.15rem, 5vw, 3.25rem);
-		letter-spacing: -0.04em;
+		letter-spacing: -0.03em;
 		line-height: 1.08;
 	}
 
@@ -260,11 +260,9 @@
 
 	.category-filters button:hover,
 	.category-filters button.active {
-		--site-ink: #11150f;
-		--site-paper: #f3efe5;
-		border-color: var(--site-ink);
-		background: var(--site-ink);
-		color: var(--site-paper);
+		border-color: var(--site-fill);
+		background: var(--site-fill);
+		color: var(--site-on-fill);
 	}
 
 	.package-results {

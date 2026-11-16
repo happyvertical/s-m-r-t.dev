@@ -44,7 +44,7 @@
 	}
 	.kicker {
 		margin: 0 0 10px;
-		color: var(--site-accent-ink);
+		color: var(--site-accent);
 		font: 500 0.75rem var(--site-font-mono);
 		letter-spacing: 0.1em;
 		text-transform: uppercase;

@@ -150,7 +150,7 @@ pnpm app:open               # in a second terminal: the one-time owner setup pag
 	h1 {
 		margin-top: 13px;
 		font-size: clamp(2.15rem, 5vw, 3.2rem);
-		letter-spacing: -0.04em;
+		letter-spacing: -0.03em;
 		line-height: 1.08;
 	}
 

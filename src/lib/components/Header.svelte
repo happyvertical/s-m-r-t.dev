@@ -133,9 +133,8 @@
 		z-index: 1000;
 		padding: 0.55rem 0.75rem;
 		border-radius: var(--site-radius-md);
-		background: var(--smrt-color-primary);
-		/* smrt#2071: the preset's light on-primary is 3.6:1 here. */
-		color: var(--site-on-accent);
+		background: var(--site-fill);
+		color: var(--site-on-fill);
 		font-size: 0.8rem;
 		font-weight: 700;
 		transform: translateY(-150%);

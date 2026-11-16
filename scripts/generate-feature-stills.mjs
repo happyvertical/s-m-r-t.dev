@@ -318,14 +318,14 @@ function render(id, card) {
 	return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${WIDTH} ${HEIGHT}" width="${WIDTH}" height="${HEIGHT}" role="img" aria-labelledby="title-${id}">
   <title id="title-${id}">${escapeXml(label)}</title>
   <style>
-    .bg { fill: #fbf8f3; }
-    .card { fill: #ffffff; stroke: #e3dbd0; }
-    .kicker { font: 600 12px/1 ui-monospace, "JetBrains Mono", monospace; fill: #c2410c; letter-spacing: 0.08em; text-transform: uppercase; }
-    .title { font: 600 24px/1 Avenir, Inter, system-ui, sans-serif; fill: #1c1917; }
-    .head { font: 600 12px/1 Avenir, Inter, system-ui, sans-serif; fill: #78716c; letter-spacing: 0.04em; text-transform: uppercase; }
-    .cell { font: 400 15px/1 Avenir, Inter, system-ui, sans-serif; fill: #292524; }
-    .rule { stroke: #efe9e1; }
-    .badge { font: 600 11px/1 ui-monospace, "JetBrains Mono", monospace; fill: #78716c; letter-spacing: 0.06em; }
+    .bg { fill: #fafaf7; }
+    .card { fill: #ffffff; stroke: #dfe3de; }
+    .kicker { font: 600 12px/1 ui-monospace, "JetBrains Mono", monospace; fill: #1d6a3c; letter-spacing: 0.08em; text-transform: uppercase; }
+    .title { font: 700 24px/1 Gabarito, "Avenir Next", "Segoe UI", sans-serif; fill: #17201f; }
+    .head { font: 600 12px/1 Inter, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #5b6664; letter-spacing: 0.04em; text-transform: uppercase; }
+    .cell { font: 400 15px/1 Inter, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #17201f; }
+    .rule { stroke: #e9ebe6; }
+    .badge { font: 600 11px/1 ui-monospace, "JetBrains Mono", monospace; fill: #5b6664; letter-spacing: 0.06em; }
   </style>
   <rect class="bg" width="${WIDTH}" height="${HEIGHT}"/>
   <rect class="card" x="20" y="20" width="${WIDTH - 40}" height="${HEIGHT - 40}" rx="16"/>

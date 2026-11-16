@@ -118,7 +118,7 @@
 	h2 {
 		margin-top: 0.65rem;
 		font-size: clamp(2rem, 5vw, 3.35rem);
-		letter-spacing: -0.045em;
+		letter-spacing: -0.03em;
 		line-height: 1.05;
 		text-wrap: balance;
 	}
