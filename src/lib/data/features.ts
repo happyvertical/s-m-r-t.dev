@@ -685,7 +685,15 @@ export const offMapPackageSlugs: string[] = [
 	'smrt-jobs',
 	'smrt-ledgers',
 	'smrt-properties',
-	'smrt-tags'
+	'smrt-tags',
+	'smrt-app-shell',
+	'smrt-bookings',
+	'smrt-desktop',
+	'smrt-education',
+	'smrt-reactions',
+	'smrt-spreadsheets',
+	'smrt-vault-relay',
+	'smrt-workflows'
 ];
 
 export function getFeatureSection(id: string): FeatureSection | undefined {
