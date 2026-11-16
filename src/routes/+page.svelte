@@ -67,6 +67,62 @@
 		[']', 'plain']
 	];
 
+	// The agentic section (#411). Each line was checked against the installed
+	// packages at the pinned release (smrt-chat for the dock and its approval
+	// holds, smrt-svelte and smrt-web for page tools, smrt-agents and
+	// smrt-personas for schedules, smrt-reports for runtime reports, smrt-core
+	// for usage rows and tiers) or, where the package is not a dependency of this
+	// site (smrt-approvals, smrt-inference, smrt-ingestion), against the page
+	// the card links to.
+	const agentic = [
+		{
+			name: 'An assistant that sees the page',
+			line: 'A chat dock that knows what is on the page and acts through the page’s own tools. Anything destructive waits for a person.',
+			href: '/docs/reference/components/assistant-dock'
+		},
+		{
+			name: 'Page tools',
+			line: 'In a browser with WebMCP support, an agent works with the page as the signed-in person. Read-only until you allow more, and a form change is staged for a person to apply.',
+			href: '/docs/capabilities/webmcp'
+		},
+		{
+			name: 'Agents on a schedule',
+			line: 'Set an agent to run on a schedule. It works as the user it is bound to, with that user’s rights and only the tools you list.',
+			href: '/features/assistant/agents'
+		},
+		{
+			name: 'Approvals',
+			line: 'Who has to say yes before something happens, kept as history. The assistant’s destructive requests wait here too, and a yes runs one once, as the person who asked.',
+			href: '/features/team/approvals'
+		},
+		{
+			name: 'Reports on request',
+			line: 'Describe a report, or let an agent draft one. It is saved only after a person confirms, and each run shows only what the person running it may see.',
+			href: '/docs/capabilities/reports'
+		},
+		{
+			name: 'AI usage',
+			line: 'Every model call leaves a row: which prompt asked, which model answered, the tokens, an estimated cost and the time. One command turns the rows into a report.',
+			href: '/docs/capabilities/ai-usage'
+		},
+		{
+			name: 'Inference tuning',
+			line: 'Your code asks for a tier, not a model. Bind each tier to a model, or to a list of models, and a call that fails moves to the next one.',
+			href: '/docs/capabilities/inference-tuning'
+		},
+		{
+			name: 'Ingestion',
+			line: 'Uploads and email are kept as evidence, read when you ask, and turned into suggestions. A reviewer decides. It ships as a preview, with automation off.',
+			href: '/docs/capabilities/ingestion'
+		}
+	];
+
+	const alsoAgentic = [
+		{ name: 'agent memory', href: '/features/assistant/memory' },
+		{ name: 'search by meaning', href: '/docs/guides/semantic-search' },
+		{ name: 'voice on the device', href: '/docs/reference/packages/smrt-svelte' }
+	];
+
 	let asking = $state<'person' | 'agent'>('person');
 </script>
 
@@ -170,29 +226,32 @@
 		</div>
 	</section>
 
-	<section class="band" aria-labelledby="every-way-in">
+	<section class="band" aria-labelledby="agentic-features">
 		<div class="wrap">
 			<div class="head">
-				<h2 id="every-way-in">One model, every way in.</h2>
+				<h2 id="agentic-features">Agentic features, out of the box.</h2>
 				<p>
-					That class is the description. smrt reads it and generates the rest, so the screen a
-					person uses and the tool an agent calls come from the same model.
+					This is what agents do inside a smrt app. Each one works as a user, with that user’s
+					permissions and nothing more.
 				</p>
 			</div>
-			<ul class="ways-in">
-				<li><b>A table</b><span>The fields tell smrt what to store.</span></li>
-				<li><b>An API</b><span>Routes and clients for exactly the actions you allow.</span></li>
-				<li>
-					<b>Agent tools</b><span
-						>The same actions, described so an agent knows when to use them.</span
-					>
-				</li>
-				<li><b>Commands</b><span>For the terminal and for scripts.</span></li>
-				<li><b>Forms</b><span>Fields and labels, straight from the model.</span></li>
-				<li>
-					<b>Permissions</b><span>However a request arrives, the same checks apply.</span>
-				</li>
+			<ul class="agentic">
+				{#each agentic as item (item.href)}
+					<li>
+						<a class="feat" href={item.href}>
+							<b>{item.name}</b>
+							<span>{item.line}</span>
+						</a>
+					</li>
+				{/each}
 			</ul>
+			<p class="also">
+				Also in the box:
+				{#each alsoAgentic as item, index (item.href)}<a href={item.href}>{item.name}</a>{index <
+					alsoAgentic.length - 1
+						? ', '
+						: '.'}{/each}
+			</p>
 		</div>
 	</section>
 
@@ -201,8 +260,8 @@
 			<div class="head">
 				<h2 id="already-built">The parts every app needs are already built.</h2>
 				<p>
-					Customers, invoices, timesheets, chat, approvals. Switch on what you need and save your
-					energy for the part that is actually yours.
+					Then there are the everyday parts: customers, invoices, timesheets, chat. Switch on what
+					you need and save your energy for the part that is actually yours.
 				</p>
 			</div>
 			<ul class="groups">
@@ -221,6 +280,32 @@
 				{/each}
 			</ul>
 			<p class="more"><a href={FEATURES_PATH}>Browse all features →</a></p>
+		</div>
+	</section>
+
+	<section class="band" aria-labelledby="every-way-in">
+		<div class="wrap">
+			<div class="head">
+				<h2 id="every-way-in">One model, every way in.</h2>
+				<p>
+					You write a model once, as a TypeScript class. smrt reads it and generates the rest, so
+					the screen a person uses and the tool an agent calls come from the same model.
+				</p>
+			</div>
+			<ul class="ways-in">
+				<li><b>A table</b><span>The fields tell smrt what to store.</span></li>
+				<li><b>An API</b><span>Routes and clients for exactly the actions you allow.</span></li>
+				<li>
+					<b>Agent tools</b><span
+						>The same actions, described so an agent knows when to use them.</span
+					>
+				</li>
+				<li><b>Commands</b><span>For the terminal and for scripts.</span></li>
+				<li><b>Forms</b><span>Fields and labels, straight from the model.</span></li>
+				<li>
+					<b>Permissions</b><span>However a request arrives, the same checks apply.</span>
+				</li>
+			</ul>
 		</div>
 	</section>
 
@@ -620,15 +705,21 @@
 		font-size: 0.93rem;
 	}
 
+	.agentic,
 	.groups {
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 		gap: 14px;
 	}
+	.agentic {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+	.agentic li,
 	.groups li {
 		min-width: 0;
 		display: flex;
 	}
+	.feat,
 	.group {
 		flex: 1;
 		min-width: 0;
@@ -642,8 +733,23 @@
 		color: inherit;
 		text-decoration: none;
 	}
+	.feat:hover,
 	.group:hover {
 		border-color: var(--site-accent);
+	}
+	.feat {
+		/* The one brass mark on a card: these lead the page. */
+		border-top: 3px solid var(--site-brass);
+	}
+	.feat:hover {
+		border-top-color: var(--site-brass);
+	}
+	.feat b {
+		font-family: var(--site-font-display);
+		font-size: 1.1rem;
+		font-weight: 700;
+		letter-spacing: -0.01em;
+		line-height: 1.25;
 	}
 	.group b {
 		font-family: var(--site-font-display);
@@ -651,19 +757,27 @@
 		font-weight: 700;
 		letter-spacing: -0.01em;
 	}
+	.feat span,
 	.group .words {
 		color: var(--site-muted);
 		font-size: 0.92rem;
+	}
+	.also {
+		margin-top: 24px;
+		color: var(--site-muted);
+		font-size: 0.95rem;
 	}
 	.more {
 		margin-top: 24px;
 		font-weight: 600;
 	}
+	.also a,
 	.more a,
 	.list a {
 		color: var(--site-accent);
 		text-decoration: none;
 	}
+	.also a:hover,
 	.more a:hover,
 	.list a:hover,
 	.go:hover {
@@ -736,6 +850,12 @@
 		color: var(--site-muted);
 	}
 
+	@media (max-width: 1040px) {
+		.agentic {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
 	@media (max-width: 860px) {
 		.hero {
 			padding-block: 44px 56px;
@@ -749,6 +869,7 @@
 			padding-block: 52px;
 		}
 		.ways-in,
+		.agentic,
 		.groups {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
@@ -759,6 +880,7 @@
 
 	@media (max-width: 560px) {
 		.ways-in,
+		.agentic,
 		.groups {
 			grid-template-columns: minmax(0, 1fr);
 		}
