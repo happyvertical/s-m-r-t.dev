@@ -1355,7 +1355,8 @@ export const nextPageIntent = defineIntent({
 					'Set the window with --since and --until, as a date or a relative span such as 24h, 7d or 2w.',
 					'--tenant totals one tenant and counts the others as excluded. Nothing is dropped silently.',
 					'--runs adds run totals per run type, by status, with check and approval rates.',
-					'--json prints the same report as data. The commands only read.'
+					'--json prints the same report as data.',
+					'These commands change no usage data. The three that show transcript text (smrt ai:usage --with-transcripts, smrt ai:transcript and smrt ai:compare --transcripts) write an audit entry for each transcript they read.'
 				],
 				filename: 'terminal',
 				lang: 'bash',
@@ -1407,7 +1408,7 @@ export const nextPageIntent = defineIntent({
 		lede: 'Your code asks for a tier, not a model. You bind each tier to a model or to an ordered list of models, and a call that hits a quota, a bad key or a renamed model moves to the next one. Every move is written to the usage row.',
 		plainEnglish:
 			'Tiers are built in and change nothing until you bind them. Fallback chains, per-user and per-tenant choices, the settings screen and the spend gate come from the smrt-inference package, which you add and switch on piece by piece.',
-		packages: ['smrt-core', 'smrt-cli'],
+		packages: ['smrt-core', 'smrt-inference', 'smrt-cli'],
 		pinnedVersion: SMRT_VERSION,
 		sources: [
 			{
@@ -1547,7 +1548,7 @@ export const nextPageIntent = defineIntent({
 				points: [
 					'Four kinds of source ship: an upload endpoint, an email adapter, a watched folder and a vendor webhook handler. All of them only preserve what arrived. None writes to your records, calls an AI tool or takes an outside action.',
 					'Analysis runs as background jobs: extracting text from PDFs, images and audio, then generating suggestions. Receiving an item does not start it. Your host asks for the first analysis and names the extraction settings.',
-					'Retention is enforced. When an item expires, access is revoked, the bytes are removed, and the content of its history is redacted.'
+					'Retention runs when your host runs it. The host schedules repairDispatches, after a restart and on a timer, along with the retention and cleanup sweeps. When an item expires, access is revoked, the bytes are removed, and the content of its history is redacted.'
 				]
 			},
 			{
@@ -1564,7 +1565,7 @@ export const nextPageIntent = defineIntent({
 			{
 				title: 'What upstream marks as preview',
 				intro:
-					'The package’s own README says the published evaluation did not meet its quality gates and did not establish safety, and that automation remains disabled. This page repeats that so nobody reads more into it.',
+					'The package’s own README says the published evaluation did not meet its quality gates and did not establish safety, and that automation remains disabled. We repeat it here so the limits are clear.',
 				points: [
 					'Every generated suggestion is marked as not eligible for automatic action. That flag is always false.',
 					'The package has a path for machine authorization. It needs an explicit, evaluated opt-in at the application, the tenant and the source, and upstream makes no evaluation claim for it. The reference handlers always require review.',
