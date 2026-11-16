@@ -27,24 +27,24 @@
 
 <SEO
 	title="Guides"
-	description="Task-oriented smrt guides organized into six scalable guide families."
+	description="smrt guides that each get one task done, organized into six guide families."
 	url={siteUrl('/docs/guides')}
 />
 
 <article class="guide-index">
 	<header>
 		<p>Guides · {TASK_GUIDES_PINNED_VERSION}</p>
-		<h1>Complete one application task at a time.</h1>
+		<h1>Get one task done at a time.</h1>
 		<span>
-			Choose a guide family. Each guide states its starting point, packages, concepts, and expected
-			result.
+			Pick a guide family. Each guide tells you where it starts, which packages and concepts it
+			uses, and what you should have at the end.
 		</span>
 	</header>
 
 	<section class="family-list" aria-labelledby="family-title">
 		<div class="section-heading">
 			<h2 id="family-title">Guide families</h2>
-			<p>Use a family to narrow the library.</p>
+			<p>Pick a family to narrow the library.</p>
 		</div>
 		<div class="family-grid">
 			{#each taskGuideFamilies as family, index (family.id)}
@@ -101,15 +101,15 @@
 				{/each}
 			</div>
 		{:else}
-			<p class="empty">No guide matches this filter. Clear the family or search text.</p>
+			<p class="empty">No guide matches that filter. Try clearing the family or the search text.</p>
 		{/if}
 	</section>
 
 	<aside>
-		<strong>Use concepts and reference pages for background.</strong>
+		<strong>Want the background?</strong>
 		<p>
-			Guides give procedures. Framework pages explain concepts. Reference pages define complete
-			contracts.
+			Guides give you the steps. Framework pages explain the concepts. Reference pages define the
+			complete contracts.
 		</p>
 	</aside>
 </article>

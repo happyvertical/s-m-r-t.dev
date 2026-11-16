@@ -10,33 +10,33 @@
 	const audiences = [
 		{
 			name: 'Developers',
-			body: 'Developers create projects, change models, generate artifacts, run tests, and apply migrations. CI runs the same project checks and generation commands. These actions can write files or change the configured development database.'
+			body: 'Developers create projects, change models, generate artifacts, run tests and apply migrations. CI runs the same project checks and generation commands. These actions can write files or change the configured development database.'
 		},
 		{
 			name: 'Coding agents',
-			body: 'Coding agents inspect source, manifests, package contracts, and generated knowledge. Development MCP is read-only. Any separate permission to edit the repository comes from the coding-agent client.'
+			body: 'Coding agents inspect source, manifests, package contracts and generated knowledge. Development MCP is read-only. If an agent can also edit the repository, that permission comes from the coding-agent client.'
 		},
 		{
 			name: 'Application agents',
-			body: 'Application agents use generated local MCP, hosted application MCP, or WebMCP. Their calls can operate live data and remain inside the application authentication, tenant, permission, and field-policy boundaries.'
+			body: 'Application agents use generated local MCP, hosted application MCP or WebMCP. Their calls can operate live data, and they stay inside the application authentication, tenant, permission and field-policy boundaries.'
 		}
 	];
 </script>
 
 <SEO
 	title="Developer tooling"
-	description="Use smrt tools to build, inspect, test, and operate applications. Keep development MCP, generated MCP, hosted application MCP, and WebMCP separate."
+	description="The smrt tools for building, inspecting, testing and operating an app, and why development MCP, generated MCP, hosted application MCP and WebMCP stay separate."
 	url={siteUrl('/docs/tooling')}
 />
 
 <article class="tooling-index">
 	<header>
 		<p>Tooling · {TOOLING_PINNED_VERSION}</p>
-		<h1>Build the application. Inspect the workspace. Operate the correct surface.</h1>
+		<h1>Build the app. Inspect the workspace. Operate the right surface.</h1>
 		<span
-			>This section covers systems for developers and coding agents. It also explains the runtime
-			surfaces that application agents use. These surfaces are not interchangeable. Every claim in
-			this section was verified against the released {TOOLING_PINNED_VERSION} packages.</span
+			>This section covers the systems developers and coding agents work with. It also explains the
+			runtime surfaces that application agents use. Those surfaces aren't interchangeable. Every
+			claim in this section was checked against the released {TOOLING_PINNED_VERSION} packages.</span
 		>
 	</header>
 
@@ -96,12 +96,12 @@
 		<p>
 			The <a href="/docs/framework">Framework section</a> explains the shared application model. The
 			<a href="/docs/reference/interfaces">generated interfaces</a> reference defines how that model
-			produces REST, MCP, WebMCP, and CLI views. The
+			produces REST, MCP, WebMCP and CLI views. The
 			<a href="/docs/reference/security">security defaults</a>
-			reference defines how those interfaces fail closed. Use the
+			reference defines how those interfaces fail closed. When you want a complete procedure, use the
 			<a href="/docs/guides/testing-your-app">testing guide</a> or the
-			<a href="/docs/guides/expose-your-app-over-mcp">application MCP guide</a> for a complete
-			procedure. Package pages for
+			<a href="/docs/guides/expose-your-app-over-mcp">application MCP guide</a>. The package pages
+			for
 			<a href="/docs/reference/packages/smrt-app-mcp">smrt-app-mcp</a>
 			and <a href="/docs/reference/packages/smrt-dev-mcp">smrt-dev-mcp</a> hold the per-package detail.
 		</p>

@@ -6,7 +6,7 @@
 
 <SEO
 	title="Human-Agent Interaction"
-	description="Learn how persons and application agents communicate, discover controls, stage changes, preserve input sources, and keep authority explicit."
+	description="How people and application agents communicate, discover controls, stage changes, preserve input sources and keep authority explicit."
 	url={siteUrl('/docs/interaction')}
 />
 
@@ -15,23 +15,26 @@
 		<p>Interaction</p>
 		<h1>Human-Agent Interaction</h1>
 		<span
-			>Persons and application agents use one declared interaction model. The model keeps meaning,
-			proposals, consent, and authority explicit.</span
+			>People and application agents use one declared interaction model. It keeps meaning,
+			proposals, consent and authority explicit.</span
 		>
 	</header>
 
 	<section class="overview-section boundary">
-		<h2>Keep each concern in its section</h2>
-		<p>Interaction explains how persons and agents communicate and agree on meaning and control.</p>
+		<h2>Each concern has its own section</h2>
+		<p>
+			This one, Interaction, explains how people and agents communicate and agree on meaning and
+			control.
+		</p>
 		<div>
 			<article>
 				<h3>UI</h3>
-				<p>UI renders the controls, state, confirmation, and feedback for an interaction.</p>
+				<p>UI renders the controls, state, confirmation and feedback for an interaction.</p>
 				<a href="/docs/ui">Open UI →</a>
 			</article>
 			<article>
 				<h3>Framework</h3>
-				<p>Framework explains manifests, registries, generated operations, and authority.</p>
+				<p>Framework explains manifests, registries, generated operations and authority.</p>
 				<a href="/docs/framework">Open Framework →</a>
 			</article>
 			<article>
@@ -41,7 +44,7 @@
 			</article>
 			<article>
 				<h3>Reference</h3>
-				<p>Reference lists the complete interface, security, and package contracts.</p>
+				<p>Reference lists the complete interface, security and package contracts.</p>
 				<a href="/docs/reference">Open Reference →</a>
 			</article>
 		</div>

@@ -7,17 +7,17 @@
 
 <SEO
 	title="Capabilities"
-	description="Learn how smrt makes applications agent-legible through manifests, runtime registries, semantic controls, generated tools, and permission-aware capabilities."
+	description="How smrt makes an app legible to agents, through manifests, runtime registries, semantic controls, generated tools and permission-aware capabilities."
 	url={siteUrl('/docs/capabilities')}
 />
 
 <article class="capability-index">
 	<header>
 		<p>Capabilities · {SMRT_VERSION}</p>
-		<h1>Add the parts your application needs.</h1>
+		<h1>Add the parts your app needs.</h1>
 		<span
-			>The application foundations come first. These guides cover newer or more specialized systems
-			that connect to the same models, tenants, permissions, and manifests.</span
+			>Start with the application foundations. These guides cover the newer or more specialized
+			systems, and they all connect to the same models, tenants, permissions and manifests.</span
 		>
 	</header>
 
@@ -35,10 +35,10 @@
 	</section>
 
 	<aside>
-		<strong>Components are browsable too.</strong>
+		<strong>You can browse the components too.</strong>
 		<p>
-			Open the <a href="/playground">playground</a> to try foundation controls and package working views.
-			Package pages keep those previews beside their reference material.
+			Open the <a href="/playground">playground</a> to try the foundation controls and the package working
+			views. Each package page keeps those previews next to its reference material.
 		</p>
 	</aside>
 </article>
