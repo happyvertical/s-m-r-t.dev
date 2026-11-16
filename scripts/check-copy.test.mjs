@@ -28,7 +28,8 @@ describe('copy checker tiers', () => {
 			'A domain-specific toolkit.',
 			'SMRT is the framework.',
 			'Try Build a boilerplate today.',
-			'Install smrt 0.55.16 to get started.'
+			'Install smrt 0.55.16 to get started.',
+			'Put business logic in the model.'
 		]) {
 			const findings = auditPassages(passage(text, WELCOME_FILE));
 			expect(findings.filter((item) => item.severity === 'error')).not.toHaveLength(0);
@@ -53,7 +54,7 @@ describe('copy checker tiers', () => {
 		const long =
 			'Use this deliberately oversized procedural sentence to verify that the checker stays quiet for relaxed pages without claiming anything about the project behavior in general terms.';
 		const findings = auditPassages(
-			passage(`Put business logic in the model, simply via HTTP. ${long}`, WELCOME_FILE)
+			passage(`Put the rules in the model, simply via HTTP. ${long}`, WELCOME_FILE)
 		);
 		expect(findings).toEqual([]);
 	});
@@ -62,16 +63,11 @@ describe('copy checker tiers', () => {
 		const long =
 			'Use this deliberately oversized procedural sentence to verify that the checker reports for strict pages without claiming anything about the project behavior in general terms.';
 		const findings = auditPassages(
-			passage(`Put business logic in the model, simply via HTTP. ${long}`, STRICT_FILE)
+			passage(`Put the rules in the model, simply via HTTP. ${long}`, STRICT_FILE)
 		);
 		const ids = findings.map((item) => item.id);
 		expect(ids).toEqual(
-			expect.arrayContaining([
-				'prohibited-business-logic',
-				'phrase-simply',
-				'phrase-via',
-				'procedural-sentence-length'
-			])
+			expect.arrayContaining(['phrase-simply', 'phrase-via', 'procedural-sentence-length'])
 		);
 	});
 

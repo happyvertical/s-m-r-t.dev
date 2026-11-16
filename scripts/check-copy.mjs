@@ -419,6 +419,11 @@ const IMPERATIVE_VERBS = new Set([
 // `skipFiles` exempts files whose copy is generated from upstream packages.
 const TIER_A_ERRORS = [
 	{
+		id: 'prohibited-business-logic',
+		pattern: /\bbusiness(?:[\s-]+)logic\b/giu,
+		message: 'Use the approved project term "application logic".'
+	},
+	{
 		id: 'wording-software-agents',
 		pattern: /\bsoftware agents?\b/giu,
 		message: 'Say "agents", never "software agents".'
@@ -463,14 +468,6 @@ const TIER_A_ERRORS = [
 ];
 
 // Tier B: ASD-STE100-style rules. They run only on STRICT_COPY_GLOBS files.
-const TIER_B_ERRORS = [
-	{
-		id: 'prohibited-business-logic',
-		pattern: /\bbusiness(?:[\s-]+)logic\b/giu,
-		message: 'Use the approved project term "application logic".'
-	}
-];
-
 // Tier B advisory phrases.
 const TIER_B_PHRASES = [
 	{
@@ -1831,7 +1828,6 @@ export function auditPassages(passages) {
 
 		// Tier B: ASD-STE100-style rules, strict reference paths only.
 		if (!strict) continue;
-		applyRules(TIER_B_ERRORS, 'error', passage, findings, strict);
 		applyRules(TIER_B_PHRASES, 'warning', passage, findings, strict);
 
 		const sentences = splitSentences(passage.text);

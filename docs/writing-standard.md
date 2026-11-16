@@ -18,7 +18,7 @@ These apply to every page:
 - Write `build-a-boilerplate` in lowercase, with hyphens.
 - Say "agents", never "software agents".
 - Lead with "agentic". smrt builds software, or agentic software. Never say it "builds business software".
-- Never say "domain-specific" or "AI decision engine".
+- Never say "domain-specific" or "AI decision engine". Say "application logic", not "business logic".
 - Don't put a version number in page copy. Import `SMRT_VERSION` from `$lib/version`.
 
 ## Check every claim
@@ -77,6 +77,6 @@ Don't rewrite these to satisfy a prose rule: code and code comments, identifiers
 Run `pnpm run check:copy`. It also runs as part of `pnpm test`. It has two tiers:
 
 - **Tier A** covers the fixed wording and the mechanical rules. It runs on the whole site and fails on an error. A product-name test backs it up.
-- **Tier B** covers the strict rules: sentence and paragraph length, ambiguous pronouns, filler phrases and the "business logic" term. It runs only on the strict reference paths. Its findings are advisory warnings, except "business logic", which is an error.
+- **Tier B** covers the strict rules: sentence and paragraph length, ambiguous pronouns, and filler phrases. It runs only on the strict reference paths, and its findings are advisory warnings.
 
 A passing check doesn't prove the copy is good, so read the page too. A pull request that changes copy lists the pages you reviewed and the `check:copy` result in the review section of the pull request template.
