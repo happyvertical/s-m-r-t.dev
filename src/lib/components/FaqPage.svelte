@@ -105,10 +105,6 @@
 					q: 'Is this site itself built with smrt?',
 					a: `Yes. ${SITE_HOST} runs on the same released @happyvertical/smrt-* packages it documents — the component playground, the agent-aware form demo, and the data table on this site are the actual packages, not mockups.`,
 					link: { label: 'Component playground', href: '/playground' }
-				},
-				{
-					q: 'How is the name written?',
-					a: `Lowercase, four letters: smrt. That holds at the start of a sentence too. The hyphens you see in ${SITE_HOST} belong to the site's address, and the packages are published as @happyvertical/smrt-*.`
 				}
 			]
 		}
@@ -116,7 +112,7 @@
 </script>
 
 <SEO
-	title="smrt FAQ"
+	title="FAQ"
 	description="Clear answers about smrt, SAADL applications, users, tenants, generated interfaces, agent-assisted forms, learning agents, mobile, WebMCP, and live data."
 	url={siteUrl('/docs/reference/faq')}
 />
