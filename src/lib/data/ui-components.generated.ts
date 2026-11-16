@@ -2341,6 +2341,118 @@ export const uiComponents: UiComponentReference[] = [
 		source: 'packages/chat/src/svelte/components/agent/AgentSessionPanel.svelte'
 	},
 	{
+		slug: 'ai-unavailable-notice',
+		name: 'AiUnavailableNotice',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'AiUnavailableNotice is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'status',
+				code: "Pick<ChatUnavailableStatus, 'reason'>",
+				status: true,
+				description: "Why AI is unavailable, from the server's `ai_unavailable` answer."
+			},
+			{
+				name: 'settingsHref',
+				code: 'string',
+				status: false,
+				description: 'Host route of its AI settings page (e.g. the #4754 "My AI" panel).'
+			},
+			{
+				name: 'settingsLabel',
+				code: 'string',
+				status: false,
+				description: 'Link text; defaults to "Open AI settings".'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/docs/ui'
+		},
+		source: 'packages/chat/src/svelte/components/shared/AiUnavailableNotice.svelte'
+	},
+	{
+		slug: 'assistant-approval-card',
+		name: 'AssistantApprovalCard',
+		family: 'smrt-chat-svelte',
+		category: 'Chat · Components',
+		importPath: '@happyvertical/smrt-chat/svelte',
+		summary: 'AssistantApprovalCard is part of the chat · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'approval',
+				code: 'AssistantApprovalRequest',
+				status: false,
+				description: 'The pending request this card asks the owner to approve or deny.'
+			},
+			{
+				name: 'threadId',
+				code: 'string',
+				status: false,
+				description: 'Conversation the request belongs to, sent with the decision.'
+			},
+			{
+				name: 'toolPresentation',
+				code: "'generic'",
+				status: false,
+				description: "Show a plain summary in place of the tool's own name and arguments."
+			},
+			{
+				name: 'transport',
+				code: 'AssistantTransport',
+				status: false,
+				description: "Connection used to send the owner's decision to the assistant."
+			},
+			{
+				name: 'presentation',
+				code: '{ id: string; summary: string; statusLabel: string; badgeClass: string; headingSize?: string; pending: boolean; busy?: boolean; busyLabel?: string; message?: string; ondecide?: (approve: boolean) => void; }',
+				status: false,
+				description:
+					'Host-authorized presentation for an existing decision endpoint and persisted view.'
+			},
+			{
+				name: 'detail',
+				code: 'Snippet',
+				status: false,
+				description: 'Extra content shown under the summary, such as what will change.'
+			},
+			{
+				name: 'ondecided',
+				code: '() => void | Promise<void>',
+				status: false,
+				description: 'Called after the decision has been accepted, to refresh the surrounding view.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'ondecided',
+				code: '() => void | Promise<void>',
+				status: false,
+				description: 'Called after the decision has been accepted, to refresh the surrounding view.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/docs/ui'
+		},
+		source: 'packages/chat/src/svelte/components/assistant/AssistantApprovalCard.svelte'
+	},
+	{
 		slug: 'assistant-choice-cards',
 		name: 'AssistantChoiceCards',
 		family: 'smrt-chat-svelte',
@@ -2440,6 +2552,13 @@ export const uiComponents: UiComponentReference[] = [
 		summarySynthesized: false,
 		slot: null,
 		details: [
+			{
+				name: 'showSendError',
+				code: 'boolean',
+				status: false,
+				description:
+					'A containing dock owns the send error and retry; standalone composers show it locally.'
+			},
 			{
 				name: 'onsend',
 				code: '(content: string, attachments: AssistantAttachmentRef[]) => void | Promise<void>',
@@ -2646,6 +2765,13 @@ export const uiComponents: UiComponentReference[] = [
 					'Trusted host selection of a component for a tool result. Unknown results retain their ordinary message text and optional toolCall snippet. This seam only renders: it grants no tool execution or confirmation authority.'
 			},
 			{
+				name: 'toolPresentation',
+				code: "'generic'",
+				status: false,
+				description:
+					'Trusted host presentation; tool execution data stays out of visible fallback text.'
+			},
+			{
 				name: 'messageFormat',
 				code: "'text' | 'markdown'",
 				status: false,
@@ -2813,6 +2939,13 @@ export const uiComponents: UiComponentReference[] = [
 				status: false,
 				description:
 					'The reply is being read aloud: hands-free listening pauses meanwhile; see `AssistantComposer`.'
+			},
+			{
+				name: 'aiSettingsHref',
+				code: 'string',
+				status: false,
+				description:
+					'Host route of its AI settings page (#4757). When a send is refused because AI is off or not set up (`ai_unavailable`), the dock shows "AI is off" with a link here instead of an error.'
 			}
 		],
 		sources: [],
@@ -3523,6 +3656,13 @@ export const uiComponents: UiComponentReference[] = [
 					'Trusted host selection of a component for a tool result. Unknown results retain their ordinary message text and optional toolCall snippet. This seam only renders: it grants no tool execution or confirmation authority.'
 			},
 			{
+				name: 'toolPresentation',
+				code: "'generic'",
+				status: false,
+				description:
+					'Trusted host presentation; tool execution data stays out of visible fallback text.'
+			},
+			{
 				name: 'messageFormat',
 				code: "'text' | 'markdown'",
 				status: false,
@@ -3690,6 +3830,13 @@ export const uiComponents: UiComponentReference[] = [
 				status: false,
 				description:
 					'The reply is being read aloud: hands-free listening pauses meanwhile; see `AssistantComposer`.'
+			},
+			{
+				name: 'aiSettingsHref',
+				code: 'string',
+				status: false,
+				description:
+					'Host route of its AI settings page (#4757). When a send is refused because AI is off or not set up (`ai_unavailable`), the dock shows "AI is off" with a link here instead of an error.'
 			},
 			{
 				name: 'character',
@@ -14869,6 +15016,96 @@ export const uiComponents: UiComponentReference[] = [
 		source: 'packages/projects/src/svelte/ProjectBoard.svelte'
 	},
 	{
+		slug: 'project-interview',
+		name: 'ProjectInterview',
+		family: 'smrt-projects-svelte',
+		category: 'Projects · Components',
+		importPath: '@happyvertical/smrt-projects/svelte',
+		summary: 'ProjectInterview is part of the projects · components component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'questions',
+				code: 'ProjectQuestionView[]',
+				status: false,
+				description: 'Authorized questions, in the order the host wants them asked.'
+			},
+			{
+				name: 'decisions',
+				code: 'ProjectDecisionView[]',
+				status: false,
+				description: "Authorized decisions, asked after the questions in the host's order."
+			},
+			{
+				name: 'busy',
+				code: 'boolean',
+				status: false,
+				description: 'Disable submissions and navigation while the host saves a change.'
+			},
+			{
+				name: 'framing',
+				code: 'Record<string, ProjectInterviewFraming>',
+				status: false,
+				description: 'Plain-language framing keyed by question or decision id.'
+			},
+			{
+				name: 'startIndex',
+				code: 'number',
+				status: false,
+				description:
+					'Zero-based record to open first (e.g. a resumed position). Defaults to the first open record; read once on mount.'
+			},
+			{
+				name: 'onanswer',
+				code: '(input: ProjectQuestionAnswerInput) => void | Promise<void>',
+				status: false,
+				description: 'Save an explicit answer with the observed revision.'
+			},
+			{
+				name: 'ondecide',
+				code: '(input: ProjectDecisionResolveInput) => void | Promise<void>',
+				status: false,
+				description: 'Save a selected outcome and optional rationale with the observed revision.'
+			},
+			{
+				name: 'onadvance',
+				code: '(detail: ProjectInterviewAdvanceDetail) => void',
+				status: false,
+				description: 'Called whenever the interview moves to another record or completes.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onanswer',
+				code: '(input: ProjectQuestionAnswerInput) => void | Promise<void>',
+				status: false,
+				description: 'Save an explicit answer with the observed revision.'
+			},
+			{
+				name: 'ondecide',
+				code: '(input: ProjectDecisionResolveInput) => void | Promise<void>',
+				status: false,
+				description: 'Save a selected outcome and optional rationale with the observed revision.'
+			},
+			{
+				name: 'onadvance',
+				code: '(detail: ProjectInterviewAdvanceDetail) => void',
+				status: false,
+				description: 'Called whenever the interview moves to another record or completes.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/docs/ui'
+		},
+		source: 'packages/projects/src/svelte/ProjectInterview.svelte'
+	},
+	{
 		slug: 'project-questions-and-decisions',
 		name: 'ProjectQuestionsAndDecisions',
 		family: 'smrt-projects-svelte',
@@ -15416,6 +15653,18 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'string',
 				status: false,
 				description: ''
+			},
+			{
+				name: 'formatCell',
+				code: "(value: unknown, column: Column, row: RuntimeReportResult['rows'][number]) => string | undefined",
+				status: false,
+				description: 'Host-owned labels/formatting; raw values remain available for links.'
+			},
+			{
+				name: 'cellHref',
+				code: "(column: Column, row: RuntimeReportResult['rows'][number]) => string | undefined",
+				status: false,
+				description: 'Optional same-origin record destination, used only in the table.'
 			}
 		],
 		sources: [],
@@ -16068,6 +16317,59 @@ export const uiComponents: UiComponentReference[] = [
 					'The command palette as the built-in item `item:command-palette` (default slot `header.center`): a search-shaped trigger with the shortcut hint, a search icon button on phones. Mounts the existing `CommandPalette` (trigger, dialog and global shortcut). Off unless given.'
 			},
 			{
+				name: 'panel',
+				code: 'Snippet<[{ viewport: ShellViewport; open: boolean; }]>',
+				status: false,
+				description:
+					"A docked panel between the left sidebar and the main area (sidebar, panel, content), e.g. an assistant chat. Off unless given, so existing apps are unchanged. Stays mounted while closed. Off phones it has a draggable, keyboard-operable separator (`panelResize`); on phones it is a full-size view over the content that the phone tab bar's panel tab (see `panelToggle`) switches to."
+			},
+			{
+				name: 'panelEnabled',
+				code: 'boolean',
+				status: false,
+				description:
+					'Turn the docked panel (and its toggle and phone tab) off without removing the `panel` snippet, e.g. when the app runs as a plugin inside a host app that is the chat. Default true.'
+			},
+			{
+				name: 'panelOpen',
+				code: 'boolean',
+				status: false,
+				description:
+					'Whether the docked panel is open on tablet and desktop (bindable; the host persists it). On phones the open state is internal: the panel starts closed and closes when the location changes.'
+			},
+			{
+				name: 'panelLabel',
+				code: 'string',
+				status: false,
+				description: 'Accessible name of the docked panel (default "Panel").'
+			},
+			{
+				name: 'panelResize',
+				code: 'boolean | ShellPanelResize',
+				status: false,
+				description: 'Resizing of the docked panel; see `AdminShell` `panelResize` (default on).'
+			},
+			{
+				name: 'panelSize',
+				code: 'number',
+				status: false,
+				description: 'Width in px until the user resizes the panel (default 400).'
+			},
+			{
+				name: 'panelToggle',
+				code: 'AppShellPanelToggle | false',
+				status: false,
+				description:
+					'The built-in item `item:panel-toggle`: an icon button with `aria-pressed` that opens and closes the docked panel. Default slot `leftSidebar.footer`, kept as an icon in the collapsed rail; a tab in the phone tab bar. Needs `panel`. `false` or omitted: no toggle (the host drives `panelOpen`).'
+			},
+			{
+				name: 'voiceToggle',
+				code: 'AppShellVoiceToggle | false',
+				status: false,
+				description:
+					'The built-in item `item:voice`: an icon button for a voice mode, default slot `leftSidebar.footer`, above the panel toggle; kept as an icon in the collapsed rail. See `AppShellVoiceToggle` (a toggle, or an honest not-available-yet state). `false` or omitted: none.'
+			},
+			{
 				name: 'webmcp',
 				code: 'boolean | WebMcpProviderConfig',
 				status: false,
@@ -16220,6 +16522,12 @@ export const uiComponents: UiComponentReference[] = [
 					'Edge toggle buttons and WASD drop-down panels (see `AdminShell`). Default `false`: regions are laid out inline and no toggles or hotkeys exist. Pass `true` (or a per-edge map) for the previous behaviour.'
 			},
 			{
+				name: 'sidebarFooterDivider',
+				code: "AdminShellProps['sidebarFooterDivider']",
+				status: false,
+				description: 'Hairline above the sidebar footer (default true); see `AdminShell`.'
+			},
+			{
 				name: 'hotkeys',
 				code: 'boolean',
 				status: false,
@@ -16254,7 +16562,15 @@ export const uiComponents: UiComponentReference[] = [
 			}
 		],
 		sources: [],
-		sections: [],
+		sections: [
+			{
+				name: 'panelOpen',
+				code: 'boolean',
+				status: false,
+				description:
+					'Whether the docked panel is open on tablet and desktop (bindable; the host persists it). On phones the open state is internal: the panel starts closed and closes when the location changes.'
+			}
+		],
 		items: [
 			{
 				name: 'onSignOut',
@@ -16270,7 +16586,7 @@ export const uiComponents: UiComponentReference[] = [
 				description: 'Called with the next layout whenever the user (or an assistant) edits it.'
 			}
 		],
-		components: [''],
+		components: ['panelOpen'],
 		demo: null,
 		related: {
 			label: 'UI showcase',
@@ -16400,6 +16716,38 @@ export const uiComponents: UiComponentReference[] = [
 				status: false,
 				description:
 					'Called by the sign-out control instead of following `signOutHref`; may be async (busy while pending, inline error on rejection).'
+			},
+			{
+				name: 'basePath',
+				code: 'string',
+				status: false,
+				description:
+					'Turns on the section menu: the settings route (e.g. `/settings`). Without a `section` the page lists the sections, each linking to `${basePath}/${id}`; with one it renders only that section and links back. Omit for the one-page mode that shows every section.'
+			},
+			{
+				name: 'section',
+				code: 'ShellSettingsSection',
+				status: false,
+				description:
+					'Built-in section to render on its own page (needs `basePath` for the back link).'
+			},
+			{
+				name: 'extraSections',
+				code: 'ShellSettingsMenuItem[]',
+				status: false,
+				description: 'Host sections listed after the built-in ones in the menu.'
+			},
+			{
+				name: 'title',
+				code: 'string',
+				status: false,
+				description: 'Heading of a host section page (`children` without a built-in `section`).'
+			},
+			{
+				name: 'children',
+				code: 'Snippet',
+				status: false,
+				description: 'Host section content, rendered instead of the built-in panel.'
 			}
 		],
 		sources: [],
@@ -16526,7 +16874,7 @@ export const uiComponents: UiComponentReference[] = [
 		details: [
 			{
 				name: 'entries',
-				code: 'AuditHistoryEntry[]',
+				code: 'Entry[]',
 				status: true,
 				description: 'Authorized entries. This component never fetches or authorizes records.'
 			},
@@ -16563,31 +16911,31 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'resourceLabel',
-				code: 'AuditEntryLabel',
+				code: 'AuditEntryLabel<Entry>',
 				status: false,
 				description: 'Resolves friendly resource text for each authorized entry.'
 			},
 			{
 				name: 'resourceHref',
-				code: 'AuditResourceHref',
+				code: 'AuditResourceHref<Entry>',
 				status: false,
 				description: 'Resolves an already-authorized local or HTTP(S) destination for each entry.'
 			},
 			{
 				name: 'actionLabel',
-				code: 'AuditEntryLabel',
+				code: 'AuditEntryLabel<Entry>',
 				status: false,
 				description: 'Resolves friendly action text for each authorized entry.'
 			},
 			{
 				name: 'fieldLabel',
-				code: 'AuditFieldLabel',
+				code: 'AuditFieldLabel<Entry>',
 				status: false,
 				description: 'Resolves friendly field text for each authorized entry change.'
 			},
 			{
 				name: 'formatValue',
-				code: 'AuditValueFormatter',
+				code: 'AuditValueFormatter<Entry>',
 				status: false,
 				description: 'Formats before/after values as escaped text.'
 			}
@@ -16595,7 +16943,7 @@ export const uiComponents: UiComponentReference[] = [
 		sources: [],
 		sections: [],
 		items: [],
-		components: [],
+		components: [''],
 		demo: null,
 		related: {
 			label: 'UI showcase',
@@ -17319,6 +17667,84 @@ export const uiComponents: UiComponentReference[] = [
 		source: 'packages/smrt-svelte/src/Provider.svelte'
 	},
 	{
+		slug: 'connect-ai',
+		name: 'ConnectAi',
+		family: 'smrt-svelte-connect-ai',
+		category: 'Svelte · Connect Ai',
+		importPath: '@happyvertical/smrt-svelte/connect-ai',
+		summary: 'ConnectAi is part of the svelte · connect ai component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'client',
+				code: 'ConnectAiClient',
+				status: true,
+				description:
+					'Authenticated transport, usually createConnectAiClient. No provider clients in the browser.'
+			},
+			{
+				name: 'apiKeyHref',
+				code: 'string',
+				status: true,
+				description: "Host's existing inference settings/key form, shared with advanced settings."
+			},
+			{
+				name: 'variant',
+				code: "'onboarding' | 'settings'",
+				status: false,
+				description: 'Onboarding and settings share exactly the same engine policy.'
+			},
+			{
+				name: 'initialState',
+				code: 'ConnectAiState',
+				status: false,
+				description: 'Optional server-loaded snapshot, refreshed on mount and browser focus.'
+			},
+			{
+				name: 'onchange',
+				code: '(state: ConnectAiState, ready: boolean) => void',
+				status: false,
+				description: 'Reports readiness so an onboarding host can enable its next step.'
+			},
+			{
+				name: 'pollMs',
+				code: 'number',
+				status: false,
+				description: 'Sign-in polling interval; defaults to 2.5 seconds.'
+			},
+			{
+				name: 'presentation',
+				code: "'compact'",
+				status: false,
+				description: 'Compact saved-product wording/grouping; defaults stay unchanged.'
+			},
+			{
+				name: 'headingId',
+				code: 'string',
+				status: false,
+				description: 'Parent step heading. Reuses its name instead of rendering a second heading.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onchange',
+				code: '(state: ConnectAiState, ready: boolean) => void',
+				status: false,
+				description: 'Reports readiness so an onboarding host can enable its next step.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/docs/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/connect-ai/ConnectAi.svelte'
+	},
+	{
 		slug: 'cookbook-app',
 		name: 'CookbookApp',
 		family: 'smrt-svelte-cookbook',
@@ -17339,6 +17765,24 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'CookbookCatalog',
 				status: true,
 				description: ''
+			},
+			{
+				name: 'assistant',
+				code: "{ component: Component<{ transport: AssistantTransport; registry: DataSurfaceRegistry; contextMode?: 'data-surfaces' | 'server'; visible?: boolean; messageFormat?: 'text' | 'markdown'; toolPresentation?: 'generic'; introduction?: { lists: string[]; actions: string[]; configured: boolean; }; }>; transport: AssistantTransport; registry: DataSurfaceRegistry; label?: string; /** Host-owned person-facing tool copy; raw provider history stays private. */ toolPresentation?: 'generic'; introduction?: { lists: string[]; actions: string[]; configured: boolean; }; }",
+				status: false,
+				description: 'Shared host composition supplies the dock, transport and surface registry.'
+			},
+			{
+				name: 'embed',
+				code: 'boolean',
+				status: false,
+				description: 'Embedded/plugin hosts keep their content and navigation without in-app chat.'
+			},
+			{
+				name: 'fieldPolicies',
+				code: 'Readonly<Record<string, ScreenPolicy>>',
+				status: false,
+				description: 'Resolved once by the owning policy engine at the server boundary.'
 			},
 			{
 				name: 'navMode',
@@ -19031,9 +19475,21 @@ export const uiComponents: UiComponentReference[] = [
 			{
 				name: 'fields',
 				code: 'ImportExportField[]',
-				status: true,
+				status: false,
 				description:
 					'Columns, usually from `fieldsFromCollectionDefinition` (manifest + resolved policy).'
+			},
+			{
+				name: 'definition',
+				code: 'ScreenCollectionDefinition',
+				status: false,
+				description: 'Use generated fields and the active cookbook policy automatically.'
+			},
+			{
+				name: 'policy',
+				code: 'ScreenPolicy | null',
+				status: false,
+				description: ''
 			},
 			{
 				name: 'collectionLabel',
@@ -19311,6 +19767,159 @@ export const uiComponents: UiComponentReference[] = [
 			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/notifications/NotificationBell.svelte'
+	},
+	{
+		slug: 'first-run-onboarding',
+		name: 'FirstRunOnboarding',
+		family: 'smrt-svelte-onboarding',
+		category: 'Svelte · Onboarding',
+		importPath: '@happyvertical/smrt-svelte/onboarding',
+		summary: 'FirstRunOnboarding is part of the svelte · onboarding component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'client',
+				code: 'OnboardingClient',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'connectAi',
+				code: 'ConnectAiClient',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'approvalTransport',
+				code: 'AssistantTransport',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'initialState',
+				code: 'OnboardingState',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'appName',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'description',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'apiKeyHref',
+				code: 'string',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'oncomplete',
+				code: '() => void | Promise<void>',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'backHref',
+				code: 'string',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'aiAlternative',
+				code: 'InferenceEngineAction',
+				status: false,
+				description: 'Host-owned alternative connection link, inside the AI step card.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'oncomplete',
+				code: '() => void | Promise<void>',
+				status: true,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/docs/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/onboarding/FirstRunOnboarding.svelte'
+	},
+	{
+		slug: 'onboarding-assistant',
+		name: 'OnboardingAssistant',
+		family: 'smrt-svelte-onboarding',
+		category: 'Svelte · Onboarding',
+		importPath: '@happyvertical/smrt-svelte/onboarding',
+		summary: 'OnboardingAssistant is part of the svelte · onboarding component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'transport',
+				code: 'AssistantTransport',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'registry',
+				code: 'DataSurfaceRegistry',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'visible',
+				code: 'boolean',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'contextMode',
+				code: "'server' | 'data-surfaces'",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'messageFormat',
+				code: "'text' | 'markdown'",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'toolPresentation',
+				code: "'generic'",
+				status: false,
+				description: ''
+			},
+			{
+				name: 'introduction',
+				code: '{ lists: string[]; actions: string[]; configured: boolean; }',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/docs/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/onboarding/OnboardingAssistant.svelte'
 	},
 	{
 		slug: 'chart-widget',
@@ -20017,6 +20626,12 @@ export const uiComponents: UiComponentReference[] = [
 		slot: null,
 		details: [
 			{
+				name: 'references',
+				code: 'ScreenReferenceSources',
+				status: false,
+				description: 'Exposed target definitions, sources and optional record routes.'
+			},
+			{
 				name: 'definition',
 				code: 'ScreenCollectionDefinition',
 				status: true,
@@ -20124,7 +20739,7 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'Readonly<Record<string, (id: string) => string | undefined>>',
 				status: false,
 				description:
-					'Display label for a referenced record, keyed by target model id (`relation.model`); `undefined` falls back to the raw id.'
+					'Display label for a referenced record, keyed by target model id (`relation.model`); `undefined` shows the unavailable notice.'
 			},
 			{
 				name: 'exclude',
@@ -20186,6 +20801,12 @@ export const uiComponents: UiComponentReference[] = [
 		summarySynthesized: true,
 		slot: null,
 		details: [
+			{
+				name: 'references',
+				code: 'ScreenReferenceSources',
+				status: false,
+				description: 'Exposed target definitions, sources and optional record routes.'
+			},
 			{
 				name: 'definition',
 				code: 'ScreenCollectionDefinition',
@@ -20300,6 +20921,12 @@ export const uiComponents: UiComponentReference[] = [
 		summarySynthesized: true,
 		slot: null,
 		details: [
+			{
+				name: 'references',
+				code: 'ScreenReferenceSources',
+				status: false,
+				description: 'Exposed target definitions, sources and optional record routes.'
+			},
 			{
 				name: 'definition',
 				code: 'ScreenCollectionDefinition',
@@ -20450,6 +21077,31 @@ export const uiComponents: UiComponentReference[] = [
 		slot: null,
 		details: [
 			{
+				name: 'surfacePath',
+				code: 'string',
+				status: false,
+				description:
+					'Route declared by the active recipe; defaults to the selected collection entry path.'
+			},
+			{
+				name: 'surfaceProps',
+				code: 'Record<string, unknown>',
+				status: false,
+				description: 'Additional capabilities required by a recipe-owned route component.'
+			},
+			{
+				name: 'entryId',
+				code: 'string',
+				status: false,
+				description: 'Disambiguates keyed entries for the same model in the cookbook.'
+			},
+			{
+				name: 'references',
+				code: 'ScreenReferenceSources',
+				status: false,
+				description: 'Exposed target definitions, sources and optional record routes.'
+			},
+			{
 				name: 'definition',
 				code: 'ScreenCollectionDefinition',
 				status: true,
@@ -20523,7 +21175,7 @@ export const uiComponents: UiComponentReference[] = [
 			},
 			{
 				name: 'definitions',
-				code: 'Readonly<Record<string, ScreenCollectionDefinition>>',
+				code: 'Parameters<typeof createRecipeScreenReferences>[0]',
 				status: false,
 				description:
 					"Every exposed collection definition, keyed by collection name; the record view derives this model's relations from it. Omit for none."
@@ -20536,7 +21188,20 @@ export const uiComponents: UiComponentReference[] = [
 			}
 		],
 		sources: [],
-		sections: [],
+		sections: [
+			{
+				name: 'view',
+				code: 'RecipeScreenView',
+				status: false,
+				description: 'Current screen (bindable).'
+			},
+			{
+				name: 'recordId',
+				code: 'string | null',
+				status: false,
+				description: 'Record shown by `view` and `edit` (bindable).'
+			}
+		],
 		items: [
 			{
 				name: 'onnavigate',
@@ -20545,7 +21210,7 @@ export const uiComponents: UiComponentReference[] = [
 				description: 'Called on every user navigation, for router synchronization.'
 			}
 		],
-		components: [],
+		components: ['view', 'recordId'],
 		demo: null,
 		related: {
 			label: 'UI showcase',
@@ -20563,6 +21228,12 @@ export const uiComponents: UiComponentReference[] = [
 		summarySynthesized: true,
 		slot: null,
 		details: [
+			{
+				name: 'references',
+				code: 'ScreenReferenceSources',
+				status: false,
+				description: 'Exposed target definitions, sources and optional record routes.'
+			},
 			{
 				name: 'definition',
 				code: 'ScreenCollectionDefinition',
@@ -20828,6 +21499,136 @@ export const uiComponents: UiComponentReference[] = [
 			href: '/docs/ui'
 		},
 		source: 'packages/smrt-svelte/src/components/screens/RecordScreen.svelte'
+	},
+	{
+		slug: 'owner-approvals-settings',
+		name: 'OwnerApprovalsSettings',
+		family: 'smrt-svelte-settings',
+		category: 'Svelte · Settings',
+		importPath: '@happyvertical/smrt-svelte/settings',
+		summary: 'OwnerApprovalsSettings is part of the svelte · settings component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'approvals',
+				code: 'AssistantApprovalView[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'transport',
+				code: 'AssistantTransport',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'ondecided',
+				code: '() => void | Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onsettled',
+				code: '() => void | Promise<void>',
+				status: false,
+				description: 'A known unsettled hold succeeded; invoked once before its card is removed.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'ondecided',
+				code: '() => void | Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'onsettled',
+				code: '() => void | Promise<void>',
+				status: false,
+				description: 'A known unsettled hold succeeded; invoked once before its card is removed.'
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/docs/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/settings/OwnerApprovalsSettings.svelte'
+	},
+	{
+		slug: 'prebuilt-components-settings',
+		name: 'PrebuiltComponentsSettings',
+		family: 'smrt-svelte-settings',
+		category: 'Svelte · Settings',
+		importPath: '@happyvertical/smrt-svelte/settings',
+		summary: 'PrebuiltComponentsSettings is part of the svelte · settings component family.',
+		summarySynthesized: true,
+		slot: null,
+		details: [
+			{
+				name: 'enabled',
+				code: 'boolean',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'onsave',
+				code: '(enabled: boolean) => Promise<void>',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'approvals',
+				code: 'AssistantApprovalView[]',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'transport',
+				code: 'AssistantTransport',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'ondecided',
+				code: '() => void | Promise<void>',
+				status: false,
+				description: ''
+			},
+			{
+				name: 'restartHref',
+				code: 'string',
+				status: false,
+				description: ''
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [
+			{
+				name: 'onsave',
+				code: '(enabled: boolean) => Promise<void>',
+				status: true,
+				description: ''
+			},
+			{
+				name: 'ondecided',
+				code: '() => void | Promise<void>',
+				status: false,
+				description: ''
+			}
+		],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/docs/ui'
+		},
+		source: 'packages/smrt-svelte/src/components/settings/PrebuiltComponentsSettings.svelte'
 	},
 	{
 		slug: 'settings-catalog',
@@ -21212,6 +22013,13 @@ export const uiComponents: UiComponentReference[] = [
 					'Show the edge toggle buttons (and their hotkey hints) that open and close the drop-down edge panels: `true` for all four edges, or a per-edge map. Default `false`: no toggles, no hotkeys, and each region is laid out inline (its slots and content visible) instead of a collapsed bar that expands as a drop-down. Visibility then comes from the layout (`ShellLayout.panels`). Existing apps keep the old behaviour with `true`. A phone still gets the Menu opener and drawer for the left sidebar.'
 			},
 			{
+				name: 'sidebarFooterDivider',
+				code: 'boolean',
+				status: false,
+				description:
+					"Draw the hairline above the sidebar footer slots (`leftSidebar.footer`, `rightSidebar.footer`) and above the footer of the collapsed left rail. Default `true`. A host whose neighbouring column draws its own line at that height (a docked panel's composer) turns it off so the two do not clash."
+			},
+			{
 				name: 'hotkeys',
 				code: 'boolean',
 				status: false,
@@ -21477,6 +22285,38 @@ export const uiComponents: UiComponentReference[] = [
 				status: false,
 				description:
 					'Current location. When it changes on a phone, open side drawers and sheets close and the phone top bar comes back.'
+			},
+			{
+				name: 'panel',
+				code: 'Snippet<[{ viewport: ShellViewport; open: boolean; }]>',
+				status: false,
+				description:
+					'A docked panel between the left sidebar and the main area (the order is sidebar, panel, content). Only rendered when given, so existing shells are unchanged. The panel stays mounted while closed (`panelOpen` false hides it), so its state survives a toggle. Off phones it sits beside main with a draggable, keyboard-operable separator; on phones it is a full-size view over main.'
+			},
+			{
+				name: 'panelOpen',
+				code: 'boolean',
+				status: false,
+				description: 'Whether the docked panel is shown (default true). Host-owned.'
+			},
+			{
+				name: 'panelLabel',
+				code: 'string',
+				status: false,
+				description: 'Accessible name of the panel (default "Panel").'
+			},
+			{
+				name: 'panelResize',
+				code: 'boolean | ShellPanelResize',
+				status: false,
+				description:
+					'Resizing of the docked panel: `true` (default) uses the docked-panel limits (280-800 px, 16 px step), an object overrides them, `false` keeps the panel at `panelSize`. The width persists through the shell settings adapter (`ShellSettingsDelta.sizes.panel`).'
+			},
+			{
+				name: 'panelSize',
+				code: 'number',
+				status: false,
+				description: "The panel's width in px until the user resizes it (default 400)."
 			},
 			{
 				name: 'children',
@@ -22169,6 +23009,13 @@ export const uiComponents: UiComponentReference[] = [
 				status: false,
 				description:
 					'Called by the sign-out control instead of following `signOutHref`. May return a promise: the control is busy and disabled while it is pending; a rejection shows an inline error and leaves the section as it was.'
+			},
+			{
+				name: 'section',
+				code: 'ShellSettingsSection',
+				status: false,
+				description:
+					'Render only this section (Appearance and Account then show without their flags). Omit for the one-page mode the flags control.'
 			}
 		],
 		sources: [],
@@ -22534,6 +23381,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'boolean',
 				status: false,
 				description: 'Disables the account menu button.'
+			},
+			{
+				name: 'items',
+				code: 'WorkspaceAccountMenuItem[]',
+				status: false,
+				description:
+					'Host destinations and actions (caller-owned, e.g. Approvals, History), listed after tenants and before Settings. Their badges also show on the closed trigger (the total), so a pending count is visible without opening.'
 			},
 			{
 				name: 'settingsHref',
@@ -26081,6 +26935,12 @@ export const uiComponents: UiComponentReference[] = [
 					'Called with the text to search for when the list opens (empty) and on every keystroke. Pair with `filter={false}` and fresh `options`.'
 			},
 			{
+				name: 'footer',
+				code: 'Snippet',
+				status: false,
+				description: 'Extra actions below the listbox, kept inside its focus boundary.'
+			},
+			{
 				name: 'status',
 				code: 'string',
 				status: false,
@@ -27737,6 +28597,25 @@ export const uiComponents: UiComponentReference[] = [
 				code: '(query: string) => Promise<RelationOption[]>',
 				status: true,
 				description: "Look up records matching the text; called with '' when the list opens."
+			},
+			{
+				name: 'loadMore',
+				code: '() => Promise<RelationOption[]>',
+				status: false,
+				description:
+					'Optional next page for the current query; appended without losing focus or selection.'
+			},
+			{
+				name: 'hasMore',
+				code: 'boolean',
+				status: false,
+				description: 'Whether another page of matches exists for the current query.'
+			},
+			{
+				name: 'moreLabel',
+				code: 'string',
+				status: false,
+				description: 'Text on the button that loads the next page of matches.'
 			},
 			{
 				name: 'resolve',
@@ -30033,7 +30912,7 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'boolean',
 				status: false,
 				description:
-					"Paint the theme's background/color/font onto the wrapper. Set false when the host app owns its surface palette and only wants the CSS variables + scheme context — avoids specificity-fighting `.smrt-theme-root`."
+					"Paint the theme's background/color/font onto the wrapper. Set false when the host app owns its surface palette and only wants the CSS variables + scheme context — avoids specificity-fighting `.smrt-theme-provider__root`."
 			},
 			{
 				name: 'persist',
@@ -30375,6 +31254,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'Snippet',
 				status: false,
 				description: 'Snippet for button content'
+			},
+			{
+				name: 'labelWhitespace',
+				code: "'preserve' | 'trim'",
+				status: false,
+				description:
+					'Retain the historical spacer before content, or trim it for an exact label contract.'
 			},
 			{
 				name: 'fullWidth',
@@ -32195,10 +33081,10 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 2944,
-	totalProps: 3110,
+	describedProps: 3018,
+	totalProps: 3210,
 	authoredSummaries: 153,
-	totalComponents: 412
+	totalComponents: 420
 };
 
 export const uiComponentGroups = [

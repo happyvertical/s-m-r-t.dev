@@ -33,7 +33,7 @@ describe('PlaygroundEmbed', () => {
 		});
 
 		expect(document.querySelector('.playground-embed')).toBeNull();
-		expect(document.querySelector('.playground-shell')).toBeTruthy();
+		expect(document.querySelector('[data-smrt-component="PlaygroundHost"]')).toBeTruthy();
 	});
 
 	it('switches between interactive package-owned previews', async () => {

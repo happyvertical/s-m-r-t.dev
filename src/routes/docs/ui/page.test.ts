@@ -71,7 +71,7 @@ describe('/docs/ui', () => {
 		const selectedCountBeforeDensity =
 			container.querySelector('.state-summary strong')?.textContent;
 		await fireEvent.click(screen.getByRole('button', { name: 'Use dense rows' }));
-		expect(table.classList.contains('data-table--dense')).toBe(true);
+		expect(table.classList.contains('smrt-data-table__dense')).toBe(true);
 		expect(screen.getByRole('button', { name: 'Use comfortable rows' })).toBeTruthy();
 		expect(container.querySelector('.controller-state')?.textContent).toBe(
 			controllerStateBeforeDensity
@@ -81,7 +81,7 @@ describe('/docs/ui', () => {
 		);
 
 		await fireEvent.click(screen.getByRole('button', { name: 'Reset controller state' }));
-		expect(table.classList.contains('data-table--dense')).toBe(true);
+		expect(table.classList.contains('smrt-data-table__dense')).toBe(true);
 	});
 
 	it('operates the active ShellState without creating another shell in the story', async () => {

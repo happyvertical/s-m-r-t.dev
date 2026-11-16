@@ -156,13 +156,13 @@ describe('legacy static routes', () => {
 		);
 	});
 
-	it('prerenders every legacy /packages/<slug> page as a redirect to Reference (76 pages: 75 slugs + the index)', async () => {
+	it('prerenders every legacy /packages/<slug> page as a redirect to Reference (77 pages: 76 slugs + the index)', async () => {
 		const paths = (await packageEntries()).map(({ slug }) => slug);
 
 		// /packages/[slug] mirrors packages.ts exactly, with no hand-written
-		// extras — /packages itself (the +76th page in this family) is a
+		// extras — /packages itself (the +77th page in this family) is a
 		// separate, non-parametrized redirect route with nothing to enumerate.
-		expect(paths, RESTORE_DONT_RENUMBER).toHaveLength(75);
+		expect(paths, RESTORE_DONT_RENUMBER).toHaveLength(76);
 		expect(paths).toHaveLength(packages.length);
 		expect(new Set(paths).size).toBe(paths.length);
 	});

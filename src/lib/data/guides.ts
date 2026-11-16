@@ -1295,6 +1295,317 @@ export const nextPageIntent = defineIntent({
 				external: true
 			}
 		]
+	},
+	{
+		slug: 'ai-usage',
+		navTitle: 'AI usage and prompt statistics',
+		eyebrow: 'New capability',
+		title: 'See what every AI call cost and how it did',
+		lede: 'smrt records each model call as one row: which prompt asked, which model answered, the tokens, an estimated cost and how long it took. The command line turns those rows into reports and side-by-side comparisons.',
+		plainEnglish:
+			'Usage recording is on by default when your app has a database. You get a table of calls by prompt, model, tier or tenant, and you can compare two versions of a prompt on the numbers. Reading the text of a call is a separate, opt-in feature.',
+		packages: ['smrt-core', 'smrt-cli', 'smrt-prompts'],
+		pinnedVersion: SMRT_VERSION,
+		sources: [
+			{
+				label: 'smrt-core agents/ai-usage.md',
+				href: `${SMRT_TREE}/packages/core/agents/ai-usage.md`,
+				external: true
+			},
+			{
+				label: 'smrt-cli agents/ai-commands.md',
+				href: `${SMRT_TREE}/packages/cli/agents/ai-commands.md`,
+				external: true
+			},
+			{
+				label: 'AI runs',
+				href: `${SMRT_TREE}/docs/content/ai-runs.md`,
+				external: true
+			}
+		],
+		sections: [
+			{
+				title: 'Every call leaves one row',
+				intro:
+					'A model call made through is(), do(), describe() or the tracked client is written once to the _smrt_ai_usage table. The row holds the provider and model, token counts, an estimated cost, the duration and the tenant. It also holds the prompt key, when the call came from a registered prompt, and the tier that was asked for and the tier that answered.',
+				points: [
+					'On by default. Tracking and saving to the table are both on unless you turn them off, and rows are saved whenever the app has a database.',
+					'The cost is an estimate from a rate card. A call with no known rate is counted as uncosted. It is never priced at zero.',
+					'A user is recorded only when the app supplies one. A row with no tenant source is a global row; smrt does not guess.',
+					'Usage rows hold numbers and labels, not the text of the prompt or the answer.'
+				],
+				filename: 'startup.ts',
+				code: `import { config } from '@happyvertical/smrt-core';\n\nconfig({\n  usage: {\n    enabled: true, // default\n    persist: true, // default: save rows when a database exists\n    estimateCosts: true, // default\n    // USD per 1K tokens, for a model the rate card does not know\n    costRates: { 'your-provider:your-model': { input: 0.001, output: 0.002 } }\n  }\n});`
+			},
+			{
+				title: 'Runs group the calls that belong together',
+				intro:
+					'Some work takes several calls: a chat turn, a workflow, a fusion, or a run type your app defines. smrt lays a run over the usage rows of those calls in _smrt_ai_runs. A run has a status, a budget and a trail of events: calls, actions, observations, checks, approvals and handoffs. A call on its own is not a run.',
+				points: [
+					'A run needs usage recording. With tracking or saving turned off, opening a run throws AiRunTrackingDisabledError before anything is sent.',
+					'Run totals decide whether a budget is spent. Usage rows are the billing record.'
+				]
+			},
+			{
+				title: 'The report you see',
+				intro:
+					'smrt ai:usage prints one line per group and a total. The columns are calls, blocked calls, tokens, estimated cost, median duration, substitutions (calls that recorded at least one fallback) and evaluation labels. Under the table it states how many calls had no prompt key, what was excluded from the totals and which rate card priced them.',
+				points: [
+					'Group with --by, using any of prompt, model, tier, class, tenant, fusion, source and template. The default is prompt.',
+					'Set the window with --since and --until, as a date or a relative span such as 24h, 7d or 2w.',
+					'--tenant totals one tenant and counts the others as excluded. Nothing is dropped silently.',
+					'--runs adds run totals per run type, by status, with check and approval rates.',
+					'--json prints the same report as data.',
+					'These commands change no usage data. The three that show transcript text (smrt ai:usage --with-transcripts, smrt ai:transcript and smrt ai:compare --transcripts) record who read it, and why, in a log line. They write a persisted audit entry only where your app has set an audit writer.'
+				],
+				filename: 'terminal',
+				lang: 'bash',
+				code: `smrt ai:usage --by prompt,model --since 7d\nsmrt ai:usage --by tier --tenant <tenant-id>\nsmrt ai:usage --runs`
+			},
+			{
+				title: 'Compare two versions of a prompt, or two models',
+				intro:
+					'smrt prompts:history lists each version of a prompt that has run, with first and last use, call counts and the models that answered. smrt ai:compare then prints a table with one column per side, for one prompt key. A side is a prompt version, a model or a tier.',
+				points: [
+					'The rows are calls, blocked calls, tokens, estimated cost, cost per call, latency at the 50th, 90th, 95th and 99th percentile, the fallback and degraded rates, repair, check-pass and approval rates, and the evaluation labels with their mean score.',
+					'No model judges anything. The comparison reads stored rows.',
+					'Both commands need --tenant <id> (use global for rows with no tenant) or --all-tenants.'
+				],
+				filename: 'terminal',
+				lang: 'bash',
+				code: `smrt prompts:history <prompt-key> --tenant <tenant-id>\nsmrt ai:compare --prompt <prompt-key> --a hash:<h1> --b hash:<h2> --tenant <tenant-id>\nsmrt ai:compare --prompt <prompt-key> --a model:<provider:model> --b tier:<tier> --tenant <tenant-id>`
+			},
+			{
+				title: 'Labels come from your app',
+				intro:
+					'An evaluation is a verdict attached to one call or one run: a label, a score, or both. Your app records it when the verdict is known, and names who judged: a person, the app, or a named grader. There are no labels in a report until something records them.',
+				filename: 'record-evaluation.ts',
+				code: `import { recordAiEvaluation } from '@happyvertical/smrt-core';\n\nawait recordAiEvaluation(db, {\n  callId, // the usage row's id\n  label: 'accepted',\n  evaluator: 'human'\n});`
+			},
+			{
+				title: 'Transcripts are separate, and off by default',
+				intro:
+					'A transcript is the readable content of a call, kept for prompt tuning. It is opt-in and set for the whole app; a tenant cannot turn it on. When it is on, a sample of calls is kept (one in ten unless you change it), along with calls that failed or fell back.',
+				points: [
+					'Stored text is redacted first: API keys, values of fields marked sensitive, and anything your own redactor removes.',
+					'Every read is audited and scoped to a tenant. smrt ai:transcript <callId> needs --tenant or --all-tenants.',
+					'Transcripts are pruned after 30 days by default, separately from usage rows, so the numbers outlive the content.'
+				],
+				filename: 'startup.ts',
+				code: `config({\n  inference: {\n    transcripts: { enabled: true, sample: 0.1 }\n  }\n});`
+			}
+		],
+		related: [
+			{ label: 'Inference tuning', href: '/docs/capabilities/inference-tuning' },
+			{ label: 'AI and retrieval reference', href: '/docs/reference/ai-and-retrieval' }
+		]
+	},
+	{
+		slug: 'inference-tuning',
+		navTitle: 'Inference tuning',
+		eyebrow: 'New capability',
+		title: 'Choose which model answers, and what happens when it can’t',
+		lede: 'Your code asks for a tier, not a model. You bind each tier to a model or to an ordered list of models, and a call that hits a quota, a bad key or a renamed model moves to the next one. Every move is written to the usage row.',
+		plainEnglish:
+			'Tiers are built in and change nothing until you bind them. Fallback chains, per-user and per-tenant choices, the settings screen and the spend gate come from the smrt-inference package, which you add and switch on piece by piece.',
+		packages: ['smrt-core', 'smrt-inference', 'smrt-cli'],
+		pinnedVersion: SMRT_VERSION,
+		sources: [
+			{
+				label: 'smrt-inference README',
+				href: `${SMRT_TREE}/packages/inference/README.md`,
+				external: true
+			},
+			{
+				label: 'smrt-core agents/inference.md',
+				href: `${SMRT_TREE}/packages/core/agents/inference.md`,
+				external: true
+			},
+			{
+				label: 'Inference tiers, bindings and usage',
+				href: `${SMRT_TREE}/docs/content/inference.md`,
+				external: true
+			},
+			{
+				label: 'Inference settings',
+				href: `${SMRT_TREE}/docs/content/inference-settings.md`,
+				external: true
+			}
+		],
+		sections: [
+			{
+				title: 'Tiers: ask for how good, not for which model',
+				intro:
+					'There are four tiers, cheapest first: cheap, good, great and best. A call can also ask for auto, which resolves to your default tier, or to good when you set none. Speed is not a tier. It is a separate hint, interactive or background, that a binding may honor.',
+				points: [
+					'With nothing configured, every tier uses the client you already configured. Calls behave exactly as they did before.',
+					'You bind a tier in config, in smrt.config, in environment variables, or per instance. The highest layer that binds a tier replaces the whole target, so a key never follows a target to another provider.'
+				],
+				filename: 'summarize.ts',
+				code: `await article.do('Summarize this', { tier: 'great' });`
+			},
+			{
+				title: 'Fallback chains',
+				intro:
+					'Add @happyvertical/smrt-inference and import it once at startup. You can then bind a tier to an alias, which is an ordered list of candidate models. Importing the package with no aliases changes nothing.',
+				points: [
+					'A failed candidate is classified as quota, credential, missing-model, transient, refusal or missing-capability, and the next one is tried. A transient failure is retried once first.',
+					'When every candidate of a tier fails, the call moves down to the next cheaper tier, never up. Set degrade to false to stop that, or pass minimumTier on the call.',
+					'Text already streamed to the caller is never continued by another model.',
+					'The usage row of the answering call records the tier that answered and each substitution. A call that nothing answered leaves a zero-token row with the reason and throws InferenceExhaustedError.'
+				],
+				filename: 'startup.ts',
+				code: `import '@happyvertical/smrt-inference';\nimport { config } from '@happyvertical/smrt-core';\n\nconfig({\n  inference: {\n    aliases: {\n      frontier: {\n        candidates: [\n          { provider: 'anthropic', model: 'your-first-choice' },\n          { provider: 'openai', model: 'your-second-choice' },\n          { preset: 'lemonade', model: 'your-local-model' }\n        ]\n      }\n    },\n    tiers: { great: { alias: 'frontier' } },\n    degrade: true // default\n  }\n});`
+			},
+			{
+				title: 'Per-user and per-tenant choices',
+				intro:
+					'A person or a tenant can bring a provider and key of their own. For each tier the resolver looks at the user’s stored choice, then the tenant’s, then a tenant override the app allows, then the app’s own override, then config, then the configured client. This is not on until the host registers the resolver.',
+				points: [
+					'A tenant may bind a tier only to targets on the app’s allow-list. With no list, nothing is allowed.',
+					'Keys are stored once, in smrt-secrets, and are bound to the endpoint they were entered for. The server sends a key only to that origin.',
+					'Aliases and fusions are defined by the app. A tenant can pick an allowed one, never define one.',
+					'Each usage row records where the binding came from: the user’s own key, a local model, hosted inference or the app.',
+					'Sign in with ChatGPT is also in the package, for local apps only. Upstream marks it a preview. It is never a default and never a fallback.'
+				]
+			},
+			{
+				title: 'The settings screen',
+				intro:
+					'InferenceSettingsPanel is a Svelte component from @happyvertical/smrt-inference/svelte. The default view is the whole screen for one provider. Advanced holds the tier ladder, the auto tier, aliases and fusions, and stays closed until someone opens it. A Usage tab shows usage by model, tier, prompt, fusion or template.',
+				points: [
+					'The panel only presents. Your host mounts it, supplies the load and save routes, and decides who may see and change what.',
+					'A key goes out of the panel once, when it is saved, and never comes back. The panel shows only whether a key is set.',
+					'At tenant scope, targets off the allow-list are disabled and aliases and fusions are read-only.',
+					'The Usage tab shows transcript counts and can link to a route of yours. It never shows transcript content.'
+				]
+			},
+			{
+				title: 'A spend gate for hosted inference',
+				intro:
+					'If your app pays for inference on behalf of its users, the package can provision a gateway key per user and check each call first. The gate checks a kill switch, the tenant, the entitlement and then the plan’s spend caps. A blocked call throws InferenceUnavailableError and writes a blocked row, which reports show in their own column beside calls.',
+				points: [
+					'Off until the host registers the gate and configures a gateway. Nothing is gated otherwise.',
+					'A global disable on the kill switch always wins.'
+				]
+			},
+			{
+				title: 'Fusions',
+				intro:
+					'A tier can be bound to a fusion: a small arrangement of prompts you define, in one of three modes (single, pair or handoff). Callers keep asking for the tier. smrt ships the interpreter and no fusions, so there is nothing to use until you define one. Each run of a fusion is recorded as a run with one usage row per seat.'
+			},
+			{
+				title: 'Check the bindings before you need them',
+				intro:
+					'smrt doctor --ai checks each tier, alias and fusion without calling a model: the provider is recognized, the key variable is present, a model is named, aliases resolve and nothing loops. Add --probe and it also asks each endpoint for its model list. Keys never appear in the report.',
+				filename: 'terminal',
+				lang: 'bash',
+				code: `smrt doctor --ai\nsmrt doctor --ai --probe`
+			}
+		],
+		related: [
+			{ label: 'AI usage and prompt statistics', href: '/docs/capabilities/ai-usage' },
+			{ label: 'AI and retrieval reference', href: '/docs/reference/ai-and-retrieval' }
+		]
+	},
+	{
+		slug: 'ingestion',
+		navTitle: 'Ingestion',
+		eyebrow: 'Preview',
+		title: 'Incoming files and email wait for a person',
+		lede: 'smrt-ingestion keeps what arrives (uploads, email, files in a watched folder) as evidence, reads it, and suggests what to do with it. A reviewer decides. Upstream ships it as a preview with automation disabled.',
+		plainEnglish:
+			'Receiving and keeping the original is automatic. Reading it and suggesting an action runs when your host asks for it. Changing a record happens only after a person approves the suggestion. Nothing is switched on by installing the package.',
+		packages: ['smrt-ingestion', 'smrt-assets', 'smrt-jobs'],
+		pinnedVersion: SMRT_VERSION,
+		sources: [
+			{
+				label: 'smrt-ingestion README',
+				href: `${SMRT_TREE}/packages/ingestion/README.md`,
+				external: true
+			},
+			{
+				label: 'smrt-ingestion REVIEW.md',
+				href: `${SMRT_TREE}/packages/ingestion/REVIEW.md`,
+				external: true
+			},
+			{
+				label: 'smrt-ingestion PROPOSALS.md',
+				href: `${SMRT_TREE}/packages/ingestion/PROPOSALS.md`,
+				external: true
+			},
+			{
+				label: 'Measured evaluation report',
+				href: `${SMRT_TREE}/docs/evaluation/3677-measured-evaluation.md`,
+				external: true
+			}
+		],
+		sections: [
+			{
+				title: 'What happens without a person',
+				intro:
+					'A source hands the service the original bytes, and the service keeps them. A receipt is identified by tenant, source and delivery key, so a source that retries after a failure gets the same receipt back and no duplicate. An item is ready only once every part is stored.',
+				points: [
+					'Four kinds of source ship: an upload endpoint, an email adapter, a watched folder and a vendor webhook handler. All of them only preserve what arrived. None writes to your records, calls an AI tool or takes an outside action.',
+					'Analysis runs as background jobs: extracting text from PDFs, images and audio, then generating suggestions. Receiving an item does not start it. Your host asks for the first analysis and names the extraction settings.',
+					'Retention runs when your host runs it. The host schedules repairDispatches, after a restart and on a timer, along with the retention and cleanup sweeps. When an item expires, access is revoked, the bytes are removed, and the content of its history is redacted.'
+				]
+			},
+			{
+				title: 'What waits for a reviewer',
+				intro:
+					'A suggestion is only a suggestion. Generating one never approves or applies anything. A reviewer opens the inbox, sees the item beside its original, and decides.',
+				points: [
+					'IntakeInbox lists what arrived and what needs attention. IntakeReview shows one item with its evidence and the suggested action. IntakeWorkspace puts both on one page with keyboard next and previous.',
+					'A reviewer can approve, reject, correct or defer a suggestion, complete one that is missing required fields, start any action the app offers for the item, or close the item with no action.',
+					'An approved action is applied once, under the approver’s current permissions.',
+					'A person confirming their own submission is recorded as exactly that. It is never counted as independent review.'
+				]
+			},
+			{
+				title: 'What upstream marks as preview',
+				intro:
+					'The package’s own README says the published evaluation did not meet its quality gates and did not establish safety, and that automation remains disabled. We repeat it here so the limits are clear.',
+				points: [
+					'Every generated suggestion is marked as not eligible for automatic action. That flag is always false.',
+					'The package has a path for machine authorization. It needs an explicit, evaluated opt-in at the application, the tenant and the source, and upstream makes no evaluation claim for it. The reference handlers always require review.',
+					'Upstream claims no recognition quality for OCR, speech or vision. Whoever deploys it is expected to test their own provider and model on representative material first.',
+					'Generated REST, command-line and MCP changes to the ingestion records are disabled. A host exposes its own authorized methods.'
+				],
+				callout: {
+					variant: 'warning',
+					title: 'Preview: automation stays disabled',
+					body: 'Treat ingestion as a reviewed inbox. Nothing it suggests changes a record until a person approves it.'
+				}
+			},
+			{
+				title: 'What is not on by default',
+				intro:
+					'The ingestion.inbox and ingestion.review recipes register the two screens as /ingestion/inbox and /ingestion/review for a host to mount. They do not configure a source, a provider or a host.',
+				points: [
+					'Email is opt-in for each configured account.',
+					'No extraction provider or suggestion generator is chosen for you.',
+					'Keeping the output of a failed suggestion attempt for diagnosis is off, and needs a redaction hook from the host.',
+					'Letting a submitter confirm their own suggestion is off until the application policy opts in.'
+				]
+			},
+			{
+				title: 'How to switch it on',
+				intro:
+					'Ingestion is host work, done in trusted server code. This site does not install the package, so there is no live example here.',
+				points: [
+					'Add @happyvertical/smrt-ingestion and run smrt db:migrate before starting. SQLite and PostgreSQL are supported.',
+					'Create an IngestionService from the /server entry with a database, an asset runtime, the signed-in tenant, actor and scope, an authorization callback, a jobs target and a callback that purges your own previews, indexes and caches. Never take scope or permissions from the incoming document.',
+					'Run the task runner with the ingestion queue enabled, and schedule the repair and retention sweeps.',
+					'Configure a source, then request the first analysis for each new item.',
+					'Mount the inbox and review components from the /svelte entry behind an authenticated review host.'
+				]
+			}
+		],
+		related: [
+			{ label: 'smrt-ingestion package', href: '/docs/reference/packages/smrt-ingestion' },
+			{ label: 'AI usage and prompt statistics', href: '/docs/capabilities/ai-usage' }
+		]
 	}
 ];
 

@@ -37,7 +37,7 @@ describe('playground page', () => {
 	it('places the Docs escape link before the playground host for keyboard users', () => {
 		const { container } = render(Page);
 		const docsLink = screen.getByRole('link', { name: '← Docs' });
-		const host = container.querySelector('.playground-shell');
+		const host = container.querySelector('[data-smrt-component="PlaygroundHost"]');
 
 		expect(host).toBeTruthy();
 		expect(docsLink.compareDocumentPosition(host!)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
@@ -72,7 +72,7 @@ describe('playground page', () => {
 
 	it('updates one mounted host during query-only client navigation in both directions', async () => {
 		const { container } = render(Page);
-		const mountedHost = container.querySelector('.playground-shell');
+		const mountedHost = container.querySelector('[data-smrt-component="PlaygroundHost"]');
 
 		expect(mountedHost).toBeTruthy();
 		expect(screen.getByRole('heading', { name: 'Base Controls', level: 2 })).toBeTruthy();
@@ -87,6 +87,6 @@ describe('playground page', () => {
 
 		page.url.search = '';
 		expect(await screen.findByRole('heading', { name: 'Base Controls', level: 2 })).toBeTruthy();
-		expect(container.querySelector('.playground-shell')).toBe(mountedHost);
+		expect(container.querySelector('[data-smrt-component="PlaygroundHost"]')).toBe(mountedHost);
 	});
 });

@@ -39,7 +39,7 @@ the framework is ready for public consumption.
 
 ## Framework documentation
 
-All 24 installed `@happyvertical/smrt-*` packages ship an `AGENTS.md` inside
+All 25 installed `@happyvertical/smrt-*` packages ship an `AGENTS.md` inside
 `node_modules`, written against the version you actually have. Read
 `node_modules/@happyvertical/<package>/AGENTS.md` before working on a package —
 it is the authority on that package's API, and no summary here could stay true.
@@ -128,7 +128,7 @@ Nothing links to these paths, so a dropped entry produces no build warning —
 
 ## Dependency policy
 
-All 24 `@happyvertical/smrt-*` packages, `smrt-planner` included, are public on
+All 25 `@happyvertical/smrt-*` packages, `smrt-planner` included, are public on
 the primary HappyVertical registry and released in lockstep; the project `.npmrc`
 pins that registry, so installs need no auth. The npmjs mirror can lag the released line.
 
@@ -162,11 +162,6 @@ Then one line below.
 - sdk#1484 (was smrt#4054): `@happyvertical/utils` default-imports CommonJS
   `pluralize`, which fails unbundled in dev; `optimizeDeps.include` prebundles
   it. Tracked here in #310.
-- smrt#4374: `PlaygroundHost` in embedded mode renders a nested `main`, so axe
-  reports `landmark-main-is-top-level`/`landmark-no-duplicate-main`/
-  `landmark-unique` on live-example showcases. Tracked here in #368.
-- smrt#4375: `AgentScheduleList` rows are `role=button` holding buttons (axe
-  `nested-interactive`) on the Agents showcase. Tracked here in #368.
 - smrt#4415: `Planner` nests a `main` in the AdminShell's `main`, and axe
   finds contrast and name mismatches inside it on `/build-a-boilerplate`.
 - smrt#4416: `AdminShell` is fixed at `100svh`; `build-a-boilerplate/+page.svelte`

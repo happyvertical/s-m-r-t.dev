@@ -100,9 +100,17 @@ export function movedPath(oldPath: string): string | undefined {
 }
 
 /**
+ * Capability pages first published under `/docs` (#412). They never had a
+ * pre-#365 address outside `/docs`, so the legacy stub route must not mint
+ * one: a prerendered redirect is a URL the site then has to keep.
+ */
+const bornUnderDocs: ReadonlySet<string> = new Set(['ai-usage', 'inference-tuning', 'ingestion']);
+
+/**
  * `slugs` without the names a move introduced (a slug that is the last segment
- * of a `docMoves` target but of no `docMoves` key). The pre-#365 stubs use this
- * so they cover only URLs that existed before #399.
+ * of a `docMoves` target but of no `docMoves` key) and without the pages first
+ * published under `/docs`. The pre-#365 stubs use this so they cover only URLs
+ * that existed before #399.
  */
 export function withoutRenamedSlugs(slugs: readonly string[]): string[] {
 	const last = (path: string) => path.split('/').at(-1);
@@ -112,7 +120,7 @@ export function withoutRenamedSlugs(slugs: readonly string[]): string[] {
 			.map(last)
 			.filter((name) => !oldNames.has(name))
 	);
-	return slugs.filter((slug) => !newNames.has(slug));
+	return slugs.filter((slug) => !newNames.has(slug) && !bornUnderDocs.has(slug));
 }
 
 /** The address a docs path answers at now: its move target, else itself. */

@@ -139,7 +139,7 @@
 	.live-stage :global(.workspace-header:not(:has(.mode-control))) {
 		display: none;
 	}
-	.live-stage :global(.playground-shell) {
+	.live-stage :global([data-smrt-component='PlaygroundHost']) {
 		min-height: 0;
 	}
 	/* A one-card entry should not sit in 480px of white space. */
