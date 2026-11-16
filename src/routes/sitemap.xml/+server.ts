@@ -14,6 +14,8 @@ const baseUrl = SITE_ORIGIN;
 
 const staticRoutes = [
 	{ path: '', priority: '1.0', changefreq: 'weekly' },
+	{ path: '/demo', priority: '0.7', changefreq: 'monthly' },
+	{ path: '/tools', priority: '0.9', changefreq: 'weekly' },
 	{ path: '/features', priority: '0.95', changefreq: 'weekly' },
 	{ path: '/docs', priority: '0.95', changefreq: 'weekly' },
 	{ path: '/docs/framework', priority: '0.95', changefreq: 'weekly' },

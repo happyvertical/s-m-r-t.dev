@@ -137,8 +137,8 @@ describe('emitted-route inventory (#187 S4)', () => {
 	});
 
 	it('resolves exactly one active primaryNavigation item per emitted content route', () => {
-		// The three doors (#361) — BUILD, FEATURES, DOCS — cover every content
-		// route except the homepage (the brand link) and the standalone
+		// The header links (Docs, Features, Tools, Demo) cover every content
+		// route except the landing page (the brand link) and the standalone
 		// playground, which belong to no door by design, not by omission.
 		const noPrimaryDestination = (path: string) => path === '/' || path === '/playground';
 

@@ -146,6 +146,8 @@ const NON_PROSE_PROPERTIES = new Set([
 	'groups',
 	'haystack',
 	'hideEntryList',
+	// The demo's call-to-action door (`doors.ts`): a flag, not prose.
+	'hot',
 	'href',
 	'icon',
 	'id',

@@ -7,6 +7,7 @@
 	import DocsPanelSections from '$lib/components/DocsPanelSections.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import { DEMO_PATH } from '$lib/data/doors';
 	import { isDocsPathname } from '$lib/data/navigation';
 	import { createShellScrollMemory } from '$lib/scroll';
 	import { createDocsShellState } from '$lib/shell';
@@ -21,7 +22,7 @@
 	// The docs panel (the section map) lives only inside Docs (#365). Leaving
 	// Docs with it open closes it, so it never hangs over a feature page.
 	const inDocs = $derived(isDocsPathname(pathname));
-	const onFront = $derived(pathname === '/');
+	const onDemo = $derived(pathname === DEMO_PATH);
 	$effect(() => {
 		if (!inDocs && shell.panels.top === 'expanded') shell.collapsePanel('top');
 	});
@@ -88,14 +89,14 @@
 {/snippet}
 
 <AppTheme>
-	<!-- The front page has no site header (#381): without an appBar snippet and
+	<!-- The demo has no site header (#381): without an appBar snippet and
 	     with the brand slot claimed, the shell renders no top band at all. -->
 	<AdminShell
 		state={shell}
 		edgeToggles={{ top: inDocs }}
 		appPanel={inDocs ? docsPanel : undefined}
-		appBar={onFront ? undefined : appBar}
-		brandInSlot={onFront}
+		appBar={onDemo ? undefined : appBar}
+		brandInSlot={onDemo}
 	>
 		<div class="site-content">
 			<div class="route-content" id="main-content" tabindex="-1">

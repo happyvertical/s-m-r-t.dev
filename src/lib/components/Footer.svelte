@@ -1,12 +1,20 @@
 <script lang="ts">
+	import { primaryLinks } from '$lib/data/doors';
 	import { SMRT_VERSION } from '$lib/version';
 </script>
 
 <footer>
 	<div class="footer-inner">
 		<p class="brand">smrt</p>
-		<p>Framework documentation · MIT · {SMRT_VERSION}</p>
+		<p>MIT licensed</p>
+		<p>
+			A <a href="https://happyvertical.com" target="_blank" rel="noreferrer">HappyVertical</a> project
+		</p>
+		<p>Docs for {SMRT_VERSION}</p>
 		<nav aria-label="Footer navigation">
+			{#each primaryLinks as link (link.href)}
+				<a href={link.href}>{link.label}</a>
+			{/each}
 			<a href="/docs/reference/faq">FAQ</a>
 			<a href="https://github.com/happyvertical/smrt" target="_blank" rel="noreferrer">GitHub ↗</a>
 		</nav>
@@ -16,24 +24,25 @@
 <style>
 	footer {
 		border-top: 1px solid var(--site-line);
-		background: var(--site-surface);
+		background: var(--site-paper);
 	}
 
 	.footer-inner {
-		width: min(1060px, calc(100% - 36px));
+		width: min(1120px, 100% - 32px);
 		display: flex;
-		align-items: center;
-		gap: 24px;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 12px 28px;
 		margin: 0 auto;
-		padding: 24px 0;
+		padding: 36px 0 56px;
 		color: var(--site-muted);
-		font-size: 0.72rem;
+		font-size: 0.9rem;
 	}
 
 	.brand {
 		color: var(--site-ink);
 		font-family: var(--site-font-wordmark);
-		font-size: 1.25rem;
+		font-size: 1.3rem;
 		font-weight: 800;
 		letter-spacing: -0.04em;
 		line-height: 1;
@@ -41,7 +50,8 @@
 
 	footer nav {
 		display: flex;
-		gap: 18px;
+		flex-wrap: wrap;
+		gap: 8px 18px;
 		margin-left: auto;
 	}
 
@@ -50,18 +60,19 @@
 		text-decoration: none;
 	}
 
+	footer p a {
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+	}
+
 	footer a:hover {
 		color: var(--site-ink);
 	}
 
 	@media (max-width: 620px) {
-		.footer-inner {
-			align-items: flex-start;
-			flex-direction: column;
-		}
-
 		footer nav {
 			margin-left: 0;
+			flex-basis: 100%;
 		}
 	}
 </style>

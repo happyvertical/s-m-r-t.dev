@@ -9,9 +9,10 @@
  * visit and Back keep it.
  */
 
+import { BUILD_PATH } from '$lib/data/doors';
 import { features, getFeature } from '$lib/data/features';
 
-export const BUILD_PATH = '/build-a-boilerplate';
+export { BUILD_PATH };
 export const FEATURES_PARAM = 'features';
 const STORAGE_KEY = 'smrt-map-selection';
 

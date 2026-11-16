@@ -8,15 +8,13 @@
   `sips -g pixelWidth -g pixelHeight static/og-image.png` (1200 x 630) and
   keep the file under 300 KB.
 
-  The card is the dark (fire) front page of #361: og-map.png beside this file
-  is a 1200x630 capture of `/` in the dark scheme after the sun has settled
-  (build the site, `vite preview`, emulate prefers-color-scheme dark, wait
-  ~3 s, screenshot). The page header and the "hover a node" hint are covered
-  by the two strips here, which carry the wordmark and the three doors.
-  Colours are the front page's fire tokens (src/routes/+page.svelte). The
-  wordmark is the header's: lowercase, Gabarito 800, set tight (#396). The
-  rest is the front page's JetBrains Mono. Both come from the one Google Fonts
-  link below and fall back to system stacks, so wait for the fonts.
+  The card is the landing page's hero (#397) on a solid pine ground: the
+  wordmark, the headline with its two brass underlines, and the hero label.
+  Colours are the site theme's (src/lib/themes/site-theme.ts): pine as a fill,
+  white on it, brass for decoration. The wordmark is the header's: lowercase,
+  Gabarito 800, set tight (#396). The headline is Gabarito 700 and the label
+  JetBrains Mono, as on the page. All come from the one Google Fonts link
+  below and fall back to system stacks, so wait for the fonts.
 -->
 <html lang="en">
 	<head>
@@ -24,85 +22,80 @@
 		<title>og-image source card</title>
 		<link
 			rel="stylesheet"
-			href="https://fonts.googleapis.com/css2?family=Gabarito:wght@800&family=JetBrains+Mono:wght@500;700&display=swap"
+			href="https://fonts.googleapis.com/css2?family=Gabarito:wght@700;800&family=JetBrains+Mono:wght@500&display=swap"
 		/>
 		<style>
 			:root {
-				--bg: #0a0604;
-				--ink: #ffe9c4;
-				--dim: #c28a4f;
-				--line: #3a2412;
-				--orange: #ff8c1a;
-				--font-wordmark: 'Gabarito', 'Avenir Next', 'Helvetica Neue', sans-serif;
+				--pine: #1d6a3c;
+				--on-pine: #ffffff;
+				--brass: #d4a017;
+				--font-display: 'Gabarito', 'Avenir Next', 'Helvetica Neue', sans-serif;
 				--font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Monaco, Consolas, monospace;
 			}
 			html,
 			body {
 				margin: 0;
-				background: var(--bg);
+				background: var(--pine);
 			}
 			.card {
-				position: relative;
+				box-sizing: border-box;
 				width: 1200px;
 				height: 630px;
-				overflow: hidden;
-				background: var(--bg);
-				font-family: var(--font-mono);
-			}
-			.card img.map {
-				position: absolute;
-				inset: 0;
-				width: 1200px;
-				height: 630px;
-			}
-			.strip {
-				position: absolute;
-				left: 0;
-				right: 0;
 				display: flex;
-				align-items: center;
-				background: var(--bg);
-				padding: 0 28px;
+				flex-direction: column;
+				justify-content: space-between;
+				padding: 64px 72px 60px;
+				overflow: hidden;
+				background: var(--pine);
+				color: var(--on-pine);
 			}
-			.top {
-				top: 0;
-				height: 62px;
-				gap: 14px;
-				border-bottom: 1px solid var(--line);
-			}
-			.top .word {
-				color: var(--ink);
-				font-family: var(--font-wordmark);
-				font-size: 38px;
+			.word {
+				font-family: var(--font-display);
+				font-size: 64px;
 				font-weight: 800;
 				letter-spacing: -0.04em;
 				line-height: 1;
 			}
-			.top .doors {
-				margin-left: auto;
-				color: var(--orange);
-				font-size: 18px;
+			h1 {
+				max-width: 980px;
+				margin: 0;
+				font-family: var(--font-display);
+				font-size: 100px;
 				font-weight: 700;
-				letter-spacing: 0.22em;
+				letter-spacing: -0.03em;
+				line-height: 1.04;
 			}
-			.bottom {
-				bottom: 0;
-				height: 38px;
-				justify-content: center;
-				color: var(--dim);
-				font-size: 14px;
-				letter-spacing: 0.12em;
+			h1 em {
+				font-style: normal;
+				text-decoration: underline;
+				text-decoration-color: var(--brass);
+				text-decoration-thickness: 0.09em;
+				text-underline-offset: 0.1em;
+				text-decoration-skip-ink: none;
+			}
+			.foot {
+				display: flex;
+				align-items: center;
+				gap: 20px;
+				font-family: var(--font-mono);
+				font-size: 24px;
+				font-weight: 500;
+				letter-spacing: 0.02em;
+			}
+			.foot::before {
+				content: '';
+				width: 56px;
+				height: 8px;
+				border-radius: 4px;
+				background: var(--brass);
 			}
 		</style>
 	</head>
 	<body>
 		<div class="card">
-			<img class="map" src="og-map.png" alt="" width="1200" height="630" />
-			<div class="strip top">
-				<span class="word">smrt</span>
-				<span class="doors">BUILD · FEATURES · DOCS</span>
-			</div>
-			<div class="strip bottom">The smrt application stack · MIT</div>
+			<div class="word">smrt</div>
+			<h1>Build <em>agentic software</em> for people <em>and agents</em>.</h1>
+			<div class="foot">TypeScript framework · MIT licensed</div>
 		</div>
 	</body>
 </html>

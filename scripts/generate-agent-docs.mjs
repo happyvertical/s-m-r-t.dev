@@ -183,6 +183,7 @@ export async function generate(directory = 'build', check = false, source = sour
 		[
 			'Stack overview',
 			'Features',
+			'Tools',
 			'Docs',
 			'Foundations',
 			'Capabilities',
@@ -203,6 +204,7 @@ export async function generate(directory = 'build', check = false, source = sour
 				? 'Components'
 				: [
 							'features',
+							'tools',
 							'docs',
 							'foundations',
 							'capabilities',

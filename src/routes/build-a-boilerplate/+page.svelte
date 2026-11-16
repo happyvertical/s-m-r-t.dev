@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { siteUrl } from '$lib/site';
 	import { onMount } from 'svelte';
+	import { TOOLS_PATH } from '$lib/data/doors';
 	import SEO from '$lib/components/SEO.svelte';
 	import { noticeFor, parseFeatures, recipesFor, seedFor, takeWarp } from '$lib/build-handoff';
 
@@ -71,9 +72,9 @@
 		await openAssistant?.();
 	}
 
-	// The way back to the map, rendered by the planner at the start of its own
+	// The way back to the tools index, rendered by the planner at the start of its own
 	// header beside the brand; the site header above it holds the rest.
-	const backLink = { href: '/', label: 'Back to the map' };
+	const backLink = { href: TOOLS_PATH, label: 'Back to tools' };
 
 	// On-device inference first: the AI page offers to download a small model
 	// (WebLLM) into the visitor's browser, so nothing leaves their device and

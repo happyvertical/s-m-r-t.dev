@@ -1,7 +1,8 @@
 <script lang="ts">
 	import ColorSchemeToggle from '$lib/components/ColorSchemeToggle.svelte';
+	import { doors } from '$lib/data/doors';
 
-	// The front page has no site header (#381): BUILD, FEATURES and DOCS at the
+	// The demo has no site header (#381): BUILD, FEATURES and DOCS (`doors.ts`) at the
 	// top left, the colour scheme and the source at the top right. Transparent
 	// buttons, readable on the sky and on space; BUILD is the sun's twin.
 	let {
@@ -24,13 +25,17 @@
 <a class="skip-link" href="#main-content">Skip to content</a>
 
 <nav class="bar left" inert={busy} class:day={sky} aria-label="Primary navigation">
-	<a class="btn" href={buildTarget} onclick={onbuild}
-		>Build{#if count}<span class="count" aria-hidden="true">{count}</span><span class="sr"
-				>, {count} selected</span
-			>{/if}</a
-	>
-	<a class="btn" href="/features">Features</a>
-	<a class="btn" href="/docs">Docs</a>
+	{#each doors as door (door.id)}
+		{#if door.id === 'build'}
+			<a class="btn" href={buildTarget} onclick={onbuild}
+				>{door.label}{#if count}<span class="count" aria-hidden="true">{count}</span><span
+						class="sr">, {count} selected</span
+					>{/if}</a
+			>
+		{:else}
+			<a class="btn" href={door.href}>{door.label}</a>
+		{/if}
+	{/each}
 </nav>
 <div class="bar right" inert={busy} class:day={sky}>
 	<ColorSchemeToggle class="btn icon" />

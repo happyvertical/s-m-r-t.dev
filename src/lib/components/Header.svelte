@@ -41,7 +41,7 @@
 
 <div class="header-root">
 	<div class="app-bar">
-		<a href="/" class="brand" aria-label="smrt documentation home">smrt</a>
+		<a href="/" class="brand" aria-label="smrt home">smrt</a>
 
 		{#if inDocs}
 			<button
@@ -221,13 +221,12 @@
 
 	.desktop-navigation a,
 	.mobile-navigation a {
+		/* Docs · Features · Tools · Demo, in sentence case and the body face (#397). */
 		color: var(--site-muted);
-		font-size: 0.72rem;
-		font-weight: 650;
-		letter-spacing: 0.08em;
+		font-family: var(--site-font-sans);
+		font-size: 0.95rem;
+		font-weight: 500;
 		text-decoration: none;
-		/* The three doors read BUILD · FEATURES · DOCS (#361). */
-		text-transform: uppercase;
 	}
 
 	.desktop-navigation a:hover,
@@ -280,7 +279,7 @@
 			inset-inline: 0;
 			z-index: 80;
 			display: grid;
-			grid-template-columns: repeat(3, minmax(0, 1fr));
+			grid-template-columns: repeat(2, minmax(0, 1fr));
 			gap: 1px;
 			padding: 0.75rem max(1rem, calc((100vw - 72rem) / 2));
 			border-block-end: 1px solid var(--site-line-strong);

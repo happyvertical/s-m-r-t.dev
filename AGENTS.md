@@ -34,8 +34,8 @@ The public documentation site for the smrt framework, and the primary test bed f
 install the fixed version, and continue here. Where a defect blocks the site until
 that release ships, record the exception as "Active upstream defects" describes.
 
-Quick hacks hide real problems. This site exists to prove the framework is ready
-for public consumption; a local patch defeats the point.
+Quick hacks hide real problems; a local patch defeats this site's point: proving
+the framework is ready for public consumption.
 
 ## Framework documentation
 
@@ -69,17 +69,18 @@ it catches `{UndefinedVar}` in templates.
 
 ## How the content is authored
 
-The site has three doors — BUILD (`/build-a-boilerplate`), FEATURES (`/features`)
-and DOCS (`/docs`) — and the front page is the FEATURES map. Every technical
-page lives under `/docs` (framework, foundations, capabilities, agents,
-interaction, ui, tooling, guides, reference, getting-started).
+The site's doors are Docs, Features, Tools and Demo (`primaryLinks` in
+`src/lib/data/doors.ts`, the one source for door labels and paths). `/` is the
+landing page and `/demo` the map flow (map, selection, warp into the planner),
+the only headerless page. `/tools` indexes build-a-boilerplate, which keeps
+`/build-a-boilerplate`. Every technical page lives under `/docs`.
 
 It is data-driven, not page-per-file. The guide, reference and package pages are
 entries in `src/lib/data/`, served by renderers: `GuidePage.svelte` for the
 `Guide[]` modules and `PackageWorkbench.svelte` for `packages.ts`. Adding one
 means adding a data entry, not a route; the route's `entries()` prerenders it.
-Editing a renderer changes every page it serves, so check a few before assuming.
-Landing pages and the section indexes are ordinary hand-written `+page.svelte`.
+Editing a renderer changes every page it serves, so check a few. Landing pages
+and section indexes are hand-written `+page.svelte`.
 
 **Features -> groups -> showcases.** `src/lib/data/features.ts` holds the nine
 groups (Sell, Buy, Make, Team, Publish, Talk, Grow, Plan, Assistant) and their
@@ -88,8 +89,8 @@ recipes). Groups are named for what a person is doing and features for words
 people already use; agentic plumbing stays in `/docs`. A
 feature maps to planner **recipe ids** that exist in the installed catalog, not
 to a package, and one with none keeps the "not in the planner yet" notice.
-The front page graph
-(`components/home/`), the group index (`/features/[section]`) and the showcase
+The map
+(`components/home/`, mounted at `/demo`), the group index (`/features/[section]`) and the showcase
 (`/features/[section]/[feature]`, `components/features/Showcase.svelte`) are all
 generated from it. A live example is a real playground entry from
 `playgrounds.ts`; otherwise a still from `scripts/generate-feature-stills.mjs`.
@@ -122,9 +123,8 @@ feature or group), the retired pre-#375 `/features/<section>[/<feature>]` pages
 and `src/routes/faq/` prerender 301 redirects for URLs the site used to serve.
 The site is static, so a path with no prerendered redirect is a hard 404 in
 production — **removing an entry silently breaks a live URL.**
-Nothing on the site links to these paths, so a dropped entry produces no build
-warning at all — `legacy-routes.test.ts` is the only signal. It holds the counts
-and says what to do when one drops.
+Nothing links to these paths, so a dropped entry produces no build warning —
+`legacy-routes.test.ts` is the only signal. It holds the counts and says what to do.
 
 ## Dependency policy
 

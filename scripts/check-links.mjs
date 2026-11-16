@@ -102,8 +102,7 @@ async function main() {
 		// 1. <a href="...">
 		for (const match of page.html.matchAll(/<a\s[^>]*href="([^"]+)"/g)) {
 			const href = stripQueryAndHash(match[1]);
-			if (!isInternalPath(href) || href.startsWith('/#')) continue;
-			if (href === '/' || href.startsWith('/#')) continue;
+			if (!isInternalPath(href)) continue;
 			const target = href.replace(/\/$/, '') || '/';
 			if (!pages.has(target) && !emittedFiles.has(target)) {
 				brokenLinks.push({ from: ownPath, href: match[1] });

@@ -16,9 +16,11 @@ describe('site shell contract', () => {
 		expect(siteShell).toContain('{#snippet docsPanel()}');
 		expect(siteShell).toContain('appPanel={inDocs ? docsPanel : undefined}');
 		expect(siteShell).toContain('edgeToggles={{ top: inDocs }}');
-		// The front page has no site header (#381).
-		expect(siteShell).toContain('appBar={onFront ? undefined : appBar}');
-		expect(siteShell).toContain('brandInSlot={onFront}');
+		// The demo (`/demo`) has no site header (#381); `/` and every other page do.
+		expect(siteShell).toContain('pathname === DEMO_PATH');
+		expect(siteShell).toContain('appBar={onDemo ? undefined : appBar}');
+		expect(siteShell).toContain('brandInSlot={onDemo}');
+		expect(readFileSync('src/lib/data/doors.ts', 'utf8')).toContain("DEMO_PATH = '/demo'");
 	});
 
 	it('does not retain or nest a second application shell', () => {
