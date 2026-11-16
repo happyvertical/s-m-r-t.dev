@@ -2656,7 +2656,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Two kinds of capacity',
-					body: 'A developer-hour offering is exclusive: it blocks every overlapping reservation. A supervision-day offering is shared capacity of one unit and needs a project and an approved plan. Two active supervision reservations for one project and one interval are refused.'
+					body: 'A developer-hour offering is exclusive: it blocks every overlapping reservation. A supervision-day offering draws on supervision windows with a positive whole-number capacity. Each booking consumes one unit, and the offering needs a project and an approved plan. Two active supervision reservations for one project and one interval are refused.'
 				},
 				{
 					title: 'PostgreSQL, applied by the host',
@@ -2703,16 +2703,17 @@ export const packages: SmrtPackage[] = [
 				}
 			],
 			surfaceNote:
-				'The package has no models. The bundler, builder, and launcher run as Node-only entries and as smrt desktop commands.'
+				'The package has no models. The bundler, builder, and launcher are Node-only entries. The smrt desktop bundle and smrt desktop build commands run the first two. An assistant plugin runs the launcher.'
 		}
 	),
 	definePackage(
 		'Domain models',
 		'smrt-education',
-		'Tenant-aware learning catalog models and services for courses, lessons, learners, submissions, authoring, and group sharing.',
+		'Preview tenant-aware learning catalog models and services for courses, lessons, learners, submissions, authoring, and group sharing.',
 		{
 			status: 'new',
 			highlights: [
+				'The package is a preview, so its models and services can still change',
 				'Courses, ordered sections, lessons, and lesson-owned files in one catalog',
 				'CatalogService authorizes each read through a decision the application supplies',
 				'Services own learner planning, progress, submissions, course authoring, and course bundle import',
@@ -2835,11 +2836,11 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Lapsed subscriptions',
-					body: 'When the entitlement lapses, begin, chunk upload, commit, and device delete answer 402. List, latest, download, abort, and lease routes stay open. After the retention days, routes answer 410. Only an operator sweep deletes lapsed data.'
+					body: 'When the entitlement lapses, begin, chunk upload, commit, and device delete answer 402. List, latest, download, abort, and lease routes stay open. After the retention days, reads answer 410 and writes keep answering 402. Only an operator sweep deletes lapsed data.'
 				},
 				{
 					title: 'Schema and deployment',
-					body: 'The deployment applies migrateVaultRelayV1 and migrateVaultRelayLeasesV1. The relay deploys as a container. The operator sets quotas, retention, bucket, databases, and domain, because none has a default.'
+					body: 'The deployment applies migrateVaultRelayV1 and migrateVaultRelayLeasesV1. The relay deploys as a container. The operator sets the quotas, the retained snapshot count and age window, the bucket, the databases, and the domain. The relay has no default for these. The lapse retention days (90), the sequence jump limit (1000), and the lease lifetime (300 seconds) have defaults.'
 				}
 			],
 			surfaceNote:
