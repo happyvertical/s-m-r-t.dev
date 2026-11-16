@@ -461,18 +461,17 @@ const underPath = (pathname: string, base: string) =>
 	pathname === base || pathname.startsWith(`${base}/`);
 
 export function documentationSectionForPathname(pathname: string): DocumentationSection {
-	if (underPath(pathname, '/docs/framework') || underPath(pathname, '/docs/foundations')) {
+	if (
+		underPath(pathname, '/docs/framework') ||
+		underPath(pathname, '/docs/foundations') ||
+		// Capability pages served here are Framework; the UI ones live under /docs/ui.
+		underPath(pathname, '/docs/capabilities')
+	) {
 		return getDocumentationSection('framework');
 	}
 	if (underPath(pathname, '/docs/ui')) return getDocumentationSection('ui');
 	if (underPath(pathname, '/docs/guides')) return getDocumentationSection('guides');
 	if (underPath(pathname, '/docs/tooling')) return getDocumentationSection('tooling');
-	if (underPath(pathname, '/docs/capabilities')) {
-		// `/docs/capabilities/<slug>`
-		const slug = pathname.split('/')[3] ?? '';
-		if (placementOfSlug(slug) === 'ui') return getDocumentationSection('ui');
-		return getDocumentationSection('framework');
-	}
 	if (underPath(pathname, '/docs/reference')) return getDocumentationSection('reference');
 	// `/docs` itself and Getting Started, plus any page outside Docs.
 	return getDocumentationSection('docs');

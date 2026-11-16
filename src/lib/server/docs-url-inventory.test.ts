@@ -7,7 +7,7 @@ import { routesByPath, stripQueryAndHash } from './route-inventory';
 
 // Both counts may only grow. A smaller number means a served /docs URL was
 // dropped from the frozen list; restore it instead of lowering the number.
-const FROZEN_PAGES = 554;
+const FROZEN_PAGES = 558;
 const FROZEN_REDIRECTS = 15;
 
 describe('frozen /docs url inventory (#399)', () => {
@@ -50,17 +50,27 @@ describe('moved pages (#399 part 1)', () => {
 	});
 });
 
-describe('renamed pages (#399 item 3)', () => {
+describe('renamed and moved pages (#399 items 3 and 4)', () => {
 	// The literal targets are written out on purpose: a rename in docMoves must
 	// not silently re-point these without someone updating the pin.
 	it.each([
 		['/docs/capabilities/collections', '/docs/capabilities/collection-reads'],
 		['/docs/foundations/interfaces', '/docs/foundations/connect-interfaces'],
+		['/docs/capabilities/application-shell', '/docs/ui/application-shell'],
+		['/docs/capabilities/policy-aware-forms', '/docs/ui/policy-aware-forms'],
+		['/docs/capabilities/field-policy-operations', '/docs/ui/field-policy-operations'],
+		['/docs/capabilities/field-policies', '/docs/ui/field-policy-layers'],
 		// Older stubs go straight to the final page, never through the old URL.
 		['/docs/collections', '/docs/capabilities/collection-reads'],
 		['/capabilities/collections', '/docs/capabilities/collection-reads'],
 		['/foundations/interfaces', '/docs/foundations/connect-interfaces'],
-		['/foundations/generated-surfaces', '/docs/foundations/connect-interfaces']
+		['/foundations/generated-surfaces', '/docs/foundations/connect-interfaces'],
+		['/capabilities/application-shell', '/docs/ui/application-shell'],
+		['/capabilities/policy-aware-forms', '/docs/ui/policy-aware-forms'],
+		['/capabilities/field-policy-operations', '/docs/ui/field-policy-operations'],
+		['/capabilities/field-policies', '/docs/ui/field-policy-layers'],
+		['/blocks/screens-and-shell', '/docs/ui/application-shell'],
+		['/features/screens/shell', '/docs/ui/application-shell']
 	])('%s answers 301 to %s', (from, to) => {
 		const route = routesByPath.get(from);
 		expect(route?.isRedirect, from).toBe(true);
@@ -69,19 +79,17 @@ describe('renamed pages (#399 item 3)', () => {
 		expect(routesByPath.get(to)?.isRedirect).toBe(false);
 	});
 
-	it('serves the new pages and agrees with docMoves', () => {
-		for (const to of [
-			'/docs/capabilities/collection-reads',
-			'/docs/foundations/connect-interfaces'
-		]) {
-			expect(routesByPath.get(to)?.isRedirect, to).toBe(false);
+	it.each(Object.entries(docMoves))('docMoves sends %s to %s, a page', (from, to) => {
+		expect(movedPath(from)).toBe(to);
+		expect(routesByPath.get(to)?.isRedirect, to).toBe(false);
+		expect(stripQueryAndHash(routesByPath.get(from)?.target ?? '')).toBe(to);
+	});
+
+	it('does not serve a moved UI page from /docs/capabilities', () => {
+		for (const slug of ['application-shell', 'policy-aware-forms', 'field-policy-operations']) {
+			expect(routesByPath.get(`/docs/capabilities/${slug}`)?.isRedirect, slug).toBe(true);
 		}
-		expect(movedPath('/docs/capabilities/collections')).toBe(
-			docMoves['/docs/capabilities/collections']
-		);
-		expect(movedPath('/docs/foundations/interfaces')).toBe(
-			docMoves['/docs/foundations/interfaces']
-		);
+		expect(routesByPath.has('/docs/capabilities/field-policy-layers')).toBe(false);
 	});
 });
 
@@ -104,5 +112,7 @@ describe('sitemap', () => {
 		expect(locs).toContain(`${SITE_ORIGIN}/docs/foundations/connect-interfaces`);
 		expect(locs).not.toContain(`${SITE_ORIGIN}/docs/capabilities/collections`);
 		expect(locs).not.toContain(`${SITE_ORIGIN}/docs/foundations/interfaces`);
+		for (const to of Object.values(docMoves)) expect(locs).toContain(`${SITE_ORIGIN}${to}`);
+		for (const from of Object.keys(docMoves)) expect(locs).not.toContain(`${SITE_ORIGIN}${from}`);
 	});
 });

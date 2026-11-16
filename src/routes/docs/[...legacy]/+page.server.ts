@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { capabilityPath, currentPath } from '$lib/data/doc-moves';
+import { capabilityTarget } from '$lib/data/doc-moves';
 import type { PageServerLoad } from './$types';
 
 // Pre-redesign `/docs/<x>` URLs. Since #365 `/docs` is a real section, so this
@@ -9,8 +9,8 @@ import type { PageServerLoad } from './$types';
 const destinations: Record<string, string> = {
 	'how-it-works': '/docs/framework',
 	objects: '/docs/foundations/objects-and-collections',
-	// The page's name before #399; `currentPath` follows docMoves to where it lives now.
-	collections: currentPath(capabilityPath('collections')),
+	// The page's name before #399; `capabilityTarget` follows docMoves to where it lives now.
+	collections: capabilityTarget('collections'),
 	'agents/dispatch': '/docs/reference/packages/smrt-agents',
 	'components/feedback/confirm-dialog': '/docs/reference/packages/smrt-ui',
 	'components/feedback/progress-bar': '/docs/reference/packages/smrt-ui',

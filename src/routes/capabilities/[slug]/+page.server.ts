@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { capabilityPath, currentPath, movedSlugs } from '$lib/data/doc-moves';
+import { capabilityTarget, movedSlugs } from '$lib/data/doc-moves';
 import { capabilityGuides } from '$lib/data/guides';
 import type { PageServerLoad } from './$types';
 
@@ -14,5 +14,5 @@ export const entries = () =>
 	].map((slug) => ({ slug }));
 
 export const load: PageServerLoad = ({ params }) => {
-	redirect(301, currentPath(capabilityPath(params.slug)));
+	redirect(301, capabilityTarget(params.slug));
 };

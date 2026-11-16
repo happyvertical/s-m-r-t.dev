@@ -111,7 +111,7 @@ export const referenceGuides: Guide[] = [
 		],
 		related: [
 			{ label: 'Authorization model', href: '/docs/reference/authorization' },
-			{ label: 'Field policies', href: '/docs/capabilities/field-policies' },
+			{ label: 'Field policies', href: '/docs/ui/field-policy-layers' },
 			{ label: 'Field policy API', href: '/docs/reference/field-policies' }
 		]
 	},
@@ -276,9 +276,7 @@ export const referenceGuides: Guide[] = [
 				],
 				filename: 'src/lib/server/register-permissions.ts',
 				code: `import { registerPermissionDefinitions } from '@happyvertical/smrt-users';\n\nconst unregister = registerPermissionDefinitions([\n  {\n    slug: 'invoices.export',\n    category: 'billing',\n    name: 'Export Invoices',\n    description: 'Allows exporting invoices'\n  }\n]);\n\n// The slug is now in catalog.permissions with source 'runtime'\n// and is eligible for syncPermissionCatalog() and the guard.\n// Call unregister() to remove it again.`,
-				links: [
-					{ label: 'Field policy operations', href: '/docs/capabilities/field-policy-operations' }
-				]
+				links: [{ label: 'Field policy operations', href: '/docs/ui/field-policy-operations' }]
 			},
 			{
 				title: 'The guard is for the code you write yourself',
@@ -388,7 +386,7 @@ export const referenceGuides: Guide[] = [
 		related: [
 			{ label: 'Grant access', href: '/docs/foundations/memberships-and-permissions' },
 			{ label: 'Security defaults', href: '/docs/reference/security' },
-			{ label: 'Field policy operations', href: '/docs/capabilities/field-policy-operations' },
+			{ label: 'Field policy operations', href: '/docs/ui/field-policy-operations' },
 			{ label: 'smrt-users package', href: '/docs/reference/packages/smrt-users' }
 		]
 	},
@@ -1510,9 +1508,9 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			}
 		],
 		related: [
-			{ label: 'How resolution works', href: '/docs/capabilities/field-policies' },
-			{ label: 'Build a policy-aware form', href: '/docs/capabilities/policy-aware-forms' },
-			{ label: 'Operate field policies', href: '/docs/capabilities/field-policy-operations' },
+			{ label: 'How resolution works', href: '/docs/ui/field-policy-layers' },
+			{ label: 'Build a policy-aware form', href: '/docs/ui/policy-aware-forms' },
+			{ label: 'Operate field policies', href: '/docs/ui/field-policy-operations' },
 			{ label: 'smrt-fields package', href: '/docs/reference/packages/smrt-fields' },
 			{ label: 'Security defaults', href: '/docs/reference/security' }
 		]

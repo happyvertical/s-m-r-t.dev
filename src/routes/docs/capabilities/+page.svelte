@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { siteUrl } from '$lib/site';
 	import SEO from '$lib/components/SEO.svelte';
+	import { capabilityPath } from '$lib/data/doc-moves';
 	import { capabilityGuides } from '$lib/data/guides';
 	import { SMRT_VERSION } from '$lib/version';
 </script>
@@ -23,7 +24,7 @@
 
 	<section class="capability-list">
 		{#each capabilityGuides as guide (guide.slug)}
-			<a href={`/docs/capabilities/${guide.slug}`}>
+			<a href={capabilityPath(guide)}>
 				<div>
 					<h2>{guide.navTitle ?? guide.title}</h2>
 					<span>{guide.eyebrow}</span>

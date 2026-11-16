@@ -12,6 +12,7 @@
  * a `$lib/data` module and `registration.test.ts` starts demanding all four
  * registrations for it on the next run.
  */
+import { movedSlugs } from '$lib/data/doc-moves';
 import type { Guide } from '$lib/data/guides';
 
 export interface GuideFamily {
@@ -63,58 +64,77 @@ export const guidePages = guideFamilies.flatMap((family) =>
 
 export type GuidePage = (typeof guidePages)[number];
 
-/** Every prerendered `[slug]` route, keyed by the slugs its `entries()` yields. */
+/**
+ * Every prerendered `[slug]` route, keyed by the slugs it serves as pages.
+ *
+ * `entries()` also yields the old slugs of moved pages (`docMoves`) and a
+ * route's `_aliases`, which are one-hop 301s, not pages; they are left out here.
+ */
 const slugRoutes = Object.entries(
 	// Every guide family lives under /docs since #365; the pre-move
 	// `src/routes/<family>/[slug]/` routes are redirect-only `+page.server.ts`
 	// files and so never match this glob.
-	import.meta.glob<{ entries?: () => { slug: string }[] }>('/src/routes/docs/*/*/+page.ts', {
+	import.meta.glob<{
+		entries?: () => { slug: string }[];
+		_aliases?: Record<string, string>;
+	}>('/src/routes/docs/*/*/+page.ts', {
 		eager: true
 	})
 )
 	.filter(([path]) => path.includes('/[slug]/'))
-	.map(([path, module]) => ({
+	.map(([path, module]) => {
 		// `/src/routes/docs/reference/[slug]/+page.ts` → `/docs/reference`
-		base: path.replace(/^\/src\/routes/, '').replace(/\/\[slug\]\/\+page\.ts$/, ''),
-		slugs: new Set((module.entries?.() ?? []).map((entry) => entry.slug))
-	}))
-	.sort((a, b) => a.slugs.size - b.slugs.size);
+		const base = path.replace(/^\/src\/routes/, '').replace(/\/\[slug\]\/\+page\.ts$/, '');
+		const moved = new Set([...movedSlugs(base), ...Object.keys(module._aliases ?? {})]);
+		return {
+			base,
+			slugs: new Set(
+				(module.entries?.() ?? []).map((entry) => entry.slug).filter((slug) => !moved.has(slug))
+			)
+		};
+	});
 
 /**
- * The URL prefix a family's pages live under — `/docs/reference` for
- * `referenceGuides` — resolved through the route that renders them.
+ * The routes that render a family's pages — `/docs/reference` for
+ * `referenceGuides`; `/docs/capabilities` and `/docs/ui` for `capabilityGuides`,
+ * which are split by `capabilityHome`.
  *
  * The route is the only place a family's URL is actually defined, and its
- * `entries()` maps the family array, so the route that prerenders all of a
- * family's slugs is that family's route. Containment rather than equality
- * because a route may add slugs of its own: `/docs/foundations` also prerenders
- * three renamed aliases that redirect.
- *
- * Pairing runs from the route's side, and one route claims one family — the
- * one it covers with the fewest slugs to spare. Otherwise a new family could
- * be *contained* in a foreign route by sharing a single slug (`collections` is
- * already both a capability page and a reference page), inherit that route's
- * URL, and satisfy the sidebar and sitemap checks below on a page belonging to
- * someone else. Reading the prefix off the sidebar has the same flaw.
+ * `entries()` maps the family array, so a route belongs to the family that
+ * contains every page the route serves. Pairing runs from the route's side:
+ * a route is claimed by the smallest family holding all of its slugs.
+ * Otherwise a new family could be *matched* to a foreign route by sharing a
+ * single slug and inherit that route's URL, satisfying the sidebar and sitemap
+ * checks on a page belonging to someone else. Reading the prefix off the
+ * sidebar has the same flaw.
  */
-const familyBases = new Map<GuideFamily, string>();
+const familyRoutes = new Map<GuideFamily, { base: string; slugs: Set<string> }[]>();
 
 for (const route of slugRoutes) {
+	if (route.slugs.size === 0) continue;
 	const owner = guideFamilies
-		.filter((family) => family.guides.every((guide) => route.slugs.has(guide.slug)))
-		.sort((a, b) => b.guides.length - a.guides.length)[0];
-	if (owner && !familyBases.has(owner)) familyBases.set(owner, route.base);
+		.filter((family) => {
+			const slugs = new Set(family.guides.map((guide) => guide.slug));
+			return [...route.slugs].every((slug) => slugs.has(slug));
+		})
+		.sort((a, b) => a.guides.length - b.guides.length)[0];
+	if (owner) familyRoutes.set(owner, [...(familyRoutes.get(owner) ?? []), route]);
+}
+
+/** Every URL prefix a family's pages live under (more than one when it is split). */
+export function familyBases(family: GuideFamily): string[] {
+	return (familyRoutes.get(family) ?? []).map((route) => route.base);
 }
 
 /** Prefix for a family, or `undefined` when no `[slug]` route renders it. */
 export function familyBase(family: GuideFamily): string | undefined {
-	return familyBases.get(family);
+	return familyBases(family)[0];
 }
 
-/** Site URL for a page, or `undefined` when no `[slug]` route renders its family. */
+/** Site URL for a page, or `undefined` when no `[slug]` route renders it. */
 export function guideHref({ family, guide }: GuidePage): string | undefined {
-	const base = familyBases.get(family);
-	return base === undefined ? undefined : `${base}/${guide.slug}`;
+	const route = familyRoutes.get(family)?.find((candidate) => candidate.slugs.has(guide.slug));
+	return route && `${route.base}/${guide.slug}`;
 }
 
 /** How a failure names the page it is complaining about. */

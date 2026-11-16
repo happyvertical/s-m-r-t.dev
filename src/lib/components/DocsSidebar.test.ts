@@ -70,6 +70,21 @@ describe('docs sidebar', () => {
 		expect(current.map((link) => link.getAttribute('href'))).toEqual(['/docs/tooling/dev-mcp']);
 	});
 
+	it.each([
+		'/docs/ui/application-shell',
+		'/docs/ui/policy-aware-forms',
+		'/docs/ui/field-policy-layers',
+		'/docs/ui/field-policy-operations'
+	])('lists %s under UI and marks it the current page', (pathname) => {
+		expect(documentationSectionForPathname(pathname).id).toBe('ui');
+		render(DocsSidebar, { props: { pathname } });
+		const current = within(sidebar())
+			.getAllByRole('link')
+			.filter((link) => link.getAttribute('aria-current') === 'page');
+
+		expect(current.map((link) => link.getAttribute('href'))).toEqual([pathname]);
+	});
+
 	it('marks a section landing as the current page in the section list', () => {
 		render(DocsSidebar, { props: { pathname: '/docs/guides' } });
 		const [docs, , , , guides] = within(sidebar()).getAllByRole('link');

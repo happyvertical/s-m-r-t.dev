@@ -75,7 +75,7 @@ const groupByHref = new Map<string, string>([
  * headings will be missing from the palette while its pages appear.
  */
 const guideTracks: {
-	pathOf: (guide: Guide) => string;
+	pathOf: typeof foundationPath;
 	label: string;
 	guides: Guide[];
 }[] = [

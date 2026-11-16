@@ -21,31 +21,30 @@ describe('docMoves', () => {
 		expect(Object.keys(docMoves)).toHaveLength(6);
 	});
 
-	// A move is landed once its target is a page; from then on the old URL is
-	// one 301 to it. A pending move (target route not built yet) still serves
-	// the page at the old URL. #399 item 4 lands the last four.
-	it.each(Object.entries(docMoves))('%s -> %s is pending or one 301 hop', (from, to) => {
-		if (served.has(to)) {
-			expect(movedPath(from)).toBe(to);
-			expect(routesByPath.get(from)?.isRedirect, `${from} must redirect`).toBe(true);
-			expect(routesByPath.get(from)?.target).toBe(to);
-		} else {
-			expect(movedPath(from)).toBeUndefined();
-			expect(served.has(from), `${from} is not served`).toBe(true);
-		}
+	it.each(Object.entries(docMoves))('%s -> %s is one 301 hop to a page', (from, to) => {
+		expect(served.has(to), `${to} is not a page`).toBe(true);
+		expect(movedPath(from)).toBe(to);
+		expect(routesByPath.get(from)?.isRedirect, `${from} must redirect`).toBe(true);
+		expect(routesByPath.get(from)?.target).toBe(to);
+		expect(served.has(from)).toBe(false);
 	});
 
 	it('resolves a path to its final address, one hop, never an old one', () => {
 		expect(currentPath('/docs/capabilities/webmcp')).toBe('/docs/capabilities/webmcp');
 		for (const old of Object.keys(docMoves)) {
-			if (movedPath(old) === undefined) continue;
 			expect(Object.hasOwn(docMoves, currentPath(old)), `${old} chains`).toBe(false);
 		}
 	});
 
 	it('lists the old slugs per family', () => {
 		expect(movedSlugs('/docs/foundations')).toEqual(['interfaces']);
-		expect(movedSlugs('/docs/capabilities')).toContain('collections');
+		expect(movedSlugs('/docs/capabilities').sort()).toEqual([
+			'application-shell',
+			'collections',
+			'field-policies',
+			'field-policy-operations',
+			'policy-aware-forms'
+		]);
 	});
 
 	it('returns undefined for a path that never moved', () => {
@@ -61,6 +60,7 @@ describe('path helpers', () => {
 		}
 		for (const guide of capabilityGuides) {
 			expect(served.has(capabilityPath(guide)), guide.slug).toBe(true);
+			expect(capabilityPath(guide).startsWith('/docs/ui/')).toBe(capabilityHome(guide) === 'ui');
 			expect(capabilityPath(guide.slug)).toBe(capabilityPath(guide));
 		}
 		expect(taskPath('x')).toBe('/docs/guides/x');

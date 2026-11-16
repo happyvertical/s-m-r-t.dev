@@ -70,7 +70,7 @@ describe('contextual navigation', () => {
 		expect(documentationSectionForPathname('/docs/capabilities/agent-assisted-forms').id).toBe(
 			'framework'
 		);
-		expect(documentationSectionForPathname('/docs/capabilities/application-shell').id).toBe('ui');
+		expect(documentationSectionForPathname('/docs/ui/application-shell').id).toBe('ui');
 		expect(documentationSectionForPathname('/docs/foundations/tenants').id).toBe('framework');
 		expect(documentationSectionForPathname('/docs/tooling/dev-mcp').id).toBe('tooling');
 		expect(documentationSectionForPathname('/docs/guides/semantic-search').id).toBe('guides');

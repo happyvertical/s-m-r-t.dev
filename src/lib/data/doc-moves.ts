@@ -22,18 +22,18 @@ export type CapabilityHome = 'ui' | 'agents-and-interaction';
 
 /**
  * Capability pages that are not plain Framework capabilities. A slug that is
- * not here is a Framework capability.
+ * not here and not a `docMoves` target under `/docs/ui/` is a Framework
+ * capability.
  *
- * - `ui`: listed in the UI section.
+ * - `ui`: listed in the UI section and served under `/docs/ui`. Not stored
+ *   here: a capability is `ui` when `docMoves` sends a page to
+ *   `/docs/ui/<its slug>`, so renaming one is a `docMoves` value plus the
+ *   guide's `slug`.
  * - `agents-and-interaction`: Framework, listed with the Agents and Interaction
  *   pages. WebMCP sits here because it is the protocol-level mechanics behind
  *   the tool surfaces the Agents page maps.
  */
 const capabilityHomes: ReadonlyMap<string, CapabilityHome> = new Map([
-	['application-shell', 'ui'],
-	['field-policies', 'ui'],
-	['policy-aware-forms', 'ui'],
-	['field-policy-operations', 'ui'],
 	['webmcp', 'agents-and-interaction'],
 	['agent-legible-applications', 'agents-and-interaction'],
 	['agent-assisted-forms', 'agents-and-interaction'],
@@ -43,11 +43,6 @@ const capabilityHomes: ReadonlyMap<string, CapabilityHome> = new Map([
 type SlugOrGuide = string | { slug: string };
 
 const slugOf = (page: SlugOrGuide): string => (typeof page === 'string' ? page : page.slug);
-
-/** Which non-Framework home claims a capability slug, if any. */
-export function capabilityHome(page: SlugOrGuide): CapabilityHome | undefined {
-	return capabilityHomes.get(slugOf(page));
-}
 
 /** `oldPath → newPath`. Frozen: entries are only ever added. */
 export const docMoves: Readonly<Record<string, string>> = Object.freeze({
@@ -61,11 +56,14 @@ export const docMoves: Readonly<Record<string, string>> = Object.freeze({
 
 /**
  * URL families that have a route serving moved pages. A move whose target is
- * in another family waits until that route exists (the `/docs/ui/[slug]` route
- * lands in #399 item 4, which adds `/docs/ui/` here); until then its old URL
+ * in another family waits until that route exists, and until then its old URL
  * keeps serving the page.
  */
-const landedFamilies: readonly string[] = ['/docs/capabilities/', '/docs/foundations/'];
+const landedFamilies: readonly string[] = [
+	'/docs/capabilities/',
+	'/docs/foundations/',
+	'/docs/ui/'
+];
 
 const isLanded = (newPath: string): boolean =>
 	landedFamilies.some((family) => newPath.startsWith(family));
@@ -96,11 +94,31 @@ export function movedSlugs(base: string): string[] {
 
 export const foundationPath = (page: SlugOrGuide): string => `/docs/foundations/${slugOf(page)}`;
 
+/** The UI section's address for a page (`/docs/ui/<slug>`). */
+export const uiPath = (page: SlugOrGuide): string => `/docs/ui/${slugOf(page)}`;
+
+/** Which non-Framework home claims a capability slug, if any. */
+export function capabilityHome(page: SlugOrGuide): CapabilityHome | undefined {
+	const slug = slugOf(page);
+	if (Object.values(docMoves).includes(uiPath(slug))) return 'ui';
+	return capabilityHomes.get(slug);
+}
+
+/** The capabilities route's own address for a slug, whatever its home. */
+export const capabilityRoutePath = (page: SlugOrGuide): string =>
+	`/docs/capabilities/${slugOf(page)}`;
+
+/** Where a capability page is served: its home's address, UI or Framework. */
+export const capabilityPath = (page: SlugOrGuide): string =>
+	capabilityHome(page) === 'ui' ? uiPath(page) : capabilityRoutePath(page);
+
 /**
- * Capability pages are served under `/docs/capabilities` today, including the
- * four listed in UI; #399 item 4 moves those by consulting `capabilityHome`.
+ * Where a capability slug answers now, for the stubs that kept an older URL: a
+ * moved page's final address (one hop), else the page's own address.
  */
-export const capabilityPath = (page: SlugOrGuide): string => `/docs/capabilities/${slugOf(page)}`;
+export function capabilityTarget(slug: string): string {
+	return movedPath(capabilityRoutePath(slug)) ?? capabilityPath(slug);
+}
 
 export const taskPath = (page: SlugOrGuide): string => `/docs/guides/${slugOf(page)}`;
 export const toolingPath = (page: SlugOrGuide): string => `/docs/tooling/${slugOf(page)}`;

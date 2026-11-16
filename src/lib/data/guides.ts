@@ -307,7 +307,7 @@ export const foundationGuides: Guide[] = [
 		],
 		related: [
 			{ label: 'Authorization model', href: '/docs/reference/authorization' },
-			{ label: 'Field policy operations', href: '/docs/capabilities/field-policy-operations' }
+			{ label: 'Field policy operations', href: '/docs/ui/field-policy-operations' }
 		]
 	},
 	{
@@ -971,7 +971,7 @@ export const nextPageIntent = defineIntent({
 		]
 	},
 	{
-		slug: 'field-policies',
+		slug: 'field-policy-layers',
 		navTitle: 'Field policies',
 		eyebrow: 'Field policies 01',
 		title: 'Defaults and visibility resolve in layers',
@@ -1059,8 +1059,8 @@ export const nextPageIntent = defineIntent({
 			}
 		],
 		related: [
-			{ label: 'Build a policy-aware form', href: '/docs/capabilities/policy-aware-forms' },
-			{ label: 'Operate field policies', href: '/docs/capabilities/field-policy-operations' },
+			{ label: 'Build a policy-aware form', href: '/docs/ui/policy-aware-forms' },
+			{ label: 'Operate field policies', href: '/docs/ui/field-policy-operations' },
 			{ label: 'Field policy API', href: '/docs/reference/field-policies' },
 			{ label: 'Security defaults', href: '/docs/reference/security' }
 		]
@@ -1140,8 +1140,8 @@ export const nextPageIntent = defineIntent({
 			}
 		],
 		related: [
-			{ label: 'How resolution works', href: '/docs/capabilities/field-policies' },
-			{ label: 'Operate field policies', href: '/docs/capabilities/field-policy-operations' },
+			{ label: 'How resolution works', href: '/docs/ui/field-policy-layers' },
+			{ label: 'Operate field policies', href: '/docs/ui/field-policy-operations' },
 			{ label: 'Field policy API', href: '/docs/reference/field-policies' },
 			{ label: 'smrt-fields package', href: '/docs/reference/packages/smrt-fields' }
 		]
@@ -1262,8 +1262,8 @@ export const nextPageIntent = defineIntent({
 			}
 		],
 		related: [
-			{ label: 'How resolution works', href: '/docs/capabilities/field-policies' },
-			{ label: 'Build a policy-aware form', href: '/docs/capabilities/policy-aware-forms' },
+			{ label: 'How resolution works', href: '/docs/ui/field-policy-layers' },
+			{ label: 'Build a policy-aware form', href: '/docs/ui/policy-aware-forms' },
 			{ label: 'Field policy API', href: '/docs/reference/field-policies' },
 			{
 				label: 'Memberships and permissions',

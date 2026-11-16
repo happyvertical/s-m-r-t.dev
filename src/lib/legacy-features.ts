@@ -9,6 +9,8 @@
  * to the Docs page that already documents it.
  */
 
+import { capabilityPath } from '$lib/data/doc-moves';
+
 /** Old section id → its new group, or the Docs page when no group fits. */
 export const legacySectionTargets: Record<string, string> = {
 	agents: '/features/assistant',
@@ -41,7 +43,7 @@ export const legacyFeatureTargets: Record<string, string> = {
 	'basics/tenants': '/docs/foundations/tenants',
 	'basics/realtime': '/docs/capabilities/live-data',
 	'basics/reports': '/features/grow/reports',
-	'screens/shell': '/docs/capabilities/application-shell',
+	'screens/shell': capabilityPath('application-shell'),
 	'screens/mobile': '/docs/capabilities/mobile',
 	'content/articles': '/features/publish/articles',
 	'content/assets': '/features/publish/images',

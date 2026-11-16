@@ -53,6 +53,15 @@ describe('guide route family registration', () => {
 		}
 	});
 
+	it('serves every guide from a route of its family', () => {
+		for (const page of guidePages) {
+			expect(
+				guideHref(page),
+				`${describePage(page)} — no [slug] route of its family serves this slug.`
+			).toBeDefined();
+		}
+	});
+
 	it('gives every guide a sidebar entry (navigation.ts)', () => {
 		for (const { page, href } of routed) {
 			expect(
