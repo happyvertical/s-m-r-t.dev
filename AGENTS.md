@@ -118,7 +118,7 @@ merge, because a hash comparison is not qualified to reject prose.
 `src/routes/docs/[...legacy]/`, `src/routes/components/[...legacy]/`,
 `src/routes/blocks/` (the retired #358 landing and 23 block pages, each a 301 to a
 feature or group), the retired pre-#375 `/features/<section>[/<feature>]` pages
-(58, in `src/lib/legacy-features.ts`),
+(60, in `src/lib/legacy-features.ts`),
 `src/routes/modules/[slug]/`, `src/routes/packages/[slug]/`, `src/routes/packages/`,
 and `src/routes/faq/` prerender 301 redirects for URLs the site used to serve.
 The site is static, so a path with no prerendered redirect is a hard 404 in
