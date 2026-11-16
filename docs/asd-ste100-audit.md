@@ -1,3 +1,5 @@
+> Historical. This is a dated baseline from before the voice change (#398). The strict ASD-STE100-style rules now apply only to the generated reference pages; see `docs/writing-standard.md`.
+
 # ASD-STE100 baseline audit
 
 Audit date: 2026-08-24
