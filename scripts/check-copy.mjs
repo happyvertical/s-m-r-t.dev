@@ -1809,8 +1809,7 @@ function applyRules(rules, severity, passage, findings, strict) {
 		if (rule.skipFiles?.test(passage.file)) continue;
 		if (rule.skipStrict && strict) continue;
 		if (rule.pattern.test(passage.text)) {
-			const { pattern, skipFiles, skipStrict, ...rest } = rule;
-			findings.push(finding({ severity, ...rest, passage }));
+			findings.push(finding({ severity, id: rule.id, message: rule.message, passage }));
 		}
 		rule.pattern.lastIndex = 0;
 	}
