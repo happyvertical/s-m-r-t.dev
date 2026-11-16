@@ -111,7 +111,7 @@
 				<strong>Guides</strong>
 				<span>Follow step-by-step procedures for setup, integration, migration and testing.</span>
 			</a>
-			<a href="/docs/interaction">
+			<a href="/docs/framework/interaction">
 				<strong>Interaction</strong>
 				<span>See how people and application agents communicate and share control.</span>
 			</a>

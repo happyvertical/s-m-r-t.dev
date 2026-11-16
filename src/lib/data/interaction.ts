@@ -417,7 +417,7 @@ export function getInteractionGuide(slug: string): Guide | undefined {
 	return interactionGuides.find((guide) => guide.slug === slug);
 }
 
-/** Ordered content families rendered as stable anchors on `/docs/interaction`. */
+/** Ordered content families rendered as stable anchors on `/docs/framework/interaction`. */
 export function listInteractionGuides(): readonly Guide[] {
 	return interactionGuides;
 }

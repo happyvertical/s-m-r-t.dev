@@ -90,7 +90,12 @@ describe('emitted-route inventory (#187 S4)', () => {
 			// the /blocks landing it pointed at redirects there too. Guarded in
 			// legacy-routes.test.ts.
 			'/modules',
-			'/blocks'
+			'/blocks',
+			// #399: the Agents and Interaction sections became Framework topic
+			// pages; the old landings are single-file stubs. Guarded in
+			// legacy-routes.test.ts and docs-url-inventory.test.ts.
+			'/docs/agents',
+			'/docs/interaction'
 		];
 		for (const path of knownSingleRedirectRoutes) {
 			expect(

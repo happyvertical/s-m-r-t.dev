@@ -89,9 +89,18 @@ describe('legacy static routes', () => {
 			])
 		);
 		// The five that left the table, and where each one went (#365).
-		for (const owned of ['getting-started', 'agents', 'guides/multi-tenant-lifecycle']) {
+		for (const owned of ['getting-started', 'guides/multi-tenant-lifecycle']) {
 			expect(paths).not.toContain(owned);
 			expect(routesByPath.get(`/docs/${owned}`)?.isRedirect, owned).toBe(false);
+		}
+		// `agents` left the table because /docs/agents has its own stub, which
+		// since #399 sends it straight to its new page (and /docs/interaction too).
+		expect(paths).not.toContain('agents');
+		for (const folded of ['agents', 'interaction']) {
+			expect(routesByPath.get(`/docs/${folded}`), folded).toMatchObject({
+				isRedirect: true,
+				target: `/docs/framework/${folded}`
+			});
 		}
 		expect(Object.keys(docsGuideAliases), DOCS_LEGACY_COLLISION_NOTE).toEqual([
 			'expose-app-via-mcp',

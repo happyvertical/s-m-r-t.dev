@@ -15,7 +15,7 @@
 <SEO
 	title="Agents and the application"
 	description="What an agent can do with a smrt application: the four tool surfaces, the read-only exposure default, and the identity every call runs as."
-	url={siteUrl('/docs/agents')}
+	url={siteUrl('/docs/framework/agents')}
 />
 
 <article class="agents-page">
@@ -161,7 +161,7 @@
 			<h2 id="boundaries-heading">Pick the section that answers your next question.</h2>
 		</div>
 		<div>
-			<a href="/docs/interaction">
+			<a href="/docs/framework/interaction">
 				<strong>Interaction</strong>
 				<span>How persons and agents propose, confirm, and refuse — moment to moment.</span>
 			</a>

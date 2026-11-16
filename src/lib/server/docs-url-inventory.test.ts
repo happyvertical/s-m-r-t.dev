@@ -39,7 +39,7 @@ describe('frozen /docs url inventory (#399)', () => {
 
 describe('sitemap', () => {
 	it('lists only real pages, never a redirect or a 404', async () => {
-		const xml = await getSitemap({} as Parameters<typeof getSitemap>[0]).text();
+		const xml = await (await getSitemap({} as Parameters<typeof getSitemap>[0])).text();
 		const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
 		expect(locs.length).toBeGreaterThan(0);
 

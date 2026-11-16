@@ -62,7 +62,7 @@ describe('Why smrt discovery surfaces', () => {
 		expect(llms).not.toContain('Build a boilerplate');
 		expect(llms).toContain(SITE_ORIGIN + '/build-a-boilerplate');
 		expect(llms).toContain(SITE_ORIGIN + '/docs —');
-		expect(llms).toContain(SITE_ORIGIN + '/docs/agents');
+		expect(llms).toContain(SITE_ORIGIN + '/docs/framework/agents');
 		expect(llms).toContain(SITE_ORIGIN + '/docs/reference/evidence');
 		expect(llms).toContain('Awareness is not authority');
 		expect(llms).toContain(SITE_ORIGIN + '/docs/capabilities/agent-legible-applications');

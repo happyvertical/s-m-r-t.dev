@@ -100,8 +100,8 @@ const sectionEntries: SearchEntry[] = guideTracks.flatMap(({ base, label, guides
 );
 
 /**
- * The single-route landing pages: `/docs/framework`, `/docs/interaction`, and `/docs/agents`
- * each render several topics on one page rather than one route per topic, so
+ * The single-route landing pages: `/docs/framework`,
+ * `/docs/framework/interaction`, and `/docs/framework/agents` each render several topics on one page rather than one route per topic, so
  * — unlike `guideTracks`, where every guide already has its own page entry —
  * neither the topics nor their subsections get a palette entry unless this
  * track builds one. Framework's 22 topics and Interaction's 5 concepts had
@@ -113,8 +113,8 @@ const landingTracks: {
 	topics: readonly (FrameworkTopic | Guide)[];
 }[] = [
 	{ base: '/docs/framework', label: 'Framework', topics: frameworkTopics },
-	{ base: '/docs/interaction', label: 'Interaction', topics: interactionContent.guides },
-	{ base: '/docs/agents', label: 'Agents', topics: agentsTopics }
+	{ base: '/docs/framework/interaction', label: 'Interaction', topics: interactionContent.guides },
+	{ base: '/docs/framework/agents', label: 'Agents', topics: agentsTopics }
 ];
 
 /**

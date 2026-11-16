@@ -63,12 +63,12 @@ describe('contextual navigation', () => {
 		expect(documentationSectionForPathname('/docs').id).toBe('docs');
 		expect(documentationSectionForPathname('/docs/getting-started').id).toBe('docs');
 		expect(documentationSectionForPathname('/docs/framework').id).toBe('framework');
-		expect(documentationSectionForPathname('/docs/agents').id).toBe('agents');
-		expect(documentationSectionForPathname('/docs/capabilities/webmcp').id).toBe('agents');
-		expect(documentationSectionForPathname('/docs/interaction').id).toBe('interaction');
+		expect(documentationSectionForPathname('/docs/framework/agents').id).toBe('framework');
+		expect(documentationSectionForPathname('/docs/capabilities/webmcp').id).toBe('framework');
+		expect(documentationSectionForPathname('/docs/framework/interaction').id).toBe('framework');
 		expect(documentationSectionForPathname('/docs/ui').id).toBe('ui');
 		expect(documentationSectionForPathname('/docs/capabilities/agent-assisted-forms').id).toBe(
-			'interaction'
+			'framework'
 		);
 		expect(documentationSectionForPathname('/docs/capabilities/application-shell').id).toBe('ui');
 		expect(documentationSectionForPathname('/docs/foundations/tenants').id).toBe('framework');
@@ -105,16 +105,16 @@ describe('contextual navigation', () => {
 		expect(isNavigationItemActive('/#features', '/', '#doors')).toBe(false);
 	});
 
-	it('marks exactly one /agents "On this page" anchor active for the current topic', () => {
-		const section = documentationSections.find((candidate) => candidate.id === 'agents');
-		const onThisPage = section?.groups.find((group) => group.label === 'On this page');
+	it('marks exactly one agents-page anchor active for the current topic', () => {
+		const section = documentationSections.find((candidate) => candidate.id === 'framework');
+		const onThisPage = section?.groups.find((group) => group.label === 'On the agents page');
 		expect(onThisPage).toBeTruthy();
 		expect(onThisPage!.items.length).toBeGreaterThan(1);
 
 		for (const target of onThisPage!.items) {
 			const hash = new URL(target.href, 'https://s-m-r-t.dev').hash;
 			const activeHrefs = onThisPage!.items
-				.filter((item) => isNavigationItemActive(item.href, '/docs/agents', hash))
+				.filter((item) => isNavigationItemActive(item.href, '/docs/framework/agents', hash))
 				.map((item) => item.href);
 
 			expect(activeHrefs).toEqual([target.href]);

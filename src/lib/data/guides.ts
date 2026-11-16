@@ -785,15 +785,15 @@ export const nextPageIntent = defineIntent({
 				links: [
 					{
 						label: 'Exposure is not authorization',
-						href: '/docs/agents#exposure-is-not-authorization'
+						href: '/docs/framework/agents#exposure-is-not-authorization'
 					}
 				]
 			}
 		],
 		related: [
-			{ label: 'Agents overview', href: '/docs/agents' },
-			{ label: 'One vocabulary, four projections', href: '/docs/agents#one-vocabulary' },
-			{ label: 'State, not the screen', href: '/docs/agents#state-not-screen' },
+			{ label: 'Agents overview', href: '/docs/framework/agents' },
+			{ label: 'One vocabulary, four projections', href: '/docs/framework/agents#one-vocabulary' },
+			{ label: 'State, not the screen', href: '/docs/framework/agents#state-not-screen' },
 			{ label: 'UI overview', href: '/docs/ui' }
 		],
 		sources: [

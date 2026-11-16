@@ -7,7 +7,7 @@
 <SEO
 	title="Human-Agent Interaction"
 	description="How people and application agents communicate, discover controls, stage changes, preserve input sources and keep authority explicit."
-	url={siteUrl('/docs/interaction')}
+	url={siteUrl('/docs/framework/interaction')}
 />
 
 <article class="interaction-index">

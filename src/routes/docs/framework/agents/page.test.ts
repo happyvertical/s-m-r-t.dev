@@ -87,7 +87,7 @@ describe('Agents landing page', () => {
 			'Playground'
 		]);
 		expect(cells.map((cell) => cell.getAttribute('href'))).toEqual([
-			'/docs/interaction',
+			'/docs/framework/interaction',
 			'/docs/framework',
 			'/docs/tooling',
 			'/docs/reference',

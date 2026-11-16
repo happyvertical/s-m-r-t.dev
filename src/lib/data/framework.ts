@@ -291,7 +291,7 @@ export const frameworkTopics: FrameworkTopic[] = [
 		related: [
 			{ label: 'Decide where data belongs', href: '/docs/foundations/tenants' },
 			{ label: 'Add people and accounts', href: '/docs/foundations/users-and-profiles' },
-			{ label: 'Human-agent interaction', href: '/docs/interaction' }
+			{ label: 'Human-agent interaction', href: '/docs/framework/interaction' }
 		],
 		sources: [
 			{
@@ -501,7 +501,7 @@ export const frameworkTopics: FrameworkTopic[] = [
 					'Software as Agentic Domain Logic describes an application where persons and agents reach the same permitted application operations. The application does not maintain a separate, reduced agent definition that can drift from the human interface.',
 				links: [
 					{ label: 'Complete SAADL terminology entry', href: '/docs/reference/saadl' },
-					{ label: 'Human-agent interaction', href: '/docs/interaction' }
+					{ label: 'Human-agent interaction', href: '/docs/framework/interaction' }
 				]
 			},
 			{

@@ -204,7 +204,10 @@ export const referenceGuides: Guide[] = [
 				label: 'Standalone Playground demonstration',
 				href: '/playground?entry=agent-aware-form'
 			},
-			{ label: 'Interaction lifecycle', href: '/docs/interaction#commands-and-lifecycle' },
+			{
+				label: 'Interaction lifecycle',
+				href: '/docs/framework/interaction#commands-and-lifecycle'
+			},
 			{ label: 'Agent-assisted forms guide', href: '/docs/capabilities/agent-assisted-forms' }
 		]
 	},
@@ -882,7 +885,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 		related: [
 			{ label: 'AI methods and detailed decisions', href: '/docs/reference/ai-and-retrieval' },
 			{ label: 'Authorization model', href: '/docs/reference/authorization' },
-			{ label: 'Agents overview', href: '/docs/agents' }
+			{ label: 'Agents overview', href: '/docs/framework/agents' }
 		]
 	},
 	{
