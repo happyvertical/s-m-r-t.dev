@@ -2089,6 +2089,11 @@ export const packages: SmrtPackage[] = [
 		{
 			kind: 'mobile',
 			status: 'private',
+			notice: {
+				variant: 'note',
+				title: 'Source distribution only',
+				body: 'This package is private and is not published to npm or Maven. Its source is in the smrt repository, in packages/smrt-mobile. A project consumes it from a local checkout with a Gradle composite build.'
+			},
 			highlights: [
 				'SQLDelight offline queue and pack store',
 				'PKCE sessions, authenticated Ktor networking, and idempotent multipart uploads',
@@ -2106,13 +2111,29 @@ export const packages: SmrtPackage[] = [
 		'Mobile',
 		'smrt-android',
 		'Compose shell, smrt theme, and Android adapters for barcode, speech, on-device AI, secure auth, and storage.',
-		{ kind: 'mobile', status: 'private' }
+		{
+			kind: 'mobile',
+			status: 'private',
+			notice: {
+				variant: 'note',
+				title: 'Source distribution only',
+				body: 'This package is private and is not published to npm or Maven. Its source is in the smrt repository, in packages/smrt-android. A project consumes it from a local checkout with a Gradle composite build.'
+			}
+		}
 	),
 	definePackage(
 		'Mobile',
 		'smrt-ios',
 		'SwiftUI shell, smrt theme, and iOS adapters for VisionKit, Speech, Foundation Models, Keychain, and native storage.',
-		{ kind: 'mobile', status: 'private' }
+		{
+			kind: 'mobile',
+			status: 'private',
+			notice: {
+				variant: 'note',
+				title: 'Source distribution only',
+				body: 'This package is private and is not published to npm. Its source is in the smrt repository, in packages/smrt-ios. A project consumes it from a local checkout and builds it with XcodeGen. No Swift package release exists.'
+			}
+		}
 	),
 
 	// Documented from the published tarballs; the site does not install these
