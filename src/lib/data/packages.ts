@@ -823,7 +823,7 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'A pinnable discovery contract',
 					body: 'The /app-contract subpath carries the versioned discovery artifact that a CLI or MCP consumer can validate and pin. createDiscoveryConformanceArtifact emits deterministically ordered JSON with a SHA-256 integrity digest, and validateDiscoveryConformanceArtifact checks structure, ordering, and that digest in one call.',
-					href: '/docs/foundations/interfaces',
+					href: '/docs/foundations/connect-interfaces',
 					linkLabel: 'Generated interfaces'
 				}
 			],

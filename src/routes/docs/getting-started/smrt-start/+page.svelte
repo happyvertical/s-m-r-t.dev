@@ -160,7 +160,7 @@ export class Note extends SmrtObject {
 				>
 			</li>
 			<li>
-				<a href="/docs/foundations/interfaces"
+				<a href="/docs/foundations/connect-interfaces"
 					><strong>Generated interfaces</strong><span
 						>Choose which REST, MCP, WebMCP and CLI actions each model exposes.</span
 					></a

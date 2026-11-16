@@ -344,7 +344,7 @@ export const foundationGuides: Guide[] = [
 		]
 	},
 	{
-		slug: 'interfaces',
+		slug: 'connect-interfaces',
 		navTitle: 'Connect APIs, tools, and agents',
 		eyebrow: 'Foundation 06',
 		title: 'Choose which interfaces each object should have',
@@ -941,7 +941,7 @@ export const nextPageIntent = defineIntent({
 		]
 	},
 	{
-		slug: 'collections',
+		slug: 'collection-reads',
 		navTitle: 'Collection reads',
 		eyebrow: 'Core improvement',
 		title: 'Lists can be smaller, faster, and safer',

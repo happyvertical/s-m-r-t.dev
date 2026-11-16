@@ -10,8 +10,9 @@
  * keeps redirecting to the new one (the frozen inventory in
  * `server/docs-url-inventory.ts` is append-only).
  *
- * `docMoves` is data only for now: no served URL changes in this commit and no
- * route reads it yet (#399, items 3 and 4 apply it).
+ * Routes, stubs, the sitemap and the tests read `docMoves` through
+ * `movedPath`, `movedSlugs` and `currentPath`; nothing builds an old or new
+ * moved path by hand.
  *
  * This module imports nothing from `navigation.ts`, so both can use it.
  */
@@ -58,9 +59,39 @@ export const docMoves: Readonly<Record<string, string>> = Object.freeze({
 	'/docs/capabilities/field-policy-operations': '/docs/ui/field-policy-operations'
 });
 
+/**
+ * URL families that have a route serving moved pages. A move whose target is
+ * in another family waits until that route exists (the `/docs/ui/[slug]` route
+ * lands in #399 item 4, which adds `/docs/ui/` here); until then its old URL
+ * keeps serving the page.
+ */
+const landedFamilies: readonly string[] = ['/docs/capabilities/', '/docs/foundations/'];
+
+const isLanded = (newPath: string): boolean =>
+	landedFamilies.some((family) => newPath.startsWith(family));
+
 /** Where a moved page now lives, or `undefined` when `oldPath` never moved. */
 export function movedPath(oldPath: string): string | undefined {
-	return Object.hasOwn(docMoves, oldPath) ? docMoves[oldPath] : undefined;
+	if (!Object.hasOwn(docMoves, oldPath)) return undefined;
+	const newPath = docMoves[oldPath];
+	return isLanded(newPath) ? newPath : undefined;
+}
+
+/** The address a docs path answers at now: its move target, else itself. */
+export function currentPath(path: string): string {
+	return movedPath(path) ?? path;
+}
+
+/**
+ * Old slugs of moved pages that lived under `base` (for example
+ * `/docs/capabilities`). A `[slug]` route adds these to its `entries()` so each
+ * old URL is prerendered as a 301.
+ */
+export function movedSlugs(base: string): string[] {
+	const prefix = `${base}/`;
+	return Object.keys(docMoves)
+		.filter((oldPath) => oldPath.startsWith(prefix) && movedPath(oldPath) !== undefined)
+		.map((oldPath) => oldPath.slice(prefix.length));
 }
 
 export const foundationPath = (page: SlugOrGuide): string => `/docs/foundations/${slugOf(page)}`;

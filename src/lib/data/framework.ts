@@ -419,7 +419,7 @@ export const frameworkTopics: FrameworkTopic[] = [
 			}
 		],
 		related: [
-			{ label: 'Connect APIs, tools, and agents', href: '/docs/foundations/interfaces' },
+			{ label: 'Connect APIs, tools, and agents', href: '/docs/foundations/connect-interfaces' },
 			{ label: 'Development tooling', href: '/docs/tooling' },
 			{ label: 'Working playground', href: '/playground' }
 		],
@@ -589,13 +589,13 @@ export const frameworkMigrationDecisions: FrameworkMigrationDecision[] = [
 		note: 'Merge server loading with hydration, change signals, and offline replay.'
 	},
 	{
-		source: '/docs/foundations/interfaces',
+		source: '/docs/foundations/connect-interfaces',
 		status: 'move',
 		href: '/docs/framework#generated-interfaces',
 		note: 'Keep the concept summary separate from the exhaustive interface contract.'
 	},
 	{
-		source: '/docs/capabilities/collections',
+		source: '/docs/capabilities/collection-reads',
 		status: 'merge',
 		href: '/docs/framework#models-and-collections',
 		note: 'Retain detailed collection behavior in the existing capability and reference pages.'

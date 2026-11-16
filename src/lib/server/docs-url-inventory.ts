@@ -1,6 +1,6 @@
 /**
  * FROZEN inventory of every URL the site served under /docs at the start of
- * #399 (the docs restructure): 550 pages and 15 redirects (552 pages after the part 1 fold). Do not edit entries
+ * #399 (the docs restructure): 550 pages and 15 redirects (552 pages after the part 1 fold, 554 after the item 3 renames). Do not edit entries
  * to follow a restructure. Later changes may turn a page into a redirect, but
  * the URL stays in this list and must keep answering (see
  * docs-url-inventory.test.ts). Only ever append.
@@ -562,7 +562,12 @@ export const frozenDocsPages: readonly string[] = [
 	'/docs/ui',
 	// Appended after #399 part 1: the folded agents and interaction pages.
 	'/docs/framework/agents',
-	'/docs/framework/interaction'
+	'/docs/framework/interaction',
+	// Appended after #399 item 3: the renamed concept pages. Their old URLs
+	// (/docs/capabilities/collections, /docs/foundations/interfaces) stay above
+	// and now answer a 301 to these.
+	'/docs/capabilities/collection-reads',
+	'/docs/foundations/connect-interfaces'
 ];
 
 /** Frozen /docs redirects: path -> the 301 target it had. */

@@ -101,7 +101,7 @@ export const guideMigrationDecisions: GuideMigrationRecord[] = [
 		family: 'getting-started'
 	},
 	{
-		source: '/docs/foundations/interfaces',
+		source: '/docs/foundations/connect-interfaces',
 		decision: 'split',
 		family: 'add-interfaces'
 	},
@@ -1115,7 +1115,10 @@ export const GET = async ({ url, locals }) => {
 					'Native vector search falls back to the in-application scan when the database call fails. Results stay correct and get much slower, and the only trace is a logged warning.'
 				],
 				links: [
-					{ label: 'Foundation: collections and reads', href: '/docs/capabilities/collections' },
+					{
+						label: 'Foundation: collections and reads',
+						href: '/docs/capabilities/collection-reads'
+					},
 					{ label: 'Reference: security defaults', href: '/docs/reference/security' }
 				]
 			},
@@ -1543,7 +1546,7 @@ interface MigrationGuideDestination {
 
 const migrationGuideDestinations = new Map<string, MigrationGuideDestination>([
 	['start-with-smrt-start', { href: '/docs/getting-started/smrt-start', stepCount: 3 }],
-	['add-generated-interfaces', { href: '/docs/foundations/interfaces', stepCount: 3 }]
+	['add-generated-interfaces', { href: '/docs/foundations/connect-interfaces', stepCount: 3 }]
 ]);
 
 function guideLibraryItem(

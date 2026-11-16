@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { contentRoutes } from '../server/route-inventory';
+import { contentRoutes, routesByPath } from '../server/route-inventory';
 import {
 	capabilityHome,
+	currentPath,
+	movedSlugs,
 	capabilityPath,
 	docMoves,
 	foundationPath,
@@ -19,10 +21,31 @@ describe('docMoves', () => {
 		expect(Object.keys(docMoves)).toHaveLength(6);
 	});
 
-	it.each(Object.entries(docMoves))('%s is served now and %s is not yet', (from, to) => {
-		expect(served.has(from), `${from} is not served`).toBe(true);
-		expect(served.has(to), `${to} is already served`).toBe(false);
-		expect(movedPath(from)).toBe(to);
+	// A move is landed once its target is a page; from then on the old URL is
+	// one 301 to it. A pending move (target route not built yet) still serves
+	// the page at the old URL. #399 item 4 lands the last four.
+	it.each(Object.entries(docMoves))('%s -> %s is pending or one 301 hop', (from, to) => {
+		if (served.has(to)) {
+			expect(movedPath(from)).toBe(to);
+			expect(routesByPath.get(from)?.isRedirect, `${from} must redirect`).toBe(true);
+			expect(routesByPath.get(from)?.target).toBe(to);
+		} else {
+			expect(movedPath(from)).toBeUndefined();
+			expect(served.has(from), `${from} is not served`).toBe(true);
+		}
+	});
+
+	it('resolves a path to its final address, one hop, never an old one', () => {
+		expect(currentPath('/docs/capabilities/webmcp')).toBe('/docs/capabilities/webmcp');
+		for (const old of Object.keys(docMoves)) {
+			if (movedPath(old) === undefined) continue;
+			expect(Object.hasOwn(docMoves, currentPath(old)), `${old} chains`).toBe(false);
+		}
+	});
+
+	it('lists the old slugs per family', () => {
+		expect(movedSlugs('/docs/foundations')).toEqual(['interfaces']);
+		expect(movedSlugs('/docs/capabilities')).toContain('collections');
 	});
 
 	it('returns undefined for a path that never moved', () => {
@@ -48,6 +71,6 @@ describe('path helpers', () => {
 	it('reads capability homes from the placement table', () => {
 		expect(capabilityHome('application-shell')).toBe('ui');
 		expect(capabilityHome({ slug: 'webmcp' })).toBe('agents-and-interaction');
-		expect(capabilityHome('collections')).toBeUndefined();
+		expect(capabilityHome('collection-reads')).toBeUndefined();
 	});
 });

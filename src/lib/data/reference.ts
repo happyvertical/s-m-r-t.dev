@@ -52,7 +52,7 @@ export const referenceGuides: Guide[] = [
 				label: 'Agent-legible applications',
 				href: '/docs/capabilities/agent-legible-applications'
 			},
-			{ label: 'Connect APIs, tools, and agents', href: '/docs/foundations/interfaces' },
+			{ label: 'Connect APIs, tools, and agents', href: '/docs/foundations/connect-interfaces' },
 			{ label: 'The development MCP server', href: '/docs/tooling/dev-mcp' }
 		]
 	},

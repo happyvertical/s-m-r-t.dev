@@ -14,6 +14,13 @@
 import { toAnchorId } from '$lib/data/anchors';
 import { agentsTopics } from '$lib/data/agents';
 import { frameworkTopics, type FrameworkTopic } from '$lib/data/framework';
+import {
+	capabilityPath,
+	foundationPath,
+	referencePath,
+	taskPath,
+	toolingPath
+} from '$lib/data/doc-moves';
 import { capabilityGuides, foundationGuides, type Guide } from '$lib/data/guides';
 import { interactionContent } from '$lib/data/interaction';
 import { docsNavigation, featureNavigation, searchItems } from '$lib/data/navigation';
@@ -67,12 +74,16 @@ const groupByHref = new Map<string, string>([
  * entries do not: a new `Guide[]` route family must be added here, or its
  * headings will be missing from the palette while its pages appear.
  */
-const guideTracks: { base: string; label: string; guides: Guide[] }[] = [
-	{ base: '/docs/foundations', label: 'Application foundations', guides: foundationGuides },
-	{ base: '/docs/capabilities', label: 'Capabilities', guides: capabilityGuides },
-	{ base: '/docs/guides', label: 'Task guides', guides: taskGuides },
-	{ base: '/docs/tooling', label: 'Developer tooling', guides: toolingGuides },
-	{ base: '/docs/reference', label: 'Reference', guides: referenceGuides }
+const guideTracks: {
+	pathOf: (guide: Guide) => string;
+	label: string;
+	guides: Guide[];
+}[] = [
+	{ pathOf: foundationPath, label: 'Application foundations', guides: foundationGuides },
+	{ pathOf: capabilityPath, label: 'Capabilities', guides: capabilityGuides },
+	{ pathOf: taskPath, label: 'Task guides', guides: taskGuides },
+	{ pathOf: toolingPath, label: 'Developer tooling', guides: toolingGuides },
+	{ pathOf: referencePath, label: 'Reference', guides: referenceGuides }
 ];
 
 const pageEntries: SearchEntry[] = searchItems.map((item) => ({
@@ -86,11 +97,11 @@ const pageEntries: SearchEntry[] = searchItems.map((item) => ({
 	kind: 'page'
 }));
 
-const sectionEntries: SearchEntry[] = guideTracks.flatMap(({ base, label, guides }) =>
+const sectionEntries: SearchEntry[] = guideTracks.flatMap(({ pathOf, label, guides }) =>
 	guides.flatMap((guide) =>
 		guide.sections.map((section) => ({
 			label: section.title,
-			href: `${base}/${guide.slug}#${toAnchorId(section.title)}`,
+			href: `${pathOf(guide)}#${toAnchorId(section.title)}`,
 			breadcrumb: `${label} · ${guide.navTitle ?? guide.title}`,
 			description: section.intro,
 			keywords: [...guide.packages, ...(section.points ?? [])],

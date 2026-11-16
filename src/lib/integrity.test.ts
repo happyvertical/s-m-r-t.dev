@@ -21,6 +21,7 @@
  * build-output sweep, `scripts/check-links.mjs`, run after `vite build`.
  */
 import { describe, expect, it } from 'vitest';
+import { docMoves, movedPath } from '$lib/data/doc-moves';
 import { isPrimaryNavigationActive, primaryNavigation } from '$lib/data/navigation';
 import { packages } from '$lib/data/packages';
 import {
@@ -75,6 +76,9 @@ describe('emitted-route inventory (#187 S4)', () => {
 		// The two `/docs/guides/<old>` aliases that left the `/docs/[...legacy]`
 		// table for the guides route (#365; guarded in legacy-routes.test.ts).
 		const docsGuideAliasCount = Object.keys(docsGuideAliases).length;
+		// #399: every landed docMoves entry is a 301 at its old /docs address
+		// (guarded in docs-url-inventory.test.ts and doc-moves.test.ts).
+		const docMoveCount = Object.keys(docMoves).filter((path) => movedPath(path)).length;
 		const knownSingleRedirectRoutes = [
 			'/components',
 			'/sdk',
@@ -108,7 +112,7 @@ describe('emitted-route inventory (#187 S4)', () => {
 		expect(
 			redirectRoutes.length,
 			'A new redirect-shaped route appeared that is not one of the guarded families ' +
-				'(components, docs, modules, blocks, retired features, packages, the #365 /docs moves and docs guide aliases) or a known single-file ' +
+				'(components, docs, modules, blocks, retired features, packages, the #365 /docs moves, docs guide aliases and #399 doc moves) or a known single-file ' +
 				'static redirect. If it is a real new family, add it to legacy-routes.test.ts the way ' +
 				'the foundations aliases were added; if it is a new single-file redirect, add it to ' +
 				'`knownSingleRedirectRoutes` above. Do not just widen this expectation.'
@@ -121,6 +125,7 @@ describe('emitted-route inventory (#187 S4)', () => {
 				packageCount +
 				docsMoveCount +
 				docsGuideAliasCount +
+				docMoveCount +
 				staticSingleRedirectCount
 		);
 	});

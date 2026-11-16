@@ -19,12 +19,12 @@ import { documentationSectionForPathname, documentationSections } from '$lib/dat
 import type { DocumentationSectionId } from '$lib/data/navigation';
 
 /**
- * Slugs still served by two route families. Item 3 of #399 renames the concept
- * sides (`collection-reads`, `connect-interfaces`, `field-policy-layers`) and
- * deletes this allowance. Asserted exact: fixing one without removing it here
+ * Slugs still served by two route families. Item 3 of #399 renamed `collections` and
+ * `interfaces`; item 4 renames the last (`field-policy-layers`) and deletes
+ * this allowance. Asserted exact: fixing one without removing it here
  * fails, and so does a new duplicate.
  */
-const knownDuplicates = ['collections', 'field-policies', 'interfaces'];
+const knownDuplicates = ['field-policies'];
 
 /**
  * Capability pages the sidebar lists under UI that are still served from
