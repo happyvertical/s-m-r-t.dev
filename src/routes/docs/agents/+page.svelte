@@ -32,7 +32,7 @@
 				<p>
 					Whichever door it uses, an agent acts as someone — the signed-in person on the page, or a
 					user account bound to it on the server — and the server checks every request against that
-					identity. The front page says an agent never has more power than the person it works for.
+					identity. The upshot is that an agent never has more power than the person it works for.
 					This section is the mechanism behind that sentence.
 				</p>
 			</div>

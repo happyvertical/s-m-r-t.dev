@@ -37,7 +37,7 @@ export class Note extends SmrtObject {
 
 <SEO
 	title="Clone smrt-start"
-	description="smrt-start is the public MIT template that smrt cookbook apply copies by default. Clone it for a small working application: one owner, local SQLite, a Note model, an assistant and read-only MCP."
+	description="Clone smrt-start, the public MIT template that smrt cookbook apply copies by default, and you get a small working app with one owner, local SQLite, a Note model, an assistant and read-only MCP."
 	url={siteUrl('/docs/getting-started/smrt-start')}
 />
 
@@ -48,7 +48,7 @@ export class Note extends SmrtObject {
 		<h1>Start from the template itself.</h1>
 		<span
 			>smrt-start is the public, MIT-licensed template that <code>smrt cookbook apply</code> copies by
-			default. Cloned on its own it is a small working application, not an empty folder.</span
+			default. Clone it on its own and you get a small working app, not an empty folder.</span
 		>
 	</header>
 
@@ -63,8 +63,9 @@ export class Note extends SmrtObject {
 		</div>
 		<div>
 			<strong>Left to you</strong><span
-				>The template runs locally for one person. Hosting, sign-in for anyone else, and deployment
-				are yours to add. The assistant needs an Anthropic or OpenAI key; nothing else does.</span
+				>The template runs on your machine, for one person. Hosting, sign-in for anyone else and
+				deployment are yours to add. The assistant needs an Anthropic or OpenAI key; nothing else
+				does.</span
 			>
 		</div>
 	</aside>
@@ -74,34 +75,34 @@ export class Note extends SmrtObject {
 	<section id="create">
 		<h2>1. Clone and run it</h2>
 		<p>
-			You need Node 26 or newer, git and pnpm 11.25, the version the template's <code
+			You'll need Node 26 or newer, git and pnpm 11.25, the version the template's <code
 				>packageManager</code
 			>
 			pins. <code>app:setup</code> builds, creates the local database and issues a one-time owner
 			invitation;
-			<code>app:open</code> opens the page where your name and email make you the owner.
-			<code>pnpm app:doctor</code> prints where the data lives and anything it finds wrong.
+			<code>app:open</code> opens the page where your name and email make you the owner. If you're
+			ever unsure, <code>pnpm app:doctor</code> prints where the data lives and anything it finds wrong.
 		</p>
 		<CodeBlock code={install} language="bash" filename="terminal" />
 		<p>
 			A clone keeps the template's own package pins, lockfile, git history and remote. <a
 				href="/docs/getting-started#cookbook">smrt cookbook apply</a
 			>
-			gives the same template with every smrt package pinned to the current release ({SMRT_VERSION}).
+			gives you the same template with every smrt package pinned to the current release ({SMRT_VERSION}).
 			A clone stays on the version the template last moved to until you bump it. The older
-			<code>@happyvertical/smrt-template-sveltekit</code> package is still published; it is not the starting
-			point.
+			<code>@happyvertical/smrt-template-sveltekit</code> package is still published, but it isn't the
+			place to start.
 		</p>
 	</section>
 
 	<section id="model">
 		<h2>2. Read the first model</h2>
 		<p>
-			<code>src/lib/models/Note.ts</code> is the application's data model. On every
-			<code>pnpm dev</code> and <code>pnpm build</code>, the <code>smrt()</code> Vite plugin turns
+			<code>src/lib/models/Note.ts</code> is the app's data model. Every time you run
+			<code>pnpm dev</code> or <code>pnpm build</code>, the <code>smrt()</code> Vite plugin turns
 			this one class into the schema and the REST routes under <code>/api/notes</code>. The same
 			class supplies the WebMCP read tools, the assistant's tools and the remote MCP read tools.
-			<code>pnpm db:migrate</code> applies schema changes.
+			When the schema changes, <code>pnpm db:migrate</code> applies it.
 		</p>
 		<CodeBlock code={note} language="typescript" filename="src/lib/models/Note.ts" />
 		<ul>
@@ -111,22 +112,22 @@ export class Note extends SmrtObject {
 			</li>
 			<li>
 				<code>@TenantScoped</code> with <code>mode: 'required'</code> means every note belongs to one
-				organization and is never read across them.
+				organization and is never read from another one.
 			</li>
 			<li>
 				The generated files under <code>.smrt/</code> and <code>src/routes/api/</code> are gitignored.
-				Edit the model, not them.
+				Edit the model and leave them be.
 			</li>
 		</ul>
 	</section>
 
 	<section id="journey">
-		<h2>3. Continue through the foundations</h2>
+		<h2>3. Keep going with the foundations</h2>
 		<ol>
 			<li>
 				<a href="/docs/foundations/objects-and-collections"
 					><strong>Objects and collections</strong><span
-						>Rename Note and add the first useful fields and relationships.</span
+						>Rename Note, then add your first useful fields and relationships.</span
 					></a
 				>
 			</li>
@@ -154,14 +155,14 @@ export class Note extends SmrtObject {
 			<li>
 				<a href="/docs/foundations/pages-and-data"
 					><strong>Pages and live data</strong><span
-						>Load on the server, then hydrate browser collections only where needed.</span
+						>Load on the server, then hydrate browser collections only where you need them.</span
 					></a
 				>
 			</li>
 			<li>
 				<a href="/docs/foundations/interfaces"
 					><strong>Generated interfaces</strong><span
-						>Choose the REST, MCP, WebMCP, and CLI actions each model should expose.</span
+						>Choose which REST, MCP, WebMCP and CLI actions each model exposes.</span
 					></a
 				>
 			</li>
