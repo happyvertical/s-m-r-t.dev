@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { capabilityTarget, movedSlugs } from '$lib/data/doc-moves';
+import { capabilityTarget, movedSlugs, withoutRenamedSlugs } from '$lib/data/doc-moves';
 import { capabilityGuides } from '$lib/data/guides';
 import type { PageServerLoad } from './$types';
 
@@ -10,7 +10,10 @@ export const prerender = true;
 
 export const entries = () =>
 	[
-		...new Set([...capabilityGuides.map((item) => item.slug), ...movedSlugs('/docs/capabilities')])
+		...new Set([
+			...withoutRenamedSlugs(capabilityGuides.map((item) => item.slug)),
+			...movedSlugs('/docs/capabilities')
+		])
 	].map((slug) => ({ slug }));
 
 export const load: PageServerLoad = ({ params }) => {

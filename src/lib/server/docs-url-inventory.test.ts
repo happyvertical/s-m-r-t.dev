@@ -85,6 +85,16 @@ describe('renamed and moved pages (#399 items 3 and 4)', () => {
 		expect(stripQueryAndHash(routesByPath.get(from)?.target ?? '')).toBe(to);
 	});
 
+	it('never stubs a name that did not exist before the move', () => {
+		for (const path of [
+			'/capabilities/collection-reads',
+			'/capabilities/field-policy-layers',
+			'/foundations/connect-interfaces'
+		]) {
+			expect(routesByPath.has(path), path).toBe(false);
+		}
+	});
+
 	it('does not serve a moved UI page from /docs/capabilities', () => {
 		for (const slug of ['application-shell', 'policy-aware-forms', 'field-policy-operations']) {
 			expect(routesByPath.get(`/docs/capabilities/${slug}`)?.isRedirect, slug).toBe(true);

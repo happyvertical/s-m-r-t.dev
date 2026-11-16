@@ -213,7 +213,9 @@ export async function generate(directory = 'build', check = false, source = sour
 							'reference'
 					  ].includes(family)
 					? family[0].toUpperCase() + family.slice(1)
-					: 'Stack overview';
+					: family === 'ui'
+						? 'UI'
+						: 'Stack overview';
 		if (!sections.has(section)) sections.set(section, []);
 		sections.get(section).push(page);
 	}

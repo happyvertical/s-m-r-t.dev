@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { currentPath, foundationPath, movedSlugs } from '$lib/data/doc-moves';
+import { currentPath, foundationPath, movedSlugs, withoutRenamedSlugs } from '$lib/data/doc-moves';
 import { foundationGuides } from '$lib/data/guides';
 import type { PageServerLoad } from './$types';
 
@@ -20,7 +20,7 @@ export const _aliases: Record<string, string> = {
 export const entries = () =>
 	[
 		...new Set([
-			...foundationGuides.map((guide) => guide.slug),
+			...withoutRenamedSlugs(foundationGuides.map((guide) => guide.slug)),
 			...movedSlugs('/docs/foundations'),
 			...Object.keys(_aliases)
 		])

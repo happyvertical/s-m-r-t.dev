@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { featureSections } from '$lib/data/features';
 import { legacyFeatureTargets, legacySectionTargets } from '$lib/legacy-features';
 import { packages } from '$lib/data/packages';
-import { movedSlugs } from '$lib/data/doc-moves';
+import { movedSlugs, withoutRenamedSlugs } from '$lib/data/doc-moves';
 import { foundationGuides } from '$lib/data/guides';
 import { capabilityGuides } from '$lib/data/guides';
 import { referenceGuides } from '$lib/data/reference';
@@ -290,10 +290,13 @@ describe('the #365 move under /docs', () => {
 		);
 		expect(familySizes, RESTORE_DONT_RENUMBER).toEqual({
 			'/capabilities': new Set([
-				...capabilityGuides.map((guide) => guide.slug),
+				...withoutRenamedSlugs(capabilityGuides.map((guide) => guide.slug)),
 				...movedSlugs('/docs/capabilities')
 			]).size,
-			'/foundations': foundationGuides.length + 3 + movedSlugs('/docs/foundations').length,
+			'/foundations':
+				withoutRenamedSlugs(foundationGuides.map((guide) => guide.slug)).length +
+				3 +
+				movedSlugs('/docs/foundations').length,
 			'/guides': taskGuides.length,
 			'/reference': referenceGuides.length,
 			'/reference/components': uiComponents.length + Object.keys(referenceComponentAliases).length,

@@ -99,6 +99,22 @@ export function movedPath(oldPath: string): string | undefined {
 	return isLanded(newPath) ? newPath : undefined;
 }
 
+/**
+ * `slugs` without the names a move introduced (a slug that is the last segment
+ * of a `docMoves` target but of no `docMoves` key). The pre-#365 stubs use this
+ * so they cover only URLs that existed before #399.
+ */
+export function withoutRenamedSlugs(slugs: readonly string[]): string[] {
+	const last = (path: string) => path.split('/').at(-1);
+	const oldNames = new Set(Object.keys(docMoves).map(last));
+	const newNames = new Set(
+		Object.values(docMoves)
+			.map(last)
+			.filter((name) => !oldNames.has(name))
+	);
+	return slugs.filter((slug) => !newNames.has(slug));
+}
+
 /** The address a docs path answers at now: its move target, else itself. */
 export function currentPath(path: string): string {
 	return movedPath(path) ?? path;
