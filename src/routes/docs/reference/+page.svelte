@@ -78,7 +78,7 @@
 </script>
 
 <SEO
-	title="smrt reference"
+	title="Reference"
 	description="Search smrt API contracts, packages, UI components, configuration, decorators, collections, generated interfaces, security, field policies, terminology, versions, and FAQ content."
 	url={siteUrl('/docs/reference')}
 />

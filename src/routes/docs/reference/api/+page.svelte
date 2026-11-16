@@ -40,7 +40,7 @@
 </script>
 
 <SEO
-	title="smrt API reference"
+	title="API reference"
 	description="Find generated REST, MCP, WebMCP, CLI, authorization, field-policy, configuration, and decorator contracts."
 	url={siteUrl('/docs/reference/api')}
 />

@@ -57,7 +57,7 @@
 </script>
 
 <SEO
-	title="smrt docs"
+	title="Docs"
 	description="Documentation for developers and agents: getting started, the machine-readable entry points, and every technical section of the smrt framework."
 	url={siteUrl('/docs')}
 />

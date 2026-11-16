@@ -5,7 +5,7 @@
 </script>
 
 <SEO
-	title="smrt application foundations"
+	title="Application foundations"
 	description="Learn how smrt objects, tenants, users, profiles, memberships, permissions, pages, data, and generated interfaces fit together."
 	url={siteUrl('/docs/foundations')}
 />

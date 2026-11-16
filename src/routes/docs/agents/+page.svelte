@@ -13,7 +13,7 @@
 </script>
 
 <SEO
-	title="Agents and the smrt application"
+	title="Agents and the application"
 	description="What an agent can do with a smrt application: the four tool surfaces, the read-only exposure default, and the identity every call runs as."
 	url={siteUrl('/docs/agents')}
 />

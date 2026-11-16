@@ -24,7 +24,7 @@
 </script>
 
 <SEO
-	title="smrt developer tooling"
+	title="Developer tooling"
 	description="Use smrt tools to build, inspect, test, and operate applications. Keep development MCP, generated MCP, hosted application MCP, and WebMCP separate."
 	url={siteUrl('/docs/tooling')}
 />

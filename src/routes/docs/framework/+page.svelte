@@ -12,7 +12,7 @@
 </script>
 
 <SEO
-	title="smrt framework"
+	title="Framework"
 	description="Learn how one smrt application model supplies persistence, collections, identity, permissions, generated interfaces, and stable descriptions for persons and agents."
 	url={siteUrl('/docs/framework')}
 />

@@ -26,7 +26,7 @@
 </script>
 
 <SEO
-	title="smrt guides"
+	title="Guides"
 	description="Task-oriented smrt guides organized into six scalable guide families."
 	url={siteUrl('/docs/guides')}
 />
