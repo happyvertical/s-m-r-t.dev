@@ -75,7 +75,8 @@
 	// runtime reports; smrt-core for usage rows and the four tiers, each bound
 	// to one model) or, where the package is not a dependency of this site
 	// (smrt-approvals, smrt-inference for model lists, smrt-ingestion), against
-	// that package's README at the same release.
+	// that package's README or agent docs at the same release (the failure
+	// classes that trigger model fallback come from the agent docs).
 	const agentic = [
 		{
 			name: 'An assistant on the page',
@@ -109,7 +110,7 @@
 		},
 		{
 			name: 'Choose your models',
-			line: 'Your code asks for a quality level, called a tier, from cheap to best. You pick the AI model behind each one. Add one package, smrt-inference, and a failed call moves on to the next model in your list.',
+			line: 'Your code asks for a quality level, called a tier, from cheap to best. You pick the AI model behind each one. Add one package, smrt-inference, and a call that fails on a quota, a bad key or a missing model moves on to the next model in your list.',
 			href: '/docs/capabilities/inference-tuning'
 		},
 		{
