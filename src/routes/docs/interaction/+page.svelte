@@ -129,7 +129,7 @@
 	h1 {
 		margin-top: 11px;
 		font-size: clamp(2.35rem, 6vw, 4.4rem);
-		letter-spacing: -0.055em;
+		letter-spacing: -0.03em;
 		line-height: 1;
 	}
 	header > span {
@@ -251,7 +251,7 @@
 		max-width: 680px;
 		margin-top: 10px;
 		font-size: clamp(1.9rem, 4vw, 3rem);
-		letter-spacing: -0.04em;
+		letter-spacing: -0.03em;
 		line-height: 1.08;
 	}
 	.concept-header > span {

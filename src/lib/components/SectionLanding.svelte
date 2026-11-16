@@ -62,7 +62,7 @@
 	header h1 {
 		margin-top: 0.7rem;
 		font-size: clamp(2.4rem, 7vw, 4.75rem);
-		letter-spacing: -0.055em;
+		letter-spacing: -0.03em;
 		line-height: 1;
 	}
 

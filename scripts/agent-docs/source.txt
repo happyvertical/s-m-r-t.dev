@@ -1,10 +1,12 @@
 # smrt
 
-> smrt is an MIT-licensed TypeScript stack for agentic software that people and agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The site has three doors, BUILD, FEATURES and DOCS. FEATURES groups what ships by what a person is trying to do, into nine groups (Sell, Buy, Make, Team, Publish, Talk, Grow, Plan and Assistant), and each feature has a showcase with a live example where the packages ship one. build-a-boilerplate, behind BUILD, assembles a working mock-up for a kind of business in the browser and exports the plan as a file. DOCS holds every technical page, for developers and for agents.
+> smrt is an MIT-licensed TypeScript stack for agentic software that people and agents use through the same screens, rules and permissions. Describe a record once and the storage, forms, API, command line and agent tools are generated from it. The site has four doors: Docs, Features, Tools and Demo. Features groups what ships by what a person is trying to do, into nine groups (Sell, Buy, Make, Team, Publish, Talk, Grow, Plan and Assistant), and each feature has a showcase with a live example where the packages ship one. Tools lists build-a-boilerplate, which assembles a working mock-up for a kind of business in the browser and exports the plan as a file. Demo is a map of the features that sends a selection into build-a-boilerplate. Docs holds every technical page, for developers and for agents.
 
 ## Canonical technical documentation
 
-- {{SITE_ORIGIN}}/ — the smrt application stack: a map of nine groups and their features, with three doors, BUILD, FEATURES and DOCS
+- {{SITE_ORIGIN}}/ — the landing page: what smrt is, and the way into Docs, Features, Tools and Demo
+- {{SITE_ORIGIN}}/demo — the map flow: nine groups and their features on a map, a selection, and the hand-off into build-a-boilerplate
+- {{SITE_ORIGIN}}/tools — the tools index: build-a-boilerplate, and the tooling docs for the command line and agents
 - {{SITE_ORIGIN}}/features — the nine feature sections, each with a showcase page per feature
 - {{SITE_ORIGIN}}/docs — the documentation index: getting started for developers, these entry points for agents, then every technical section
 - {{SITE_ORIGIN}}/build-a-boilerplate — assemble a working mock-up for a kind of business in the browser and export the plan as a cookbook file

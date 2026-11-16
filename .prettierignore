@@ -12,3 +12,6 @@ pnpm-lock.yaml
 
 # Approved redesign mocks (#361) are design artifacts, not source; keep them byte-exact.
 design/mocks/
+
+# Generated from src/lib/themes/site-theme.ts (#401); regenerating keeps it byte-exact.
+src/lib/styles/site-theme.css

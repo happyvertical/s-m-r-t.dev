@@ -1,53 +1,67 @@
+/*
+ * The site's one token set (#401). Colours and type come from the site's own
+ * smrt-ui theme (src/lib/themes/site-theme.ts), delivered as static CSS on
+ * <html> (site-theme.css). Each fallback is that theme's light value, which is
+ * what a page paints with before the theme attributes are stamped.
+ */
 :root {
 	--grid-columns: 12;
 	--grid-gap: 24px;
 	--container-width: 1200px;
 	--site-header-height: 3.5rem;
-	--site-font-sans: var(--smrt-font-family, 'Avenir Next', Avenir, 'Helvetica Neue', sans-serif);
-	/* The wordmark face, loaded in app.html beside Inter and JetBrains Mono. */
-	--site-font-wordmark: 'Gabarito', var(--site-font-sans);
+	/* Loaded in app.html: Gabarito 700/800, Inter, JetBrains Mono. */
+	--site-font-sans: var(--smrt-font-family, Inter, -apple-system, 'Segoe UI', Roboto, sans-serif);
+	--site-font-display: var(
+		--smrt-typography-headline-large-font-family,
+		Gabarito,
+		'Avenir Next',
+		'Segoe UI',
+		sans-serif
+	);
+	/* The wordmark is the display face at 800, lowercase, set tight. */
+	--site-font-wordmark: var(--site-font-display);
 	--site-font-mono: var(
 		--smrt-font-family-mono,
-		'SFMono-Regular',
+		'JetBrains Mono',
+		ui-monospace,
 		'SF Mono',
-		'Roboto Mono',
-		Consolas,
+		Menlo,
 		monospace
 	);
-	--site-paper: var(--smrt-color-background, #edeff2);
-	--site-paper-deep: var(--smrt-color-surface-container, #f5f6f8);
+	--site-paper: var(--smrt-color-background, #fafaf7);
+	--site-sunken: var(--smrt-color-surface-container, #f1f2ee);
+	--site-paper-deep: var(--site-sunken);
 	--site-surface: var(--smrt-color-surface, #ffffff);
-	--site-ink: var(--smrt-color-on-background, #14171c);
-	--site-muted: var(--smrt-color-on-surface-variant, #5b6470);
-	--site-line: color-mix(in srgb, var(--smrt-color-outline-variant, #dfe3e8) 55%, transparent);
-	--site-line-strong: var(--smrt-color-outline-variant, #dfe3e8);
-	--site-grid-line: color-mix(in srgb, var(--smrt-color-outline-variant, #dfe3e8) 20%, transparent);
-	--site-accent: var(--smrt-color-primary, #e35d12);
-	--site-accent-strong: var(--smrt-color-primary, #e35d12);
-	--site-accent-soft: var(--smrt-color-primary-container, #ffe6d4);
-	/*
-	 * Accent as *text*, and text *on* the accent fill. The light-scheme primary
-	 * (#e35d12) is 3.1:1 on the paper and 3.6:1 under white — both short of
-	 * AA 4.5:1 for small text (upstream: happyvertical/smrt#2071, the smrt-ui
-	 * `smrt` preset; retire these two tokens per s-m-r-t.dev#332 once the pair
-	 * passes). Small accent-coloured text therefore uses the preset's own
-	 * on-primary-container (#7a2e00, 8.2:1 on paper), and text on an accent
-	 * fill uses the ink (5.0:1 on #e35d12). The dark scheme's primary
-	 * (#ff7a1a, 7.5:1) and on-primary (#1a0e02, 7.3:1) already pass, so dark
-	 * keeps the preset values below.
-	 */
-	--site-accent-ink: var(--smrt-color-on-primary-container, #7a2e00);
-	--site-on-accent: var(--site-ink);
-	--site-note: var(--smrt-color-primary, #e35d12);
-	--site-note-soft: var(--smrt-color-primary-container, #ffe6d4);
-	--site-warn: var(--smrt-color-warning, #b06a00);
-	--site-warn-soft: var(--smrt-color-warning-container, #ffedd0);
-	--site-danger: var(--smrt-color-error, #c0362c);
-	--site-danger-soft: var(--smrt-color-error-container, #fbe0dd);
-	--site-ok: var(--smrt-color-success, #0f7a5f);
-	--site-ok-soft: var(--smrt-color-success-container, #d7f2e8);
-	--site-neutral: var(--smrt-color-on-surface-variant, #5b6470);
-	--site-neutral-soft: var(--smrt-color-surface-container, #f5f6f8);
+	--site-ink: var(--smrt-color-on-background, #17201f);
+	--site-muted: var(--smrt-color-on-surface-variant, #5b6664);
+	--site-line: var(--smrt-color-outline-variant, #dfe3de);
+	--site-line-strong: var(--smrt-color-outline-variant, #dfe3de);
+	--site-grid-line: color-mix(in srgb, var(--smrt-color-outline-variant, #dfe3de) 20%, transparent);
+	/* Pine as text or accent: readable on every surface of its scheme. */
+	--site-accent: var(--smrt-color-primary, #1d6a3c);
+	--site-accent-strong: var(--smrt-color-primary, #1d6a3c);
+	--site-accent-soft: var(--smrt-color-primary-container, #e4e9e2);
+	/* Pine as a fill, with the text that goes on it: the same in both schemes. */
+	--site-fill: #1d6a3c;
+	--site-on-fill: #ffffff;
+	/* Brass is decoration, and text on dark surfaces. Text on a light surface
+	   takes --site-brass-ink, which is a darker brass in the light scheme. */
+	--site-brass: #d4a017;
+	--site-brass-ink: var(--smrt-color-secondary, #7a5900);
+	/* Code panels are dark in both schemes. */
+	--site-code-bg: #101817;
+	--site-code-ink: #dfe9e6;
+	--site-code-dim: #8fa19d;
+	--site-note: var(--smrt-color-primary, #1d6a3c);
+	--site-note-soft: var(--smrt-color-primary-container, #e4e9e2);
+	--site-warn: var(--smrt-color-warning, #8f5600);
+	--site-warn-soft: var(--smrt-color-warning-container, #f3e8d2);
+	--site-danger: var(--smrt-color-error, #b3261e);
+	--site-danger-soft: var(--smrt-color-error-container, #f6e1de);
+	--site-ok: var(--smrt-color-success, #1d6a3c);
+	--site-ok-soft: var(--smrt-color-success-container, #e0eae2);
+	--site-neutral: var(--smrt-color-on-surface-variant, #5b6664);
+	--site-neutral-soft: var(--smrt-color-surface-container, #f1f2ee);
 	--site-radius-md: var(--smrt-radius-medium, 12px);
 	--site-radius-lg: var(--smrt-radius-large, 20px);
 	--font-sans: var(--site-font-sans);
@@ -55,8 +69,8 @@
 }
 
 html[data-color-scheme='dark'] {
-	--site-accent-ink: var(--site-accent-strong);
-	--site-on-accent: var(--smrt-color-on-primary, #1a0e02);
+	--site-code-bg: #080d0c;
+	--site-code-dim: #7f918d;
 }
 
 *:focus-visible {
@@ -65,6 +79,6 @@ html[data-color-scheme='dark'] {
 }
 
 ::selection {
-	background: var(--site-accent);
-	color: var(--smrt-color-on-primary, #ffffff);
+	background: var(--site-fill);
+	color: var(--site-on-fill);
 }

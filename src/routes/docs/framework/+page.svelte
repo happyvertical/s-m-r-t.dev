@@ -155,7 +155,7 @@
 		max-width: 56rem;
 		margin-top: 0.75rem;
 		font-size: clamp(2.5rem, 7vw, 5.25rem);
-		letter-spacing: -0.06em;
+		letter-spacing: -0.03em;
 		line-height: 0.98;
 	}
 
@@ -198,7 +198,7 @@
 	.section-heading h2 {
 		margin-top: 0.6rem;
 		font-size: clamp(1.75rem, 4vw, 2.7rem);
-		letter-spacing: -0.04em;
+		letter-spacing: -0.03em;
 		line-height: 1.08;
 	}
 

@@ -133,7 +133,7 @@
 	}
 
 	.kicker {
-		color: var(--site-accent-ink);
+		color: var(--site-accent);
 		font: 700 0.66rem var(--site-font-mono);
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
@@ -142,7 +142,7 @@
 	h1 {
 		margin-top: 0.7rem;
 		font-size: clamp(2.2rem, 6vw, 3.9rem);
-		letter-spacing: -0.045em;
+		letter-spacing: -0.03em;
 		line-height: 1.02;
 	}
 
@@ -210,7 +210,7 @@
 
 	.audience a:hover strong,
 	.section-grid a:hover strong {
-		color: var(--site-accent-ink);
+		color: var(--site-accent);
 	}
 
 	.sections {
@@ -236,12 +236,12 @@
 		position: absolute;
 		inset-block-start: 1.05rem;
 		inset-inline-end: 1.1rem;
-		color: var(--site-accent-ink);
+		color: var(--site-accent);
 	}
 
 	.audience a:focus-visible,
 	.section-grid a:focus-visible {
-		outline: 2px solid var(--site-accent-ink);
+		outline: 2px solid var(--site-accent);
 		outline-offset: 3px;
 	}
 

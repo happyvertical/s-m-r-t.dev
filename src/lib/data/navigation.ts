@@ -1,5 +1,6 @@
 import { agentsTopics } from '$lib/data/agents';
 import { capabilityGuides, foundationGuides } from '$lib/data/guides';
+import { BUILD_PATH, DEMO_PATH, TOOLS_PATH, primaryLinks } from '$lib/data/doors';
 import { featurePath, featureSectionPath, featureSections, features } from '$lib/data/features';
 import { packages } from '$lib/data/packages';
 import { referenceGuides } from '$lib/data/reference';
@@ -32,7 +33,7 @@ export interface DocumentationSection {
 	groups: NavigationGroup[];
 }
 
-/** One of the three doors (#361): BUILD · FEATURES · DOCS. */
+/** One header link: Docs · Features · Tools · Demo. */
 export type PrimaryNavigationItem = NavigationItem;
 
 const foundationItems: NavigationItem[] = foundationGuides.map((guide) => ({
@@ -182,10 +183,24 @@ const whyItem: NavigationItem = {
 		// The visible H1 and the hero's subject, so a visitor who read the page
 		// name or the lede can get back to it from search.
 		'application stack',
-		'agentic software',
-		// The three doors below the feature map.
-		'features map'
+		'agentic software'
 	]
+};
+
+/** The map flow (map, selection, warp into build-a-boilerplate), moved from `/`. */
+const demoItem: NavigationItem = {
+	label: 'Demo',
+	href: DEMO_PATH,
+	description: 'Pick features on the map, then send the selection to build-a-boilerplate.',
+	keywords: ['demo', 'features map', 'map', 'galaxy', 'selection', 'warp']
+};
+
+/** The tools index; build-a-boilerplate is listed there. */
+const toolsItem: NavigationItem = {
+	label: 'Tools',
+	href: TOOLS_PATH,
+	description: 'Tools that plan and start a smrt application, and the tooling docs.',
+	keywords: ['tools', 'planner', 'cli', 'build-a-boilerplate', 'tooling']
 };
 
 /** The `/docs` landing (#365), the entry into every technical section. */
@@ -265,7 +280,7 @@ const sectionOverviewItem = (id: DocumentationSectionId): NavigationItem => {
 /** Getting Started moved from the old starters path to `/docs/getting-started` in #365. */
 const gettingStartedItems: NavigationItem[] = [
 	{ label: 'Getting Started', href: '/docs/getting-started' },
-	{ label: 'build-a-boilerplate', href: '/build-a-boilerplate' },
+	{ label: 'build-a-boilerplate', href: BUILD_PATH },
 	{ label: 'Start from a cookbook', href: '/docs/getting-started#cookbook' },
 	{ label: 'smrt-start', href: '/docs/getting-started/smrt-start' }
 ];
@@ -402,7 +417,7 @@ export const documentationSections: DocumentationSection[] = [
 					},
 					...uiCapabilityItems,
 					{ label: 'Working playground', href: '/playground' },
-					{ label: 'build-a-boilerplate', href: '/build-a-boilerplate' }
+					{ label: 'build-a-boilerplate', href: BUILD_PATH }
 				]
 			},
 			{
@@ -479,15 +494,13 @@ export const documentationSections: DocumentationSection[] = [
 ];
 
 /**
- * The three doors (#361): BUILD · FEATURES · DOCS. Every technical section is
- * reached through Docs, whose panel (`DocsPanelSections.svelte`) carries the
- * section map; the labels render uppercase in `Header.svelte`.
+ * The header navigation: Docs · Features · Tools · Demo, from `doors.ts`.
+ * Every technical section is reached through Docs, whose panel
+ * (`DocsPanelSections.svelte`) carries the section map.
  */
-export const primaryNavigation: PrimaryNavigationItem[] = [
-	{ label: 'Build', href: '/build-a-boilerplate' },
-	{ label: 'Features', href: '/features' },
-	{ label: 'Docs', href: '/docs' }
-];
+export const primaryNavigation: PrimaryNavigationItem[] = primaryLinks.map((link) => ({
+	...link
+}));
 
 export function getDocumentationSection(id: DocumentationSectionId): DocumentationSection {
 	const section = documentationSections.find((candidate) => candidate.id === id);
@@ -526,10 +539,9 @@ export function documentationSectionForPathname(pathname: string): Documentation
 }
 
 export function isPrimaryNavigationActive(item: PrimaryNavigationItem, pathname: string): boolean {
-	if (item.href === '/features') {
-		return underPath(pathname, '/features');
-	}
-	return isNavigationItemActive(item.href, pathname);
+	// build-a-boilerplate is a tool, so Tools stays lit while it is open.
+	if (item.href === TOOLS_PATH && underPath(pathname, BUILD_PATH)) return true;
+	return underPath(pathname, item.href);
 }
 
 export function isNavigationItemActive(href: string, pathname: string, hash = ''): boolean {
@@ -568,7 +580,7 @@ export const docsNavigation: NavigationGroup[] = [
 			docsItem,
 			// build-a-boilerplate is not a documentation page; it is registered
 			// for the palette in `searchItems` below, so it is not repeated here.
-			...gettingStartedItems.filter((item) => item.href !== '/build-a-boilerplate')
+			...gettingStartedItems.filter((item) => item.href !== BUILD_PATH)
 		]
 	},
 	{
@@ -610,10 +622,12 @@ export const searchItems: NavigationItem[] = [
 	// `docsNavigation` (the reading track and the docs panel) and registered
 	// for the palette here, like the package entries below.
 	whyItem,
+	demoItem,
+	toolsItem,
 	...featureNavigation.flatMap((group) => group.items),
 	{
 		label: 'build-a-boilerplate',
-		href: '/build-a-boilerplate',
+		href: BUILD_PATH,
 		description:
 			'Add recipes or packages and an app mock-up assembles around them; export the cookbook it produces to start a project.',
 		// Older wording stays searchable: the page used to be called the planner.

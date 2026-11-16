@@ -13,11 +13,12 @@ import {
 } from './navigation';
 
 describe('primary navigation', () => {
-	it('opens the three doors in order: BUILD · FEATURES · DOCS (#361)', () => {
+	it('lists Docs · Features · Tools · Demo in order (#397)', () => {
 		expect(primaryNavigation.map((item) => [item.label, item.href])).toEqual([
-			['Build', '/build-a-boilerplate'],
+			['Docs', '/docs'],
 			['Features', '/features'],
-			['Docs', '/docs']
+			['Tools', '/tools'],
+			['Demo', '/demo']
 		]);
 	});
 
@@ -27,7 +28,9 @@ describe('primary navigation', () => {
 				.filter((item) => isPrimaryNavigationActive(item, pathname))
 				.map((item) => item.label);
 
-		expect(active('/build-a-boilerplate')).toEqual(['Build']);
+		expect(active('/tools')).toEqual(['Tools']);
+		expect(active('/build-a-boilerplate')).toEqual(['Tools']);
+		expect(active('/demo')).toEqual(['Demo']);
 		expect(active('/features')).toEqual(['Features']);
 		expect(active('/features/team/approvals')).toEqual(['Features']);
 		for (const pathname of [
@@ -97,8 +100,8 @@ describe('contextual navigation', () => {
 	});
 
 	it('uses location state for homepage anchors', () => {
-		expect(isNavigationItemActive('/#doors', '/', '#doors')).toBe(true);
-		expect(isNavigationItemActive('/', '/', '#doors')).toBe(false);
+		expect(isNavigationItemActive('/#features', '/', '#features')).toBe(true);
+		expect(isNavigationItemActive('/', '/', '#features')).toBe(false);
 		expect(isNavigationItemActive('/#features', '/', '#doors')).toBe(false);
 	});
 

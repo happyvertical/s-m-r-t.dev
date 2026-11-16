@@ -2,6 +2,7 @@
 	import { siteUrl } from '$lib/site';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import SEO from '$lib/components/SEO.svelte';
+	import { KITCHEN_COMMAND, SMRT_CLI } from '$lib/commands';
 	import { SMRT_VERSION } from '$lib/version';
 
 	// Three ways to a project on the smrt-start template; build-a-boilerplate
@@ -28,7 +29,7 @@
 	// The CLI package ships four library cookbooks under `cookbooks/` (bakery,
 	// mechanic, welder, yoga-studio); the same files are in the smrt repository
 	// at the release tag, which is what the URL example below fetches.
-	const cli = `npx -y @happyvertical/smrt-cli@${SMRT_VERSION}`;
+	const cli = SMRT_CLI;
 
 	const applyFile = `${cli} cookbook validate my.cookbook.json
 ${cli} cookbook apply my.cookbook.json my-app
@@ -44,7 +45,7 @@ pnpm app:open               # in a second terminal: the one-time owner setup pag
 
 	// `smrt kitchen` serves the planner on localhost and applies the cookbook
 	// the person sends from it. The first run caches the planner (about 70 MB).
-	const kitchen = `${cli} kitchen my-app      # opens http://127.0.0.1:<port>/ in the browser`;
+	const kitchen = `${KITCHEN_COMMAND}      # opens http://127.0.0.1:<port>/ in the browser`;
 </script>
 
 <SEO
@@ -150,7 +151,7 @@ pnpm app:open               # in a second terminal: the one-time owner setup pag
 	h1 {
 		margin-top: 13px;
 		font-size: clamp(2.15rem, 5vw, 3.2rem);
-		letter-spacing: -0.04em;
+		letter-spacing: -0.03em;
 		line-height: 1.08;
 	}
 

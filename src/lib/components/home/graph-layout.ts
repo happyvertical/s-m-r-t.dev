@@ -16,6 +16,7 @@ import {
 	type SimulationLinkDatum,
 	type SimulationNodeDatum
 } from 'd3-force';
+import { BUILD_PATH } from '$lib/data/doors';
 import {
 	featurePath,
 	featureSectionPath,
@@ -26,7 +27,7 @@ import {
 export const HUB_RADIUS = 46;
 /** Links from the hub start this far from its centre: just outside the sun's rim. */
 export const RIM_RADIUS = HUB_RADIUS + 6;
-export const BUILD_HREF = '/build-a-boilerplate';
+export const BUILD_HREF = BUILD_PATH;
 
 export type Depth = 0 | 1 | 2;
 

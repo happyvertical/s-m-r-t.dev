@@ -40,7 +40,8 @@ describe('Why smrt discovery surfaces', () => {
 		// are registered as keywords so the page's own words find it.
 		expect(searchDocs('application stack')[0]).toMatchObject({ label: 'Home', href: '/' });
 		expect(searchDocs('agentic software')[0]).toMatchObject({ label: 'Home', href: '/' });
-		expect(searchDocs('features map')[0]).toMatchObject({ label: 'Home', href: '/' });
+		expect(searchDocs('features map')[0]).toMatchObject({ label: 'Demo', href: '/demo' });
+		expect(searchDocs('tools')[0]).toMatchObject({ label: 'Tools', href: '/tools' });
 
 		const sitemapXml = await (await sitemap({} as never)).text();
 		expect(sitemapXml).toContain(`<loc>${SITE_ORIGIN}</loc>`);
@@ -54,7 +55,7 @@ describe('Why smrt discovery surfaces', () => {
 		expect(llms).toContain(
 			'> smrt is an MIT-licensed TypeScript stack for agentic software that people and agents use through the same screens, rules and permissions.'
 		);
-		expect(llms).toContain('BUILD, FEATURES and DOCS');
+		expect(llms).toContain('four doors: Docs, Features, Tools and Demo');
 		expect(llms).toContain('nine groups');
 		expect(llms).toContain('assembles a working mock-up for a kind of business');
 		expect(llms).not.toMatch(/\bblocks?\b/i);

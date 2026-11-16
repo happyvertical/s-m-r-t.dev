@@ -15,7 +15,7 @@ afterEach(() => {
 
 const text = (node: Element | null | undefined) => node?.textContent?.replace(/\s+/g, ' ') ?? '';
 
-describe('front page (#361)', () => {
+describe('demo: the map flow (#361, moved to /demo in #397)', () => {
 	it('is the feature map first, then three doors', () => {
 		const { container } = render(Page);
 		const map = container.querySelector('section.map')!;

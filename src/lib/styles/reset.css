@@ -14,7 +14,7 @@
 
 	html {
 		scroll-behavior: smooth;
-		background: var(--site-paper, #f3efe5);
+		background: var(--site-paper, #fafaf7);
 	}
 
 	body {
@@ -24,6 +24,17 @@
 		line-height: 1.5;
 		-webkit-font-smoothing: antialiased;
 		text-rendering: optimizeLegibility;
+	}
+
+	/* Display headings are Gabarito; the wordmark is the same face at 800.
+	   A theme provider nested in the site's own (the planner's app shell) is
+	   another app's look, so its headings are left alone. */
+	:where(h1, h2, h3):not(
+		[data-smrt-component='ThemeProvider'] [data-smrt-component='ThemeProvider'] *
+	) {
+		font-family: var(--site-font-display, Gabarito, sans-serif);
+		font-weight: 700;
+		letter-spacing: -0.02em;
 	}
 
 	button,

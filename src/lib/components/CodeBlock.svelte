@@ -76,7 +76,7 @@
 
 <style>
 	.code-block {
-		background: #11150f;
+		background: var(--site-code-bg);
 		border: 1px solid rgb(255 255 255 / 9%);
 		border-radius: var(--site-radius-md, 12px);
 		overflow: hidden;
@@ -88,7 +88,7 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 8px 16px;
-		background: #191f17;
+		background: color-mix(in srgb, var(--site-code-bg), #ffffff 5%);
 		border-bottom: 1px solid rgb(255 255 255 / 9%);
 	}
 
@@ -106,7 +106,7 @@
 	.language {
 		font-family: var(--site-font-mono);
 		font-size: 0.75rem;
-		color: #899081;
+		color: var(--site-code-dim);
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}
@@ -119,7 +119,7 @@
 		border: 1px solid rgb(255 255 255 / 14%);
 		border-radius: 999px;
 		padding: 4px 10px;
-		color: #a5ab9e;
+		color: var(--site-code-dim);
 		font-family: var(--site-font-mono);
 		font-size: 0.75rem;
 		cursor: pointer;
@@ -127,7 +127,7 @@
 	}
 
 	.copy-btn:hover {
-		background: #242b21;
+		background: color-mix(in srgb, var(--site-code-bg), #ffffff 10%);
 		color: #fff;
 		border-color: rgb(255 255 255 / 26%);
 	}
@@ -151,6 +151,6 @@
 		font-family: var(--site-font-mono);
 		font-size: 0.85rem;
 		line-height: 1.5;
-		color: #f2eee4;
+		color: var(--site-code-ink);
 	}
 </style>

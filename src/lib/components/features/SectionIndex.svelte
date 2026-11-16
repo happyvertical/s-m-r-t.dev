@@ -101,7 +101,7 @@
 		font-size: 0.8125rem;
 	}
 	.crumb a {
-		color: var(--site-accent-ink);
+		color: var(--site-accent);
 		font-weight: 600;
 		text-decoration: none;
 	}
@@ -133,9 +133,9 @@
 		border-color: var(--site-accent);
 	}
 	.strip li a[aria-current] {
-		background: var(--site-accent);
+		background: var(--site-fill);
 		border-color: transparent;
-		color: var(--site-on-accent);
+		color: var(--site-on-fill);
 	}
 
 	.hero {
@@ -143,7 +143,7 @@
 	}
 	.kicker {
 		margin: 0 0 10px;
-		color: var(--site-accent-ink);
+		color: var(--site-accent);
 		font: 500 0.75rem var(--site-font-mono);
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
@@ -234,7 +234,7 @@
 		border: 1px solid var(--site-line-strong);
 		border-radius: 10px;
 		background: var(--site-surface);
-		color: var(--site-accent-ink);
+		color: var(--site-accent);
 		font: 500 0.8125rem var(--site-font-mono);
 	}
 	.meta {
