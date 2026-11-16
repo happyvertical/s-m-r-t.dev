@@ -23,7 +23,11 @@ const COPY_IGNORES = [
 	'**/*.test.*',
 	'**/*.spec.*',
 	'src/routes/**/+page.server.ts',
-	'src/routes/**/+server.ts'
+	'src/routes/**/+server.ts',
+	// Addresses and ids only, keyed by path, so the property classifier cannot
+	// read it. doc-moves.test.ts fails if any string literal in it is not a
+	// path, slug, or id (no spaces), so prose cannot enter unaudited.
+	'src/lib/data/doc-moves.ts'
 ];
 
 /**
@@ -119,6 +123,8 @@ const PROSE_PROPERTIES = new Set([
 ]);
 
 const NON_PROSE_PROPERTIES = new Set([
+	// A function that builds a page address (search.ts guideTracks).
+	'pathOf',
 	// Front-page map props (#381): state and callbacks, not prose.
 	'appBar',
 	'brandInSlot',
@@ -583,6 +589,23 @@ function bindingNameContains(node, name) {
 	return false;
 }
 
+/**
+ * `href: movedHref('id')` is an address, not prose: a call to the doc-moves
+ * address helper in an `href` position, with only string-literal arguments.
+ * Any other call, or the same call in a prose position, is still unauditable.
+ */
+const ADDRESS_HELPERS = new Set(['movedHref']);
+function isAddressHelperCall(property) {
+	return (
+		propertyName(property.name) === 'href' &&
+		ts.isCallExpression(property.initializer) &&
+		ts.isIdentifier(property.initializer.expression) &&
+		ADDRESS_HELPERS.has(property.initializer.expression.text) &&
+		property.initializer.arguments.length > 0 &&
+		property.initializer.arguments.every((arg) => ts.isStringLiteralLike(arg))
+	);
+}
+
 function createAuditedSourceResolver(ast) {
 	const importedBindings = new Set();
 	const declarations = new Map();
@@ -744,6 +767,7 @@ function createAuditedSourceResolver(ast) {
 		if (ts.isObjectLiteralExpression(node)) {
 			return node.properties.every((property) => {
 				if (ts.isPropertyAssignment(property)) {
+					if (isAddressHelperCall(property)) return true;
 					return isAuditedSourceExpression(property.initializer, seen);
 				}
 				if (ts.isShorthandPropertyAssignment(property)) {
@@ -891,6 +915,7 @@ function isSupportedProseInitializer(node, bindings, auditedSources) {
 	if (ts.isObjectLiteralExpression(node)) {
 		return node.properties.every((property) => {
 			if (ts.isPropertyAssignment(property)) {
+				if (isAddressHelperCall(property)) return true;
 				return isSupportedProseInitializer(property.initializer, bindings, auditedSources);
 			}
 			if (ts.isShorthandPropertyAssignment(property)) return true;

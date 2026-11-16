@@ -1,4 +1,5 @@
 import { redirect } from '@sveltejs/kit';
+import { movedHref } from '$lib/data/doc-moves';
 import type { PageServerLoad } from './$types';
 
 export const prerender = true;
@@ -33,7 +34,7 @@ export const _aliases: Record<string, string> = {
 	events: '/features/plan/events',
 	places: '/features/plan/places',
 	tags: '/docs/reference/packages/smrt-tags',
-	'screens-and-shell': '/docs/capabilities/application-shell',
+	'screens-and-shell': movedHref('applicationShell'),
 	mobile: '/docs/capabilities/mobile'
 };
 

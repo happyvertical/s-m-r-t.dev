@@ -1,3 +1,4 @@
+import { movedHref } from '$lib/data/doc-moves';
 import { describe, expect, it } from 'vitest';
 import {
 	getGuideLibraryItem,
@@ -57,7 +58,7 @@ describe('guide library', () => {
 
 	it('uses the step counts from migrated destination pages', () => {
 		expect(getGuideLibraryItem('/docs/getting-started/smrt-start')?.stepCount).toBe(3);
-		expect(getGuideLibraryItem('/docs/foundations/interfaces')?.stepCount).toBe(3);
+		expect(getGuideLibraryItem(movedHref('connectInterfaces'))?.stepCount).toBe(3);
 	});
 
 	it('places the procedural agent guide in Connect agents', () => {
@@ -80,7 +81,7 @@ describe('guide library', () => {
 			'/docs/getting-started',
 			'/docs/getting-started/ground-up',
 			'/docs/getting-started/saas',
-			'/docs/foundations/interfaces',
+			movedHref('connectInterfaces'),
 			'/docs/capabilities/agent-legible-applications'
 		]);
 	});

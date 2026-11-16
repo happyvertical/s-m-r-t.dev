@@ -1,3 +1,10 @@
+import {
+	capabilityPath,
+	foundationPath,
+	referencePath,
+	taskPath,
+	toolingPath
+} from '$lib/data/doc-moves';
 import { capabilityGuides, foundationGuides } from '$lib/data/guides';
 import { featurePath, featureSectionPath, featureSections, features } from '$lib/data/features';
 import { packages } from '$lib/data/packages';
@@ -40,13 +47,13 @@ function entry(path: string, priority: string, changefreq: string): string {
 export const GET: RequestHandler = () => {
 	const urls = [
 		...staticRoutes.map((route) => entry(route.path, route.priority, route.changefreq)),
-		...foundationGuides.map((guide) => entry(`/docs/foundations/${guide.slug}`, '0.8', 'monthly')),
-		...capabilityGuides.map((guide) => entry(`/docs/capabilities/${guide.slug}`, '0.85', 'weekly')),
+		...foundationGuides.map((guide) => entry(foundationPath(guide), '0.8', 'monthly')),
+		...capabilityGuides.map((guide) => entry(capabilityPath(guide), '0.85', 'weekly')),
 		...featureSections.map((section) => entry(featureSectionPath(section), '0.9', 'monthly')),
 		...features.map((item) => entry(featurePath(item), '0.85', 'monthly')),
-		...taskGuides.map((guide) => entry(`/docs/guides/${guide.slug}`, '0.85', 'monthly')),
-		...toolingGuides.map((guide) => entry(`/docs/tooling/${guide.slug}`, '0.8', 'monthly')),
-		...referenceGuides.map((guide) => entry(`/docs/reference/${guide.slug}`, '0.75', 'monthly')),
+		...taskGuides.map((guide) => entry(taskPath(guide), '0.85', 'monthly')),
+		...toolingGuides.map((guide) => entry(toolingPath(guide), '0.8', 'monthly')),
+		...referenceGuides.map((guide) => entry(referencePath(guide), '0.75', 'monthly')),
 		// /packages*, /faq, /blocks* and every pre-#365 path outside /docs are redirects to
 		// these URLs and are intentionally absent here — a sitemap must not list a
 		// redirecting URL.

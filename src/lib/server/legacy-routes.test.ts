@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { featureSections } from '$lib/data/features';
 import { legacyFeatureTargets, legacySectionTargets } from '$lib/legacy-features';
 import { packages } from '$lib/data/packages';
+import { movedSlugs, withoutRenamedSlugs } from '$lib/data/doc-moves';
 import { foundationGuides } from '$lib/data/guides';
 import { capabilityGuides } from '$lib/data/guides';
 import { referenceGuides } from '$lib/data/reference';
@@ -144,8 +145,11 @@ describe('legacy static routes', () => {
 		// These three slugs are old foundation-guide names that were renamed. They
 		// exist only as hand-written aliases in the pre-move redirect route
 		// foundations/[slug]/+page.server.ts, so a cleanup there would silently
-		// 404 a live URL rather than fail a build.
-		expect(slugs, RESTORE_DONT_RENUMBER).toHaveLength(3);
+		// 404 a live URL rather than fail a build. Pages #399 renamed since
+		// (docMoves) keep their /foundations/<old> URL too.
+		const renamedSince = movedSlugs('/docs/foundations');
+		expect(slugs, RESTORE_DONT_RENUMBER).toHaveLength(3 + renamedSince.length);
+		expect(renamedSince, RESTORE_DONT_RENUMBER).toEqual(['interfaces']);
 		expect(new Set(slugs).size).toBe(slugs.length);
 		expect(slugs).toEqual(
 			expect.arrayContaining(['app-model', 'identity-access', 'generated-surfaces'])
@@ -285,8 +289,14 @@ describe('the #365 move under /docs', () => {
 			Object.entries(movedSlugFamilies).map(([base, entries]) => [base, entries().length])
 		);
 		expect(familySizes, RESTORE_DONT_RENUMBER).toEqual({
-			'/capabilities': capabilityGuides.length,
-			'/foundations': foundationGuides.length + 3,
+			'/capabilities': new Set([
+				...withoutRenamedSlugs(capabilityGuides.map((guide) => guide.slug)),
+				...movedSlugs('/docs/capabilities')
+			]).size,
+			'/foundations':
+				withoutRenamedSlugs(foundationGuides.map((guide) => guide.slug)).length +
+				3 +
+				movedSlugs('/docs/foundations').length,
 			'/guides': taskGuides.length,
 			'/reference': referenceGuides.length,
 			'/reference/components': uiComponents.length + Object.keys(referenceComponentAliases).length,

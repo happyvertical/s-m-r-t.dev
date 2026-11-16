@@ -1,3 +1,4 @@
+import { movedHref } from '$lib/data/doc-moves';
 import type { Guide, GuideLink, GuideSection } from '$lib/data/guides';
 import { SMRT_VERSION } from '$lib/version';
 
@@ -419,7 +420,7 @@ export const frameworkTopics: FrameworkTopic[] = [
 			}
 		],
 		related: [
-			{ label: 'Connect APIs, tools, and agents', href: '/docs/foundations/interfaces' },
+			{ label: 'Connect APIs, tools, and agents', href: movedHref('connectInterfaces') },
 			{ label: 'Development tooling', href: '/docs/tooling' },
 			{ label: 'Working playground', href: '/playground' }
 		],
@@ -589,13 +590,13 @@ export const frameworkMigrationDecisions: FrameworkMigrationDecision[] = [
 		note: 'Merge server loading with hydration, change signals, and offline replay.'
 	},
 	{
-		source: '/docs/foundations/interfaces',
+		source: movedHref('connectInterfaces'),
 		status: 'move',
 		href: '/docs/framework#generated-interfaces',
 		note: 'Keep the concept summary separate from the exhaustive interface contract.'
 	},
 	{
-		source: '/docs/capabilities/collections',
+		source: movedHref('collectionReads'),
 		status: 'merge',
 		href: '/docs/framework#models-and-collections',
 		note: 'Retain detailed collection behavior in the existing capability and reference pages.'

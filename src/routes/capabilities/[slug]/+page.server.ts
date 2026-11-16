@@ -1,13 +1,21 @@
 import { redirect } from '@sveltejs/kit';
+import { capabilityTarget, movedSlugs, withoutRenamedSlugs } from '$lib/data/doc-moves';
 import { capabilityGuides } from '$lib/data/guides';
 import type { PageServerLoad } from './$types';
 
 // Moved under /docs (#365). Every pre-move slug keeps a prerendered 301 to
-// its /docs page; legacy-routes.test.ts holds the inventory.
+// its /docs page; legacy-routes.test.ts holds the inventory. A page #399 moved
+// again goes straight to its final address (docMoves), never through a second hop.
 export const prerender = true;
 
-export const entries = () => capabilityGuides.map((item) => ({ slug: item.slug }));
+export const entries = () =>
+	[
+		...new Set([
+			...withoutRenamedSlugs(capabilityGuides.map((item) => item.slug)),
+			...movedSlugs('/docs/capabilities')
+		])
+	].map((slug) => ({ slug }));
 
 export const load: PageServerLoad = ({ params }) => {
-	redirect(301, `/docs/capabilities/${params.slug}`);
+	redirect(301, capabilityTarget(params.slug));
 };

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { movedHref } from '$lib/data/doc-moves';
 	import { siteUrl } from '$lib/site';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import GuideLibraryMetadata from '$lib/components/GuideLibraryMetadata.svelte';
@@ -160,7 +161,7 @@ export class Note extends SmrtObject {
 				>
 			</li>
 			<li>
-				<a href="/docs/foundations/interfaces"
+				<a href={movedHref('connectInterfaces')}
 					><strong>Generated interfaces</strong><span
 						>Choose which REST, MCP, WebMCP and CLI actions each model exposes.</span
 					></a

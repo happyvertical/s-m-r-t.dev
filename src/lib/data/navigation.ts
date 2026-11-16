@@ -1,5 +1,13 @@
 import { agentsTopics } from '$lib/data/agents';
 import { capabilityGuides, foundationGuides } from '$lib/data/guides';
+import {
+	capabilityHome,
+	capabilityPath,
+	foundationPath,
+	referencePath,
+	taskPath,
+	toolingPath
+} from '$lib/data/doc-moves';
 import { BUILD_PATH, DEMO_PATH, TOOLS_PATH, primaryLinks } from '$lib/data/doors';
 import { featurePath, featureSectionPath, featureSections, features } from '$lib/data/features';
 import { packages } from '$lib/data/packages';
@@ -38,31 +46,31 @@ export type PrimaryNavigationItem = NavigationItem;
 
 const foundationItems: NavigationItem[] = foundationGuides.map((guide) => ({
 	label: guide.navTitle ?? guide.title,
-	href: `/docs/foundations/${guide.slug}`,
+	href: foundationPath(guide),
 	description: guide.plainEnglish,
 	keywords: guide.packages
 }));
 const capabilityItems: NavigationItem[] = capabilityGuides.map((guide) => ({
 	label: guide.navTitle ?? guide.title,
-	href: `/docs/capabilities/${guide.slug}`,
+	href: capabilityPath(guide),
 	description: guide.plainEnglish,
 	keywords: guide.packages
 }));
 const taskItems: NavigationItem[] = taskGuides.map((guide) => ({
 	label: guide.navTitle ?? guide.title,
-	href: `/docs/guides/${guide.slug}`,
+	href: taskPath(guide),
 	description: guide.plainEnglish,
 	keywords: guide.packages
 }));
 const toolingItems: NavigationItem[] = toolingGuides.map((guide) => ({
 	label: guide.navTitle ?? guide.title,
-	href: `/docs/tooling/${guide.slug}`,
+	href: toolingPath(guide),
 	description: guide.plainEnglish,
 	keywords: guide.packages
 }));
 const referenceItems: NavigationItem[] = referenceGuides.map((guide) => ({
 	label: guide.navTitle ?? guide.title,
-	href: `/docs/reference/${guide.slug}`,
+	href: referencePath(guide),
 	description: guide.plainEnglish,
 	keywords: guide.packages
 }));
@@ -117,30 +125,8 @@ export const featureNavigation: NavigationGroup[] = featureSections.map((section
 	]
 }));
 
-/**
- * Where each capability page is listed. Every capability stays at
- * `/docs/capabilities/<slug>`; this table is the only place that says which
- * section claims it, and both the sidebar and
- * `documentationSectionForPathname` read it. A slug that is not here is a plain
- * Framework capability.
- *
- * - `ui`: the UI section.
- * - `agents-and-interaction`: Framework, listed with the Agents and Interaction
- *   pages. WebMCP sits here because it is the protocol-level mechanics behind
- *   the tool surfaces the Agents page maps.
- */
-const capabilityPlacement = new Map<string, 'ui' | 'agents-and-interaction'>([
-	['application-shell', 'ui'],
-	['field-policies', 'ui'],
-	['policy-aware-forms', 'ui'],
-	['field-policy-operations', 'ui'],
-	['webmcp', 'agents-and-interaction'],
-	['agent-legible-applications', 'agents-and-interaction'],
-	['agent-assisted-forms', 'agents-and-interaction'],
-	['learning-agents', 'agents-and-interaction']
-]);
-
-const placementOfSlug = (slug: string) => capabilityPlacement.get(slug);
+/** Which section lists each capability page: `capabilityHome` in `doc-moves.ts`. */
+const placementOfSlug = (slug: string) => capabilityHome(slug);
 const placementOf = (item: NavigationItem) => placementOfSlug(item.href.split('/').at(-1) ?? '');
 
 const frameworkCapabilityItems = capabilityItems.filter((item) => !placementOf(item));
@@ -475,18 +461,17 @@ const underPath = (pathname: string, base: string) =>
 	pathname === base || pathname.startsWith(`${base}/`);
 
 export function documentationSectionForPathname(pathname: string): DocumentationSection {
-	if (underPath(pathname, '/docs/framework') || underPath(pathname, '/docs/foundations')) {
+	if (
+		underPath(pathname, '/docs/framework') ||
+		underPath(pathname, '/docs/foundations') ||
+		// Capability pages served here are Framework; the UI ones live under /docs/ui.
+		underPath(pathname, '/docs/capabilities')
+	) {
 		return getDocumentationSection('framework');
 	}
 	if (underPath(pathname, '/docs/ui')) return getDocumentationSection('ui');
 	if (underPath(pathname, '/docs/guides')) return getDocumentationSection('guides');
 	if (underPath(pathname, '/docs/tooling')) return getDocumentationSection('tooling');
-	if (underPath(pathname, '/docs/capabilities')) {
-		// `/docs/capabilities/<slug>`
-		const slug = pathname.split('/')[3] ?? '';
-		if (placementOfSlug(slug) === 'ui') return getDocumentationSection('ui');
-		return getDocumentationSection('framework');
-	}
 	if (underPath(pathname, '/docs/reference')) return getDocumentationSection('reference');
 	// `/docs` itself and Getting Started, plus any page outside Docs.
 	return getDocumentationSection('docs');

@@ -1,3 +1,4 @@
+import { movedHref } from '$lib/data/doc-moves';
 import type { Guide } from '$lib/data/guides';
 import { SMRT_VERSION } from '$lib/version';
 
@@ -52,7 +53,7 @@ export const referenceGuides: Guide[] = [
 				label: 'Agent-legible applications',
 				href: '/docs/capabilities/agent-legible-applications'
 			},
-			{ label: 'Connect APIs, tools, and agents', href: '/docs/foundations/interfaces' },
+			{ label: 'Connect APIs, tools, and agents', href: movedHref('connectInterfaces') },
 			{ label: 'The development MCP server', href: '/docs/tooling/dev-mcp' }
 		]
 	},
@@ -111,7 +112,7 @@ export const referenceGuides: Guide[] = [
 		],
 		related: [
 			{ label: 'Authorization model', href: '/docs/reference/authorization' },
-			{ label: 'Field policies', href: '/docs/capabilities/field-policies' },
+			{ label: 'Field policies', href: movedHref('fieldPolicyLayers') },
 			{ label: 'Field policy API', href: '/docs/reference/field-policies' }
 		]
 	},
@@ -276,9 +277,7 @@ export const referenceGuides: Guide[] = [
 				],
 				filename: 'src/lib/server/register-permissions.ts',
 				code: `import { registerPermissionDefinitions } from '@happyvertical/smrt-users';\n\nconst unregister = registerPermissionDefinitions([\n  {\n    slug: 'invoices.export',\n    category: 'billing',\n    name: 'Export Invoices',\n    description: 'Allows exporting invoices'\n  }\n]);\n\n// The slug is now in catalog.permissions with source 'runtime'\n// and is eligible for syncPermissionCatalog() and the guard.\n// Call unregister() to remove it again.`,
-				links: [
-					{ label: 'Field policy operations', href: '/docs/capabilities/field-policy-operations' }
-				]
+				links: [{ label: 'Field policy operations', href: movedHref('fieldPolicyOperations') }]
 			},
 			{
 				title: 'The guard is for the code you write yourself',
@@ -388,7 +387,7 @@ export const referenceGuides: Guide[] = [
 		related: [
 			{ label: 'Grant access', href: '/docs/foundations/memberships-and-permissions' },
 			{ label: 'Security defaults', href: '/docs/reference/security' },
-			{ label: 'Field policy operations', href: '/docs/capabilities/field-policy-operations' },
+			{ label: 'Field policy operations', href: movedHref('fieldPolicyOperations') },
 			{ label: 'smrt-users package', href: '/docs/reference/packages/smrt-users' }
 		]
 	},
@@ -1510,9 +1509,9 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			}
 		],
 		related: [
-			{ label: 'How resolution works', href: '/docs/capabilities/field-policies' },
-			{ label: 'Build a policy-aware form', href: '/docs/capabilities/policy-aware-forms' },
-			{ label: 'Operate field policies', href: '/docs/capabilities/field-policy-operations' },
+			{ label: 'How resolution works', href: movedHref('fieldPolicyLayers') },
+			{ label: 'Build a policy-aware form', href: movedHref('policyAwareForms') },
+			{ label: 'Operate field policies', href: movedHref('fieldPolicyOperations') },
 			{ label: 'smrt-fields package', href: '/docs/reference/packages/smrt-fields' },
 			{ label: 'Security defaults', href: '/docs/reference/security' }
 		]

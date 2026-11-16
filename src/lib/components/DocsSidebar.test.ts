@@ -1,3 +1,4 @@
+import { movedHref } from '$lib/data/doc-moves';
 import { cleanup, render, screen, within } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
@@ -68,6 +69,21 @@ describe('docs sidebar', () => {
 			.filter((link) => link.getAttribute('aria-current') === 'page');
 
 		expect(current.map((link) => link.getAttribute('href'))).toEqual(['/docs/tooling/dev-mcp']);
+	});
+
+	it.each([
+		movedHref('applicationShell'),
+		movedHref('policyAwareForms'),
+		movedHref('fieldPolicyLayers'),
+		movedHref('fieldPolicyOperations')
+	])('lists %s under UI and marks it the current page', (pathname) => {
+		expect(documentationSectionForPathname(pathname).id).toBe('ui');
+		render(DocsSidebar, { props: { pathname } });
+		const current = within(sidebar())
+			.getAllByRole('link')
+			.filter((link) => link.getAttribute('aria-current') === 'page');
+
+		expect(current.map((link) => link.getAttribute('href'))).toEqual([pathname]);
 	});
 
 	it('marks a section landing as the current page in the section list', () => {
