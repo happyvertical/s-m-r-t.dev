@@ -15,11 +15,11 @@ it('keeps every static documentation tab in the DOM and displays only the select
 		expect(panel.textContent?.trim().length).toBeGreaterThan(20);
 		expect(panel.hidden).toBe(panel.id !== 'panel-overview');
 	}
-	expect(container.querySelector('.playground-shell')).toBeNull();
+	expect(container.querySelector('[data-smrt-component="PlaygroundHost"]')).toBeNull();
 	const rest = container.querySelector<HTMLButtonElement>('[aria-controls="panel-rest"]')!;
 	await fireEvent.click(rest);
 	expect(rest.getAttribute('aria-selected')).toBe('true');
 	expect(panels.filter((panel) => !panel.hidden).map((panel) => panel.id)).toEqual(['panel-rest']);
 	expect(new URL(window.location.href).searchParams.get('tab')).toBe('rest');
-	expect(container.querySelector('.playground-shell')).toBeNull();
+	expect(container.querySelector('[data-smrt-component="PlaygroundHost"]')).toBeNull();
 });

@@ -40,7 +40,7 @@
 	.playground-embed.compact {
 		min-height: 620px;
 	}
-	.playground-embed :global(.playground-shell) {
+	.playground-embed :global([data-smrt-component='PlaygroundHost']) {
 		min-height: inherit;
 	}
 </style>
