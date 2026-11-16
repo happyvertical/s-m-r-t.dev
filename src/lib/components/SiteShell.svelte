@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import AppTheme from '$lib/components/AppTheme.svelte';
 	import DocsPanelSections from '$lib/components/DocsPanelSections.svelte';
+	import DocsSidebar from '$lib/components/DocsSidebar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import { DEMO_PATH } from '$lib/data/doors';
@@ -99,8 +100,19 @@
 		brandInSlot={onDemo}
 	>
 		<div class="site-content">
-			<div class="route-content" id="main-content" tabindex="-1">
-				{@render children()}
+			<!-- The frame is always mounted so route content never remounts on the
+			     way into or out of Docs. The sidebar is a sibling of #main-content,
+			     never inside it: the skip link and the generated agent docs both
+			     take #main-content as the page. -->
+			<div class="route-frame" data-docs={inDocs ? 'true' : undefined}>
+				{#if inDocs}
+					<div class="docs-aside">
+						<DocsSidebar {pathname} {hash} />
+					</div>
+				{/if}
+				<div class="route-content" id="main-content" tabindex="-1">
+					{@render children()}
+				</div>
 			</div>
 			<Footer />
 		</div>
@@ -116,9 +128,64 @@
 		color: var(--site-ink);
 	}
 
+	.route-frame {
+		min-width: 0;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+
 	.route-content {
 		min-width: 0;
 		flex: 1;
+	}
+
+	/* Below the breakpoint the sidebar is not displayed, which also takes it
+	   out of the accessibility tree; the docs panel covers those widths. */
+	.docs-aside {
+		display: none;
+	}
+
+	@media (min-width: 72rem) {
+		.route-frame[data-docs='true'] {
+			display: grid;
+			grid-template-columns: 15rem minmax(0, 1fr);
+		}
+
+		/* The shell's main area is the scroller and sits under the header, so
+		   the sidebar sticks to its top and scrolls on its own. */
+		.docs-aside {
+			display: block;
+			position: sticky;
+			top: 0;
+			align-self: start;
+			max-height: calc(100svh - var(--site-header-height));
+			overflow-y: auto;
+			overscroll-behavior: contain;
+		}
+
+		/* The rule is on the content so it runs the full height of the page,
+		   not only as far as a short sidebar. */
+		.route-frame[data-docs='true'] > .route-content {
+			border-left: 1px solid var(--site-line);
+		}
+
+		/* #main-content takes focus after navigation only so the next Tab starts
+		   in the page. Its ring used to fall outside the viewport; beside the
+		   sidebar its left edge would show as a stray rule. */
+		.route-frame[data-docs='true'] > .route-content:focus-visible {
+			outline: none;
+		}
+	}
+
+	@media print {
+		.docs-aside {
+			display: none;
+		}
+
+		.route-frame[data-docs='true'] {
+			display: block;
+		}
 	}
 
 	:global(.smrt-admin-shell__main) {

@@ -2,7 +2,7 @@ import type { FrameworkTopic } from '$lib/data/framework';
 import { SMRT_VERSION } from '$lib/version';
 
 /**
- * `/docs/agents` copy: what an agent can do with a smrt application, the
+ * `/docs/framework/agents` copy: what an agent can do with a smrt application, the
  * four tool surfaces, the read-only exposure default, and the identity every
  * call runs as.
  *
@@ -15,7 +15,7 @@ import { SMRT_VERSION } from '$lib/version';
  * `registration.test.ts` then demands a `[slug]` route, sidebar entries,
  * `guideTracks`, and sitemap registration for it. `FrameworkTopic` has
  * `summary` + `content` instead of `lede` + `sections`, so `agentsTopics`
- * structurally cannot match that predicate — `/docs/agents` stays a hand-written
+ * structurally cannot match that predicate — `/docs/framework/agents` stays a hand-written
  * landing page, the same way `interaction.ts` dodges the same discovery by
  * not exporting its `Guide[]` (see the comment at `interaction.ts:12`).
  */
@@ -364,7 +364,7 @@ export class Report extends SmrtObject {
 				links: [
 					{ label: 'Permissions and security', href: '/docs/framework#permissions-and-security' },
 					{ label: 'Authorization reference', href: '/docs/reference/authorization' },
-					{ label: 'Interaction', href: '/docs/interaction' }
+					{ label: 'Interaction', href: '/docs/framework/interaction' }
 				]
 			}
 		],

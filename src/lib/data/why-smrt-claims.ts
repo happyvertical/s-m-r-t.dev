@@ -61,7 +61,7 @@ export const whySmrtClaims: WhySmrtClaim[] = [
 			'MCP and WebMCP expose selected operations with shared model metadata and policy boundaries.',
 		display:
 			'Selected operations become agent tools with the same names, inputs, and policy as the human interface.',
-		canonical: { label: 'Agents', href: '/docs/agents' },
+		canonical: { label: 'Agents', href: '/docs/framework/agents' },
 		source: {
 			label: 'smrt-web release contract',
 			href: `${INSTALLED_TREE}/packages/smrt-web/AGENTS.md`

@@ -83,14 +83,15 @@ describe('search index', () => {
 			for (const guide of interactionContent.guides) {
 				const entry = searchEntries.find(
 					(candidate) =>
-						candidate.kind === 'section' && candidate.href === `/docs/interaction#${guide.slug}`
+						candidate.kind === 'section' &&
+						candidate.href === `/docs/framework/interaction#${guide.slug}`
 				);
 				expect(entry?.label, `missing entry for /interaction#${guide.slug}`).toBe(
 					guide.navTitle ?? guide.title
 				);
 			}
 			const subsectionEntries = searchEntries.filter((candidate) =>
-				candidate.href.startsWith('/docs/interaction#human-agent-communication-')
+				candidate.href.startsWith('/docs/framework/interaction#human-agent-communication-')
 			);
 			expect(subsectionEntries).toHaveLength(0);
 		});
@@ -99,7 +100,8 @@ describe('search index', () => {
 			for (const topic of agentsTopics) {
 				const topicEntry = searchEntries.find(
 					(candidate) =>
-						candidate.kind === 'section' && candidate.href === `/docs/agents#${topic.slug}`
+						candidate.kind === 'section' &&
+						candidate.href === `/docs/framework/agents#${topic.slug}`
 				);
 				expect(topicEntry?.label, `missing entry for /agents#${topic.slug}`).toBe(topic.navTitle);
 
@@ -111,7 +113,7 @@ describe('search index', () => {
 					const subEntry = searchEntries.find(
 						(candidate) =>
 							candidate.kind === 'section' &&
-							candidate.href === `/docs/agents#${topic.slug}-${anchorId}`
+							candidate.href === `/docs/framework/agents#${topic.slug}-${anchorId}`
 					);
 					expect(subEntry?.label, `missing entry for /agents#${topic.slug}-${anchorId}`).toBe(
 						item.title
@@ -123,7 +125,7 @@ describe('search index', () => {
 		it('resolves an Agents topic heading through fuzzy search', () => {
 			const [first] = searchDocs('Where agents connect');
 			expect(first.kind).toBe('section');
-			expect(first.href).toBe('/docs/agents#where-agents-connect');
+			expect(first.href).toBe('/docs/framework/agents#where-agents-connect');
 		});
 	});
 

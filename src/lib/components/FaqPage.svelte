@@ -99,7 +99,7 @@
 				{
 					q: "Does asking in chat skip the application's rules?",
 					a: 'No. However a request arrives, whether a click, a typed command or a chat message in plain language, it comes in through the same declared control or operation, and the same tenant, permission and field-policy checks apply.',
-					link: { label: 'Human-agent interaction', href: '/docs/interaction' }
+					link: { label: 'Human-agent interaction', href: '/docs/framework/interaction' }
 				},
 				{
 					q: 'Is this site itself built with smrt?',

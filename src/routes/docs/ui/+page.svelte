@@ -41,7 +41,8 @@
 		</div>
 
 		<div class="hero-links">
-			<a href="/docs/interaction">Read the interaction contract <span aria-hidden="true">→</span></a
+			<a href="/docs/framework/interaction"
+				>Read the interaction contract <span aria-hidden="true">→</span></a
 			>
 			<a href="/docs/framework">See the framework architecture <span aria-hidden="true">→</span></a>
 		</div>
@@ -198,7 +199,7 @@
 			A component exposes meaning, state and operations. Your application supplies the model,
 			adapter, permissions, confirmation rules and durable side effects.
 		</p>
-		<a href="/docs/interaction"
+		<a href="/docs/framework/interaction"
 			>Continue to the interaction contract <span aria-hidden="true">→</span></a
 		>
 	</section>

@@ -13,7 +13,7 @@ const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${INTERACTION_PIN
  * Deliberately not exported. `guide-families.ts` structurally discovers any
  * exported array whose items carry `slug` + `lede` + `sections` — this array
  * has all three — and `registration.test.ts` would then demand a
- * `/docs/interaction/[slug]` route, sidebar entries, a `guideTracks` row in
+ * `/docs/framework/interaction/[slug]` route, sidebar entries, a `guideTracks` row in
  * `search.ts`, and sitemap entries, none of which are correct for a
  * single-route landing page. `interactionContent` below is the safe export:
  * `search.ts`'s `landingTracks` and this page's own renderer both read
@@ -417,7 +417,7 @@ export function getInteractionGuide(slug: string): Guide | undefined {
 	return interactionGuides.find((guide) => guide.slug === slug);
 }
 
-/** Ordered content families rendered as stable anchors on `/docs/interaction`. */
+/** Ordered content families rendered as stable anchors on `/docs/framework/interaction`. */
 export function listInteractionGuides(): readonly Guide[] {
 	return interactionGuides;
 }

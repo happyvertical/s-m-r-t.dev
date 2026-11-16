@@ -403,6 +403,19 @@
 		color: var(--site-muted);
 	}
 
+	/* Beside the docs sidebar (72rem and up, in SiteShell) the two-column
+	   section does not fit until about 80rem, so it stacks in between. */
+	@media (min-width: 72rem) and (max-width: 80rem) {
+		.category-section {
+			grid-template-columns: 1fr;
+			gap: 40px;
+		}
+
+		.category-title {
+			position: static;
+		}
+	}
+
 	@media (max-width: 900px) {
 		.packages-page {
 			width: min(100% - 28px, 1240px);

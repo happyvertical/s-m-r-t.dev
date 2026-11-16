@@ -22,7 +22,7 @@ export interface NavigationGroup {
 }
 
 export type DocumentationSectionId =
-	'docs' | 'framework' | 'agents' | 'interaction' | 'ui' | 'tooling' | 'guides' | 'reference';
+	'docs' | 'framework' | 'ui' | 'tooling' | 'guides' | 'reference';
 
 export interface DocumentationSection {
 	id: DocumentationSectionId;
@@ -117,40 +117,37 @@ export const featureNavigation: NavigationGroup[] = featureSections.map((section
 	]
 }));
 
-const interactionCapabilitySlugs = new Set([
-	'agent-legible-applications',
-	'agent-assisted-forms',
-	'learning-agents'
-]);
-const uiCapabilitySlugs = new Set([
-	'application-shell',
-	'field-policies',
-	'policy-aware-forms',
-	'field-policy-operations'
-]);
 /**
- * The WebMCP deep-dive lives under Agents, not Interaction: it is the
- * protocol-level mechanics behind the tool surfaces `/docs/agents` maps, not a
- * moment-to-moment interaction concept. The URL is unchanged
- * (`/docs/capabilities/webmcp`) — only which primary section claims it moves.
+ * Where each capability page is listed. Every capability stays at
+ * `/docs/capabilities/<slug>`; this table is the only place that says which
+ * section claims it, and both the sidebar and
+ * `documentationSectionForPathname` read it. A slug that is not here is a plain
+ * Framework capability.
+ *
+ * - `ui`: the UI section.
+ * - `agents-and-interaction`: Framework, listed with the Agents and Interaction
+ *   pages. WebMCP sits here because it is the protocol-level mechanics behind
+ *   the tool surfaces the Agents page maps.
  */
-const agentsCapabilitySlugs = new Set(['webmcp']);
+const capabilityPlacement = new Map<string, 'ui' | 'agents-and-interaction'>([
+	['application-shell', 'ui'],
+	['field-policies', 'ui'],
+	['policy-aware-forms', 'ui'],
+	['field-policy-operations', 'ui'],
+	['webmcp', 'agents-and-interaction'],
+	['agent-legible-applications', 'agents-and-interaction'],
+	['agent-assisted-forms', 'agents-and-interaction'],
+	['learning-agents', 'agents-and-interaction']
+]);
 
-const frameworkCapabilityItems = capabilityItems.filter(
-	(item) =>
-		!interactionCapabilitySlugs.has(item.href.split('/').at(-1) ?? '') &&
-		!uiCapabilitySlugs.has(item.href.split('/').at(-1) ?? '') &&
-		!agentsCapabilitySlugs.has(item.href.split('/').at(-1) ?? '')
+const placementOfSlug = (slug: string) => capabilityPlacement.get(slug);
+const placementOf = (item: NavigationItem) => placementOfSlug(item.href.split('/').at(-1) ?? '');
+
+const frameworkCapabilityItems = capabilityItems.filter((item) => !placementOf(item));
+const agentsAndInteractionCapabilityItems = capabilityItems.filter(
+	(item) => placementOf(item) === 'agents-and-interaction'
 );
-const interactionCapabilityItems = capabilityItems.filter((item) =>
-	interactionCapabilitySlugs.has(item.href.split('/').at(-1) ?? '')
-);
-const uiCapabilityItems = capabilityItems.filter((item) =>
-	uiCapabilitySlugs.has(item.href.split('/').at(-1) ?? '')
-);
-const agentsCapabilityItems = capabilityItems.filter((item) =>
-	agentsCapabilitySlugs.has(item.href.split('/').at(-1) ?? '')
-);
+const uiCapabilityItems = capabilityItems.filter((item) => placementOf(item) === 'ui');
 
 const itemByHref = (items: NavigationItem[], href: string): NavigationItem => {
 	const item = items.find((candidate) => candidate.href === href);
@@ -211,6 +208,18 @@ const docsItem: NavigationItem = {
 	keywords: ['docs', 'documentation', 'llms.txt', 'agent docs', 'developers', 'agents']
 };
 
+/** The two topic pages that used to be sections of their own (#399). */
+const agentsPageItem: NavigationItem = {
+	label: 'Agents overview',
+	href: '/docs/framework/agents',
+	description: 'See where agents connect, what they may do, and whose authority they carry.'
+};
+const interactionPageItem: NavigationItem = {
+	label: 'Interaction overview',
+	href: '/docs/framework/interaction',
+	description: 'See how persons and application agents communicate and share control.'
+};
+
 const sectionOverviewItems = new Map<DocumentationSectionId, NavigationItem>([
 	['docs', docsItem],
 	[
@@ -219,22 +228,6 @@ const sectionOverviewItems = new Map<DocumentationSectionId, NavigationItem>([
 			label: 'Framework overview',
 			href: '/docs/framework',
 			description: 'See how the application model connects framework mechanisms and interfaces.'
-		}
-	],
-	[
-		'agents',
-		{
-			label: 'Agents overview',
-			href: '/docs/agents',
-			description: 'See where agents connect, what they may do, and whose authority they carry.'
-		}
-	],
-	[
-		'interaction',
-		{
-			label: 'Interaction overview',
-			href: '/docs/interaction',
-			description: 'See how persons and application agents communicate and share control.'
 		}
 	],
 	[
@@ -311,8 +304,6 @@ export const documentationSections: DocumentationSection[] = [
 				label: 'Sections',
 				items: [
 					sectionOverviewItem('framework'),
-					sectionOverviewItem('agents'),
-					sectionOverviewItem('interaction'),
 					sectionOverviewItem('ui'),
 					sectionOverviewItem('tooling'),
 					sectionOverviewItem('guides'),
@@ -330,15 +321,31 @@ export const documentationSections: DocumentationSection[] = [
 			'Learn how models, data, identity, permissions, and generated interfaces fit together.',
 		groups: [
 			{
-				label: 'Application foundations',
+				label: 'Foundations',
 				items: [{ label: 'Foundations overview', href: '/docs/foundations' }, ...foundationItems]
 			},
 			{
-				label: 'Framework capabilities',
+				label: 'Capabilities',
 				items: [
 					{ label: 'Capabilities overview', href: '/docs/capabilities' },
 					...frameworkCapabilityItems
 				]
+			},
+			{
+				label: 'Agents and interaction',
+				items: [
+					agentsPageItem,
+					interactionPageItem,
+					...agentsAndInteractionCapabilityItems,
+					{ label: 'Application MCP', href: '/docs/tooling/app-mcp' }
+				]
+			},
+			{
+				label: 'On the agents page',
+				items: agentsTopics.map((topic) => ({
+					label: topic.navTitle,
+					href: `/docs/framework/agents#${topic.slug}`
+				}))
 			},
 			relatedGuides('/docs/guides/multi-tenant-lifecycle', '/docs/guides/semantic-search'),
 			{
@@ -346,57 +353,8 @@ export const documentationSections: DocumentationSection[] = [
 				items: [
 					{ label: 'Generated interfaces', href: '/docs/reference/interfaces' },
 					{ label: 'Authorization model', href: '/docs/reference/authorization' },
+					{ label: 'Security defaults', href: '/docs/reference/security' },
 					sectionOverviewItem('reference')
-				]
-			}
-		]
-	},
-	{
-		id: 'agents',
-		label: 'Agents',
-		title: 'Agents',
-		href: '/docs/agents',
-		description: 'See where agents connect, what they may do, and whose authority they carry.',
-		groups: [
-			{
-				label: 'On this page',
-				items: agentsTopics.map((topic) => ({
-					label: topic.navTitle,
-					href: `/docs/agents#${topic.slug}`
-				}))
-			},
-			{
-				label: 'Deep dives',
-				items: [
-					...agentsCapabilityItems,
-					{ label: 'Application MCP', href: '/docs/tooling/app-mcp' }
-				]
-			},
-			{
-				label: 'Related reference',
-				items: [
-					{ label: 'Authorization model', href: '/docs/reference/authorization' },
-					{ label: 'Security defaults', href: '/docs/reference/security' },
-					{ label: 'Generated interfaces', href: '/docs/reference/interfaces' }
-				]
-			}
-		]
-	},
-	{
-		id: 'interaction',
-		label: 'Interaction',
-		title: 'Human-Agent Interaction',
-		href: '/docs/interaction',
-		description:
-			'Learn how persons and application agents communicate, propose changes, and share control.',
-		groups: [
-			{ label: 'Current interaction topics', items: interactionCapabilityItems },
-			{
-				label: 'Related material',
-				items: [
-					{ label: 'Security defaults', href: '/docs/reference/security' },
-					{ label: 'Field policy API', href: '/docs/reference/field-policies' },
-					sectionOverviewItem('guides')
 				]
 			}
 		]
@@ -520,17 +478,13 @@ export function documentationSectionForPathname(pathname: string): Documentation
 	if (underPath(pathname, '/docs/framework') || underPath(pathname, '/docs/foundations')) {
 		return getDocumentationSection('framework');
 	}
-	if (underPath(pathname, '/docs/agents')) return getDocumentationSection('agents');
-	if (underPath(pathname, '/docs/interaction')) return getDocumentationSection('interaction');
 	if (underPath(pathname, '/docs/ui')) return getDocumentationSection('ui');
 	if (underPath(pathname, '/docs/guides')) return getDocumentationSection('guides');
 	if (underPath(pathname, '/docs/tooling')) return getDocumentationSection('tooling');
 	if (underPath(pathname, '/docs/capabilities')) {
 		// `/docs/capabilities/<slug>`
 		const slug = pathname.split('/')[3] ?? '';
-		if (agentsCapabilitySlugs.has(slug)) return getDocumentationSection('agents');
-		if (interactionCapabilitySlugs.has(slug)) return getDocumentationSection('interaction');
-		if (uiCapabilitySlugs.has(slug)) return getDocumentationSection('ui');
+		if (placementOfSlug(slug) === 'ui') return getDocumentationSection('ui');
 		return getDocumentationSection('framework');
 	}
 	if (underPath(pathname, '/docs/reference')) return getDocumentationSection('reference');
@@ -549,7 +503,7 @@ export function isNavigationItemActive(href: string, pathname: string, hash = ''
 	if (url.pathname === '/') {
 		return pathname === '/' && (url.hash ? url.hash === hash : hash === '');
 	}
-	// A same-page anchor (e.g. /agents#topic) only owns the current location when
+	// A same-page anchor (e.g. /docs/framework/agents#topic) only owns the current location when
 	// its hash matches; without this, every anchor sharing that pathname would
 	// match at once. A plain page link (no hash) keeps the prefix match below,
 	// which also covers a section overview link staying active on its nested pages.
@@ -590,16 +544,11 @@ export const docsNavigation: NavigationGroup[] = [
 			{ label: 'Foundations overview', href: '/docs/foundations' },
 			...foundationItems,
 			{ label: 'Capabilities overview', href: '/docs/capabilities' },
-			...frameworkCapabilityItems
+			...frameworkCapabilityItems,
+			agentsPageItem,
+			interactionPageItem,
+			...agentsAndInteractionCapabilityItems
 		]
-	},
-	{
-		label: 'Agents',
-		items: [sectionOverviewItem('agents'), ...agentsCapabilityItems]
-	},
-	{
-		label: 'Interaction',
-		items: [sectionOverviewItem('interaction'), ...interactionCapabilityItems]
 	},
 	{ label: 'UI', items: [sectionOverviewItem('ui'), ...uiCapabilityItems] },
 	{ label: 'Tooling', items: [sectionOverviewItem('tooling'), ...toolingItems] },

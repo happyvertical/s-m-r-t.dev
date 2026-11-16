@@ -4,4 +4,4 @@ import { redirect } from '@sveltejs/kit';
 // static host; legacy-routes.test.ts holds the inventory.
 export const prerender = true;
 
-export const load = () => redirect(301, '/docs/agents');
+export const load = () => redirect(301, '/docs/framework/agents');

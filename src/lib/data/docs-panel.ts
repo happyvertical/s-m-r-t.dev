@@ -32,8 +32,6 @@ export interface DocsPanelSection {
 const groupLabelBySectionId = new Map<DocumentationSectionId, string>([
 	['docs', 'Docs'],
 	['framework', 'Framework'],
-	['agents', 'Agents'],
-	['interaction', 'Interaction'],
 	['ui', 'UI'],
 	['tooling', 'Tooling'],
 	['guides', 'Guides'],
