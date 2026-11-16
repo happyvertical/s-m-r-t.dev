@@ -88,7 +88,7 @@ export type MovedPageKey = keyof typeof movedPages;
 /** The current address of a moved page, with an optional `#fragment`. */
 export function movedHref(key: MovedPageKey, hash = ''): string {
 	const target = docMoves[movedPages[key]];
-	if (target === undefined) throw new Error(`movedPages.${key} is not in docMoves`);
+	if (target === undefined) throw new Error(`movedPages-missing:${key}`);
 	return hash === '' ? target : `${target}#${hash.replace(/^#/, '')}`;
 }
 

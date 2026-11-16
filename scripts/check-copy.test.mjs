@@ -199,6 +199,28 @@ describe('copy checker', () => {
 		);
 	});
 
+	it('treats movedHref in an href position as an address, never as prose', () => {
+		const data = (body) =>
+			`import { movedHref } from '$lib/data/doc-moves';
+function make(options = {}) { return { details: options.details ?? [] }; }
+make({ details: [${body}] });`;
+		const errors = (body) =>
+			extractTypeScriptPassages(data(body), 'src/lib/data/fixture.ts').filter(
+				(item) => item.extractionError
+			);
+		expect(
+			errors(
+				"{ title: 'Pinned contract', href: movedHref('connectInterfaces'), linkLabel: 'Interfaces' }"
+			)
+		).toEqual([]);
+		// The same call in a prose position is still unauditable.
+		expect(
+			errors("{ title: 'Pinned contract', body: movedHref('connectInterfaces') }")
+		).not.toEqual([]);
+		// Any other call in an href position is not whitelisted.
+		expect(errors("{ title: 'Pinned contract', href: somethingElse('x') }")).not.toEqual([]);
+	});
+
 	it('allows visible copy imported from an audited data module', () => {
 		const passages = extractSveltePassages(
 			"<script>import { copy } from '$lib/data/messages';</script><p>{copy}</p>",
