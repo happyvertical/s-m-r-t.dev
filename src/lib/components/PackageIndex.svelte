@@ -102,7 +102,7 @@
 						{#each categoryPackages as pkg (pkg.slug)}
 							<a href={`${backHref}/${pkg.slug}`}>
 								<div class="package-name">
-									<code>{pkg.name}</code><span>v{pkg.version}</span>{#if pkg.status === 'new'}<em
+									<code>{pkg.name}</code>{#if pkg.status !== 'private'}<span>v{pkg.version}</span>{/if}{#if pkg.status === 'new'}<em
 											>New</em
 										>{:else if pkg.status === 'stub'}<em class="stub">{packageStatusLabels.stub}</em
 										>{/if}
