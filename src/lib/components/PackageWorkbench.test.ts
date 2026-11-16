@@ -23,3 +23,16 @@ it('keeps every static documentation tab in the DOM and displays only the select
 	expect(new URL(window.location.href).searchParams.get('tab')).toBe('rest');
 	expect(container.querySelector('[data-smrt-component="PlaygroundHost"]')).toBeNull();
 });
+
+it('shows a release for a published package and none for a private one', () => {
+	const published = packages.find((pkg) => pkg.status !== 'private')!;
+	const priv = packages.find((pkg) => pkg.status === 'private')!;
+	const a = render(PackageWorkbench, { pkg: published });
+	expect(a.container.textContent).toContain(`v${published.version}`);
+	expect(a.container.textContent).toContain('Release');
+	cleanup();
+	const b = render(PackageWorkbench, { pkg: priv });
+	expect(b.container.textContent).not.toContain(`v${priv.version}`);
+	expect(b.container.textContent).not.toContain('Release');
+	expect(b.container.querySelector('a.source-link')).not.toBeNull();
+});

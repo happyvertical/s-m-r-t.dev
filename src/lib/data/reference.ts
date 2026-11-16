@@ -450,7 +450,7 @@ export const referenceGuides: Guide[] = [
 			{
 				title: 'Three model-backed methods on every object',
 				intro:
-					'Without smrt.decisions, is(criteria), do(instructions), and describe() each resolve the AI client configured for the object, build a prompt from the record, and call it once. is() constrains the reply to a JSON object with a boolean result property and returns that boolean. do() returns the raw text reply. describe() asks for a short description of the record. All three raise when no AI client is configured.',
+					'Without smrt.decisions, is(criteria), do(instructions), and describe() each resolve the AI client configured for the object, build a prompt from the record, and call it once. is() constrains the reply to a JSON object with a boolean result property and returns that boolean. do() returns the raw text reply. describe() asks for a short description of the record. All three raise an AI_UNAVAILABLE error when no provider is configured. is() never turns that error into false.',
 				points: [
 					'Methods listed in @smrt({ ai: { callable } }) are offered to the model as tools during all three calls.',
 					'is() throws when the reply is not parseable JSON, and resolves to undefined when the parsed result is not a boolean. Treat a malformed reply as an error path.',
@@ -787,9 +787,9 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: 'Check availability before you adopt a package route',
 				intro:
-					'The shared decision change and the released package changes are merged on the framework main branch. The site release pinned here predates those routes, and the playground does not run these examples.',
+					'The installed framework includes the shared decision seam and the decision routes in smrt-projects, smrt-facts, smrt-analytics, smrt-support, and smrt-images. The playground does not run these examples.',
 				points: [
-					'Use the linked epic and package issues to track package publication. Issue-label suggestions also remain pending in the linked issue; do not configure any route until its package release is available.',
+					'Use the linked epic and package issues for design history. Read the AGENTS.md of the installed package before you configure its route.',
 					'Keep release versions in package data. Do not copy a version number into application code or documentation.',
 					'Claim-support work is research. It has no production replacement until a labeled evaluation supports a separate implementation decision.'
 				],
@@ -859,12 +859,12 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				]
 			},
 			{
-				title: 'Use image metadata and track pending label suggestions',
+				title: 'Use image metadata and issue label suggestions',
 				intro:
-					'Images can select tags and subjects from separate curated vocabularies. Project issue-label suggestions are pending and will select only from an optional repository vocabulary when released.',
+					'Images can select tags and subjects from separate curated vocabularies. Issue.suggestLabels() selects only from an optional repository vocabulary.',
 				points: [
-					'When the issue-label route is released, selection can return many offered labels, no label, or an uncertain result. It will never return a label outside the supplied vocabulary.',
-					'For that pending route, an absent vocabulary will keep legacy generation. An explicit empty vocabulary will select no values and will not call the decision provider.',
+					'With a configured decision provider, selection can return many offered labels, no label, or an uncertain result. It never returns a label outside the supplied vocabulary.',
+					'An absent vocabulary keeps free-label generation. An explicit empty vocabulary selects no values and does not call the decision provider.',
 					'Image metadata selection uses the name, description, MIME type, and dimensions. The existing buffer parameter is unused and does not provide pixel or vision understanding.',
 					'Generated image descriptions and alt text remain generative output. Keep decision probabilities separate from the existing generated-category confidence.',
 					'Resolver and provider failures propagate. Do not turn them into an empty successful selection.'

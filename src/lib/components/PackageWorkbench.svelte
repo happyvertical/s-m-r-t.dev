@@ -104,7 +104,7 @@
 			<a class="back-link" href={backHref}>← All packages</a>
 			<div class="package-meta">
 				<span>{pkg.category}</span>
-				<span>v{pkg.version}</span>
+				{#if pkg.status !== 'private'}<span>v{pkg.version}</span>{/if}
 				{#if pkg.status === 'new'}<span class="new">New</span>{/if}
 				{#if pkg.status === 'private'}<span>Source distribution</span>{/if}
 				{#if pkg.status === 'stub'}<span class="stub">{packageStatusLabels.stub}</span>{/if}
@@ -220,10 +220,12 @@
 									<dt>Shape</dt>
 									<dd>{pkg.kind}</dd>
 								</div>
-								<div>
-									<dt>Release</dt>
-									<dd>{pkg.version}</dd>
-								</div>
+								{#if pkg.status !== 'private'}
+									<div>
+										<dt>Release</dt>
+										<dd>{pkg.version}</dd>
+									</div>
+								{/if}
 							</dl>
 						</aside>
 					</div>

@@ -155,10 +155,12 @@ describe('collectReferences', () => {
 		// installed package and is no longer in this list. `smrt dev:knowledge-index
 		// --scope installed` discovers direct dependencies only (it does not walk the
 		// pnpm store for transitive-only packages the way the old hand-rolled scan
-		// did), so `smrt-core` — a transitive dependency with its own page — is now
-		// correctly reported as unauditable rather than silently assumed covered.
+		// did), so a transitive-only package with its own page, such as `smrt-types`,
+		// is reported as unauditable rather than silently assumed covered.
+		// `smrt-core` is now installed directly, so it is audited like `smrt-cli`.
 		expect(missing).not.toContain('smrt-cli');
-		expect(missing).toContain('smrt-core');
+		expect(missing).not.toContain('smrt-core');
+		expect(missing).toContain('smrt-types');
 	});
 });
 

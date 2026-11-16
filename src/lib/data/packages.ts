@@ -115,7 +115,7 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 	{
 		title: 'Text and structured input',
 		description:
-			'Collect free text, selected options, related records, multiple values, tags, dates, times, files, and dictated speech.',
+			'Collect free text, selected options, related records, multiple values, tags, dates, times, files, dictated speech, and quantities or money on a keypad.',
 		importPath: '@happyvertical/smrt-ui/forms',
 		components: [
 			'Input',
@@ -134,7 +134,8 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 			'TimePicker',
 			'FilePicker',
 			'DictationButton',
-			'DictationStatus'
+			'DictationStatus',
+			'NumericKeypad'
 		]
 	},
 	{
@@ -261,6 +262,8 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 			'Container',
 			'PageLayout',
 			'Grid',
+			'Stack',
+			'DescriptionList',
 			'ActionGroup',
 			'Header',
 			'Footer',
@@ -278,9 +281,17 @@ const smrtUiComponentGroups: PackageComponentGroup[] = [
 	},
 	{
 		title: 'Display and status',
-		description: 'Render common values and compact status consistently.',
+		description:
+			'Render common values and compact status consistently, and view a PDF or image on a touch screen.',
 		importPath: '@happyvertical/smrt-ui',
-		components: ['ConfidenceBadge', 'CurrencyDisplay', 'DateDisplay', 'Icon', 'StatusBadge']
+		components: [
+			'ConfidenceBadge',
+			'CurrencyDisplay',
+			'DateDisplay',
+			'DocumentViewer',
+			'Icon',
+			'StatusBadge'
+		]
 	},
 	{
 		title: 'Calendar',
@@ -684,6 +695,22 @@ export const packages: SmrtPackage[] = [
 					body: 'smrt() from @happyvertical/smrt-core/vite applies the decorator config and composes smrtConsumer and smrtPlugin with the SvelteKit conventions. The consumed packages are the declared list under consumer.packages in smrt.config.ts; a missing or malformed list fails the build. smrtPlugin and smrtConsumer remain public for custom setups. Generated routes resolve collections through the runtime exported from $lib/server/smrt; a hand-written getCollection export is deprecated.'
 				},
 				{
+					title: 'Data shape rules',
+					body: 'smrt requires a field only when its own code would be wrong or unsafe without it, and each such field states why. The app decides every other part of a table. An app hardens a smrt class with a subclass that overrides fields. A subclass with the same name replaces the class everywhere in the app. Migrate changes the database to match the code when that loses no data. It stops when it would lose or invent data, such as a field declared required while existing rows are empty.'
+				},
+				{
+					title: 'Migrate is all or nothing',
+					body: 'Migrate works out every change first. If any change stops, it applies none and reports what stopped and what it held back. Migrate also stops when a package it saw last time is missing. smrt does not start new code against a database that was not migrated for that build.'
+				},
+				{
+					title: 'Models from data',
+					body: 'runtimeModelEntry turns a definition into a manifest entry, and registerRuntimeModel registers it. The model then has storage, REST, MCP, and method surfaces without a class or a rebuild. planRuntimeModelDDL returns additive statements only. The host runs them in its own transaction, because smrt does not create the tables.'
+				},
+				{
+					title: 'App models and cookbook tools',
+					body: 'createAppModelEditor from the /app-models entry adds fields and lists to a cookbook with versioned, tracked edits. createCookbookToolService from /cookbook/tools supplies recipe tools, and an app customization set when given modelEditorFor. Removing a field or list, and undo, always need durable owner approval. Removing a list keeps its table and data.'
+				},
+				{
 					title: 'Move a model or close its surface without a subclass',
 					body: 'A class that moves between packages declares its old qualified names in previousQualifiedNames, and lookups by the old name keep resolving. smrt db:migrate-qualified-names rewrites stored names on request. ObjectRegistry.registerOverride closes the generated API, MCP, or CLI surface of a package model, or makes its tenancy required, at startup. Only complete closures are supported; reopening throws. The browser entry builds and evaluates without Node-only modules.'
 				}
@@ -1024,6 +1051,10 @@ export const packages: SmrtPackage[] = [
 					body: 'executeAsPrincipal creates a PrincipalRun and checks assertToolAllowed and assertOperation before work proceeds. This is agent execution authority, distinct from smrt-users assertOperationPermission. A data surface can expose data.discover, data.inspect, and data.query through createDataSurfaceTools; report surfaces separately expose reports.query, refresh, drilldown, and export.'
 				},
 				{
+					title: 'A missing AI provider skips the run',
+					body: 'When execute() meets an AI_UNAVAILABLE error, the run ends as skipped. The agent does not retry it and does not rethrow it. The agent stops its interests, and learning neither reinforces nor decays. A direct run() call throws the error and marks it not retryable.'
+				},
+				{
 					title: 'The host owns the process, not the agent',
 					body: 'Signal handling is optional. An agent with manageProcessSignals set to true installs SIGTERM and SIGINT handlers. These handlers shut down and exit. The default false value registers nothing, which is suitable for a server or job runner. Do not enable this option for multiple agents unless the host coordinates shutdown. The first handler to finish exits the process.'
 				},
@@ -1150,8 +1181,8 @@ export const packages: SmrtPackage[] = [
 					body: 'The fluent builder composes delay(), priority(), retries(), queue(), and timeout() before enqueue(); bg() is the short form for background work. Delivery is at least once. timeoutBehavior chooses fail, warn, or kill, so idempotency belongs in the job method.'
 				},
 				{
-					title: 'Schedules use local wall-clock time',
-					body: 'ScheduleRunner fires forward once: cron matching uses local time, is not timezone-aware, and does not backfill missed runs. Worker liveness uses a process-global live set, an off-loop ticker, and lease recovery. ForgeDeliveryCollection and ForgeProjectionRuntime provide durable projections and dead-letter replay.'
+					title: 'Schedules run in the time zone of their row',
+					body: 'ScheduleRunner fires forward once: it arms the next future time and does not backfill missed runs. Cron matches the wall clock of the IANA timezone stored on the schedule row. That value defaults to UTC, and the host time zone does not matter. Worker liveness uses a process-global live set, an off-loop ticker, and lease recovery. ForgeDeliveryCollection and ForgeProjectionRuntime provide durable projections and dead-letter replay.'
 				},
 				{
 					title: 'Say which methods a job may call',
@@ -1213,7 +1244,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'The AssistantDock and its routes',
-					body: 'AssistantDock reads the mounted descriptors of a host data-surface registry; with none it is plain chat. mountAssistantRoutes from the /sveltekit subpath serves the dock from one catch-all route. The principal comes from event.locals, and threads only from the actor keyed session room. runAssistantTurn runs one turn over the tool loop with server tools and declared browser tools. A browser tool call suspends the turn; the browser resumes it with results, which reach the model marked untrusted. Destructive browser calls always wait for the person.'
+					body: 'AssistantDock reads the mounted descriptors of a host data-surface registry; with none it is plain chat. mountAssistantRoutes from the /sveltekit subpath serves the dock from one catch-all route. The principal comes from event.locals, and threads only from the actor keyed session room. runAssistantTurn runs one turn over the tool loop with server tools and declared browser tools. A browser tool call suspends the turn; the browser resumes it with results, which reach the model marked untrusted. Destructive browser calls always wait for the person. The routes also hold destructive server tools for owner approval by default, and the turn stops until the owner decides. Each turn is recorded as a run. When AI is off or not set up, the routes answer 503 with the ai_unavailable code.'
 				},
 				{
 					title: 'Report and overview tools for the assistant',
@@ -1483,6 +1514,10 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Operate production schema changes deliberately',
 					body: 'db:migrate --postgres-safe orders dependencies, uses concurrent-index mode, applies lock and statement timeouts, and probes orphan foreign keys. doctor --db and db:status --parity compare the live schema. db:rollback executes only a reconstructible down migration or refuses; --mark-only changes migration bookkeeping without changing schema. db:prune supports dry-run and skip controls for retention work. SQLite type changes rebuild the table. db:migrate-qualified-names rewrites stored deprecated qualified names on request, and --empty-text-as-null converts empty text to NULL during a column change.'
+				},
+				{
+					title: 'A blocked migrate applies nothing',
+					body: 'db:migrate works out every change before it writes. Any blocker stops the whole run. The command applies nothing and lists each blocker and what it held back. Fix the blocker, then rerun the full migration. A dry run prints the same refusal and exits 1.'
 				},
 				{
 					title: 'Which database a db command uses',
@@ -1964,7 +1999,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Service billing and repository sync retain correction paths',
-					body: 'ServiceTimeEntry, ServiceChargeSnapshot, and ServiceCompensationSnapshot are owned by smrt-timesheets and re-exported here unchanged, on the same tables. SubscriptionServiceCommercialResolver prices client work through smrt-subscriptions; provider compensation is a separate resolver and snapshot. The time-entry Svelte components are re-exported from smrt-timesheets too. Repository, issue, and pull-request sync supports GitHub, GitLab, Bitbucket, and Azure. incorporateFeedback can preview or roll back Living Spec changes, while Project.analyzeHealth evaluates the synchronized project.'
+					body: 'ServiceTimeEntry, ServiceChargeSnapshot, and ServiceCompensationSnapshot are owned by smrt-timesheets and re-exported here unchanged, on the same tables. SubscriptionServiceCommercialResolver prices client work through smrt-subscriptions; provider compensation is a separate resolver and snapshot. The time-entry Svelte components are re-exported from smrt-timesheets too. GitHub is the primary sync provider. The GitLab, Bitbucket, and Azure provider types are declared, but the package marks them as planned. incorporateFeedback can preview or roll back Living Spec changes, while Project.analyzeHealth evaluates the synchronized project.'
 				},
 				{
 					title: 'Issues do not need a repository',
@@ -2089,6 +2124,11 @@ export const packages: SmrtPackage[] = [
 		{
 			kind: 'mobile',
 			status: 'private',
+			notice: {
+				variant: 'note',
+				title: 'Source distribution only',
+				body: 'This package is private and is not published to npm or Maven. Its source is in the smrt repository, in packages/smrt-mobile. A project consumes it from a local checkout with a Gradle composite build.'
+			},
 			highlights: [
 				'SQLDelight offline queue and pack store',
 				'PKCE sessions, authenticated Ktor networking, and idempotent multipart uploads',
@@ -2106,13 +2146,29 @@ export const packages: SmrtPackage[] = [
 		'Mobile',
 		'smrt-android',
 		'Compose shell, smrt theme, and Android adapters for barcode, speech, on-device AI, secure auth, and storage.',
-		{ kind: 'mobile', status: 'private' }
+		{
+			kind: 'mobile',
+			status: 'private',
+			notice: {
+				variant: 'note',
+				title: 'Source distribution only',
+				body: 'This package is private and is not published to npm or Maven. Its source is in the smrt repository, in packages/smrt-android. A project consumes it from a local checkout with a Gradle composite build.'
+			}
+		}
 	),
 	definePackage(
 		'Mobile',
 		'smrt-ios',
 		'SwiftUI shell, smrt theme, and iOS adapters for VisionKit, Speech, Foundation Models, Keychain, and native storage.',
-		{ kind: 'mobile', status: 'private' }
+		{
+			kind: 'mobile',
+			status: 'private',
+			notice: {
+				variant: 'note',
+				title: 'Source distribution only',
+				body: 'This package is private and is not published to npm. Its source is in the smrt repository, in packages/smrt-ios. A project consumes it from a local checkout and builds it with XcodeGen. No Swift package release exists.'
+			}
+		}
 	),
 
 	// Documented from the published tarballs; the site does not install these
@@ -2574,6 +2630,291 @@ export const packages: SmrtPackage[] = [
 			],
 			surfaceNote:
 				'Every model and collection publishes no generated REST, MCP, WebMCP, or CLI operation. The application authorizes the acting person and calls EmploymentService or QualificationService.'
+		}
+	),
+	definePackage(
+		'Web & UI',
+		'smrt-app-shell',
+		'A smrt app that builds and runs one owner’s own smrt app from versioned definitions, with owner approvals, drafts, and an assistant.',
+		{
+			kind: 'runtime',
+			status: 'new',
+			highlights: [
+				'The owner changes the app through builder operations: models, fields, code methods, and recipes',
+				'A risky change becomes an approval that only the signed-in owner decides',
+				'Every change is a version, and the owner can undo to an earlier version',
+				'A draft copy holds changes until the owner previews and publishes them'
+			],
+			details: [
+				{
+					title: 'One owner, one policy',
+					body: 'The shell checks the owner role on every route and builder operation. A token, header, or body never grants that role. The /mcp route and the assistant share one policy. A non-owner receives no tools.'
+				},
+				{
+					title: 'Risky changes wait for approval',
+					body: 'A risky builder command, a record deletion, a REST DELETE, and an undo that converts a field type create an Approval. The change runs only after the owner decides in the interface. No tool decides an approval, and the assistant cannot approve its own request.'
+				},
+				{
+					title: 'Draft, preview, publish',
+					body: 'startDraft opens a copy of the app. While a draft is open, the live structure is frozen and live records keep working. previewPublish shows the change, and publishDraft is always an approval pinned to that preview. discardDraft drops the draft.'
+				},
+				{
+					title: 'Data and runtime layout',
+					body: 'The shell uses the local profile of smrt-app-runtime. The shell database holds users, sessions, the app, its versions, and approvals. The owner’s app keeps its own database and snapshots in the data root. PORT and SMRT_DATA_DIR set the port and folder.'
+				},
+				{
+					title: 'The assistant and the engine',
+					body: 'The assistant uses the same tool policy as /mcp. It runs on an API key, a ChatGPT sign-in preview, or a local agent command-line tool. The engine entry exports AppHost, which runs the owner’s app in a worker thread with migrations and a sandbox for code methods.'
+				}
+			],
+			surfaceNote:
+				'The shell models expose only custom operations. They have no generated list, get, create, update, or delete route.'
+		}
+	),
+	definePackage(
+		'Business & operations',
+		'smrt-bookings',
+		'Operator-managed reservations of developer time and supervision windows, with provider availability, exact assent, and transactional capacity checks.',
+		{
+			kind: 'runtime',
+			status: 'new',
+			highlights: [
+				'An offering has a kind and a unit of hour, day, week, or month',
+				'A proposal freezes the unit price, the quantity, the total, and the agreed wording',
+				'Confirmation locks the booking and the provider, then checks every window against declared availability',
+				'Canceling a confirmed booking releases its capacity in the same transaction'
+			],
+			details: [
+				{
+					title: 'Request, propose, assent, confirm',
+					body: 'A contact or an operator requests an enabled offering. An operator proposes a provider, windows, and terms. The contact assents to that exact proposal. An operator then confirms it. Requests, proposals, and assent reserve no capacity.'
+				},
+				{
+					title: 'Two kinds of capacity',
+					body: 'A developer-hour offering is exclusive: it blocks every overlapping reservation. A supervision-day offering draws on supervision windows with a positive whole-number capacity. Each booking consumes one unit, and the offering needs a project and an approved plan. Two active supervision reservations for one project and one interval are refused.'
+				},
+				{
+					title: 'PostgreSQL, applied by the host',
+					body: 'The host applies migrateBookingsV1 and then migrateBookingsV2 once each through its deployment migration ledger. BookingService owns its transaction and uses READ COMMITTED. The package creates no schema on demand.'
+				},
+				{
+					title: 'What the package leaves to the host',
+					body: 'The package starts no agents, collects no payment, sends no notification, and writes no Commerce record. The host supplies the trusted actor and tenant, and verifies customer, provider, project, and plan relationships.'
+				}
+			],
+			surfaceNote:
+				'The package registers no ORM collection, CRUD route, or generated CLI or MCP write. Applications call BookingService.'
+		}
+	),
+	definePackage(
+		'Web & UI',
+		'smrt-desktop',
+		'The versioned sidecar manifest, runtime bundler, installer builder, and plugin launcher for smrt desktop apps.',
+		{
+			kind: 'tooling',
+			status: 'new',
+			highlights: [
+				'A version 1 manifest names the executable, arguments, health route, data directory, and environment',
+				'The bundler (smrt desktop bundle) writes the sidecar and a closed, timestamp-free report',
+				'The builder (smrt desktop build) wraps the bundle in a Tauri installer, which is always unsigned',
+				'The launcher gives an assistant plugin a local token from the running app'
+			],
+			details: [
+				{
+					title: 'The sidecar manifest',
+					body: 'The Rust wrapper reads the manifest before it starts the packaged Node executable. The parser rejects duplicate keys and reserved environment names. buildSidecarEnv builds the sidecar environment. The root entry and the bundler use only Node built-ins.'
+				},
+				{
+					title: 'Sign-in belongs to the runtime',
+					body: 'Owner sign-in and local MCP credentials belong to smrt-app-runtime: claimOwner, the loopback onboarding URL, and openLocalMcpTokenStore. This package does not duplicate them. The launcher is a thin client of that runtime and needs it as a dependency.'
+				},
+				{
+					title: 'Release signing fails closed',
+					body: 'A pull request build is unsigned and uses no secrets. The signing path refuses to start without every secret, a real updater key, a verified Node pin, and a real product identity. No default fills a missing value.'
+				},
+				{
+					title: 'Examples',
+					body: 'The tricia example packages smrt-app-shell as a desktop product. The generic-app example packages an app from the SvelteKit template with a placeholder identity.'
+				}
+			],
+			surfaceNote:
+				'The package has no models. The bundler, builder, and launcher are Node-only entries. The smrt desktop bundle and smrt desktop build commands run the first two. An assistant plugin runs the launcher.'
+		}
+	),
+	definePackage(
+		'Domain models',
+		'smrt-education',
+		'Preview tenant-aware learning catalog models and services for courses, lessons, learners, submissions, authoring, and group sharing.',
+		{
+			status: 'new',
+			highlights: [
+				'The package is a preview, so its models and services can still change',
+				'Courses, ordered sections, lessons, and lesson-owned files in one catalog',
+				'CatalogService authorizes each read through a decision the application supplies',
+				'Services own learner planning, progress, submissions, course authoring, and course bundle import',
+				'Private family material never reaches a learner-facing result'
+			],
+			details: [
+				{
+					title: 'Catalog reads use the caller’s authorization',
+					body: 'Catalog objects are scoped to an optional tenant. Applications call CatalogService with an actor-bound decision. The tenant catalog read scope widens only a list to the tenant, its ancestors, and global rows. It never authorizes a get, a write, or a raw query.'
+				},
+				{
+					title: 'Private material stays private',
+					body: 'Courses marked personal-use-copy and all answer keys and assessment guidance are private family material. A learner never sees guardian-audience material. A learner bundle never carries a key, and a missing key stays null.'
+				},
+				{
+					title: 'Services own the writes',
+					body: 'LearnerService, SubmissionService, LessonWorkService, CourseAuthoringService, and GroupSharingService perform authorization and transactions. Course revisions are append-only. Group tenants never become family ancestors or guardians.'
+				},
+				{
+					title: 'Import and ingestion',
+					body: 'CourseBundleImportService reads a bounded bundle and refuses hostile input instead of trimming it. Nothing imports as published. The ingestion entry supports the extract-questions handler for scanned worksheets. The node entry reads Class CrunchLabs downloads from disk.'
+				}
+			],
+			surfaceNote:
+				'Catalog and learner objects publish no generated REST, CLI, MCP, or AI surface. Applications call the services and decide guardian permissions.'
+		}
+	),
+	definePackage(
+		'Content & media',
+		'smrt-reactions',
+		'Tenant-scoped reactions and lightweight polls on any record, with participation limits enforced by a shared service.',
+		{
+			status: 'new',
+			highlights: [
+				'Reaction, Poll, and PollVote models with a ParticipationRuntime on the server entry',
+				'A profile votes once per poll, and a vote keeps its evidence unchanged',
+				'ReactionBar and PollCard render authorized projections and call callbacks',
+				'SQLite and PostgreSQL only; DuckDB is refused'
+			],
+			components: ['ReactionBar', 'PollCard'],
+			componentImport: '@happyvertical/smrt-reactions/svelte',
+			details: [
+				{
+					title: 'The host binds the actor',
+					body: 'ParticipationRuntime.create opens the database and returns the reaction and poll services. The host authenticates the actor and supplies an authorizeRecord callback. A missing callback, a rejection, or an error fails closed.'
+				},
+				{
+					title: 'Participation limits are shared',
+					body: 'ParticipationService from smrt-comments owns entitlement, bans, and quotas. A new reaction or vote reserves quota in the same transaction as the write. A failure rolls both back.'
+				},
+				{
+					title: 'Polls are fixed at creation',
+					body: 'A poll has two to fifty unique option ids that never change. An identical vote retry succeeds, and a different choice fails. A poll can close and reopen. The package is not a ballot, an election, or a legal audit system.'
+				},
+				{
+					title: 'Components perform no fetch',
+					body: 'The Svelte components receive tally props and async callbacks. They make no request and no authorization decision. Refresh the props after each mutation.'
+				}
+			],
+			surfaceNote:
+				'The models disable generated mutation endpoints. Hosts call the reaction and poll services.'
+		}
+	),
+	definePackage(
+		'Content & media',
+		'smrt-spreadsheets',
+		'Spreadsheet import for smrt: validated plans, workbook checks, batch loading through a target adapter, and a read-back proof.',
+		{
+			kind: 'runtime',
+			status: 'new',
+			highlights: [
+				'A plan maps sheet ranges to tables, columns to typed fields, and calculated fields',
+				'checkPlan validates the plan against the workbook before anything is written',
+				'runImport loads in batches through an ImportTarget and verifies the result with checkLoaded',
+				'Export, saved mapping, and re-import are planned and not present'
+			],
+			details: [
+				{
+					title: 'A person or a model proposes the plan',
+					body: 'This package does not decide the plan. validatePlan checks its shape and limits. A plan that fails validation throws ImportPlanError. A workbook over the size limits is refused.'
+				},
+				{
+					title: 'Nothing is guessed',
+					body: 'coerceCell is the one typing rule. A cell that does not fit its field is refused, and its row never becomes a record. Money is an exact number of integer minor units. Integer sums are exact.'
+				},
+				{
+					title: 'First import into an empty target',
+					body: 'runImport refuses a target that already holds a planned table. If checkPlan reports errors, nothing is written. After a load, an unsuccessful verdict means the caller discards the draft target. The package never repairs.'
+				},
+				{
+					title: 'Entries',
+					body: 'The root entry exports types only. The import entry is pure and browser-safe. The testing entry holds createSqliteReferenceTarget, a Node-only SQLite target for tests.'
+				}
+			],
+			surfaceNote:
+				'The package has no models, tables, or Svelte components. The target you provide decides where the data goes.'
+		}
+	),
+	definePackage(
+		'Business & operations',
+		'smrt-vault-relay',
+		'A blind snapshot relay: a deployable service that stores encrypted snapshots per account, signed by devices and gated by the backup.vault feature.',
+		{
+			kind: 'runtime',
+			status: 'new',
+			highlights: [
+				'The relay stores opaque ciphertext and holds no key material',
+				'Each device route needs an Ed25519 device signature and the backup.vault entitlement',
+				'A primary-writer lease with a fencing token controls who publishes',
+				'A lapsed entitlement stops writes at once and keeps restores open for a retention window'
+			],
+			details: [
+				{
+					title: 'Blind by construction',
+					body: 'The relay never parses, decrypts, or validates blob content. It logs an account handle, never a body, a signature, a nonce, or an account id. It still observes framing, sizes, sequences, identifiers, and traffic activity.'
+				},
+				{
+					title: 'Chunked upload and commit',
+					body: 'A device begins an upload with the fencing token, uploads fixed-size chunks, and commits. The relay checks every chunk and the SHA-256 digest of the whole ciphertext. A commit makes the snapshot the newest one in one atomic step.'
+				},
+				{
+					title: 'Lapsed subscriptions',
+					body: 'When the entitlement lapses, begin, chunk upload, commit, and device delete answer 402. List, latest, download, abort, and lease routes stay open. After the retention days, reads answer 410 and writes keep answering 402. Only an operator sweep deletes lapsed data.'
+				},
+				{
+					title: 'Schema and deployment',
+					body: 'The deployment applies migrateVaultRelayV1 and migrateVaultRelayLeasesV1. The relay deploys as a container. The operator sets the quotas, the retained snapshot count and age window, the bucket, the databases, and the domain. The relay has no default for these. The lapse retention days (90), the sequence jump limit (1000), and the lease lifetime (300 seconds) have defaults.'
+				}
+			],
+			surfaceNote:
+				'The package registers no models. It has no generated REST, CLI, or MCP surface, and its device routes live under /v1.'
+		}
+	),
+	definePackage(
+		'Agents & runtime',
+		'smrt-workflows',
+		'Durable workflow runs: ordered host steps over registered prompts, with tracked calls, checkpoints, repair, approval, and budgets.',
+		{
+			kind: 'runtime',
+			status: 'new',
+			highlights: [
+				'A step names a registered prompt, a JSON Schema for its output, and an optional check',
+				'Output that fails the schema is repaired up to the budget, then the run fails',
+				'A budget limit leaves the run stopped and resumable; a cancel ends it',
+				'A job handler works each run with claim fencing'
+			],
+			details: [
+				{
+					title: 'Runs live in core',
+					body: 'The package has no models and creates no tables. Runs, events, and checkpoints live in the system tables of smrt-core. The package replaces the design runs of smrt-inference.'
+				},
+				{
+					title: 'Every step call is tracked',
+					body: 'A step resolves its prompt through resolvePrompt and calls the tracked client inside the run. The budget reserves each call. A call event and a usage row record the step, the attempt, and the prompt hash.'
+				},
+				{
+					title: 'Checks, approval, and retry',
+					body: 'The host check can reject output, ask for the step again, finish the run early, or pause it for a person’s approval. A failed run can restart from its last accepted step as a new run.'
+				},
+				{
+					title: 'Background execution',
+					body: 'createWorkflowRunJobs registers a named job handler and admits one job for each run. Create the host at startup, before any runner claims work. Steps and checks must be safe to repeat after a crash.'
+				}
+			],
+			surfaceNote:
+				'The package registers no models. It depends on smrt-core, smrt-prompts, and smrt-jobs, and adds no generated surface.'
 		}
 	)
 ];

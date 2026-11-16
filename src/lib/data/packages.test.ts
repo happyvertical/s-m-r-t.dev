@@ -37,3 +37,53 @@ describe('retired MCP tier and plane terminology (#197)', () => {
 		expect(packageText).not.toMatch(/data-plane/i);
 	});
 });
+
+describe('packages published without a page (#387)', () => {
+	const added = [
+		'smrt-app-shell',
+		'smrt-bookings',
+		'smrt-desktop',
+		'smrt-education',
+		'smrt-reactions',
+		'smrt-spreadsheets',
+		'smrt-vault-relay',
+		'smrt-workflows'
+	];
+
+	it('has a page with a summary, highlights, and details for each', () => {
+		for (const slug of added) {
+			const pkg = getPackage(slug);
+			expect(pkg, `${slug} has no package page`).toBeDefined();
+			expect(pkg?.name).toBe(`@happyvertical/${slug}`);
+			expect(pkg?.highlights.length, `${slug} has no highlights`).toBeGreaterThan(0);
+			expect(pkg?.details.length, `${slug} has no details`).toBeGreaterThan(0);
+		}
+	});
+
+	it('uses each slug once', () => {
+		const slugs = packages.map((pkg) => pkg.slug);
+		expect(new Set(slugs).size).toBe(slugs.length);
+	});
+});
+
+describe('private mobile packages (#387)', () => {
+	it('tells readers the source packages are not published to npm', () => {
+		for (const slug of ['smrt-android', 'smrt-ios', 'smrt-mobile']) {
+			const pkg = getPackage(slug);
+			expect(pkg?.status).toBe('private');
+			expect(pkg?.notice?.body, `${slug} has no source-only notice`).toMatch(
+				/not published to npm/
+			);
+			expect(pkg?.notice?.body).toContain(`packages/${slug}`);
+		}
+	});
+});
+
+describe('smrt-jobs schedule time zone (#387)', () => {
+	it('does not claim that cron matching ignores the schedule time zone', () => {
+		const text = JSON.stringify(getPackage('smrt-jobs'));
+
+		expect(text).not.toMatch(/not timezone-aware/i);
+		expect(text).toMatch(/IANA timezone/);
+	});
+});

@@ -7,7 +7,7 @@ import { routesByPath, stripQueryAndHash } from './route-inventory';
 
 // Both counts may only grow. A smaller number means a served /docs URL was
 // dropped from the frozen list; restore it instead of lowering the number.
-const FROZEN_PAGES = 562;
+const FROZEN_PAGES = 570;
 const FROZEN_REDIRECTS = 15;
 
 describe('frozen /docs url inventory (#399)', () => {
