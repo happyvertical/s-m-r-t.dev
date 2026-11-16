@@ -1356,7 +1356,7 @@ export const nextPageIntent = defineIntent({
 					'--tenant totals one tenant and counts the others as excluded. Nothing is dropped silently.',
 					'--runs adds run totals per run type, by status, with check and approval rates.',
 					'--json prints the same report as data.',
-					'These commands change no usage data. The three that show transcript text (smrt ai:usage --with-transcripts, smrt ai:transcript and smrt ai:compare --transcripts) write an audit entry for each transcript they read.'
+					'These commands change no usage data. The three that show transcript text (smrt ai:usage --with-transcripts, smrt ai:transcript and smrt ai:compare --transcripts) record who read it, and why, in a log line. They write a persisted audit entry only where your app has set an audit writer.'
 				],
 				filename: 'terminal',
 				lang: 'bash',
