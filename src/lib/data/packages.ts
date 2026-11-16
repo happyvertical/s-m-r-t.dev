@@ -1086,6 +1086,47 @@ export const packages: SmrtPackage[] = [
 	),
 	definePackage(
 		'Agents & runtime',
+		'smrt-inference',
+		'Fallback for inference tiers: ordered model chains, recorded substitutions, fusions, user and tenant bindings, a settings panel, and a hosted spend gate.',
+		{
+			kind: 'runtime',
+			status: 'new',
+			highlights: [
+				'An alias binds a tier to an ordered chain of models; a failed call moves to the next candidate',
+				'The usage row of the answering call records the resolved tier and each substitution',
+				'smrt doctor --ai checks providers, key variables, models, aliases, and cycles before a call needs them',
+				'Importing the root entry once at startup registers the package with smrt-core'
+			],
+			components: ['InferenceSettingsPanel'],
+			componentImport: '@happyvertical/smrt-inference/svelte',
+			details: [
+				{
+					title: 'Failures are classified before fallback',
+					body: 'The executor classifies a failed candidate as quota, credential, missing-model, transient, refusal, or missing-capability. It retries a transient failure once, then tries the next candidate. When every candidate of a tier fails, the call moves to the next cheaper tier. Set inference.degrade to false, or pass minimumTier on the call, to stop that move. Another model never continues text that the caller already received.'
+				},
+				{
+					title: 'Every move is recorded',
+					body: 'The usage row of the answering call carries tierResolved and substitutions. A call that no candidate answers writes a zero-token usage row with the reason and throws InferenceExhaustedError. A fusion is recorded as a fusion run with one usage row for each seat call.'
+				},
+				{
+					title: 'Fusions keep the tier interface',
+					body: 'defineFusion declares a single, pair, or handoff fusion over smrt-prompts keys. A tier can bind to that fusion, and callers continue to request the tier.'
+				},
+				{
+					title: 'Bindings for users and tenants',
+					body: 'The resolver entry resolves each tier from the stored configuration of the user, then of the tenant, before the application configuration. A tenant can bind a tier only to targets on the application allow-list. Keys stay in smrt-secrets. InferenceSettingsPanel renders rows and callbacks; it fetches nothing and makes no authorization decision.'
+				},
+				{
+					title: 'Hosted inference and assistant engines',
+					body: 'The node entry provisions gateway keys for each user, and the gate entry supplies the spend gate and kill switch. The server entry adds Node-only adapters for a ChatGPT connection and for local command-line engines. The ChatGPT sign-in is an opt-in preview. It is never a default and never a fallback.'
+				}
+			],
+			surfaceNote:
+				'The InferenceOverride model has no generated REST, CLI, or MCP surface. Hosts change bindings through their own permission-checked actions.'
+		}
+	),
+	definePackage(
+		'Agents & runtime',
 		'smrt-jobs',
 		'Persistent background work, schedules, retries, runners, queue controls, and operational visibility.',
 		{

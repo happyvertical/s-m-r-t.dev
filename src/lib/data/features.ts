@@ -666,6 +666,7 @@ export const offMapPackageSlugs: string[] = [
 	'smrt-preferences',
 	'smrt-dev-mcp',
 	'smrt-ingestion',
+	'smrt-inference',
 	'smrt-webhooks',
 	'smrt-facts',
 	'smrt-types',

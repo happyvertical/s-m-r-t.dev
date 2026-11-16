@@ -1,6 +1,6 @@
 /**
  * FROZEN inventory of every URL the site served under /docs at the start of
- * #399 (the docs restructure): 550 pages and 15 redirects (552 pages after the part 1 fold, 554 after the item 3 renames, 558 after the item 4 UI moves, 561 after the #412 capability pages). Do not edit entries
+ * #399 (the docs restructure): 550 pages and 15 redirects (552 pages after the part 1 fold, 554 after the item 3 renames, 558 after the item 4 UI moves, 561 after the #412 capability pages, 562 after the smrt-inference package page). Do not edit entries
  * to follow a restructure. Later changes may turn a page into a redirect, but
  * the URL stays in this list and must keep answering (see
  * docs-url-inventory.test.ts). Only ever append.
@@ -578,7 +578,9 @@ export const frozenDocsPages: readonly string[] = [
 	// #412: the AI usage, inference tuning and ingestion capability pages.
 	'/docs/capabilities/ai-usage',
 	'/docs/capabilities/inference-tuning',
-	'/docs/capabilities/ingestion'
+	'/docs/capabilities/ingestion',
+	// #410: the smrt-inference package page.
+	'/docs/reference/packages/smrt-inference'
 ];
 
 /** Frozen /docs redirects: path -> the 301 target it had. */
