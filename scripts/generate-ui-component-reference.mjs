@@ -5,6 +5,7 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { format, resolveConfig } from 'prettier';
 import ts from 'typescript';
+import { cleanSummary, summarizeHeader } from './ui-summary.mjs';
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 const OUTPUT = join(ROOT, 'src', 'lib', 'data', 'ui-components.generated.ts');
@@ -333,21 +334,38 @@ function jsDocText(node) {
 
 /**
  * Prose from the JSDoc block at the top of a declaration file, which is where a
- * component describes itself rather than its individual props. Tag sections are
- * dropped; `@example` bodies are code, not summary prose.
+ * component describes itself rather than its individual props.
  */
-function fileDocText(sourceText) {
+function fileDocText(sourceText, name) {
 	for (const range of ts.getLeadingCommentRanges(sourceText, 0) ?? []) {
 		const raw = sourceText.slice(range.pos, range.end);
 		if (!raw.startsWith('/**')) continue;
-		const prose = raw
-			.slice(3, -2)
-			.split('\n')
-			.map((line) => line.replace(/^\s*\*?\s?/, ''))
-			.join('\n')
-			.split(/\n\s*@/)[0]
-			.replace(/\s+/g, ' ')
-			.trim();
+		const prose = summarizeHeader(raw, name);
+		if (prose) return prose;
+	}
+	return '';
+}
+
+/**
+ * The component's header as authored in its `.svelte` source: the JSDoc block
+ * that opens a `<script>` tag. A component with a `module` script puts its
+ * header in the instance script, so that one is preferred, and the compiled
+ * declaration then carries no leading comment of its own.
+ */
+function svelteHeaderDoc(declarationPath, name) {
+	const sourceFile = declarationPath.replace(/\.d\.ts$/, '');
+	if (sourceFile === declarationPath || !existsSync(sourceFile)) return '';
+	const source = readFileSync(sourceFile, 'utf8');
+	const blocks = [];
+	for (const match of source.matchAll(/<script\b([^>]*)>\s*(\/\*\*[\s\S]*?\*\/)/g)) {
+		blocks.push({
+			isModule: /\bmodule\b|context\s*=\s*["']module["']/.test(match[1]),
+			raw: match[2]
+		});
+	}
+	blocks.sort((x, y) => Number(x.isModule) - Number(y.isModule));
+	for (const { raw } of blocks) {
+		const prose = summarizeHeader(raw, name);
 		if (prose) return prose;
 	}
 	return '';
@@ -357,8 +375,8 @@ function fileDocText(sourceText) {
  * A component's own description, preferring the file header (which describes the
  * component) over the props interface (which describes its options bag).
  */
-function componentSummary(file, interfaceName) {
-	const header = fileDocText(readFileSync(file, 'utf8'));
+function componentSummary(file, interfaceName, name) {
+	const header = fileDocText(readFileSync(file, 'utf8'), name) || svelteHeaderDoc(file, name);
 	if (header) return header;
 	if (!interfaceName) return '';
 	const found = interfaceIn(file, interfaceName);
@@ -666,8 +684,10 @@ function buildComponent(name, declarationPath, group, slot = null) {
 	const exampleId = exampleByComponent.get(name);
 	// A component's own file header first, then the description its module wrote
 	// for the slot it fills. Both are authored; only the placeholder is not.
-	const authoredSummary =
-		componentSummary(declarationPath, declared?.name) || (slot?.description ?? '');
+	const authoredSummary = cleanSummary(
+		componentSummary(declarationPath, declared?.name, name) || (slot?.description ?? ''),
+		name
+	);
 	const member = (prop) => ({
 		name: prop.name,
 		code: prop.type,
