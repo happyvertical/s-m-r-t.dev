@@ -203,7 +203,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-agents-svelte',
 		category: 'Agents · Components',
 		importPath: '@happyvertical/smrt-agents/svelte',
-		summary: 'AgentDashboard - Combined overview panel for agent schedules',
+		summary: 'Combined overview panel for agent schedules',
 		summarySynthesized: false,
 		slot: {
 			id: 'agent-dashboard',
@@ -333,7 +333,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-agents-svelte',
 		category: 'Agents · Components',
 		importPath: '@happyvertical/smrt-agents/svelte',
-		summary: 'AgentRunHistory - Display run history for an agent',
+		summary: 'Display run history for an agent',
 		summarySynthesized: false,
 		slot: {
 			id: 'agent-run-history',
@@ -391,7 +391,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-agents-svelte',
 		category: 'Agents · Components',
 		importPath: '@happyvertical/smrt-agents/svelte',
-		summary: 'AgentScheduleForm - Create or edit an agent schedule',
+		summary: 'Create or edit an agent schedule',
 		summarySynthesized: false,
 		slot: {
 			id: 'agent-schedule-form',
@@ -467,7 +467,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-agents-svelte',
 		category: 'Agents · Components',
 		importPath: '@happyvertical/smrt-agents/svelte',
-		summary: 'AgentScheduleList - Display a list of scheduled agents',
+		summary: 'Display a list of scheduled agents',
 		summarySynthesized: false,
 		slot: {
 			id: 'agent-schedule-list',
@@ -691,7 +691,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-agents-svelte',
 		category: 'Agents · Components',
 		importPath: '@happyvertical/smrt-agents/svelte',
-		summary: 'ScheduleStatusBadge - Display schedule status with appropriate styling',
+		summary: 'Display schedule status with appropriate styling',
 		summarySynthesized: false,
 		slot: {
 			id: 'schedule-status-badge',
@@ -995,8 +995,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-assets-svelte',
 		category: 'Assets · Components',
 		importPath: '@happyvertical/smrt-assets/svelte',
-		summary:
-			'ActionBar - Bulk action bar for selected assets Appears when one or more assets are selected. Shows selection count, default actions (delete), and any custom actions passed by the consumer.',
+		summary: 'Bulk action bar for selected assets',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -1079,8 +1078,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-assets-svelte',
 		category: 'Assets · Components',
 		importPath: '@happyvertical/smrt-assets/svelte',
-		summary:
-			'AssetDetail - Detail drawer/modal for a single asset Shows preview, SEO fields (alt text, title, caption, description), metadata, content references ("Used In"), copy utilities, and actions.',
+		summary: 'Detail drawer/modal for a single asset',
 		summarySynthesized: false,
 		slot: {
 			id: 'asset-detail',
@@ -1222,8 +1220,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-assets-svelte',
 		category: 'Assets · Components',
 		importPath: '@happyvertical/smrt-assets/svelte',
-		summary:
-			'AssetGrid - Thumbnail grid view for assets Displays assets as cards in a responsive grid, with selection checkboxes, type-based thumbnails, and missing alt-text warnings for images.',
+		summary: 'Thumbnail grid view for assets',
 		summarySynthesized: false,
 		slot: {
 			id: 'asset-grid',
@@ -1313,7 +1310,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Assets · Components',
 		importPath: '@happyvertical/smrt-assets/svelte',
 		summary:
-			'AssetList - Table/list view for assets Displays assets in a sortable table with selection, thumbnail previews, type badges, and metadata columns.',
+			'Table/list view for assets. Displays assets in a sortable table with selection, thumbnail previews, type badges, and metadata columns.',
 		summarySynthesized: false,
 		slot: {
 			id: 'asset-list',
@@ -1401,8 +1398,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-assets-svelte',
 		category: 'Assets · Components',
 		importPath: '@happyvertical/smrt-assets/svelte',
-		summary:
-			"AssetManager - Main shell component for the Asset Manager Orchestrates the toolbar, grid/list views, action bar, detail drawer, and create modal. Can operate in 'manage' mode (full CRUD) or 'pick' mode (selection-only for embedding as a picker).",
+		summary: 'Main shell component for the Asset Manager',
 		summarySynthesized: false,
 		slot: {
 			id: 'asset-manager',
@@ -2102,7 +2098,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Assets · Components',
 		importPath: '@happyvertical/smrt-assets/svelte',
 		summary:
-			'CreateAssetModal - Upload/create new assets Modal with drag-and-drop dropzone, paste support, and metadata fields. When a file is pasted or dragged onto the AssetManager, this modal opens with the file pre-loaded.',
+			'Upload/create new assets. Modal with drag-and-drop dropzone, paste support, and metadata fields. When a file is pasted or dragged onto the AssetManager, this modal opens with the file pre-loaded.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -2164,7 +2160,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'AgentChat - Full agent conversation interface Shows agent info header, message list with tool call displays, and input bar. Agent messages are styled differently from user messages.',
+			'Full agent conversation interface. Shows agent info header, message list with tool call displays, and input bar. Agent messages are styled differently from user messages.',
 		summarySynthesized: false,
 		slot: {
 			id: 'agent-chat',
@@ -2253,7 +2249,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'AgentSelector - Agent picker UI Grid/list of available agents with avatars, names, and descriptions. Disabled state for unavailable agents.',
+			'Agent picker UI. Grid/list of available agents with avatars, names, and descriptions. Disabled state for unavailable agents.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -2295,7 +2291,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'AgentSessionPanel - Session management sidebar Lists past agent sessions with status, message count, and allowed tools. Allows selecting an existing session or creating a new one.',
+			'Session management sidebar. Lists past agent sessions with status, message count, and allowed tools. Allows selecting an existing session or creating a new one.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -2467,7 +2463,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'AssistantChoiceCards — the options an assistant offered (see `./assistant-choices.svelte.ts`), as cards the person picks from. Used by `AssistantDock` for its own conversation, and by a host that runs a second, focused conversation next to the page (for example "change this picture") with its own controller. Only the person\'s click chooses; "None of these" dismisses the set. A set whose source can preview (`set.previewable`) works in two steps: a click on a card PREVIEWS it in place (`onpreview`; the "Original" card puts the page back), and nothing is applied until the person presses the primary button (`oncommit`). The secondary button, Escape, and closing the offer restore the original (`oncancel`). Once applied the cards collapse to the outcome line.',
+			'The options an assistant offered (see `./assistant-choices.svelte.ts`), as cards the person picks from.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -2556,8 +2552,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary:
-			'AssistantComposer - text + attachment composer for AssistantDock (#2904). Enter-to-send / Shift+Enter-for-newline matches the package convention in `../messages/MessageInput.svelte` (same `Textarea` primitive, same `handleKeydown` shape). Attachments use a compact attach button + a small chip row instead of the full `../shared/FileUpload.svelte` dropzone/preview flow, which is sized for a dedicated upload panel, not a one-line composer (#2904 review fix).',
+		summary: 'Text + attachment composer for AssistantDock (#2904).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -2688,8 +2683,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary:
-			'AssistantDock - shell-mounted, route-aware assistant surface (#2904). Consumers mount this inside a host shell\'s own focus-tool primitive, e.g. smrt-svelte\'s `ShellDockTool` (see docs/assistant-dock.md "Shell mounting recipe"). This component does not import smrt-svelte — it only needs a `DataSurfaceRegistry` instance (already owned by the host shell) and an `AssistantTransport`.',
+		summary: 'Shell-mounted, route-aware assistant surface (#2904).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -3018,7 +3012,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'AssistantQuestionForm — a structured assistant question (see `./assistant-question.ts`) as a small form in the chat (#4100). One fieldset whose legend is the question. A single choice is a radio group (a select past six options), several choices are checkboxes, defaults are preselected, and one submit button sends the values. Once answered it collapses to a read-only summary line. With `autofocus` the first control takes focus when the form appears, so a keyboard user can answer at once.',
+			'A structured assistant question (see `./assistant-question.ts`) as a small form in the chat (#4100).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -3077,7 +3071,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary: 'AssistantThreadList - sidebar list of assistant threads (#2904).',
+		summary: 'Sidebar list of assistant threads (#2904).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -3136,8 +3130,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary:
-			"Avatar — chat profile avatar with online-presence indicator. Thin adapter over the shared `@happyvertical/smrt-ui` `Avatar` primitive (S10 consolidation, #1415): it keeps chat's prop vocabulary (`avatarUrl` / `onlineStatus`) but delegates rendering, the initials + image-error fallback, presence dot, tokens, and a11y to the library so that logic lives in exactly one place.",
+		summary: 'Chat profile avatar with online-presence indicator.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -3218,7 +3211,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'ChatLayout - Main chat container with sidebar and content area Discord/Slack-style layout with resizable room list sidebar',
+			'Main chat container with sidebar and content area. Discord/Slack-style layout with resizable room list sidebar',
 		summarySynthesized: false,
 		slot: {
 			id: 'chat-layout',
@@ -3295,7 +3288,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'ChatTab - Individual collapsible chat window Compact header with title, collapse/close buttons. Contains message list and input. Expands upward from the bottom tab bar.',
+			'Individual collapsible chat window. Compact header with title, collapse/close buttons. Contains message list and input. Expands upward from the bottom tab bar.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -3385,7 +3378,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'ChatTabList - Minimized tab overview bar Horizontal bar of small avatars/names at bottom. Shows unread badges.',
+			'Minimized tab overview bar. Horizontal bar of small avatars/names at bottom. Shows unread badges.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -3439,7 +3432,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'ChatTabs - Bottom bar with expandable chat tabs (Facebook Messenger style) Fixed to viewport bottom. Shows collapsed tab headers that expand upward on click.',
+			'Bottom bar with expandable chat tabs (Facebook Messenger style). Fixed to viewport bottom. Shows collapsed tab headers that expand upward on click.',
 		summarySynthesized: false,
 		slot: {
 			id: 'chat-tabs',
@@ -3534,7 +3527,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'FileUpload - Attachment upload UI Button with drag-and-drop zone. Shows file preview before upload. Supports file type filtering and max size constraints.',
+			'Attachment upload UI. Button with drag-and-drop zone. Shows file preview before upload. Supports file type filtering and max size constraints.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -3587,8 +3580,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary:
-			'A permanently mounted AssistantDock with a compact launcher. The wrapper intentionally owns only presentation. AssistantDock remains the one controller, conversation, and confirmation authority. A character is an optional Svelte snippet so a host can use a still image, CSS art, or an animation package without making any of them a chat dependency.',
+		summary: 'A permanently mounted AssistantDock with a compact launcher.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -4082,7 +4074,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary: 'LinkPreview - URL preview card Compact card with thumbnail, title, and description.',
+		summary: 'URL preview card. Compact card with thumbnail, title, and description.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -4129,7 +4121,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'MemberList - Room member sidebar panel Lists participants grouped by online status with role badges',
+			'Room member sidebar panel. Lists participants grouped by online status with role badges',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -4171,7 +4163,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'MentionAutocomplete - @mention suggestions popup Floating dropdown positioned near cursor. Shows matching profile names with optional avatars. Keyboard navigable.',
+			'@mention suggestions popup. Floating dropdown positioned near cursor. Shows matching profile names with optional avatars. Keyboard navigable.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -4237,7 +4229,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'MessageInput - Chat message input bar Text area with send button. Shows reply preview when replying.',
+			'Chat message input bar. Text area with send button. Shows reply preview when replying.',
 		summarySynthesized: false,
 		slot: {
 			id: 'message-input',
@@ -4308,7 +4300,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'MessageItem - Individual message row Displays avatar, message bubble, reactions, reply preview, and tool call data.',
+			'Individual message row. Displays avatar, message bubble, reactions, reply preview, and tool call data.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -4392,7 +4384,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'MessageList - Scrollable message feed Renders MessageItem for each message, grouped by date. Supports infinite scroll via onloadmore callback.',
+			'Scrollable message feed. Renders MessageItem for each message, grouped by date. Supports infinite scroll via onloadmore callback.',
 		summarySynthesized: false,
 		slot: {
 			id: 'message-list',
@@ -4469,7 +4461,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'MiniChat - Compact chat window for tab mode Simplified message list + input in minimal space. No thread panel, no reactions. Just messages and a send box.',
+			'Compact chat window for tab mode. Simplified message list + input in minimal space. No thread panel, no reactions. Just messages and a send box.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -4523,7 +4515,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'ModelPicker - AI model selector Extracted from `@happyvertical/smrt-content`\'s `ContentAgentChat.svelte` (its `AI_MODELS` constant + `availableAIModels`/`allowedModelIds` filtering, `packages/content/src/svelte/components/ContentAgentChat.svelte:28-121`) for reuse by AssistantDock (#2904). `ContentAgentChat` itself is NOT migrated to this component in this change — that is a separate, behavior-preserving follow-up (docs/assistant-dock.md "Gaps").',
+			"AI model selector. Extracted from `@happyvertical/smrt-content`'s `ContentAgentChat.svelte` (its `AI_MODELS` constant + `availableAIModels`/`allowedModelIds` filtering, `packages/content/src/svelte/components/ContentAgentChat.svelte:28-121`) for reuse by AssistantDock (#2904).",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -4583,8 +4575,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary:
-			"ReactionPicker — chat's emoji reaction selector. A thin adapter over the canonical `@happyvertical/smrt-ui/chat` `ReactionPicker` (no duplicated markup/styles): it supplies chat's emoji palette and routes the group + per-emoji labels through chat's i18n catalog, and preserves the package's `onreact` / `isOpen` vocabulary + the `ModuleUIRegistry` registration.",
+		summary: "Chat's emoji reaction selector.",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -4626,7 +4617,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'ReadReceipts - Message read status display Shows checkmarks or small avatars indicating who has read a message.',
+			'Message read status display. Shows checkmarks or small avatars indicating who has read a message.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -4661,7 +4652,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'RoomCreateDialog - Modal dialog for creating a new chat room Provides name, type selector, and description fields. Built on the shared smrt-ui `Modal` (T2 #1391) so it inherits a focus trap, Escape handling, scrim, and focus-restore-to-trigger on close — the hand-rolled backdrop it replaced had none of those.',
+			'Modal dialog for creating a new chat room. Provides name, type selector, and description fields.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -4715,7 +4706,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'RoomHeader - Room header bar with name, topic, and action buttons Displays room info and provides access to members and search',
+			'Room header bar with name, topic, and action buttons. Displays room info and provides access to members and search',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -4775,7 +4766,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'RoomList - Sidebar room navigation with grouping and unread badges Groups rooms by type: channels, DMs, and agent conversations',
+			'Sidebar room navigation with grouping and unread badges. Groups rooms by type: channels, DMs, and agent conversations',
 		summarySynthesized: false,
 		slot: {
 			id: 'room-list',
@@ -4840,7 +4831,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'SearchMessages - Message search interface with results list Provides a search input and displays matching messages',
+			'Message search interface with results list. Provides a search input and displays matching messages',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -4976,7 +4967,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'ThreadPanel - Side panel for threaded conversation Shows the root message, thread replies, and an input for new replies.',
+			'Side panel for threaded conversation. Shows the root message, thread replies, and an input for new replies.',
 		summarySynthesized: false,
 		slot: {
 			id: 'thread-panel',
@@ -5047,7 +5038,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'ToolCallDisplay - Inline tool call/result display Collapsible card showing tool name, arguments (as JSON), status indicator, and result/error. Color-coded by status (pending, running, success, error).',
+			'Inline tool call/result display. Collapsible card showing tool name, arguments (as JSON), status indicator, and result/error. Color-coded by status (pending, running, success, error).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -5109,7 +5100,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary: 'UserPresence - Online/offline status indicator with optional label',
+		summary: 'Online/offline status indicator with optional label',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -5692,8 +5683,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-commerce-svelte',
 		category: 'Commerce · Components',
 		importPath: '@happyvertical/smrt-commerce/svelte',
-		summary:
-			'InvoiceActions - Status-based action buttons for invoices Renders appropriate action buttons based on invoice status.',
+		summary: 'Status-based action buttons for invoices',
 		summarySynthesized: false,
 		slot: {
 			id: 'invoice-actions',
@@ -5901,8 +5891,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-commerce-svelte',
 		category: 'Commerce · Components',
 		importPath: '@happyvertical/smrt-commerce/svelte',
-		summary:
-			'InvoiceCard - Invoice list/grid card refactored for Material 3 Compact card view for displaying invoices in lists.',
+		summary: 'Invoice list/grid card',
 		summarySynthesized: false,
 		slot: {
 			id: 'invoice-card',
@@ -6060,8 +6049,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-commerce-svelte',
 		category: 'Commerce · Components',
 		importPath: '@happyvertical/smrt-commerce/svelte',
-		summary:
-			'InvoiceHeader - Invoice metadata display Shows invoice number, status, dates, and customer info.',
+		summary: 'Invoice metadata display. Shows invoice number, status, dates, and customer info.',
 		summarySynthesized: false,
 		slot: {
 			id: 'invoice-header',
@@ -6155,8 +6143,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-commerce-svelte',
 		category: 'Commerce · Components',
 		importPath: '@happyvertical/smrt-commerce/svelte',
-		summary:
-			'InvoiceLineItems - Line items table for invoices/estimates Displays line items with optional inline editing capabilities. Supports both read-only and editable modes.',
+		summary: 'Line items table for invoices/estimates',
 		summarySynthesized: false,
 		slot: {
 			id: 'invoice-line-items',
@@ -6350,7 +6337,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Commerce · Components',
 		importPath: '@happyvertical/smrt-commerce/svelte',
 		summary:
-			'InvoiceTotals - Totals section for invoices/estimates Displays stored subtotal, discount, tax lines, total, paid and payable facts.',
+			'Totals section for invoices/estimates. Displays stored subtotal, discount, tax lines, total, paid and payable facts.',
 		summarySynthesized: false,
 		slot: {
 			id: 'invoice-totals',
@@ -7324,8 +7311,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-commerce-svelte',
 		category: 'Commerce · Components',
 		importPath: '@happyvertical/smrt-commerce/svelte',
-		summary:
-			'UnbilledItems - Selectable list of unbilled expenses/time Shows unbilled items with checkbox selection for invoice creation.',
+		summary: 'Selectable list of unbilled expenses/time',
 		summarySynthesized: false,
 		slot: {
 			id: 'unbilled-items',
@@ -7932,8 +7918,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-content-svelte',
 		category: 'Content · Components',
 		importPath: '@happyvertical/smrt-content/svelte',
-		summary:
-			'ArticleCard - Displays an article preview card Shows article title, excerpt, metadata, and tags in a card format. Links to the full article page.',
+		summary: 'Displays an article preview card',
 		summarySynthesized: false,
 		slot: {
 			id: 'article-card',
@@ -7990,8 +7975,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-content-svelte',
 		category: 'Content · Components',
 		importPath: '@happyvertical/smrt-content/svelte',
-		summary:
-			'ArticleList - Displays a grid of article cards Renders articles in a responsive grid layout with configurable columns.',
+		summary: 'Displays a grid of article cards',
 		summarySynthesized: false,
 		slot: {
 			id: 'article-list',
@@ -8061,7 +8045,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Content · Components',
 		importPath: '@happyvertical/smrt-content/svelte',
 		summary:
-			'ContentAgentChat Renders an AI chat interface alongside a specific piece of content, supporting multiple topics (threads).',
+			'ContentAgentChat. Renders an AI chat interface alongside a specific piece of content, supporting multiple topics (threads).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -9958,8 +9942,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-content-svelte',
 		category: 'Content · Components',
 		importPath: '@happyvertical/smrt-content/svelte',
-		summary:
-			'ContentPictureDrawer — the one "Add pictures" drawer for a content editor. Shows the host\'s picture library as a plain grid with one search box and an upload button. A picture is dragged into the story (drop position), or tapped to pick it (several at once) and inserted at the cursor with Insert — the keyboard and phone path. It also shows and changes the main picture: the first picture in the story, unless the person chose one. It holds no data of its own: the host loads pictures, uploads files, and resolves an inserted picture into its stored asset.',
+		summary: 'The one "Add pictures" drawer for a content editor.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -10296,8 +10279,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-content-svelte',
 		category: 'Content · Components',
 		importPath: '@happyvertical/smrt-content/svelte',
-		summary:
-			"ContentTitleField - a content item's title as a headline-style text field. The title wraps like a heading (a one-row textarea that grows with its text) but stays one line of text: Enter never adds a newline, and pasted line breaks become spaces. It is a labelled control (`label`, default \"Title\"), so it can sit inside the page's `<h1>` (smrt-ui PageHeader's `titleField`): the heading is then named by the title and the field keeps its own label. Inside a heading it takes the heading's type. Give it a `name` (or `id`) so a surrounding agent-operable form registers it like any smrt-ui control. Validation messages belong outside a heading: render the message beside it and point `describedBy` at it.",
+		summary: "A content item's title as a headline-style text field.",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -10812,8 +10794,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-events-svelte',
 		category: 'Events · Components',
 		importPath: '@happyvertical/smrt-events/svelte',
-		summary:
-			'MeetingView Component Displays details for a council meeting with links to agenda, minutes, video',
+		summary: 'Displays details for a council meeting with links to agenda, minutes, video',
 		summarySynthesized: false,
 		slot: {
 			id: 'meeting-view',
@@ -10852,8 +10833,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-fields-svelte',
 		category: 'Fields · Components',
 		importPath: '@happyvertical/smrt-fields/svelte',
-		summary:
-			"AdvancedFields — a disclosure section for advanced-tier fields. An optional composition that wraps PolicyField-wrapped advanced fields. Uses `@happyvertical/smrt-ui/ui`'s Disclosure (native `<details>/<summary>` — good a11y baseline). The title shows the advanced field count from the resolved policy. The disclosure's open state is **not** coupled to the provider's mode: the mode determines *visibility* (advanced fields are hidden in basic mode), while the disclosure provides a *collapsed* view of those same fields when they are visible (advanced mode). Consumers who prefer the mode toggle alone (ModeSwitch) do not need this component. Must be used inside a FieldPolicyProvider.",
+		summary: 'A disclosure section for advanced-tier fields.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -11158,8 +11138,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-fields-svelte',
 		category: 'Fields · Components',
 		importPath: '@happyvertical/smrt-fields/svelte',
-		summary:
-			'FieldPolicyProvider — the form-level entry point for policy-driven forms. Receives a resolved {@link ResolvedObjectFieldPolicy} **as props** (SSR `initialData` or a client fetch by the app). Owns mode state (`basic`/ `advanced`) and publishes the reactive context consumed by `PolicyField`, `ModeSwitch`, `AdvancedFields`, and `FormHelp`. No `smrt-web` import in the core primitive — an optional `./web` adapter can wire live invalidation for apps that want it; this component is policy-source agnostic. SSR seeding: props seed `$state` via `untrack()` so the first render reflects the request, with a client-only `$effect` resync — the same pattern as ThemeProvider (`smrt-ui/src/themes/ThemeProvider.svelte:53-70`).',
+		summary: 'The form-level entry point for policy-driven forms.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -11254,7 +11233,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Fields · Components',
 		importPath: '@happyvertical/smrt-fields/svelte',
 		summary:
-			'FormHelp — a `?` affordance assembling the object description + per-field glossary from the manifest (org-overridden text where present). Renders a button toggling a details/summary panel listing every visible field\'s label and help text — matching PolicyField visibility, so advanced-tier entries only appear while the provider mode is `advanced` — plus the object description if provided. The data comes entirely from the resolved policy — no separate fetch needed. Must be used inside a FieldPolicyProvider — deliberately, via the throwing accessor. The panel\'s payload IS the resolved glossary, so with no provider there is nothing to assemble and a `?` affordance that opens onto "No field help available." would hide the mistake instead of reporting it. This matches the other provider-only compositions (`ModeSwitch`, `AdvancedFields`); `PolicyField` degrades instead only because it has caller-owned children to render verbatim. To put form help in a page header, extend the SAME provider over the header — it renders no markup of its own. Do not add a second one: each provider owns its own mode store and shadows the outer for its subtree, so a `FormHelp` above a nested provider stops tracking the `ModeSwitch` inside it (#2272). Inside `ObjectForm`, which builds its own provider, use its `actions` snippet — it renders within that provider, so the glossary resolves. There is no header seam, so it lands below the fields; tracked in #2289.',
+			'A `?` affordance assembling the object description + per-field glossary from the manifest (org-overridden text where present).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -11295,8 +11274,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-fields-svelte',
 		category: 'Fields · Components',
 		importPath: '@happyvertical/smrt-fields/svelte',
-		summary:
-			"ModeSwitch — a Basic/Advanced toggle built on SegmentedControl. An optional composition for PolicyField-wrapped forms. Reads and writes the provider's reactive mode state. Must be used inside a FieldPolicyProvider. Uses `@happyvertical/smrt-ui/forms`'s SegmentedControl (exported from there, not `./ui` — see the plan-review addendum in #2048).",
+		summary: 'A Basic/Advanced toggle built on SegmentedControl.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -11494,8 +11472,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-fields-svelte',
 		category: 'Fields · Components',
 		importPath: '@happyvertical/smrt-fields/svelte',
-		summary:
-			'PolicyField — layout-neutral wrapper around any input. Contributes: - Visibility by resolved tier × current mode (advanced fields hidden in basic mode) - Initial-value prefill from the resolved default (new records only — never clobbers loaded values) - Label rendering (the resolved label; when the policy has no label the label element is omitted rather than fabricated from the raw field name, and tooltip-density help falls back to a visible hint) - Help hint rendered from resolved help (manifest description → org/user override) - Required marker Label ↔ control association: the default wrapper renders `<label for={name}>`, so the wrapped control should carry an `id` equal to the field `name`. When the first wrapped control has a different `id`, the `for` attribute is re-pointed to it after mount; when it has no `id` at all, the wrapper assigns `id={name}` so the association is guaranteed. Headless escape hatch: pass a `render` snippet receiving `{visible, label, help, defaultValue, required, tier}` for fully custom rendering. Without a snippet, PolicyField wraps children in a label + help affordance and controls visibility. Graceful degradation: outside a FieldPolicyProvider, PolicyField renders its children verbatim (no visibility filtering, no label/help injection) so forms can adopt it incrementally.',
+		summary: 'Layout-neutral wrapper around any input.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -11845,7 +11822,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-jobs-svelte',
 		category: 'Jobs · Components',
 		importPath: '@happyvertical/smrt-jobs/svelte',
-		summary: 'JobActions - Action buttons for job management',
+		summary: 'Action buttons for job management',
 		summarySynthesized: false,
 		slot: {
 			id: 'job-actions',
@@ -11939,7 +11916,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-jobs-svelte',
 		category: 'Jobs · Components',
 		importPath: '@happyvertical/smrt-jobs/svelte',
-		summary: 'JobDashboard - Combined overview panel for background jobs',
+		summary: 'Combined overview panel for background jobs',
 		summarySynthesized: false,
 		slot: {
 			id: 'job-dashboard',
@@ -12057,7 +12034,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-jobs-svelte',
 		category: 'Jobs · Components',
 		importPath: '@happyvertical/smrt-jobs/svelte',
-		summary: 'JobDetail - Detailed view of a single job',
+		summary: 'Detailed view of a single job',
 		summarySynthesized: false,
 		slot: {
 			id: 'job-detail',
@@ -12133,8 +12110,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-jobs-svelte',
 		category: 'Jobs · Components',
 		importPath: '@happyvertical/smrt-jobs/svelte',
-		summary:
-			'JobList - Display a filterable, sortable list of background jobs. Sorting follows the list-sort contract (`@happyvertical/smrt-ui/data`): every column header toggles its column ascending/descending (dates and counts start with the largest). Rows keep the order they are supplied in until the host passes `sort` or the person activates a header, so a host that already orders its jobs is not silently reordered. A parent that pages on the server passes `sort` + `onSortChange` and supplies rows already in that order.',
+		summary: 'Display a filterable, sortable list of background jobs.',
 		summarySynthesized: false,
 		slot: {
 			id: 'job-list',
@@ -12267,7 +12243,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-jobs-svelte',
 		category: 'Jobs · Components',
 		importPath: '@happyvertical/smrt-jobs/svelte',
-		summary: 'JobStats - Display job statistics overview',
+		summary: 'Display job statistics overview',
 		summarySynthesized: false,
 		slot: {
 			id: 'job-stats',
@@ -12318,7 +12294,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-jobs-svelte',
 		category: 'Jobs · Components',
 		importPath: '@happyvertical/smrt-jobs/svelte',
-		summary: 'JobStatusBadge - Display job status with appropriate styling',
+		summary: 'Display job status with appropriate styling',
 		summarySynthesized: false,
 		slot: {
 			id: 'job-status-badge',
@@ -12357,7 +12333,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'AccountAvatar - Provider icon with fallback initials',
+		summary: 'Provider icon with fallback initials',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -12397,7 +12373,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'AccountCard - Individual account card with status and actions',
+		summary: 'Individual account card with status and actions',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -12474,7 +12450,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'AccountList - Account management list',
+		summary: 'Account management list',
 		summarySynthesized: false,
 		slot: {
 			id: 'account-list',
@@ -12550,7 +12526,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'AttachmentChip - File chip with icon, name, and size',
+		summary: 'File chip with icon, name, and size',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -12733,7 +12709,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary:
-			'EmailAccountManager - Manage IMAP/SMTP email accounts Reusable component for adding, editing, testing, and removing email accounts. Works with any backend via callback props.',
+			'Manage IMAP/SMTP email accounts. Reusable component for adding, editing, testing, and removing email accounts. Works with any backend via callback props.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -12805,7 +12781,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
 		summary:
-			'EmailFilterManager - Combined whitelist/blacklist management Reusable component for managing email allow/block lists. Works with any backend via callback props.',
+			'Combined whitelist/blacklist management. Reusable component for managing email allow/block lists. Works with any backend via callback props.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -12894,7 +12870,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'FolderNav - Folder/label navigation sidebar',
+		summary: 'Folder/label navigation sidebar',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -13021,7 +12997,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'MessageCard - Single message row with type-adaptive rendering',
+		summary: 'Single message row with type-adaptive rendering',
 		summarySynthesized: false,
 		slot: {
 			id: 'message-card',
@@ -13127,7 +13103,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'MessageDetail - Full message view with type-adaptive sections',
+		summary: 'Full message view with type-adaptive sections',
 		summarySynthesized: false,
 		slot: {
 			id: 'message-detail',
@@ -13221,7 +13197,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'MessageFilters - Filter/sort controls bar',
+		summary: 'Filter/sort controls bar',
 		summarySynthesized: false,
 		slot: {
 			id: 'message-filters',
@@ -13297,7 +13273,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'MessageList - Unified message list with selection',
+		summary: 'Unified message list with selection',
 		summarySynthesized: false,
 		slot: {
 			id: 'message-list',
@@ -13421,7 +13397,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'MessageStatusIndicator - Read/flag/attachment indicators',
+		summary: 'Read/flag/attachment indicators',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -13473,7 +13449,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'MessageToolbar - Bulk action toolbar',
+		summary: 'Bulk action toolbar',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -13550,7 +13526,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'MessageTypeBadge - Icon + label badge for message types',
+		summary: 'Icon + label badge for message types',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -13836,7 +13812,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-messages-svelte',
 		category: 'Messages · Components',
 		importPath: '@happyvertical/smrt-messages/svelte',
-		summary: 'ThreadView - Conversation thread with collapsible messages',
+		summary: 'Conversation thread with collapsible messages',
 		summarySynthesized: false,
 		slot: {
 			id: 'thread-view',
@@ -13906,8 +13882,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-personas-svelte',
 		category: 'Personas · Components',
 		importPath: '@happyvertical/smrt-personas/svelte',
-		summary:
-			'DirectiveReviewQueue — the minimal human-in-the-loop surface for the persona learning loop (#1889). Renders pending {@link DirectiveProposalView}s with their rationale and a current-vs-proposed diff, and lets a reviewer approve (optionally editing the proposed text) or reject. It is purely presentational — approval/rejection are delegated to the `onApprove` / `onReject` callbacks, which a host wires to the permission-gated `DirectiveApprovalService`.',
+		summary: 'The minimal human-in-the-loop surface for the persona learning loop (#1889).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -14446,7 +14421,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Projects · Components',
 		importPath: '@happyvertical/smrt-projects/svelte',
 		summary:
-			'ApprovalActions - Status-based action buttons for approval workflow Shows appropriate buttons based on current status',
+			'Status-based action buttons for approval workflow. Shows appropriate buttons based on current status',
 		summarySynthesized: false,
 		slot: {
 			id: 'approval-actions',
@@ -15520,7 +15495,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Reports · Components',
 		importPath: '@happyvertical/smrt-reports/svelte',
 		summary:
-			"A saved report's page: its title and description, what it covers (source, groupings, the period with its dates, measures, filters, who saved it and when it last ran), then its result run afresh: headline figures and a chart or table. The primary action follows the report's state: Edit (asks the page's assistant), Try again after a failed run, Restore when archived. Export CSV sits beside it; Re-run and Archive are in the \"more\" menu.",
+			"A saved report's page: its title and description, what it covers (source, groupings, the period with its dates, measures, filters, who saved it and when it last ran), then its result run afresh: headline figures and a chart or table. The primary action follows the report's state: Edit (asks the page's assistant), Try again after a failed run, Restore when archived.",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -15669,7 +15644,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Reports · Components',
 		importPath: '@happyvertical/smrt-reports/svelte',
 		summary:
-			"A report's result: one measure charted at a time (a measure switch when there are several), or the whole result as a table with formatted columns (money, \"Jan 2025\" buckets). `full` is a report's page: a Chart/Table switch, headline figures for the shown measure (total, average, peak) and a tall chart with a value axis. `compact` is the assistant's preview card: a quiet table toggle and a regular chart.",
+			'A report\'s result: one measure charted at a time (a measure switch when there are several), or the whole result as a table with formatted columns (money, "Jan 2025" buckets). `full` is a report\'s page: a Chart/Table switch, headline figures for the shown measure (total, average, peak) and a tall chart with a value axis.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -17145,7 +17120,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Browser Ai',
 		importPath: '@happyvertical/smrt-svelte/browser-ai/svelte',
 		summary:
-			'AI Loading Overlay Component Shows a full-screen overlay while AI models are being downloaded/initialized. Wraps the generic LoadingOverlay with AI-specific state management.',
+			'AI Loading Overlay Component. Shows a full-screen overlay while AI models are being downloaded/initialized. Wraps the generic LoadingOverlay with AI-specific state management.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -17297,7 +17272,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Browser Ai',
 		importPath: '@happyvertical/smrt-svelte/browser-ai/svelte',
 		summary:
-			"Model status control Presents ONE inference backend's model lifecycle to a user: whether it is loaded, a way to load or release it, and live download progress. Driven entirely by the backend's own `status`/`progress`/`subscribe` surface, so it works anywhere — a shell dock, a settings panel, or a workbench that has no `<Provider>` ancestor. When a `<Provider ai>` IS configured, pass the local backend built from the app-state-managed adapter and this control reflects the same warm-cached model the rest of the app uses. An `unavailable` backend is a first-class state, not an error: a device without WebGPU is expected to fall through to the route backend, and the message says so rather than offering a Load button that cannot succeed.",
+			"Model status control. Presents ONE inference backend's model lifecycle to a user: whether it is loaded, a way to load or release it, and live download progress. Driven entirely by the backend's own `status`/`progress`/`subscribe` surface, so it works anywhere — a shell dock, a settings panel, or a workbench that has no `<Provider>` ancestor.",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -17444,7 +17419,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Command Palette',
 		importPath: '@happyvertical/smrt-svelte/command-palette',
 		summary:
-			"CommandPalette - the trigger and the dialog together: the one component a host drops into a shell slot. ```svelte <AppShell slotItems={[{ id: 'item:command-palette', label: 'Search', slot: 'header.center', render: search }]} ... /> ``` The palette is the `palette` prop, else the nearest `setCommandPalette()` context, else one created here from `providers` and `navigate` (then only this component can reach it). Mount it once: it owns the global shortcut.",
+			'The trigger and the dialog together: the one component a host drops into a shell slot.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -17515,7 +17490,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Command Palette',
 		importPath: '@happyvertical/smrt-svelte/command-palette',
 		summary:
-			'CommandPaletteDialog - the palette itself: a modal with a search box and a grouped result list, driven by a {@link CommandPaletteController}. It follows the WAI-ARIA combobox pattern: focus stays in the search box, the highlighted row is `aria-activedescendant`, Up/Down move it, Enter chooses it and Escape closes. It also installs the global shortcut (`Mod+K` by default) that toggles the palette. The shortcut works in any field because it carries a modifier; a bare key such as `/` is ignored while the user is typing. The palette comes from the `palette` prop or the nearest `setCommandPalette()` context.',
+			'The palette itself: a modal with a search box and a grouped result list, driven by a CommandPaletteController.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -17563,7 +17538,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Command Palette',
 		importPath: '@happyvertical/smrt-svelte/command-palette',
 		summary:
-			'CommandPaletteTrigger - the shell control that opens the palette: a search glyph, a label and the shortcut hint. Place it in a shell slot (the header center or end is the usual home) through `AppShell` `slotItems`. On narrow screens only the glyph shows; the accessible name stays the label.',
+			'The shell control that opens the palette: a search glyph, a label and the shortcut hint. Place it in a shell slot (the header center or end is the usual home) through `AppShell` `slotItems`. On narrow screens only the glyph shows; the accessible name stays the label.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -17813,7 +17788,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Cookbook',
 		importPath: '@happyvertical/smrt-svelte/cookbook',
 		summary:
-			'`CookbookApp` (#3749): `AppShell` driven by a cookbook. A generated app needs a layout that renders this with `smrt.cookbook.json` (validated) and the catalog the server helper loads, plus one route that renders `CookbookSectionPage`. It builds the navigation, layout, theme and section overviews with `buildCookbookShell`, keeps layout and overview edits in memory, and hands each edit to `oncookbookchange` for the host to persist.',
+			'`CookbookApp` (#3749): `AppShell` driven by a cookbook. A generated app needs a layout that renders this with `smrt.cookbook.json` (validated) and the catalog the server helper loads, plus one route that renders `CookbookSectionPage`.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -18008,7 +17983,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Cookbook',
 		importPath: '@happyvertical/smrt-svelte/cookbook',
 		summary:
-			"A navigation section's own page in a cookbook app (#3749). The sidebar lists only sections, so this is where a section's entries are: an editable overview (the entries as themed cards by default, unframed shortcuts with explicit `presentation=\"plain\"`) with the shell's layout edit mode driving its grid. A section with no overview shows its menu. Render it from one route (`s/[slug]/+page.svelte`), inside `CookbookApp`.",
+			"A navigation section's own page in a cookbook app (#3749). The sidebar lists only sections, so this is where a section's entries are: an editable overview (the entries as themed cards by default, unframed shortcuts with explicit `presentation=\"plain\"`) with the shell's layout edit mode driving its grid. A section with no overview shows its menu.",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -18417,8 +18392,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-svelte-forms',
 		category: 'Svelte · Forms and controls',
 		importPath: '@happyvertical/smrt-svelte/forms',
-		summary:
-			"FileUpload - Drag-and-drop file upload component Features: - Drag-and-drop zone with visual feedback - File list with remove buttons - Accept filter (mime types / extensions) - Multiple file support - Max size validation - Native form posting via `name` (the accepted list is mirrored onto the real input with `DataTransfer`, so picks, drops and removals post exactly what the list shows), `required` validation, and camera `capture` - A reset of the owning form (`form.reset()`, a reset button, SvelteKit `enhance`'s `update()` after a success) empties the list, as it empties a native file input, and reports it through `onchange([])` - Material 3 styling Fallback: where the `DataTransfer` constructor is unavailable (Safari < 14.1, jsdom), the input keeps the browser's own selection only while it matches the accepted list exactly; otherwise it is cleared. A native submit then never posts a file the list does not show, but drops, accumulated picks and partial removals post nothing until the next matching pick.",
+		summary: 'Drag-and-drop file upload component',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -19160,8 +19134,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-svelte-forms',
 		category: 'Svelte · Forms and controls',
 		importPath: '@happyvertical/smrt-svelte/forms',
-		summary:
-			'SMRTSearchInput - A search input with built-in functionality Features: - Search icon - Clear button - Optional debounce - Loading state - Keyboard shortcuts - Material 3 styling',
+		summary: 'A search input with built-in functionality',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -19727,8 +19700,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-svelte-module',
 		category: 'Svelte · Module',
 		importPath: '@happyvertical/smrt-svelte',
-		summary:
-			"ModulePanel - Shell component for rendering module UI slots Dynamically renders a module's registered UI component by looking up the component in the ModuleUIRegistry. Usage: 1. Import ModulePanel from '@happyvertical/smrt-svelte' 2. Import the module's svelte package to register components 3. Use ModulePanel with moduleName and slotId props",
+		summary: 'Shell component for rendering module UI slots',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20066,7 +20038,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Overview',
 		importPath: '@happyvertical/smrt-svelte/overview',
 		summary:
-			"Line items widget (#3718 record page): a document's lines as a table (item, quantity, unit price, amount) with a footer, then the totals block aligned under the amounts: subtotal, discount and tax when present, total. The record's own figures are shown as they are; a missing one is computed from the lines and says so; when the record and the lines disagree, a visible flag says what the lines add up to (`lineItemTotals`).",
+			"Line items widget (#3718 record page): a document's lines as a table (item, quantity, unit price, amount) with a footer, then the totals block aligned under the amounts: subtotal, discount and tax when present, total.",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20322,8 +20294,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-svelte-overview',
 		category: 'Svelte · Overview',
 		importPath: '@happyvertical/smrt-svelte/overview',
-		summary:
-			"OverviewGrid - a customizable overview as a flow grid of widgets (#3727). Widgets keep an order and a column span of 1 to 4 (the grid draws 4, 2 or 1 columns by its own width); there is no free x/y. Rendering needs nothing but the controller: widget data arrives with the page's server load, so a server render and the hydrated client are the same tree. Edit mode is the shell's: inside an `AppShell` with `layoutEditing`, the same pencil that edits the navigation edits the grid (pass `editing` to drive it without a shell). While editing, each widget shows icon-only controls (a drag handle, configure, remove), is rendered exactly as it is on the site inside an `inert` wrapper, and has a resize handle on its end edge. Everything works from the keyboard: Space on the handle picks a widget up, the arrow keys move it, Enter drops, Escape cancels; the resize handle is a slider (arrows, Home, End).",
+		summary: 'A customizable overview as a flow grid of widgets (#3727).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20410,7 +20381,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Overview',
 		importPath: '@happyvertical/smrt-svelte/overview',
 		summary:
-			"Record list widget (#3727): the rows a loader chose, each optionally a link. The loader owns which field is the title and which records the viewer may see; the widget only draws what it is given. With columns (the `columns` option, else the data's `columns`) the rows render as a compact table of their `cells` (`RecordTable`): identifier, status badge, date and amount by role, with a totals footer (on by default when a money or quantity column exists; the `summaries` option overrides). Without columns, the title list.",
+			'Record list widget (#3727): the rows a loader chose, each optionally a link. The loader owns which field is the title and which records the viewer may see; the widget only draws what it is given.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20554,7 +20525,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Overview',
 		importPath: '@happyvertical/smrt-svelte/overview',
 		summary:
-			"Shortcuts widget (#3727): the section-overview cards as a widget. It draws the cards a loader produced (see `shortcutsFromNav`), with the same look as `ShellSectionMenu layout=\"cards\"`, so a section's default overview is just this widget. As there, the heading row is the icon and the title alone; the record count is meta, so it sits in the card's foot under the description rather than taking a slice of the title's row (#4120).",
+			'Shortcuts widget (#3727): the section-overview cards as a widget. It draws the cards a loader produced (see `shortcutsFromNav`), with the same look as `ShellSectionMenu layout="cards"`, so a section\'s default overview is just this widget.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20626,7 +20597,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Overview',
 		importPath: '@happyvertical/smrt-svelte/overview',
 		summary:
-			"WidgetOptionsForm - edits one widget's options (#3727). A widget's options are plain fields, so this reads like the generated record forms: smrt-ui form controls driven by the option field descriptors (label, help, required, type), with the same save/cancel bar. It validates through the widget's schema (via `onsave`) and shows each problem beside its field.",
+			"Edits one widget's options (#3727). A widget's options are plain fields, so this reads like the generated record forms: smrt-ui form controls driven by the option field descriptors (label, help, required, type), with the same save/cancel bar. It validates through the widget's schema (via `onsave`) and shows each problem beside its field.",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20698,7 +20669,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Screens',
 		importPath: '@happyvertical/smrt-svelte/screens',
 		summary:
-			'DetailScreen - a read-only record view for any model, derived from its manifest definition and resolved field policy (#3718). Basic-tier fields show first, grouped by the policy/manifest `group`; advanced-tier fields and the read-only created/updated timestamps sit behind a "More details" disclosure. Hidden fields and fields outside the policy never render, so a sensitive field the policy omits cannot leak through this screen. Empty values (an empty JSON object or array included) show the "Not set" placeholder; a JSON object shows as a compact key/value list. A reference shows its target\'s label from `labels` (a link when `hrefFor` gives one); without a label it shows an unavailable notice, with the id in its tooltip.',
+			'A read-only record view for any model, derived from its manifest definition and resolved field policy (#3718).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20875,7 +20846,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Screens',
 		importPath: '@happyvertical/smrt-svelte/screens',
 		summary:
-			'EditForm - a create / edit form for any model, derived from its manifest definition and resolved field policy (#3718). Policy behavior: basic-tier fields render up front and advanced-tier fields sit behind an "Advanced fields" disclosure (opened automatically when one has a problem); hidden fields and fields outside the policy never render; policy labels, help and order win over the manifest; on create, resolved policy defaults prefill the draft. System fields are never editable. The form is transport-neutral. `onsubmit` receives a payload already converted to wire values (safe integers, integer minor units for money, ISO datetimes, parsed JSON); throw to report a failed save, or return `{ fieldErrors }` to attach server-side validation messages to fields. Remount with `{#key}` when switching to another record. For the policy gear, usage telemetry and per-field renderer registry use `ObjectForm` from `@happyvertical/smrt-fields/svelte` instead.',
+			'A create / edit form for any model, derived from its manifest definition and resolved field policy (#3718).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20996,7 +20967,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Screens',
 		importPath: '@happyvertical/smrt-svelte/screens',
 		summary:
-			"ListScreen - a searchable, sortable, paged table for any model, derived from its manifest definition and resolved field policy (#3718). Columns are the policy's basic-tier scalar fields in policy order (override with `columns`). Hidden fields, fields outside the policy, and long text / JSON columns never appear by default. The screen is transport-neutral: the caller supplies `rows` and handles `onselect`, `oncreate` and `onretry`.",
+			'A searchable, sortable, paged table for any model, derived from its manifest definition and resolved field policy (#3718).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -21152,7 +21123,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Screens',
 		importPath: '@happyvertical/smrt-svelte/screens',
 		summary:
-			'RecipeScreens - list, view, create and edit for any model, derived from its manifest definition and resolved field policy (#3718). It is the default screen set for a package that ships models but no consumer UI: tags, facts, secrets, profiles, reports, prompts and the like. It composes `ListScreen`, `RecordScreen` (view and edit, the record view with its related-records overview) and `EditForm` (create) over a transport-neutral `source` (list / get / create / update / delete). The `view` and `recordId` props are bindable so an app can mirror them into its router (`onnavigate` fires on every user navigation); left unbound, the component keeps its own state. An operation is offered only when the source implements it and `can` has not turned it off, so a read-only source yields a read-only screen set.',
+			'List, view, create and edit for any model, derived from its manifest definition and resolved field policy (#3718). It is the default screen set for a package that ships models but no consumer UI: tags, facts, secrets, profiles, reports, prompts and the like.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -21305,7 +21276,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Screens',
 		importPath: '@happyvertical/smrt-svelte/screens',
 		summary:
-			"RecordScreen - the record page (#3718): a header (back link, the title or a document's \"Order GRA-3159\", the monospace identifier, a status badge and key facts by role; Edit as the one primary action and an overflow menu with the host's extra actions and Delete), a details card of the remaining fields (empty ones behind \"Show empty fields\"), and a customizable `OverviewGrid` below: by default a summary strip of metric tiles, the `line-items` table and totals when the model has line items, and one tabbed `related` widget (`recordOverview`, persisted per model kind). The edit form is a mode of the same screen: `mode: 'edit'` opens `EditForm` beside the header on desktop (`min-width: 48rem`) and in a full-screen `PhoneSheet` on phones. Closing the form calls `oncancel`. A related-records panel (a `records` widget with `filter: 'parent'` on one of the relations) is headed `Orders · 3` with its one \"View all\" link (`viewAllHref`, else the loaded data's `href`); the panel body then lists the rows only, so the count and the link never repeat. The widget loaders run in the browser with the record context (`ctx.record = { model, id }`); the host owns the data access. `related` and `line-items` load through `loaders.records`. The registry and overview are fixed at mount: remount (`{#key}`) to change the model kind. A record change reloads every widget.",
+			'The record page (#3718): a header (back link, the title or a document\'s "Order GRA-3159", the monospace identifier, a status badge and key facts by role; Edit as the one primary action and an overflow menu with the host\'s extra actions and Delete), a details card of the remaining fields (empty ones behind "Show empty fields"), and a customizable `OverviewGrid` below: by default a summary strip of metric tiles, the `line-items` table and totals when the model has line items, and one tabbed `related` widget (`recordOverview`, persisted per model kind).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -22839,7 +22810,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Workspace',
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary:
-			'The navigation as it looks on the site, made editable in place: every section heading and item has a grip (drag, or Space plus arrow keys), section headings carry overlay icon buttons (show, title, host actions) and open a floating toolbar (rename, title, hide, delete, host actions), and a "New section" button ends the list. Rendered by `AppShell` in place of `TenantNav` while the layout is being edited.',
+			'The navigation as it looks on the site, made editable in place: every section heading and item has a grip (drag, or Space plus arrow keys), section headings carry overlay icon buttons (show, title, host actions) and open a floating toolbar (rename, title, hide, delete, host actions), and a "New section" button ends the list.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -22988,7 +22959,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Workspace',
 		importPath: '@happyvertical/smrt-svelte/workspace',
 		summary:
-			"A section's entries as a menu: one row per navigation item, in the layout's order with the user's renames (hidden entries are left out). Used on a section's own page when the shell shows only sections (`navMode: 'sections'`). Hosts add per-row content with `meta(entry)` (e.g. \"8 records\") and `actions(entry)` (e.g. a \"New course\" link). While the layout is being edited the rows get the same chrome as the nav editor: a grip (drag, or Space plus arrows), an inline rename, and a show/hide toggle, all driving the layout controller. Rows are plain text then, not links.",
+			"A section's entries as a menu: one row per navigation item, in the layout's order with the user's renames (hidden entries are left out). Used on a section's own page when the shell shows only sections (`navMode: 'sections'`). Hosts add per-row content with `meta(entry)` (e.g. \"8 records\") and `actions(entry)` (e.g. a \"New course\" link).",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -23350,8 +23321,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-svelte-workspace',
 		category: 'Svelte · Workspace',
 		importPath: '@happyvertical/smrt-svelte/workspace/legacy',
-		summary:
-			"ToolsDock - renderer for the tools dock. Consumes a {@link ToolsDockInstance} produced by {@link defineToolsDock} and renders either: - layout='rail' → a vertical icon rail (right edge) + a sliding panel contained inside the dock's own aside (no fixed positioning at the viewport level — safe to compose alongside `<WorkspaceShell>`'s `inspector` snippet). - layout='topbar' → inline activation buttons + a SEPARATE floating `position: fixed` panel anchored to the bottom-right (z-index `40`). **Do not also use `<WorkspaceShell>`'s `inspector` snippet in this mode** — the shell renders its own `position: fixed` inspector with no z-index coordination against the dock, and the two panels will visibly overlap. Render `<ToolsDock layout='topbar'>` inside the shell's `topbarActions` snippet and leave `inspector` unused. The component takes care of: - registering the dock on Svelte context (via the factory) so descendants can call {@link useToolsDock} - hydrating persisted state on mount (SSR-safe) - persisting state changes back to localStorage when `storageKey` is set - Escape-to-close + focus restoration to the activating button - reflecting active tool via aria-current and a polite live region - showing an empty-state when no tools pass the availability filter",
+		summary: 'Renderer for the tools dock.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -23534,7 +23504,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-tenancy-svelte',
 		category: 'Tenancy · Components',
 		importPath: '@happyvertical/smrt-tenancy/svelte',
-		summary: 'TenantCard - Tenant information and management refactored for Material 3',
+		summary: 'Tenant information and management',
 		summarySynthesized: false,
 		slot: {
 			id: 'tenant-card',
@@ -23680,7 +23650,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-calendar',
 		category: 'Calendar',
 		importPath: '@happyvertical/smrt-ui/calendar',
-		summary: 'Calendar Component Month view calendar with event indicators and day navigation',
+		summary: 'Month view calendar with event indicators and day navigation',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -23763,8 +23733,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-calendar',
 		category: 'Calendar',
 		importPath: '@happyvertical/smrt-ui/calendar',
-		summary:
-			'CalendarView — generic month and week grids with a phone agenda. - `month` mode: a month grid (`role="grid"`, roving focus, arrow keys). All-day and multi-day items render as bands across the days they cover; a day that has more than fits shows "+N more", which opens the day in a panel under the grid (never a modal) or follows `dayHref`. - `week` mode: one seven-day grid controlled by `date`. In `auto`, `autoMode="week"` selects a week grid with its seven-day phone agenda. - `agenda` mode: a scrollable strip of the month\'s days above a day-by-day list. `auto` (default) uses the agenda below 48rem, the grid above. Every day is computed in `timeZone` (IANA) and every name comes from `Intl` in `locale`, so the browser\'s own zone and language never leak in. The visible month and selected day can be controlled (`year`/`month`, `selectedDate`) and are reported through `onNavigate` / `onSelectDate`, so a page can keep them in its URL.',
+		summary: 'Generic month and week grids with a phone agenda.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -23920,7 +23889,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-calendar',
 		category: 'Calendar',
 		importPath: '@happyvertical/smrt-ui/calendar',
-		summary: 'DayView Component Full event list for a specific day with optional weather',
+		summary: 'Full event list for a specific day with optional weather',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -24060,8 +24029,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-chat',
 		category: 'Chat',
 		importPath: '@happyvertical/smrt-ui/chat',
-		summary:
-			'MessageBubble — a single chat message, tokenised and a11y-clean. Two complementary forms share one styled container: - **Bare bubble** (the common case for a message list that renders its own author/time/reactions around each row): opt into the styling axes by passing `variant` and/or `own` (plus `content` or a `children` snippet). No header or labelled group is rendered — unless you also pass an `author` — so it nests cleanly inside an already-labelled message row without a redundant landmark. - **Self-contained card** (legacy form): pass `role` / `author` / `timestamp` (and optionally the `reactions` / `actions` snippets) without the styling axes. A header and a labelled `role="group"` (`<author|role> (<role>)`) are rendered so assistive tech can announce who sent each message; `author` falls back to a role label ("You" / "Assistant" / "System"). `variant` + `own` are the canonical styling axes. The legacy `role` prop sets the header\'s role label and derives `variant`/`own` when those are not given.',
+		summary: 'A single chat message, tokenised and a11y-clean.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -24145,8 +24113,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-chat',
 		category: 'Chat',
 		importPath: '@happyvertical/smrt-ui/chat',
-		summary:
-			"ReactionPicker — a labelled group of emoji reaction buttons. Each button carries a text accessible name (so the emoji isn't announced as raw glyphs) and the group carries an `aria-label`. Fires `onpick(emoji)` on activation. The group label and the fallback name for unrecognised emoji default to translated `ui.reaction_picker.*` strings; the common reactions use built-in English names unless a caller supplies `emojiLabel` (e.g. to route every label through a domain i18n catalog). Wraps gracefully for larger emoji sets.",
+		summary: 'A labelled group of emoji reaction buttons.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -24206,8 +24173,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-chat',
 		category: 'Chat',
 		importPath: '@happyvertical/smrt-ui/chat',
-		summary:
-			'TypingIndicator — animated "…is typing" affordance. Renders a visible label plus decorative animated dots (`aria-hidden`) inside a polite `role="status"` live region, so both sighted users and screen readers learn who is typing. Honors reduced-motion. Pass `names` to announce one or more typists ("Ada is typing", "Ada and Bob are typing", "Ada and 2 others are typing") — an empty list renders nothing. Or pass a single `name` / a full `label` override. The animated dots stand in for the trailing ellipsis, so the label text omits it.',
+		summary: 'Animated "…is typing" affordance.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -24644,8 +24610,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-data',
 		category: 'Collections and tables',
 		importPath: '@happyvertical/smrt-ui/data',
-		summary:
-			'DataTable - A flexible, accessible data table component Features: - Sortable columns with custom sort functions - Row selection (single and multi-select) - Custom cell and header renderers via Snippets - Loading and empty states - Responsive with sticky header option - Material 3 styling with theme token support',
+		summary: 'A flexible, accessible data table component',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -25257,8 +25222,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-display',
 		category: 'Display and status',
 		importPath: '@happyvertical/smrt-ui/display',
-		summary:
-			'ConfidenceBadge - Displays AI confidence level indicator Shows a visual indicator for confidence scores (0-100). Useful for OCR results, AI predictions, etc. Accessibility: Uses role="meter" with aria-valuenow for screen readers',
+		summary: 'Displays AI confidence level indicator',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -25310,8 +25274,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-display',
 		category: 'Display and status',
 		importPath: '@happyvertical/smrt-ui/display',
-		summary:
-			'CurrencyDisplay - Formats and displays monetary values Displays formatted currency with configurable unit. Use `unit="cents"` (default) when amount is in the currency\'s minor units, or `unit="dollars"` when it is already in major units. Accepts ISO 4217 currency codes, normalized by trimming whitespace and uppercasing before locale formatting. Unsupported codes render an accessible inline error instead of throwing during a collection render.',
+		summary: 'Formats and displays monetary values',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -25382,7 +25345,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Display and status',
 		importPath: '@happyvertical/smrt-ui/display',
 		summary:
-			'DateDisplay - Formats and displays dates Supports various format options and relative time display.',
+			'Formats and displays dates. Supports various format options and relative time display.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -25576,7 +25539,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Display and status',
 		importPath: '@happyvertical/smrt-ui/display',
 		summary:
-			'StatusBadge - Generic status indicator badge Provides pre-defined color schemes for common status domains (invoice, project, etc.) or an explicit semantic tone for custom status vocabulary.',
+			'Generic status indicator badge. Provides pre-defined color schemes for common status domains (invoice, project, etc.) or an explicit semantic tone for custom status vocabulary.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -25720,8 +25683,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-feedback',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
-		summary:
-			'ConfirmDialog - Modal confirmation dialog refactored for Material 3 Provides a consistent confirmation dialog for destructive actions or important decisions. Native showModal() puts confirmations above existing Modal/Drawer surfaces, traps focus and makes the background inert. Escape is handled locally so only the active confirmation requests cancellation.',
+		summary: 'Modal confirmation dialog',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -25920,7 +25882,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
 		summary:
-			'Loading Overlay Component A generic full-screen loading overlay for any async operation. Shows progress, completed items, and error states.',
+			'A generic full-screen loading overlay for any async operation. Shows progress, completed items, and error states.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -26087,8 +26049,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-feedback',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
-		summary:
-			'Modal - An accessible dialog component Features: - Native dialog element for accessibility - Backdrop click to close (optional) - Escape key to close - Focus trap - Multiple sizes - Custom header/footer via snippets - Material 3 styling',
+		summary: 'An accessible dialog component',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -26205,8 +26166,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-feedback',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
-		summary:
-			'PhoneSheet — the phone replacement for drawers and centered modals. - `variant="page"`: a full-screen page (a notifications list, a picker); - `variant="sheet"`: slides up from the bottom with a grabber; a swipe down on its header closes it. It closes on its close button and Escape, moves focus into itself when it opens, and returns focus to the opener when it closes. It is positioned `absolute; inset: 0`, so it covers its nearest positioned ancestor — inside an `AdminShell`, render it in the `overlays` snippet so it covers the screen above the phone bottom bar. The host may keep it mounted while closed (it is hidden and inert), so a chat inside keeps its draft.',
+		summary: 'The phone replacement for drawers and centered modals.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -26624,8 +26584,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-feedback',
 		category: 'Feedback and overlays',
 		importPath: '@happyvertical/smrt-ui/feedback',
-		summary:
-			'WorkingStrip — "something is working" status. - `variant="strip"`: a thin bar (place it above a phone bottom bar); with `onopen` the whole strip is a button that reopens the surface doing the work (e.g. an assistant sheet); - `variant="floating"`: the same content as a pill the host floats over the page (desktop and tablet), with the goal above the current step; - `variant="inline"`: a compact line at the top of a pane. Phases (see `WorkingStatus`): a spinner while `working`; `paused`; `waiting` (the person is needed, with a prominent Review button); `done` (success colors), `failed` (error colors) and `cancelled`, each with an icon and text, never color alone; nothing while `idle`. Accessibility: two live regions stay mounted. Step changes are announced politely, at most once per `announceIntervalMs`; `waiting` and `failed` are announced assertively. The strip never takes focus by itself. Escape inside it pauses the work when `onpause` is given. Every control is at least 44px (strip and floating).',
+		summary: '"something is working" status.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -27333,8 +27292,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
-		summary:
-			'DictationButton — the microphone next to a text field (see `Dictation`). Tap to start listening, tap again to stop. It is always there, so people who cannot (or do not know to) press and hold the field can still speak. 44px target, named by `aria-label`, `aria-pressed` while listening, and a listening dot that does not rely on color alone (the name changes too). Pair it with `DictationStatus` for the words ("Listening…", errors). Hands-free (`mode: \'hands-free\'`): a steady ring means it is listening, a halo that swells with the voice means someone is speaking, and a small spinner means sentences are being written down. The ring is the non-motion cue; the halo and spinner stop moving for people who ask for reduced motion. While the page speaks a reply (`Dictation.suspend()`) the button dims with a dashed outline and its tooltip reads "Paused while the assistant speaks". Tapping ends it either way. The help text ("Just talk; I write it down when you pause...") is the tooltip and the button\'s `aria-describedby`, never a line of text in the form.',
+		summary: 'The microphone next to a text field (see `Dictation`).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -27392,8 +27350,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
-		summary:
-			'DictationStatus — what dictation is doing, in words (see `Dictation`). "Listening…" (with the words heard so far) while the microphone is on. Hands-free is announced, not shown: the line is visually hidden and says "Listening", "Hearing you…" while someone is speaking and "Writing it down…" while sentences are being written down (the long help text is the microphone\'s tooltip) and "Paused while the assistant speaks" while listening is suspended. "Sending…" (`sending`) is the one short hands-free hint that stays visible, since a message is about to leave. "Writing it down…" while a recording is turned into text, and a plain explanation when it cannot listen: the browser cannot turn speech into text, the microphone is blocked, or nothing was heard. Nothing while idle. Listening is announced politely; problems are announced as alerts.',
+		summary: 'What dictation is doing, in words (see `Dictation`).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -27734,8 +27691,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
-		summary:
-			"Form — the Provider-free base `<form>` primitive. A thin, dependency-free wrapper around the native `<form>` element so domain components have a primitive to adopt instead of hand-rolling raw `<form>` markup (issue #1589). It forwards every native form attribute (including `onsubmit`) and renders its children — no Provider, no i18n, no spoken-input logic. For the rich, Provider-backed form with field registration and voice input, use `Form` from `@happyvertical/smrt-svelte/forms` instead. This one is the leaf-level building block; that one composes app state on top. `preventDefault` (default `true`) calls `event.preventDefault()` before invoking the consumer's `onsubmit`, so a click/Enter submit runs the handler without a full-page navigation — the near-universal SPA pattern. Pass `preventDefault={false}` to keep native submission (e.g. a GET/POST `action`).",
+		summary: 'The Provider-free base `<form>` primitive.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -27810,8 +27766,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
-		summary:
-			"FormActionBar — a form's actions (Cancel · Save draft · Publish). Inline under the form on wider screens. On phones (up to 48rem) it is fixed to the bottom of the screen, padded for the safe area, and replaces the shell's phone bottom bar: `AdminShell` sees the `data-form-action-bar` attribute and hides its own bar. Hidden while the on-screen keyboard is open (`:root[data-keyboard-open]`, set by the shell's keyboard watcher). Put the primary action last.",
+		summary: "A form's actions (Cancel · Save draft · Publish).",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -28638,7 +28593,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary:
-			'RelationInput - searchable single-select for relation (foreign key) fields. Presentation only: the caller supplies `search` (and optionally `resolve`), so the same lookup an assistant uses to turn "Acme" into a record id backs the picker. Built on the smrt-ui `Combobox`, which supplies the ARIA 1.2 combobox pattern (arrow keys, Enter, Escape, `aria-activedescendant`) and registers with the rich Form\'s control registry. The form posts the committed id under `name`, never the visible label.',
+			'Searchable single-select for relation (foreign key) fields. Presentation only: the caller supplies `search` (and optionally `resolve`), so the same lookup an assistant uses to turn "Acme" into a record id backs the picker.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -28814,8 +28769,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
-		summary:
-			'SearchInput — the search box of a list\'s filter bar. It searches as you type (`debounceMs` after the last key; Enter searches at once) and reports the trimmed, single-line text through `onsearch`. The page keeps the applied search (a `?q=` URL parameter, say) and passes it back as `value`; the box follows it, so Back, a filter link or an agent\'s search update the text, and a search the box itself sent never undoes newer typing. The × clears it. The label ("Search") is read by screen readers; the placeholder says what the search matches. The field is a 44px target and 16px on phones so iOS does not zoom when it gets focus.',
+		summary: "The search box of a list's filter bar.",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -29559,8 +29513,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-forms',
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
-		summary:
-			'SMRTToggle - An accessible toggle/switch component Features: - Native checkbox semantics for accessibility - Bindable checked state - Disabled state - Labels on either side - Size variants - Material 3 styling',
+		summary: 'An accessible toggle/switch component',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -29858,8 +29811,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-layout',
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
-		summary:
-			'EmptyState - Placeholder for empty lists/content refactored for Material 3 Provides a consistent empty state display with optional icon, description, and call-to-action button.',
+		summary: 'Placeholder for empty lists/content',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -30115,7 +30067,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
 		summary:
-			"PageHeader - one header per page: an ancestors-only breadcrumb row, the page title (`<h1>`), and the page's own actions, right-aligned. Page-header contract (shared with AdminShell in smrt-svelte/workspace): - `crumbs` are the page's ancestors only, never the page itself; none on section homes. Inside a shell that sets `setPageHeaderContext()`, pages pass only `parents` (ancestors the nav doesn't know, e.g. the article above its video) and the shell adds the rest; the shell also hears the title (for its phone top bar). smrt-svelte's `shellPageTrailFor()` computes such a trail from a nav. - The crumb row carries `data-shell-breadcrumbs` and the title `data-shell-page-title`: on phones AdminShell hides crumbs only when its top bar declares `data-shell-page-navigation-replacement`, and visually hides the title only with `data-shell-page-title-replacement`. - No in-page back link: the crumbs (and the phone top bar) are the way back. `backHref` is kept only for pages outside such a shell. - An editable title (`titleField`, e.g. an article's headline) renders inside the `<h1>`, so the heading is still the page's title in the outline and is named by the field's value, while the field keeps its own label. Such a heading has no `data-shell-page-title`: it stays visible on phones, because it is the input. Pass the live value as `title` so the shell (the phone top bar) follows along as the person types.",
+			"One header per page: an ancestors-only breadcrumb row, the page title (`<h1>`), and the page's own actions, right-aligned.",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -30321,8 +30273,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-layout',
 		category: 'Layout',
 		importPath: '@happyvertical/smrt-ui/layout',
-		summary:
-			'SummaryCard - Statistic/summary display card refactored for Material 3 Shows a label with a prominent value, optionally with a count badge and link functionality.',
+		summary: 'Statistic/summary display card',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -30529,8 +30480,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-nav',
 		category: 'Navigation',
 		importPath: '@happyvertical/smrt-ui',
-		summary:
-			'FilterChips - Horizontal filter navigation refactored for Material 3 Provides a row of selectable filter chips for filtering lists. Supports optional counts and "all" option.',
+		summary: 'Horizontal filter navigation',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -30601,8 +30551,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-nav',
 		category: 'Navigation',
 		importPath: '@happyvertical/smrt-ui',
-		summary:
-			'Tabs - Tab navigation component refactored for Material 3 Provides tabbed navigation with optional counts and content slots. Accessibility: - Supports keyboard navigation with Arrow keys - Proper ARIA roles: tablist, tab, tabpanel - aria-selected indicates active tab - aria-controls links tab to panel Link tabs: give every tab an `href` and the row renders as navigation — a `<nav>` of links with `aria-current="page"` on the active one, each tab its own URL (a content item\'s Article / Images / Review pages). With `maxVisible`, extra link tabs move to a "More" menu while the active tab always stays in the row; `badge` marks a tab needing attention (and puts a dot on "More" when a hidden tab has one). The row scrolls sideways on phones and keeps the active tab scrolled into view. It carries `data-shell-tabs`, so AdminShell keeps it sticky under its phone top bar.',
+		summary: 'Tab navigation component',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -30813,7 +30762,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-roles',
 		category: 'Membership and permissions',
 		importPath: '@happyvertical/smrt-ui',
-		summary: 'RoleBadge - Role label component refactored for Material 3',
+		summary: 'Role label component',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -30847,8 +30796,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-roles',
 		category: 'Membership and permissions',
 		importPath: '@happyvertical/smrt-ui',
-		summary:
-			'RoleSelector — a trigger button and a single-select listbox of roles. Implements keyboard support per the WAI-ARIA listbox pattern, mirroring the roving-focus approach in `ui/Dropdown.svelte`: the trigger opens on ArrowDown/ArrowUp/Enter/Space; the open list moves focus onto the selected (or first) option; ArrowUp/Down/Home/End move roving focus; Enter/Space pick the focused option; Escape closes and refocuses the trigger; Tab closes. Click-outside also dismisses.',
+		summary: 'A trigger button and a single-select listbox of roles.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -31223,8 +31171,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-ui',
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
-		summary:
-			'Avatar — user/entity image with initials fallback and optional presence dot. Renders the image when `src` is set, otherwise initials derived from `name`. `name` is always the accessible label (image alt / initials aria-label), so an Avatar is never an unlabelled graphic.',
+		summary: 'User/entity image with initials fallback and optional presence dot.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -31321,7 +31268,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary:
-			'Button - Versatile button component Supports both button and link rendering. When href is provided, renders as an anchor tag. Otherwise renders as a button.',
+			'Versatile button component. Supports both button and link rendering. When href is provided, renders as an anchor tag. Otherwise renders as a button.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -31480,8 +31427,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-ui',
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
-		summary:
-			'Chip — compact token, optionally selectable (toggle) and/or closeable. When `selectable`, the body is a `<button>` reflecting `selected` via `aria-pressed`. When `closeable`, a labelled remove `<button>` is appended. Both are native buttons, so keyboard activation is built in.',
+		summary: 'Compact token, optionally selectable (toggle) and/or closeable.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -31645,8 +31591,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-ui',
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
-		summary:
-			'Dropdown / Menu — a trigger button and a positioned menu list. Implements the WAI-ARIA menu-button pattern: trigger has `aria-haspopup="menu"` + `aria-expanded`; the list is `role="menu"` with `role="menuitem"` buttons under roving focus (ArrowUp/Down/Home/End), Enter/ Space to activate, Escape to close + refocus the trigger, and click-outside to dismiss. CSS-anchored via `placement` — no JS positioning dependency.',
+		summary: 'Dropdown / Menu — a trigger button and a positioned menu list.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -31730,7 +31675,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary:
-			'IconToggle — an icon-only toggle button for dense filter and view-switcher rows. The icon is the `children` snippet (any icon set); `label` is both the accessible name and the tooltip text. `pressed` is reflected with `aria-pressed`, so a row of them is a one-of-many (or a many) toggle group; the owner decides what pressing means (this component keeps no state). An optional `count` shows as a small badge and is part of the accessible name and tooltip. The hit area is at least 44px square.',
+			'An icon-only toggle button for dense filter and view-switcher rows. The icon is the `children` snippet (any icon set); `label` is both the accessible name and the tooltip text. `pressed` is reflected with `aria-pressed`, so a row of them is a one-of-many (or a many) toggle group; the owner decides what pressing means (this component keeps no state).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -31798,7 +31743,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
 		summary:
-			'IconToggleGroup — joins a row of `IconToggle`s into one labelled group: a single segmented strip with shared edges and rounded ends, exposed to assistive technology as `role="group"` named by `label` ("Filter by type"). It adds no behaviour; each toggle keeps its own `pressed` state and `onclick`, so it works for one-of-many and many-of-many alike. Put one group per kind of filter and lay the groups out yourself.',
+			'Joins a row of `IconToggle`s into one labelled group: a single segmented strip with shared edges and rounded ends, exposed to assistive technology as `role="group"` named by `label` ("Filter by type"). It adds no behaviour; each toggle keeps its own `pressed` state and `onclick`, so it works for one-of-many and many-of-many alike. Put one group per kind of filter and lay the groups out yourself.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -31838,8 +31783,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-ui',
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
-		summary:
-			'Dropdown / Menu — a trigger button and a positioned menu list. Implements the WAI-ARIA menu-button pattern: trigger has `aria-haspopup="menu"` + `aria-expanded`; the list is `role="menu"` with `role="menuitem"` buttons under roving focus (ArrowUp/Down/Home/End), Enter/ Space to activate, Escape to close + refocus the trigger, and click-outside to dismiss. CSS-anchored via `placement` — no JS positioning dependency.',
+		summary: 'Dropdown / Menu — a trigger button and a positioned menu list.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -32101,8 +32045,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-ui',
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
-		summary:
-			'Skeleton — shape-matching loading placeholder. Variants: `text` (one or more lines), `circle`, `rect`. The wrapper is a polite `role="status"` region with an sr-only label so assistive tech announces that content is loading; the shimmer honors `prefers-reduced-motion`.',
+		summary: 'Shape-matching loading placeholder.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -32154,8 +32097,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-ui',
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
-		summary:
-			'Tooltip — anchored, delayed text bubble for a trigger. Shows on hover and keyboard focus, hides on leave / blur / Escape. The trigger is wired to the bubble via `aria-describedby` (always set; the bubble is in the DOM and revealed on open), and the bubble carries `role="tooltip"`. CSS-anchored via a `placement` prop — no JS positioning dependency.',
+		summary: 'Anchored, delayed text bubble for a trigger.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -32201,8 +32143,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-ui-ui',
 		category: 'Actions and display',
 		importPath: '@happyvertical/smrt-ui/ui',
-		summary:
-			'Tree — recursive, selectable tree view (generalizes the workspace NavTree). Renders a flat-DOM WAI-ARIA tree (`role="tree"` → `role="treeitem"` with `aria-level`), which keeps full keyboard support simple: roving tabindex, Arrow Up/Down to move between visible items, Right to expand / descend, Left to collapse / ascend, Home/End, and Enter/Space to select.',
+		summary: 'Recursive, selectable tree view (generalizes the workspace NavTree).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -32636,7 +32577,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-users-svelte',
 		category: 'Users · Components',
 		importPath: '@happyvertical/smrt-users/svelte',
-		summary: 'UserCard - Compact user information display refactored for Material 3',
+		summary: 'Compact user information display',
 		summarySynthesized: false,
 		slot: {
 			id: 'user-card',
@@ -32846,8 +32787,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-users-svelte',
 		category: 'Users · Components',
 		importPath: '@happyvertical/smrt-users/svelte',
-		summary:
-			'UserMenu - User profile menu dropdown refactored for Material 3 Accessibility (WAI-ARIA menu-button pattern): - Proper ARIA attributes for menu state - Roving tabindex over the menu items - Arrow Up/Down, Home/End to move between items; Escape closes + refocuses the trigger; Tab closes; click-outside dismisses - Focus management (first item focused on open, trigger refocused on close)',
+		summary: 'User profile menu dropdown',
 		summarySynthesized: false,
 		slot: {
 			id: 'user-menu',
