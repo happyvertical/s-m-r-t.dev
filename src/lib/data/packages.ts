@@ -1214,7 +1214,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Concurrent start and stop calls on one TaskRunner',
-					body: 'Concurrent start() calls on one TaskRunner share a single start, and concurrent stop() calls share a single stop. A stop() that arrives during start() cancels the steps that start() has not reached. It waits for start() to settle, then tears down the worker lease, liveness thread, and timers that did start. That start() resolves without the runner:started event. A start() call during a stop() that is still in progress throws.'
+					body: 'Concurrent start() calls on one TaskRunner share a single start, and concurrent stop() calls share a single stop. A stop() that arrives during start() is checked at two points: before the worker registers, and before polling, heartbeat, and retention begin. Earlier steps, such as the migration and readiness checks, still run. The stop() waits for start() to settle, then tears down what did start. That start() resolves without the runner:started event. A start() call during a stop() that is still in progress throws.'
 				}
 			],
 			componentImport: '@happyvertical/smrt-jobs/svelte',
