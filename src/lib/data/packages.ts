@@ -1060,7 +1060,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Server-set facts on a principal binding',
-					body: 'A PrincipalBinding accepts three optional facts: sessionId, credentialKind, and bindingMetadata. The run exposes them as run.sessionId, run.credentialKind, and a frozen copy in run.bindingMetadata. The host sets them from verified server authentication state, never from browser input. They describe how the run authenticated and never change allowedTools or permission resolution. sessionId is a label, not an authenticated session. bindingMetadata must be JSON-safe: a Date, a class instance, or a cycle throws a TypeError before the run starts.'
+					body: 'A PrincipalBinding accepts three optional facts: sessionId, credentialKind, and bindingMetadata. The run exposes them as run.sessionId, run.credentialKind, and a frozen copy in run.bindingMetadata. The host is expected to set them from verified server authentication state; the package does not verify them. They describe how the run authenticated and never change allowedTools or permission resolution. sessionId is a label, not an authenticated session. bindingMetadata must be JSON-safe: a Date, a class instance, or a cycle throws a TypeError before the run starts.'
 				},
 				{
 					title: 'A missing AI provider skips the run',
