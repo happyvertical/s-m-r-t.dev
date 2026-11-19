@@ -8,6 +8,7 @@
 const MAX_LENGTH = 400;
 const LIST_LINE = /^\s*(?:[-*\u2022]|\d+[.)])\s/;
 const FENCE = /^\s*```/;
+const TERMINAL = /[.!?]["'\u201d)\]]*$/;
 
 /** `{@link X}` and `{@link X label}` (also `linkcode`, `linkplain`) as plain text. */
 export function renderInlineTags(text) {
@@ -16,6 +17,10 @@ export function renderInlineTags(text) {
 		(_, target, label) => (label?.trim() ? label.trim() : target)
 	);
 }
+
+/** Changelog residue some headers carry beside the title. */
+const CHANGELOG_TAIL = /\s+refactored for Material \d+\.?$/i;
+const CHANGELOG_LINE = /^refactored for Material \d+\.?$/i;
 
 /** The paragraphs of a `/** ... *\/` block, before its first tag line. */
 function paragraphsOf(raw) {
@@ -29,6 +34,7 @@ function paragraphsOf(raw) {
 	let fenced = false;
 	for (const line of tag === -1 ? lines : lines.slice(0, tag)) {
 		if (FENCE.test(line)) fenced = !fenced;
+		if (CHANGELOG_LINE.test(line.trim())) continue;
 		if (!fenced && !FENCE.test(line) && line.trim() === '') {
 			if (current.length) paragraphs.push(current);
 			current = [];
@@ -40,21 +46,16 @@ function paragraphsOf(raw) {
 	return paragraphs;
 }
 
-/** Changelog residue some headers carry on their title line. */
-const CHANGELOG_TAIL = /\s+refactored for Material \d+\.?$/i;
-
 /**
- * The prose lines of a paragraph, ending where a list or a code fence starts.
- * A bare title line (no closing punctuation) is closed with a full stop so the
- * sentence after it does not run into it.
+ * The prose of a paragraph, ending where a list or a code fence starts. A
+ * title line (no closing punctuation) followed by more lines is closed with a
+ * full stop so the sentence after it does not run into it.
  */
 function proseOf(lines) {
 	const end = lines.findIndex((line) => LIST_LINE.test(line) || FENCE.test(line));
 	let kept = end === -1 ? lines : lines.slice(0, end);
-	// "Features:" introduces the list that was cut; drop it with the list.
-	if (end !== -1 && kept.length && kept.at(-1).trim().endsWith(':')) {
-		kept = kept.length === 1 ? [kept[0].trim().slice(0, -1)] : kept.slice(0, -1);
-	}
+	// A line ending in a colon only introduces the list that was cut, so it goes too.
+	if (end !== -1 && kept.length && kept.at(-1).trim().endsWith(':')) kept = kept.slice(0, -1);
 	const [first = '', ...rest] = kept.map((line) => line.trim());
 	let head = first.replace(CHANGELOG_TAIL, '');
 	if (rest.length && !/[.!?:;,]$/.test(head) && /^[A-Z]/.test(rest[0])) head += '.';
@@ -62,32 +63,32 @@ function proseOf(lines) {
 	return [head, ...rest].join(' ').split('```')[0].replace(/\s+/g, ' ').trim();
 }
 
-const isTitleLine = (lines) =>
-	lines.length === 1 &&
-	!/[.!?:]$/.test(lines[0].trim()) &&
-	lines[0].trim().split(/\s+/).length <= 6;
-
-/** "Name - text", "Name: text", "Name Component text" lose the repeated name. */
-export function stripLeadingName(text, name) {
+/**
+ * "Name - text", "Name: text", "Name. text" and "Name Component text" lose the
+ * repeated name, whether the header spells it CardList or "Card List", with or
+ * without an acronym prefix. A sentence that merely starts with
+ * the name is kept, and so is text that would start with a quote or code.
+ * `allowEmpty` returns '' for a title that is only the name.
+ */
+export function stripLeadingName(text, name, { allowEmpty = false } = {}) {
 	if (!name) return text;
-	// "LoadingOverlay" also matches the title "Loading Overlay Component". Some
-	// headers prefix the old framework name; the class keeps the product-name
-	// guard from reading this pattern as copy.
 	const words = name
-		.replace(/^S[M]RT/, '')
-		.split(/(?<=[a-z0-9])(?=[A-Z])/)
+		.split(/(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/)
 		.map((word) => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
 		.join('\\s*');
-	const stripped = text
-		.replace(
-			new RegExp(
-				`^(?:S[M]RT)?${words}(?:\\s+Component\\b[\\s:.\\u2014\\u2013-]*|\\s*[:\\u2014\\u2013-]\\s+)`
-			),
-			''
-		)
-		.replace(/^[.:\s]+/, '');
-	if (stripped === text || !stripped.trim()) return text;
-	return stripped.charAt(0).toUpperCase() + stripped.slice(1);
+	const prefix = new RegExp(`^(?:[A-Z]{2,}\\s*)?${words}(?<tail>.*)$`, 's');
+	const found = prefix.exec(text);
+	if (!found) return text;
+	const tail = found.groups.tail;
+	let rest;
+	if (/^\s+Component\b/.test(tail)) rest = tail.replace(/^\s+Component\b[\s:.\u2014\u2013-]*/, '');
+	else if (/^\s*[:\u2014\u2013-]\s+/.test(tail)) rest = tail.replace(/^\s*[:\u2014\u2013-]\s+/, '');
+	else if (/^\.\s+(?=[A-Z])/.test(tail)) rest = tail.replace(/^\.\s+/, '');
+	else if (/^[.\s:\u2014\u2013-]*$/.test(tail)) rest = '';
+	else return text;
+	if (!rest.trim()) return allowEmpty ? '' : text;
+	if (!/^[A-Za-z]/.test(rest)) return text;
+	return rest.charAt(0).toUpperCase() + rest.slice(1);
 }
 
 /** At most about MAX_LENGTH characters, ending on a sentence end, with no ellipsis. */
@@ -100,25 +101,33 @@ export function limitToSentences(text, max = MAX_LENGTH) {
 	return ends.length ? text.slice(0, ends[0]) : text;
 }
 
+/** Every summary reads as a sentence. */
+export function withTerminalPunctuation(text) {
+	const trimmed = text.trim();
+	return !trimmed || TERMINAL.test(trimmed) ? trimmed : `${trimmed.replace(/[:;,]$/, '')}.`;
+}
+
+/** Inline tags rendered, changelog tail dropped, then the name and the length. */
+export function cleanSummary(text, name) {
+	const plain = renderInlineTags(text.replace(/\s+/g, ' ').trim().replace(CHANGELOG_TAIL, ''));
+	return withTerminalPunctuation(limitToSentences(stripLeadingName(plain, name)));
+}
+
 /**
  * The summary for one header block, or '' when it has no prose. Takes the first
- * paragraph; a bare title line is joined with the paragraph after it.
+ * paragraph with the repeated name removed. When what is left has no closing
+ * punctuation it is a title, and the paragraph after it is joined on; a
+ * paragraph that is only a list introducer, a list or a code fence is not.
  */
 export function summarizeHeader(raw, name) {
 	const paragraphs = paragraphsOf(raw);
 	if (!paragraphs.length) return '';
-	let lines = paragraphs[0];
-	if (isTitleLine(lines) && paragraphs[1]) lines = [...lines, ...paragraphs[1]];
-	const text = renderInlineTags(proseOf(lines));
-	return limitToSentences(stripLeadingName(text, name));
-}
-
-/** The same cleaning for a summary that did not come from a header block. */
-export function cleanSummary(text, name) {
-	return limitToSentences(
-		stripLeadingName(
-			renderInlineTags(text.replace(/\s+/g, ' ').trim().replace(CHANGELOG_TAIL, '')),
-			name
-		)
-	);
+	let text = stripLeadingName(renderInlineTags(proseOf(paragraphs[0])), name, {
+		allowEmpty: true
+	});
+	if (!text || !TERMINAL.test(text)) {
+		const next = paragraphs[1] ? renderInlineTags(proseOf(paragraphs[1])) : '';
+		text = text ? (next ? `${withTerminalPunctuation(text)} ${next}` : text) : next;
+	}
+	return withTerminalPunctuation(limitToSentences(text));
 }
