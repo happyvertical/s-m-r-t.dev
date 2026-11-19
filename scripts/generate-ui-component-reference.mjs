@@ -332,22 +332,54 @@ function jsDocText(node) {
 }
 
 /**
+ * Prose of one `/** ... *\/` block: tag sections are dropped; `@example` bodies
+ * are code, not summary prose.
+ */
+function docBlockText(raw) {
+	return raw
+		.slice(3, -2)
+		.split('\n')
+		.map((line) => line.replace(/^\s*\*?\s?/, ''))
+		.join('\n')
+		.split(/\n\s*@/)[0]
+		.replace(/\s+/g, ' ')
+		.trim();
+}
+
+/**
  * Prose from the JSDoc block at the top of a declaration file, which is where a
- * component describes itself rather than its individual props. Tag sections are
- * dropped; `@example` bodies are code, not summary prose.
+ * component describes itself rather than its individual props.
  */
 function fileDocText(sourceText) {
 	for (const range of ts.getLeadingCommentRanges(sourceText, 0) ?? []) {
 		const raw = sourceText.slice(range.pos, range.end);
 		if (!raw.startsWith('/**')) continue;
-		const prose = raw
-			.slice(3, -2)
-			.split('\n')
-			.map((line) => line.replace(/^\s*\*?\s?/, ''))
-			.join('\n')
-			.split(/\n\s*@/)[0]
-			.replace(/\s+/g, ' ')
-			.trim();
+		const prose = docBlockText(raw);
+		if (prose) return prose;
+	}
+	return '';
+}
+
+/**
+ * The component's header as authored in its `.svelte` source: the JSDoc block
+ * that opens a `<script>` tag. A component with a `module` script puts its
+ * header in the instance script, so that one is preferred, and the compiled
+ * declaration then carries no leading comment of its own.
+ */
+function svelteHeaderDoc(declarationPath) {
+	const sourceFile = declarationPath.replace(/\.d\.ts$/, '');
+	if (sourceFile === declarationPath || !existsSync(sourceFile)) return '';
+	const source = readFileSync(sourceFile, 'utf8');
+	const blocks = [];
+	for (const match of source.matchAll(/<script\b([^>]*)>\s*(\/\*\*[\s\S]*?\*\/)/g)) {
+		blocks.push({
+			isModule: /\bmodule\b|context\s*=\s*["']module["']/.test(match[1]),
+			raw: match[2]
+		});
+	}
+	blocks.sort((x, y) => Number(x.isModule) - Number(y.isModule));
+	for (const { raw } of blocks) {
+		const prose = docBlockText(raw);
 		if (prose) return prose;
 	}
 	return '';
@@ -358,7 +390,7 @@ function fileDocText(sourceText) {
  * component) over the props interface (which describes its options bag).
  */
 function componentSummary(file, interfaceName) {
-	const header = fileDocText(readFileSync(file, 'utf8'));
+	const header = fileDocText(readFileSync(file, 'utf8')) || svelteHeaderDoc(file);
 	if (header) return header;
 	if (!interfaceName) return '';
 	const found = interfaceIn(file, interfaceName);

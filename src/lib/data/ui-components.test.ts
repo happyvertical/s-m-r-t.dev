@@ -22,6 +22,14 @@ describe('generated UI component reference', () => {
 		}
 	});
 
+	it('reads a component header that sits in its instance script', () => {
+		// ContentPictureDrawer has a `module` script before the instance one, so its
+		// authored header is not the leading comment of the compiled declaration.
+		const drawer = getUiComponent('content-picture-drawer');
+		expect(drawer?.summarySynthesized).toBe(false);
+		expect(drawer?.summary).toContain('"Add pictures" drawer');
+	});
+
 	it('publishes the prop prose the packages already ship', () => {
 		const described = uiComponents.flatMap((component) =>
 			component.details.filter((prop) => prop.description)
