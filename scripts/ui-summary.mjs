@@ -70,16 +70,18 @@ const isTitleLine = (lines) =>
 /** "Name - text", "Name: text", "Name Component text" lose the repeated name. */
 export function stripLeadingName(text, name) {
 	if (!name) return text;
-	// "LoadingOverlay" also matches the title "Loading Overlay Component".
+	// "LoadingOverlay" also matches the title "Loading Overlay Component". Some
+	// headers prefix the old framework name; the class keeps the product-name
+	// guard from reading this pattern as copy.
 	const words = name
-		.replace(/^SMRT/, '')
+		.replace(/^S[M]RT/, '')
 		.split(/(?<=[a-z0-9])(?=[A-Z])/)
 		.map((word) => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
 		.join('\\s*');
 	const stripped = text
 		.replace(
 			new RegExp(
-				`^(?:SMRT)?${words}(?:\\s+Component\\b[\\s:.\\u2014\\u2013-]*|\\s*[:\\u2014\\u2013-]\\s+)`
+				`^(?:S[M]RT)?${words}(?:\\s+Component\\b[\\s:.\\u2014\\u2013-]*|\\s*[:\\u2014\\u2013-]\\s+)`
 			),
 			''
 		)
