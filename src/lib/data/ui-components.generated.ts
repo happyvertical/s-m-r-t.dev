@@ -9917,8 +9917,8 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-content-svelte',
 		category: 'Content · Components',
 		importPath: '@happyvertical/smrt-content/svelte',
-		summary: "One picture the drawer offers (from the host's picture library).",
-		summarySynthesized: false,
+		summary: 'ContentPictureDrawer is part of the content · components component family.',
+		summarySynthesized: true,
 		slot: null,
 		details: [
 			{
@@ -23921,6 +23921,12 @@ export const uiComponents: UiComponentReference[] = [
 				description: 'Locale used to format displayed numeric values.'
 			},
 			{
+				name: 'formatValue',
+				code: '(value: number) => string',
+				status: false,
+				description: 'Host-owned units/precision, used for values, tooltips and value axes.'
+			},
+			{
 				name: 'size',
 				code: "'compact' | 'regular' | 'tall'",
 				status: false,
@@ -30938,7 +30944,7 @@ export const uiComponents: UiComponentReference[] = [
 				code: "'document' | 'local'",
 				status: false,
 				description:
-					"Where the theme attributes land. `document` (the default for a root provider) also stamps `data-theme`, `data-color-scheme`, the `dark` class, `color-scheme`, `data-contrast`, `data-density` and `data-smrt-theme-changing` onto `<html>`. `local` themes only this provider's own wrapper and never touches the document. A provider nested inside another `ThemeProvider` is `local` by default, so an embedded widget cannot retheme its host page (#4485)."
+					"Where the theme attributes land. `document` (the default for a root provider) also stamps `data-theme`, `data-color-scheme`, the `dark` class, `color-scheme`, `data-contrast`, `data-density` and `data-smrt-theme-changing` onto `<html>`. `local` themes only this provider's own wrapper and never touches the document. A provider nested inside another `ThemeProvider` is `local` by default, so an embedded widget cannot retheme its host page (#4485). A nested provider whose `colorScheme` is `system` also follows its parent's resolved scheme rather than the OS (#5025)."
 			},
 			{
 				name: 'children',
@@ -33081,9 +33087,9 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 3018,
-	totalProps: 3210,
-	authoredSummaries: 153,
+	describedProps: 3019,
+	totalProps: 3211,
+	authoredSummaries: 152,
 	totalComponents: 420
 };
 

@@ -2,103 +2,103 @@
 	"description": "What src/lib/data/*.ts was last verified against. Regenerate with `pnpm run audit:data -- --update` after re-reading the changed packages.",
 	"packages": {
 		"@happyvertical/smrt-agents": {
-			"version": "0.62.0",
-			"agentsMd": "8a74816d3dbbf145f5e8f4546357c6a793b1c5340ac768fec4ecbe8c5dc8cfd3"
+			"version": "0.62.10",
+			"agentsMd": "c69351bccb44f5f87b4b112a2a52cd4ace8efac760dcca8f0ab0fc9c95714bb2"
 		},
 		"@happyvertical/smrt-analytics": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "717c16e4cfe1d56e0d434f46ca4aa1c41c22efc09377a6229ca0d22483e93bfa"
 		},
 		"@happyvertical/smrt-assets": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "57d57d3eff49cb185e2a8cadf8b14b06d26a4a7750862a41a09e5000dc9570b6"
 		},
 		"@happyvertical/smrt-chat": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "6f17bbd164ff7bb235faea14499df6546d9a994861df91d4741e934dda8e8eaa"
 		},
 		"@happyvertical/smrt-cli": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "7ffd2a6ef7a350afd84bf27b8a9ff768cc4523fa76083409303541acd70ef92a"
 		},
 		"@happyvertical/smrt-commerce": {
-			"version": "0.62.0",
-			"agentsMd": "ce13a8c83d4f0c81b3de99c0c7ed4fcbab9178dd267ca3f76b992cb0a1309ce4"
+			"version": "0.62.10",
+			"agentsMd": "dab2392afacc78dba4b4d7b983bbc1852c1acec3de821b02220de5c6fda6f2fa"
 		},
 		"@happyvertical/smrt-content": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "8502f6ad3cd1af83ff99976aa006255792ec293ac09ca1fd69d1cb36ab79ecef"
 		},
 		"@happyvertical/smrt-core": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "e61ccd9b31355cb9ad022acc04e1210fdc017761be870c18ca35b1cf512b8ea1"
 		},
 		"@happyvertical/smrt-events": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "fd92563513c75d3b1f4107a239a7030bbcb8ac45e0e13e87afdbbebc84b0d4be"
 		},
 		"@happyvertical/smrt-fields": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "94320fb58c6d7ef3ced33afc2207eb8cd4fef135f97c55206973dfbd5fdeb3b3"
 		},
 		"@happyvertical/smrt-images": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "fafb7120269532afd016c85506c079862595ad1374477ee2ed32119862a03fef"
 		},
 		"@happyvertical/smrt-jobs": {
-			"version": "0.62.0",
-			"agentsMd": "00af938903e92b287879cc3980a1c42a8a961dcc0db7b834891f4ffd4ab2d15d"
+			"version": "0.62.10",
+			"agentsMd": "b60771f0619d2488db74ded1bd49d6beb43a3d14c2eeef55504c7fbd8f83357d"
 		},
 		"@happyvertical/smrt-ledgers": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "72fcafd8b7f7f224d37687f9fb48587909b5b332e88d4b6f6806fff1541985ca"
 		},
 		"@happyvertical/smrt-messages": {
-			"version": "0.62.0",
-			"agentsMd": "982506bdb93396f2cba5ca381c00b3e016199c2852e8f05eec27dc2de40ea106"
+			"version": "0.62.10",
+			"agentsMd": "92e8d4f9f141bdfe382a199d2b2ce88dc2932ffc808e1915e85a4e65227a5cc3"
 		},
 		"@happyvertical/smrt-personas": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "7eaddcbe7c4ad3f9c7b0ff51159a292213235877e5874347cc2be7875111e0e2"
 		},
 		"@happyvertical/smrt-planner": {
-			"version": "0.62.0",
-			"agentsMd": "e669ebb865280fb66cde20e8701e70fa34334e1d1ca70841a521600a58738493"
+			"version": "0.62.10",
+			"agentsMd": "ba94e22a00b725ad27fc099d3e1d38b874ebef72366e240b09ccd2131972905f"
 		},
 		"@happyvertical/smrt-playground": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "45bda33fec38ec2d8b41912426b7752faad5af8e137ffd8e35b98642de0347c3"
 		},
 		"@happyvertical/smrt-profiles": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "d92d03c2765795f1a984b02f9cd51dff3ded3a7b68e41b9cb133cf6df2c5c83b"
 		},
 		"@happyvertical/smrt-projects": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "4ea126e553c75662cf2081301dbbf0379b06248dd95658a77a6eedcd71f5647f"
 		},
 		"@happyvertical/smrt-reports": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "06d19fec39775737f02dd553471e74a9f4442334138ea273ea53a0fb5e45cef4"
 		},
 		"@happyvertical/smrt-svelte": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "61dafb1b35b7c6dcde35d91486d0f8731379f2b33c8d43ff23ba890eed96bad0"
 		},
 		"@happyvertical/smrt-tenancy": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "a4126b6a857504658154c5e1fb95c9e7957ec84a8ae9009f84ff1707cc732764"
 		},
 		"@happyvertical/smrt-ui": {
-			"version": "0.62.0",
-			"agentsMd": "71b4470acc06dd964c6b2df03259f9d9afb06665f0a50d5cdc8d1d528cc2c373"
+			"version": "0.62.10",
+			"agentsMd": "8286ddad377089da8f0e626fdd5d989b1e7dc7eb72ddbe0e26ceb6d15dc42602"
 		},
 		"@happyvertical/smrt-users": {
-			"version": "0.62.0",
-			"agentsMd": "30b71cb25de701433b9b10de8968eaafb6f30e4dd933dc1328feac416c439d70"
+			"version": "0.62.10",
+			"agentsMd": "f78e7b59477d9fcfad466a3c2ab9cf3a541aad7ac0c5e9f8a35f66b5b22c6435"
 		},
 		"@happyvertical/smrt-web": {
-			"version": "0.62.0",
+			"version": "0.62.10",
 			"agentsMd": "ed2c80c54812cad2c9b3eebbf3448306f34744082d855c8da4812a39a5c1039c"
 		}
 	}
