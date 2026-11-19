@@ -1360,6 +1360,10 @@ export const packages: SmrtPackage[] = [
 					body: 'Five presets ship: material, glass, studio, smrt, and happyvertical. Themes use Material 3 names as canonical tokens and retain additive aliases for migration: spacing and radius aliases such as extra-small and sm, plus motion aliases from short1 through long4. Aliases preserve older consumers; new design work should name the canonical semantic token.'
 				},
 				{
+					title: 'A nested ThemeProvider follows its parent scheme',
+					body: 'A ThemeProvider inside another ThemeProvider themes only its own wrapper by default. When the color scheme of the nested provider is system, it resolves to the scheme of its nearest parent provider, not the operating system. The nested provider tracks a later change in the parent. An explicit light or dark value on the nested provider wins, and a root provider follows the operating system. While it follows the parent, the nested provider does not load a stored color scheme from its own storage key.'
+				},
+				{
 					title: 'A shared component standard',
 					body: 'Foundation controls use native semantics, stable server-safe IDs, and Svelte 5 bindable state. They have visible focus and validation states, reduced-motion rules, semantic design tokens, and focused accessibility tests. Every exported component root carries data-smrt-component, and internal parts carry data-smrt-part; both are public styling hooks.'
 				},
