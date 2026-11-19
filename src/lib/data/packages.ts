@@ -1675,6 +1675,22 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'In-app notifications are a closed service',
 					body: 'UserNotification stores one row per recipient with kind, title, body, link, severity, a source reference, and read and dismissed state. UserNotificationService is the only access path: notify and notifyMany deduplicate on the source reference, and listForUser, countUnread, markRead, dismiss, and markAllRead filter on the recipient. Generated REST, MCP, and CLI are off, because a tenant-scoped list would expose every member. Hosts expose their own routes with the signed-in user id.'
+				},
+				{
+					title: 'A mail account can have an owner',
+					body: 'Account.ownerUserId is null by default, and an account without an owner keeps tenant-wide access. Per-account access starts when an application sets an owner and calls configureMailAccess once at startup. The call takes the database options and a resolvePrincipal function. That function returns the acting MailPrincipal: an id, a tenant, a user, and optional scopes and accountIds ceilings. The owner holds every scope on the account without a grant. Tenant administrators and super-admins get no bypass; trusted server work such as sync runs inside runWithMailSystemAccess.'
+				},
+				{
+					title: 'Four scopes, each a grant under a tenant permission',
+					body: 'The scopes are read, triage, draft, and send. The read scope opens the emails, folders, and attachments of an owned account. Triage write-back needs read and triage together, and Message.send needs send. The package does not check draft itself; a host can check it with assertMailAccess. A grant is a smrt-users ResourceGrant row on one account, and the grantee also needs the matching tenant permission, such as messages.read. The scopes and accountIds on a principal apply to every account and only narrow the result.'
+				},
+				{
+					title: 'Without configuration, owned mail stays closed',
+					body: 'The read rule is a collection interceptor that the package registers when it loads, not a UI check. If configureMailAccess was never called, the mail of every owned account is hidden. The same result applies when no principal resolves or the principal belongs to another tenant. A raw query on a mail class throws MailAccessError while any account is closed to the principal. Account rows are not filtered. MessagingSettingsService.listAccounts returns the accounts a principal owns or holds a grant on, with the effective scopes.'
+				},
+				{
+					title: 'Only the owner shares a mailbox',
+					body: 'MailAccessService has grant, revoke, list, and setOwner. The tenant permission messages.manage-access is required, and the actor must also own the account. The one exception is a grantee whose own grant is delegable: that grantee can pass on a plain grant. An administrator therefore cannot read or take over a mailbox that another person owns. A user with messages.manage-credentials can claim an account that has no owner, and the new owner must be an active tenant member. seedMessagesRolePermissions gives the system roles their messages permissions.'
 				}
 			],
 			exampleResource: 'messages'
