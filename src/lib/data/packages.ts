@@ -1365,7 +1365,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'A nested ThemeProvider follows its parent scheme',
-					body: 'A ThemeProvider inside another ThemeProvider themes only its own wrapper by default. When the color scheme of the nested provider is system, it resolves to the scheme of its nearest parent provider, not the operating system. The nested provider tracks a later change in the parent. An explicit light or dark value on the nested provider wins, and a root provider follows the operating system. While it follows the parent, the nested provider does not load a stored color scheme from its own storage key.'
+					body: 'A ThemeProvider inside another ThemeProvider themes only its own wrapper by default. When the color scheme of the nested provider is system, it resolves to the scheme of its nearest parent provider, not the operating system. The nested provider tracks a later change in the parent. An explicit light or dark value on the nested provider takes precedence over the parent, and a root provider follows the operating system. With persist on, a stored scheme can still replace that explicit value. While it follows the parent, the nested provider does not load a stored color scheme from its own storage key.'
 				},
 				{
 					title: 'A shared component standard',
