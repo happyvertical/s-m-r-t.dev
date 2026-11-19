@@ -27,7 +27,11 @@ describe('site shell contract', () => {
 		const applicationFiles = globSync('src/**/*.{svelte,ts}', {
 			// The generated UI reference quotes the packages' own prose, which may
 			// mention a shell tag; it is documentation, not site markup.
-			ignore: ['src/**/*.test.ts', 'src/**/*.test.svelte', 'src/**/*.generated.ts']
+			ignore: [
+				'src/**/*.test.ts',
+				'src/**/*.test.svelte',
+				'src/lib/data/ui-components.generated.ts'
+			]
 		});
 		const sources = applicationFiles.map((file) => [file, readFileSync(file, 'utf8')] as const);
 		const adminShellSources = sources.filter(([, source]) => source.includes('<AdminShell'));
