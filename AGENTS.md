@@ -164,8 +164,6 @@ Then one line below.
   it. Tracked here in #310.
 - smrt#4415: `Planner` nests a `main` in the AdminShell's `main`, and axe
   finds contrast and name mismatches inside it on `/build-a-boilerplate`.
-- smrt#4416: `AdminShell` is fixed at `100svh`; `build-a-boilerplate/+page.svelte`
-  sizes it to the frame under the site header. Tracked here in #371.
 
 ## Agent lifecycle posture
 

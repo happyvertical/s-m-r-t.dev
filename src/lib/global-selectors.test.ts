@@ -50,6 +50,13 @@ describe('framework class names the site targets with :global()', () => {
 		expect(targeted.size).toBeGreaterThan(0);
 	});
 
+	// build-a-boilerplate sizes the planner through this supported property
+	// (smrt#5056). A rename makes the planner fall back to the whole viewport,
+	// under the site header, without any error.
+	it('still honours --smrt-admin-shell-block-size in the installed packages', () => {
+		expect(installed).toContain('--smrt-admin-shell-block-size');
+	});
+
 	it.each([...targeted])('%s still exists in the installed packages (%s)', (cls) => {
 		const exists = new RegExp(`(?<![\\w-])${cls}(?![\\w-])`).test(installed);
 		expect(exists, `${cls} is not in any installed package`).toBe(true);

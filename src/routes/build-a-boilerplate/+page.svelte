@@ -195,24 +195,17 @@
 		display: flex;
 		flex-direction: column;
 	}
+	/* The framework's AdminShell is viewport-tall (100svh, 100dvh with the phone
+	   bottom bar) unless the host sets --smrt-admin-shell-block-size, which is
+	   inherited and so crosses the planner's own theme provider. The frame is a
+	   size container, so 100cqb is the frame's height under the site header and
+	   the notice. The loading and error paragraphs are the frame's other
+	   children and keep their own size. */
 	.planner-frame {
 		flex: 1;
 		min-height: 0;
-	}
-	/* The framework's AdminShell sizes itself to the whole viewport (100svh,
-	   100dvh on phones), which would run under the site header and the notice.
-	   Sized to the frame instead. The planner's theme wrapper is the frame's one
-	   direct child, selected by position because its class name is private and
-	   was renamed once already (smrt-theme-root to smrt-theme-provider__root),
-	   which left this rule dead and the planner short of the frame (#415). The
-	   loading and error paragraphs are the frame's other children and keep their
-	   own size. Upstream ask: a height prop or variable on the shell
-	   (smrt#4416); this rule goes when it ships. */
-	.planner-frame > :global(:not(.planner-status)),
-	.planner-frame :global(.smrt-admin-shell) {
-		height: 100%;
-		block-size: 100%;
-		min-block-size: 0;
+		container-type: size;
+		--smrt-admin-shell-block-size: 100cqb;
 	}
 	.planner-notice {
 		display: flex;
