@@ -1059,6 +1059,10 @@ export const packages: SmrtPackage[] = [
 					body: 'executeAsPrincipal creates a PrincipalRun and checks assertToolAllowed and assertOperation before work proceeds. This is agent execution authority, distinct from smrt-users assertOperationPermission. A data surface can expose data.discover, data.inspect, and data.query through createDataSurfaceTools; report surfaces separately expose reports.query, refresh, drilldown, and export.'
 				},
 				{
+					title: 'Server-set facts on a principal binding',
+					body: 'A PrincipalBinding accepts three optional facts: sessionId, credentialKind, and bindingMetadata. The run exposes them as run.sessionId, run.credentialKind, and a frozen copy in run.bindingMetadata. The host sets them from verified server authentication state, never from browser input. They describe how the run authenticated and never change allowedTools or permission resolution. sessionId is a label, not an authenticated session. bindingMetadata must be JSON-safe: a Date, a class instance, or a cycle throws a TypeError before the run starts.'
+				},
+				{
 					title: 'A missing AI provider skips the run',
 					body: 'When execute() meets an AI_UNAVAILABLE error, the run ends as skipped. The agent does not retry it and does not rethrow it. The agent stops its interests, and learning neither reinforces nor decays. A direct run() call throws the error and marks it not retryable.'
 				},
