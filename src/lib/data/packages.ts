@@ -837,6 +837,14 @@ export const packages: SmrtPackage[] = [
 					body: 'Terminal approval, device PIN, and password sign-in reserve an attempt through LoginAttemptLimiter before any credential work. The budget is stored in the database, so it holds across replicas, and its keys are hashed. A rate limit answers 429 with Retry-After. Generated CLI commands on the identity models are list and get only, or closed.'
 				},
 				{
+					title: 'Client ID Metadata Documents are opt-in',
+					body: 'createCimdAuthorizationServer takes the options of the SDK OAuth authorization server and an optional clientIdMetadataDocuments block. Without the block it returns the plain SDK server: an https client_id stays unknown, and nothing is fetched or advertised. With the block, an https client_id resolves from the metadata document at that URL, without prior registration. The allowClientOrigin policy is required and runs on every request; construction throws without it, and any result except true denies. The document must describe a public client: no client secret, and https redirect URIs unless the server allows loopback redirects. The server then adds client_id_metadata_document_supported to its discovery metadata, and every failure reads as an unknown client.'
+				},
+				{
+					title: 'Client metadata fetches are bounded',
+					body: 'The default fetcher resolves the client host once and refuses it unless every address is public. The connection is pinned to the resolved address. A response other than 200 is refused, so a redirect is never followed. The defaults are a five-second deadline and a 16 KiB document cap. Documents are cached in process memory for one minute to one day, according to their HTTP cache headers. A failed lookup is remembered for thirty seconds.'
+				},
+				{
 					title: 'Sync the permission catalog after migration',
 					body: 'syncPermissionCatalog merges three sources: manifest permissions, custom entries from smrt.config.ts, and definitions added at runtime. It reconciles them into Permission rows. The operation reports created, updated, and unchanged slugs. You can run it on every deploy. It is additive and never deletes a stale permission, grants a role, or emits row-level-security SQL.',
 					href: '/docs/reference/authorization',
