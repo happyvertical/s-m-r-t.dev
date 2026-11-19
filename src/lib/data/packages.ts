@@ -837,6 +837,14 @@ export const packages: SmrtPackage[] = [
 					body: 'Terminal approval, device PIN, and password sign-in reserve an attempt through LoginAttemptLimiter before any credential work. The budget is stored in the database, so it holds across replicas, and its keys are hashed. A rate limit answers 429 with Retry-After. Generated CLI commands on the identity models are list and get only, or closed.'
 				},
 				{
+					title: 'Client ID Metadata Documents are opt-in',
+					body: 'createCimdAuthorizationServer takes the options of the SDK OAuth authorization server and an optional clientIdMetadataDocuments block. Without the block it returns the plain SDK server: an https client_id stays unknown, and nothing is fetched or advertised. With the block, an https client_id resolves from the metadata document at that URL, without prior registration. The allowClientOrigin policy is required and runs on every request; construction throws without it, and any result except true denies. The document must describe a public client with no client secret and https redirect URIs; allowLoopbackRedirects adds http on localhost, 127.0.0.1, and [::1] only. The server then adds client_id_metadata_document_supported to its discovery metadata, and every failure reads as an unknown client.'
+				},
+				{
+					title: 'Client metadata fetches are bounded',
+					body: 'The default fetcher resolves the client host once, refuses it unless every address is public, and pins the connection to that address. A response other than 200 is refused, so a redirect is never followed. The defaults are a five-second deadline and a 16 KiB document cap. Documents are cached in process memory for the lifetime in their HTTP cache headers, or one hour without one. The lifetime is held between one minute and one day, so no-store and max-age=0 still cache for one minute. A failed lookup is remembered for thirty seconds.'
+				},
+				{
 					title: 'Sync the permission catalog after migration',
 					body: 'syncPermissionCatalog merges three sources: manifest permissions, custom entries from smrt.config.ts, and definitions added at runtime. It reconciles them into Permission rows. The operation reports created, updated, and unchanged slugs. You can run it on every deploy. It is additive and never deletes a stale permission, grants a role, or emits row-level-security SQL.',
 					href: '/docs/reference/authorization',
@@ -1051,6 +1059,10 @@ export const packages: SmrtPackage[] = [
 					body: 'executeAsPrincipal creates a PrincipalRun and checks assertToolAllowed and assertOperation before work proceeds. This is agent execution authority, distinct from smrt-users assertOperationPermission. A data surface can expose data.discover, data.inspect, and data.query through createDataSurfaceTools; report surfaces separately expose reports.query, refresh, drilldown, and export.'
 				},
 				{
+					title: 'Server-set facts on a principal binding',
+					body: 'A PrincipalBinding accepts three optional facts: sessionId, credentialKind, and bindingMetadata. The run exposes them as run.sessionId, run.credentialKind, and a frozen copy in run.bindingMetadata. The host is expected to set them from verified server authentication state; the package does not verify them. They describe how the run authenticated and never change allowedTools or permission resolution. sessionId is a label, not an authenticated session. bindingMetadata must be JSON-safe: a Date, a class instance, or a cycle throws a TypeError before the run starts.'
+				},
+				{
 					title: 'A missing AI provider skips the run',
 					body: 'When execute() meets an AI_UNAVAILABLE error, the run ends as skipped. The agent does not retry it and does not rethrow it. The agent stops its interests, and learning neither reinforces nor decays. A direct run() call throws the error and marks it not retryable.'
 				},
@@ -1199,6 +1211,10 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Retention starts after the runner is stable',
 					body: 'TaskRunner schedules its first retention sweep one interval after start, never at startup. The default policy keeps completed or canceled jobs for seven days. It keeps failed jobs and events for thirty days. Dry-run cleanup is available before a deletion policy changes.'
+				},
+				{
+					title: 'Concurrent start and stop calls on one TaskRunner',
+					body: 'Concurrent start() calls on one TaskRunner share a single start, and concurrent stop() calls share a single stop. A stop() that arrives during start() is checked at two points: before the worker registers, and before polling, heartbeat, and retention begin. Earlier steps, such as the migration and readiness checks, still run. The stop() waits for start() to settle, then tears down what did start. That start() resolves without the runner:started event. A start() call during a stop() that is still in progress throws.'
 				}
 			],
 			componentImport: '@happyvertical/smrt-jobs/svelte',
@@ -1346,6 +1362,10 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Use canonical tokens and aliases intentionally',
 					body: 'Five presets ship: material, glass, studio, smrt, and happyvertical. Themes use Material 3 names as canonical tokens and retain additive aliases for migration: spacing and radius aliases such as extra-small and sm, plus motion aliases from short1 through long4. Aliases preserve older consumers; new design work should name the canonical semantic token.'
+				},
+				{
+					title: 'A nested ThemeProvider follows its parent scheme',
+					body: 'A ThemeProvider inside another ThemeProvider themes only its own wrapper by default. When the color scheme of the nested provider is system, it resolves to the scheme of its nearest parent provider, not the operating system. The nested provider tracks a later change in the parent. An explicit light or dark value on the nested provider takes precedence over the parent, and a root provider follows the operating system. With persist on, a stored scheme can still replace that explicit value. While it follows the parent, the nested provider does not load a stored color scheme from its own storage key.'
 				},
 				{
 					title: 'A shared component standard',
@@ -1675,6 +1695,22 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'In-app notifications are a closed service',
 					body: 'UserNotification stores one row per recipient with kind, title, body, link, severity, a source reference, and read and dismissed state. UserNotificationService is the only access path: notify and notifyMany deduplicate on the source reference, and listForUser, countUnread, markRead, dismiss, and markAllRead filter on the recipient. Generated REST, MCP, and CLI are off, because a tenant-scoped list would expose every member. Hosts expose their own routes with the signed-in user id.'
+				},
+				{
+					title: 'A mail account can have an owner',
+					body: 'Account.ownerUserId is null by default, and an account without an owner stays open to its tenant. The mail of an account is closed as soon as the account has an owner. configureMailAccess, called once at startup, takes the database options and an optional resolvePrincipal function. That function returns the acting MailPrincipal: an id, a tenant, a user, and optional scopes and accountIds ceilings. The owner holds every scope on the account without a grant. Tenant administrators and super-admins get no bypass; trusted server work such as sync runs inside runWithMailSystemAccess.'
+				},
+				{
+					title: 'Four scopes, each a grant under a tenant permission',
+					body: 'The scopes are read, triage, draft, and send. The read scope opens the emails, folders, and attachments of an owned account. Triage write-back needs read and triage together, and Message.send needs send. The package does not check draft itself; a host can check it with assertMailAccess. A grant is a smrt-users ResourceGrant row on one account, and the grantee also needs the matching tenant permission, such as messages.read. The tenant check and the scopes and accountIds ceilings of a principal apply to every account, including one without an owner.'
+				},
+				{
+					title: 'Without configuration, owned mail stays closed',
+					body: 'The read rule is a collection interceptor that the package registers when it loads, not a UI check. If configureMailAccess was never called or has no resolvePrincipal, the mail of every owned account is hidden from everyone, the owner included. The same result applies when no principal resolves or the principal belongs to another tenant. A raw query on a mail class throws MailAccessError while any account is closed to the principal. Account rows are not filtered. MessagingSettingsService.listAccounts returns the accounts a principal owns or holds a grant on, with the effective scopes.'
+				},
+				{
+					title: 'Only the owner shares a mailbox',
+					body: 'MailAccessService has grant, revoke, list, and setOwner. The tenant permission messages.manage-access is required, and the actor must also own the account. The one exception is a grantee whose own grant is delegable: that grantee can pass on a plain grant. An administrator therefore cannot read or take over a mailbox that another person owns. A user with messages.manage-credentials can set the first owner of an account that has none, to any active member of the tenant. seedMessagesRolePermissions gives the system roles their messages permissions.'
 				}
 			],
 			exampleResource: 'messages'
