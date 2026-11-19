@@ -1207,6 +1207,10 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Retention starts after the runner is stable',
 					body: 'TaskRunner schedules its first retention sweep one interval after start, never at startup. The default policy keeps completed or canceled jobs for seven days. It keeps failed jobs and events for thirty days. Dry-run cleanup is available before a deletion policy changes.'
+				},
+				{
+					title: 'Concurrent start and stop calls on one TaskRunner',
+					body: 'Concurrent start() calls on one TaskRunner share a single start, and concurrent stop() calls share a single stop. A stop() that arrives during start() cancels the steps that start() has not reached. It waits for start() to settle, then tears down the worker lease, liveness thread, and timers that did start. That start() resolves without the runner:started event. A start() call during a stop() that is still in progress throws.'
 				}
 			],
 			componentImport: '@happyvertical/smrt-jobs/svelte',
