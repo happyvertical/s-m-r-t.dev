@@ -8,9 +8,11 @@ var NEW_HOST = '__NEW_HOST__';
 function handler(event) {
 	var request = event.request;
 	var header = request.headers && request.headers.host;
-	// Exact match on the host, case-insensitive, ignoring a port suffix. Anything
+	// Exact match on the host, case-insensitive, ignoring a port suffix and one trailing dot. Anything
 	// else (the new host, the distribution's own name) takes the normal path.
-	var host = header ? String(header.value).toLowerCase().replace(/:\d+$/, '') : '';
+	var host = header
+		? String(header.value).toLowerCase().replace(/:\d+$/, '').replace(/\.$/, '')
+		: '';
 	if (host !== OLD_HOST) return rewriteRequest(event);
 
 	// One 301 to the same path on the new host. The host is fixed, and leading

@@ -92,11 +92,12 @@ describe('agent static hosting', () => {
 		expect(locationOf('/llms.txt')).toBe('https://smrt.happyvertical.com/llms.txt');
 	});
 	it('matches the old host exactly and case-insensitively, otherwise rewrites as before', () => {
-		for (const host of ['S-M-R-T.DEV', 's-m-r-t.dev:443']) {
+		for (const host of ['S-M-R-T.DEV', 's-m-r-t.dev:443', 's-m-r-t.dev.', 's-m-r-t.dev.:443']) {
 			expect(run('/docs/', {}, host).statusCode).toBe(301);
 		}
 		for (const host of [
 			's-m-r-t.dev.evil.com',
+			's-m-r-t.dev..',
 			'evil.s-m-r-t.dev',
 			'xs-m-r-t.dev',
 			'smrt.happyvertical.com',
