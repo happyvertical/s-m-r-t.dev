@@ -236,10 +236,14 @@ the pull requests are code.
    `new_hosted_zone_name = "happyvertical.com"`. Apply:
    `TF_WORKSPACE=staging tofu apply -var-file=staging.tfvars`. It adds the
    certificate name, alias and record for `staging.smrt.happyvertical.com`; the
-   certificate is replaced create-before-destroy. Check that host answers and
+   certificate is replaced create-before-destroy. Plan first and stop if it shows anything else: one certificate replaced
+   (create before destroy), the old host's validation CNAME recreated, one
+   alias added, one record created, and nothing else destroyed. Check that host answers and
    `staging.s-m-r-t.dev` still does.
 3. PR, then owner applies production. The same two lines in `production.tfvars`:
-   `TF_WORKSPACE=production tofu apply -var-file=production.tfvars`. Check
+   `TF_WORKSPACE=production tofu apply -var-file=production.tfvars`. The plan
+   must show the same as step 2 (plus the #389 fix already applied); stop if it
+   shows anything else. Check
    `https://smrt.happyvertical.com` and `https://s-m-r-t.dev`.
 4. Owner: set Matomo site 31's URL to the new host at or before the next step's
    merge, or analytics stop at deploy. PR: the code cutover (`SITE_ORIGIN`, the
@@ -247,11 +251,13 @@ the pull requests are code.
    only after step 3, because it deploys and the new checks need the new host.
 5. PR, then owner applies staging: `redirect_to_new_domain = true` in
    `staging.tfvars`; `TF_WORKSPACE=staging tofu apply -var-file=staging.tfvars`.
-   Check `curl -sI https://staging.s-m-r-t.dev/docs/` answers one 301 to
+   The plan must show function updates only (the site and `havesmrt.com`
+   functions); stop if it shows anything else. Check `curl -sI https://staging.s-m-r-t.dev/docs/` answers one 301 to
    `https://staging.smrt.happyvertical.com/docs`, with the query kept.
 6. PR, then owner applies production: `redirect_to_new_domain = true` in
    `production.tfvars`;
-   `TF_WORKSPACE=production tofu apply -var-file=production.tfvars`. Check
+   `TF_WORKSPACE=production tofu apply -var-file=production.tfvars`. Same plan
+   rule as step 5. Check
    `https://s-m-r-t.dev/docs/` the same way.
 7. Track references in other repositories (smrt, have-config, iac, happyvertical.com).
 
@@ -259,10 +265,15 @@ the pull requests are code.
 
 Each step reverts by reverting its tfvars change and applying the same
 workspace with `-var-file`. Steps 5 and 6 only republish the function, so the
-old host serves again within seconds. Steps 2 and 3 remove the new host's
+old host serves again once clients drop the 301, which they may cache for up to an hour (`max-age=3600`). Steps 2 and 3 remove the new host's
 alias, record and certificate name; the old host's resources are not in the
 change, so it never stops serving. Roll back step 4 (the code) before 2 or 3.
-Keep the old domain, its zone and its redirect for at least a year.
+The certificate's primary name stays the old host, and ACM renewal validates
+every name on it, so the old domain and its Route53 zone cannot be dropped
+while this layout stands: if they lapse, renewal fails and TLS breaks on the
+new host too. Before the old domain is ever released, a later step must make the
+new host the primary `domain` (old host secondary or removed) and apply it.
+Until then the `site_url` output also stays the old host.
 
 ## Agent document delivery
 
