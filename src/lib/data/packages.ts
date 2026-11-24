@@ -886,7 +886,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Keep extensible metadata and audit evidence controlled',
-					body: 'ProfileMetafield supplies the validation schema for ProfileMetadata, whose collection supports add, get, batchGet, and batchUpdate. ProfileAsset is the owned-asset join. AuditLog is a sensitive model with no generated read routes. It records actor, action, reason, before and after changes, resource, source, and delegated identity. createAuditWriter, the consumer-authorized readAuditTrail, and the bounded pruneAuditTrail are its access paths; its super-admin bypass is an explicit policy choice.'
+					body: 'ProfileMetafield supplies the validation schema for ProfileMetadata. Profile.addMetadata and getMetadata read and write it for one profile, and ProfileCollection.batchGetMetadata and batchUpdateMetadata do so for many. ProfileAsset is the owned-asset join. AuditLog is a sensitive model with no generated read routes. It records actor, action, reason, before and after changes, resource, source, and delegated identity. createAuditWriter, the consumer-authorized readAuditTrail, and the bounded pruneAuditTrail are its access paths; its super-admin bypass is an explicit policy choice.'
 				},
 				{
 					title: 'Links and public figures',
