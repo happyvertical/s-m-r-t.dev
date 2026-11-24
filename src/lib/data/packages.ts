@@ -696,7 +696,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Data shape rules',
-					body: 'smrt requires a field only when its own code would be wrong or unsafe without it, and each such field states why. The app decides every other part of a table. An app hardens a smrt class with a subclass that overrides fields. A subclass with the same name replaces the class everywhere in the app. Migrate changes the database to match the code when that loses no data. It stops when it would lose or invent data, such as a field declared required while existing rows are empty.'
+					body: 'smrt requires a field only when its own code would be wrong or unsafe without it, and each such field states why. The app decides every other part of a table. An app hardens a smrt class with a subclass that overrides fields. A subclass with the same name as its parent declares replaceParent: true in its @smrt() options and then replaces the parent everywhere in the app. Without that option, or with replaceParent: false, smrt refuses the build with a ConfigurationError. Migrate changes the database to match the code when that loses no data. It stops when it would lose or invent data, such as a field declared required while existing rows are empty.'
 				},
 				{
 					title: 'Migrate is all or nothing',
