@@ -554,7 +554,7 @@ await documents.list();
 					body: 'Membership, Role, Session, User, and Tenant carry tenant columns but are not registered with the interceptor. Every query against them is unfiltered, so authorization code must supply the tenant condition itself.'
 				},
 				points: [
-					'Outside a request, optional-mode reads with no context pass through unfiltered at the interceptor. Request paths bind the tenancy of the request and hold a caller with no tenant to global rows. Those paths are runtime REST, emitted routes, sync apply, and MCP. A hand-written route outside them gets no such hold.',
+					'Outside a request, optional-mode reads with no context pass through unfiltered at the interceptor. Request paths bind the tenancy of the request and hold a caller with no tenant to global rows, unless a system or bypass context applies. Those paths are runtime REST, emitted routes, sync apply, and MCP. A hand-written route outside them gets no such hold.',
 					'Raw SQL is gated, not filtered. The policy can throw, warn, or allow, but no tenant predicate is ever added, and a database handle obtained outside a collection bypasses interceptors entirely.',
 					'Context does not survive an asynchronous boundary, such as a timer, emitter, or queue consumer. Wrap the callback with TenantContext.bind or runWithJobContext.'
 				]

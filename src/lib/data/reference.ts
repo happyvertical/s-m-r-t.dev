@@ -1225,7 +1225,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 					'fromProfileId and toProfileId reference Profile, so any subtype works: Person, Organization, or Bot.',
 					'typeId references ProfileRelationshipType and must resolve; addRelationship throws when the slug has no type row.',
 					'contextProfileId is an optional third Profile reference, and terms is a oneToMany to ProfileRelationshipTerm.',
-					'tenantId is nullable with optional scope. Under an active tenant context the row belongs to that tenant. Outside a request, with no context, it stays global. A request from a caller with no tenant reads only rows without an owner and cannot write one.'
+					'tenantId is nullable with optional scope. Under an active tenant context the row belongs to that tenant. Outside a request, with no context, it stays global. A request from a caller with no tenant, outside a system or bypass context, reads only rows without an owner and writes no tenant-scoped row.'
 				]
 			},
 			{
