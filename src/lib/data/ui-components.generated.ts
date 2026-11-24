@@ -13697,6 +13697,13 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'string',
 				status: false,
 				description: 'Placeholder text for the recipient input field.'
+			},
+			{
+				name: 'suggest',
+				code: '(prefix: string) => Promise<RecipientEntry[]> | RecipientEntry[]',
+				status: false,
+				description:
+					"Autocomplete source, usually backed by the host's `CorrespondentService.suggest()` for the signed-in user. Called with the text typed so far; omit it for a plain input."
 			}
 		],
 		sources: [],
@@ -15670,6 +15677,13 @@ export const uiComponents: UiComponentReference[] = [
 				description: "`compact` (default) for a preview card, `full` for a report's page."
 			},
 			{
+				name: 'fit',
+				code: 'boolean',
+				status: false,
+				description:
+					"A narrow column (the assistant's chat): the table only, cells wrap and the table never scrolls sideways. The host picks which columns to pass."
+			},
+			{
 				name: 'spec',
 				code: 'RuntimeReportSpec',
 				status: false,
@@ -16395,6 +16409,12 @@ export const uiComponents: UiComponentReference[] = [
 				code: 'number',
 				status: false,
 				description: 'Width in px until the user resizes the panel (default 400).'
+			},
+			{
+				name: 'panelSide',
+				code: "'start' | 'end'",
+				status: false,
+				description: 'Which side of the content the docked panel sits on (default `start`).'
 			},
 			{
 				name: 'panelToggle',
@@ -22381,6 +22401,13 @@ export const uiComponents: UiComponentReference[] = [
 				description: "The panel's width in px until the user resizes it (default 400)."
 			},
 			{
+				name: 'panelSide',
+				code: "'start' | 'end'",
+				status: false,
+				description:
+					'Which side of the content the docked panel sits on: `start` (default, between the left sidebar and the content) or `end` (after the content, at the inline end). Its resize handle, arrow keys and border follow.'
+			},
+			{
 				name: 'children',
 				code: 'Snippet',
 				status: true,
@@ -27745,6 +27772,13 @@ export const uiComponents: UiComponentReference[] = [
 				description: 'Render the built-in human review surface for staged changes.'
 			},
 			{
+				name: 'validate',
+				code: 'boolean',
+				status: false,
+				description:
+					'Opt in to validate-before-submit (#5346): each invalid field shows its reason next to it once touched or after a submit attempt, and submit is blocked until the form is valid. Never takes over the POST; pair with `preventDefault={false}` for a native/SvelteKit form-action submit.'
+			},
+			{
 				name: 'children',
 				code: 'Snippet',
 				status: true,
@@ -28307,6 +28341,125 @@ export const uiComponents: UiComponentReference[] = [
 			href: '/docs/ui'
 		},
 		source: 'packages/smrt-ui/src/components/forms/NumericKeypad.svelte'
+	},
+	{
+		slug: 'password-input',
+		name: 'PasswordInput',
+		family: 'smrt-ui-forms',
+		category: 'Forms and controls',
+		importPath: '@happyvertical/smrt-ui/forms',
+		summary:
+			'A password field with an accessible "Show password" toggle and an optional "Confirm password" field (happyvertical/smrt#5346).',
+		summarySynthesized: false,
+		slot: null,
+		details: [
+			{
+				name: 'name',
+				code: 'string',
+				status: false,
+				description: 'Field name posted with the form.'
+			},
+			{
+				name: 'id',
+				code: 'string',
+				status: false,
+				description: 'Base id; the confirm field uses `${id}-confirm`.'
+			},
+			{
+				name: 'value',
+				code: 'string',
+				status: false,
+				description: 'Password value (bindable).'
+			},
+			{
+				name: 'label',
+				code: 'string',
+				status: false,
+				description: 'Label above the password field.'
+			},
+			{
+				name: 'confirm',
+				code: 'boolean',
+				status: false,
+				description: 'Render a "Confirm password" field and check it matches.'
+			},
+			{
+				name: 'confirmLabel',
+				code: 'string',
+				status: false,
+				description: 'Confirm field label.'
+			},
+			{
+				name: 'confirmName',
+				code: 'string',
+				status: false,
+				description: 'Optional name for the confirm field; omitted by default (not submitted).'
+			},
+			{
+				name: 'confirmValue',
+				code: 'string',
+				status: false,
+				description: 'Confirm value (bindable).'
+			},
+			{
+				name: 'mismatchMessage',
+				code: 'string',
+				status: false,
+				description: 'Reason shown when the two fields differ.'
+			},
+			{
+				name: 'showLabel',
+				code: 'string',
+				status: false,
+				description: 'Toggle label.'
+			},
+			{
+				name: 'required',
+				code: 'boolean',
+				status: false,
+				description: 'Whether a password (and, with `confirm`, its confirmation) is required.'
+			},
+			{
+				name: 'minlength',
+				code: 'number',
+				status: false,
+				description: "Minimum password length, enforced by the browser's validation."
+			},
+			{
+				name: 'maxlength',
+				code: 'number',
+				status: false,
+				description: "Maximum password length, enforced by the browser's validation."
+			},
+			{
+				name: 'autocomplete',
+				code: "'new-password' | 'current-password' | 'off'",
+				status: false,
+				description: 'Autofill hint; `new-password` for sign-up, `current-password` for sign-in.'
+			},
+			{
+				name: 'disabled',
+				code: 'boolean',
+				status: false,
+				description: 'Disables the fields and the show toggle.'
+			},
+			{
+				name: 'class',
+				code: 'string',
+				status: false,
+				description: 'CSS class applied to the wrapper element.'
+			}
+		],
+		sources: [],
+		sections: [],
+		items: [],
+		components: [],
+		demo: null,
+		related: {
+			label: 'UI showcase',
+			href: '/docs/ui'
+		},
+		source: 'packages/smrt-ui/src/components/forms/PasswordInput.svelte'
 	},
 	{
 		slug: 'province-select',
@@ -33139,10 +33292,10 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 3019,
-	totalProps: 3211,
-	authoredSummaries: 238,
-	totalComponents: 420
+	describedProps: 3040,
+	totalProps: 3232,
+	authoredSummaries: 239,
+	totalComponents: 421
 };
 
 export const uiComponentGroups = [

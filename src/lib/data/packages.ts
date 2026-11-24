@@ -696,7 +696,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Data shape rules',
-					body: 'smrt requires a field only when its own code would be wrong or unsafe without it, and each such field states why. The app decides every other part of a table. An app hardens a smrt class with a subclass that overrides fields. A subclass with the same name replaces the class everywhere in the app. Migrate changes the database to match the code when that loses no data. It stops when it would lose or invent data, such as a field declared required while existing rows are empty.'
+					body: 'smrt requires a field only when its own code would be wrong or unsafe without it, and each such field states why. The app decides every other part of a table. An app hardens a smrt class with a subclass that overrides fields. A subclass with the same name as its parent declares replaceParent: true in its @smrt() options and then replaces the parent everywhere in the app. Without that option, or with replaceParent: false, smrt refuses the build with a ConfigurationError. Migrate changes the database to match the code when that loses no data. It stops when it would lose or invent data, such as a field declared required while existing rows are empty.'
 				},
 				{
 					title: 'Migrate is all or nothing',
@@ -886,7 +886,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Keep extensible metadata and audit evidence controlled',
-					body: 'ProfileMetafield supplies the validation schema for ProfileMetadata, whose collection supports add, get, batchGet, and batchUpdate. ProfileAsset is the owned-asset join. AuditLog is a sensitive model with no generated read routes. It records actor, action, reason, before and after changes, resource, source, and delegated identity. createAuditWriter, the consumer-authorized readAuditTrail, and the bounded pruneAuditTrail are its access paths; its super-admin bypass is an explicit policy choice.'
+					body: 'ProfileMetafield supplies the validation schema for ProfileMetadata. Profile.addMetadata and getMetadata read and write it for one profile, and ProfileCollection.batchGetMetadata and batchUpdateMetadata do so for many. ProfileAsset is the owned-asset join. AuditLog is a sensitive model with no generated read routes. It records actor, action, reason, before and after changes, resource, source, and delegated identity. createAuditWriter, the consumer-authorized readAuditTrail, and the bounded pruneAuditTrail are its access paths; its super-admin bypass is an explicit policy choice.'
 				},
 				{
 					title: 'Links and public figures',
@@ -1061,6 +1061,10 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Server-set facts on a principal binding',
 					body: 'A PrincipalBinding accepts three optional facts: sessionId, credentialKind, and bindingMetadata. The run exposes them as run.sessionId, run.credentialKind, and a frozen copy in run.bindingMetadata. The host is expected to set them from verified server authentication state; the package does not verify them. They describe how the run authenticated and never change allowedTools or permission resolution. sessionId is a label, not an authenticated session. bindingMetadata must be JSON-safe: a Date, a class instance, or a cycle throws a TypeError before the run starts.'
+				},
+				{
+					title: 'Hide a data-surface action from some principals',
+					body: 'A data-surface action definition can carry an optional visibleTo seam. It receives the run, the surface descriptor, and the action. The action stays hidden unless the seam returns true; a throw, a rejection, or any other result counts as not visible. A definition with no seam is visible to everyone. Invoking a hidden action is refused as denied. visibleDataSurfaceDescriptor(run, surface) returns the descriptor with those actions removed, for a describe-style read, and comes from @happyvertical/smrt-agents/server.'
 				},
 				{
 					title: 'A missing AI provider skips the run',
