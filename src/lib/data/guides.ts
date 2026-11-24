@@ -183,7 +183,7 @@ export const foundationGuides: Guide[] = [
 			{
 				title: 'Put tenant scope on the model',
 				intro:
-					'Required scope means every row belongs to a tenant. Optional scope allows shared rows and tenant rows. Global models remain outside tenant filtering. The request session establishes the authorized tenant context. A profile relationship uses optional scope: it takes the active tenant when there is one and stays global when there is none.'
+					'Required scope means every row belongs to a tenant. Optional scope allows shared rows and tenant rows. Global models remain outside tenant filtering. The request session establishes the authorized tenant context. A profile relationship uses optional scope: it takes the active tenant when there is one. Outside a request with no context it stays global, while a request from a caller with no tenant reads only global rows and cannot write one.'
 			}
 		],
 		related: [
