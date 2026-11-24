@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Legacy-domain 301 redirect: havesmrt.com  ->  s-m-r-t.dev  (the new var.domain)
+# Legacy-domain 301 redirect: havesmrt.com  ->  the site (var.domain)
 #
 # A dedicated CloudFront distribution fronts the legacy domain; a viewer-request
 # CloudFront Function returns a 301 to the canonical site (local.site_domain),
@@ -9,8 +9,8 @@
 # APPLY PREREQUISITES (owner action — see infra/README.md):
 #   - A Route53 public hosted zone must exist for `local.legacy_domain`
 #     (havesmrt.com) so the cert can be DNS-validated and the alias created.
-#   - The new canonical domain (var.domain = s-m-r-t.dev) must have its own
-#     Route53 zone with registrar NS delegation before `terraform apply`.
+#   - The canonical domain (var.domain) must be reachable from a Route53 zone
+#     (var.hosted_zone_name when the host sits inside a parent zone).
 # This file provisions real AWS resources — review `terraform plan` first.
 # ---------------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ resource "aws_cloudfront_function" "redirect" {
       return {
         statusCode: 301,
         statusDescription: 'Moved Permanently',
-        headers: { 'location': { value: 'https://${local.site_domain}' + request.uri + query } }
+        headers: { 'location': { value: 'https://${local.canonical_domain}' + request.uri + query } }
       };
     }
   EOF
