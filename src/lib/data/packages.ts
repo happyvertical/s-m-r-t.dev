@@ -1063,6 +1063,10 @@ export const packages: SmrtPackage[] = [
 					body: 'A PrincipalBinding accepts three optional facts: sessionId, credentialKind, and bindingMetadata. The run exposes them as run.sessionId, run.credentialKind, and a frozen copy in run.bindingMetadata. The host is expected to set them from verified server authentication state; the package does not verify them. They describe how the run authenticated and never change allowedTools or permission resolution. sessionId is a label, not an authenticated session. bindingMetadata must be JSON-safe: a Date, a class instance, or a cycle throws a TypeError before the run starts.'
 				},
 				{
+					title: 'Hide a data-surface action from some principals',
+					body: 'A data-surface action definition can carry an optional visibleTo seam. It receives the run, the surface descriptor, and the action. The action stays hidden unless the seam returns true; a throw, a rejection, or any other result counts as not visible. A definition with no seam is visible to everyone. Invoking a hidden action is refused as denied. visibleDataSurfaceDescriptor(run, surface) returns the descriptor with those actions removed, for a describe-style read, and comes from @happyvertical/smrt-agents/server.'
+				},
+				{
 					title: 'A missing AI provider skips the run',
 					body: 'When execute() meets an AI_UNAVAILABLE error, the run ends as skipped. The agent does not retry it and does not rethrow it. The agent stops its interests, and learning neither reinforces nor decays. A direct run() call throws the error and marks it not retryable.'
 				},
