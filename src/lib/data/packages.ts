@@ -776,6 +776,10 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Scope covers each read path',
 					body: 'Tenant context applies to list and get calls, slug lookups, model hydration, vector search, and collection memory. Required models fail closed without a tenant context. A system context removes the context entirely and skips every check. withSuperAdminBypass keeps the tenant context and lifts enforcement only for classes that set allowSuperAdminBypass to true. The flag defaults to false, and unresolved config fails closed. auditTenantScopedRegistrations reports runtime-only registrations whose natural key omits the tenant column.'
+				},
+				{
+					title: 'Tenant filters are matched by column',
+					body: 'A filter key is the caller’s spelling, not a column name. The tenant interceptor resolves keys to columns, so tenantId, tenant_id, and tenantId = all count as an equality filter on the tenant column, with one id or a list. Under a tenant context, a value other than the context tenant throws TenantIsolationError; with no such filter, the context tenant is added. A key with another operator, such as tenantId !=, is not a tenant filter, so the context tenant is still added beside it, in each OR branch of a list.'
 				}
 			],
 			components: ['TenantCard', 'TenantSwitcher'],
