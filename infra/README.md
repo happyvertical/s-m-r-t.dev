@@ -274,6 +274,14 @@ rename the shared OAC again. Staging has no such dependency.
   are unique), and the new one cannot be deleted until nothing references it:
   a multi-step repoint that recreates the staging/production flap. Fix forward
   instead: a failed or interrupted apply is repeated with the same command.
+- An interrupted production apply can create `havesmrt-production-oac` in AWS
+  without recording it in state. A retry then fails on the duplicate name.
+  Recover read-only first: find its id with
+  `aws cloudfront list-origin-access-controls --query "OriginAccessControlList.Items[?Name=='havesmrt-production-oac'].Id" --output text`,
+  then
+  `TF_WORKSPACE=production tofu import -var-file=production.tfvars module.havesmrt.aws_cloudfront_origin_access_control.site <ID>`.
+  Re-plan: expect step 4's plan minus the create (0 to add, 4 to change, 0 to
+  destroy), then apply as in step 5.
 - The 404 change alone reverts by reverting commit and applying the same
   workspace: the 403 mapping returns and the extra bucket-policy statement goes.
 
