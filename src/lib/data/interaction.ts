@@ -154,7 +154,7 @@ const interactionGuides: Guide[] = [
 				points: [
 					'A control needs a value reader before the registry advertises read.',
 					'A control needs a value writer before the registry advertises stage, apply, or undo.',
-					'Secret controls never advertise read or mutation capabilities.'
+					'Secret controls never advertise read, stage, apply, clear, or undo.'
 				]
 			}
 		],
@@ -219,7 +219,7 @@ const interactionGuides: Guide[] = [
 			{
 				title: 'Confirm agent mutations',
 				intro:
-					'An agent apply, clear, or undo command returns human_confirmation_required under the default policy for an otherwise-permitted control, regardless of confirmed — a more specific refusal (sensitive, non-writable, disabled) still takes precedence. Only a human, through a real local click routed via executeLocalControlCommand, can apply, clear, or undo.',
+					'An agent apply, discard, clear, or undo command returns human_confirmation_required under the default policy for an otherwise-permitted control, regardless of confirmed — a more specific refusal (sensitive, non-writable, disabled) still takes precedence. Only a human, through a real local click routed via executeLocalControlCommand, can apply, discard, clear, or undo.',
 				points: [
 					'Apply uses the staged value unless the command supplies a direct value.',
 					'Apply stores the previous value for undo and then validates the new value.',
@@ -290,7 +290,7 @@ const interactionGuides: Guide[] = [
 				intro:
 					'The registry includes command context in staged and completed command events. Subscribers can observe the source, confirmation state, actorId, and sessionId.',
 				points: [
-					'Registered and unregistered events identify control lifecycle changes.',
+					'Registered, unregistered, and refreshed events identify control lifecycle changes.',
 					'Staged events identify the proposal and its source.',
 					'Command events include the request, context, result, identity, and timestamp.'
 				]
@@ -353,7 +353,7 @@ const interactionGuides: Guide[] = [
 			{
 				title: 'Fail closed for secrets and locked controls',
 				intro:
-					'The default policy denies mutation for secret, non-writable, disabled, and read-only controls. Secret values are redacted and secret controls do not advertise read or mutation capabilities.',
+					'The default policy denies mutation for secret, non-writable, disabled, and read-only controls. Secret values are redacted and secret controls do not advertise read, stage, apply, clear, or undo.',
 				points: [
 					'A secret mutation returns sensitive_control.',
 					'A non-writable mutation returns control_not_writable.',
@@ -366,7 +366,7 @@ const interactionGuides: Guide[] = [
 				intro:
 					'Sensitive and secret are different classifications in the released API. Sensitive does not automatically redact a value or deny staging under the default policy.',
 				points: [
-					'Agent apply, clear, and undo are refused outright for any control, sensitive or not — sensitivity adds independent read and write restrictions on top.',
+					'Agent apply, discard, clear, and undo are refused outright for any control, sensitive or not — sensitivity adds independent read and write restrictions on top.',
 					'An application that must deny or redact sensitive values supplies a stricter custom policy and readable metadata.',
 					'The application must test that policy before it exposes the adapter.'
 				]
@@ -374,7 +374,7 @@ const interactionGuides: Guide[] = [
 			{
 				title: 'Require consent for agent mutations',
 				intro:
-					'The default policy permits an agent to stage a proposal. It always denies agent apply, clear, and undo — confirmed: true does not change that. Only a human, through a real local gesture verified by executeLocalControlCommand, can confirm one.',
+					'The default policy permits an agent to stage a proposal. It always denies agent apply, discard, clear, and undo — confirmed: true does not change that. Only a human, through a real local gesture verified by executeLocalControlCommand, can confirm one.',
 				points: [
 					'Confirmation is a real local click that the registry verifies, not a signal an adapter can assert.',
 					'The registry does not create a confirmation dialog or authenticate the person who confirmed.',
