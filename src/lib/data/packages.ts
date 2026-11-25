@@ -699,6 +699,10 @@ export const packages: SmrtPackage[] = [
 					body: 'smrt requires a field only when its own code would be wrong or unsafe without it, and each such field states why. The app decides every other part of a table. An app hardens a smrt class with a subclass that overrides fields. A subclass with the same name as its parent declares replaceParent: true in its @smrt() options and then replaces the parent everywhere in the app. Without that option, or with replaceParent: false, smrt refuses the build with a ConfigurationError. Migrate changes the database to match the code when that loses no data. It stops when it would lose or invent data, such as a field declared required while existing rows are empty.'
 				},
 				{
+					title: 'Replacing a same-named model',
+					body: 'A class that extends a class of the same name from another package declares replaceParent in its own @smrt() options. With true, one model remains, under the subclass’s qualified name, on the parent’s table; the parent’s qualified name and previousQualifiedNames resolve to it. The parent must be registered first, and the subclass must not use another tableName. Leaving the option out is CONFIG_SAME_NAME_SUBCLASS_UNDECLARED, and false is CONFIG_SAME_NAME_COEXISTENCE_UNSUPPORTED, because a same-named subclass cannot sit beside its parent.'
+				},
+				{
 					title: 'Migrate is all or nothing',
 					body: 'Migrate works out every change first. If any change stops, it applies none and reports what stopped and what it held back. Migrate also stops when a package it saw last time is missing. smrt does not start new code against a database that was not migrated for that build.'
 				},
