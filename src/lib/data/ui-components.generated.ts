@@ -19558,7 +19558,8 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'policy',
 				code: 'ScreenPolicy | null',
 				status: false,
-				description: ''
+				description:
+					"Field policy to apply to `definition`; defaults to the active cookbook's policy."
 			},
 			{
 				name: 'collectionLabel',
@@ -19851,55 +19852,55 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'client',
 				code: 'OnboardingClient',
 				status: true,
-				description: ''
+				description: 'Reads and advances the saved onboarding progress on the server.'
 			},
 			{
 				name: 'connectAi',
 				code: 'ConnectAiClient',
 				status: true,
-				description: ''
+				description: 'Transport for the AI connection step, usually `createConnectAiClient`.'
 			},
 			{
 				name: 'approvalTransport',
 				code: 'AssistantTransport',
 				status: true,
-				description: ''
+				description: 'Connection used to show and decide the owner approval a template needs.'
 			},
 			{
 				name: 'initialState',
 				code: 'OnboardingState',
 				status: true,
-				description: ''
+				description: 'Server-loaded progress the first screen renders; refreshed after each action.'
 			},
 			{
 				name: 'appName',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'App name shown in the welcome heading.'
 			},
 			{
 				name: 'description',
 				code: 'string',
 				status: true,
-				description: ''
+				description: 'One-paragraph introduction under the welcome heading.'
 			},
 			{
 				name: 'apiKeyHref',
 				code: 'string',
 				status: true,
-				description: ''
+				description: "Host's inference settings or API-key form, linked from the AI step."
 			},
 			{
 				name: 'oncomplete',
 				code: '() => void | Promise<void>',
 				status: true,
-				description: ''
+				description: 'Called once onboarding finishes; not called when re-running it from Settings.'
 			},
 			{
 				name: 'backHref',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Where the back-to-settings links go. Default `/settings`.'
 			},
 			{
 				name: 'aiAlternative',
@@ -19915,7 +19916,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'oncomplete',
 				code: '() => void | Promise<void>',
 				status: true,
-				description: ''
+				description: 'Called once onboarding finishes; not called when re-running it from Settings.'
 			}
 		],
 		components: [],
@@ -19940,43 +19941,45 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'transport',
 				code: 'AssistantTransport',
 				status: true,
-				description: ''
+				description: 'Thread and message backend for the assistant dock.'
 			},
 			{
 				name: 'registry',
 				code: 'DataSurfaceRegistry',
 				status: true,
-				description: ''
+				description: "The host shell's data-surface registry, passed to the dock."
 			},
 			{
 				name: 'visible',
 				code: 'boolean',
 				status: false,
-				description: ''
+				description:
+					'Whether the dock is currently visible; its polling pauses while false. Default true.'
 			},
 			{
 				name: 'contextMode',
 				code: "'server' | 'data-surfaces'",
 				status: false,
-				description: ''
+				description: 'Where the assistant gets its working context; see `AssistantDock`.'
 			},
 			{
 				name: 'messageFormat',
 				code: "'text' | 'markdown'",
 				status: false,
-				description: ''
+				description: 'How message text renders: plain `text` (default) or `markdown`.'
 			},
 			{
 				name: 'toolPresentation',
 				code: "'generic'",
 				status: false,
-				description: ''
+				description: "`generic` shows a plain summary in place of a tool's own name and arguments."
 			},
 			{
 				name: 'introduction',
 				code: '{ lists: string[]; actions: string[]; configured: boolean; }',
 				status: false,
-				description: ''
+				description:
+					'What the assistant can do here, shown until the first message: the lists it can see (the first three are named), the actions it may take (`read`, `create`, `update`, `customize`) and whether an AI engine is configured; `configured: false` shows a connect-AI notice in place of the dock. Omit for no introduction.'
 			}
 		],
 		sources: [],
@@ -21596,19 +21599,20 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'approvals',
 				code: 'AssistantApprovalView[]',
 				status: false,
-				description: ''
+				description:
+					'Server-loaded approvals to show first; the list then refreshes through `transport`.'
 			},
 			{
 				name: 'transport',
 				code: 'AssistantTransport',
 				status: true,
-				description: ''
+				description: "Connection used to list approvals and send the owner's decision."
 			},
 			{
 				name: 'ondecided',
 				code: '() => void | Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called after an owner decision is accepted, to refresh the surrounding page.'
 			},
 			{
 				name: 'onsettled',
@@ -21624,7 +21628,7 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'ondecided',
 				code: '() => void | Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called after an owner decision is accepted, to refresh the surrounding page.'
 			},
 			{
 				name: 'onsettled',
@@ -21655,37 +21659,38 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'enabled',
 				code: 'boolean',
 				status: true,
-				description: ''
+				description: 'Whether prebuilt components are currently turned on.'
 			},
 			{
 				name: 'onsave',
 				code: '(enabled: boolean) => Promise<void>',
 				status: true,
-				description: ''
+				description: 'Persists the new setting; reject to put the toggle back and show an error.'
 			},
 			{
 				name: 'approvals',
 				code: 'AssistantApprovalView[]',
 				status: false,
-				description: ''
+				description: 'Server-loaded owner approvals still waiting on a decision.'
 			},
 			{
 				name: 'transport',
 				code: 'AssistantTransport',
 				status: false,
-				description: ''
+				description:
+					'Connection for deciding approvals; without it the approvals list is not shown.'
 			},
 			{
 				name: 'ondecided',
 				code: '() => void | Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called after an owner decision is accepted, to refresh the page.'
 			},
 			{
 				name: 'restartHref',
 				code: 'string',
 				status: false,
-				description: ''
+				description: 'Where "run onboarding again" goes. Default `/onboarding?restart=1`.'
 			}
 		],
 		sources: [],
@@ -21695,13 +21700,13 @@ export const uiComponents: UiComponentReference[] = [
 				name: 'onsave',
 				code: '(enabled: boolean) => Promise<void>',
 				status: true,
-				description: ''
+				description: 'Persists the new setting; reject to put the toggle back and show an error.'
 			},
 			{
 				name: 'ondecided',
 				code: '() => void | Promise<void>',
 				status: false,
-				description: ''
+				description: 'Called after an owner decision is accepted, to refresh the page.'
 			}
 		],
 		components: [],
@@ -33292,7 +33297,7 @@ export interface UiCoverage {
  * and authored summary comes from prose shipped inside a package.
  */
 export const uiCoverage: UiCoverage = {
-	describedProps: 3040,
+	describedProps: 3066,
 	totalProps: 3232,
 	authoredSummaries: 239,
 	totalComponents: 421
