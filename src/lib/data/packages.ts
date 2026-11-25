@@ -1844,6 +1844,10 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Payment rails behind one issuing provider',
 					body: 'A runtime has one issuing provider and any number of paymentProviders, each with a unique name and its own inbox namespace. Settlement is decided by the pure decideAttempt from gateway state and the payment policy; the gateway is authoritative, and nothing here counts confirmations. Crypto rails implement the port over the payments package and never call a gateway from here. Rails never save cards or charge tax. CustomerSelect and VendorSelect are the registered selectors; QuoteEditor and PurchaseOrderEditor keep draft strings apart from minor-unit revisions.'
+				},
+				{
+					title: 'Default settlement accounts',
+					body: 'ensureTenantSettlementAccounts(db, tenantId, { currency }) seeds or loads a tenant’s settlement ledger for one currency, with four accounts: cash 1000, accounts receivable 1200, sales tax payable 2200, and sales revenue 4000. It is idempotent, never changes an existing row, and refuses a row under a seed identity whose tenant, currency, ledger, number, or type differs. It returns the ledger and account ids. Payment.recordPayment still takes ledgerId, receivablesAccountId, and cashAccountId explicitly, so pass these ids to it. postInvoiceRevenueToSettlementChart uses the same accounts.'
 				}
 			],
 			exampleResource: 'invoices'
