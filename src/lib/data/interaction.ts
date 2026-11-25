@@ -219,7 +219,7 @@ const interactionGuides: Guide[] = [
 			{
 				title: 'Confirm agent mutations',
 				intro:
-					'An agent apply, discard, clear, or undo command returns human_confirmation_required under the default policy for an otherwise-permitted control, regardless of confirmed — a more specific refusal (sensitive, non-writable, disabled) still takes precedence. Only a human, through a real local click routed via executeLocalControlCommand, can apply, discard, clear, or undo.',
+					'An agent apply, discard, clear, or undo command returns human_confirmation_required under the default policy for an otherwise-permitted control, regardless of confirmed — a more specific refusal (sensitive, non-writable, disabled) still takes precedence, except for discard. Only a human, through a real local click routed via executeLocalControlCommand, can apply, discard, clear, or undo.',
 				points: [
 					'Apply uses the staged value unless the command supplies a direct value.',
 					'Apply stores the previous value for undo and then validates the new value.',

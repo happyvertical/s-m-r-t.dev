@@ -139,7 +139,7 @@ pnpm build`,
 					'Use generate-types, generate-routes, generate-register, and generate-mcp for explicit generation tasks.',
 					'Use playground init, playground list, and playground dev for component and package previews.',
 					'Use the knowledge command family when the output is evidence for a coding agent.',
-					'Use smrt app <operation> for the application lifecycle. The operations are install, setup, recover, start, stop, doctor, open, backup, backups, export, import, migrate, token, installation, restore-latest, worker, dev, build, and vite. Success output is JSON on stdout; a failure is one JSON envelope on stderr with exit code 1 and no secret values.',
+					'Use smrt app <operation> for the application lifecycle. The operations are install, setup, recover, start, stop, doctor, open, backup, backups, export, import, migrate, token, installation, restore-latest, worker, dev, build, and vite. Lifecycle operations print JSON on success and one JSON envelope on stderr with exit code 1 on failure, with no secret values; dev, build, and vite run the Vite CLI and show its output.',
 					'Use smrt cookbook validate to check a cookbook against the recipe manifests. Use smrt cookbook apply to create a project from it. Use smrt kitchen to serve the planner on localhost and apply the cookbook it produces.',
 					'Every db:* command resolves its database once. packages.cli.database.url from config wins, then DATABASE_URL with the engine from database.type or DATABASE_TYPE, then :memory:, which schema commands refuse.',
 					'smrt db:diff --empty-text-as-null previews how many empty text values become NULL and smrt db:migrate --empty-text-as-null applies it. smrt db:migrate-qualified-names rewrites stored names declared through previousQualifiedNames; it is opt-in and idempotent, and smrt doctor --db counts what remains.'
@@ -765,12 +765,11 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 				title: 'Two manifests at the package root',
 				intro:
 					'plugin.json identifies the plugin against the canonical 1.0.0 schema. mcp.json declares how to launch it. Both are published in the package files list, so they are present in the installed package rather than only in the source repository.',
-				filename: 'plugin.json',
+				filename: 'plugin.json (excerpt)',
 				lang: 'json',
 				code: `{
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-  "name": "smrt-dev-mcp",
-  "description": "…"
+  "name": "smrt-dev-mcp"
 }`
 			},
 			{

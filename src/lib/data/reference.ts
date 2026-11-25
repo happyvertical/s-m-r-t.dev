@@ -181,7 +181,7 @@ export const referenceGuides: Guide[] = [
 					'A secret mutation returns sensitive_control.',
 					'A non-writable mutation returns control_not_writable.',
 					'A disabled or read-only mutation returns control_not_editable.',
-					'An agent apply, discard, clear, or undo on an otherwise-permitted control always returns human_confirmation_required, regardless of confirmed — a more specific refusal still takes precedence.',
+					'An agent apply, discard, clear, or undo on an otherwise-permitted control always returns human_confirmation_required, regardless of confirmed — a more specific refusal still takes precedence, except for discard.',
 					'An unknown identity returns not_found, and an unavailable capability returns unsupported.'
 				]
 			},
@@ -843,7 +843,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 					'Analytics evaluates selected metrics as a semantic predicate. Deterministic calculations remain the source for values that the application can calculate directly.',
 				points: [
 					'Document the direction and comparison period with each assessment.',
-					'An incomplete period or insufficient data is answered as false. Do not present false as evidence of a negative trend.',
+					'An incomplete period or insufficient data the prompt tells the provider to answer false. Do not present false as evidence of a negative trend.',
 					'Use a generative uncertainty fallback only when the route declares one. Preserve the deterministic calculation and selected metric inputs.'
 				]
 			},
@@ -1067,7 +1067,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				code: `const items = await products.listByIds(ids);\nconst byId = new Map(items.map((item) => [item.id, item]));`,
 				points: [
 					'Result order is not guaranteed. Index the result by id when the caller needs its own ordering back.',
-					'listByIds divides a long id list into chunks of 900, the size the framework relationship loaders use. A long array in a list() filter is not divided, and databases limit the bound parameters in one statement.',
+					'listByIds divides a long id list into chunks of at most 900, the size the framework relationship loaders use. A long array in a list() filter is not divided, and databases limit the bound parameters in one statement.',
 					'count() uses the same where conversion as list() and never uses the read cache. Thus, a cached page and a fresh count can briefly disagree during the TTL window.'
 				]
 			},
