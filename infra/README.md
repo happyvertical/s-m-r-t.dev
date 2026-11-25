@@ -319,14 +319,31 @@ the pull requests are code.
    `new_hosted_zone_name = "happyvertical.com"`. Apply:
    `TF_WORKSPACE=staging tofu apply -var-file=staging.tfvars`. It adds the
    certificate name, alias and record for `staging.smrt.happyvertical.com`; the
-   certificate is replaced create-before-destroy. Plan first and stop if it shows anything else: one certificate replaced
-   (create before destroy), the old host's validation CNAME recreated, one
-   alias added, one record created, and nothing else destroyed. Check that host answers and
-   `staging.s-m-r-t.dev` still does.
+   certificate is replaced create-before-destroy. Plan first; it must show
+   exactly 5 to add, 1 to change, 3 to destroy, and stop if it shows anything
+   else:
+   - `aws_acm_certificate.site` replaced (create before destroy; the new
+     certificate lists the new host as a subject alternative name);
+   - `aws_acm_certificate_validation.site` replaced (it follows the certificate);
+   - `aws_route53_record.cert_validation["staging.s-m-r-t.dev"]` replaced (the old
+     host's validation CNAME, recreated for the new certificate);
+   - `aws_route53_record.cert_validation["staging.smrt.happyvertical.com"]`
+     created (the new host's validation CNAME, in the `happyvertical.com` zone);
+   - `aws_route53_record.new[0]` created (the A alias for
+     `staging.smrt.happyvertical.com`);
+   - `aws_cloudfront_distribution.site` updated in place: the alias is added and
+     the certificate ARN changes;
+   - nothing else created, changed or destroyed.
+
+   Check that host answers and `staging.s-m-r-t.dev` still does.
+
 3. PR, then owner applies production. The same two lines in `production.tfvars`:
    `TF_WORKSPACE=production tofu apply -var-file=production.tfvars`. The plan
-   must show the same as step 2 (plus the #389 fix already applied); stop if it
-   shows anything else. Check
+   must be step 2's, with `s-m-r-t.dev` and `smrt.happyvertical.com` in place of
+   the staging hosts (the validation records are keyed `"s-m-r-t.dev"` and
+   `"smrt.happyvertical.com"`): 5 to add, 1 to change, 3 to destroy, and stop if
+   it shows anything else. It must not also show an origin access control
+   change; that means the #389 steps were skipped. Check
    `https://smrt.happyvertical.com` and `https://s-m-r-t.dev`.
 4. Owner: set Matomo site 31's URL to the new host at or before the next step's
    merge, or analytics stop at deploy. PR: the code cutover (`SITE_ORIGIN`, the
