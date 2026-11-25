@@ -13,7 +13,9 @@ describe('agent static hosting', () => {
 
 	it('loads the CloudFront rewrite from the file main.tf deploys', () => {
 		const terraform = readFileSync('infra/modules/havesmrt/main.tf', 'utf8');
-		expect(terraform).toContain('code    = file("${path.module}/url-rewrite.js")');
+		expect(terraform).toContain('code    = local.url_rewrite_code');
+		// Redirect off: the published function is the source file, unchanged.
+		expect(terraform).toContain(') : file("${path.module}/url-rewrite.js")');
 	});
 	it('preserves text and Markdown paths through the deployed CloudFront rewrite', () => {
 		for (const path of [
@@ -49,6 +51,128 @@ describe('agent static hosting', () => {
 		for (const uri of ['//evil.com/', '///evil.com//']) {
 			expect(rewrite({ uri, querystring: {} }).headers.location.value).toBe('/evil.com');
 		}
+	});
+	// The published function when redirect_to_new_domain is on: url-rewrite.js
+	// renamed to rewriteRequest, then moved-redirect.js with its placeholders
+	// filled, composed the way main.tf's url_rewrite_code does.
+	const rewriteSource = readFileSync('infra/modules/havesmrt/url-rewrite.js', 'utf8');
+	const composed = (oldHost = 's-m-r-t.dev') =>
+		[
+			rewriteSource.replace('function handler(', 'function rewriteRequest('),
+			readFileSync('infra/modules/havesmrt/moved-redirect.js', 'utf8')
+				.replace('__OLD_HOST__', oldHost)
+				.replace('__NEW_HOST__', 'smrt.happyvertical.com')
+		].join('\n');
+	const run = (uri: string, querystring: object = {}, host: string | null = 's-m-r-t.dev') =>
+		runInNewContext(
+			`${composed()}\nhandler(${JSON.stringify({
+				request: { uri, querystring, headers: host === null ? {} : { host: { value: host } } }
+			})})`
+		);
+	const moved = (uri: string, querystring?: object) => run(uri, querystring);
+	const locationOf = (uri: string, querystring?: object) =>
+		moved(uri, querystring).headers.location.value;
+
+	it('wires the redirect from its source file with the hosts filled in', () => {
+		const terraform = readFileSync('infra/modules/havesmrt/main.tf', 'utf8');
+		expect(terraform).toContain('file("${path.module}/moved-redirect.js")');
+		expect(terraform).toContain('"__OLD_HOST__", lower(local.site_domain)');
+		expect(terraform).toContain('"__NEW_HOST__", lower(local.new_site_domain)');
+		expect(terraform).toContain('"function handler(", "function rewriteRequest("');
+		expect(rewriteSource.match(/function handler\(/g)).toHaveLength(1);
+	});
+	it('301s the old host to the same path on the new host in one hop', () => {
+		const response = moved('/docs/getting-started');
+		expect(response.statusCode).toBe(301);
+		expect(response.headers.location.value).toBe(
+			'https://smrt.happyvertical.com/docs/getting-started'
+		);
+		expect(response.headers['cache-control'].value).toBe('public, max-age=3600');
+		expect(locationOf('/')).toBe('https://smrt.happyvertical.com/');
+		expect(locationOf('/llms.txt')).toBe('https://smrt.happyvertical.com/llms.txt');
+	});
+	it('matches the old host exactly and case-insensitively, otherwise rewrites as before', () => {
+		for (const host of ['S-M-R-T.DEV', 's-m-r-t.dev:443', 's-m-r-t.dev.', 's-m-r-t.dev.:443']) {
+			expect(run('/docs/', {}, host).statusCode).toBe(301);
+		}
+		for (const host of [
+			's-m-r-t.dev.evil.com',
+			's-m-r-t.dev..',
+			'evil.s-m-r-t.dev',
+			'xs-m-r-t.dev',
+			'smrt.happyvertical.com',
+			'd111.cloudfront.net',
+			's-m-r-t.dev@evil.com',
+			's-m-r-t.dev:443@evil.com',
+			''
+		]) {
+			expect(run('/docs', {}, host).uri).toBe('/docs.html');
+			expect(run('/', {}, host).uri).toBe('/index.html');
+		}
+		expect(run('/docs', {}, null).uri).toBe('/docs.html');
+		// The new host keeps today's trailing-slash behaviour.
+		expect(run('/docs/', {}, 'smrt.happyvertical.com').headers.location.value).toBe('/docs');
+	});
+	it('keeps the staging twin separate from production', () => {
+		const source = composed('staging.s-m-r-t.dev');
+		const call = (host: string) =>
+			runInNewContext(
+				`${source}\nhandler(${JSON.stringify({ request: { uri: '/a', querystring: {}, headers: { host: { value: host } } } })})`
+			);
+		expect(call('staging.s-m-r-t.dev').statusCode).toBe(301);
+		expect(call('s-m-r-t.dev').uri).toBe('/a.html');
+	});
+	it('strips a trailing slash so the new host does not 301 again', () => {
+		expect(locationOf('/docs/')).toBe('https://smrt.happyvertical.com/docs');
+		expect(locationOf('/docs/a/b//')).toBe('https://smrt.happyvertical.com/docs/a/b');
+		expect(locationOf('//')).toBe('https://smrt.happyvertical.com/');
+	});
+	it('cannot be turned into an off-host redirect', () => {
+		for (const uri of [
+			'//evil.com/',
+			'///evil.com//',
+			'/\\evil.com',
+			'\\\\evil.com/x',
+			'/\\/evil.com',
+			'/@evil.com',
+			'@evil.com',
+			'/.@evil.com/',
+			'/%0d%0aLocation:%20https://evil.com'
+		]) {
+			const location = locationOf(uri);
+			expect(location.startsWith('https://smrt.happyvertical.com/')).toBe(true);
+			expect(new URL(location).host).toBe('smrt.happyvertical.com');
+			expect(location).not.toMatch(/[\r\n]/);
+		}
+		expect(locationOf('//evil.com/')).toBe('https://smrt.happyvertical.com/evil.com');
+		// Encoded slashes and CR/LF stay encoded, inside the path.
+		expect(locationOf('/%2F%2Fevil.com')).toBe('https://smrt.happyvertical.com/%2F%2Fevil.com');
+		expect(locationOf('/docs%2F')).toBe('https://smrt.happyvertical.com/docs%2F');
+		expect(locationOf('/a%0d%0ab')).toBe('https://smrt.happyvertical.com/a%0d%0ab');
+	});
+	it('keeps the query string as received, including repeated and valueless keys', () => {
+		expect(
+			locationOf('/docs/', {
+				features: { value: 'chat%2Cemail' },
+				x: { value: '', multiValue: [{ value: '1' }, { value: '2' }] },
+				flag: { value: '' },
+				q: { value: 'a%20b%26c%0d%0a' }
+			})
+		).toBe(
+			'https://smrt.happyvertical.com/docs?features=chat%2Cemail&x=1&x=2&flag&q=a%20b%26c%0d%0a'
+		);
+		// ?a=1&b=2&a=3: CloudFront groups the repeated key, so it is emitted together.
+		expect(
+			locationOf('/', {
+				a: { value: '1', multiValue: [{ value: '1' }, { value: '3' }] },
+				b: { value: '2' }
+			})
+		).toBe('https://smrt.happyvertical.com/?a=1&a=3&b=2');
+		expect(locationOf('/', {})).toBe('https://smrt.happyvertical.com/');
+	});
+	it('handles very long paths', () => {
+		const path = `/${'segment/'.repeat(500)}end/`;
+		expect(locationOf(path)).toBe(`https://smrt.happyvertical.com${path.slice(0, -1)}`);
 	});
 	it('sets explicit text MIME types for both deployment buckets', () => {
 		const workflow = readFileSync('.github/workflows/build-deploy.yaml', 'utf8');

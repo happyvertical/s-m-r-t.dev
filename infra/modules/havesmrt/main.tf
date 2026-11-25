@@ -1,6 +1,28 @@
 locals {
   site_domain = var.environment == "production" ? var.domain : "${var.environment}.${var.domain}"
   bucket_name = "havesmrt-${var.environment}"
+
+  # The Route53 zone is the domain itself unless the host lives inside a parent
+  # zone (smrt.happyvertical.com in happyvertical.com).
+  zone_name = coalesce(var.hosted_zone_name, var.domain)
+
+  # The host the site is moving to. var.domain keeps serving too, as an alias
+  # and certificate name on this distribution, and its Route53 record keeps its
+  # address; the new host only adds resources.
+  has_new          = var.new_domain != null
+  new_site_domain  = !local.has_new ? null : var.environment == "production" ? var.new_domain : "${var.environment}.${var.new_domain}"
+  new_zone_name    = local.has_new ? coalesce(var.new_hosted_zone_name, var.new_domain) : null
+  redirect_to_new  = local.has_new && var.redirect_to_new_domain
+  canonical_domain = local.redirect_to_new ? local.new_site_domain : local.site_domain
+  site_aliases     = local.has_new ? [local.site_domain, local.new_site_domain] : [local.site_domain]
+
+  # With the redirect off the published function is url-rewrite.js, byte for
+  # byte. With it on, the old host answers a 301 first (moved-redirect.js) and
+  # every other request falls through to the same rewrite.
+  url_rewrite_code = local.redirect_to_new ? join("\n", [
+    replace(file("${path.module}/url-rewrite.js"), "function handler(", "function rewriteRequest("),
+    replace(replace(file("${path.module}/moved-redirect.js"), "__OLD_HOST__", lower(local.site_domain)), "__NEW_HOST__", lower(local.new_site_domain))
+  ]) : file("${path.module}/url-rewrite.js")
 }
 
 # GitHub OIDC provider (data source - already exists in account)
@@ -119,7 +141,7 @@ resource "aws_cloudfront_function" "url_rewrite" {
   name    = "havesmrt-${var.environment}-url-rewrite"
   runtime = "cloudfront-js-2.0"
   publish = true
-  code    = file("${path.module}/url-rewrite.js")
+  code    = local.url_rewrite_code
 }
 
 # CloudFront Origin Access Control
@@ -138,7 +160,7 @@ resource "aws_cloudfront_distribution" "site" {
   comment             = "havesmrt ${var.environment} distribution"
   default_root_object = "index.html"
   price_class         = var.environment == "production" ? "PriceClass_All" : "PriceClass_100"
-  aliases             = [local.site_domain]
+  aliases             = local.site_aliases
 
   origin {
     domain_name              = aws_s3_bucket.site.bucket_regional_domain_name
@@ -254,6 +276,8 @@ resource "aws_acm_certificate" "site" {
   domain_name       = local.site_domain
   validation_method = "DNS"
 
+  subject_alternative_names = local.has_new ? [local.new_site_domain] : []
+
   lifecycle {
     create_before_destroy = true
   }
@@ -277,7 +301,15 @@ resource "aws_acm_certificate_validation" "site" {
 
 # Route53 DNS record for the site (assuming zone exists)
 data "aws_route53_zone" "site" {
-  name         = var.domain
+  name         = local.zone_name
+  private_zone = false
+}
+
+# Zone of the new host, when the site is moving.
+data "aws_route53_zone" "new" {
+  count = local.has_new ? 1 : 0
+
+  name         = local.new_zone_name
   private_zone = false
 }
 
@@ -293,7 +325,22 @@ resource "aws_route53_record" "site" {
   }
 }
 
-# Route53 record for certificate validation
+resource "aws_route53_record" "new" {
+  count = local.has_new ? 1 : 0
+
+  zone_id = data.aws_route53_zone.new[0].zone_id
+  name    = local.new_site_domain
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.site.domain_name
+    zone_id                = aws_cloudfront_distribution.site.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+# Route53 records for certificate validation. The new host's records go in its
+# own zone.
 resource "aws_route53_record" "cert_validation" {
   for_each = {
     for dvo in aws_acm_certificate.site.domain_validation_options : dvo.domain_name => {
@@ -308,5 +355,5 @@ resource "aws_route53_record" "cert_validation" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = data.aws_route53_zone.site.zone_id
+  zone_id         = each.key == local.new_site_domain ? data.aws_route53_zone.new[0].zone_id : data.aws_route53_zone.site.zone_id
 }

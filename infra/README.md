@@ -189,6 +189,92 @@ both environments. A path without an extension is served as `<path>.html`, and
 `<path>/` gets a 301 to `<path>` with its query string, because the site has no
 directory index pages (#339). Change the file, then `tofu apply` publishes it.
 
+## Moving the site to another host (#400)
+
+Four variables, all off by default, so merging this changes nothing: staging
+plans no changes, and production plans only the #389 OAC rename. Each has a
+module variable of the same name.
+
+| Variable                 | Default | Meaning                                                                                                                                                          |
+| ------------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `hosted_zone_name`       | `null`  | Route53 zone holding `domain`'s records, when `domain` sits inside a parent zone. `null` uses `domain`.                                                          |
+| `new_domain`             | `null`  | The host the site moves to. While set, the same distribution also serves it (alias, certificate name, record in its own zone); `domain` keeps serving unchanged. |
+| `new_hosted_zone_name`   | `null`  | Zone holding the new host's records (`happyvertical.com` for `smrt.happyvertical.com`). `null` uses `new_domain`.                                                |
+| `redirect_to_new_domain` | `false` | The main viewer-request function answers `domain` with one 301 to the same path and query on `new_domain`. Needs `new_domain`.                                   |
+
+`domain` stays the old host in the tfvars throughout. Its Route53 record, alias
+and certificate name are never touched, so there is no `state mv`, no `-var`,
+and nothing to delete mid-cutover; the new host only adds resources. Staging
+derives `staging.<host>` from each value.
+
+With the redirect off, the published function is `url-rewrite.js` byte for byte.
+With it on, `main.tf` renames that handler to `rewriteRequest` and appends
+`modules/havesmrt/moved-redirect.js`, which handles the old host (exact,
+case-insensitive match; port ignored) and passes every other request on. The
+redirect collapses leading slashes and backslashes (a `//evil.com/` path cannot
+leave the site), strips trailing slashes (pages are `<path>.html`, so keeping one
+costs a second hop) and rebuilds the query string as received. `/_app/*` has no
+function, so assets still answer on the old host. The `havesmrt.com` redirect
+targets the new host once `redirect_to_new_domain` is on; it keeps its own
+function, so a trailing-slash URL there is still two hops (301 to the new host,
+then the site's 301 to `<path>`). Matching it is a separate change.
+
+### Cutover order
+
+Every step ships its values in the tfvars through its own pull request and is
+applied with `-var-file` only, so a later plan from committed tfvars never
+reverts a step. Run from `infra/`. Production always follows a clean staging
+rehearsal of the same step. Owner steps are applies, state changes and Matomo;
+the pull requests are code.
+
+0. Owner: resolve #389 on production (the shared OAC) and confirm
+   `TF_WORKSPACE=production tofu plan -var-file=production.tfvars` is clean.
+   Nothing below is safe to apply before this.
+1. PR (this change): infra code only, a no-op.
+2. PR, then owner applies staging. Add to `staging.tfvars`:
+   `new_domain = "smrt.happyvertical.com"` and
+   `new_hosted_zone_name = "happyvertical.com"`. Apply:
+   `TF_WORKSPACE=staging tofu apply -var-file=staging.tfvars`. It adds the
+   certificate name, alias and record for `staging.smrt.happyvertical.com`; the
+   certificate is replaced create-before-destroy. Plan first and stop if it shows anything else: one certificate replaced
+   (create before destroy), the old host's validation CNAME recreated, one
+   alias added, one record created, and nothing else destroyed. Check that host answers and
+   `staging.s-m-r-t.dev` still does.
+3. PR, then owner applies production. The same two lines in `production.tfvars`:
+   `TF_WORKSPACE=production tofu apply -var-file=production.tfvars`. The plan
+   must show the same as step 2 (plus the #389 fix already applied); stop if it
+   shows anything else. Check
+   `https://smrt.happyvertical.com` and `https://s-m-r-t.dev`.
+4. Owner: set Matomo site 31's URL to the new host at or before the next step's
+   merge, or analytics stop at deploy. PR: the code cutover (`SITE_ORIGIN`, the
+   workflow's post-deploy checks, `robots.txt` and the tests together). Merge it
+   only after step 3, because it deploys and the new checks need the new host.
+5. PR, then owner applies staging: `redirect_to_new_domain = true` in
+   `staging.tfvars`; `TF_WORKSPACE=staging tofu apply -var-file=staging.tfvars`.
+   The plan must show function updates only (the site and `havesmrt.com`
+   functions); stop if it shows anything else. Check `curl -sI https://staging.s-m-r-t.dev/docs/` answers one 301 to
+   `https://staging.smrt.happyvertical.com/docs`, with the query kept.
+6. PR, then owner applies production: `redirect_to_new_domain = true` in
+   `production.tfvars`;
+   `TF_WORKSPACE=production tofu apply -var-file=production.tfvars`. Same plan
+   rule as step 5. Check
+   `https://s-m-r-t.dev/docs/` the same way.
+7. Track references in other repositories (smrt, have-config, iac, happyvertical.com).
+
+### Rollback
+
+Each step reverts by reverting its tfvars change and applying the same
+workspace with `-var-file`. Steps 5 and 6 only republish the function, so the
+old host serves again once clients drop the 301, which they may cache for up to an hour (`max-age=3600`). Steps 2 and 3 remove the new host's
+alias, record and certificate name; the old host's resources are not in the
+change, so it never stops serving. Roll back step 4 (the code) before 2 or 3.
+The certificate's primary name stays the old host, and ACM renewal validates
+every name on it, so the old domain and its Route53 zone cannot be dropped
+while this layout stands: if they lapse, renewal fails and TLS breaks on the
+new host too. Before the old domain is ever released, a later step must make the
+new host the primary `domain` (old host secondary or removed) and apply it.
+Until then the `site_url` output also stays the old host.
+
 ## Agent document delivery
 
 The build emits `/llms.txt`, `/llms-full.txt`, and a `.md` sibling of each
