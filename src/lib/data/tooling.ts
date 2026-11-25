@@ -4,7 +4,7 @@ import type { Guide } from '$lib/data/guides';
  * Released smrt version every claim in this section was verified against.
  * When this moves, re-read the canonical sources listed on each page.
  */
-export const TOOLING_PINNED_VERSION = '0.55.16';
+export const TOOLING_PINNED_VERSION = '0.70.0';
 
 /** Canonical upstream tree for the release above. */
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${TOOLING_PINNED_VERSION}`;
@@ -100,7 +100,7 @@ export const toolingGuides: Guide[] = [
 			{
 				title: 'Choose a supported starting point',
 				intro:
-					'smrt-start is the public SvelteKit template, and the one smrt cookbook apply copies by default. It includes one Note model, SQLite, the application runtime from smrt-app-runtime mounted through hooks.server.ts, the AppShell root layout, an assistant, and generated interfaces. It ships no operator scripts; every lifecycle script is a smrt app command. Its vite.config.ts is the smrt() preset, with the consumed packages read from package.json in smrt.config.ts. A cookbook, from build-a-boilerplate or the CLI library, adds recipe packages on top of the same template.',
+					'smrt-start is the public SvelteKit template, and the one smrt kitchen copies by default; smrt cookbook apply copies the template bundled with the CLI unless you pass --template. It includes one Note model, SQLite, the application runtime from smrt-app-runtime mounted through hooks.server.ts, the AppShell root layout, an assistant, and generated interfaces. It ships no operator scripts; every lifecycle script is a smrt app command. Its vite.config.ts is the smrt() preset, with the consumed packages read from package.json in smrt.config.ts. A cookbook, from build-a-boilerplate or the CLI library, adds recipe packages on top of the same template.',
 				points: [
 					'Clone smrt-start when you want the smallest working application with every layer visible.',
 					'Use smrt cookbook apply when you have a cookbook; it pins the template to the CLI release.',
@@ -139,7 +139,7 @@ pnpm build`,
 					'Use generate-types, generate-routes, generate-register, and generate-mcp for explicit generation tasks.',
 					'Use playground init, playground list, and playground dev for component and package previews.',
 					'Use the knowledge command family when the output is evidence for a coding agent.',
-					'Use smrt app <operation> for the application lifecycle. The operations are install, setup, start, stop, recover, doctor, open, backup, export, import, migrate, and worker. Success output is JSON on stdout; a failure is one JSON envelope on stderr with exit code 1 and no secret values.',
+					'Use smrt app <operation> for the application lifecycle. The operations are install, setup, recover, start, stop, doctor, open, backup, backups, export, import, migrate, token, installation, restore-latest, worker, dev, build, and vite. Lifecycle operations print JSON on success and one JSON envelope on stderr with exit code 1 on failure, with no secret values; dev, build, and vite run the Vite CLI and show its output.',
 					'Use smrt cookbook validate to check a cookbook against the recipe manifests. Use smrt cookbook apply to create a project from it. Use smrt kitchen to serve the planner on localhost and apply the cookbook it produces.',
 					'Every db:* command resolves its database once. packages.cli.database.url from config wins, then DATABASE_URL with the engine from database.type or DATABASE_TYPE, then :memory:, which schema commands refuse.',
 					'smrt db:diff --empty-text-as-null previews how many empty text values become NULL and smrt db:migrate --empty-text-as-null applies it. smrt db:migrate-qualified-names rewrites stored names declared through previousQualifiedNames; it is opt-in and idempotent, and smrt doctor --db counts what remains.'
@@ -374,7 +374,7 @@ smrt knowledge:architecture-context "tenant-aware publishing workflow" --format 
 					'Application-agent surfaces are generated from your @smrt() objects and perform live data operations.',
 					'Development MCP provides code generation output and project analysis for a coding agent.',
 					'Its review and architecture tools are model-agnostic and call no model provider.',
-					'The standalone install lists all 21 tools but ships no smrt-core. Code generation, the knowledge and context tools, agent skills, and introspection of a built manifest work without a runtime. Source-scan enrichment and the runtime tools need @happyvertical/smrt-core installed in the selected project; without it they return a sanitized runtime_dependency_unavailable diagnostic.',
+					'The standalone install lists all 22 tools but ships no smrt-core. Code generation, the knowledge and context tools, agent skills, and introspection of a built manifest work without a runtime. Source-scan enrichment and the runtime tools need @happyvertical/smrt-core installed in the selected project; without it they return a sanitized runtime_dependency_unavailable diagnostic.',
 					'One server process loads one runtime project. A request for another project fails with runtime_project_mismatch; start a separate server or restart it for that project.'
 				],
 				links: [
@@ -551,7 +551,7 @@ args = ["/absolute/path/to/node_modules/@happyvertical/smrt-dev-mcp/dist/index.j
 			{
 				title: 'Resources, prompts, and the bundled skill',
 				intro:
-					'Besides tools, the server exposes the composed project knowledge and package-scoped knowledge as resources, and publishes review and architecture prompts. It also ships one harness-agnostic agent skill, smrt-code-review, which get-agent-skill returns as Markdown with YAML frontmatter that skill-unaware harnesses can ignore.',
+					'Besides tools, the server exposes the composed project knowledge and package-scoped knowledge as resources, and publishes review and architecture prompts. It also ships four harness-agnostic agent skills: smrt-catalog, smrt-contribute, smrt-ai-work, and smrt-code-review. get-agent-skill returns each as Markdown with YAML frontmatter that skill-unaware harnesses can ignore.',
 				links: [{ label: 'How the skill is packaged', href: '/docs/tooling/agent-plugin' }]
 			}
 		],
@@ -765,12 +765,11 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 				title: 'Two manifests at the package root',
 				intro:
 					'plugin.json identifies the plugin against the canonical 1.0.0 schema. mcp.json declares how to launch it. Both are published in the package files list, so they are present in the installed package rather than only in the source repository.',
-				filename: 'plugin.json',
+				filename: 'plugin.json (excerpt)',
 				lang: 'json',
 				code: `{
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-  "name": "smrt-dev-mcp",
-  "description": "Development MCP server and smrt code-review skill."
+  "name": "smrt-dev-mcp"
 }`
 			},
 			{
@@ -792,11 +791,11 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 			{
 				title: 'Skills are found by location, not by declaration',
 				intro:
-					'plugin.json carries no skills field. Bundled skills live under the fixed skills directory for Agent Plugins discovery. The package ships skills/smrt-code-review/SKILL.md and its referenced output guide. Each skill is plain Markdown with YAML frontmatter naming and describing it. A skill-unaware harness can ignore the frontmatter and read the body.',
+					'plugin.json carries no skills field. Bundled skills live under the fixed skills directory for Agent Plugins discovery. The package ships skills/smrt-catalog, skills/smrt-contribute, skills/smrt-ai-work, and skills/smrt-code-review, each with a SKILL.md. Each skill is plain Markdown with YAML frontmatter naming and describing it. A skill-unaware harness can ignore the frontmatter and read the body.',
 				points: [
-					'Skill-aware clients discover the file directly from the installed package root.',
+					'Skill-aware clients discover the files directly from the installed package root.',
 					'Other MCP clients can reach the same content through the get-agent-skill tool.',
-					'It is also published as a prompt and as a resource for native MCP clients.'
+					'The code-review skill is also published as a prompt and as a resource for native MCP clients.'
 				],
 				links: [{ label: 'Calling it as a tool', href: '/docs/tooling/dev-mcp' }]
 			},
@@ -853,11 +852,11 @@ toolListCache: { cacheScope: 'public', publicCatalog: true }`
 			{
 				title: 'One protocol revision, one pinned SDK',
 				intro:
-					'Both MCP packages depend on @modelcontextprotocol/server at exactly 2.0.0, with no range. That SDK owns and enforces the 2026-07-28 revision. The framework does not declare the revision as a constant. The exact pin provides one known source for the protocol envelope, header validation, and error codes.',
+					'Both MCP packages depend on @modelcontextprotocol/server at one exact version, with no range. That SDK owns and enforces the 2026-07-28 revision. The framework does not declare the revision as a constant. The exact pin provides one known source for the protocol envelope, header validation, and error codes.',
 				points: [
 					'The application HTTP mount serves the 2026-07-28 envelope, always reports tools, and advertises the optional tasks extension only when configured.',
 					'Client-side pins in the framework test suites request the same revision explicitly.',
-					'The scoped client and node packages are pinned to 2.0.0 as well.'
+					'The scoped client and node packages are pinned exactly as well.'
 				]
 			},
 			{
