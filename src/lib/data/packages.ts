@@ -1746,7 +1746,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Backfill horizon and sync health',
-					body: 'EmailAccount.backfillSince is null by default. When set, syncChanges stores no message dated before it; stored mail is still updated and undated mail is kept. A run can override it with since, and null lifts it. Moving the horizon back, or clearing it, discards the saved cursor and runs a full pass. A failed run writes lastSyncError and a success clears it. Only a refused sign-in changes connectionStatus, to needs_reconnect. backlog is true when a run stopped at maxBatches.'
+					body: 'EmailAccount.backfillSince is null by default. When set, syncChanges stores no message dated before it; stored mail is still updated and undated mail is kept. A run can override it with since, and null lifts it. Moving the horizon back, or clearing it, discards the saved cursor and runs a full pass. A failed run writes lastSyncError and a success clears it. Only a refused sign-in changes connectionStatus, to needs_reconnect. backlog is true when a run stopped at maxBatches with changes waiting.'
 				}
 			],
 			exampleResource: 'messages'
