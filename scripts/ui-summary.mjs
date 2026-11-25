@@ -22,6 +22,23 @@ export function renderInlineTags(text) {
 const CHANGELOG_TAIL = /\s+refactored for Material \d+\.?$/i;
 const CHANGELOG_LINE = /^refactored for Material \d+\.?$/i;
 
+/**
+ * A parenthetical that is only tracker references, such as "(#2904)" or
+ * "(happyvertical/smrt#5346)". Headers cite the issue that introduced a
+ * component for maintainers; a reader of the reference cannot follow them.
+ * A parenthetical with any other words in it is prose and stays.
+ */
+const ISSUE_REF = String.raw`(?:[\w.-]+\/)?[\w.-]*#\d+`;
+const ISSUE_PARENTHETICAL = new RegExp(
+	String.raw`\s*\(${ISSUE_REF}(?:\s*(?:[,;]|and)\s*${ISSUE_REF})*\)`,
+	'g'
+);
+
+/** `text` without parentheticals that only cite issues. */
+export function stripIssueReferences(text) {
+	return text.replace(ISSUE_PARENTHETICAL, '');
+}
+
 /** The paragraphs of a `/** ... *\/` block, before its first tag line. */
 function paragraphsOf(raw) {
 	const lines = raw
@@ -107,9 +124,11 @@ export function withTerminalPunctuation(text) {
 	return !trimmed || TERMINAL.test(trimmed) ? trimmed : `${trimmed.replace(/[:;,]$/, '')}.`;
 }
 
-/** Inline tags rendered, changelog tail dropped, then the name and the length. */
+/** Inline tags rendered, changelog tail and issue references dropped, then the name and the length. */
 export function cleanSummary(text, name) {
-	const plain = renderInlineTags(text.replace(/\s+/g, ' ').trim().replace(CHANGELOG_TAIL, ''));
+	const plain = stripIssueReferences(
+		renderInlineTags(text.replace(/\s+/g, ' ').trim().replace(CHANGELOG_TAIL, ''))
+	);
 	return withTerminalPunctuation(limitToSentences(stripLeadingName(plain, name)));
 }
 
