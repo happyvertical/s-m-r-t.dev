@@ -556,7 +556,7 @@ await documents.list();
 				points: [
 					'Outside a request, optional-mode reads with no context pass through unfiltered at the interceptor. Request paths bind the tenancy of the request and hold a caller with no tenant to global rows, unless a system or bypass context applies. Those paths are runtime REST, emitted routes, sync apply, and MCP. A hand-written route outside them gets no such hold.',
 					'Raw SQL is gated, not filtered. The policy can throw, warn, or allow, but no tenant predicate is ever added, and a database handle obtained outside a collection bypasses interceptors entirely.',
-					'Context does not survive an asynchronous boundary, such as a timer, emitter, or queue consumer. Wrap the callback with TenantContext.bind or runWithJobContext.'
+					'Context does not survive an asynchronous boundary, such as a timer, emitter, or queue consumer. Wrap the callback with TenantContext.bind or TenantContext.runWithJobContext.'
 				]
 			},
 			{
@@ -915,7 +915,7 @@ export const POST = mountMcpRoute(mcpServer);
 			{
 				title: 'Connect a deployed application to a local client',
 				intro:
-					'A local MCP client speaks stdio, and the generated stdio server must not leave the machine. The bridge closes that gap: it runs locally, authenticates through the first-party terminal device flow, and forwards to your deployment. It talks to the REST-shaped aliases rather than the modern mount, so mount those alongside it.',
+					'A local MCP client speaks stdio, and the generated stdio server must not leave the machine. The bridge closes that gap: it runs locally, authenticates through the first-party terminal device flow, and forwards to your deployment. By default it talks to the modern mount; pass --legacy-rest to use the deprecated REST-shaped aliases instead.',
 				filename: 'bridge.json',
 				lang: 'json',
 				code: `{
@@ -935,10 +935,10 @@ export const POST = mountMcpRoute(mcpServer);
   }
 }`,
 				points: [
-					'The bridge requests /api/mcp/tools and /api/mcp/call, which are mountMcpToolsRoute and mountMcpCallRoute — deprecated, but the only shape it speaks today.',
+					'The bridge requests the modern mount at /api/mcp by default; --mcp-path or SMRT_MCP_PATH changes the path. With --legacy-rest it requests /api/mcp/tools and /api/mcp/call, which are mountMcpToolsRoute and mountMcpCallRoute — deprecated.',
 					'--env-prefix is required, or SMRT_MCP_ENV_PREFIX in its place; the prefix names the SERVER_URL and TOKEN variables it reads.',
 					'A stored token is only sent when its server URL exactly matches the request target, so a token cannot follow you to another host.',
-					'smrt-mcp-bridge is the only binary the package publishes. The device flow — /api/cli/auth/start, then polling /api/cli/auth/token — reaches you through an application CLI you assemble with its exported createAppCli.'
+					'The package publishes two binaries, smrt-mcp-bridge and smrt-app. The device flow — /api/cli/auth/start, then polling /api/cli/auth/token — reaches you through smrt-app, or through an application CLI you assemble with its exported createAppCli.'
 				],
 				links: [
 					{ label: 'Tooling reference: app MCP', href: '/docs/tooling/app-mcp' },
@@ -1103,14 +1103,14 @@ export const GET = async ({ url, locals }) => {
 			{
 				title: 'Read the ranking honestly',
 				intro:
-					'The ranking and filtering stages are separate, and their order explains most unexpected result sets. Similarity is calculated for each stored class vector. The result is shortened to limit. Then, the collection loads the remaining ids and applies tenant scope and the where clause.',
+					'The ranking and filtering stages are separate, and their order explains most unexpected result sets. Similarity is calculated for each stored class vector, limited to the rows of the active tenant when tenant scope applies. The result is shortened to limit. Then, the collection loads the remaining ids and applies the where clause.',
 				callout: {
 					variant: 'warning',
 					title: 'limit counts candidates, not results',
-					body: 'Truncation occurs before tenant scope and the where clause apply. Thus, limit 10 can return fewer than ten rows when more matches exist. Request extra candidates and shorten the result. Do not use limit as a page size.'
+					body: 'Truncation occurs before the where clause applies. Thus, limit 10 can return fewer than ten rows when more matches exist. Request extra candidates and shorten the result. Do not use limit as a page size.'
 				},
 				points: [
-					'Nothing leaks: a tenant-scoped class still filters at the hydration step, so another tenant’s rows never reach the caller.',
+					'Nothing leaks: a tenant-scoped class filters before ranking and again at the hydration step, so another tenant’s rows never reach the caller.',
 					'Field policy is not applied. Results are fully hydrated instances. Sensitive-field rules in the generated interfaces are not in this path. Project the fields that you return, as the route above does.',
 					'With json storage, every vector for the class is read and parsed on every query. That is sufficient for a catalog and not for a corpus.',
 					'Native vector search falls back to the in-application scan when the database call fails. Results stay correct and get much slower, and the only trace is a logged warning.'
@@ -1503,7 +1503,7 @@ jobs:
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: 26
           cache: pnpm
       - run: pnpm install --frozen-lockfile
 
