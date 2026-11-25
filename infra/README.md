@@ -192,8 +192,10 @@ bucket policy keys on the distribution ARN, not on the OAC. Two things changed.
 403 mapping is gone, so a 403 now means a broken bucket policy or OAC. The
 distribution can only ask whether a key exists; nothing requests a listing and
 `s3:ListBucketVersions` is not granted. The 404 mapping keeps
-`/404.html` as its page, but the build emits no `404.html` today, so a missing
-page's body is S3's XML `NoSuchKey` until the site ships one.
+`/404.html` as its page; the build emits it (the prerendered `/404` route, with
+absolute `/_app/` asset URLs so it renders at any depth), and the deploy uploads
+it with `Cache-Control: no-cache` so a browser never keeps a not-found. The site
+deploy that ships `404.html` must run before the missing-page check below.
 
 **Production gets its own OAC.** Until now both workspaces state-track one OAC
 (same id), so each plan renames it to its own name and the two flap. The code
@@ -217,8 +219,17 @@ rename the shared OAC again. Staging has no such dependency.
    to say `Deployed`, then
    `curl -sI https://staging.s-m-r-t.dev/definitely-missing | head -1` answers
    `404`, and `curl -sI https://staging.s-m-r-t.dev/docs | head -1` answers `200`.
+   Also check that no listing leaks:
+   `curl -s --path-as-is https://staging.s-m-r-t.dev/_app/..` and
+   `curl -s --path-as-is https://staging.s-m-r-t.dev/_app/x/../..` must print
+   no `<ListBucketResult`. Check the 404's caching with
+   `curl -sI https://staging.s-m-r-t.dev/definitely-missing | grep -i cache-control`:
+   it should say `no-cache` once the site deploy has uploaded `404.html`.
 2. Production, preconditions: step 1 verified; nothing else is applying to the
-   production workspace; record the shared OAC's id (needed for rollback):
+   production workspace; no OAC named `havesmrt-production-oac` exists yet (AWS
+   names are unique, so the plan's create would fail otherwise):
+   `aws cloudfront list-origin-access-controls --query "OriginAccessControlList.Items[?Name=='havesmrt-production-oac'].Id" --output text`
+   prints nothing; and record the shared OAC's id (needed for rollback):
    `TF_WORKSPACE=production tofu state show module.havesmrt.aws_cloudfront_origin_access_control.site | grep '^ *id '`
 3. Production, the state step. It writes state only, changes nothing in AWS,
    and leaves the OAC itself alone for staging:
@@ -256,12 +267,13 @@ rename the shared OAC again. Staging has no such dependency.
   `TF_WORKSPACE=staging tofu state show module.havesmrt.aws_cloudfront_origin_access_control.site`
   and in the origin of either distribution
   (`aws cloudfront get-distribution-config --id <DIST_ID> --query 'DistributionConfig.Origins.Items[0].OriginAccessControlId'`).
-- After the apply: the distributions already use the new OAC and serve; there
-  is nothing to undo for availability. To return to the shared OAC anyway,
-  `state rm` the new one, import the shared id as above, and apply; the plan
-  repoints both distributions and renames the shared OAC to production's name.
-  The new `havesmrt-production-oac` is then unmanaged; delete it with
-  `aws cloudfront delete-origin-access-control` once nothing references it.
+- After the apply there is no rollback to the shared OAC, by design. Both
+  distributions already use their own OACs and serve, so nothing needs undoing
+  for availability. Going back would mean renaming the shared OAC to
+  `havesmrt-production-oac` while the new one still holds that name (AWS names
+  are unique), and the new one cannot be deleted until nothing references it:
+  a multi-step repoint that recreates the staging/production flap. Fix forward
+  instead: a failed or interrupted apply is repeated with the same command.
 - The 404 change alone reverts by reverting commit and applying the same
   workspace: the 403 mapping returns and the extra bucket-policy statement goes.
 
@@ -275,7 +287,7 @@ directory index pages (#339). Change the file, then `tofu apply` publishes it.
 ## Moving the site to another host (#400)
 
 Four variables, all off by default, so they change nothing on their own. (Until
-the #389 steps below are applied, both workspaces also plan the 404 change, and
+the #389 steps above are applied, both workspaces also plan the 404 change, and
 production the OAC rename.) Each has a module variable of the same name.
 
 | Variable                 | Default | Meaning                                                                                                                                                          |
@@ -310,7 +322,7 @@ reverts a step. Run from `infra/`. Production always follows a clean staging
 rehearsal of the same step. Owner steps are applies, state changes and Matomo;
 the pull requests are code.
 
-0. Owner: run the #389 steps below (staging, then production) and confirm
+0. Owner: run the #389 steps above (staging, then production) and confirm
    `TF_WORKSPACE=production tofu plan -var-file=production.tfvars` is clean.
    Nothing below is safe to apply before this.
 1. PR (this change): infra code only, a no-op.
