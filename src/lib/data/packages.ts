@@ -869,6 +869,10 @@ export const packages: SmrtPackage[] = [
 					body: 'The /app-contract subpath carries the versioned discovery artifact that a CLI or MCP consumer can validate and pin. createDiscoveryConformanceArtifact emits deterministically ordered JSON with a SHA-256 integrity digest, and validateDiscoveryConformanceArtifact checks structure, ordering, and that digest in one call.',
 					href: movedHref('connectInterfaces'),
 					linkLabel: 'Generated interfaces'
+				},
+				{
+					title: 'Service principals have no login',
+					body: 'ServicePrincipalService makes a user that cannot sign in, for work a host runs on a tenant’s behalf. It is a trusted seam, not an endpoint: it checks no permission, so the host authorizes the tenant and role and passes its own transaction with transaction: ’caller’. createServicePrincipal is idempotent per tenant and key. It creates a bot profile, a user with no email or username, and an active membership in the given role. The user can never hold a session. retireServicePrincipal is permanent: the user is suspended, the membership goes inactive, and sessions are revoked. A retired key is never reused. isActiveServicePrincipal rechecks one tenant on each call.'
 				}
 			],
 			componentImport: '@happyvertical/smrt-users/svelte',
