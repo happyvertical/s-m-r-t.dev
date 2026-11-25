@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 import { describe, expect, it } from 'vitest';
-import { checkMetadata } from './check-agent-metadata.mjs';
+import { checkMetadata, checkNotFound } from './check-agent-metadata.mjs';
 import { serializeJsonLd, structuredData } from '../src/lib/seo/structured-data';
 
 describe('agent static hosting', () => {
@@ -196,6 +196,19 @@ describe('agent static hosting', () => {
 				expect(line).toContain(`--content-type "${mime}; charset=utf-8"`);
 			}
 		}
+	});
+	it('checks the built 404 page and that the build emits it', () => {
+		const page = `<meta name="robots" content="noindex"><h1>We couldn't find that page.</h1>`;
+		expect(() => checkNotFound(page)).not.toThrow();
+		expect(() => checkNotFound('<h1>Home</h1>')).toThrow();
+		expect(() => checkNotFound(page.replace('noindex', 'index'))).toThrow();
+		// The checker reads build/404.html in CI (local mode) and /404.html after deploy.
+		expect(readFileSync('scripts/check-agent-metadata.mjs', 'utf8')).toContain(
+			"checkNotFound(await read('/404.html', 'text/html'))"
+		);
+		expect(readFileSync('src/routes/404/+page.svelte', 'utf8')).toContain(
+			'<ErrorPage status={404}'
+		);
 	});
 	it('rejects missing, malformed and unsafe metadata in the real-output checker', () => {
 		const graph = serializeJsonLd(

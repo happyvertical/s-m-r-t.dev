@@ -69,6 +69,9 @@ const allDirs = new Set<string>([
 export const routes: RouteInfo[] = [];
 
 for (const dir of allDirs) {
+	// /404 only exists so the build emits 404.html, the error page CloudFront serves
+	// for a missing path; it is not a page of the site.
+	if (dir === '/404') continue;
 	const segments = dir.split('/').filter(Boolean);
 	const lastSegment = segments.at(-1) ?? '';
 	const isCatchAll = lastSegment.startsWith('[...');

@@ -35,6 +35,15 @@ export function checkMetadata(html, pathname) {
 	assert(/<h1[\s>]/.test(html), `${pathname}: no server-rendered heading`);
 }
 
+// CloudFront serves /404.html, with status 404, for a path that has no object.
+export function checkNotFound(html) {
+	assert(
+		/<h1[\s>][^]*We couldn't find that page\./.test(html),
+		'/404.html: not the not-found page'
+	);
+	assert(/<meta\b[^>]*name="robots"[^>]*content="noindex"/.test(html), '/404.html: not noindex');
+}
+
 async function main() {
 	const originIndex = process.argv.indexOf('--origin');
 	const origin = originIndex < 0 ? null : process.argv[originIndex + 1];
@@ -82,6 +91,7 @@ async function main() {
 		const file = origin ? path : path === '/' ? '/index.html' : `${path}.html`;
 		checkMetadata(await read(file, 'text/html'), path);
 	}
+	checkNotFound(await read('/404.html', 'text/html'));
 	console.log(
 		`agent metadata: ${paths.length} Markdown files, both text indexes, ${samples.length} no-JS HTML pages passed${origin ? ` at ${origin}` : ''}.`
 	);
