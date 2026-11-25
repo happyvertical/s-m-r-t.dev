@@ -700,7 +700,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Replacing a same-named model',
-					body: 'A class that extends a class of the same name from another package declares replaceParent in its own @smrt() options. With true, one model remains, under the subclass’s qualified name, on the parent’s table; the parent’s qualified name and previousQualifiedNames resolve to it. The parent must be registered first, and the subclass must not use another tableName. Leaving the option out is CONFIG_SAME_NAME_SUBCLASS_UNDECLARED, and false is CONFIG_SAME_NAME_COEXISTENCE_UNSUPPORTED, because a same-named subclass cannot sit beside its parent.'
+					body: 'A class that extends a same-named class from another package declares replaceParent in its own @smrt() options. With true, one model remains, under the subclass’s qualified name, on the parent’s table; the parent’s qualified name and previousQualifiedNames resolve to it. The parent must be registered first, and the subclass must not use another tableName. Omitting the option is CONFIG_SAME_NAME_SUBCLASS_UNDECLARED, and false is CONFIG_SAME_NAME_COEXISTENCE_UNSUPPORTED.'
 				},
 				{
 					title: 'Migrate is all or nothing',
@@ -779,7 +779,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Tenant filters are matched by column',
-					body: 'A filter key is the caller’s spelling, not a column name. The tenant interceptor resolves keys to columns, so tenantId, tenant_id, and tenantId = all count as an equality filter on the tenant column, with one id or a list. Under a tenant context, a value other than the context tenant throws TenantIsolationError; with no such filter, the context tenant is added. A key with another operator, such as tenantId !=, is not a tenant filter, so the context tenant is still added beside it, in each OR branch of a list.'
+					body: 'A filter key is the caller’s spelling, not a column name. The tenant interceptor resolves keys to columns, so tenantId, tenant_id, and tenantId = all count as an equality filter on the tenant column, for one id or a list. Under a tenant context, a value other than the context tenant throws TenantIsolationError; with no such filter, the context tenant is added. A key with another operator, such as tenantId !=, is not a tenant filter, so the context tenant is still added.'
 				}
 			],
 			components: ['TenantCard', 'TenantSwitcher'],
@@ -872,7 +872,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Service principals have no login',
-					body: 'ServicePrincipalService makes a user that cannot sign in, for work a host runs on a tenant’s behalf. It is a trusted seam, not an endpoint: it checks no permission, so the host authorizes the tenant and role and passes its own transaction with transaction: ’caller’. createServicePrincipal is idempotent per tenant and key. It creates a bot profile, a user with no email or username, and an active membership in the given role. The user can never hold a session. retireServicePrincipal is permanent: the user is suspended, the membership goes inactive, and sessions are revoked. A retired key is never reused. isActiveServicePrincipal rechecks one tenant on each call.'
+					body: "ServicePrincipalService makes a user that cannot sign in. It is a trusted seam, not an endpoint: it checks no permission, so the host authorizes the tenant and role and passes its own transaction with transaction: 'caller'. createServicePrincipal is idempotent per tenant and key, with a bot profile, no email or username, and an active membership. The user never holds a session. retireServicePrincipal is permanent: user suspended, membership inactive, sessions revoked, key never reused. isActiveServicePrincipal rechecks one tenant per call."
 				}
 			],
 			componentImport: '@happyvertical/smrt-users/svelte',
@@ -1730,23 +1730,23 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Agent sends are held for a person',
-					body: 'When an agent principal calls Message.send on a mail account, the draft is held and nothing leaves until a person approves it; send returns success false with a pendingApproval. That is the default: agentSendPolicy is null or require_approval. Only the account owner, as a person, can set auto_send, through MailAccessService.setAgentSendPolicy with confirmAutoSend and the messages.manage-access permission, and a new owner resets the policy to null. A principal is a person only when its kind is person or human, and a persona route is held even then. Without a gate passed to configureMailSendApprovals, an agent send is refused.'
+					body: 'When an agent principal calls Message.send on a mail account, the draft is held until a person approves it. require_approval is the default, also when agentSendPolicy is null. Only the owner, as a person with messages.manage-access, can set auto_send, through MailAccessService.setAgentSendPolicy with confirmAutoSend; a new owner resets it. A host can set it per rule with resolveAgentSendPolicy in configureMailSendApprovals. Only kind person or human is a person; a persona route is held even then. Without a gate, a signed-in agent’s send from a require_approval account is refused.'
 				},
 				{
 					title: 'A person decides a held send',
-					body: 'MailSendApprovalService is the person’s side. The signed-in principal must be a person with the messages.send permission and the read and send scopes on the account. approve takes optional edits and a reason, then sends the draft as the approving person. reject needs a reason and leaves the draft a draft. release sends a draft approved elsewhere, once. An approval is bound to a hash of the stored draft and its attachment rows, so a later change makes it unusable. MailDraftService.save needs the draft scope and always sends from the account’s own address; submit goes through Message.send.'
+					body: 'MailSendApprovalService is the person’s side: the principal must be a person with the messages.send permission and the read and send scopes on the account. approve takes optional edits, then sends the draft as that person; reject needs a reason; release sends a draft approved elsewhere, once. An approval is bound to a hash of the stored draft and its attachments, so a later change voids it. MailDraftService.save needs the draft scope and always sends from the account’s own address; submit goes through Message.send.'
 				},
 				{
 					title: 'Search is limited to readable accounts',
-					body: 'MailSearchService takes db, tenantId, and a principal, and searches only accounts where the principal holds the read scope; an accountIds filter can only narrow that set. search scans the local index newest first, up to 5000 rows per call, and sets truncated when it stopped early. limit defaults to 25 and is capped at 100. Keyword mode is the default; semantic mode ranks by embedding and falls back to keyword when none exist. searchProvider asks each account’s own server and falls back to the local index per account, with the reason.'
+					body: 'MailSearchService searches only accounts where the principal holds the read scope; an accountIds filter can only narrow that set. search scans the local index newest first, up to 5000 rows per call, and sets truncated when it stops early; limit defaults to 25, capped at 100. Semantic mode falls back to keyword when no embeddings exist. searchProvider asks each account’s own server and falls back to the local index per account.'
 				},
 				{
 					title: 'Correspondents are private to one person',
-					body: 'CorrespondentService derives one person’s correspondents from mail that person can read. Each row belongs to one ownerUserId and is never listed tenant-wide; generated REST, MCP, and CLI are off. refresh scans readable accounts and stores the address, latest name, counts, and contact dates; it never creates a profile, and linkProfile links one only at the owner’s request. Views use the accounts readable now, so a revoked account drops out. A principal with scopes, account ceilings, or an id different from its user id is delegated: refresh throws and reads return nothing unless the host passes allowDelegated.'
+					body: 'CorrespondentService derives one person’s correspondents from mail that person can read. Each row belongs to one ownerUserId and is never listed tenant-wide; generated REST, MCP, and CLI are off. refresh never creates a profile; linkProfile links one at the owner’s request. Views use only accounts readable now, so a revoked account drops out. A delegated principal (scopes, account ceilings, or an id other than its user id) cannot refresh, and reads return nothing, unless the host passes allowDelegated.'
 				},
 				{
 					title: 'Backfill horizon and sync health',
-					body: 'EmailAccount.backfillSince is null by default. When set, syncChanges stores no message dated before it; stored mail is still updated, undated mail is kept, and the result reports beforeHorizon. A run can override it with since, and null lifts it. Moving the horizon back, or clearing it, discards the saved cursor and runs a full pass. A failed run writes lastSyncError and a successful run clears it. Only a refused sign-in changes connectionStatus, to needs_reconnect. backlog is true when a run stopped at maxBatches with changes waiting.'
+					body: 'EmailAccount.backfillSince is null by default. When set, syncChanges stores no message dated before it; stored mail is still updated and undated mail is kept. A run can override it with since, and null lifts it. Moving the horizon back, or clearing it, discards the saved cursor and runs a full pass. A failed run writes lastSyncError and a success clears it. Only a refused sign-in changes connectionStatus, to needs_reconnect. backlog is true when a run stopped at maxBatches.'
 				}
 			],
 			exampleResource: 'messages'
@@ -1847,7 +1847,7 @@ export const packages: SmrtPackage[] = [
 				},
 				{
 					title: 'Default settlement accounts',
-					body: 'ensureTenantSettlementAccounts(db, tenantId, { currency }) seeds or loads a tenant’s settlement ledger for one currency, with four accounts: cash 1000, accounts receivable 1200, sales tax payable 2200, and sales revenue 4000. It is idempotent, never changes an existing row, and refuses a row under a seed identity whose tenant, currency, ledger, number, or type differs. It returns the ledger and account ids. Payment.recordPayment still takes ledgerId, receivablesAccountId, and cashAccountId explicitly, so pass these ids to it. postInvoiceRevenueToSettlementChart uses the same accounts.'
+					body: 'ensureTenantSettlementAccounts(db, tenantId, { currency }) seeds or loads a tenant’s settlement ledger for one currency, with accounts for cash 1000, receivables 1200, sales tax payable 2200, and revenue 4000. It is idempotent, never changes an existing row, and refuses a seed row whose tenant, currency, ledger, number, or type differs. It returns the ids. Payment.recordPayment still takes ledgerId, receivablesAccountId, and cashAccountId explicitly, so pass them in.'
 				}
 			],
 			exampleResource: 'invoices'
