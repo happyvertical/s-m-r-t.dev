@@ -105,7 +105,10 @@ async function files(directory) {
 
 export async function collectPages(directory) {
 	const pages = [];
-	for (const file of (await files(directory)).filter((file) => file.endsWith('.html')).sort()) {
+	for (const file of (await files(directory))
+		// 404.html is the error page CloudFront serves, not a canonical document.
+		.filter((file) => file.endsWith('.html') && path.relative(directory, file) !== '404.html')
+		.sort()) {
 		const dom = new JSDOM(await readFile(file, 'utf8'));
 		const document = dom.window.document;
 		if (document.querySelector('meta[http-equiv="refresh" i]')) {
