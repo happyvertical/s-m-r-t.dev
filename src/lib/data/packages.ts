@@ -1727,6 +1727,26 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Only the owner shares a mailbox',
 					body: 'MailAccessService has grant, revoke, list, and setOwner. The tenant permission messages.manage-access is required, and the actor must also own the account. The one exception is a grantee whose own grant is delegable: that grantee can pass on a plain grant. An administrator therefore cannot read or take over a mailbox that another person owns. A user with messages.manage-credentials can set the first owner of an account that has none, to any active member of the tenant. seedMessagesRolePermissions gives the system roles their messages permissions.'
+				},
+				{
+					title: 'Agent sends are held for a person',
+					body: 'When an agent principal calls Message.send on a mail account, the draft is held and nothing leaves until a person approves it; send returns success false with a pendingApproval. That is the default: agentSendPolicy is null or require_approval. Only the account owner, as a person, can set auto_send, through MailAccessService.setAgentSendPolicy with confirmAutoSend and the messages.manage-access permission, and a new owner resets the policy to null. A principal is a person only when its kind is person or human, and a persona route is held even then. Without a gate passed to configureMailSendApprovals, an agent send is refused.'
+				},
+				{
+					title: 'A person decides a held send',
+					body: 'MailSendApprovalService is the person’s side. The signed-in principal must be a person with the messages.send permission and the read and send scopes on the account. approve takes optional edits and a reason, then sends the draft as the approving person. reject needs a reason and leaves the draft a draft. release sends a draft approved elsewhere, once. An approval is bound to a hash of the stored draft and its attachment rows, so a later change makes it unusable. MailDraftService.save needs the draft scope and always sends from the account’s own address; submit goes through Message.send.'
+				},
+				{
+					title: 'Search is limited to readable accounts',
+					body: 'MailSearchService takes db, tenantId, and a principal, and searches only accounts where the principal holds the read scope; an accountIds filter can only narrow that set. search scans the local index newest first, up to 5000 rows per call, and sets truncated when it stopped early. limit defaults to 25 and is capped at 100. Keyword mode is the default; semantic mode ranks by embedding and falls back to keyword when none exist. searchProvider asks each account’s own server and falls back to the local index per account, with the reason.'
+				},
+				{
+					title: 'Correspondents are private to one person',
+					body: 'CorrespondentService derives one person’s correspondents from mail that person can read. Each row belongs to one ownerUserId and is never listed tenant-wide; generated REST, MCP, and CLI are off. refresh scans readable accounts and stores the address, latest name, counts, and contact dates; it never creates a profile, and linkProfile links one only at the owner’s request. Views use the accounts readable now, so a revoked account drops out. A principal with scopes, account ceilings, or an id different from its user id is delegated: refresh throws and reads return nothing unless the host passes allowDelegated.'
+				},
+				{
+					title: 'Backfill horizon and sync health',
+					body: 'EmailAccount.backfillSince is null by default. When set, syncChanges stores no message dated before it; stored mail is still updated, undated mail is kept, and the result reports beforeHorizon. A run can override it with since, and null lifts it. Moving the horizon back, or clearing it, discards the saved cursor and runs a full pass. A failed run writes lastSyncError and a successful run clears it. Only a refused sign-in changes connectionStatus, to needs_reconnect. backlog is true when a run stopped at maxBatches with changes waiting.'
 				}
 			],
 			exampleResource: 'messages'
