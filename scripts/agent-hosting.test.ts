@@ -199,16 +199,28 @@ describe('agent static hosting', () => {
 	});
 	it('checks the built 404 page and that the build emits it', () => {
 		const page = `<meta name="robots" content="noindex"><h1>We couldn't find that page.</h1>`;
-		expect(() => checkNotFound(page)).not.toThrow();
+		const asset = '<link href="/_app/immutable/a.css">';
+		expect(() => checkNotFound(page + asset)).not.toThrow();
 		expect(() => checkNotFound('<h1>Home</h1>')).toThrow();
-		expect(() => checkNotFound(page.replace('noindex', 'index'))).toThrow();
+		expect(() => checkNotFound(page + asset.replace('"/_app', '"./_app'))).toThrow();
+		expect(() => checkNotFound(page)).toThrow();
+		expect(() => checkNotFound((page + asset).replace('noindex', 'index'))).toThrow();
 		// The checker reads build/404.html in CI (local mode) and /404.html after deploy.
 		expect(readFileSync('scripts/check-agent-metadata.mjs', 'utf8')).toContain(
 			"checkNotFound(await read('/404.html', 'text/html'))"
 		);
+		expect(readFileSync('svelte.config.js', 'utf8')).toMatch(/relative:\s*false/);
 		expect(readFileSync('src/routes/404/+page.svelte', 'utf8')).toContain(
 			'<ErrorPage status={404}'
 		);
+	});
+	it('uploads 404.html uncached to both buckets', () => {
+		const workflow = readFileSync('.github/workflows/build-deploy.yaml', 'utf8');
+		for (const env of ['staging', 'production']) {
+			expect(workflow).toContain(
+				`aws s3 cp build/404.html s3://havesmrt-${env}/404.html --content-type "text/html; charset=utf-8" --cache-control "no-cache"`
+			);
+		}
 	});
 	it('rejects missing, malformed and unsafe metadata in the real-output checker', () => {
 		const graph = serializeJsonLd(

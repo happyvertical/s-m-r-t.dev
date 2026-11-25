@@ -41,6 +41,12 @@ export function checkNotFound(html) {
 		/<h1[\s>][^]*We couldn't find that page\./.test(html),
 		'/404.html: not the not-found page'
 	);
+	// Served for a missing path at any depth, so no relative asset URL may remain.
+	assert(
+		!/="\.{1,2}\/_app\//.test(html) && !/new URL\("\."/.test(html),
+		'/404.html: relative asset URL'
+	);
+	assert(/="\/_app\/immutable\//.test(html), '/404.html: no absolute /_app/ asset URL');
 	assert(/<meta\b[^>]*name="robots"[^>]*content="noindex"/.test(html), '/404.html: not noindex');
 }
 
