@@ -213,16 +213,15 @@ resource "aws_cloudfront_distribution" "site" {
     compress               = true
   }
 
+  # A missing key answers 404 from S3 (the bucket policy below grants
+  # s3:ListBucket to this distribution, without which S3 answers 403 for a
+  # missing key). There is deliberately no 403 mapping: a real 403 means the
+  # bucket policy or OAC is broken and should show as one.
   custom_error_response {
-    error_code         = 404
-    response_code      = 404
-    response_page_path = "/404.html"
-  }
-
-  custom_error_response {
-    error_code         = 403
-    response_code      = 403
-    response_page_path = "/404.html"
+    error_caching_min_ttl = 0
+    error_code            = 404
+    response_code         = 404
+    response_page_path    = "/404.html"
   }
 
   restrictions {
@@ -245,7 +244,10 @@ resource "aws_cloudfront_distribution" "site" {
   }
 }
 
-# S3 bucket policy for CloudFront OAC
+# S3 bucket policy for CloudFront OAC. ListBucket is what makes S3 report a
+# missing key as 404 instead of 403. It lets only this distribution ask whether
+# a key exists; CloudFront never issues a listing request, every object is
+# already public through it, and ListBucketVersions is not granted.
 resource "aws_s3_bucket_policy" "site" {
   bucket = aws_s3_bucket.site.id
 
@@ -260,6 +262,20 @@ resource "aws_s3_bucket_policy" "site" {
         }
         Action   = "s3:GetObject"
         Resource = "${aws_s3_bucket.site.arn}/*"
+        Condition = {
+          StringEquals = {
+            "AWS:SourceArn" = aws_cloudfront_distribution.site.arn
+          }
+        }
+      },
+      {
+        Sid    = "AllowCloudFrontListBucketFor404"
+        Effect = "Allow"
+        Principal = {
+          Service = "cloudfront.amazonaws.com"
+        }
+        Action   = "s3:ListBucket"
+        Resource = aws_s3_bucket.site.arn
         Condition = {
           StringEquals = {
             "AWS:SourceArn" = aws_cloudfront_distribution.site.arn

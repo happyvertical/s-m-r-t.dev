@@ -286,6 +286,7 @@ platform-dependent S3 MIME guessing. They retain the one-hour cache policy.
 Deployments wait for invalidation to complete, then run
 `node scripts/check-agent-metadata.mjs --origin <site-url>`. This checks both text
 indexes, every Markdown URL from the sitemap, and representative HTML JSON-LD
-and no-JavaScript content. A missing S3 object can return 403 rather than 404;
-either status fails the verification. The same checker runs on local build
+and no-JavaScript content. A missing page answers 404 (the bucket policy grants
+the distribution `s3:ListBucket`, and there is no 403 mapping); the check fails on
+any status but 200. The same checker runs on local build
 output before artifacts are uploaded.
