@@ -2556,7 +2556,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary: 'Text + attachment composer for AssistantDock (#2904).',
+		summary: 'Text + attachment composer for AssistantDock.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -2687,7 +2687,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary: 'Shell-mounted, route-aware assistant surface (#2904).',
+		summary: 'Shell-mounted, route-aware assistant surface.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -3016,7 +3016,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			'A structured assistant question (see `./assistant-question.ts`) as a small form in the chat (#4100).',
+			'A structured assistant question (see `./assistant-question.ts`) as a small form in the chat.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -3075,7 +3075,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-chat-svelte',
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
-		summary: 'Sidebar list of assistant threads (#2904).',
+		summary: 'Sidebar list of assistant threads.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -4519,7 +4519,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Chat · Components',
 		importPath: '@happyvertical/smrt-chat/svelte',
 		summary:
-			"AI model selector. Extracted from `@happyvertical/smrt-content`'s `ContentAgentChat.svelte` (its `AI_MODELS` constant + `availableAIModels`/`allowedModelIds` filtering, `packages/content/src/svelte/components/ContentAgentChat.svelte:28-121`) for reuse by AssistantDock (#2904).",
+			"AI model selector. Extracted from `@happyvertical/smrt-content`'s `ContentAgentChat.svelte` (its `AI_MODELS` constant + `availableAIModels`/`allowedModelIds` filtering, `packages/content/src/svelte/components/ContentAgentChat.svelte:28-121`) for reuse by AssistantDock.",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -13898,7 +13898,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-personas-svelte',
 		category: 'Personas · Components',
 		importPath: '@happyvertical/smrt-personas/svelte',
-		summary: 'The minimal human-in-the-loop surface for the persona learning loop (#1889).',
+		summary: 'The minimal human-in-the-loop surface for the persona learning loop.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -17817,7 +17817,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Cookbook',
 		importPath: '@happyvertical/smrt-svelte/cookbook',
 		summary:
-			'`CookbookApp` (#3749): `AppShell` driven by a cookbook. A generated app needs a layout that renders this with `smrt.cookbook.json` (validated) and the catalog the server helper loads, plus one route that renders `CookbookSectionPage`.',
+			'`CookbookApp`: `AppShell` driven by a cookbook. A generated app needs a layout that renders this with `smrt.cookbook.json` (validated) and the catalog the server helper loads, plus one route that renders `CookbookSectionPage`.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -17918,7 +17918,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Cookbook',
 		importPath: '@happyvertical/smrt-svelte/cookbook',
 		summary:
-			"A section page's editable overview (#3749): `OverviewGrid` over the section's definition. The cookbook owns the override (the controller reads it and writes each edit back). Mount it under `{#key}` on the section id.",
+			"A section page's editable overview: `OverviewGrid` over the section's definition. The cookbook owns the override (the controller reads it and writes each edit back). Mount it under `{#key}` on the section id.",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -18012,7 +18012,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Cookbook',
 		importPath: '@happyvertical/smrt-svelte/cookbook',
 		summary:
-			"A navigation section's own page in a cookbook app (#3749). The sidebar lists only sections, so this is where a section's entries are: an editable overview (the entries as themed cards by default, unframed shortcuts with explicit `presentation=\"plain\"`) with the shell's layout edit mode driving its grid. A section with no overview shows its menu.",
+			"A navigation section's own page in a cookbook app. The sidebar lists only sections, so this is where a section's entries are: an editable overview (the entries as themed cards by default, unframed shortcuts with explicit `presentation=\"plain\"`) with the shell's layout edit mode driving its grid. A section with no overview shows its menu.",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20140,7 +20140,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Overview',
 		importPath: '@happyvertical/smrt-svelte/overview',
 		summary:
-			'Metric widget (#3727): one number with an optional caption and change. It renders from the loaded data only; the loader decides what the number means.',
+			'Metric widget: one number with an optional caption and change. It renders from the loaded data only; the loader decides what the number means.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20212,7 +20212,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Overview',
 		importPath: '@happyvertical/smrt-svelte/overview',
 		summary:
-			'Note widget (#3727): sanitized Markdown from the `body` option. It renders a parsed node tree as Svelte elements, never `{@html}`, so stored text cannot inject markup or an unsafe link.',
+			'Note widget: sanitized Markdown from the `body` option. It renders a parsed node tree as Svelte elements, never `{@html}`, so stored text cannot inject markup or an unsafe link.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20324,7 +20324,7 @@ export const uiComponents: UiComponentReference[] = [
 		family: 'smrt-svelte-overview',
 		category: 'Svelte · Overview',
 		importPath: '@happyvertical/smrt-svelte/overview',
-		summary: 'A customizable overview as a flow grid of widgets (#3727).',
+		summary: 'A customizable overview as a flow grid of widgets.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20411,7 +20411,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Overview',
 		importPath: '@happyvertical/smrt-svelte/overview',
 		summary:
-			'Record list widget (#3727): the rows a loader chose, each optionally a link. The loader owns which field is the title and which records the viewer may see; the widget only draws what it is given.',
+			'Record list widget: the rows a loader chose, each optionally a link. The loader owns which field is the title and which records the viewer may see; the widget only draws what it is given.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20555,7 +20555,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Overview',
 		importPath: '@happyvertical/smrt-svelte/overview',
 		summary:
-			'Shortcuts widget (#3727): the section-overview cards as a widget. It draws the cards a loader produced (see `shortcutsFromNav`), with the same look as `ShellSectionMenu layout="cards"`, so a section\'s default overview is just this widget.',
+			'Shortcuts widget: the section-overview cards as a widget. It draws the cards a loader produced (see `shortcutsFromNav`), with the same look as `ShellSectionMenu layout="cards"`, so a section\'s default overview is just this widget.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20627,7 +20627,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Overview',
 		importPath: '@happyvertical/smrt-svelte/overview',
 		summary:
-			"Edits one widget's options (#3727). A widget's options are plain fields, so this reads like the generated record forms: smrt-ui form controls driven by the option field descriptors (label, help, required, type), with the same save/cancel bar. It validates through the widget's schema (via `onsave`) and shows each problem beside its field.",
+			"Edits one widget's options. A widget's options are plain fields, so this reads like the generated record forms: smrt-ui form controls driven by the option field descriptors (label, help, required, type), with the same save/cancel bar. It validates through the widget's schema (via `onsave`) and shows each problem beside its field.",
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20699,7 +20699,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Screens',
 		importPath: '@happyvertical/smrt-svelte/screens',
 		summary:
-			'A read-only record view for any model, derived from its manifest definition and resolved field policy (#3718).',
+			'A read-only record view for any model, derived from its manifest definition and resolved field policy.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20876,7 +20876,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Screens',
 		importPath: '@happyvertical/smrt-svelte/screens',
 		summary:
-			'A create / edit form for any model, derived from its manifest definition and resolved field policy (#3718).',
+			'A create / edit form for any model, derived from its manifest definition and resolved field policy.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -20997,7 +20997,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Screens',
 		importPath: '@happyvertical/smrt-svelte/screens',
 		summary:
-			'A searchable, sortable, paged table for any model, derived from its manifest definition and resolved field policy (#3718).',
+			'A searchable, sortable, paged table for any model, derived from its manifest definition and resolved field policy.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -21153,7 +21153,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Screens',
 		importPath: '@happyvertical/smrt-svelte/screens',
 		summary:
-			'List, view, create and edit for any model, derived from its manifest definition and resolved field policy (#3718). It is the default screen set for a package that ships models but no consumer UI: tags, facts, secrets, profiles, reports, prompts and the like.',
+			'List, view, create and edit for any model, derived from its manifest definition and resolved field policy. It is the default screen set for a package that ships models but no consumer UI: tags, facts, secrets, profiles, reports, prompts and the like.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -21306,7 +21306,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Svelte · Screens',
 		importPath: '@happyvertical/smrt-svelte/screens',
 		summary:
-			'The record page (#3718): a header (back link, the title or a document\'s "Order GRA-3159", the monospace identifier, a status badge and key facts by role; Edit as the one primary action and an overflow menu with the host\'s extra actions and Delete), a details card of the remaining fields (empty ones behind "Show empty fields"), and a customizable `OverviewGrid` below: by default a summary strip of metric tiles, the `line-items` table and totals when the model has line items, and one tabbed `related` widget (`recordOverview`, persisted per model kind).',
+			'The record page: a header (back link, the title or a document\'s "Order GRA-3159", the monospace identifier, a status badge and key facts by role; Edit as the one primary action and an overflow menu with the host\'s extra actions and Delete), a details card of the remaining fields (empty ones behind "Show empty fields"), and a customizable `OverviewGrid` below: by default a summary strip of metric tiles, the `line-items` table and totals when the model has line items, and one tabbed `related` widget (`recordOverview`, persisted per model kind).',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -23986,7 +23986,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Charts',
 		importPath: '@happyvertical/smrt-ui/charts',
 		summary:
-			'Chart widget (#3727, #3888): bars, a line, a plain table, a donut or a single headline value over labelled values, drawn from the loaded data. Every chart carries its numbers as text (bar values inline, a visible table for `table`, a visually hidden table for the line and the donut, the value itself for `stat`) so it is readable without sight.',
+			'Chart widget: bars, a line, a plain table, a donut or a single headline value over labelled values, drawn from the loaded data. Every chart carries its numbers as text (bar values inline, a visible table for `table`, a visually hidden table for the line and the donut, the value itself for `stat`) so it is readable without sight.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
@@ -28349,7 +28349,7 @@ export const uiComponents: UiComponentReference[] = [
 		category: 'Forms and controls',
 		importPath: '@happyvertical/smrt-ui/forms',
 		summary:
-			'A password field with an accessible "Show password" toggle and an optional "Confirm password" field (happyvertical/smrt#5346).',
+			'A password field with an accessible "Show password" toggle and an optional "Confirm password" field.',
 		summarySynthesized: false,
 		slot: null,
 		details: [
