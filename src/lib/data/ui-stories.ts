@@ -100,7 +100,7 @@ export const uiStories: UIStory[] = [
 			},
 			{
 				kind: 'operate',
-				body: 'An adapter can request focus, reveal, highlight, explain, validate, stage, apply, clear, or undo operations. Each request identifies its command source.'
+				body: 'An adapter can request focus, reveal, highlight, explain, validate, stage, apply, discard, clear, or undo operations. Each request identifies its command source.'
 			},
 			{
 				kind: 'confirm',

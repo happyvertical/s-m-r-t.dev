@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
 	cleanSummary,
+	stripIssueReferences,
 	limitToSentences,
 	renderInlineTags,
 	stripLeadingName,
@@ -174,5 +175,32 @@ describe('limitToSentences', () => {
 
 	it('leaves a short summary untouched', () => {
 		expect(limitToSentences(sentence)).toBe(sentence);
+	});
+});
+
+describe('stripIssueReferences', () => {
+	it('drops a parenthetical made only of tracker references', () => {
+		expect(stripIssueReferences('A composer (#2904).')).toBe('A composer.');
+		expect(stripIssueReferences('A field (happyvertical/smrt#5346).')).toBe('A field.');
+		expect(stripIssueReferences('A grid (#12, #34) of widgets')).toBe('A grid of widgets');
+		expect(stripIssueReferences('A grid (smrt#12 and #34) of widgets')).toBe('A grid of widgets');
+	});
+
+	it('keeps a parenthetical that says anything else', () => {
+		expect(stripIssueReferences('A panel (the #4754 "My AI" page).')).toBe(
+			'A panel (the #4754 "My AI" page).'
+		);
+		expect(stripIssueReferences('Headings (`#`-`###`) render.')).toBe(
+			'Headings (`#`-`###`) render.'
+		);
+	});
+
+	it('reaches the summary the reference shows', () => {
+		expect(cleanSummary('Sidebar list of assistant threads (#2904).', 'ThreadList')).toBe(
+			'Sidebar list of assistant threads.'
+		);
+		expect(
+			cleanSummary('A password field with a toggle (happyvertical/smrt#5346).', 'PasswordInput')
+		).toBe('A password field with a toggle.');
 	});
 });
