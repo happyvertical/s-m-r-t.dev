@@ -8,7 +8,7 @@ import { SMRT_VERSION } from '$lib/version';
  * re-read the canonical sources listed on each page and re-run the checks
  * behind them.
  */
-const REFERENCE_PINNED_VERSION = '0.55.16';
+const REFERENCE_PINNED_VERSION = '0.70.0';
 
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${REFERENCE_PINNED_VERSION}`;
 

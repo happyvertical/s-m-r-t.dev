@@ -11,7 +11,7 @@ import type { GuideDifficulty, TaskGuide, TaskGuideFamilyId } from '$lib/data/gu
  * the disagreement between the pin and the rendered version is the signal to
  * re-run the guides and move it.
  */
-export const TASK_GUIDES_PINNED_VERSION = '0.55.16';
+export const TASK_GUIDES_PINNED_VERSION = '0.70.0';
 
 /** Canonical upstream tree for the release above. */
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${TASK_GUIDES_PINNED_VERSION}`;
