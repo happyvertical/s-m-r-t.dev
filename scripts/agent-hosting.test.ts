@@ -51,6 +51,12 @@ describe('agent static hosting', () => {
 		for (const uri of ['//evil.com/', '///evil.com//']) {
 			expect(rewrite({ uri, querystring: {} }).headers.location.value).toBe('/evil.com');
 		}
+		// Backslashes read as slashes in a browser, so /\evil.com/ is no safer.
+		for (const uri of ['/\\evil.com/', '\\\\evil.com/', '/\\/\\evil.com//']) {
+			expect(rewrite({ uri, querystring: {} }).headers.location.value).toBe('/evil.com');
+		}
+		expect(rewrite({ uri: '/\\/', querystring: {} }).headers.location.value).toBe('/');
+		expect(rewrite({ uri: '/a\\b/', querystring: {} }).headers.location.value).toBe('/a\\b');
 	});
 	// The published function when redirect_to_new_domain is on: url-rewrite.js
 	// renamed to rewriteRequest, then moved-redirect.js with its placeholders

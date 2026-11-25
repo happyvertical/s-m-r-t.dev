@@ -5,11 +5,12 @@ function handler(event) {
 	var uri = request.uri;
 
 	// The site is prerendered as <path>.html (SvelteKit trailingSlash 'never'),
-	// so <path>/ has no object and S3 answers 403. Send it to <path> with a 301,
+	// so <path>/ has no object and S3 answers 404. Send it to <path> with a 301,
 	// keeping the query string (s-m-r-t.dev#339).
 	if (uri.length > 1 && uri.endsWith('/')) {
-		// Collapse leading slashes too: a Location of //host is another site.
-		var location = '/' + uri.replace(/^\/+|\/+$/g, '');
+		// Collapse leading slashes and backslashes too (browsers read \ as /): a
+		// Location of //host or /\host is another site.
+		var location = '/' + uri.replace(/^[/\\]+|\/+$/g, '');
 		var qs = [];
 		for (var key in request.querystring) {
 			var param = request.querystring[key];
