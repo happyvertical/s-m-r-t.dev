@@ -58,7 +58,7 @@ describe('agent static hosting', () => {
 		expect(rewrite({ uri: '/\\/', querystring: {} }).headers.location.value).toBe('/');
 		expect(rewrite({ uri: '/a\\b/', querystring: {} }).headers.location.value).toBe('/a\\b');
 	});
-	// The published function when redirect_to_new_domain is on: url-rewrite.js
+	// The published function when redirect_old_domain is on: url-rewrite.js
 	// renamed to rewriteRequest, then moved-redirect.js with its placeholders
 	// filled, composed the way main.tf's url_rewrite_code does.
 	const rewriteSource = readFileSync('infra/modules/havesmrt/url-rewrite.js', 'utf8');
@@ -82,8 +82,8 @@ describe('agent static hosting', () => {
 	it('wires the redirect from its source file with the hosts filled in', () => {
 		const terraform = readFileSync('infra/modules/havesmrt/main.tf', 'utf8');
 		expect(terraform).toContain('file("${path.module}/moved-redirect.js")');
-		expect(terraform).toContain('"__OLD_HOST__", lower(local.site_domain)');
-		expect(terraform).toContain('"__NEW_HOST__", lower(local.new_site_domain)');
+		expect(terraform).toContain('"__OLD_HOST__", lower(local.old_site_domain)');
+		expect(terraform).toContain('"__NEW_HOST__", lower(local.site_domain)');
 		expect(terraform).toContain('"function handler(", "function rewriteRequest("');
 		expect(rewriteSource.match(/function handler\(/g)).toHaveLength(1);
 	});

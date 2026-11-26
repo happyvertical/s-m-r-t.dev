@@ -50,7 +50,7 @@ resource "aws_cloudfront_function" "redirect" {
       return {
         statusCode: 301,
         statusDescription: 'Moved Permanently',
-        headers: { 'location': { value: 'https://${local.canonical_domain}' + request.uri + query } }
+        headers: { 'location': { value: 'https://${local.site_domain}' + request.uri + query } }
       };
     }
   EOF

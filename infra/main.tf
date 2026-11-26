@@ -31,11 +31,11 @@ module "havesmrt" {
   domain           = var.domain
   hosted_zone_name = var.hosted_zone_name
 
-  new_domain             = var.new_domain
-  new_hosted_zone_name   = var.new_hosted_zone_name
-  redirect_to_new_domain = var.redirect_to_new_domain
-  aws_region             = var.aws_region
-  github_repository      = var.github_repository
+  old_domain           = var.old_domain
+  old_hosted_zone_name = var.old_hosted_zone_name
+  redirect_old_domain  = var.redirect_old_domain
+  aws_region           = var.aws_region
+  github_repository    = var.github_repository
 
   providers = {
     aws.us_east_1 = aws.us_east_1
