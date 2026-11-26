@@ -161,7 +161,7 @@ describe('docs panel section map', () => {
 			const failures: string[] = [];
 
 			for (const item of allItems) {
-				const url = new URL(item.href, 'https://s-m-r-t.dev');
+				const url = new URL(item.href, 'https://smrt.happyvertical.com');
 				await rerender({ pathname: url.pathname, hash: url.hash, shell });
 
 				const nav = screen.getByRole('navigation', { name: 'Documentation section map' });

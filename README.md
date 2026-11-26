@@ -1,7 +1,7 @@
-# s-m-r-t.dev
+# smrt.happyvertical.com
 
 This is the documentation site for the smrt framework, published at
-[s-m-r-t.dev](https://s-m-r-t.dev). It's a SvelteKit site built with
+[smrt.happyvertical.com](https://smrt.happyvertical.com). It's a SvelteKit site built with
 `adapter-static`: every page is prerendered at build time, so what ships is
 plain static files.
 
@@ -49,14 +49,14 @@ sitemap or a sitemap URL has no built page. Redirect aliases are left out on
 purpose. To check a deployed site:
 
 ```sh
-node scripts/check-agent-metadata.mjs --origin https://s-m-r-t.dev
+node scripts/check-agent-metadata.mjs --origin https://smrt.happyvertical.com
 ```
 
 ## How it deploys
 
 `.github/workflows/build-deploy.yaml` does it. A push to `main` that touches the
 site builds once, syncs `build/` to the staging S3 bucket, clears the CloudFront
-cache and checks [staging.s-m-r-t.dev](https://staging.s-m-r-t.dev). If that
+cache and checks [staging.smrt.happyvertical.com](https://staging.smrt.happyvertical.com). If that
 passes, the same build goes to production the same way. You can also deploy
 either environment by running the workflow by hand.
 

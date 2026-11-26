@@ -16,13 +16,7 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { SITE_HOST, SITE_ORIGIN, siteUrl } from '$lib/site';
 
-const HOST = /s-m-r-t\.dev/g;
-
-/**
- * A match is not the site's hostname when it is the GitHub repository name
- * (`happyvertical/s-m-r-t.dev`) or a cross-repo issue reference (`s-m-r-t.dev#332`).
- */
-const NOT_THE_HOSTNAME = /(?:happyvertical\/|\.)s-m-r-t\.dev|s-m-r-t\.dev#\d/g;
+const HOST = new RegExp(SITE_HOST.replaceAll('.', '\\.'), 'g');
 
 /** Tracked files that may carry the hostname, and why. First match wins. */
 const EXCEPTIONS: { test: (_file: string) => boolean; why: string }[] = [
@@ -62,7 +56,7 @@ const withHostname = tracked.flatMap((file) => {
 	}
 	const lines = text
 		.split('\n')
-		.map((line, index) => ({ line: line.replace(NOT_THE_HOSTNAME, ''), number: index + 1 }))
+		.map((line, index) => ({ line, number: index + 1 }))
 		.filter(({ line }) => new RegExp(HOST.source).test(line));
 	return lines.length ? [{ file, lines }] : [];
 });

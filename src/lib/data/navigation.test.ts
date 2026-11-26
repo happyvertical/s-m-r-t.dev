@@ -113,7 +113,7 @@ describe('contextual navigation', () => {
 		expect(onThisPage!.items.length).toBeGreaterThan(1);
 
 		for (const target of onThisPage!.items) {
-			const hash = new URL(target.href, 'https://s-m-r-t.dev').hash;
+			const hash = new URL(target.href, 'https://smrt.happyvertical.com').hash;
 			const activeHrefs = onThisPage!.items
 				.filter((item) => isNavigationItemActive(item.href, '/docs/framework/agents', hash))
 				.map((item) => item.href);

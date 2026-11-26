@@ -163,7 +163,7 @@ jobs:
           aws cloudfront wait invalidation-completed --distribution-id E1OSZKW909MZLI --id "$invalidation_id"
 
       - name: Verify deployed agent documents and no-JS metadata
-        run: node scripts/check-agent-metadata.mjs --origin https://staging.s-m-r-t.dev
+        run: node scripts/check-agent-metadata.mjs --origin https://staging.smrt.happyvertical.com
 
   deploy-production:
     needs:
@@ -225,4 +225,4 @@ jobs:
           aws cloudfront wait invalidation-completed --distribution-id EV2V4BTTHGGOV --id "$invalidation_id"
 
       - name: Verify deployed agent documents and no-JS metadata
-        run: node scripts/check-agent-metadata.mjs --origin https://s-m-r-t.dev
+        run: node scripts/check-agent-metadata.mjs --origin https://smrt.happyvertical.com

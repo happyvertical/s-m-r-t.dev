@@ -11,7 +11,7 @@ const REFERENCE_CONTRACT = '/docs/reference/control-interaction';
 
 describe('agent-aware form demonstration discovery', () => {
 	it('registers the canonical scripted demonstration in the Playground', () => {
-		expect(AGENT_AWARE_FORM_ENTRY_ID).toBe('s-m-r-t.dev:agent-aware-form');
+		expect(AGENT_AWARE_FORM_ENTRY_ID).toBe('smrt.happyvertical.com:agent-aware-form');
 		expect(sitePlayground.entries).toEqual(
 			expect.arrayContaining([
 				expect.objectContaining({

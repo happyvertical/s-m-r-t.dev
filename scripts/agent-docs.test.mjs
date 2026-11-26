@@ -8,7 +8,7 @@ import { JSDOM } from 'jsdom';
 import { markdown, collectPages, generate } from './generate-agent-docs.mjs';
 
 const html = (route, content = '<h1>Title</h1><p>Actual content.</p>') =>
-	`<title>Exact &amp; title</title><meta name="description" content="Exact &amp; description"><link rel="canonical" href="https://s-m-r-t.dev${route}"><nav>Site navigation</nav><main id="main-content">${content}</main>`;
+	`<title>Exact &amp; title</title><meta name="description" content="Exact &amp; description"><link rel="canonical" href="https://smrt.happyvertical.com${route}"><nav>Site navigation</nav><main id="main-content">${content}</main>`;
 async function fixture(routes = ['/']) {
 	const directory = await mkdtemp(path.join(os.tmpdir(), 'agent-docs-'));
 	onTestFinished(() => rm(directory, { recursive: true, force: true }));
@@ -19,7 +19,7 @@ async function fixture(routes = ['/']) {
 	}
 	await writeFile(
 		path.join(directory, 'sitemap.xml'),
-		`<urlset>${routes.map((route) => `<url><loc>https://s-m-r-t.dev${route}</loc></url>`).join('')}</urlset>`
+		`<urlset>${routes.map((route) => `<url><loc>https://smrt.happyvertical.com${route}</loc></url>`).join('')}</urlset>`
 	);
 	return directory;
 }
@@ -30,11 +30,11 @@ test('semantic Markdown preserves code, tables, links, escaping and excludes exe
 	).window.document;
 	const result = markdown(
 		document.querySelector('main'),
-		'https://s-m-r-t.dev/docs/reference/parent'
+		'https://smrt.happyvertical.com/docs/reference/parent'
 	);
 	assert.match(result, /# A \\\* title/);
 	assert.match(result, /A \\\[literal\\\]/);
-	assert.match(result, /\[link\]\(<https:\/\/s-m-r-t.dev\/docs\/reference\/child>\)/);
+	assert.match(result, /\[link\]\(<https:\/\/smrt.happyvertical.com\/docs\/reference\/child>\)/);
 	assert.match(result, /` \{ x: 1 \} `/);
 	assert.match(result, /```ts\nconst x = \{ value: `ok` \};\n\nnext\(\);\n```/);
 	assert.match(result, /\| a\\\|b \| c \|/);
@@ -108,7 +108,7 @@ test('generates complete artifacts, preserves prose, includes full curated text 
 		'## Released boundaries\n\nPolicy verbatim.\n\n## Runtime provenance\n\nProvenance verbatim.\n';
 	await writeFile(
 		source,
-		`${prefix}## Canonical technical documentation\n\n- https://s-m-r-t.dev/ — old\n\n${suffix}`
+		`${prefix}## Canonical technical documentation\n\n- https://smrt.happyvertical.com/ — old\n\n${suffix}`
 	);
 	assert.deepEqual(await generate(directory, false, source), { pages: 7, artifacts: 9 });
 	await generate(directory, true, source);
@@ -119,7 +119,7 @@ test('generates complete artifacts, preserves prose, includes full curated text 
 	assert.match(index, /## Components/);
 	assert.match(index, /https:\/\/happyvertical.com\/llms.txt/);
 	assert.match(index, /`\/index.md`/);
-	for (const route of routes) assert.ok(index.includes(`https://s-m-r-t.dev${route}`));
+	for (const route of routes) assert.ok(index.includes(`https://smrt.happyvertical.com${route}`));
 	const full = await readFile(path.join(directory, 'llms-full.txt'), 'utf8');
 	assert.equal((full.match(/Actual content\./g) || []).length, 5);
 	await writeFile(path.join(directory, 'index.md'), 'stale');
