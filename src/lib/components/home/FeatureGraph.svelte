@@ -14,6 +14,7 @@
 	import { featureSections, featuresInSection, getFeature } from '$lib/data/features';
 	import { isSetOn, toggleSet } from '$lib/group-selection';
 	import type { FeatureSectionId } from '$lib/data/features';
+	import { BURST_MS, rockPath, shards } from './asteroid';
 	import FrontControls from './FrontControls.svelte';
 	import { fitGraph, HUB_RADIUS, type PlacedNode } from './graph-layout';
 	import SkyMap from './SkyMap.svelte';
@@ -67,8 +68,37 @@
 	// A section circle is lit while its whole everyday set is selected.
 	const isSectionOn = (node: PlacedNode) => node.depth === 1 && isSetOn(selected, sectionOf(node));
 
+	// In space an unselected feature is an asteroid; selecting it by hand blows
+	// it apart (#392). A burst is keyed so the same rock can blow twice running,
+	// and a restored selection or reduced motion never bursts.
+	const ROCK = 9;
+	let bursts = $state<{ key: number; id: string }[]>([]);
+	let burstKey = 0;
+	const burstTimers: ReturnType<typeof setTimeout>[] = [];
+	function burst(ids: string[]) {
+		if (sky || !ids.length || typeof window.matchMedia !== 'function') return;
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		const added = ids.map((id) => ({ key: ++burstKey, id: `feature:${id}` }));
+		bursts.push(...added);
+		const timer = setTimeout(() => {
+			burstTimers.splice(burstTimers.indexOf(timer), 1);
+			bursts = bursts.filter((item) => !added.some((one) => one.key === item.key));
+		}, BURST_MS);
+		burstTimers.push(timer);
+	}
+	onMount(() => () => {
+		for (const timer of burstTimers) clearTimeout(timer);
+	});
+	const burstNodes = $derived(
+		bursts.flatMap((item) => {
+			const node = nodes.find((one) => one.id === item.id);
+			return node ? [{ key: item.key, node, pieces: shards(item.id, ROCK) }] : [];
+		})
+	);
+
 	function toggleSection(section: FeatureSectionId) {
 		const next = toggleSet(selected, section);
+		burst([...next].filter((id) => !selected.has(id)));
 		selected.clear();
 		for (const id of next) selected.add(id);
 		saveSelection(selected);
@@ -83,7 +113,10 @@
 	}
 
 	function toggleId(id: string) {
-		if (!selected.delete(id)) selected.add(id);
+		if (!selected.delete(id)) {
+			selected.add(id);
+			burst([id]);
+		}
 		saveSelection(selected);
 	}
 	const toggle = (node: PlacedNode) => toggleId(featureId(node));
@@ -286,10 +319,12 @@
 						>
 							{#if isSelected(node)}
 								<circle class="ring" r={node.r + 5} />
+							{:else if isFeature(node)}
+								<path class="rock" d={rockPath(node.id, ROCK)} />
 							{/if}
 							<circle
 								class="dot"
-								r={node.r}
+								r={isFeature(node) && !isSelected(node) ? ROCK : node.r}
 								onclick={(event) => onCircleClick(event, node)}
 								role="presentation"
 							/>
@@ -301,6 +336,23 @@
 								role="presentation">{node.word}</text
 							>
 						</a>
+					</g>
+				{/each}
+			</g>
+			<g class="bursts" aria-hidden="true">
+				{#each burstNodes as item (item.key)}
+					<g transform="translate({item.node.x},{item.node.y})">
+						<path
+							class="flash"
+							d="M-{ROCK},0A{ROCK},{ROCK} 0 1 0 {ROCK},0A{ROCK},{ROCK} 0 1 0 -{ROCK},0Z"
+						/>
+						{#each item.pieces as piece, index (index)}
+							<path
+								class="shard"
+								d={piece.d}
+								style="--dx:{piece.dx}px;--dy:{piece.dy}px;--spin:{piece.spin}deg"
+							/>
+						{/each}
 					</g>
 				{/each}
 			</g>
@@ -483,6 +535,71 @@
 		stroke-width: 2.5;
 		opacity: 1;
 		pointer-events: none;
+	}
+	/* An unselected feature is an asteroid (#392): the rock is what shows and the
+	   circle under it is only the click target. */
+	.n .rock {
+		fill: var(--front-bg);
+		stroke: var(--front-yellow);
+		stroke-width: 1.5;
+		stroke-linejoin: round;
+		opacity: 0.85;
+		pointer-events: none;
+	}
+	.n.d2:not(.sel) circle.dot,
+	.n.d2:not(.sel):hover circle.dot,
+	.n.d2:not(.sel).on circle.dot,
+	.n.d2:not(.sel):focus-visible circle.dot {
+		fill: transparent;
+		stroke: none;
+	}
+	.n:hover .rock,
+	.n.on .rock,
+	.n:focus-visible .rock {
+		fill: var(--front-yellow);
+		opacity: 1;
+	}
+	.n:focus-visible .rock {
+		stroke: var(--front-ink);
+		stroke-width: 3;
+	}
+	/* Selecting one blows it apart: a flash, and shards thrown clear. */
+	.bursts {
+		pointer-events: none;
+	}
+	.shard {
+		fill: var(--front-yellow);
+		stroke: var(--front-yellow);
+		stroke-width: 1;
+		stroke-linejoin: round;
+		animation: shard 0.7s cubic-bezier(0.15, 0.7, 0.3, 1) forwards;
+	}
+	.flash {
+		fill: none;
+		stroke: var(--front-ink);
+		stroke-width: 2;
+		transform-box: fill-box;
+		transform-origin: center;
+		animation: flash 0.45s ease-out forwards;
+	}
+	@keyframes shard {
+		55% {
+			opacity: 1;
+		}
+		to {
+			transform: translate(var(--dx), var(--dy)) rotate(var(--spin));
+			opacity: 0;
+		}
+	}
+	@keyframes flash {
+		from {
+			transform: scale(0.6);
+			opacity: 1;
+		}
+		to {
+			transform: scale(3.2);
+			opacity: 0;
+		}
 	}
 	/* A selected niche feature: a dashed ring around the filled dot. */
 	.n.sel.niche:not(.unmapped) circle.ring {
