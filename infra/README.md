@@ -182,6 +182,109 @@ tofu destroy -var-file=production.tfvars
 
 **Warning**: This will delete the S3 buckets and all content!
 
+## Missing pages answer 404, and production's own origin access control (#389)
+
+Both distributions read the bucket through origin access control (OAC), and the
+bucket policy keys on the distribution ARN, not on the OAC. Two things changed.
+
+**Missing pages answer 404.** The bucket policy grants the distribution
+`s3:ListBucket`, so S3 reports a missing key as 404 (without it, 403), and the
+403 mapping is gone, so a 403 now means a broken bucket policy or OAC. The
+distribution can only ask whether a key exists; nothing requests a listing and
+`s3:ListBucketVersions` is not granted. The 404 mapping keeps
+`/404.html` as its page; the build emits it (the prerendered `/404` route, with
+absolute `/_app/` asset URLs so it renders at any depth), and the deploy uploads
+it with `Cache-Control: no-cache` so a browser never keeps a not-found. The site
+deploy that ships `404.html` must run before the missing-page check below.
+
+**Production gets its own OAC.** Until now both workspaces state-track one OAC
+(same id), so each plan renames it to its own name and the two flap. The code
+already names it per environment (`havesmrt-<environment>-oac`); only
+production's state needs to let go of the shared one. It also repoints the
+`havesmrt.com` redirect distribution, which uses the same OAC. Staging keeps
+the shared OAC and needs no state step.
+
+### Owner steps
+
+Run from `infra/`. Order matters: the state step comes **before any production
+apply**, including the 404 change, because any production apply would otherwise
+rename the shared OAC again. Staging has no such dependency.
+
+1. Staging: `TF_WORKSPACE=staging tofu plan -var-file=staging.tfvars` shows
+   0 add, 3 change, 0 destroy (the distribution loses its 403 mapping, the
+   URL-rewrite function updates, the bucket policy gains `s3:ListBucket`).
+   Stop on anything else. Apply with
+   `TF_WORKSPACE=staging tofu apply -var-file=staging.tfvars`, wait for
+   `aws cloudfront get-distribution --id <STAGING_DIST_ID> --query Distribution.Status --output text`
+   to say `Deployed`, then
+   `curl -sI https://staging.s-m-r-t.dev/definitely-missing | head -1` answers
+   `404`, and `curl -sI https://staging.s-m-r-t.dev/docs | head -1` answers `200`.
+   Also check that no listing leaks:
+   `curl -s --path-as-is https://staging.s-m-r-t.dev/_app/..` and
+   `curl -s --path-as-is https://staging.s-m-r-t.dev/_app/x/../..` must print
+   no `<ListBucketResult`. Check the 404's caching with
+   `curl -sI https://staging.s-m-r-t.dev/definitely-missing | grep -i cache-control`:
+   it should say `no-cache` once the site deploy has uploaded `404.html`.
+2. Production, preconditions: step 1 verified; nothing else is applying to the
+   production workspace; no OAC named `havesmrt-production-oac` exists yet (AWS
+   names are unique, so the plan's create would fail otherwise):
+   `aws cloudfront list-origin-access-controls --query "OriginAccessControlList.Items[?Name=='havesmrt-production-oac'].Id" --output text`
+   prints nothing; and record the shared OAC's id (needed for rollback):
+   `TF_WORKSPACE=production tofu state show module.havesmrt.aws_cloudfront_origin_access_control.site | grep '^ *id '`
+3. Production, the state step. It writes state only, changes nothing in AWS,
+   and leaves the OAC itself alone for staging:
+   `TF_WORKSPACE=production tofu state rm module.havesmrt.aws_cloudfront_origin_access_control.site`
+4. Production plan, `TF_WORKSPACE=production tofu plan -var-file=production.tfvars`,
+   must show exactly 1 to add, 4 to change, 0 to destroy:
+   - add `aws_cloudfront_origin_access_control.site` named
+     `havesmrt-production-oac`;
+   - change `aws_cloudfront_distribution.site`: the origin's
+     `origin_access_control_id` becomes the new OAC's id, and the 403 mapping is
+     removed;
+   - change `aws_cloudfront_distribution.redirect`: its origin's
+     `origin_access_control_id` becomes the new OAC's id;
+   - change `aws_cloudfront_function.url_rewrite` (code only);
+   - change `aws_s3_bucket_policy.site`: gains the `s3:ListBucket` statement;
+     the existing `s3:GetObject` statement, which names the production
+     distribution ARN, is unchanged.
+
+   Stop if the plan renames or replaces anything, destroys anything, or touches
+   staging-named resources.
+
+5. Apply: `TF_WORKSPACE=production tofu apply -var-file=production.tfvars`, then
+   wait for the production distribution's status to be `Deployed`.
+6. Verify: `curl -sI https://s-m-r-t.dev/docs | head -1` answers `200`;
+   `curl -sI https://s-m-r-t.dev/definitely-missing | head -1` answers `404`;
+   `curl -sI https://s-m-r-t.dev/docs/ | grep -i '^location'` still answers a
+   301 to `/docs`; `curl -sI https://havesmrt.com/ | head -1` still answers 301.
+   A plan from the committed tfvars is now clean for both workspaces.
+
+### Rollback
+
+- After step 3, before the apply: put the shared OAC back with
+  `TF_WORKSPACE=production tofu import -var-file=production.tfvars module.havesmrt.aws_cloudfront_origin_access_control.site <ID>`,
+  where `<ID>` is the id recorded in step 2. The id also shows in
+  `TF_WORKSPACE=staging tofu state show module.havesmrt.aws_cloudfront_origin_access_control.site`
+  and in the origin of either distribution
+  (`aws cloudfront get-distribution-config --id <DIST_ID> --query 'DistributionConfig.Origins.Items[0].OriginAccessControlId'`).
+- After the apply there is no rollback to the shared OAC, by design. Both
+  distributions already use their own OACs and serve, so nothing needs undoing
+  for availability. Going back would mean renaming the shared OAC to
+  `havesmrt-production-oac` while the new one still holds that name (AWS names
+  are unique), and the new one cannot be deleted until nothing references it:
+  a multi-step repoint that recreates the staging/production flap. Fix forward
+  instead: a failed or interrupted apply is repeated with the same command.
+- An interrupted production apply can create `havesmrt-production-oac` in AWS
+  without recording it in state. A retry then fails on the duplicate name.
+  Recover read-only first: find its id with
+  `aws cloudfront list-origin-access-controls --query "OriginAccessControlList.Items[?Name=='havesmrt-production-oac'].Id" --output text`,
+  then
+  `TF_WORKSPACE=production tofu import -var-file=production.tfvars module.havesmrt.aws_cloudfront_origin_access_control.site <ID>`.
+  Re-plan: expect step 4's plan minus the create (0 to add, 4 to change, 0 to
+  destroy), then apply as in step 5.
+- The 404 change alone reverts by reverting commit and applying the same
+  workspace: the 403 mapping returns and the extra bucket-policy statement goes.
+
 ## URL rewriting
 
 `modules/havesmrt/url-rewrite.js` is the viewer-request CloudFront Function for
@@ -191,9 +294,9 @@ directory index pages (#339). Change the file, then `tofu apply` publishes it.
 
 ## Moving the site to another host (#400)
 
-Four variables, all off by default, so merging this changes nothing: staging
-plans no changes, and production plans only the #389 OAC rename. Each has a
-module variable of the same name.
+Four variables, all off by default, so they change nothing on their own. (Until
+the #389 steps above are applied, both workspaces also plan the 404 change, and
+production the OAC rename.) Each has a module variable of the same name.
 
 | Variable                 | Default | Meaning                                                                                                                                                          |
 | ------------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -227,7 +330,7 @@ reverts a step. Run from `infra/`. Production always follows a clean staging
 rehearsal of the same step. Owner steps are applies, state changes and Matomo;
 the pull requests are code.
 
-0. Owner: resolve #389 on production (the shared OAC) and confirm
+0. Owner: run the #389 steps above (staging, then production) and confirm
    `TF_WORKSPACE=production tofu plan -var-file=production.tfvars` is clean.
    Nothing below is safe to apply before this.
 1. PR (this change): infra code only, a no-op.
@@ -236,14 +339,31 @@ the pull requests are code.
    `new_hosted_zone_name = "happyvertical.com"`. Apply:
    `TF_WORKSPACE=staging tofu apply -var-file=staging.tfvars`. It adds the
    certificate name, alias and record for `staging.smrt.happyvertical.com`; the
-   certificate is replaced create-before-destroy. Plan first and stop if it shows anything else: one certificate replaced
-   (create before destroy), the old host's validation CNAME recreated, one
-   alias added, one record created, and nothing else destroyed. Check that host answers and
-   `staging.s-m-r-t.dev` still does.
+   certificate is replaced create-before-destroy. Plan first; it must show
+   exactly 5 to add, 1 to change, 3 to destroy, and stop if it shows anything
+   else:
+   - `aws_acm_certificate.site` replaced (create before destroy; the new
+     certificate lists the new host as a subject alternative name);
+   - `aws_acm_certificate_validation.site` replaced (it follows the certificate);
+   - `aws_route53_record.cert_validation["staging.s-m-r-t.dev"]` replaced (the old
+     host's validation CNAME, recreated for the new certificate);
+   - `aws_route53_record.cert_validation["staging.smrt.happyvertical.com"]`
+     created (the new host's validation CNAME, in the `happyvertical.com` zone);
+   - `aws_route53_record.new[0]` created (the A alias for
+     `staging.smrt.happyvertical.com`);
+   - `aws_cloudfront_distribution.site` updated in place: the alias is added and
+     the certificate ARN changes;
+   - nothing else created, changed or destroyed.
+
+   Check that host answers and `staging.s-m-r-t.dev` still does.
+
 3. PR, then owner applies production. The same two lines in `production.tfvars`:
    `TF_WORKSPACE=production tofu apply -var-file=production.tfvars`. The plan
-   must show the same as step 2 (plus the #389 fix already applied); stop if it
-   shows anything else. Check
+   must be step 2's, with `s-m-r-t.dev` and `smrt.happyvertical.com` in place of
+   the staging hosts (the validation records are keyed `"s-m-r-t.dev"` and
+   `"smrt.happyvertical.com"`): 5 to add, 1 to change, 3 to destroy, and stop if
+   it shows anything else. It must not also show an origin access control
+   change; that means the #389 steps were skipped. Check
    `https://smrt.happyvertical.com` and `https://s-m-r-t.dev`.
 4. Owner: set Matomo site 31's URL to the new host at or before the next step's
    merge, or analytics stop at deploy. PR: the code cutover (`SITE_ORIGIN`, the
@@ -286,6 +406,7 @@ platform-dependent S3 MIME guessing. They retain the one-hour cache policy.
 Deployments wait for invalidation to complete, then run
 `node scripts/check-agent-metadata.mjs --origin <site-url>`. This checks both text
 indexes, every Markdown URL from the sitemap, and representative HTML JSON-LD
-and no-JavaScript content. A missing S3 object can return 403 rather than 404;
-either status fails the verification. The same checker runs on local build
+and no-JavaScript content. A missing page answers 404 (the bucket policy grants
+the distribution `s3:ListBucket`, and there is no 403 mapping); the check fails on
+any status but 200. The same checker runs on local build
 output before artifacts are uploaded.

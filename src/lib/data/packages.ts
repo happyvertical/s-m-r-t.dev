@@ -699,6 +699,10 @@ export const packages: SmrtPackage[] = [
 					body: 'smrt requires a field only when its own code would be wrong or unsafe without it, and each such field states why. The app decides every other part of a table. An app hardens a smrt class with a subclass that overrides fields. A subclass with the same name as its parent declares replaceParent: true in its @smrt() options and then replaces the parent everywhere in the app. Without that option, or with replaceParent: false, smrt refuses the build with a ConfigurationError. Migrate changes the database to match the code when that loses no data. It stops when it would lose or invent data, such as a field declared required while existing rows are empty.'
 				},
 				{
+					title: 'Replacing a same-named model',
+					body: 'A class that extends a same-named class from another package declares replaceParent in its own @smrt() options. With true, one model remains, under the subclass’s qualified name, on the parent’s table; the parent’s qualified name and previousQualifiedNames resolve to it. The parent must be registered first, and the subclass must not use another tableName. Omitting the option is CONFIG_SAME_NAME_SUBCLASS_UNDECLARED, and false is CONFIG_SAME_NAME_COEXISTENCE_UNSUPPORTED.'
+				},
+				{
 					title: 'Migrate is all or nothing',
 					body: 'Migrate works out every change first. If any change stops, it applies none and reports what stopped and what it held back. Migrate also stops when a package it saw last time is missing. smrt does not start new code against a database that was not migrated for that build.'
 				},
@@ -772,6 +776,10 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Scope covers each read path',
 					body: 'Tenant context applies to list and get calls, slug lookups, model hydration, vector search, and collection memory. Required models fail closed without a tenant context. A system context removes the context entirely and skips every check. withSuperAdminBypass keeps the tenant context and lifts enforcement only for classes that set allowSuperAdminBypass to true. The flag defaults to false, and unresolved config fails closed. auditTenantScopedRegistrations reports runtime-only registrations whose natural key omits the tenant column.'
+				},
+				{
+					title: 'Tenant filters are matched by column',
+					body: 'A filter key is the caller’s spelling, not a column name. The tenant interceptor resolves keys to columns, so tenantId, tenant_id, and tenantId = all count as an equality filter on the tenant column, for one id or a list. Under a tenant context, a value other than the context tenant throws TenantIsolationError; with no such filter, the context tenant is added. A key with another operator, such as tenantId !=, is not a tenant filter, so the context tenant is still added.'
 				}
 			],
 			components: ['TenantCard', 'TenantSwitcher'],
@@ -861,6 +869,10 @@ export const packages: SmrtPackage[] = [
 					body: 'The /app-contract subpath carries the versioned discovery artifact that a CLI or MCP consumer can validate and pin. createDiscoveryConformanceArtifact emits deterministically ordered JSON with a SHA-256 integrity digest, and validateDiscoveryConformanceArtifact checks structure, ordering, and that digest in one call.',
 					href: movedHref('connectInterfaces'),
 					linkLabel: 'Generated interfaces'
+				},
+				{
+					title: 'Service principals have no login',
+					body: "ServicePrincipalService makes a user that cannot sign in. It is a trusted seam, not an endpoint: it checks no permission, so the host authorizes the tenant and role and passes its own transaction with transaction: 'caller'. createServicePrincipal is idempotent per tenant and key, with a bot profile, no email or username, and an active membership. The user never holds a session. retireServicePrincipal is permanent: user suspended, membership inactive, sessions revoked, key never reused. isActiveServicePrincipal rechecks one tenant per call."
 				}
 			],
 			componentImport: '@happyvertical/smrt-users/svelte',
@@ -1715,6 +1727,26 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Only the owner shares a mailbox',
 					body: 'MailAccessService has grant, revoke, list, and setOwner. The tenant permission messages.manage-access is required, and the actor must also own the account. The one exception is a grantee whose own grant is delegable: that grantee can pass on a plain grant. An administrator therefore cannot read or take over a mailbox that another person owns. A user with messages.manage-credentials can set the first owner of an account that has none, to any active member of the tenant. seedMessagesRolePermissions gives the system roles their messages permissions.'
+				},
+				{
+					title: 'Agent sends are held for a person',
+					body: 'When an agent principal calls Message.send on a mail account, the draft is held until a person approves it. require_approval is the default, also when agentSendPolicy is null. Only the owner, as a person with messages.manage-access, can set auto_send, through MailAccessService.setAgentSendPolicy with confirmAutoSend; a new owner resets it. A host can set it per rule with resolveAgentSendPolicy in configureMailSendApprovals. Only kind person or human is a person; a persona route is held even then. Without a gate, a signed-in agent’s send from a require_approval account is refused.'
+				},
+				{
+					title: 'A person decides a held send',
+					body: 'MailSendApprovalService is the person’s side: the principal must be a person with the messages.send permission and the read and send scopes on the account. approve takes optional edits, then sends the draft as that person; reject needs a reason; release sends a draft approved elsewhere, once. An approval is bound to a hash of the stored draft and its attachments, so a later change voids it. MailDraftService.save needs the draft scope and always sends from the account’s own address; submit goes through Message.send.'
+				},
+				{
+					title: 'Search is limited to readable accounts',
+					body: 'MailSearchService searches only accounts where the principal holds the read scope; an accountIds filter can only narrow that set. search scans the local index newest first, up to 5000 rows per call, and sets truncated when it stops early; limit defaults to 25, capped at 100. Semantic mode falls back to keyword when no embeddings exist. searchProvider asks each account’s own server and falls back to the local index per account.'
+				},
+				{
+					title: 'Correspondents are private to one person',
+					body: 'CorrespondentService derives one person’s correspondents from mail that person can read. Each row belongs to one ownerUserId and is never listed tenant-wide; generated REST, MCP, and CLI are off. refresh never creates a profile; linkProfile links one at the owner’s request. Views use only accounts readable now, so a revoked account drops out. A delegated principal (scopes, account ceilings, or an id other than its user id) cannot refresh, and reads return nothing, unless the host passes allowDelegated.'
+				},
+				{
+					title: 'Backfill horizon and sync health',
+					body: 'EmailAccount.backfillSince is null by default. When set, syncChanges stores no message dated before it; stored mail is still updated and undated mail is kept. A run can override it with since, and null lifts it. Moving the horizon back, or clearing it, discards the saved cursor and runs a full pass. A failed run writes lastSyncError and a success clears it. Only a refused sign-in changes connectionStatus, to needs_reconnect. backlog is true when a run stopped at maxBatches with changes waiting.'
 				}
 			],
 			exampleResource: 'messages'
@@ -1812,6 +1844,10 @@ export const packages: SmrtPackage[] = [
 				{
 					title: 'Payment rails behind one issuing provider',
 					body: 'A runtime has one issuing provider and any number of paymentProviders, each with a unique name and its own inbox namespace. Settlement is decided by the pure decideAttempt from gateway state and the payment policy; the gateway is authoritative, and nothing here counts confirmations. Crypto rails implement the port over the payments package and never call a gateway from here. Rails never save cards or charge tax. CustomerSelect and VendorSelect are the registered selectors; QuoteEditor and PurchaseOrderEditor keep draft strings apart from minor-unit revisions.'
+				},
+				{
+					title: 'Default settlement accounts',
+					body: 'ensureTenantSettlementAccounts(db, tenantId, { currency }) seeds or loads a tenant’s settlement ledger for one currency, with accounts for cash 1000, receivables 1200, sales tax payable 2200, and revenue 4000. It is idempotent, never changes an existing row, and refuses a seed row whose tenant, currency, ledger, number, or type differs. It returns the ids. Payment.recordPayment still takes ledgerId, receivablesAccountId, and cashAccountId explicitly, so pass them in.'
 				}
 			],
 			exampleResource: 'invoices'
