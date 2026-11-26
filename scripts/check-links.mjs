@@ -64,7 +64,10 @@ function isInternalPath(href) {
 }
 
 async function main() {
-	const htmlFiles = (await glob('**/*.html', { cwd: BUILD_DIR, absolute: true })).sort();
+	// 404.html is the error page CloudFront serves, not a routed page.
+	const htmlFiles = (
+		await glob('**/*.html', { cwd: BUILD_DIR, absolute: true, ignore: '404.html' })
+	).sort();
 	if (htmlFiles.length === 0) {
 		console.error('check-links: no build/**/*.html found — run `vite build` first.');
 		process.exit(1);

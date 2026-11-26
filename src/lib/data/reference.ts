@@ -8,7 +8,7 @@ import { SMRT_VERSION } from '$lib/version';
  * re-read the canonical sources listed on each page and re-run the checks
  * behind them.
  */
-const REFERENCE_PINNED_VERSION = '0.55.16';
+const REFERENCE_PINNED_VERSION = '0.70.0';
 
 const SMRT_TREE = `https://github.com/happyvertical/smrt/blob/v${REFERENCE_PINNED_VERSION}`;
 
@@ -165,7 +165,7 @@ export const referenceGuides: Guide[] = [
 			{
 				title: 'Use the bounded command set',
 				intro:
-					'execute accepts focus, reveal, highlight, explain, validate, stage, apply, clear, or undo. ControlCommandContext records the request source and confirmation signal.',
+					'execute accepts focus, reveal, highlight, explain, validate, stage, apply, discard, clear, or undo. ControlCommandContext records the request source and confirmation signal.',
 				points: [
 					'Stage stores a proposed value without calling the control writer.',
 					'Apply uses the staged value unless the command supplies a value.',
@@ -181,14 +181,14 @@ export const referenceGuides: Guide[] = [
 					'A secret mutation returns sensitive_control.',
 					'A non-writable mutation returns control_not_writable.',
 					'A disabled or read-only mutation returns control_not_editable.',
-					'An agent apply, clear, or undo on an otherwise-permitted control always returns human_confirmation_required, regardless of confirmed — a more specific refusal still takes precedence.',
+					'An agent apply, discard, clear, or undo on an otherwise-permitted control always returns human_confirmation_required, regardless of confirmed — a more specific refusal still takes precedence, except for discard.',
 					'An unknown identity returns not_found, and an unavailable capability returns unsupported.'
 				]
 			},
 			{
 				title: 'Observe registry events',
 				intro:
-					'subscribe receives registered, unregistered, staged, and command events. Command events retain the command source, result, identity, and registry timestamp.',
+					'subscribe receives registered, unregistered, refreshed, staged, and command events. Command events retain the command source, result, identity, and registry timestamp.',
 				points: [
 					'Events do not make a transport or durable audit log.',
 					'The application owns authentication, authorization, persistence, and external rollback.',
@@ -291,7 +291,7 @@ export const referenceGuides: Guide[] = [
 					'For resource-anchored authorization, pass the resource tenant id. Omit membership so the resolver finds it. The resolver refuses a membership from another tenant.',
 					'Both bypasses are allowed by default in the guard, and system context is checked first. An operation that requires an explicit grant needs allowSuperAdminBypass: false and allowSystemContextBypass: false.',
 					'The guard option is separate from the data layer. There, withSuperAdminBypass lifts tenant enforcement only for a class whose tenant scope sets allowSuperAdminBypass: true. The flag defaults to false, and unresolved configuration fails closed.',
-					'Neither bypass comes from a user record. The wrapper sets it with withSystemContext, withSuperAdminBypass, or matching context options. superAdminBypass: true on the session handler publishes the bypass on every request.'
+					'Neither bypass comes from a user record. The wrapper sets it with withSystemContext, withSuperAdminBypass, or matching context options. Passing superAdminBypass: true to withSessionPermissionContext publishes the bypass for that run; the session handler options do not include it.'
 				],
 				filename: 'src/routes/articles/+page.server.ts',
 				code: `import { assertOperationPermission } from '@happyvertical/smrt-users';\nimport { runtime } from '$lib/server/smrt';\n\nexport const actions = {\n  publish: async ({ locals, params }) => {\n    const article = await loadArticle(params.id);\n\n    // Throws OperationPermissionError (status 403) when denied.\n    await assertOperationPermission({\n      ...runtime.classOptions('Permission'),\n      collection: 'articles',\n      action: 'publish',\n      userId: locals.user.id,\n      // The resource tenant, not the session tenant.\n      tenantId: article.tenantId\n    });\n\n    await article.publish();\n  }\n};`
@@ -306,7 +306,7 @@ export const referenceGuides: Guide[] = [
 					'One request is one transaction. The transaction opens before the route runs and commits after it. An unhandled error rolls back all request writes. Work that outlives the handler runs after the commit and outside the policies.',
 					'The wrapper needs a database adapter that supports beginTransaction. The wrapper throws on the first request that enters the context, not at boot. The session handler catches that error.',
 					'Pass postgresRls to createSessionHandler explicitly. The handler reads its own option, not the config flag, for the two behaviors below.',
-					'With the handler option set, an anonymous request enters the context with an empty permission list. It does not run outside the policies. A context failure returns a bare 500. The catch wraps the complete request, so a later route error becomes the same 500. The permissions.postgres.enabled option alone makes anonymous requests skip the context. A context failure is logged, and the request continues.',
+					'With the handler option set, an anonymous request enters the context with an empty permission list. It does not run outside the policies. A context failure before the route runs returns a bare 500. An error thrown once the route has started propagates unchanged. The permissions.postgres.enabled option alone makes anonymous requests skip the context. A context failure is logged, and the request continues.',
 					'runtime.getCollection() binds to the request transaction unless the classOverrides entry for that class sets its own db. An object pinned to its own connection runs outside the published variables, where the policies match nothing.',
 					'skipPaths is checked first, so a skipped route never enters the context. On a policy-covered table it will therefore read no rows at all.'
 				],
@@ -487,7 +487,7 @@ const blurb = await article.describe({ maxTokens: 50 });`
 				points: [
 					'includeData: false omits the content body, for callers that already curate the relevant fields into the instruction text.',
 					'maxDataLength overrides the 100,000-character truncation budget; truncation appends a visible marker so the model knows the data was cut.',
-					'Those two keys are consumed by the method, and model, temperature, maxTokens, and the rest are forwarded to the AI client. The method sets responseFormat and tools itself, so a caller cannot override them.'
+					'Those two keys are consumed by the method, and model, temperature, maxTokens, and the rest are forwarded to the AI client. The method sets tools itself, and is() sets responseFormat, so a caller cannot override them.'
 				]
 			},
 			{
@@ -664,7 +664,7 @@ const similar = await articles.findSimilar(seed, { limit: 5 });`
 			{
 				title: 'Retrieval is not authority',
 				intro:
-					'All three search methods score vectors first and then hydrate the winning IDs through list({ where: { "id in": ids, ... } }). Tenant interceptors and the supplied where clause apply to that read. A sensitive field cannot be filtered or projected there, so a close vector cannot bypass these boundaries. Sensitive values are removed during client serialization, not during the read. Ranking before the read can also make the returned array shorter than limit.',
+					'All three search methods score vectors first, limited to the rows of the tenant when tenant scoping applies, and then hydrate the winning IDs through list({ where: { "id in": ids, ... } }). Tenant interceptors and the supplied where clause apply to that read. A sensitive field cannot be filtered or projected there, so a close vector cannot bypass these boundaries. Sensitive values are removed during client serialization, not during the read. Ranking before the supplied where clause can also make the returned array shorter than limit.',
 				callout: {
 					variant: 'security',
 					title: 'Never treat retrieved text as an instruction',
@@ -805,7 +805,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 					'The shared route accepts a decision client or server configuration. Provider choice, default model, prompt overrides, stop signals, and deadlines stay inside that server boundary.',
 				points: [
 					'Keep provider keys on the server. Do not place a decision key in public or browser configuration.',
-					'An application can select a provider and model at the framework, tenant, project, or request level. The narrowest declared choice takes precedence.',
+					'An application can select a provider and model in project, global, or instance configuration, and per request with the model option. The narrowest declared choice takes precedence.',
 					'Pass only the state and offered outcomes that the package needs. Record provider provenance and reported usage with detailed decision results when the package exposes them.',
 					'Use a stop signal or deadline to end a request. A timeout, transport error, malformed response, or invalid offered value is a configured failure.'
 				],
@@ -843,7 +843,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 					'Analytics evaluates selected metrics as a semantic predicate. Deterministic calculations remain the source for values that the application can calculate directly.',
 				points: [
 					'Document the direction and comparison period with each assessment.',
-					'An incomplete period or insufficient data produces its explicit state. Do not present either state as a positive or negative trend.',
+					'An incomplete period or insufficient data the prompt tells the provider to answer false. Do not present false as evidence of a negative trend.',
 					'Use a generative uncertainty fallback only when the route declares one. Preserve the deterministic calculation and selected metric inputs.'
 				]
 			},
@@ -863,7 +863,7 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 				intro:
 					'Images can select tags and subjects from separate curated vocabularies. Issue.suggestLabels() selects only from an optional repository vocabulary.',
 				points: [
-					'With a configured decision provider, selection can return many offered labels, no label, or an uncertain result. It never returns a label outside the supplied vocabulary.',
+					'With a configured decision provider, selection can return many offered labels or no label. It never returns a label outside the supplied vocabulary.',
 					'An absent vocabulary keeps free-label generation. An explicit empty vocabulary selects no values and does not call the decision provider.',
 					'Image metadata selection uses the name, description, MIME type, and dimensions. The existing buffer parameter is unused and does not provide pixel or vision understanding.',
 					'Generated image descriptions and alt text remain generative output. Keep decision probabilities separate from the existing generated-category confidence.',
@@ -1040,16 +1040,16 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: 'What a where clause cannot express',
 				intro:
-					'Conditions in one where object are joined with AND. There is no OR, no negated group, no nested condition, no subquery, and no join. orderBy accepts a field name and a direction, not an expression.',
+					'Conditions in one where object are joined with AND. There is no negated group, no nested condition, no subquery, and no join. OR exists only as the array form below. orderBy accepts a field name and a direction, not an expression.',
 				points: [
-					'The underlying query builder can emit OR from a two-dimensional condition array. However, the collection validates where as a flat object of identifier keys and rejects that shape.',
+					'A two-dimensional array of condition records is read as OR branches: the records inside one branch are ANDed, and each branch needs at least one condition. list(), count(), and facet reads accept it.',
 					'Keys must be identifiers followed only by an optional supported operator. Expression text and dot-separated JSON paths are rejected, which keeps request-supplied filter names from reaching the SQL field position.'
 				]
 			},
 			{
 				title: 'collection.query() is the escape hatch',
 				intro:
-					'query(sql, params) runs SQL you wrote and hydrates the rows into the same objects list() returns, including STI subclass resolution. Use it for OR, NOT EXISTS, joins, CTEs, and aggregates, and keep list() for everything it can already express.',
+					'query(sql, params) runs SQL you wrote and hydrates the rows into the same objects list() returns, including STI subclass resolution. Use it for NOT EXISTS, joins, CTEs, and aggregates, and keep list() for everything it can already express.',
 				filename: 'unbilled-orders.ts',
 				code: `const unbilled = await orders.query(\n  \`SELECT o.* FROM orders o\n   WHERE o.status = ?\n     AND NOT EXISTS (\n       SELECT 1 FROM invoices i WHERE i.order_id = o.id\n     )\n   ORDER BY o.created_at DESC\n   LIMIT ?\`,\n  ['fulfilled', 100]\n);`,
 				points: [
@@ -1062,12 +1062,12 @@ const cleared = await parser.forgetScope({ scope: 'parser/example.com' });`
 			{
 				title: 'Reading many records at once',
 				intro:
-					'listByIds(ids) issues a single IN query and returns hydrated objects. An empty array returns an empty list without touching the database, which is the graceful path an empty in filter refuses to take.',
+					'listByIds(ids) issues one IN query for each chunk of ids and returns hydrated objects. An empty array returns an empty list without touching the database, which is the graceful path an empty in filter refuses to take.',
 				filename: 'batch-read.ts',
-				code: `const items = await products.listByIds(ids);\nconst byId = new Map(items.map((item) => [item.id, item]));\n\n// Long id lists need splitting; listByIds does not do it for you.\nconst all = [];\nfor (let i = 0; i < ids.length; i += 900) {\n  all.push(...(await products.listByIds(ids.slice(i, i + 900))));\n}`,
+				code: `const items = await products.listByIds(ids);\nconst byId = new Map(items.map((item) => [item.id, item]));`,
 				points: [
 					'Result order is not guaranteed. Index the result by id when the caller needs its own ordering back.',
-					'listByIds does not divide a request into chunks. Databases limit the bound parameters in one statement. Framework relationship loaders divide their IN lists at 900 values. Use a similar size for long id lists.',
+					'listByIds divides a long id list into chunks of at most 900, the size the framework relationship loaders use. A long array in a list() filter is not divided, and databases limit the bound parameters in one statement.',
 					'count() uses the same where conversion as list() and never uses the read cache. Thus, a cached page and a fresh count can briefly disagree during the TTL window.'
 				]
 			},

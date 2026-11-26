@@ -15,6 +15,11 @@ const config = {
 			precompress: false,
 			strict: false
 		}),
+		paths: {
+			// build/404.html is served for any missing path, at any depth, so its
+			// assets must be absolute (/_app/...), not relative to the URL.
+			relative: false
+		},
 		prerender: {
 			handleHttpError: 'warn',
 			handleMissingId: 'warn',
