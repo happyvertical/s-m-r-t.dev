@@ -1,8 +1,8 @@
-# robots.txt for s-m-r-t.dev
+# robots.txt for smrt.happyvertical.com
 User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://s-m-r-t.dev/sitemap.xml
+Sitemap: https://smrt.happyvertical.com/sitemap.xml
 
 # Allow all content by default

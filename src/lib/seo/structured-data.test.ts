@@ -3,7 +3,7 @@ import { isDocPath, serializeJsonLd, structuredData } from './structured-data';
 
 describe('agent structured data', () => {
 	it('identifies the website, organization and released source on the home page', () => {
-		const graph = structuredData('smrt', 'Stack', 'https://s-m-r-t.dev')['@graph'];
+		const graph = structuredData('smrt', 'Stack', 'https://smrt.happyvertical.com')['@graph'];
 		expect(graph.map((node) => node['@type'])).toEqual([
 			'Organization',
 			'WebSite',
@@ -17,7 +17,7 @@ describe('agent structured data', () => {
 		});
 	});
 	it('uses page metadata for the article and ordered canonical breadcrumbs', () => {
-		const url = 'https://s-m-r-t.dev/docs/reference/packages/core';
+		const url = 'https://smrt.happyvertical.com/docs/reference/packages/core';
 		const graph = structuredData('Core', 'Domain models', url)['@graph'];
 		expect(graph[3]).toMatchObject({
 			'@type': 'TechArticle',
@@ -26,26 +26,35 @@ describe('agent structured data', () => {
 			url
 		});
 		expect(graph[4].itemListElement).toEqual([
-			{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://s-m-r-t.dev' },
-			{ '@type': 'ListItem', position: 2, name: 'Docs', item: 'https://s-m-r-t.dev/docs' },
+			{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://smrt.happyvertical.com' },
+			{
+				'@type': 'ListItem',
+				position: 2,
+				name: 'Docs',
+				item: 'https://smrt.happyvertical.com/docs'
+			},
 			{
 				'@type': 'ListItem',
 				position: 3,
 				name: 'Reference',
-				item: 'https://s-m-r-t.dev/docs/reference'
+				item: 'https://smrt.happyvertical.com/docs/reference'
 			},
 			{
 				'@type': 'ListItem',
 				position: 4,
 				name: 'Packages',
-				item: 'https://s-m-r-t.dev/docs/reference/packages'
+				item: 'https://smrt.happyvertical.com/docs/reference/packages'
 			},
 			{ '@type': 'ListItem', position: 5, name: 'Core', item: url }
 		]);
 	});
 	it('escapes script injection and HTML delimiters without changing JSON values', () => {
 		const title = '</script><script>alert("x")</script> & >';
-		const value = structuredData(title, title, 'https://s-m-r-t.dev/docs/reference/security');
+		const value = structuredData(
+			title,
+			title,
+			'https://smrt.happyvertical.com/docs/reference/security'
+		);
 		const serialized = serializeJsonLd(value);
 		expect(serialized).not.toMatch(/[<>&]/);
 		expect(serialized).toContain('\\u003c/script\\u003e');

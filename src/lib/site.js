@@ -8,7 +8,7 @@
  */
 
 /** Origin with scheme and no trailing slash, e.g. `https://example.com`. */
-export const SITE_ORIGIN = 'https://s-m-r-t.dev';
+export const SITE_ORIGIN = 'https://smrt.happyvertical.com';
 
 /** The hostname alone, derived from {@link SITE_ORIGIN}. */
 export const SITE_HOST = new URL(SITE_ORIGIN).hostname;

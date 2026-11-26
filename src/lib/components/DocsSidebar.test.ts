@@ -115,7 +115,7 @@ describe('docs sidebar', () => {
 			.groups.flatMap((group) => group.items)
 			.find((item) => item.href.includes('#'));
 		expect(anchor).toBeTruthy();
-		const url = new URL(anchor?.href as string, 'https://s-m-r-t.dev');
+		const url = new URL(anchor?.href as string, 'https://smrt.happyvertical.com');
 		render(DocsSidebar, { props: { pathname: url.pathname, hash: url.hash } });
 		const links = within(sidebar()).getAllByRole('link');
 		const located = links.filter((link) => link.getAttribute('aria-current') === 'location');
@@ -139,7 +139,7 @@ describe('docs sidebar', () => {
 		const ungrouped: string[] = [];
 
 		for (const item of docsNavigation.flatMap((group) => group.items)) {
-			const url = new URL(item.href, 'https://s-m-r-t.dev');
+			const url = new URL(item.href, 'https://smrt.happyvertical.com');
 			if (!url.pathname.startsWith('/docs')) continue;
 			await rerender({ pathname: url.pathname, hash: url.hash });
 			const links = within(sidebar()).getAllByRole('link');

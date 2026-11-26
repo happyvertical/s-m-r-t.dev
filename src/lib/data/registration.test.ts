@@ -89,7 +89,7 @@ describe('guide route family registration', () => {
 	it('lists every guide in the sitemap (sitemap.xml/+server.ts)', () => {
 		for (const { page, href } of routed) {
 			expect(
-				sitemapXml.includes(`<loc>https://s-m-r-t.dev${href}</loc>`),
+				sitemapXml.includes(`<loc>https://smrt.happyvertical.com${href}</loc>`),
 				`${describePage(page)} — ${href} is missing from sitemap.xml/+server.ts.`
 			).toBe(true);
 		}

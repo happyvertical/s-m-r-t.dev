@@ -5,7 +5,7 @@ type Command = [string, ...unknown[]];
 
 const config = { url: 'https://matomo.example/', siteId: '7' };
 
-function env(hostname = 's-m-r-t.dev') {
+function env(hostname = 'smrt.happyvertical.com') {
 	const scripts: string[] = [];
 	const paq: Command[] = [];
 	const e: MatomoEnv & { paq: Command[] } = {
@@ -21,8 +21,8 @@ describe('matomo tracker', () => {
 	it('is a no-op off the production host', () => {
 		for (const host of [
 			'localhost',
-			'staging.s-m-r-t.dev',
-			'www.s-m-r-t.dev',
+			'staging.smrt.happyvertical.com',
+			'www.smrt.happyvertical.com',
 			'x.s3.amazonaws.com'
 		]) {
 			const { e, scripts } = env(host);
@@ -55,14 +55,14 @@ describe('matomo tracker', () => {
 		const { e } = env();
 		const t = createMatomoTracker(e, config)!;
 		e.paq.length = 0;
-		t.pageView(new URL('https://s-m-r-t.dev/'), 'Home');
-		t.pageView(new URL('https://s-m-r-t.dev/framework'), 'Framework');
+		t.pageView(new URL('https://smrt.happyvertical.com/'), 'Home');
+		t.pageView(new URL('https://smrt.happyvertical.com/framework'), 'Framework');
 		expect(e.paq).toEqual([
-			['setCustomUrl', 'https://s-m-r-t.dev/'],
+			['setCustomUrl', 'https://smrt.happyvertical.com/'],
 			['setDocumentTitle', 'Home'],
 			['trackPageView'],
-			['setReferrerUrl', 'https://s-m-r-t.dev/'],
-			['setCustomUrl', 'https://s-m-r-t.dev/framework'],
+			['setReferrerUrl', 'https://smrt.happyvertical.com/'],
+			['setCustomUrl', 'https://smrt.happyvertical.com/framework'],
 			['setDocumentTitle', 'Framework'],
 			['trackPageView']
 		]);
@@ -71,11 +71,11 @@ describe('matomo tracker', () => {
 	it('ignores hash-only changes and repeats of the same page', () => {
 		const { e } = env();
 		const t = createMatomoTracker(e, config)!;
-		t.pageView(new URL('https://s-m-r-t.dev/saadl'), 'SAADL');
-		t.pageView(new URL('https://s-m-r-t.dev/saadl#layers'), 'SAADL');
-		t.pageView(new URL('https://s-m-r-t.dev/saadl'), 'SAADL');
+		t.pageView(new URL('https://smrt.happyvertical.com/saadl'), 'SAADL');
+		t.pageView(new URL('https://smrt.happyvertical.com/saadl#layers'), 'SAADL');
+		t.pageView(new URL('https://smrt.happyvertical.com/saadl'), 'SAADL');
 		expect(e.paq.filter((c) => c[0] === 'trackPageView')).toHaveLength(1);
-		t.pageView(new URL('https://s-m-r-t.dev/saadl?view=a'), 'SAADL');
+		t.pageView(new URL('https://smrt.happyvertical.com/saadl?view=a'), 'SAADL');
 		expect(e.paq.filter((c) => c[0] === 'trackPageView')).toHaveLength(2);
 	});
 });
@@ -85,14 +85,20 @@ describe('matomo queue swap', () => {
 		// matomo.js swaps window._paq for its own object on load; pushes must follow it.
 		let queue: Command[] = [];
 		const tracker = createMatomoTracker(
-			{ hostname: 's-m-r-t.dev', push: (c) => queue.push(c), loadScript: () => {} },
+			{ hostname: 'smrt.happyvertical.com', push: (c) => queue.push(c), loadScript: () => {} },
 			config
 		);
-		tracker?.pageView(new URL('https://s-m-r-t.dev/starters'), 'Getting Started');
+		tracker?.pageView(new URL('https://smrt.happyvertical.com/starters'), 'Getting Started');
 		const loaded: Command[] = [];
 		queue = loaded; // the script has loaded and taken over the queue
-		tracker?.pageView(new URL('https://s-m-r-t.dev/starters/smrt-start'), 'Clone smrt-start');
-		expect(loaded).toContainEqual(['setCustomUrl', 'https://s-m-r-t.dev/starters/smrt-start']);
+		tracker?.pageView(
+			new URL('https://smrt.happyvertical.com/starters/smrt-start'),
+			'Clone smrt-start'
+		);
+		expect(loaded).toContainEqual([
+			'setCustomUrl',
+			'https://smrt.happyvertical.com/starters/smrt-start'
+		]);
 		expect(loaded).toContainEqual(['trackPageView']);
 	});
 });

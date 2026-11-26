@@ -25,8 +25,8 @@ describe('resolvePlaygroundSlug', () => {
 		// This slug is deep-linked from the homepage, /ui, and /agents and must
 		// keep resolving to the site's own demo, not fall back to Base Controls.
 		expect(resolvePlaygroundSlug('agent-aware-form')).toMatchObject({
-			qualifiedId: 's-m-r-t.dev:agent-aware-form',
-			packageName: 's-m-r-t.dev',
+			qualifiedId: 'smrt.happyvertical.com:agent-aware-form',
+			packageName: 'smrt.happyvertical.com',
 			entryId: 'agent-aware-form'
 		});
 	});
