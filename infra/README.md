@@ -349,19 +349,38 @@ Check both hosts afterwards: the new host answers 200 and the old one one 301.
 
 When `s-m-r-t.dev` is to lapse, remove `old_domain`, `old_hosted_zone_name` and
 `redirect_old_domain` from both tfvars and apply staging, then production. The
-plan must show the certificate replaced (the old name leaves its subject
-alternative names; create before destroy), its validation and the old host's
-validation record replaced or destroyed, the distribution updated in place (alias
-and certificate ARN), `aws_route53_record.old[0]` destroyed, and the site
-function updated to plain `url-rewrite.js`. Nothing serving
-`smrt.happyvertical.com` is replaced. The old host stops answering, so do this only
-once its traffic no longer matters. Release the domain and zone afterwards.
+plan must show exactly 3 to add, 2 to change, 5 to destroy, and stop on anything
+else:
+
+- the certificate replaced (the old name leaves its subject alternative names;
+  create before destroy), and its validation replaced;
+- the old host's validation record destroyed and the new host's replaced;
+- the distribution updated in place (alias and certificate ARN);
+- the site function updated in place to plain `url-rewrite.js`;
+- `aws_route53_record.old[0]` destroyed.
+
+The new host's A record (`aws_route53_record.primary`) and the `havesmrt.com`
+resources are untouched. The old host stops answering, so do this only once its
+traffic no longer matters. Release the domain and zone afterwards.
 
 ### Rollback
 
-Revert the tfvars and code and apply the same workspace with `-var-file`. The
-`moved` blocks are one-way in state, so a revert is a fresh rename the same way
-(plan shows the certificate replaced again and the records moved back).
+Roll forward instead: a failed or interrupted apply is repeated with the same
+command, and a wrong result is fixed with a new change.
+
+Do not roll back by reverting the commit. That removes the `moved` blocks, so the
+plan destroys `aws_route53_record.primary` and `.old[0]` and creates `.new[0]` and
+`.site`: a DNS outage for both hosts. If a rollback is unavoidable, the change
+that reverts the variables must also carry the reverse `moved` blocks
+(`aws_route53_record.primary` to `.new[0]`, `.old[0]` to `.site`), and its plan
+must show both A records as moved before it is applied.
+
+### Certificate validation records
+
+The apply deletes both validation CNAMEs before requesting the new certificate
+and recreates them with the same values (ACM reuses them per name and account).
+The old certificate keeps serving throughout. If the apply stops between the
+delete and the re-create, re-run the same apply.
 
 ## Agent document delivery
 
