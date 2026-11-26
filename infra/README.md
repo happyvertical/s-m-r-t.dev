@@ -13,14 +13,14 @@ This directory contains OpenTofu/Terraform configuration for deploying s-m-r-t.d
 
 ## Environments
 
-- **Staging**: `staging.s-m-r-t.dev`
-- **Production**: `s-m-r-t.dev`
+- **Staging**: `staging.smrt.happyvertical.com` (also `staging.s-m-r-t.dev`, redirecting)
+- **Production**: `smrt.happyvertical.com` (also `s-m-r-t.dev`, redirecting)
 
 ## Prerequisites
 
 1. **AWS CLI** configured with appropriate credentials
 2. **OpenTofu** >= 1.6.0
-3. **Route53 hosted zone** for `s-m-r-t.dev`
+3. **Route53 hosted zones** for `happyvertical.com` and, while it redirects, `s-m-r-t.dev`
 4. **Route53 hosted zone** for `havesmrt.com` while the legacy-domain redirect is enabled
 5. **S3 bucket** for state: `happyvertical-terraform-state` (already exists)
 
@@ -110,8 +110,8 @@ Required GitHub Secrets:
 
 ### Route53 Records
 
-- `staging.s-m-r-t.dev`: ALIAS to staging CloudFront distribution
-- `s-m-r-t.dev`: ALIAS to production CloudFront distribution
+- `staging.smrt.happyvertical.com`, `staging.s-m-r-t.dev`: ALIAS to staging CloudFront distribution
+- `smrt.happyvertical.com`, `s-m-r-t.dev`: ALIAS to production CloudFront distribution
 - `staging.havesmrt.com`: ALIAS to the staging legacy redirect distribution
 - `havesmrt.com`: ALIAS to the production legacy redirect distribution
 
@@ -292,23 +292,24 @@ both environments. A path without an extension is served as `<path>.html`, and
 `<path>/` gets a 301 to `<path>` with its query string, because the site has no
 directory index pages (#339). Change the file, then `tofu apply` publishes it.
 
-## Moving the site to another host (#400)
+## Hosts: smrt.happyvertical.com primary, s-m-r-t.dev redirecting (#400, #440)
 
-Four variables, all off by default, so they change nothing on their own. (Until
-the #389 steps above are applied, both workspaces also plan the 404 change, and
-production the OAC rename.) Each has a module variable of the same name.
+The site's primary host is `smrt.happyvertical.com` (staging:
+`staging.smrt.happyvertical.com`); `s-m-r-t.dev` is the old host, still served by
+the same distribution and answering one 301 to the new host. Each variable has a
+module variable of the same name.
 
-| Variable                 | Default | Meaning                                                                                                                                                          |
-| ------------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `hosted_zone_name`       | `null`  | Route53 zone holding `domain`'s records, when `domain` sits inside a parent zone. `null` uses `domain`.                                                          |
-| `new_domain`             | `null`  | The host the site moves to. While set, the same distribution also serves it (alias, certificate name, record in its own zone); `domain` keeps serving unchanged. |
-| `new_hosted_zone_name`   | `null`  | Zone holding the new host's records (`happyvertical.com` for `smrt.happyvertical.com`). `null` uses `new_domain`.                                                |
-| `redirect_to_new_domain` | `false` | The main viewer-request function answers `domain` with one 301 to the same path and query on `new_domain`. Needs `new_domain`.                                   |
+| Variable               | Default                  | Meaning                                                                                                                                               |
+| ---------------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `domain`               | `smrt.happyvertical.com` | Primary host: certificate primary name, alias, record, `site_url`, and the `havesmrt.com` redirect target. Staging derives `staging.<host>`.          |
+| `hosted_zone_name`     | `null`                   | Route53 zone holding `domain`'s records, when `domain` sits inside a parent zone (`happyvertical.com`). `null` uses `domain`.                         |
+| `old_domain`           | `null`                   | The previous host. While set, the distribution also serves it (alias, certificate subject alternative name, record in its own zone). `null` drops it. |
+| `old_hosted_zone_name` | `null`                   | Zone holding the old host's records. `null` uses `old_domain`.                                                                                        |
+| `redirect_old_domain`  | `false`                  | The main viewer-request function answers `old_domain` with one 301 to the same path and query on `domain`. Needs `old_domain`.                        |
 
-`domain` stays the old host in the tfvars throughout. Its Route53 record, alias
-and certificate name are never touched, so there is no `state mv`, no `-var`,
-and nothing to delete mid-cutover; the new host only adds resources. Staging
-derives `staging.<host>` from each value.
+(`old_` rather than `legacy_`: `legacy_domain` already names `havesmrt.com` in
+`redirect.tf`.) Bucket, function, OAC and IAM names are per environment, so none
+follows `domain`.
 
 With the redirect off, the published function is `url-rewrite.js` byte for byte.
 With it on, `main.tf` renames that handler to `rewriteRequest` and appends
@@ -318,82 +319,49 @@ redirect collapses leading slashes and backslashes (a `//evil.com/` path cannot
 leave the site), strips trailing slashes (pages are `<path>.html`, so keeping one
 costs a second hop) and rebuilds the query string as received. `/_app/*` has no
 function, so assets still answer on the old host. The `havesmrt.com` redirect
-targets the new host once `redirect_to_new_domain` is on; it keeps its own
-function, so a trailing-slash URL there is still two hops (301 to the new host,
-then the site's 301 to `<path>`). Matching it is a separate change.
+targets `domain`; it keeps its own function, so a trailing-slash URL there is
+still two hops (301 to the new host, then the site's 301 to `<path>`).
 
-### Cutover order
+### Applying the primary-domain change (#440)
 
-Every step ships its values in the tfvars through its own pull request and is
-applied with `-var-file` only, so a later plan from committed tfvars never
-reverts a step. Run from `infra/`. Production always follows a clean staging
-rehearsal of the same step. Owner steps are applies, state changes and Matomo;
-the pull requests are code.
+Moving from the old layout (`domain = s-m-r-t.dev`, `new_domain = ...`) renames
+the variables and swaps which host is primary. `moved` blocks keep both A records
+(`aws_route53_record.new[0]` becomes `.primary`, `.site` becomes `.old[0]`)
+without destroy or create. Run from `infra/`, staging first, with `-var-file`:
+`TF_WORKSPACE=staging tofu apply -var-file=staging.tfvars`, then production. The
+certificate's primary name changes, so it is replaced (create before destroy, the
+distribution is repointed in place, then the old one goes). Plan first; it must
+show exactly 4 to add, 1 to change, 4 to destroy, and stop on anything else:
 
-0. Owner: run the #389 steps above (staging, then production) and confirm
-   `TF_WORKSPACE=production tofu plan -var-file=production.tfvars` is clean.
-   Nothing below is safe to apply before this.
-1. PR (this change): infra code only, a no-op.
-2. PR, then owner applies staging. Add to `staging.tfvars`:
-   `new_domain = "smrt.happyvertical.com"` and
-   `new_hosted_zone_name = "happyvertical.com"`. Apply:
-   `TF_WORKSPACE=staging tofu apply -var-file=staging.tfvars`. It adds the
-   certificate name, alias and record for `staging.smrt.happyvertical.com`; the
-   certificate is replaced create-before-destroy. Plan first; it must show
-   exactly 5 to add, 1 to change, 3 to destroy, and stop if it shows anything
-   else:
-   - `aws_acm_certificate.site` replaced (create before destroy; the new
-     certificate lists the new host as a subject alternative name);
-   - `aws_acm_certificate_validation.site` replaced (it follows the certificate);
-   - `aws_route53_record.cert_validation["staging.s-m-r-t.dev"]` replaced (the old
-     host's validation CNAME, recreated for the new certificate);
-   - `aws_route53_record.cert_validation["staging.smrt.happyvertical.com"]`
-     created (the new host's validation CNAME, in the `happyvertical.com` zone);
-   - `aws_route53_record.new[0]` created (the A alias for
-     `staging.smrt.happyvertical.com`);
-   - `aws_cloudfront_distribution.site` updated in place: the alias is added and
-     the certificate ARN changes;
-   - nothing else created, changed or destroyed.
+- `aws_acm_certificate.site` replaced (create before destroy);
+- `aws_acm_certificate_validation.site` replaced (follows the certificate);
+- both `aws_route53_record.cert_validation[...]` (keys unchanged: the old and new
+  host) replaced; validation CNAMEs, not serving records;
+- `aws_cloudfront_distribution.site` updated in place (certificate ARN only; the
+  aliases are the same set);
+- both A records reported as moved, no change;
+- `site_url` now the new host; no function, bucket, OAC, policy or `havesmrt.com`
+  change.
 
-   Check that host answers and `staging.s-m-r-t.dev` still does.
+Check both hosts afterwards: the new host answers 200 and the old one one 301.
 
-3. PR, then owner applies production. The same two lines in `production.tfvars`:
-   `TF_WORKSPACE=production tofu apply -var-file=production.tfvars`. The plan
-   must be step 2's, with `s-m-r-t.dev` and `smrt.happyvertical.com` in place of
-   the staging hosts (the validation records are keyed `"s-m-r-t.dev"` and
-   `"smrt.happyvertical.com"`): 5 to add, 1 to change, 3 to destroy, and stop if
-   it shows anything else. It must not also show an origin access control
-   change; that means the #389 steps were skipped. Check
-   `https://smrt.happyvertical.com` and `https://s-m-r-t.dev`.
-4. Owner: set Matomo site 31's URL to the new host at or before the next step's
-   merge, or analytics stop at deploy. PR: the code cutover (`SITE_ORIGIN`, the
-   workflow's post-deploy checks, `robots.txt` and the tests together). Merge it
-   only after step 3, because it deploys and the new checks need the new host.
-5. PR, then owner applies staging: `redirect_to_new_domain = true` in
-   `staging.tfvars`; `TF_WORKSPACE=staging tofu apply -var-file=staging.tfvars`.
-   The plan must show function updates only (the site and `havesmrt.com`
-   functions); stop if it shows anything else. Check `curl -sI https://staging.s-m-r-t.dev/docs/` answers one 301 to
-   `https://staging.smrt.happyvertical.com/docs`, with the query kept.
-6. PR, then owner applies production: `redirect_to_new_domain = true` in
-   `production.tfvars`;
-   `TF_WORKSPACE=production tofu apply -var-file=production.tfvars`. Same plan
-   rule as step 5. Check
-   `https://s-m-r-t.dev/docs/` the same way.
-7. Track references in other repositories (smrt, have-config, iac, happyvertical.com).
+### Dropping the old domain
+
+When `s-m-r-t.dev` is to lapse, remove `old_domain`, `old_hosted_zone_name` and
+`redirect_old_domain` from both tfvars and apply staging, then production. The
+plan must show the certificate replaced (the old name leaves its subject
+alternative names; create before destroy), its validation and the old host's
+validation record replaced or destroyed, the distribution updated in place (alias
+and certificate ARN), `aws_route53_record.old[0]` destroyed, and the site
+function updated to plain `url-rewrite.js`. Nothing serving
+`smrt.happyvertical.com` is replaced. The old host stops answering, so do this only
+once its traffic no longer matters. Release the domain and zone afterwards.
 
 ### Rollback
 
-Each step reverts by reverting its tfvars change and applying the same
-workspace with `-var-file`. Steps 5 and 6 only republish the function, so the
-old host serves again once clients drop the 301, which they may cache for up to an hour (`max-age=3600`). Steps 2 and 3 remove the new host's
-alias, record and certificate name; the old host's resources are not in the
-change, so it never stops serving. Roll back step 4 (the code) before 2 or 3.
-The certificate's primary name stays the old host, and ACM renewal validates
-every name on it, so the old domain and its Route53 zone cannot be dropped
-while this layout stands: if they lapse, renewal fails and TLS breaks on the
-new host too. Before the old domain is ever released, a later step must make the
-new host the primary `domain` (old host secondary or removed) and apply it.
-Until then the `site_url` output also stays the old host.
+Revert the tfvars and code and apply the same workspace with `-var-file`. The
+`moved` blocks are one-way in state, so a revert is a fresh rename the same way
+(plan shows the certificate replaced again and the records moved back).
 
 ## Agent document delivery
 

@@ -6,23 +6,35 @@ locals {
   # zone (smrt.happyvertical.com in happyvertical.com).
   zone_name = coalesce(var.hosted_zone_name, var.domain)
 
-  # The host the site is moving to. var.domain keeps serving too, as an alias
-  # and certificate name on this distribution, and its Route53 record keeps its
-  # address; the new host only adds resources.
-  has_new          = var.new_domain != null
-  new_site_domain  = !local.has_new ? null : var.environment == "production" ? var.new_domain : "${var.environment}.${var.new_domain}"
-  new_zone_name    = local.has_new ? coalesce(var.new_hosted_zone_name, var.new_domain) : null
-  redirect_to_new  = local.has_new && var.redirect_to_new_domain
-  canonical_domain = local.redirect_to_new ? local.new_site_domain : local.site_domain
-  site_aliases     = local.has_new ? [local.site_domain, local.new_site_domain] : [local.site_domain]
+  # The previous host. While var.old_domain is set the distribution also serves
+  # it (alias, certificate name, record in its own zone). It is only ever an
+  # addition to the primary host: unset it and nothing serving var.domain
+  # changes.
+  has_old         = var.old_domain != null
+  old_site_domain = !local.has_old ? null : var.environment == "production" ? var.old_domain : "${var.environment}.${var.old_domain}"
+  old_zone_name   = local.has_old ? coalesce(var.old_hosted_zone_name, var.old_domain) : null
+  redirect_old    = local.has_old && var.redirect_old_domain
+  site_aliases    = local.has_old ? [local.site_domain, local.old_site_domain] : [local.site_domain]
 
   # With the redirect off the published function is url-rewrite.js, byte for
   # byte. With it on, the old host answers a 301 first (moved-redirect.js) and
   # every other request falls through to the same rewrite.
-  url_rewrite_code = local.redirect_to_new ? join("\n", [
+  url_rewrite_code = local.redirect_old ? join("\n", [
     replace(file("${path.module}/url-rewrite.js"), "function handler(", "function rewriteRequest("),
-    replace(replace(file("${path.module}/moved-redirect.js"), "__OLD_HOST__", lower(local.site_domain)), "__NEW_HOST__", lower(local.new_site_domain))
+    replace(replace(file("${path.module}/moved-redirect.js"), "__OLD_HOST__", lower(local.old_site_domain)), "__NEW_HOST__", lower(local.site_domain))
   ]) : file("${path.module}/url-rewrite.js")
+}
+
+# The primary host's A record was aws_route53_record.new[0] and the old host's
+# was aws_route53_record.site; both keep their identity (no destroy/create).
+moved {
+  from = aws_route53_record.site
+  to   = aws_route53_record.old[0]
+}
+
+moved {
+  from = aws_route53_record.new[0]
+  to   = aws_route53_record.primary
 }
 
 # GitHub OIDC provider (data source - already exists in account)
@@ -292,7 +304,7 @@ resource "aws_acm_certificate" "site" {
   domain_name       = local.site_domain
   validation_method = "DNS"
 
-  subject_alternative_names = local.has_new ? [local.new_site_domain] : []
+  subject_alternative_names = local.has_old ? [local.old_site_domain] : []
 
   lifecycle {
     create_before_destroy = true
@@ -321,15 +333,15 @@ data "aws_route53_zone" "site" {
   private_zone = false
 }
 
-# Zone of the new host, when the site is moving.
-data "aws_route53_zone" "new" {
-  count = local.has_new ? 1 : 0
+# Zone of the old host, while it is served.
+data "aws_route53_zone" "old" {
+  count = local.has_old ? 1 : 0
 
-  name         = local.new_zone_name
+  name         = local.old_zone_name
   private_zone = false
 }
 
-resource "aws_route53_record" "site" {
+resource "aws_route53_record" "primary" {
   zone_id = data.aws_route53_zone.site.zone_id
   name    = local.site_domain
   type    = "A"
@@ -341,11 +353,11 @@ resource "aws_route53_record" "site" {
   }
 }
 
-resource "aws_route53_record" "new" {
-  count = local.has_new ? 1 : 0
+resource "aws_route53_record" "old" {
+  count = local.has_old ? 1 : 0
 
-  zone_id = data.aws_route53_zone.new[0].zone_id
-  name    = local.new_site_domain
+  zone_id = data.aws_route53_zone.old[0].zone_id
+  name    = local.old_site_domain
   type    = "A"
 
   alias {
@@ -355,7 +367,7 @@ resource "aws_route53_record" "new" {
   }
 }
 
-# Route53 records for certificate validation. The new host's records go in its
+# Route53 records for certificate validation. The old host's records go in its
 # own zone.
 resource "aws_route53_record" "cert_validation" {
   for_each = {
@@ -371,5 +383,5 @@ resource "aws_route53_record" "cert_validation" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = each.key == local.new_site_domain ? data.aws_route53_zone.new[0].zone_id : data.aws_route53_zone.site.zone_id
+  zone_id         = each.key == local.old_site_domain ? data.aws_route53_zone.old[0].zone_id : data.aws_route53_zone.site.zone_id
 }

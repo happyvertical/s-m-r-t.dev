@@ -1,6 +1,6 @@
-environment            = "production"
-domain                 = "s-m-r-t.dev"
-aws_region             = "us-west-2"
-new_domain             = "smrt.happyvertical.com"
-new_hosted_zone_name   = "happyvertical.com"
-redirect_to_new_domain = true
+environment         = "production"
+domain              = "smrt.happyvertical.com"
+hosted_zone_name    = "happyvertical.com"
+aws_region          = "us-west-2"
+old_domain          = "s-m-r-t.dev"
+redirect_old_domain = true
